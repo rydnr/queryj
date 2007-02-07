@@ -40,68 +40,30 @@ package org.acmsl.queryj;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.ConditionOperator;
 import org.acmsl.queryj.Field;
-
-/*
- * Importing JDK classes.
- */
-import java.util.ArrayList;
-import java.util.Collection;
+import org.acmsl.queryj.Function;
+import org.acmsl.queryj.FunctionVariableCondition;
 
 /**
  * Represents conditions in SQL statements.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class VariableCondition
-    extends  AtomicCondition
+public class FunctionVariableCondition
+    extends  VariableCondition
 {
     /**
      * Creates a variable condition using given information.
      * @param field the left-side field.
      * @param operator the operator.
+     * @param function the function.
      * @precondition field != null
      * @precondition operator != null
      */
-    public VariableCondition(final Field field, final ConditionOperator operator)
+    public FunctionVariableCondition(
+        final Field field, final ConditionOperator operator, final Function function)
     {
-        super(field, operator, "?");
-    }
-
-    /**
-     * Creates a variable condition using given information.
-     * @param field the left-side field.
-     * @param operator the operator.
-     * @param rightSideField the right-side field.
-     * @precondition field != null
-     * @precondition operator != null
-     * @precondition rightSideField != null
-     */
-    protected VariableCondition(
-        final Field field, final ConditionOperator operator, final String rightSideField)
-    {
-        super(field, operator, rightSideField);
-    }
-
-    /**
-     * Retrieves the variable conditions.
-     * @return such collection.
-     */
-    public Collection getVariableConditions()
-    {
-        Collection result = new ArrayList();
-
-        result.add(this);
-
-        Collection t_cNestedConditions = super.getVariableConditions();
-
-        if  (t_cNestedConditions != null)
-        {
-            result.addAll(t_cNestedConditions);
-        }
-
-        return result;
+        super(field, operator, function.buildExpression("?"));
     }
 }

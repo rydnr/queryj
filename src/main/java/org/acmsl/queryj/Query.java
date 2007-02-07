@@ -43,7 +43,12 @@ package org.acmsl.queryj;
 import org.acmsl.queryj.QueryResultSet;
 
 /*
- * Importing some JDK1.3 classes.
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing some JDK classes.
  */
 import java.io.InputStream;
 import java.io.Reader;
@@ -70,6 +75,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Calendar;
 import java.util.List;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Represents queries to access persistent data.
@@ -150,7 +160,7 @@ public abstract class Query
      * @return the statement.
      * @throws SQLException in such invalid API usage.
      */
-    protected PreparedStatement retrievePreparedStatement()
+    PreparedStatement retrievePreparedStatement()
         throws SQLException
     {
         PreparedStatement result = getPreparedStatement();
@@ -538,7 +548,12 @@ public abstract class Query
     public PreparedStatement prepareStatement(final Connection connection)
         throws  SQLException
     {
-        setPreparedStatement(connection.prepareStatement(toString()));
+        setPreparedStatement(
+            connection.prepareStatement(
+                toString()));
+//                ResultSet.TYPE_FORWARD_ONLY,
+//                ResultSet.CONCUR_READ_ONLY));
+////                ResultSet.CLOSE_CURSORS_AT_COMMIT));
 
         return this;
     }
@@ -609,7 +624,29 @@ public abstract class Query
     public void close()
         throws  SQLException
     {
-        retrievePreparedStatement().close();
+        close(retrievePreparedStatement());
+    }
+    
+    /**
+     * See java.sql.Statement#close().
+     * @see java.sql.Statement#close()
+     * @param preparedStatement the <code>PreparedStatement</code> instance.
+     * @throws SQLException if an error occurs.
+     * @precondition preparedStatement != null
+     */
+    protected void close(final PreparedStatement preparedStatement)
+        throws  SQLException
+    {
+        Log t_Log = UniqueLogFactory.getLog(Query.class);
+        
+        if  (t_Log != null)
+        {
+            t_Log.info(
+                  "Closing prepared statement for " + this
+                + " (" + retrievePreparedStatement() + ")");
+        }
+
+        preparedStatement.close();
     }
 
     /**
@@ -679,8 +716,7 @@ public abstract class Query
     {
         return
             new QueryResultSet(
-                this,
-                retrievePreparedStatement().executeQuery(sql));
+                this, retrievePreparedStatement().executeQuery(sql));
     }
 
     /**

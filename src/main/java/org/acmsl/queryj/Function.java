@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: VariableCondition.java
+ * Filename: Function.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents conditions in SQL statements.
+ * Description: Represents text/numeric/time/system functions in SQL statements.
  *
  */
 package org.acmsl.queryj;
@@ -44,64 +44,61 @@ import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.ConditionOperator;
 import org.acmsl.queryj.Field;
 
-/*
- * Importing JDK classes.
- */
-import java.util.ArrayList;
-import java.util.Collection;
-
 /**
- * Represents conditions in SQL statements.
+ * Represents text/numeric/time/system in SQL statements.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class VariableCondition
-    extends  AtomicCondition
+public abstract class Function
 {
     /**
-     * Creates a variable condition using given information.
-     * @param field the left-side field.
-     * @param operator the operator.
-     * @precondition field != null
-     * @precondition operator != null
+     * The function name.
      */
-    public VariableCondition(final Field field, final ConditionOperator operator)
+    private String m__strName;
+    
+    /**
+     * Creates a function condition using given information.
+     * @param name the function name.
+     * @precondition name != null
+     */
+    public Function(final String name)
     {
-        super(field, operator, "?");
+        immutableSetName(name);
+        
     }
 
     /**
-     * Creates a variable condition using given information.
-     * @param field the left-side field.
-     * @param operator the operator.
-     * @param rightSideField the right-side field.
-     * @precondition field != null
-     * @precondition operator != null
-     * @precondition rightSideField != null
+     * Specifies the name.
+     * @param name such name.
      */
-    protected VariableCondition(
-        final Field field, final ConditionOperator operator, final String rightSideField)
+    protected final void immutableSetName(final String name)
     {
-        super(field, operator, rightSideField);
+        m__strName = name;
     }
 
     /**
-     * Retrieves the variable conditions.
-     * @return such collection.
+     * Specifies the name.
+     * @param name such name.
      */
-    public Collection getVariableConditions()
+    protected void setName(final String name)
     {
-        Collection result = new ArrayList();
-
-        result.add(this);
-
-        Collection t_cNestedConditions = super.getVariableConditions();
-
-        if  (t_cNestedConditions != null)
-        {
-            result.addAll(t_cNestedConditions);
-        }
-
-        return result;
+        immutableSetName(name);
     }
+
+    /**
+     * Retrieves the name.
+     * @param name such name.
+     */
+    public String getName()
+    {
+        return m__strName ;
+    }
+
+    /**
+     * Builds an expression.
+     * @param value the expression value.
+     * @return the function call in text format.
+     * @precondition value != null
+     */
+    public abstract String buildExpression(final String value);
 }

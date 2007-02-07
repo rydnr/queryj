@@ -242,7 +242,13 @@ public class TextFunctionsTemplateGenerator
             {
                 throw
                     new QueryJException(
-                        "invalid.text.function.template.factory");
+                        "invalid.text.function.template.factory",
+                        new Object[]
+                        {
+                            t_TemplateFactory,
+                            engineName,
+                            engineVersion
+                        });
             }
             else 
             {
@@ -291,10 +297,12 @@ public class TextFunctionsTemplateGenerator
         {
             throw
                 new QueryJException(
-                      "Cannot find text functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
+                    "cannot.find.text.functions.template",
+                    new Object[]
+                    {
+                        engineName,
+                        engineVersion
+                    });
         }
 
         return result;

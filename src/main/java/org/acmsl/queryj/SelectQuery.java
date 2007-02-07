@@ -38,12 +38,17 @@
 package org.acmsl.queryj;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.Table;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
@@ -55,6 +60,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Represents standard SQL select queries.
@@ -290,19 +300,9 @@ public class SelectQuery
     public QueryResultSet retrieveMatchingResults()
         throws  SQLException
     {
-        QueryResultSet result = null;
-
-        Statement t_Statement = getPreparedStatement();
-
-        if  (t_Statement != null)
-        {
-            result =
-                new QueryResultSet(
-                    this,
-                    t_Statement.executeQuery(toString()));
-        }
-
-        return result;
+        return
+            new QueryResultSet(
+                this, executeQuery(toString()));
     }
 
     /**
@@ -547,6 +547,13 @@ public class SelectQuery
                 queryUtils.concatenate(orderingFields, ", "));
         }
 
+        Log t_Log = UniqueLogFactory.getLog("jdbc");
+        
+        if  (t_Log != null)
+        {
+            t_Log.debug(t_sbResult.toString());
+        }
+        
         return t_sbResult.toString();
     }
 }

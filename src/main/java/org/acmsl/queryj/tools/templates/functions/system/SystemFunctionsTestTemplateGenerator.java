@@ -182,7 +182,13 @@ public class SystemFunctionsTestTemplateGenerator
                 {
                     throw
                         new QueryJException(
-                            "invalid.system.function.test.template.factory");
+                            "invalid.system.function.test.template.factory",
+                            new Object[]
+                            {
+                                t_TemplateFactory,
+                                engineName,
+                                engineVersion
+                            });
                 }
                 else 
                 {

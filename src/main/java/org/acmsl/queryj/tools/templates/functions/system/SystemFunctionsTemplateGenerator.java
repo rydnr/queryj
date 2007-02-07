@@ -246,7 +246,12 @@ public class SystemFunctionsTemplateGenerator
             {
                 throw
                     new QueryJException(
-                        "invalid.system.function.template.factory");
+                        "invalid.system.function.template.factory",
+                        new Object[]
+                        {
+                            engineName,
+                            engineVersion
+                        });
             }
             else 
             {
@@ -296,10 +301,12 @@ public class SystemFunctionsTemplateGenerator
         {
             throw
                 new QueryJException(
-                      "Cannot find system functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
+                    "cannot.find.system.functions.template",
+                    new Object[]
+                    {
+                        engineName,
+                        engineVersion
+                    });
         }
 
         return result;

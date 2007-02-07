@@ -761,28 +761,44 @@ public class TemplateMappingManager
                 {
                     throw
                         new QueryJException(
-                            type + ".template.factory.class.not.available");
+                            "template.factory.class.not.available",
+                            new Object[]
+                            {
+                                type
+                            });
                 }
             }
             catch  (final ClassNotFoundException classNotFoundException)
             {
                 throw
                     new QueryJException(
-                        type + ".template.factory.not.found",
+                        "template.factory.not.found",
+                        new Object[]
+                        {
+                            type
+                        },
                         classNotFoundException);
             }
             catch  (final InstantiationException instantiationException)
             {
                 throw
                     new QueryJException(
-                        "invalid." + type + ".template.factory",
+                        "invalid.template.factory",
+                        new Object[]
+                        {
+                            type
+                        },
                         instantiationException);
             }
             catch  (final IllegalAccessException illegalAccessException)
             {
                 throw
                     new QueryJException(
-                        "access.to." + type + ".template.factory.not.allowed",
+                        "access.to.template.factory.not.allowed",
+                        new Object[]
+                        {
+                            type
+                        },
                         illegalAccessException);
             }
         }

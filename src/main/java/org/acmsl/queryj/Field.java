@@ -191,6 +191,41 @@ public abstract class Field
     }
 
     /**
+     * Retrieves the condition to be able to filter for equality.
+     * @param function the field to filter with.
+     * @return such kind of condition.
+     */
+    public VariableCondition equals(final Function function)
+    {
+        return
+            equals(
+                function,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter for non-equality.
+     * @param function the function.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition function != null
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition equals(
+        final Function function,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getEquals(), function);
+    }
+
+    /**
      * Retrieves the variable condition to be able to filter for non-equality.
      * @return such kind of condition.
      */
@@ -218,6 +253,42 @@ public abstract class Field
         return
             conditionFactory.createVariableCondition(
                 this, conditionOperatorRepository.getNotEquals());
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter for non-equality.
+     * @param function the function.
+     * @return such kind of condition.
+     * @precondition function != null
+     */
+    public VariableCondition notEquals(final Function function)
+    {
+        return
+            notEquals(
+                function,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter for non-equality.
+     * @param function the function.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition function != null
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition notEquals(
+        final Function function,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getNotEquals(), function);
     }
 
     /**
@@ -251,6 +322,42 @@ public abstract class Field
     }
 
     /**
+     * Retrieves the variable condition to be able to filter for lower values.
+     * @param function the function.
+     * @return such kind of condition.
+     * @precondition function != null
+     */
+    public VariableCondition greaterThan(final Function function)
+    {
+        return
+            greaterThan(
+                function,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
+
+    /**
+     * Retrieves the condition to be able to filter for lower values.
+     * @param function the function.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition function != null
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition greaterThan(
+        final Function function,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getGreaterThan(), function);
+    }
+
+    /**
      * Retrieves the variable condition to be able to filter for greater
      * values.
      * @return such kind of condition.
@@ -279,6 +386,43 @@ public abstract class Field
         return
             conditionFactory.createVariableCondition(
                 this, conditionOperatorRepository.getLessThan());
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter for greater
+     * values.
+     * @param function the function.
+     * @return such kind of condition.
+     * @precondition function != null
+     */
+    public VariableCondition lessThan(final Function function)
+    {
+        return
+            lessThan(
+                function,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
+
+    /**
+     * Retrieves the condition to be able to filter for higher values.
+     * @param function the function.
+     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionOperatorRepository the
+     * <code>ConditionOperatorRepository</code> instance.
+     * @return such kind of condition.
+     * @precondition function != null
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition lessThan(
+        final Function function,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this, conditionOperatorRepository.getLessThan(), function);
     }
 
     /**

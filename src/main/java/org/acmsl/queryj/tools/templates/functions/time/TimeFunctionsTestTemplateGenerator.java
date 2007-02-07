@@ -148,7 +148,13 @@ public class TimeFunctionsTestTemplateGenerator
             {
                 throw
                     new QueryJException(
-                        "invalid.time.function.test.template.factory");
+                        "invalid.time.function.test.template.factory",
+                        new Object[]
+                        {
+                            t_TemplateFactory,
+                            engineName,
+                            engineVersion
+                        });
             }
             else 
             {
@@ -200,8 +206,12 @@ public class TimeFunctionsTestTemplateGenerator
         {
             throw
                 new QueryJException(
-                      "cannot.find.test.template.factory.for."
-                    + engineName);
+                    "cannot.find.time.test.template.factory",
+                    new Object[]
+                    {
+                        engineName,
+                        engineVersion
+                    });
         }
 
         return result;

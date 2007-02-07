@@ -184,7 +184,13 @@ public class TextFunctionsTestTemplateGenerator
                 {
                     throw
                         new QueryJException(
-                            "invalid.text.function.test.template.factory");
+                            "invalid.text.function.test.template.factory",
+                            new Object[]
+                            {
+                                t_TemplateFactory,
+                                engineName,
+                                engineVersion
+                            });
                 }
                 else 
                 {

@@ -37,31 +37,82 @@
  */
 package org.acmsl.queryj;
 
+/*
+ * Importing ACM-SL classes.
+ */
+import org.acmsl.commons.CheckedException;
+
 /**
  * Represents abnormal situations regarding QueryJ processing.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public class QueryJException
-    extends  Exception
+    extends  CheckedException
 {
     /**
-     * Builds a QueryJ exception with a certain message.
-     * @param message the message.
+     * A cached empty String array.
      */
-    public QueryJException(final String message)
+    protected static final String[] EMPTY_STRING_ARRAY = new String[0];
+    
+    /**
+     * Creates a <code>QueryJException</code> with given message.
+     * @param messageKey the key to build the exception message.
+     * @param params the parameters to build the exception message.
+     * @precondition messageKey != null
+     * @precondition params != null
+     */
+    public QueryJException(final String messageKey, final Object[] params)
     {
-        super(message);
+        super(messageKey, params);
     }
 
     /**
-     * Builds a QueryJ exception to wrap given one.
-     * @param message the message.
-     * @param cause the exception to wrap.
+     * Creates a <code>QueryJException</code> with given message.
+     * @param messageKey the key to build the exception message.
+     * @precondition messageKey != null
      */
-    public QueryJException(final String message, final Throwable cause)
+    public QueryJException(final String messageKey)
     {
-        super(message, cause);
+        this(messageKey, EMPTY_STRING_ARRAY);
+    }
+
+    /**
+     * Creates a <code>QueryJException</code> with given cause.
+     * @param messageKey the key to build the exception message.
+     * @param params the parameters to build the exception message.
+     * @param cause the error cause.
+     * @precondition messageKey != null
+     * @precondition params != null
+     * @precondition cause != null
+     */
+    public QueryJException(
+        final String messageKey,
+        final Object[] params,
+        final Throwable cause)
+    {
+        super(messageKey, params, cause);
+    }
+
+    /**
+     * Creates a <code>QueryJException</code> with given cause.
+     * @param messageKey the key to build the exception message.
+     * @param cause the error cause.
+     * @precondition messageKey != null
+     * @precondition cause != null
+     */
+    public QueryJException(final String messageKey, final Throwable cause)
+    {
+        this(messageKey, EMPTY_STRING_ARRAY, cause);
+    }
+
+    /**
+     * Retrieves the exceptions bundle.
+     * @return such bundle name.
+     */
+    protected String retrieveExceptionsBundleName()
+    {
+        return "queryj-exceptions";
     }
 
     /**
@@ -83,6 +134,9 @@ public class QueryJException
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        t_sbResult.append(super.toString());
+
+        t_sbResult.append(":\n");
         t_sbResult.append(message);
 
         if  (cause != null) 

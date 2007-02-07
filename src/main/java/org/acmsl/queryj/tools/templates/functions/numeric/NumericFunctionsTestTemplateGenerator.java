@@ -160,8 +160,8 @@ public class NumericFunctionsTestTemplateGenerator
      * @throws QueryJException if the factory class is invalid.
      */
     protected NumericFunctionsTestTemplateFactory getTemplateFactory(
-            String engineName, String engineVersion)
-        throws  QueryJException
+        final String engineName, final String engineVersion)
+      throws  QueryJException
     {
         NumericFunctionsTestTemplateFactory result = null;
 
@@ -182,7 +182,13 @@ public class NumericFunctionsTestTemplateGenerator
                 {
                     throw
                         new QueryJException(
-                            "invalid.numeric.function.test.template.factory");
+                            "invalid.numeric.function.test.template.factory",
+                            new Object[]
+                            {
+                                t_TemplateFactory,
+                                engineName,
+                                engineVersion
+                            });
                 }
                 else 
                 {

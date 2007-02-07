@@ -47,6 +47,7 @@ import org.acmsl.queryj.BigDecimalField;
 import org.acmsl.queryj.CalendarField;
 import org.acmsl.queryj.DoubleField;
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.Function;
 import org.acmsl.queryj.IntField;
 import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.QueryUtils;
@@ -72,6 +73,22 @@ import java.util.Calendar;
 public class OracleTextFunctions
     implements  Singleton
 {
+    /**
+     * The <code>UPPER</code> function.
+     */
+    public static final Function UPPER =
+        new Function("UPPER")
+        {
+            /**
+             * Builds the function expression.
+             * @param value the value.
+             */
+            public String buildExpression(final String value)
+            {
+                return getName() + "(" + value + ")";
+            }
+        };
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
@@ -101,6 +118,16 @@ public class OracleTextFunctions
     public StringField upper(final StringField field)
     {
         return new _StringFieldWrapper(field, "UPPER");
+    }
+
+    /**
+     * Creates the field represented by the usage of Oracle's LTRIM function.
+     * @param field the text field.
+     * @return the corresponding function call.
+     */
+    public Function upper()
+    {
+        return UPPER;
     }
 
     /**

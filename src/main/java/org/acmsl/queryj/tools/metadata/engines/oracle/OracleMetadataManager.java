@@ -189,7 +189,8 @@ public class OracleMetadataManager
             catalog,
             schema,
             getTableNames(metaData, catalog, schema),
-            QueryFactory.getInstance());
+            QueryFactory.getInstance(),
+            OracleTextFunctions.getInstance());
     }
 
     /**
@@ -199,18 +200,21 @@ public class OracleMetadataManager
      * @param schema the database schema.
      * @param tableNames the table names.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition tableNames != null
-     * @precndition queryFactory != null
+     * @precondition queryFactory != null
+     * @precondition oracleTextFunctions != null
      */
     protected void extractPrimaryKeys(
         final Connection connection,
         final String catalog,
         final String schema,
         final String[] tableNames,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -222,6 +226,8 @@ public class OracleMetadataManager
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
             
+        String t_strTableName = null;
+
         try
         {
             for  (int t_iTableIndex = 0;
@@ -230,6 +236,8 @@ public class OracleMetadataManager
             {
                 try
                 {
+                    t_strTableName = tableNames[t_iTableIndex];
+
                     SelectQuery t_Query = queryFactory.createSelectQuery();
 
                     t_Query.select(USER_CONS_COLUMNS.COLUMN_NAME);
@@ -245,7 +253,8 @@ public class OracleMetadataManager
 
                     t_Condition =
                         t_Condition.and(
-                            USER_CONS_COLUMNS.TABLE_NAME.equals());
+                            oracleTextFunctions.upper(USER_CONS_COLUMNS.TABLE_NAME).equals(
+                                oracleTextFunctions.upper()));
 
                     //(USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
                     // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)
@@ -262,8 +271,9 @@ public class OracleMetadataManager
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
                     t_Query.setString(
-                        USER_CONS_COLUMNS.TABLE_NAME.equals(),
-                        tableNames[t_iTableIndex]);
+                        oracleTextFunctions.upper(USER_CONS_COLUMNS.TABLE_NAME).equals(
+                            oracleTextFunctions.upper()),
+                        t_strTableName.toUpperCase());
 
                     //SELECT USER_CONS_COLUMNS.COLUMN_NAME
                     //FROM USER_CONS_COLUMNS, USER_CONSTRAINTS
@@ -278,13 +288,15 @@ public class OracleMetadataManager
                     
                     t_rsResults = t_Query.executeQuery();
 
-                    while  (   (t_rsResults != null)
-                            && (t_rsResults.next()))
+                    if  (t_rsResults != null)
                     {
-                        addPrimaryKey(
-                            tableNames[t_iTableIndex],
-                            t_rsResults.getString(
-                                USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
+                        while  (t_rsResults.next())
+                        {
+                            addPrimaryKey(
+                                t_strTableName,
+                                t_rsResults.getString(
+                                    USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
+                        }
                     }
                 }
                 catch  (final SQLException sqlException)
@@ -292,6 +304,10 @@ public class OracleMetadataManager
                     throw
                         new QueryJException(
                             "cannot.retrieve.primary.keys",
+                            new Object[]
+                            {
+                                t_strTableName
+                            },
                             sqlException);
                 }
             }
@@ -370,13 +386,13 @@ public class OracleMetadataManager
      * @param schema the database schema.
      * @param tableNames the table names.
      * @param queryFactory the query factory.
-     * @param textFunctions the <code>OracleTextFunctions</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition tableNames != null
      * @precondition queryFactory != null
-     * @precondition textFunctions != null
+     * @precondition oracleTextFunctions != null
      */
     protected void extractForeignKeys(
         final Connection connection,
@@ -384,7 +400,7 @@ public class OracleMetadataManager
         final String schema,
         final String[] tableNames,
         final QueryFactory queryFactory,
-        final OracleTextFunctions textFunctions)
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -395,7 +411,9 @@ public class OracleMetadataManager
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
-        
+
+        String t_strTableName = null;
+
         try
         {
             for  (int t_iTableIndex = 0;
@@ -404,6 +422,8 @@ public class OracleMetadataManager
             {
                 try
                 {
+                    t_strTableName = tableNames[t_iTableIndex];
+
                     SelectQuery t_Query = queryFactory.createSelectQuery();
 
                     OracleUserConstraintsTable CON =
@@ -434,13 +454,15 @@ public class OracleMetadataManager
                         .and(RCOL.TABLE_NAME.equals(RCON.TABLE_NAME))
                         .and(RCOL.CONSTRAINT_NAME.equals(RCON.CONSTRAINT_NAME))
                         .and(RCOL.POSITION.equals(COL.POSITION))
-                        .and(textFunctions.upper(COL.TABLE_NAME).equals()));
+                        .and(oracleTextFunctions.upper(COL.TABLE_NAME).equals(
+                                 oracleTextFunctions.upper())));
 
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
                     t_Query.setString(
-                        textFunctions.upper(COL.TABLE_NAME).equals(),
-                        tableNames[t_iTableIndex].toUpperCase());
+                        oracleTextFunctions.upper(COL.TABLE_NAME).equals(
+                            oracleTextFunctions.upper()),
+                        t_strTableName.toUpperCase());
 
                     t_Results = (QueryResultSet) t_Query.executeQuery();
 
@@ -455,7 +477,7 @@ public class OracleMetadataManager
                                 {
                                     t_Results.getString(RCOL.COLUMN_NAME)
                                 },
-                                tableNames[t_iTableIndex],
+                                t_strTableName,
                                 new String[]
                                 {
                                     t_Results.getString(COL.COLUMN_NAME)
@@ -468,6 +490,10 @@ public class OracleMetadataManager
                     throw
                         new QueryJException(
                             "cannot.retrieve.foreign.keys",
+                            new Object[]
+                            {
+                                t_strTableName
+                            },
                             sqlException);
                 }
             }
@@ -586,7 +612,7 @@ public class OracleMetadataManager
                 throw
                     new QueryJException(
                         "cannot.retrieve.database.table.names",
-                            sqlException);
+                        sqlException);
             }
 
             result = extractTableNames(t_Results);
@@ -702,7 +728,8 @@ public class OracleMetadataManager
                 schema,
                 tableName,
                 parentTable,
-                QueryFactory.getInstance());
+                QueryFactory.getInstance(),
+                OracleTextFunctions.getInstance());
     }
 
     /**
@@ -713,11 +740,13 @@ public class OracleMetadataManager
      * @param tableName the table name.
      * @param parentTable the parent table.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
      * @precondition connection != null
      * @precondition queryFactory != null
+     * @precondition oracleTextFunctions != null
      */
     protected String[] getColumnNames(
         final Connection connection,
@@ -725,7 +754,8 @@ public class OracleMetadataManager
         final String schema,
         final String tableName,
         final String parentTable,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -741,7 +771,8 @@ public class OracleMetadataManager
                         schema,
                         parentTable,
                         getParentTable(parentTable),
-                        queryFactory)));
+                        queryFactory,
+                        oracleTextFunctions)));
         }
         
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -750,25 +781,32 @@ public class OracleMetadataManager
 
         PreparedStatement t_PreparedStatement = null;
 
+        String t_strQuery = null;
+
+        SelectQuery t_Query;
+
         try
         {
             try
             {
-                SelectQuery t_Query = queryFactory.createSelectQuery();
+                t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
 
                 t_Query.from(USER_TAB_COLUMNS);
 
-                t_Query.where(USER_TAB_COLUMNS.TABLE_NAME.equals());
+                t_Query.where(
+                    oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()));
 
                 t_Query.orderBy(USER_TAB_COLUMNS.COLUMN_ID);
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    USER_TAB_COLUMNS.TABLE_NAME.equals(),
-                    tableName);
+                    oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()),
+                    tableName.toUpperCase());
 
                 /*
                 t_PreparedStatement = t_Connection.prepareStatement(t_Query.toString());
@@ -778,6 +816,8 @@ public class OracleMetadataManager
                     tableName);
                 */
 
+                t_strQuery = t_Query.toString();
+
                 t_rsResults = t_Query.executeQuery();
                 //t_rsResults = t_PreparedStatement.executeQuery();
             }
@@ -786,6 +826,10 @@ public class OracleMetadataManager
                 throw
                     new QueryJException(
                         "cannot.retrieve.database.column.names",
+                        new Object[]
+                        {
+                            tableName
+                        },
                         sqlException);
             }
 
@@ -852,6 +896,11 @@ public class OracleMetadataManager
             }
         }
 
+        if  (result.size() == 0)
+        {
+            t_Log.error("'" + t_strQuery + "' returned zero results for table " + tableName);
+        }
+
         return (String[]) result.toArray(EMPTY_STRING_ARRAY);
     }
 
@@ -902,7 +951,8 @@ public class OracleMetadataManager
                 tableName,
                 parentTable,
                 size,
-                QueryFactory.getInstance());
+                QueryFactory.getInstance(),
+                OracleTextFunctions.getInstance());
     }
 
     /**
@@ -914,11 +964,13 @@ public class OracleMetadataManager
      * @param parentTable the parent table.
      * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition queryFactory != null
+     * @precondition oracleTextFunctions != null
      */
     protected int[] getColumnTypes(
         final Connection connection,
@@ -927,7 +979,8 @@ public class OracleMetadataManager
         final String tableName,
         final String parentTable,
         final int size,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -946,7 +999,8 @@ public class OracleMetadataManager
                                 parentTable,
                                 getParentTable(parentTable),
                                 -1,
-                                queryFactory))));
+                                queryFactory,
+                                oracleTextFunctions))));
         }
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -966,13 +1020,15 @@ public class OracleMetadataManager
                 t_Query.from(USER_TAB_COLUMNS);
 
                 t_Query.where(
-                    USER_TAB_COLUMNS.TABLE_NAME.equals());
+                    oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()));
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    USER_TAB_COLUMNS.TABLE_NAME.equals(),
-                    tableName);
+                    oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()),
+                    tableName.toUpperCase());
 
                 t_rsResults = t_Query.executeQuery();
             }
@@ -981,6 +1037,10 @@ public class OracleMetadataManager
                 throw
                     new QueryJException(
                         "cannot.retrieve.database.column.types",
+                        new Object[]
+                        {
+                            tableName
+                        },
                         sqlException);
             }
 
@@ -1139,7 +1199,8 @@ public class OracleMetadataManager
                 tableName,
                 parentTable,
                 size,
-                QueryFactory.getInstance());
+                QueryFactory.getInstance(),
+                OracleTextFunctions.getInstance());
     }
 
     /**
@@ -1151,11 +1212,13 @@ public class OracleMetadataManager
      * @param parentTable the parent table.
      * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition queryFactory != null
+     * @precondition oracleTextFunctions != null
      */
     protected boolean[] getAllowNulls(
         final Connection connection,
@@ -1164,7 +1227,8 @@ public class OracleMetadataManager
         final String tableName,
         final String parentTable,
         final int size,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -1183,7 +1247,8 @@ public class OracleMetadataManager
                                parentTable,
                                getParentTable(parentTable),
                                -1,
-                               queryFactory))));
+                               queryFactory,
+                               oracleTextFunctions))));
         }
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -1203,13 +1268,15 @@ public class OracleMetadataManager
                 t_Query.from(USER_TAB_COLUMNS);
 
                 t_Query.where(
-                    USER_TAB_COLUMNS.TABLE_NAME.equals());
+                    oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()));
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    USER_TAB_COLUMNS.TABLE_NAME.equals(),
-                    tableName);
+                    oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()),
+                    tableName.toUpperCase());
 
                 t_rsResults = t_Query.executeQuery();
             }
@@ -1218,6 +1285,10 @@ public class OracleMetadataManager
                 throw
                     new QueryJException(
                         "cannot.retrieve.database.column.types",
+                        new Object[]
+                        {
+                            tableName
+                        },
                         sqlException);
             }
 
@@ -1351,7 +1422,8 @@ public class OracleMetadataManager
                 catalog,
                 schema,
                 tableName,
-                QueryFactory.getInstance());
+                QueryFactory.getInstance(),
+                OracleTextFunctions.getInstance());
     }
 
     /**
@@ -1361,19 +1433,22 @@ public class OracleMetadataManager
      * @param schema the database schema.
      * @param tableName the table name.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition tableNames != null
      * @precndition queryFactory != null
+     * @precondition oracleTextFunctions != null
      */
     protected String getTableComment(
         final Connection connection,
         final String catalog,
         final String schema,
         final String tableName,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -1396,13 +1471,15 @@ public class OracleMetadataManager
                 t_Query.from(USER_TAB_COMMENTS);
 
                 t_Query.where(
-                    USER_TAB_COMMENTS.TABLE_NAME.equals());
+                    oracleTextFunctions.upper(USER_TAB_COMMENTS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()));
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
-                    USER_TAB_COMMENTS.TABLE_NAME.equals(),
-                    tableName);
+                    oracleTextFunctions.upper(USER_TAB_COMMENTS.TABLE_NAME).equals(
+                        oracleTextFunctions.upper()),
+                    tableName.toUpperCase());
 
                 if  (t_Log != null)
                 {
@@ -1426,7 +1503,7 @@ public class OracleMetadataManager
                         {
                             t_Log.trace(
                                   "Comments for table "+ tableName
-                                  + " = " + t_strComment);
+                                + " = " + t_strComment);
                         }
                     }
                     else
@@ -1441,7 +1518,11 @@ public class OracleMetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.table.comments",
+                        "cannot.retrieve.table.comment",
+                        new Object[]
+                        {
+                            tableName
+                        },
                         sqlException);
             }
         }
@@ -1516,7 +1597,8 @@ public class OracleMetadataManager
                 schema,
                 tableName,
                 columnNames,
-                QueryFactory.getInstance());
+                QueryFactory.getInstance(),
+                OracleTextFunctions.getInstance());
     }
 
     /**
@@ -1527,12 +1609,14 @@ public class OracleMetadataManager
      * @param tableName the table name.
      * @param columnNames the column names.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition tableName != null
-     * @precndition queryFactory != null
+     * @precondition queryFactory != null
+     * @precondition oracleTextFunctions != null
      */
     protected String[] getColumnComments(
         final Connection connection,
@@ -1540,7 +1624,8 @@ public class OracleMetadataManager
         final String schema,
         final String tableName,
         final String[] columnNames,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final OracleTextFunctions oracleTextFunctions)
       throws  SQLException,
               QueryJException
     {
@@ -1558,11 +1643,12 @@ public class OracleMetadataManager
 
         try
         {
+            String t_strColumnName = null;
+            String t_strComment = null;
+
             try
             {
                 SelectQuery t_Query;
-                String t_strColumnName = null;
-                String t_strComment = null;
 
                 for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
                 {
@@ -1575,18 +1661,22 @@ public class OracleMetadataManager
                     t_Query.from(USER_COL_COMMENTS);
 
                     t_Query.where(
-                             USER_COL_COMMENTS.TABLE_NAME.equals()
-                        .and(USER_COL_COMMENTS.COLUMN_NAME.equals()));
+                             oracleTextFunctions.upper(USER_COL_COMMENTS.TABLE_NAME).equals(
+                                 oracleTextFunctions.upper())
+                        .and(oracleTextFunctions.upper(USER_COL_COMMENTS.COLUMN_NAME).equals(
+                                 oracleTextFunctions.upper())));
 
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
                     t_Query.setString(
-                        USER_COL_COMMENTS.TABLE_NAME.equals(),
-                        tableName);
+                        oracleTextFunctions.upper(USER_COL_COMMENTS.TABLE_NAME).equals(
+                            oracleTextFunctions.upper()),
+                        tableName.toUpperCase());
 
                     t_Query.setString(
-                        USER_COL_COMMENTS.COLUMN_NAME.equals(),
-                        t_strColumnName);
+                        oracleTextFunctions.upper(USER_COL_COMMENTS.COLUMN_NAME).equals(
+                            oracleTextFunctions.upper()),
+                        t_strColumnName.toUpperCase());
 
                     String t_strQuery = t_Query.toString();
 
@@ -1608,10 +1698,11 @@ public class OracleMetadataManager
 
                         if  (t_strComment != null)
                         {
-                            if  (t_Log != null)
+                            if  (   (t_Log != null)
+                                 && (t_Log.isTraceEnabled()))
                             {
                                 t_Log.trace(
-                                    "Comments for column "
+                                      "Comments for column "
                                     + tableName
                                     + "."
                                     + t_strColumnName
@@ -1632,7 +1723,12 @@ public class OracleMetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.column.comments",
+                        "cannot.retrieve.column.comment",
+                        new Object[]
+                        {
+                            t_strColumnName,
+                            tableName
+                        },
                         sqlException);
             }
         }

@@ -2480,6 +2480,19 @@ public abstract class AbstractJdbcMetadataManager
 
             t_strParentTable = getParentTable(t_strTableName);
             
+            if  (!exists(t_strTableName, t_astrTableNames))
+            {
+                throw
+                    new QueryJException(
+                        "parent.table.not.found",
+                        new Object[]
+                        {
+                            t_strParentTable,
+                            t_strTableName,
+                            t_strTableComment
+                        });
+            }
+                
             String[] t_astrColumnNames =
                 getColumnNames(
                     metaData,
@@ -3204,7 +3217,7 @@ public abstract class AbstractJdbcMetadataManager
             try 
             {
                 t_rsProcedures =
-                    metaData.getProcedures(catalog, schema,null);
+                    metaData.getProcedures(catalog, schema, null);
             }
             catch  (final SQLException sqlException)
             {
@@ -3648,7 +3661,11 @@ public abstract class AbstractJdbcMetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.database.table.names",
+                        "cannot.retrieve.database.table.comment",
+                        new Object[]
+                        {
+                            tableName
+                        },
                         sqlException);
             }
 
@@ -3711,7 +3728,12 @@ public abstract class AbstractJdbcMetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.database.table.names",
+                        "cannot.retrieve.database.column.comment",
+                        new Object[]
+                        {
+                            columnName,
+                            tableName
+                        },
                         sqlException);
             }
 
@@ -4135,6 +4157,36 @@ public abstract class AbstractJdbcMetadataManager
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
             result[t_iIndex] = Boolean.valueOf(array[t_iIndex]);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Checks whether given text is part of the array.
+     * @param text the text to look for.
+     * @param array the array.
+     * @precondition text != null
+     * @precondition array != null
+     */
+    protected boolean exists(final String text, final String[] array)
+    {
+        boolean result = (text != null);
+
+        if  (result)
+        {
+            result = false;
+            
+            int t_iCount = (array != null) ? array.length : 0;
+        
+            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                if  (text.equals(array[t_iIndex]))
+                {
+                    result = true;
+                    break;
+                }
+            }
         }
         
         return result;

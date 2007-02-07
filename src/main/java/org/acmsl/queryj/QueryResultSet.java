@@ -43,7 +43,12 @@ package org.acmsl.queryj;
 import org.acmsl.queryj.Query;
 
 /*
- * Importing some JDK1.3 classes.
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing some JDK classes.
  */
 import java.io.InputStream;
 import java.io.Reader;
@@ -63,6 +68,11 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /**
  * Represents standard SQL queries.
@@ -589,6 +599,15 @@ public class QueryResultSet
     protected void close(final ResultSet resultSet)
         throws  SQLException
     {
+        Log t_Log = UniqueLogFactory.getLog(QueryResultSet.class);
+        
+        if  (t_Log != null)
+        {
+            t_Log.info(
+                  "Closing resultset (" + getResultSet()
+                + ") for (" + getQuery().retrievePreparedStatement() + ") " + getQuery());
+        }
+        
         resultSet.close();
     }
 

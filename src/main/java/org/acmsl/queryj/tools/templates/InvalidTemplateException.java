@@ -51,21 +51,20 @@ public class InvalidTemplateException
     extends  NonCheckedException
 {
     /**
-     * Creates a InvalidTemplateException with given message.
+     * Creates a <code>InvalidTemplateException</code> with given message.
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.
      * @precondition messageKey != null
      * @precondition params != null
      */
     public InvalidTemplateException(
-        final String messageKey,
-        final Object[] params)
+        final String messageKey, final Object[] params)
     {
         super(messageKey, params);
     }
 
     /**
-     * Creates a InvalidTemplateException with given cause.
+     * Creates a <code>InvalidTemplateException</code> with given cause.
      * @param messageKey the key to build the exception message.
      * @param params the parameters to build the exception message.
      * @param cause the error cause.

@@ -155,7 +155,13 @@ public class NumericFunctionsTemplateGenerator
             {
                 throw
                     new QueryJException(
-                        "invalid.numeric.function.template.factory");
+                        "invalid.numeric.function.template.factory",
+                        new Object[]
+                        {
+                            t_TemplateFactory,
+                            engineName,
+                            engineVersion
+                        });
             }
             else 
             {
@@ -207,10 +213,12 @@ public class NumericFunctionsTemplateGenerator
         {
             throw
                 new QueryJException(
-                      "Cannot find numeric functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
+                    "cannot.find.numeric.functions.template",
+                    new Object[]
+                    {
+                        engineName,
+                        engineVersion
+                    });
         }
 
         return result;

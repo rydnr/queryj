@@ -242,10 +242,25 @@ public class ConditionFactory
      * @precondition operator != null
      */
     public VariableCondition createVariableCondition(
-        final Field field,
-        final ConditionOperator operator)
+        final Field field, final ConditionOperator operator)
     {
         return new VariableCondition(field, operator);
+    }
+
+    /**
+     * Creates a variable condition.
+     * @param field the field.
+     * @param operator the operator.
+     * @param function the function.
+     * @return such type of instance.
+     * @precondition field != null
+     * @precondition operator != null
+     * @precondition function != null
+     */
+    public VariableCondition createVariableCondition(
+        final Field field, final ConditionOperator operator, final Function function)
+    {
+        return new FunctionVariableCondition(field, operator, function);
     }
 
     /**

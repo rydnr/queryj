@@ -246,7 +246,12 @@ public class TimeFunctionsTemplateGenerator
             {
                 throw
                     new QueryJException(
-                        "invalid.time.function.template.factory");
+                        "invalid.time.function.template.factory",
+                        new Object[]
+                        {
+                            engineName,
+                            engineVersion
+                        });
             }
             else 
             {
@@ -295,10 +300,12 @@ public class TimeFunctionsTemplateGenerator
         {
             throw
                 new QueryJException(
-                      "Cannot find time functions' "
-                    + "template factory for "
-                    + engineName + "\n"
-                    + "Disable extractfunctions setting.");
+                    "cannot.find.time.functions.template",
+                    new Object[]
+                    {
+                        engineName,
+                        engineVersion
+                    });
         }
 
         return result;
