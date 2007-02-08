@@ -181,6 +181,7 @@ public class <input.vo_name>ValueObjectFactory
     public <input.vo_name> create<input.vo_name>ValueObject(
 <if(parent)>
         <parent.attributes:attribute_method_declaration(attribute=it);
+          separator=",\n">,
 <endif>
 
         <table.attributes:attribute_method_declaration(attribute=it);
@@ -190,6 +191,7 @@ public class <input.vo_name>ValueObjectFactory
             create<input.vo_name>(
 <if(parent)>
                 <parent.attributes:{<it.nameUncapitalized>};
+                  separator=",\n">,
 <endif>
 
                 <table.attributes:{<it.nameUncapitalized>};
