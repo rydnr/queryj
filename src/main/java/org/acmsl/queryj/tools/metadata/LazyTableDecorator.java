@@ -76,6 +76,11 @@ public class LazyTableDecorator
     private List m__lChildAttributes;
 
     /**
+     * A flag indicating whether the attributes have been cleaned up.
+     */
+    private boolean m__bAttributesCleanedUp = false;
+    
+    /**
      * Creates a <code>LazyTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -85,7 +90,7 @@ public class LazyTableDecorator
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
-    public LazyTableDecorator(
+    protected LazyTableDecorator(
         final Table table,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
@@ -104,7 +109,7 @@ public class LazyTableDecorator
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
-    public LazyTableDecorator(
+    protected LazyTableDecorator(
         final String table,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
@@ -117,20 +122,21 @@ public class LazyTableDecorator
      * Creates a <code>LazyTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
-     * @param attributes the attributes.
      * @param metadataManager the metadata manager.
+     * @param childAttributes the child attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition table != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
-    public LazyTableDecorator(
+    protected LazyTableDecorator(
         final String table,
-        final List attributes,
         final MetadataManager metadataManager,
+        final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        super(table, attributes, null, metadataManager);
+        super(table, null, null, metadataManager);
+        immutableSetChildAttributes(childAttributes);
         immutableSetDecoratorFactory(decoratorFactory);
     }
     
@@ -188,7 +194,7 @@ public class LazyTableDecorator
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
-    public LazyTableDecorator(
+    protected LazyTableDecorator(
         final String name,
         final List attributes,
         final Table parentTable,
@@ -256,6 +262,33 @@ public class LazyTableDecorator
         return m__lChildAttributes;
     }
 
+    /**
+     * Specifies whether the attributes have been cleaned up.
+     * @param flag such flag.
+     */
+    protected final void immutableSetAttributesCleanedUp(final boolean flag)
+    {
+        m__bAttributesCleanedUp = flag;
+    }
+    
+    /**
+     * Specifies whether the attributes have been cleaned up.
+     * @param flag such flag.
+     */
+    protected void setAttributesCleanedUp(final boolean flag)
+    {
+        immutableSetAttributesCleanedUp(flag);
+    }
+    
+    /**
+     * Retrieves whether the attributes have been cleaned up.
+     * @return such flag.
+     */
+    protected boolean getAttributesCleanedUp()
+    {
+        return m__bAttributesCleanedUp;
+    }
+    
     /**
      * Retrieves the attributes.
      * @return such information.
@@ -346,7 +379,8 @@ public class LazyTableDecorator
                 getName(),
                 getChildAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                getAttributesCleanedUp());
     }
 
     /**
@@ -355,6 +389,8 @@ public class LazyTableDecorator
      * @param childAttributes the child's attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param attributesCleanedUp whether the child attributes have been removed
+     * from the attribute list already.
      * @return such information.
      * @precondition table != null
      * @precondition childAttributes != null
@@ -365,22 +401,26 @@ public class LazyTableDecorator
         final String table,
         final List childAttributes,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final boolean attributesCleanedUp)
     {
         List result = super.getAttributes();
 
         if  (   (result == null)
-                || (result.size() == 0))
+             || (result.size() == 0))
         {
-            super.setAttributes(
-                removeOverridden(
-                    childAttributes,
-                    decorateAttributes(
-                        table,
-                        metadataManager,
-                        decoratorFactory)));
-
-            result = super.getAttributes();
+            result =
+                decorateAttributes(
+                    table, metadataManager, decoratorFactory);
+        }
+        
+        if  (   (result != null)
+             && (!attributesCleanedUp))
+        {
+            result = removeOverridden(childAttributes, result);
+            
+            super.setAttributes(result);
+            setAttributesCleanedUp(true);
         }
 
         return result;
@@ -392,16 +432,20 @@ public class LazyTableDecorator
      */
     public Table getParentTable()
     {
-        return getParentTable(getMetadataManager());
+        return getParentTable(getMetadataManager(), getDecoratorFactory());
     }
     
     /**
      * Retrieves the parent table.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such information.
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
-    protected Table getParentTable(final MetadataManager metadataManager)
+    protected Table getParentTable(
+        final MetadataManager metadataManager, 
+        final DecoratorFactory decoratorFactory)
     {
         Table result = super.getParentTable();
 
@@ -412,12 +456,19 @@ public class LazyTableDecorator
             
             if  (t_strParentTable != null)
             {
+                List t_lAttributes = getAttributes();
+                
                 super.setParentTable(
                     new LazyTableDecorator(
                         t_strParentTable, 
-                        sumUpParentAndChildAttributes(),
+                        sumUpParentAndChildAttributes(
+                            t_strParentTable,
+                            t_lAttributes,
+                            metadataManager,
+                            decoratorFactory),
                         metadataManager,
-                        getDecoratorFactory()));
+                        t_lAttributes,
+                        decoratorFactory));
 
                 result = super.getParentTable();
             }
@@ -500,6 +551,28 @@ public class LazyTableDecorator
         return sumUpParentAndChildAttributes(getAttributes(), getChildAttributes());
     }
 
+    /**
+     * Sums up parent and child's attributes.
+     * @param parentTable the parent table.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such collection.
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected List sumUpParentAndChildAttributes(
+        final String parentTable,
+        final List attributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        return
+            sumUpParentAndChildAttributes(
+                decoratorFactory.decorateAttributes(parentTable, metadataManager),
+                attributes);
+    }
+    
     /**
      * Sums up parent and child's attributes.
      * @param attributes the attributes.

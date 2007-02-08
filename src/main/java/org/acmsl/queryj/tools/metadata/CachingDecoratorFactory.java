@@ -288,6 +288,6 @@ public class CachingDecoratorFactory
     {
         return
             new LazyTableDecorator(
-                table, childAttributes, metadataManager, this);
+                table, metadataManager, childAttributes, this);
     }
 }

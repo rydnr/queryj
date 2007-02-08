@@ -85,7 +85,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<class(input=input)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -96,10 +96,21 @@ first_line_description(tableName) ::= <<
 Value object for \<i\><tableName>\</i\>.
 >>
 
-class(input) ::= <<
+class(input, table) ::= <<
 <!
  Generates the class body.
  @param input the input.
+ @param table the table.
+!>
+<class_impl(input=input, table=table, parent=table.parentTable)>
+>>
+
+class_impl(input, table, parent) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -110,14 +121,14 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public interface <input.vo_name>
-<if(input.parent)>
-    extends  <input.parent:{<it.voName>}>
+<if(parent)>
+    extends  <parent.voName>
 <else>
 //    extends  ValueObject
 <endif>
 
 {
-    <input.attributes:attribute_getter(attribute=it);
+    <table.attributes:attribute_getter(attribute=it);
       separator="\n\n">
 }
 >>

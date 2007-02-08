@@ -117,7 +117,7 @@ class_impl(input, table, parent) ::= <<
  */
 public abstract class Abstract<input.vo_name>ValueObject
 <if(parent)>
-    extends  <parent.voName>
+    extends  Abstract<parent.voName>ValueObject
 <endif>
 
     implements  <input.vo_name>
@@ -127,11 +127,17 @@ public abstract class Abstract<input.vo_name>ValueObject
 
     /**
      * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
+<if(parent)>
      <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+<endif>
+
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public Abstract<input.vo_name>ValueObject(
+<if(parent)>
         <parent.attributes:attribute_method_declaration(attribute=it); separator=",\n">,
+<endif>
+
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {

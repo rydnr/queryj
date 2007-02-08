@@ -80,7 +80,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<class(input=input)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -91,11 +91,21 @@ first_line_description(tableName) ::= <<
 Value object factory for \<i\><tableName>\</i\>.
 >>
 
-class(input) ::= <<
+class(input, table) ::= <<
 <!
  Generates the class body.
  @param input the input.
- @param result the custom result.
+ @param table the table.
+!>
+<class_impl(input=input, table=table, parent=table.parentTable)>
+>>
+
+class_impl(input, table, parent) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -136,57 +146,107 @@ public class <input.vo_name>ValueObjectFactory
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
+<if(parent)>
+     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+<endif>
+
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>(
-        <input.attributes:attribute_method_declaration(attribute=it);
+<if(parent)>
+        <parent.attributes:attribute_method_declaration(attribute=it);
+          separator=",\n">,
+<endif>
+
+        <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             new <input.vo_name>ValueObject(
-                <input.attributes:{<it.nameUncapitalized>};
-                separator=",\n">);
+<if(parent)>
+                <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">,
+<endif>
+
+                <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
+<if(parent)>
+     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+<endif>
+
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>ValueObject(
-        <input.attributes:attribute_method_declaration(attribute=it);
+<if(parent)>
+        <parent.attributes:attribute_method_declaration(attribute=it);
+<endif>
+
+        <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             create<input.vo_name>(
-                <input.attributes:{<it.nameUncapitalized>};
+<if(parent)>
+                <parent.attributes:{<it.nameUncapitalized>};
+<endif>
+
+                <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
+<if(parent)>
+     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+<endif>
+
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create(
-        <input.attributes:attribute_method_declaration(attribute=it);
+<if(parent)>
+        <parent.attributes:attribute_method_declaration(attribute=it);
+          separator=",\n">,
+<endif>
+
+        <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             create<input.vo_name>(
-                <input.attributes:{<it.nameUncapitalized>};
+<if(parent)>
+                <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">,
+<endif>
+
+                <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
-     <input.attributes:attribute_javadoc(attribute=it); separator="\n">
+<if(parent)>
+     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+<endif>
+
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> createValueObject(
-        <input.attributes:attribute_method_declaration(attribute=it);
+<if(parent)>
+        <parent.attributes:attribute_method_declaration(attribute=it);
+          separator=",\n">,
+<endif>
+
+        <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
     {
         return
             create<input.vo_name>(
-                <input.attributes:{<it.nameUncapitalized>};
+<if(parent)>
+                <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">,
+<endif>
+
+                <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
     }
 }
