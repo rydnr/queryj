@@ -392,18 +392,35 @@ public class LazyTableDecorator
      */
     public Table getParentTable()
     {
+        return getParentTable(getMetadataManager());
+    }
+    
+    /**
+     * Retrieves the parent table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition metadataManager != null
+     */
+    protected Table getParentTable(final MetadataManager metadataManager)
+    {
         Table result = super.getParentTable();
 
         if  (result == null)
         {
-            super.setParentTable(
-                new LazyTableDecorator(
-                    getName(), 
-                    sumUpParentAndChildAttributes(),
-                    getMetadataManager(),
-                    getDecoratorFactory()));
+            String t_strParentTable =
+                metadataManager.getParentTable(getName());
+            
+            if  (t_strParentTable != null)
+            {
+                super.setParentTable(
+                    new LazyTableDecorator(
+                        t_strParentTable, 
+                        sumUpParentAndChildAttributes(),
+                        metadataManager,
+                        getDecoratorFactory()));
 
-            result = super.getParentTable();
+                result = super.getParentTable();
+            }
         }
 
         return result;
@@ -496,10 +513,13 @@ public class LazyTableDecorator
 
         result.addAll(attributes);
 
-        result.removeAll(childAttributes);
+        if  (childAttributes != null)
+        {
+            result.removeAll(childAttributes);
 
-        result.addAll(childAttributes);
-
+            result.addAll(childAttributes);
+        }
+        
         return result;
     }
 }
