@@ -135,9 +135,18 @@ public abstract class AbstractTable
      * Retrieves the attributes.
      * @return such list.
      */
-    public List getAttributes()
+    protected final List immutableGetAttributes()
     {
         return m__lAttributes;
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such list.
+     */
+    public List getAttributes()
+    {
+        return immutableGetAttributes();
     }
 
     /**

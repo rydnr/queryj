@@ -561,7 +561,7 @@ public class CustomSqlValidationHandler
 
                         if  (   (   ("Date".equals(t_strType))
                                  || ("Timestamp".equals(t_strType)))
-                                && (t_Parameter.getValidationValue() != null))
+                             && (t_Parameter.getValidationValue() != null))
                         {
                             t_ParameterValue = new Timestamp(new Date().getTime());
                         }

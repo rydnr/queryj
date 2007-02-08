@@ -761,20 +761,6 @@ public class OracleMetadataManager
     {
         Collection result = new ArrayList();
 
-        if  (parentTable != null)
-        {
-            result.addAll(
-                Arrays.asList(
-                    getColumnNames(
-                        connection,
-                        catalog,
-                        schema,
-                        parentTable,
-                        getParentTable(parentTable),
-                        queryFactory,
-                        oracleTextFunctions)));
-        }
-        
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -986,23 +972,6 @@ public class OracleMetadataManager
     {
         Collection result = new ArrayList();
         
-        if  (parentTable != null)
-        {
-            result.addAll(
-                Arrays.asList(
-                    (Object[])
-                        toIntegerArray(
-                            getColumnTypes(
-                                connection,
-                                catalog,
-                                schema,
-                                parentTable,
-                                getParentTable(parentTable),
-                                -1,
-                                queryFactory,
-                                oracleTextFunctions))));
-        }
-
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -1233,23 +1202,6 @@ public class OracleMetadataManager
               QueryJException
     {
         Collection result = new ArrayList();
-
-        if  (parentTable != null)
-        {
-            result.addAll(
-                Arrays.asList(
-                    (Object[])
-                       toBooleanArray(
-                           getAllowNulls(
-                               connection,
-                               catalog,
-                               schema,
-                               parentTable,
-                               getParentTable(parentTable),
-                               -1,
-                               queryFactory,
-                               oracleTextFunctions))));
-        }
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         

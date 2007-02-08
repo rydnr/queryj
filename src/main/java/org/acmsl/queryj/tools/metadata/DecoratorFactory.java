@@ -53,6 +53,11 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  */
 import org.acmsl.commons.patterns.Factory;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+
 /**
  * Abstract factory for template-specific decorators.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -113,5 +118,19 @@ public interface DecoratorFactory
      * @return the decorated table for the concrete template.
      */
     public TableDecorator createTableDecorator(
+        final String table, final MetadataManager metadataManager);
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @return the attribute list
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    public List decorateAttributes(
         final String table, final MetadataManager metadataManager);
 }

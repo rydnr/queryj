@@ -62,6 +62,7 @@ import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -71,6 +72,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
@@ -94,7 +96,7 @@ import java.util.Map;
 /*
  * Importing Apache Commons Logging classes.
  */
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.Log;
 
 /**
  * Base logic for all per-table templates.
@@ -921,12 +923,9 @@ public abstract class BasePerTableTemplate
             input.put("static_table", Boolean.TRUE);
         }
 
-        if  (parentTable != null)
-        {
-            input.put(
-                "parent",
-                decorate(parentTable, metadataManager, decoratorFactory));
-        }
+        Table t_Table = decorate(tableName, metadataManager, decoratorFactory);
+
+        input.put("table", t_Table);
 
         input.put("tr_name", tableRepositoryName);
         input.put("tr_name_capitalized", capitalize(tableRepositoryName));

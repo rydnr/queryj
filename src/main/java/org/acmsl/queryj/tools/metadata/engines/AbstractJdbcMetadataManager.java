@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.metadata.engines;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.QueryJException;
 
@@ -77,6 +78,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public abstract class AbstractJdbcMetadataManager
+    implements  MetadataManager
 {
     /**
      * An empty String array.
@@ -2160,7 +2162,33 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected Object buildKey(final Object key)
     {
-        return ((key == null) ? "null" : key);
+        return buildKey(key, isCaseSensitive());
+    }
+
+    /**
+     * Builds a key using given object.
+     * @param key the object key.
+     * @param caseSensitive whether the engine is case sensitive.
+     * @return the map key.
+     */
+    protected Object buildKey(final Object key, final boolean caseSensitive)
+    {
+        Object result = null;
+
+        if  (key == null)
+        {
+            result = "null";
+        }
+        else if  (caseSensitive)
+        {
+            result = "" + key;
+        }
+        else
+        {
+            result = ("" + key).toUpperCase();
+        }
+        
+        return result;
     }
  
     /**
@@ -2726,18 +2754,6 @@ public abstract class AbstractJdbcMetadataManager
     {
         Collection result = new ArrayList();
 
-        if  (parentTable != null)
-        {
-            result.addAll(
-                Arrays.asList(
-                    getColumnNames(
-                        metaData,
-                        catalog,
-                        schema,
-                        parentTable,
-                        getParentTable(parentTable))));
-        }
-        
         try 
         {
             ResultSet t_rsColumns =
@@ -2834,21 +2850,6 @@ public abstract class AbstractJdbcMetadataManager
     {
         Collection result = new ArrayList();
         
-        if  (parentTable != null)
-        {
-            result.addAll(
-                Arrays.asList(
-                    (Object[])
-                        toIntegerArray(
-                            getColumnTypes(
-                                metaData,
-                                catalog,
-                                schema,
-                                parentTable,
-                                getParentTable(parentTable),
-                                -1))));
-        }
-
         try 
         {
             if  (metaData != null) 
@@ -3020,21 +3021,6 @@ public abstract class AbstractJdbcMetadataManager
     {
         Collection result = new ArrayList();
 
-        if  (parentTable != null)
-        {
-            result.addAll(
-                Arrays.asList(
-                    (Object[])
-                       toBooleanArray(
-                           getAllowNulls(
-                               metaData,
-                               catalog,
-                               schema,
-                               parentTable,
-                               getParentTable(parentTable),
-                               -1))));
-        }
-                    
         try 
         {
             ResultSet t_rsColumns =
@@ -4190,5 +4176,14 @@ public abstract class AbstractJdbcMetadataManager
         }
         
         return result;
+    }
+
+    /**
+     * Retrieves whether the engine is case sensitive or not.
+     * @return such information.
+     */
+    protected boolean isCaseSensitive()
+    {
+        return false;
     }
 }

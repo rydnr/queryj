@@ -424,4 +424,57 @@ public class TableDecorator
     {
         return lowerCase(getSingularNameUppercased());
     }
+
+
+    /**
+     * Retrieves the parent table.
+     * @return such table.
+     */
+    public Table getParentTable()
+    {
+        Table result = super.getParentTable();
+
+        if  (result == null)
+        {
+            result = getParentTable(getName(), getMetadataManager());
+            super.setParentTable(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the parent table.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such table, or <code>null</code> if it doesn't exist.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     */
+    protected Table getParentTable(
+        final String name, final MetadataManager metadataManager)
+    {
+        Table result = null;
+
+        String t_strParentTable = metadataManager.getParentTable(name);
+
+        if  (t_strParentTable != null)
+        {
+            result =
+                new LazyTableDecorator(
+                    t_strParentTable, metadataManager, getDecoratorFactory());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the standard decorator instance. Inherit and override for a different
+     * one.
+     * @return the decorator factory used by default.
+     */
+    protected DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
+    }
 }
