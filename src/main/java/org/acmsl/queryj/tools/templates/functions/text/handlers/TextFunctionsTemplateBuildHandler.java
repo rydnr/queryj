@@ -128,26 +128,13 @@ public class TextFunctionsTemplateBuildHandler
                          && (t_StringUtils                    != null)
                          && (t_TextFunctionsTemplateGenerator != null))
                     {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
                         TextFunctionsTemplate t_TextFunctionsTemplate =
                             t_TextFunctionsTemplateGenerator
                                 .createTextFunctionsTemplate(
                                     t_strPackage,
-                                    t_MetaData.getDatabaseProductName(),
-                                    t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote);
+                                    retrieveDatabaseProductName(attributes),
+                                    retrieveDatabaseProductVersion(attributes),
+                                    retrieveDatabaseIdentifierQuoteString(attributes));
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

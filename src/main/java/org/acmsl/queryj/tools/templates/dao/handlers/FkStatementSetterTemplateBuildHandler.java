@@ -132,64 +132,9 @@ public class FkStatementSetterTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaData(parameters));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            handle(
-                parameters,
-                metaData.getDatabaseProductName(),
-                metaData.getDatabaseProductVersion(),
-                fixQuote(metaData.getIdentifierQuoteString()));
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-
-        return result;
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote)
-      throws  BuildException
-    {
-        return
-            handle(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
+                retrieveDatabaseProductName(parameters),
+                retrieveDatabaseProductVersion(parameters),
+                retrieveDatabaseIdentifierQuoteString(parameters),
                 FkStatementSetterTemplateGenerator.getInstance());
     }
     

@@ -59,6 +59,56 @@ public class CachingTableDecorator
     extends TableDecorator
 {
     /**
+     * The cached uppercased name.
+     */
+    private String m__strCachedNameUppercased;
+
+    /**
+     * The cached capitalized name.
+     */
+    private String m__strCachedNameCapitalized;
+
+    /**
+     * The cached lowercased name.
+     */
+    private String m__strCachedNameLowercased;
+
+    /**
+     * The cached uncapitalized name.
+     */
+    private String m__strCachedUncapitalizedName;
+
+    /**
+     * The cached VO name.
+     */
+    private String m__strCachedVoName;
+
+    /**
+     * The cached normalized lowercased name.
+     */
+    private String m__strCachedNameNormalizedLowercased;
+
+    /**
+     * The cached normalized lowercased singular name.
+     */
+    private String m__strCachedSingularNameNormalizedLowercased;
+
+    /**
+     * The cached normalized name.
+     */
+    private String m__strCachedNameNormalized;
+
+    /**
+     * The cached capitalized singular name.
+     */
+    private String m__strCachedSingularNameCapitalized;
+
+    /**
+     * The cached non-parent attributes.
+     */
+    private List m__lCachedNonParentAttributes;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -90,11 +140,6 @@ public class CachingTableDecorator
     {
         super(name, attributes, parentTable, metadataManager);
     }
-
-    /**
-     * The cached uppercased name.
-     */
-    private String m__strCachedNameUppercased;
 
     /**
      * Specifies the cached uppercased name.
@@ -140,12 +185,6 @@ public class CachingTableDecorator
         
         return result;
     }
-    
-
-    /**
-     * The cached capitalized name.
-     */
-    private String m__strCachedNameCapitalized;
 
     /**
      * Specifies the cached capitalized name.
@@ -193,11 +232,6 @@ public class CachingTableDecorator
     }
 
     /**
-     * The cached lowercased name.
-     */
-    private String m__strCachedNameLowercased;
-
-    /**
      * Specifies the cached lowercased name.
      * @param value the value to cache.
      */
@@ -241,11 +275,6 @@ public class CachingTableDecorator
         
         return result;
     }
-
-    /**
-     * The cached uncapitalized name.
-     */
-    private String m__strCachedUncapitalizedName;
 
     /**
      * Specifies the cached uncapitalized name.
@@ -293,11 +322,6 @@ public class CachingTableDecorator
     }
 
     /**
-     * The cached VO name.
-     */
-    private String m__strCachedVoName;
-
-    /**
      * Specifies the cached VO name.
      * @param value the value to cache.
      */
@@ -341,11 +365,6 @@ public class CachingTableDecorator
         
         return result;
     }
-
-    /**
-     * The cached normalized lowercased name.
-     */
-    private String m__strCachedNameNormalizedLowercased;
 
     /**
      * Specifies the cached normalized lowercased name.
@@ -393,11 +412,6 @@ public class CachingTableDecorator
     }
 
     /**
-     * The cached normalized lowercased singular name.
-     */
-    private String m__strCachedSingularNameNormalizedLowercased;
-
-    /**
      * Specifies the cached normalized lowercased singular name.
      * @param value the value to cache.
      */
@@ -441,11 +455,6 @@ public class CachingTableDecorator
         
         return result;
     }
-
-    /**
-     * The cached normalized name.
-     */
-    private String m__strCachedNameNormalized;
 
     /**
      * Specifies the cached normalized name.
@@ -493,11 +502,6 @@ public class CachingTableDecorator
     }
 
     /**
-     * The cached capitalized singular name.
-     */
-    private String m__strCachedSingularNameCapitalized;
-
-    /**
      * Specifies the cached capitalized singular name.
      * @param value the value to cache.
      */
@@ -539,6 +543,50 @@ public class CachingTableDecorator
             setCachedSingularNameCapitalized(result);
         }
         
+        return result;
+    }
+
+    /**
+     * Specifies the cached, non-parent attributes.
+     * @param attrs such attributes.
+     */
+    protected final void immutableSetCachedNonParentAttributes(final List attrs)
+    {
+        m__lCachedNonParentAttributes = attrs;
+    }
+
+    /**
+     * Specifies the cached, non-parent attributes.
+     * @param attrs such attributes.
+     */
+    protected void setCachedNonParentAttributes(final List attrs)
+    {
+        immutableSetCachedNonParentAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the cached, non-parent attributes.
+     * @return such information.
+     */
+    protected List getCachedNonParentAttributes()
+    {
+        return m__lCachedNonParentAttributes;
+    }
+
+    /**
+     * Retrieves the non-parent attributes.
+     * @return such attributes.
+     */
+    public List getNonParentAttributes()
+    {
+        List result = getCachedNonParentAttributes();
+
+        if  (result == null)
+        {
+            result = super.getNonParentAttributes();
+            setCachedNonParentAttributes(result);
+        }
+
         return result;
     }
 }

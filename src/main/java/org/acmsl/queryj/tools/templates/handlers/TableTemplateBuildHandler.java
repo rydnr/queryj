@@ -113,25 +113,6 @@ public class TableTemplateBuildHandler
     protected boolean handle(final Map parameters)
         throws  BuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
-    {
         boolean result = false;
 
         try
@@ -139,13 +120,9 @@ public class TableTemplateBuildHandler
             result =
                 handle(
                     parameters,
-                    metaData.getDatabaseProductName(),
-                    metaData.getDatabaseProductVersion(),
-                    fixQuote(metaData.getIdentifierQuoteString()));
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
+                    retrieveDatabaseProductName(parameters),
+                    retrieveDatabaseProductVersion(parameters),
+                    retrieveDatabaseIdentifierQuoteString(parameters));
         }
         catch  (final QueryJException queryjException)
         {

@@ -338,37 +338,6 @@ public class LazyTableDecorator
     }
 
     /**
-     * Decorates the attributes.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the decorated attributes.
-     * @precondition decoratorFactory != null
-     */
-    protected List decorateAttributes()
-    {
-        return
-            decorateAttributes(
-                getName(), getMetadataManager(), getDecoratorFactory());
-    }
-    
-    /**
-     * Decorates the attributes.
-     * @param name the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the decorated attributes.
-     * @precondition name != null
-     * @precondition decoratorFactory != null
-     * @precondition metadataManager != null
-     */
-    protected List decorateAttributes(
-        final String name,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
-    {
-        return decoratorFactory.decorateAttributes(name, metadataManager);
-    }
-    
-    /**
      * Retrieves the attributes.
      * @return such information.
      */
@@ -421,6 +390,7 @@ public class LazyTableDecorator
                 removeOverridden(
                     childAttributes,
                     result,
+                    table,
                     metadataManager,
                     TableDecoratorHelper.getInstance());
             
@@ -487,21 +457,27 @@ public class LazyTableDecorator
      * Removes the duplicated attributes from <code>secondAttributes</code>.
      * @param firstAttributes the child attributes.
      * @param secondAttributes the parent attributes.
+     * @param parentTableName the parent table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
      * @precondition firstAttributes != null
-     * @preconditoin secondAttributes != null
+     * @precondition secondAttributes != null
+     * @precondition parentTableName != null
      * @precondition metadataManager != null
      */
     public List removeOverridden(
         final List firstAttributes,
         final List secondAttributes,
+        final String parentTableName,
         final MetadataManager metadataManager,
         final TableDecoratorHelper tableDecoratorHelper)
     {
         return
             tableDecoratorHelper.removeOverridden(
-                firstAttributes, secondAttributes, metadataManager);
+                firstAttributes,
+                secondAttributes,
+                parentTableName,
+                metadataManager);
     }
         
     /**

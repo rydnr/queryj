@@ -129,39 +129,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     protected boolean handle(final Map parameters)
         throws  BuildException
     {
-        return handle(parameters, retrieveDatabaseMetaData(parameters));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            result =
-                handle(
-                    parameters,
-                    metaData.getDatabaseProductName(),
-                    metaData.getDatabaseProductVersion(),
-                    fixQuote(metaData.getIdentifierQuoteString()));
-        }
-        catch  (final SQLException resultException)
-        {
-            throw new BuildException(resultException);
-        }
-
-        return result;
+        return
+            handle(
+                parameters,
+                retrieveDatabaseProductName(parameters),
+                retrieveDatabaseProductVersion(parameters),
+                retrieveDatabaseIdentifierQuoteString(parameters));
     }
 
     /**

@@ -227,6 +227,17 @@ public interface MetadataManager
         final String tableName, final String fieldName);
 
     /**
+     * Checks whether given field belongs to the primary key or not.
+     * @param tableName the table name.
+     * @param fieldNames the field names.
+     * @param parentTableName the parent table name.
+     * @return <code>true</code> if such field is part of what dentifies a
+     * concrete row.
+     */
+    public boolean pointsToPrimaryKey(
+        final String tableName, final String[] fieldNames, final String parentTableName);
+
+    /**
      * Adds a foreign key.
      * @param tableName the table name.
      * @param columnNames the column names.

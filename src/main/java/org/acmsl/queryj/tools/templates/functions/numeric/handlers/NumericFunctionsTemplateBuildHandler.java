@@ -129,27 +129,14 @@ public class NumericFunctionsTemplateBuildHandler
                          && (t_StringUtils                       != null)
                          && (t_NumericFunctionsTemplateGenerator != null))
                     {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
                         NumericFunctionsTemplate
                             t_NumericFunctionsTemplate =
                                 t_NumericFunctionsTemplateGenerator
                                     .createNumericFunctionsTemplate(
                                         t_strPackage,
-                                        t_MetaData.getDatabaseProductName(),
-                                        t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote,
+                                        retrieveDatabaseProductName(attributes),
+                                        retrieveDatabaseProductVersion(attributes),
+                                        retrieveDatabaseIdentifierQuoteString(attributes),
                                         t_strHeader);
 
                         Collection t_cFunctions =

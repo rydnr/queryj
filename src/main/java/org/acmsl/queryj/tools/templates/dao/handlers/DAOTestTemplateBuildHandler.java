@@ -111,66 +111,31 @@ public class DAOTestTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaData(parameters),
-                retrieveMetadataManager(parameters));
-    }
-    
-    /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @param metaData the database metadata.
-     * @param metadataManager the database metadata manager.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     * @precondition metadataManager != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final MetadataManager metadataManager)
-      throws  BuildException
-    {
-        boolean result = false;
-        
-        try
-        {
-            result =
-                handle(
-                    parameters,
-                    metaData,
-                    metadataManager,
-                    retrieveTableTemplates(parameters),
-                    metaData.getDatabaseProductName(),
-                    metaData.getDatabaseProductVersion(),
-                    retrieveDAOPackage(
-                        metaData.getDatabaseProductName(),
-                        parameters),
-                    retrieveValueObjectPackage(parameters),
-                    retrieveJdbcDriver(parameters),
-                    retrieveJdbcUrl(parameters),
-                    retrieveJdbcUsername(parameters),
-                    retrieveJdbcPassword(parameters),
-                    retrieveHeader(parameters),
-                    DAOTestTemplateGenerator.getInstance());
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-
-        return result;
+                retrieveMetadataManager(parameters),
+                retrieveTableTemplates(parameters),
+                retrieveDatabaseProductName(parameters),
+                retrieveDatabaseProductVersion(parameters),
+                retrieveDatabaseIdentifierQuoteString(parameters),
+                retrieveDAOPackage(
+                    retrieveDatabaseProductName(parameters),
+                    parameters),
+                retrieveValueObjectPackage(parameters),
+                retrieveJdbcDriver(parameters),
+                retrieveJdbcUrl(parameters),
+                retrieveJdbcUsername(parameters),
+                retrieveJdbcPassword(parameters),
+                retrieveHeader(parameters),
+                DAOTestTemplateGenerator.getInstance());
     }
     
     /**
      * Builds the DAO test templates.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
      * @param metadataManager the database metadata manager.
      * @param tableTemplates the table templates.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
+     * @param quote the quote.
      * @param daoPackage the DAO package.
      * @param voPackage the value-object package.
      * @param jdbcDriver the JDBC driver.
@@ -189,11 +154,11 @@ public class DAOTestTemplateBuildHandler
      */
     protected boolean handle(
         final Map parameters,
-        final DatabaseMetaData metaData,
         final MetadataManager metadataManager,
         final TableTemplate[] tableTemplates,
         final String engineName,
         final String engineVersion,
+        final String quote,
         final String daoPackage,
         final String voPackage,
         final String jdbcDriver,
@@ -218,18 +183,6 @@ public class DAOTestTemplateBuildHandler
             DAOTestTemplate[] t_aDAOTestTemplates =
                 new DAOTestTemplate[t_iLength];
 
-            String t_strQuote = metaData.getIdentifierQuoteString();
-
-            if  (t_strQuote == null)
-            {
-                t_strQuote = "\"";
-            }
-
-            if  (t_strQuote.equals("\""))
-            {
-                t_strQuote = "\\\"";
-            }
-
             for  (int t_iDAOTestIndex = 0;
                       t_iDAOTestIndex < t_iLength;
                       t_iDAOTestIndex++) 
@@ -241,7 +194,7 @@ public class DAOTestTemplateBuildHandler
                         t_strPackage,
                         engineName,
                         engineVersion,
-                        t_strQuote,
+                        quote,
                         daoPackage,
                         voPackage,
                         jdbcDriver,
@@ -256,10 +209,6 @@ public class DAOTestTemplateBuildHandler
             }
 
             storeDAOTestTemplates(t_aDAOTestTemplates, parameters);
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
         }
         catch  (final QueryJException queryjException)
         {

@@ -1083,6 +1083,18 @@ public class QueryJTask
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
 
+            //result.add(new FunctionsBundle());
+
+            result.add(new ProcedureRepositoryTemplateHandlerBundle());
+
+            result.add(new KeywordRepositoryTemplateHandlerBundle());
+
+            result.add(new DAOBundle(generateMock, generateXML));
+
+            // cannot precede BaseDAO template since it can query the database for
+            // static content.
+            result.add(new JdbcConnectionClosingHandler());
+
             result.add(new BaseRepositoryDAOTemplateHandlerBundle());
             result.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
 
@@ -1092,14 +1104,6 @@ public class QueryJTask
             result.add(new TableTemplateHandlerBundle());
 
             result.add(new TableRepositoryTemplateHandlerBundle());
-
-            //result.add(new FunctionsBundle());
-
-            result.add(new ProcedureRepositoryTemplateHandlerBundle());
-
-            result.add(new KeywordRepositoryTemplateHandlerBundle());
-
-            result.add(new DAOBundle(generateMock, generateXML));
 
             result.add(new ValueObjectTemplateHandlerBundle());
 
@@ -1118,8 +1122,6 @@ public class QueryJTask
             result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
 
             result.add(new TestSuiteTemplateHandlerBundle());
-
-            result.add(new JdbcConnectionClosingHandler());
         }
 
         return result;

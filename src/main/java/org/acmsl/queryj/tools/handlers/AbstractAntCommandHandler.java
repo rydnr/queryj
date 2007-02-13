@@ -316,4 +316,43 @@ public abstract class AbstractAntCommandHandler
         return (String) parameters.get(ParameterValidationHandler.HEADER);
     }
 
+    /**
+     * Retrieves the database product name.
+     * @param parameters such parameters.
+     * @return such information.
+     * @precondition parameters != null
+     */
+    protected String retrieveDatabaseProductName(final Map parameters)
+    {
+        return
+            (String)
+                parameters.get(DatabaseMetaDataRetrievalHandler.DATABASE_PRODUCT_NAME);
+    }
+    
+    /**
+     * Retrieves the database product version.
+     * @param parameters such parameters.
+     * @return such information.
+     * @precondition parameters != null
+     */
+    protected String retrieveDatabaseProductVersion(final Map parameters)
+    {
+        return
+            (String)
+                parameters.get(DatabaseMetaDataRetrievalHandler.DATABASE_PRODUCT_VERSION);
+    }
+    
+    /**
+     * Retrieves the database identifier quote string.
+     * @param parameters such parameters.
+     * @return such information.
+     * @precondition parameters != null
+     */
+    protected String retrieveDatabaseIdentifierQuoteString(final Map parameters)
+    {
+        return
+            (String)
+                parameters.get(
+                    DatabaseMetaDataRetrievalHandler.DATABASE_IDENTIFIER_QUOTE_STRING);
+    }
 }

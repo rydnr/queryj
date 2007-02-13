@@ -121,6 +121,21 @@ public abstract class DatabaseMetaDataRetrievalHandler
         "metadata.extraction.already.done";
 
     /**
+     * The database product name.
+     */
+    public static final String DATABASE_PRODUCT_NAME = "database.product.name";
+    
+    /**
+     * The database product version.
+     */
+    public static final String DATABASE_PRODUCT_VERSION = "database.product.version";
+    
+    /**
+     * The identifier quote string.
+     */
+    public static final String DATABASE_IDENTIFIER_QUOTE_STRING = "identifier.quote.string";
+    
+    /**
      * Creates a DatabaseMetaDataRetrievalHandler.
      */
     public DatabaseMetaDataRetrievalHandler() {};
@@ -186,6 +201,15 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 oldHandle(parameters);
 
             storeAlreadyDoneFlag(parameters);
+
+            try
+            {
+                storeCommonDbSettings(metaData, parameters);
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw new BuildException("Error retrieving db settings", sqlException);
+            }
         }
 
         return result;
@@ -1498,4 +1522,22 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final String productVersion,
         final int majorVersion,
         final int minorVersion);
+
+    /**
+     * Stores common database settings.
+     * @param metaData the database metadata.
+     * @param parameters the parameters.
+     * @throws SQLException if the operation fails.
+     * @precondition metaData != null
+     * @precondition parameters != null
+     */
+    protected void storeCommonDbSettings(
+        final DatabaseMetaData metaData, final Map parameters)
+      throws  SQLException
+    {
+        parameters.put(DATABASE_PRODUCT_NAME, metaData.getDatabaseProductName());
+        parameters.put(DATABASE_PRODUCT_VERSION, metaData.getDatabaseProductVersion());
+        parameters.put(
+            DATABASE_IDENTIFIER_QUOTE_STRING, fixQuote(metaData.getIdentifierQuoteString()));
+    }
 }

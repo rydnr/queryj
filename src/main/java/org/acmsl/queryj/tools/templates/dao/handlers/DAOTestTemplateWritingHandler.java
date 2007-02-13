@@ -109,40 +109,13 @@ public class DAOTestTemplateWritingHandler
     protected boolean handle(final Map parameters)
         throws  BuildException
     {
-        return handle(parameters, retrieveDatabaseMetaData(parameters));
-    }
-                
-    /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @param metadata the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metadata != null
-     */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metadata)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            result =
-                handle(
-                    retrieveDAOTestTemplates(parameters),
-                    retrieveOutputDir(
-                        metadata.getDatabaseProductName(),
-                        parameters),
-                    DAOTestTemplateGenerator.getInstance());
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-
-        return result;
+        return
+            handle(
+                retrieveDAOTestTemplates(parameters),
+                retrieveOutputDir(
+                    retrieveDatabaseProductName(parameters),
+                    parameters),
+                DAOTestTemplateGenerator.getInstance());
     }
                 
     /**

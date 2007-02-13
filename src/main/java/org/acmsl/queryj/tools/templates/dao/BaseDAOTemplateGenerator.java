@@ -211,7 +211,7 @@ public class BaseDAOTemplateGenerator
         outputDir.mkdirs();
 
         fileUtils.writeFile(
-            outputDir.getAbsolutePath()
+              outputDir.getAbsolutePath()
             + File.separator
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(

@@ -126,6 +126,8 @@ public abstract class Abstract<input.vo_name>ValueObject
 Table: <table.name>
   Attributes:
     <table.attributes:{<it>}; separator="\n">
+  Non-parent attributes:
+    <table.nonParentAttributes:{<it>}; separator="\n">
 
 Parent: <parent.name>
   Attributes:
@@ -135,36 +137,47 @@ Parent: <parent.name>
   All attributes:
     <parent.allAttributes:{<it>}; separator="\n">
 */
+<if(parent)>
+    <table.nonParentAttributes:attribute_declaration(attribute=it);
+     separator="\n\n">
+<else>
     <table.attributes:attribute_declaration(attribute=it);
      separator="\n\n">
+<endif>
+
 
     /**
      * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
-     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public Abstract<input.vo_name>ValueObject(
 <if(parent)>
-        <parent.attributes:attribute_method_declaration(attribute=it); separator=",\n">,
-<endif>
-
+        <parent.allAttributes:attribute_method_declaration(attribute=it); separator=",\n">,
+        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+          separator=",\n">)
+<else>
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
+<endif>
+
     {
 <if(parent)>
         super(
-            <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">);
+            <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 
         <table.nonParentAttributes:immutable_setter_call(attribute=it);
           separator="\n">
-
 <else>
         <table.attributes:immutable_setter_call(attribute=it);
           separator="\n">
 <endif>
+
     }
 
 <if(parent)>

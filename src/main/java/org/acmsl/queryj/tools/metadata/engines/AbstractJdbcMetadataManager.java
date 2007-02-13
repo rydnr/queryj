@@ -1312,6 +1312,115 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Checks whether given field belongs to the primary key or not.
+     * @param tableName the table name.
+     * @param fieldNames the field names.
+     * @param parentTableName the parent table name.
+     * @return <code>true</code> if such field is part of what dentifies a
+     * concrete row.
+     */
+    public boolean pointsToPrimaryKey(
+        final String tableName, final String[] fieldNames, final String parentTableName)
+    {
+        return
+            pointsToPrimaryKey(
+                tableName,
+                fieldNames,
+                getForeignKeys(tableName, parentTableName),
+                isCaseSensitive());
+    }
+
+    /**
+     * Checks whether given field belongs to the primary key or not.
+     * @param tableName the table name.
+     * @param fieldNames the field names.
+     * @param foreignKeys the foreign keys key.
+     * @param caseSensitive whether case matters.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition fieldNames != null
+     * @precondition parentTableName != null
+     * @precondition parentPrimaryKey != null
+     */
+    public boolean pointsToPrimaryKey(
+        final String tableName,
+        final String[] fieldNames,
+        final String[][] foreignKeys,
+        final boolean caseSensitive)
+    {
+        boolean result = false;
+        
+        int t_iFkCount = (foreignKeys != null) ? foreignKeys.length : 0;
+        
+        String[] t_astrFk;
+        String t_strFkField;
+        
+        for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+        {
+            result = false;
+                   
+            t_astrFk = foreignKeys[t_iFkIndex];
+
+            if  (matchFields(fieldNames, t_astrFk, caseSensitive))
+            {
+                result = true;
+                break;
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
+     * Checks whether given field sets are equivalent.
+     * @param firstFields the first field set.
+     * @param secondFields the second field set.
+     * @param caseSensitive whether case matters.
+     * @return <code>true</code> in such case.
+     * @precondition firstFields != null
+     * @precondition secondFields != null
+     */
+    protected boolean matchFields(
+        final String[] firstFields, final String[] secondFields, final boolean caseSensitive)
+    {
+        boolean result = false;
+            
+        int t_iFirstCount = (firstFields != null) ? firstFields.length : 0;
+        int t_iSecondCount = (secondFields != null) ? secondFields.length : 0;
+            
+        if  (t_iFirstCount == t_iSecondCount)
+        {
+            for  (int t_iFirstIndex = 0; t_iFirstIndex < t_iFirstCount; t_iFirstIndex++)
+            {
+                for  (int t_iSecondIndex = 0; t_iSecondIndex < t_iSecondCount; t_iSecondIndex++)
+                {
+                    if  (   (caseSensitive)
+                         && (firstFields[t_iFirstIndex].equals(
+                                 secondFields[t_iSecondIndex])))
+                    {
+                        result = true;
+                        break;
+                    }
+                    else if  (   (!caseSensitive)
+                              && (firstFields[t_iFirstIndex].equalsIgnoreCase(
+                                      secondFields[t_iSecondIndex])))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+
+                if  (!result)
+                {
+                    break;
+                }
+            }
+        }
+        
+        return result;
+    }
+    
+    /**
      * Specifies the foreign keys.
      * @param map the foreign keys map.
      */

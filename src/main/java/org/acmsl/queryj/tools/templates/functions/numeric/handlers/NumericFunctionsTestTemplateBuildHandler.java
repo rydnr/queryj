@@ -127,28 +127,15 @@ public class NumericFunctionsTestTemplateBuildHandler
                          && (t_StringUtils                           != null)
                          && (t_NumericFunctionsTestTemplateGenerator != null))
                     {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
                         NumericFunctionsTestTemplate
                             t_NumericFunctionsTestTemplate =
                                 t_NumericFunctionsTestTemplateGenerator
                                     .createNumericFunctionsTestTemplate(
                                         t_strPackage,
                                         t_strTestedPackage,
-                                        t_MetaData.getDatabaseProductName(),
-                                        t_MetaData.getDatabaseProductVersion(),
-                                        t_strQuote,
+                                        retrieveDatabaseProductName(attributes),
+                                        retrieveDatabaseProductVersion(attributes),
+                                        retrieveDatabaseIdentifierQuoteString(attributes),
                                         t_strHeader);
 
                         Collection t_cFunctions =
@@ -161,7 +148,7 @@ public class NumericFunctionsTestTemplateBuildHandler
                             Iterator t_itFunctions = t_cFunctions.iterator();
 
                             while  (   (t_itFunctions != null)
-                                       && (t_itFunctions.hasNext()))
+                                    && (t_itFunctions.hasNext()))
                             {
                                 String t_strFunctions =
                                     (String) t_itFunctions.next();

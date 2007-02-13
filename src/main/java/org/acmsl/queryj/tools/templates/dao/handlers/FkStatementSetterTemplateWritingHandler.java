@@ -103,41 +103,13 @@ public class FkStatementSetterTemplateWritingHandler
     protected boolean handle(final Map parameters)
       throws  BuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters));
-    }
+        handle(
+            parameters,
+            retrieveDatabaseProductName(parameters),
+            retrieveTemplates(parameters),
+            FkStatementSetterTemplateGenerator.getInstance());
 
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            handle(
-                parameters,
-                metaData.getDatabaseProductName(),
-                retrieveTemplates(parameters),
-                FkStatementSetterTemplateGenerator.getInstance());
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-
-        return result;
+        return false;
     }
 
     /**

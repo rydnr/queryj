@@ -130,26 +130,13 @@ public class SystemFunctionsTemplateBuildHandler
                          && (t_StringUtils                      != null)
                          && (t_SystemFunctionsTemplateGenerator != null))
                     {
-                        String t_strQuote =
-                            t_MetaData.getIdentifierQuoteString();
-
-                        if  (t_strQuote == null)
-                        {
-                            t_strQuote = "\"";
-                        }
-
-                        if  (t_strQuote.equals("\""))
-                        {
-                            t_strQuote = "\\\"";
-                        }
-
                         SystemFunctionsTemplate t_SystemFunctionsTemplate =
                             t_SystemFunctionsTemplateGenerator
                                 .createSystemFunctionsTemplate(
                                     t_strPackage,
-                                    t_MetaData.getDatabaseProductName(),
-                                    t_MetaData.getDatabaseProductVersion(),
-                                    t_strQuote);
+                                    retrieveDatabaseProductName(attributes),
+                                    retrieveDatabaseProductVersion(attributes),
+                                    retrieveDatabaseIdentifierQuoteString(attributes));
 
                         Collection t_cFunctions =
                             t_StringUtils.tokenize(

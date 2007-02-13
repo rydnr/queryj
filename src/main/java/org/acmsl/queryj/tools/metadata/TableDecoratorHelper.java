@@ -90,8 +90,9 @@ public class TableDecoratorHelper
 
     /**
      * Removes the duplicated attributes from <code>secondAttributes</code>.
-     * @param firstAttributes the child attributes.
-     * @param secondAttributes the parent attributes.
+     * @param firstAttributes the first attributes.
+     * @param secondAttributes the second attributes.
+     * @param parentTableName the parent table name of the second attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
      * @precondition firstAttributes != null
@@ -101,6 +102,7 @@ public class TableDecoratorHelper
     public List removeOverridden(
         final List firstAttributes,
         final List secondAttributes,
+        final String parentTableName,
         final MetadataManager metadataManager)
     {
         List result = new ArrayList();
@@ -108,18 +110,28 @@ public class TableDecoratorHelper
         int t_iCount = (secondAttributes != null) ? secondAttributes.size() : 0;
 
         Attribute t_Attribute;
-
+        String t_strName;
+        
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
             t_Attribute = (Attribute) secondAttributes.get(t_iIndex);
 
-            if  (    (t_Attribute != null)
-                  && (   (metadataManager.isPartOfPrimaryKey(
-                              t_Attribute.getTableName(),
-                              t_Attribute.getName()))
-                      || (!contains(firstAttributes, t_Attribute))))
+            if  (t_Attribute != null)
             {
-                result.add(t_Attribute);
+                t_strName = t_Attribute.getName();
+                
+                if  (   (   (metadataManager.isPartOfPrimaryKey(
+                                 t_Attribute.getTableName(), t_strName))
+                         && (!metadataManager.isPartOfPrimaryKey(
+                                 parentTableName, t_strName))
+                         && (!metadataManager.pointsToPrimaryKey(
+                                 t_Attribute.getTableName(),
+                                 new String[] { t_strName },
+                                 parentTableName)))
+                     || (!contains(firstAttributes, t_Attribute)))
+                {
+                    result.add(t_Attribute);
+                }
             }
         }
 

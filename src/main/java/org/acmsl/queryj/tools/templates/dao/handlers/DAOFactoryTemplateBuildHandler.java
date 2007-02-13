@@ -118,52 +118,19 @@ public class DAOFactoryTemplateBuildHandler
     protected boolean handle(final Map parameters)
       throws  BuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters),
-                retrieveProjectPackage(parameters));
-    }
+        handle(
+            parameters,
+            retrieveJNDIDataSource(parameters),
+            retrievePackage(
+                retrieveProjectPackage(parameters),
+                retrieveDatabaseProductName(parameters).toLowerCase()),
+            retrieveProjectPackage(parameters),
+            retrieveDatabaseProductName(parameters),
+            retrieveHeader(parameters),
+            retrieveTableTemplates(parameters),
+            DAOFactoryTemplateGenerator.getInstance());
 
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @param basePackage the base package.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     * @precondition basePackage != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
-        final String basePackage)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            handle(
-                parameters,
-                retrieveJNDIDataSource(parameters),
-                retrievePackage(
-                    basePackage,
-                    metaData.getDatabaseProductName().toLowerCase()),
-                basePackage,
-                metaData.getDatabaseProductName(),
-                retrieveHeader(parameters),
-                retrieveTableTemplates(parameters),
-                DAOFactoryTemplateGenerator.getInstance());
-        }
-        catch  (final SQLException sqlException)
-        {
-            throw new BuildException(sqlException);
-        }
-
-        return result;
+        return false;
     }
 
     /**
