@@ -417,7 +417,12 @@ public class LazyTableDecorator
         if  (   (result != null)
              && (!attributesCleanedUp))
         {
-            result = removeOverridden(childAttributes, result);
+            result =
+                removeOverridden(
+                    childAttributes,
+                    result,
+                    metadataManager,
+                    TableDecoratorHelper.getInstance());
             
             super.setAttributes(result);
             setAttributesCleanedUp(true);
@@ -465,7 +470,8 @@ public class LazyTableDecorator
                             t_strParentTable,
                             t_lAttributes,
                             metadataManager,
-                            decoratorFactory),
+                            decoratorFactory,
+                            TableDecoratorHelper.getInstance()),
                         metadataManager,
                         t_lAttributes,
                         decoratorFactory));
@@ -478,77 +484,37 @@ public class LazyTableDecorator
     }
 
     /**
-     * Removes the duplicated attributes.
-     * @param childAttributes the child attributes.
-     * @param parentAttributes the parent attributes.
+     * Removes the duplicated attributes from <code>secondAttributes</code>.
+     * @param firstAttributes the child attributes.
+     * @param secondAttributes the parent attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
-     * @precondition childAttributes != null
-     * @preconditoin parentAttributes != null
+     * @precondition firstAttributes != null
+     * @preconditoin secondAttributes != null
+     * @precondition metadataManager != null
      */
-    protected List removeOverridden(
-        final List childAttributes, final List parentAttributes)
+    public List removeOverridden(
+        final List firstAttributes,
+        final List secondAttributes,
+        final MetadataManager metadataManager,
+        final TableDecoratorHelper tableDecoratorHelper)
     {
-        List result = new ArrayList();
-
-        int t_iCount = (parentAttributes != null) ? parentAttributes.size() : 0;
-
-        Attribute t_ParentAttribute;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-        {
-            t_ParentAttribute = (Attribute) parentAttributes.get(t_iIndex);
-
-            if  (    (t_ParentAttribute != null)
-                     && (!contains(childAttributes, t_ParentAttribute)))
-            {
-                result.add(parentAttributes.get(t_iIndex));
-            }
-        }
-
-        return result;
+        return
+            tableDecoratorHelper.removeOverridden(
+                firstAttributes, secondAttributes, metadataManager);
     }
-
-    /**
-     * Checks whether given list contains a concrete attribute.
-     * @param attributes the attributes.
-     * @param attribute the attribute to check.
-     * @return <code>true</code> in such case.
-     */
-    protected boolean contains(final List attributes, final Attribute attribute)
-    {
-        boolean result = false;
-
-        int t_iCount = (attributes != null) ? attributes.size() : 0;
-
-        String t_strName = (attribute != null) ? attribute.getName() : null;
-
-        if  (t_strName != null)
-        {
-            Attribute t_CurrentAttribute;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-            {
-                t_CurrentAttribute = (Attribute) attributes.get(t_iIndex);
-
-                if  (   (t_CurrentAttribute != null)
-                        && (t_strName.equals(t_CurrentAttribute.getName())))
-                {
-                    result = true;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
+        
     /**
      * Sums up parent and child's attributes.
      * @return such collection.
      */
     protected List sumUpParentAndChildAttributes()
     {
-        return sumUpParentAndChildAttributes(getAttributes(), getChildAttributes());
+        return
+            sumUpParentAndChildAttributes(
+                getAttributes(),
+                getChildAttributes(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -557,42 +523,44 @@ public class LazyTableDecorator
      * @param attributes the attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
      * @return such collection.
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
+     * @precondition tableDecoratorHelper != null
      */
     protected List sumUpParentAndChildAttributes(
         final String parentTable,
         final List attributes,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper tableDecoratorHelper)
     {
         return
-            sumUpParentAndChildAttributes(
-                decoratorFactory.decorateAttributes(parentTable, metadataManager),
-                attributes);
+            tableDecoratorHelper.sumUpParentAndChildAttributes(
+                parentTable,
+                attributes,
+                metadataManager,
+                decoratorFactory);
     }
     
     /**
      * Sums up parent and child's attributes.
      * @param attributes the attributes.
      * @param childAttributes the child attributes.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
      * @return such collection.
+     * @precondition attributes != null
+     * @precondition childAttributes != null
+     * @precondition tableDecoratorHelper != null
      */
     protected List sumUpParentAndChildAttributes(
-        final List attributes, final List childAttributes)
+        final List attributes,
+        final List childAttributes,
+        final TableDecoratorHelper tableDecoratorHelper)
     {
-        List result = new ArrayList();
-
-        result.addAll(attributes);
-
-        if  (childAttributes != null)
-        {
-            result.removeAll(childAttributes);
-
-            result.addAll(childAttributes);
-        }
-        
-        return result;
+        return
+            tableDecoratorHelper.sumUpParentAndChildAttributes(
+                attributes, childAttributes);
     }
 }

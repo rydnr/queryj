@@ -477,4 +477,38 @@ public class TableDecorator
     {
         return CachingDecoratorFactory.getInstance();
     }
+
+    /**
+     * Retrieves the non-parent attributes.
+     * @return such attributes.
+     */
+    public List getNonParentAttributes()
+    {
+        return getNonParentAttributes(getAttributes(), TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the non-parent attributes.
+     * @param attributes the attributes.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @return such attributes.
+     * @precondition attributes != null
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List getNonParentAttributes(
+        final List attributes, final TableDecoratorHelper tableDecoratorHelper)
+    {
+        List result = attributes;
+
+        Table t_ParentTable = getParentTable();
+
+        if  (t_ParentTable != null)
+        {
+            result =
+                tableDecoratorHelper.removeOverridden(
+                    t_ParentTable.getAttributes(), attributes, getMetadataManager());
+        }
+
+        return getAttributes();
+    }
 }

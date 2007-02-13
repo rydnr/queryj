@@ -1270,28 +1270,36 @@ public abstract class AbstractJdbcMetadataManager
     {
         return
             isPartOfPrimaryKey(
-                fieldName, getPrimaryKey(tableName));
+                fieldName, getPrimaryKey(tableName), isCaseSensitive());
     }
 
     /**
      * Checks whether given field is a primary key or not.
      * @param fieldName the field name.
      * @param primaryKey the primary key.
+     * @param caseSensitive whether the case matters.
      * @return <code>true</code> if such field identifies a concrete row.
      * @precondition fieldName != null
      */
     public boolean isPartOfPrimaryKey(
-        final String fieldName, final String[] primaryKey)
+        final String fieldName, final String[] primaryKey, final boolean caseSensitive)
     {
         boolean result = false;
 
         if  (primaryKey != null)
         {
+            String t_strCurrentPrimaryKey;
+            
             for  (int t_iPkIndex = 0;
                       t_iPkIndex < primaryKey.length;
                       t_iPkIndex++)
             {
-                if  (fieldName.equals(primaryKey[t_iPkIndex]))
+                t_strCurrentPrimaryKey = primaryKey[t_iPkIndex];
+                
+                if  (   (   (caseSensitive)
+                         && (fieldName.equals(t_strCurrentPrimaryKey)))
+                     || (   (!caseSensitive)
+                         && (fieldName.equalsIgnoreCase(t_strCurrentPrimaryKey))))
                 {
                     result = true;
 

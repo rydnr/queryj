@@ -155,6 +155,11 @@ private String tableIsa;
 private String tableIsaType;
 
 /**
+ * The table decorator attribute.
+ */
+private boolean tableDecorator;
+
+/**
  * The column comment.
  */
 private String columnComment;
@@ -254,6 +259,27 @@ public String getTableIsaType()
 {
     return tableIsaType;
 }
+
+/**
+ * Specifies whether the table-specific value-object will be wrapped
+ * by custom decorators.
+ * @param flag such flag.
+ */
+protected void setTableDecorator(final boolean flag)
+{
+    tableDecorator = flag;
+}
+
+/**
+ * Retrieves whether the table-specific value-object will be wrapped
+ * by custom decorators.
+ * @return such information.
+ */
+public boolean getTableDecorator()
+{
+    return tableDecorator;
+}
+
 /**
  * Specifies the column comment.
  * @param comment such comment.
@@ -385,9 +411,10 @@ fragment text returns [String result]
         
 fragment tab_annotation
   : (
-        s=tab_static  { setTableStatic(s); }
-      | i=tab_isa     { setTableIsa(i); }
-      | t=tab_isatype { setTableIsaType(t); }
+        s=tab_static    { setTableStatic(s); }
+      | i=tab_isa       { setTableIsa(i); }
+      | t=tab_isatype   { setTableIsaType(t); }
+      |   tab_decorator { setTableDecorator(true); }
     )
   ;
 
@@ -405,6 +432,8 @@ fragment tab_isatype returns [String result]
 @init { result = null; }
   : ISATYPE WS i=identifier WS? { result = $i.text; }
   ;
+
+fragment tab_decorator :  DECORATOR WS?;
 
 fragment col_annotation
   : (
@@ -451,13 +480,14 @@ fragment col_oraseq returns [String result]
  *------------------------------------------------------------------*/
 
 AT
-    :  (  ('@static')   => STATIC   {$type = STATIC;}
-        | ('@isa')      => ISA      {$type = ISA;}
-        | ('@isatype')  => ISATYPE  {$type = ISATYPE;}
-        | ('@isarefs')  => ISAREFS  {$type = ISAREFS;}
-        | ('@readonly') => READONLY {$type = READONLY;}
-        | ('@bool')     => BOOL     {$type = BOOL;}
-        | ('@oraseq')   => ORASEQ   {$type = ORASEQ;}
+    :  (  ('@static')    => STATIC    {$type = STATIC;}
+        | ('@isa')       => ISA       {$type = ISA;}
+        | ('@isatype')   => ISATYPE   {$type = ISATYPE;}
+        | ('@decorator') => DECORATOR {$type = DECORATOR;}
+        | ('@isarefs')   => ISAREFS   {$type = ISAREFS;}
+        | ('@readonly')  => READONLY  {$type = READONLY;}
+        | ('@bool')      => BOOL      {$type = BOOL;}
+        | ('@oraseq')    => ORASEQ    {$type = ORASEQ;}
         | '@')
     ;
 
@@ -471,6 +501,7 @@ ID
 fragment STATIC : '@static';
 fragment ISA : '@isa';
 fragment ISATYPE : '@isatype';
+fragment DECORATOR : '@decorator';
 fragment ISAREFS : '@isarefs';
 fragment READONLY : '@readonly';
 fragment BOOL : '@bool';
