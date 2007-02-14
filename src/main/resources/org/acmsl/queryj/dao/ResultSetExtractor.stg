@@ -111,7 +111,7 @@ import java.util.Date;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input, table=input.table, parent=input.table.parentTable)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -140,7 +140,16 @@ import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
-class(input, table, parent) ::= <<
+class(input, table) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+ @param table the table.
+!>
+<classImpl(input=input, table=table, parent=table.parentTable)>
+>>
+
+classImpl(input, table, parent) ::= <<
 <!
  Generates the class body.
  @param input the input.
@@ -160,15 +169,25 @@ public class <input.vo_name>ResultSetExtractor
                 <input.tr_name_capitalized>TableRepository
 {
 <if(input.clobHandling)>
-    <indirect_template(name=input.clobHandling+"Extractor", input=input)>
+    <indirect_template(name=input.clobHandling+"Extractor", input=input, extra1=table, extra2=parent)>
 <else>
-    <defaultExtractor(input=input, table=table, parent=parent)>
+    <defaultExtractorImpl(input=input, table=table, parent=parent)>
 <endif>
 
 }
 >>
 
-defaultExtractor(input, table, parent) ::= <<
+defaultExtractor(input, extra1, extra2) ::= <<
+<!
+ Generates the default logic for the extractor.
+ @param input the input.
+ @param extra1 the table.
+ @param extra2 the parent.
+!>
+<defaultExtractorImpl(input=input, table=extra1, parent=extra2)>
+>>
+
+defaultExtractorImpl(input, table, parent) ::= <<
 <!
  Generates the default logic for the extractor.
  @param input the input.
@@ -249,18 +268,42 @@ protected <input.vo_name> extractData(
 }
 >>
 
-oracleExtractor(input) ::= <<
+oracleExtractor(input, extra1, extra2) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
  @param input the input.
+ @param extra1 the table.
+ @param extra2 the parent.
 !>
-<oracle8Extractor(input=input)>
+<oracleExtractorImpl(input=input, table=extra1, parent=extra2)>
 >>
 
-oracle8Extractor(input) ::= <<
+oracleExtractorImpl(input, table, parent) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
  @param input the input.
+ @param table the table.
+ @param parent the parent.
+!>
+<oracle8ExtractorImpl(input=input, table=table, parent=parent)>
+>>
+
+oracle8Extractor(input, extra1, extra2) ::= <<
+<!
+ Generates the constructor needed by Oracle8 LOB management.
+ @param input the input.
+ @param extra1 the table.
+ @param extra2 the parent.
+!>
+<oracle8ExtractorImpl(input=input, table=extra1, parent=extra2)>
+>>
+
+oracle8ExtractorImpl(input, table, parent) ::= <<
+<!
+ Generates the constructor needed by Oracle8 LOB management.
+ @param input the input.
+ @param table the table.
+ @param parent the parent.
 !>
 <input.lob_attributes:attribute_class_declaration(attr=it);
   separator="\n\n">
@@ -396,15 +439,34 @@ protected Object extractData(
 
     if  (resultSet.next())
     {
-        <input.attributes:nullable_attribute_extraction(
+<if(parent)>
+        <parent.allAttributes:nullable_attribute_extraction(
           attr=it, input=input)>
+        <table.nonParentAttributes:nullable_attribute_extraction(
+          attr=it, input=input)>
+<else>
+        <table.attributes:nullable_attribute_extraction(
+          attr=it, input=input)>
+<endif>
+
         <input.lob_attributes:special_attribute_extraction(
           attr=it, input=input)>
 
         result =
             factory.create<input.vo_name>ValueObject(
-                <input.attributes:attribute_extraction(
+<if(parent)>
+                // parent.allAttributes
+                <parent.allAttributes:attribute_extraction(
+                  attr=it, input=input); separator=",\n">,
+                // table.nonParentAttributes
+                <table.nonParentAttributes:attribute_extraction(
                   attr=it, input=input); separator=",\n">);
+<else>
+                // table.attributes
+                <table.attributes:attribute_extraction(
+                  attr=it, input=input); separator=",\n">);
+<endif>
+
     }
 
     return result;
@@ -621,7 +683,6 @@ new <attr.objectType>(
 <endif>
 <endif>
 
-
 >>
 
 object_nullable_attribute_extractor(attr) ::= <<
@@ -714,8 +775,6 @@ resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>
 <endif>
-
-
 
 >>
 

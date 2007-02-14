@@ -150,13 +150,13 @@ attribute_isolated_declaration(attr) ::= <<
 <attribute_declaration(attr=attr)>,
 >>
 
-indirect_template(name, input) ::= <<
+indirect_template(name, input, extra1, extra2) ::= <<
 <!
   Calls the template matching given name, passing the input as argument.
   @param name the template name.
   @param input the arguments.
 !>
-<(name)(input=input)>
+<(name)(input=input, extra1=extra1, extra2=extra2)>
 >>
 
 custom_select(cs, input) ::= <<
