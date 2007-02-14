@@ -147,109 +147,138 @@ public class <input.vo_name>ValueObjectFactory
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
-     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>(
 <if(parent)>
-        <parent.attributes:attribute_method_declaration(attribute=it);
+        <parent.allAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">,
-<endif>
-
+        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+          separator=",\n">)
+<else>
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
+<endif>
     {
         return
             new <input.vo_name>ValueObject(
 <if(parent)>
-                <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">,
+                <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
+                <table.nonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
+<else>
+                <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
 <endif>
 
-                <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
-     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>ValueObject(
 <if(parent)>
-        <parent.attributes:attribute_method_declaration(attribute=it);
+        <parent.allAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">,
-<endif>
-
+        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+          separator=",\n">)
+<else>
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
+<endif>
+
     {
         return
             create<input.vo_name>(
 <if(parent)>
-                <parent.attributes:{<it.nameUncapitalized>};
+                <parent.allAttributes:{<it.nameUncapitalized>};
                   separator=",\n">,
-<endif>
-
+                <table.nonParentAttributes:{<it.nameUncapitalized>};
+                  separator=",\n">);
+<else>
                 <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
+<endif>
+
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
-<endif>
-
+     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+<else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
+<endif>
      */
     public <input.vo_name> create(
 <if(parent)>
-        <parent.attributes:attribute_method_declaration(attribute=it);
+        <parent.allAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">,
-<endif>
-
+        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+          separator=",\n">)
+<else>
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
+<endif>
+
     {
         return
             create<input.vo_name>(
 <if(parent)>
-                <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">,
-<endif>
-
+                <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
+                <table.nonParentAttributes:{<it.nameUncapitalized>};
+                  separator=",\n">);
+<else>
                 <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
+<endif>
+
     }
 
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.attributes:attribute_javadoc(attribute=it); separator="\n">
+     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
-     <table.attributes:attribute_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> createValueObject(
 <if(parent)>
-        <parent.attributes:attribute_method_declaration(attribute=it);
+        <parent.allAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">,
-<endif>
-
+        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+          separator=",\n">)
+<else>
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
+<endif>
+
     {
         return
             create<input.vo_name>(
 <if(parent)>
-                <parent.attributes:{<it.nameUncapitalized>}; separator=",\n">,
-<endif>
-
+                <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
+                <table.nonParentAttributes:{<it.nameUncapitalized>};
+                  separator=",\n">);
+<else>
                 <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
+<endif>
+
     }
 }
 >>

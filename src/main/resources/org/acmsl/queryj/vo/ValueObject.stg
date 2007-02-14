@@ -128,8 +128,14 @@ public interface <input.vo_name>
 <endif>
 
 {
+<if(parent)> 
+    <table.nonParentAttributes:attribute_getter(attribute=it);
+      separator="\n\n">
+<else>
     <table.attributes:attribute_getter(attribute=it);
       separator="\n\n">
+<endif>
+
 }
 >>
 

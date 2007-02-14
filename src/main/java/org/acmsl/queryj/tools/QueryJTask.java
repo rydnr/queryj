@@ -1083,6 +1083,8 @@ public class QueryJTask
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
 
+            result.add(new TableTemplateHandlerBundle());
+
             //result.add(new FunctionsBundle());
 
             result.add(new ProcedureRepositoryTemplateHandlerBundle());
@@ -1100,8 +1102,6 @@ public class QueryJTask
 
             result.add(new RepositoryDAOTemplateHandlerBundle());
             result.add(new RepositoryDAOFactoryTemplateHandlerBundle());
-
-            result.add(new TableTemplateHandlerBundle());
 
             result.add(new TableRepositoryTemplateHandlerBundle());
 

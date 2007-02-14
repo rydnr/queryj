@@ -122,21 +122,6 @@ public abstract class Abstract<input.vo_name>ValueObject
 
     implements  <input.vo_name>
 {
-/*
-Table: <table.name>
-  Attributes:
-    <table.attributes:{<it>}; separator="\n">
-  Non-parent attributes:
-    <table.nonParentAttributes:{<it>}; separator="\n">
-
-Parent: <parent.name>
-  Attributes:
-    <parent.attributes:{<it>}; separator="\n">
-  Child attributes:
-    <parent.childAttributes:{<it>}; separator="\n">
-  All attributes:
-    <parent.allAttributes:{<it>}; separator="\n">
-*/
 <if(parent)>
     <table.nonParentAttributes:attribute_declaration(attribute=it);
      separator="\n\n">
