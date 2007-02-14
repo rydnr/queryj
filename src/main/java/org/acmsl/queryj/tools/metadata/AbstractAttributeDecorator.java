@@ -494,7 +494,7 @@ public abstract class AbstractAttributeDecorator
      */
     public boolean isDate()
     {
-        return isDate(getType(), getMetadataTypeManager());
+        return isDate(getNativeType(), getMetadataTypeManager());
     }
 
     /**
@@ -506,7 +506,7 @@ public abstract class AbstractAttributeDecorator
      * @precondition metadataTypeManager != null
      */
     protected boolean isDate(
-        final int type, final MetadataTypeManager metadataTypeManager)
+        final String type, final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isDate(type);
     }

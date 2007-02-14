@@ -567,7 +567,12 @@ Timestamp_to_primitive(input) ::= <<
 <!
  Don't try to convert the Timestamp to anything.
  @param input the attribute.
-!><Object_to_primitive(input=input)>
+!>
+<if(input.date)>
+new Timestamp(<input.nameLowercased>.getTime())
+<else>
+<Object_to_primitive(input=input)>
+<endif>
 >>
 
 Object_to_primitive(input) ::= <<
