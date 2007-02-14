@@ -142,12 +142,28 @@ attribute_declaration(attr) ::= <<
 final <if(attr.clob)>String<else><attr.fieldType><endif> <attr.nameLowercased>
 >>
 
+attribute_declaration_impl(attr) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>
+>>
+
 attribute_isolated_declaration(attr) ::= <<
 <!
   Writes the parameter declaration for a concrete attribute, isolated.
   @param attr the attribute.
 !>
 <attribute_declaration(attr=attr)>,
+>>
+
+attribute_isolated_declaration_impl(attr) ::= <<
+<!
+  Writes the parameter declaration for a concrete attribute.
+  @param attr the attribute.
+!>
+final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>,
 >>
 
 indirect_template(name, input, extra1, extra2) ::= <<

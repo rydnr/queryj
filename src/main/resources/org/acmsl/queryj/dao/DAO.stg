@@ -165,7 +165,7 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
+<class(input=input,foreign_keys_by_table=input.foreign_keys_by_table, table=input.table)>
 >>
 
 first_line_description(tableName, engineName, engineVersion) ::= <<
@@ -289,16 +289,33 @@ foreignkey_dao_import(
 import <basePackageName>.<baseDAOSubpackageName>.<referredVOName>DAO;
 >>
 
-class(input,foreign_keys_by_table) ::= <<
+class(input, foreign_keys_by_table, table) ::= <<
 <!
-  Generates the class body.
-  @param input.vo_name the value object name.
-  @param input.engine_name the engine name.
-  @param input.engine_version the engine version.
-  @param input.timestamp the timestamp.
-  @param input.custom_results the results for the custom queries.
-  @param input.tr_name the table repository name.
-  @param foreign_keys_by_table a map of table-name->foreign_key
+ Generates the class body.
+ @param input.vo_name the value object name.
+ @param input.engine_name the engine name.
+ @param input.engine_version the engine version.
+ @param input.timestamp the timestamp.
+ @param input.custom_results the results for the custom queries.
+ @param input.tr_name the table repository name.
+ @param foreign_keys_by_table a map of table-name->foreign_key
+ @param table the table.
+!>
+<classImpl(input=input, foreign_keys_by_table=foreign_keys_by_table, table=table, parent=table.parentTable)>
+>>
+
+classImpl(input, foreign_keys_by_table, table, parent) ::= <<
+<!
+ Generates the class body.
+ @param input.vo_name the value object name.
+ @param input.engine_name the engine name.
+ @param input.engine_version the engine version.
+ @param input.timestamp the timestamp.
+ @param input.custom_results the results for the custom queries.
+ @param input.tr_name the table repository name.
+ @param foreign_keys_by_table a map of table-name->foreign_key
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -516,7 +533,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(input.clobHandling)>
     <indirect_template(name=input.clobHandling+"Insert", input=input)>
 <else>
-    <defaultInsert(input=input)>
+    <defaultInsert(input=input, table=table, parent=parent)>
 <endif>
 
     /**
@@ -566,24 +583,48 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<endif>
+
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      */
     public int update(
-        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
+<if(parent)>
+        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.attributes)>,
+        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>)
+<else>
+        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)
+<endif>
+
       throws DataAccessException
     {
         return
             update(
-                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent)>
+                <parent.allAttributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n">,
+<else>
+                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
                 buildUpdateQuery(),
                 getDataSource());
     }
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<endif>
+
      * @param query the query used to perform the update operation.
      * @param dataSource the \<code>DataSource\<code> instance.
      * @return the number of entities updated.
@@ -592,21 +633,39 @@ public class <input.engine_name><input.vo_name>DAO
      <precondition_notnull("dataSource")>
      */
     protected int update(
-        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
+<if(parent)>
+        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.nonParentAttributes)>,
+        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>,
+<else>
+        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+<endif>
+
         final Query query,
         final DataSource dataSource)
       throws DataAccessException
     {
         return
             update(
-                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent)>
+                <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.nonParentAttributes)>,
+                <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n"><endif>,
+<else>
+                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
                 query,
                 new DataSourceTransactionManager(dataSource));
     }
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<endif>
+
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
@@ -616,7 +675,13 @@ public class <input.engine_name><input.vo_name>DAO
      <precondition_notnull("transactionManager")>
      */
     protected int update(
-        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
+<if(parent)>
+        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.nonParentAttributes)>,
+        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>,
+<else>
+        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+<endif>
+
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
@@ -628,7 +693,13 @@ public class <input.engine_name><input.vo_name>DAO
         {
             result =
                 update(
-                    <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent)>
+                    <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.nonParentAttributes)>,
+                    <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n"><endif>,
+<else>
+                    <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
                     query,
                     new TransactionTemplate(transactionManager));
         }
@@ -638,7 +709,13 @@ public class <input.engine_name><input.vo_name>DAO
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<endif>
+
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
@@ -648,7 +725,13 @@ public class <input.engine_name><input.vo_name>DAO
      <precondition_notnull("transactionManager")>
      */
     protected int update(
-        <input.attributes:attribute_declaration(attr=it); separator=",\n">,
+<if(parent)>
+        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.nonParentAttributes)>,
+        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>,
+<else>
+        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+<endif>
+
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
@@ -660,7 +743,13 @@ public class <input.engine_name><input.vo_name>DAO
                 new UpdateTransactionCallback(
                     new QueryPreparedStatementCreator(query),
                     new <input.vo_name>AttributesStatementSetter(
-                        <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent)>
+                        <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.nonParentAttributes)>,
+                        <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n"><endif>,
+<else>
+                        <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
                         true),
                     this));
 
@@ -1273,15 +1362,17 @@ protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
 }
 >>
 
-defaultInsert(input) ::= <<
+defaultInsert(input, table, parent) ::= <<
 <!
  Generates the default insert logic.
  @param input the input.
+ @param table the table.
+ @param parent the parent.
 !>
-<jdbcInsert(input=input)>
+<jdbcInsert(input=input, table=table, parent=parent)>
 >>
 
-jdbcInsert(input) ::= <<
+jdbcInsert(input, table, parent) ::= <<
 <!
  Generates the JDBC insert logic.
  @param input the input.
@@ -1321,21 +1412,45 @@ protected Query buildInsertQuery(final QueryFactory queryFactory)
 protected void buildInsertQuery(final InsertQuery query)
 {
     query.insertInto(<input.table_name_uppercased>);
-    <input.attributes:attribute_query_insert(
+<if(parent)>
+    <parent.allAttributes:attribute_query_insert(
       tableRepositoryName=input.tr_name_capitalized,
       tableNameUppercased=input.table_name_uppercased,
       nameUppercased=it.nameUppercased); separator="\n">
+    <table.nonParentAttributes:attribute_query_insert(
+      tableRepositoryName=input.tr_name_capitalized,
+      tableNameUppercased=input.table_name_uppercased,
+      nameUppercased=it.nameUppercased); separator="\n">
+<else>
+    <table.attributes:attribute_query_insert(
+      tableRepositoryName=input.tr_name_capitalized,
+      tableNameUppercased=input.table_name_uppercased,
+      nameUppercased=it.nameUppercased); separator="\n">
+<endif>
+
 }
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @throws DataAccessException if the operation fails.
  */
 public void insert(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
+<endif>
+
   throws DataAccessException
 {
     insert(
@@ -1346,8 +1461,14 @@ public void insert(
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param query the query to insert the values.
  * @param dataSource the \<code>DataSource\</code> instance.
  * @throws DataAccessException if the operation fails.
@@ -1355,8 +1476,14 @@ public void insert(
  <precondition_notnull("dataSource")>
  */
 protected void insert(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
+<endif>
+
     final Query query,
     final DataSource dataSource)
   throws DataAccessException
@@ -1368,9 +1495,15 @@ protected void insert(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information."
+ * Persists \<code><input.vo_name>\</code> information." 
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param query the query to insert the values.
  * @param transactionManager the \<code>PlatformTransactionManager\</code>
  * instance.
@@ -1379,8 +1512,14 @@ protected void insert(
  <precondition_notnull("transactionManager")>
  */
 protected void insert(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
+<endif>
+
     final Query query,
     final PlatformTransactionManager transactionManager)
   throws DataAccessException
@@ -1397,8 +1536,14 @@ protected void insert(
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param query the query to insert the values.
  * @param transactionTemplate the \<code>TransactionTemplate\</code>
  * instance.
@@ -1407,8 +1552,14 @@ protected void insert(
  <precondition_notnull("transactionTemplate")>
  */
 protected void insert(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
+<endif>
+
     final Query query,
     final TransactionTemplate transactionTemplate)
   throws DataAccessException
@@ -1425,7 +1576,13 @@ protected void insert(
         new UpdateTransactionCallback(
             new QueryPreparedStatementCreator(query),
             new <input.vo_name>AttributesStatementSetter(
-                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent)>
+                <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.nonParentAttributes)>,
+                <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n"><endif>,
+<else>
+                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
                 true),
             this));
 }
@@ -1433,18 +1590,37 @@ protected void insert(
 /**
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @throws DataAccessException if the operation fails.
  */
 public <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
+<endif>
+
   throws DataAccessException
 {
     return
         create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+            <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attr.nameLowercased><endif>}; separator=",\n">,
+<else>
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
             buildInsertQuery(),
             getDataSource(),
             <input.vo_name>ValueObjectFactory.getInstance());
@@ -1453,8 +1629,14 @@ public <input.vo_name> create(
 /**
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance."
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param query the query required to insert given information.
  * @param dataSource the data source.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
@@ -1465,8 +1647,14 @@ public <input.vo_name> create(
  <precondition_notnull("factory")>
  */
 protected <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
+<endif>
+
     final Query query,
     final DataSource dataSource,
     final <input.vo_name>ValueObjectFactory factory)
@@ -1474,7 +1662,12 @@ protected <input.vo_name> create(
 {
     return
         create(
+<if(parent)>
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+<else>
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
             query,
             new DataSourceTransactionManager(dataSource),
             factory);
@@ -1483,8 +1676,14 @@ protected <input.vo_name> create(
 /**
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance."
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param query the query required to insert given information.
  * @param transactionManager the \<code>PlatformTransactionManager\</code>
  * instance.
@@ -1496,8 +1695,14 @@ protected <input.vo_name> create(
  <precondition_notnull("factory")>
  */
 protected <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
+<endif>
+
     final Query query,
     final PlatformTransactionManager transactionManager,
     final <input.vo_name>ValueObjectFactory factory)
@@ -1514,8 +1719,14 @@ protected <input.vo_name> create(
 /**
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param query the query required to insert given information.
  * @param transactionTemplate the \<code>TransactionTemplate\<code>
  * instance.
@@ -1526,8 +1737,14 @@ protected <input.vo_name> create(
  <precondition_notnull("factory")>
  */
 protected <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
+<endif>
+
     final Query query,
     final TransactionTemplate transactionTemplate,
     final <input.vo_name>ValueObjectFactory factory)
@@ -1547,13 +1764,25 @@ protected <input.vo_name> create(
         new UpdateTransactionCallback(
             new QueryPreparedStatementCreator(query),
             new <input.vo_name>AttributesStatementSetter(
-                <input.attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent)>
+                <parent.allAttributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n">,
+<else>
+                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
                 true),
             this));
 
     result =
         factory.create<input.vo_name>(
-            <input.attributes:{<it.nameLowercased>}; separator=",\n">);
+<if(parent)>
+            <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.attributes)>,
+            <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n">);<endif>
+<else>
+            <table.attributes:{<it.nameLowercased>}; separator=",\n">);
+<endif>
+
 
     return result;
 }
@@ -1688,11 +1917,27 @@ protected <input.vo_name> create(
             new QueryPreparedStatementCreator(
                 "insert into <input.table_name_uppercased>" +
                 " (" +
-                <input.attributes:{"<it.nameUppercased>};
+<if(parent)>
+                <parent.allAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
+                <table.nonParentAttributes:{"<it.nameUppercased>};
+                  separator=", \" +\n">" +
+<else>
+                <table.attributes:{"<it.nameUppercased>};
+                  separator=", \" +\n">" +
+<endif>
+
                 ") VALUES (" +
-                <input.attributes:insert_attribute(attr=it);
+<if(parent)>
+                <parent.allAttributes:insert_attribute(attr=it);
+                  separator=",\" +\n">)"<if(table.nonParentAttributes)>,
+                <table.nonParentAttributes:insert_attribute(attr=it);
+                  separator=",\" +\n">)")<endif>,
+<else>
+                <table.attributes:insert_attribute(attr=it);
                   separator=",\" +\n">)"),
+<endif>
+
             new <input.vo_name>AttributesStatementSetter(
                 <input.all_but_lob_attributes:{<it.nameLowercased>};
                   separator=",\n">,
@@ -1704,8 +1949,16 @@ protected <input.vo_name> create(
         new SelectForUpdateTransactionCallback(
             new QueryPreparedStatementCreator(
                 "SELECT " +
-                <input.attributes:{"<it.nameUppercased>};
+<if(parent)>
+                <parent.allAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
+                <table.nonParentAttributes:{"<it.nameUppercased>};
+                  separator=", \" +\n">" +
+<else>
+                <table.attributes:{"<it.nameUppercased>};
+                  separator=", \" +\n">" +
+<endif>
+
                 " FROM <input.table_name_uppercased>" +
                 " WHERE " +
                 <input.pk_attributes:{"<it.nameUppercased> = ?};

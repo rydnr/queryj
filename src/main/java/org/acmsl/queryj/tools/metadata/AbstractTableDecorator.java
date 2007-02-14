@@ -29,7 +29,7 @@
 
  *****************************************************************************
  *
- * Filename: TableDecorator.java
+ * Filename: AbstractTableDecorator.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -64,8 +64,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class TableDecorator
-    extends AbstractTable
+public class AbstractTableDecorator
+    extends     AbstractTable
+    implements  TableDecorator
 {
     /**
      * The metadata type manager.
@@ -73,14 +74,14 @@ public class TableDecorator
     private MetadataManager m__MetadataManager;
 
     /**
-     * Creates an <code>TableDecorator</code> with the
+     * Creates an <code>AbstractTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
      * @param metadataManager the metadata manager.
      * @precondition table != null
      * @precondition metadataManager != null
      */
-    public TableDecorator(
+    public AbstractTableDecorator(
         final Table table, final MetadataManager metadataManager)
     {
         this(
@@ -91,7 +92,7 @@ public class TableDecorator
     }
 
     /**
-     * Creates an <code>TableDecorator</code> with the following
+     * Creates an <code>AbstractTableDecorator</code> with the following
      * information.
      * @param name the name.
      * @param attributes the attributes.
@@ -100,7 +101,7 @@ public class TableDecorator
      * @precondition name != null
      * @precondition metadataManager != null
      */
-    public TableDecorator(
+    public AbstractTableDecorator(
         final String name,
         final List attributes,
         final Table parentTable,
@@ -424,7 +425,6 @@ public class TableDecorator
     {
         return lowerCase(getSingularNameUppercased());
     }
-
 
     /**
      * Retrieves the parent table.

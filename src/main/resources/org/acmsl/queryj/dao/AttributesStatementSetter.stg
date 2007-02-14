@@ -113,7 +113,7 @@ import java.util.Date;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -158,10 +158,21 @@ import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
-class(input) ::= <<
+class(input, table) ::= <<
 <!
  Generates the class body.
  @param input the input.
+ @param table the table.
+!>
+<classImpl(input=input, table=table, parent=table.parentTable)>
+>>
+
+classImpl(input, table, parent) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -177,7 +188,13 @@ public class <input.vo_name>AttributesStatementSetter
     implements  PreparedStatementSetter,
                 <input.tr_name_capitalized>TableRepository
 {
-    <input.attributes:attribute_member_declaration(attr=it); separator="\n\n">
+<if(parent)>
+    <parent.allAttributes:attribute_member_declaration(attr=it); separator="\n\n">
+
+    <table.nonParentAttributes:attribute_member_declaration(attr=it); separator="\n\n">
+<else>
+    <table.attributes:attribute_member_declaration(attr=it); separator="\n\n">
+<endif>
 
     /**
      * The \<i>update\</i> operation.
@@ -190,18 +207,33 @@ public class <input.vo_name>AttributesStatementSetter
      */
     private boolean m__bSelectForUpdateOperation;
 
-
 <endif>
     /**
      * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
      * instance.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased);
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+<endif>
+
      * @param updateOperation whether the operation is an update.
      */
     public <input.vo_name>AttributesStatementSetter(
-        <input.attributes:attribute_isolated_declaration(attr=it);
+<if(parent)>
+        <parent.allAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
+        <table.nonParentAttributes:attribute_isolated_declaration_impl(attr=it);
+          separator="\n">
+<else>
+        <table.attributes:attribute_isolated_declaration_impl(attr=it);
+          separator="\n">
+<endif>
+
         final boolean updateOperation)
     {
         this(
@@ -222,7 +254,7 @@ public class <input.vo_name>AttributesStatementSetter
      * @param updateOperation whether the operation is an update.
      */
     public <input.vo_name>AttributesStatementSetter(
-        <input.nonpk_attributes:attribute_isolated_declaration(attr=it);
+        <input.nonpk_attributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
         final boolean updateOperation)
     {
@@ -242,7 +274,7 @@ public class <input.vo_name>AttributesStatementSetter
      * @param selectForUpdateOperation whether the operation is a select-for-update.
      */
     public <input.vo_name>AttributesStatementSetter(
-        <input.all_but_lob_attributes:attribute_isolated_declaration(attr=it);
+        <input.all_but_lob_attributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
         final boolean updateOperation,
         final boolean selectForUpdateOperation)
@@ -316,7 +348,13 @@ public class <input.vo_name>AttributesStatementSetter
 
 
 <endif>
-    <input.attributes:attribute_accessor(attr=it); separator="\n\n">
+<if(parent)>
+    <parent.allAttributes:attribute_accessor(attr=it); separator="\n\n">
+
+    <table.nonParentAttributes:attribute_accessor(attr=it); separator="\n\n">
+<else>
+    <table.attributes:attribute_accessor(attr=it); separator="\n\n">
+<endif>
 
     /**
      * Specifies the values on given \<code>PreparedStatement\</code>
@@ -336,7 +374,14 @@ public class <input.vo_name>AttributesStatementSetter
             (Query) preparedStatement,
 
 <endif>
-            <input.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
+
+<if(parent)>
+            <parent.allAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n"><if(table.nonParentAttributes)>,
+            <table.nonParentAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n"><endif>,
+<else>
+            <table.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
+<endif>
+
 <if(input.clobHandling)>
             isUpdateOperation(),
             isSelectForUpdateOperation());
@@ -356,8 +401,16 @@ public class <input.vo_name>AttributesStatementSetter
      * @param query the query.
 
 <endif>
-     <input.attributes:attribute_javadoc(name=it.nameLowercased);
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased);
+        separator="\n">
+<endif>
+
      * @param updateOperation whether the operation is an update.
 <if(input.clobHandling)>
      * @param selectForUpdateOperation whether the operation is a
@@ -376,13 +429,20 @@ public class <input.vo_name>AttributesStatementSetter
     protected void setValues(
 <if(input.clobHandling)>
         final PreparedStatement preparedStatement,
-
 <else>
         final Query query,
-
 <endif>
-        <input.attributes:attribute_isolated_declaration(attr=it);
+
+<if(parent)>
+        <parent.allAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
+        <table.nonParentAttributes:attribute_isolated_declaration_impl(attr=it);
+          separator="\n">
+<else>
+        <table.attributes:attribute_isolated_declaration_impl(attr=it);
+          separator="\n">
+<endif>
+
 <if(input.clobHandling)>
         final boolean updateOperation,
         final boolean selectForUpdateOperation)
@@ -461,7 +521,7 @@ attribute_accessor(attr) ::= <<
  <attribute_javadoc(name=attr.nameLowercased)>
  */
 protected final void immutableSet<attr.nameCapitalized>(
-    <attribute_declaration(attr=attr)>)
+    <attribute_declaration_impl(attr=attr)>)
 {
     this.<attr.nameLowercased> = <attr.nameLowercased>;
 }
@@ -471,7 +531,7 @@ protected final void immutableSet<attr.nameCapitalized>(
  <attribute_javadoc(name=attr.nameLowercased)>
  */
 protected void set<attr.nameCapitalized>(
-    <attribute_declaration(attr=attr)>)
+    <attribute_declaration_impl(attr=attr)>)
 {
     immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
 }
@@ -523,6 +583,7 @@ preparedStatement.set<attr.objectType>(
     t_iIndex++, <attr.nameLowercased>);
 <endif>
 <endif>
+
 >>
 
 Integer_to_primitive(input) ::= <<
@@ -581,6 +642,3 @@ Object_to_primitive(input) ::= <<
  @param input the attribute.
 !><input.nameLowercased>
 >>
-
-
-

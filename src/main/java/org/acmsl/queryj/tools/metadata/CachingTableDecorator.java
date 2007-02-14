@@ -56,7 +56,7 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public class CachingTableDecorator
-    extends TableDecorator
+    extends AbstractTableDecorator
 {
     /**
      * The cached uppercased name.

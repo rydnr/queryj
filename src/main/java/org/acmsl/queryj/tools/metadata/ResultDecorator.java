@@ -70,8 +70,9 @@ public interface ResultDecorator
     /**
      * Retrieves the parent result, if any.
      * @return such element.
-     */
+     *
     public Result getParentResult();
+    */
 
     /**
      * Retrieves whether the result matches a single entity or expects

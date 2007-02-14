@@ -93,7 +93,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<class(input=input)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -126,10 +126,21 @@ import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 >>
 
-class(input) ::= <<
+class(input, table) ::= <<
 <!
  Generates the class body.
  @param input the input.
+ @param table the table.
+!>
+<classImpl(input=input, table=table, parent=table.parentTable)>
+>>
+
+classImpl(input, table, parent) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -183,35 +194,71 @@ public interface <input.vo_name>DAO
 
     /**
      * Persists \<code><input.vo_name>\</code> information.
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
+ <input.all_but_externally_managed_attributes:attribute_javadoc(
+   name=it.nameLowercased); separator="\n">
+<endif>
+
      * @throws DataAccessException if the operation fails.
      */
     public void insert(
+<if(parent)>
+        <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+        <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
         <input.all_but_externally_managed_attributes:attribute_declaration(
           attr=it); separator=",\n">)
+<endif>
+
       throws DataAccessException;
 
     /**
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance.
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
-       name=it.nameLowercased); separator="\n">
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+<else>
+ <input.all_but_externally_managed_attributes:attribute_javadoc(
+   name=it.nameLowercased); separator="\n">
+<endif>
+
      * @throws DataAccessException if the operation fails.
      */
     public <input.vo_name> create(
+<if(parent)>
+        <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
+        <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+<else>
         <input.all_but_externally_managed_attributes:attribute_declaration(
           attr=it); separator=",\n">)
+<endif>
+
       throws DataAccessException;
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
-     <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<if(parent)>
+     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<endif>
+
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      */
     public int update(
-        <input.attributes:attribute_declaration(attr=it); separator=",\n">)
+<if(parent)>
+        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.nonParentAttributes)>,
+        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>)
+<else>
+        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)
+<endif>
+
       throws DataAccessException;
 
     /**
