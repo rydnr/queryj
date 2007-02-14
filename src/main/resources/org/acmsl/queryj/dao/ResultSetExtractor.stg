@@ -111,7 +111,7 @@ import java.util.Date;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input)>
+<class(input=input, table=input.table, parent=input.table.parentTable)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -140,10 +140,12 @@ import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
-class(input) ::= <<
+class(input, table, parent) ::= <<
 <!
  Generates the class body.
  @param input the input.
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -160,16 +162,18 @@ public class <input.vo_name>ResultSetExtractor
 <if(input.clobHandling)>
     <indirect_template(name=input.clobHandling+"Extractor", input=input)>
 <else>
-    <defaultExtractor(input=input)>
+    <defaultExtractor(input=input, table=table, parent=parent)>
 <endif>
 
 }
 >>
 
-defaultExtractor(input) ::= <<
+defaultExtractor(input, table, parent) ::= <<
 <!
  Generates the default logic for the extractor.
  @param input the input.
+ @param table the table.
+ @param parent the parent.
 !>
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
@@ -215,13 +219,30 @@ protected <input.vo_name> extractData(
 
     if  (resultSet.next())
     {
-        <input.attributes:nullable_attribute_extraction(
+<if(parent)>
+        <parent.allAttributes:nullable_attribute_extraction(
           attr=it, input=input)>
+        <table.nonParentAttributes:nullable_attribute_extraction(
+          attr=it, input=input)>
+<else>
+        <table.attributes:nullable_attribute_extraction(
+          attr=it, input=input)>
+<endif>
+
 
         result =
             factory.create<input.vo_name>ValueObject(
-                <input.attributes:attribute_extraction(attr=it);
+<if(parent)>
+                <parent.allAttributes:attribute_extraction(attr=it);
+                  separator=",\n"><if(table.nonParentAttributes)>,
+                <table.nonParentAttributes:attribute_extraction(attr=it);
+                  separator=",\n">
+<endif>);
+<else>
+                <table.attributes:attribute_extraction(attr=it);
                   separator=",\n">);
+<endif>
+
     }
 
     return result;
@@ -230,7 +251,7 @@ protected <input.vo_name> extractData(
 
 oracleExtractor(input) ::= <<
 <!
- Generates the constructor needed by Oracle LOB management.
+ Generates the constructor needed by Oracle8 LOB management.
  @param input the input.
 !>
 <oracle8Extractor(input=input)>
