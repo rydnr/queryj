@@ -205,8 +205,8 @@ public interface <input.vo_name>DAO
      */
     public void insert(
 <if(parent)>
-        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">)
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+        <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">)
 <else>
         <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
@@ -228,8 +228,8 @@ public interface <input.vo_name>DAO
      */
     public <input.vo_name> create(
 <if(parent)>
-        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">)
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+        <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">)
 <else>
         <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
@@ -250,8 +250,8 @@ public interface <input.vo_name>DAO
      */
     public int update(
 <if(parent)>
-        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.nonParentAttributes)>,
-<table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>)
+        <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <else>
         <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <endif>

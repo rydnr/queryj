@@ -164,12 +164,17 @@ public class <input.vo_name>ValueObjectFactory
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
 <endif>
+
     {
         return
             new <input.vo_name>ValueObject(
 <if(parent)>
+// parent.allAttributes
                 <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
+// /parent.allAttributes
+// table.nonParentAttributes
                 <table.nonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
+// /table.nonParentAttributes
 <else>
                 <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
 <endif>

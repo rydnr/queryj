@@ -287,7 +287,7 @@ public class CachingDecoratorFactory
         final MetadataManager metadataManager)
     {
         return
-            new LazyTableDecorator(
+            new CachingTableDecorator(
                 table, metadataManager, childAttributes, this);
     }
 }

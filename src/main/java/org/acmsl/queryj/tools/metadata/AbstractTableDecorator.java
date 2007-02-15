@@ -56,6 +56,7 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,7 +65,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class AbstractTableDecorator
+public abstract class AbstractTableDecorator
     extends     AbstractTable
     implements  TableDecorator
 {
@@ -72,6 +73,21 @@ public class AbstractTableDecorator
      * The metadata type manager.
      */
     private MetadataManager m__MetadataManager;
+
+    /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
+    
+    /**
+     * The child's attributes.
+     */
+    private List m__lChildAttributes;
+
+    /**
+     * A flag indicating whether the attributes have been cleaned up.
+     */
+    private boolean m__bAttributesCleanedUp = false;
 
     /**
      * Creates an <code>AbstractTableDecorator</code> with the
@@ -89,6 +105,25 @@ public class AbstractTableDecorator
             table.getAttributes(),
             table.getParentTable(),
             metadataManager);
+    }
+
+    /**
+     * Creates an <code>AbstractTableDecorator</code> with the
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the decorator factory.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    public AbstractTableDecorator(
+        final Table table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(table, metadataManager);
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
@@ -112,6 +147,68 @@ public class AbstractTableDecorator
         immutableSetMetadataManager(metadataManager);
     }
 
+    /**
+     * Creates a <code>AbstractTableDecorator</code> instance.
+     * @param table the table name.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param childAttributes the child attributes.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition decoratorFactory != null
+     */
+    public AbstractTableDecorator(
+        final String table,
+        final List attributes,
+        final MetadataManager metadataManager,
+        final List childAttributes,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(table, attributes, null, metadataManager);
+        immutableSetChildAttributes(childAttributes);
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+
+    /**
+     * Creates a <code>AbstractTableDecorator</code> instance.
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected AbstractTableDecorator(
+        final String table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(table, null, null, metadataManager);
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+    
+    /**
+     * Creates a <code>AbstractTableDecorator</code> instance.
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param childAttributes the child attributes.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected AbstractTableDecorator(
+        final String table,
+        final MetadataManager metadataManager,
+        final List childAttributes,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(table, null, null, metadataManager);
+        immutableSetChildAttributes(childAttributes);
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+    
     /**
      * Specifies the metadata manager.
      * @param metadataManager such instance.
@@ -139,6 +236,105 @@ public class AbstractTableDecorator
     protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     */
+    protected final void immutableSetDecoratorFactory(
+        final DecoratorFactory decoratorFactory)
+    {
+        m__DecoratorFactory = decoratorFactory;
+    }
+    
+    /**
+     * Specifies the decorator factory.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     */
+    protected void setDecoratorFactory(final DecoratorFactory decoratorFactory)
+    {
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+    
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    protected final DecoratorFactory immutableGetDecoratorFactory()
+    {
+        return m__DecoratorFactory;
+    }
+    
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        DecoratorFactory result = immutableGetDecoratorFactory();
+
+        if  (result == null)
+        {
+            result = CachingDecoratorFactory.getInstance();
+            setDecoratorFactory(result);
+        }
+
+        return result;
+    }
+    
+    /**
+     * Specifies whether the attributes have been cleaned up.
+     * @param flag such flag.
+     */
+    protected final void immutableSetAttributesCleanedUp(final boolean flag)
+    {
+        m__bAttributesCleanedUp = flag;
+    }
+    
+    /**
+     * Specifies whether the attributes have been cleaned up.
+     * @param flag such flag.
+     */
+    protected void setAttributesCleanedUp(final boolean flag)
+    {
+        immutableSetAttributesCleanedUp(flag);
+    }
+    
+    /**
+     * Retrieves whether the attributes have been cleaned up.
+     * @return such flag.
+     */
+    protected boolean getAttributesCleanedUp()
+    {
+        return m__bAttributesCleanedUp;
+    }
+
+    /**
+     * Specifies the child attributes.
+     * @param childAttributes the child attributes.
+     */
+    protected final void immutableSetChildAttributes(final List childAttributes)
+    {
+        m__lChildAttributes = childAttributes;
+    }
+
+    /**
+     * Specifies the child attributes.
+     * @param childAttributes the child attributes.
+     */
+    protected void setChildAttributes(final List childAttributes)
+    {
+        immutableSetChildAttributes(childAttributes);
+    }
+
+    /**
+     * Retrieves the child's attributes.
+     * @return such list.
+     */
+    public List getChildAttributes()
+    {
+        return m__lChildAttributes;
     }
 
     /**
@@ -427,58 +623,6 @@ public class AbstractTableDecorator
     }
 
     /**
-     * Retrieves the parent table.
-     * @return such table.
-     */
-    public Table getParentTable()
-    {
-        Table result = super.getParentTable();
-
-        if  (result == null)
-        {
-            result = getParentTable(getName(), getMetadataManager());
-            super.setParentTable(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the parent table.
-     * @param table the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return such table, or <code>null</code> if it doesn't exist.
-     * @precondition table != null
-     * @precondition metadataManager != null
-     */
-    protected Table getParentTable(
-        final String name, final MetadataManager metadataManager)
-    {
-        Table result = null;
-
-        String t_strParentTable = metadataManager.getParentTable(name);
-
-        if  (t_strParentTable != null)
-        {
-            result =
-                new LazyTableDecorator(
-                    t_strParentTable, metadataManager, getDecoratorFactory());
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the standard decorator instance. Inherit and override for a different
-     * one.
-     * @return the decorator factory used by default.
-     */
-    protected DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
-    }
-
-    /**
      * Retrieves the non-parent attributes.
      * @return such attributes.
      */
@@ -566,4 +710,284 @@ public class AbstractTableDecorator
         return decoratorFactory.decorateAttributes(name, metadataManager);
     }
     
+    /**
+     * Retrieves the attributes.
+     * @return such information.
+     */
+    public List getAllAttributes()
+    {
+        return
+            getAllAttributes(
+                getName(), getMetadataManager(), getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @param table the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such information.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected List getAllAttributes(
+        final String table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        List result = new ArrayList();
+
+        Table t_ParentTable = getParentTable();
+
+        if  (t_ParentTable != null)
+        {
+            TableDecorator t_ParentDecorator =
+                createTableDecorator(
+                    t_ParentTable, metadataManager, decoratorFactory);
+            
+            result.addAll(t_ParentDecorator.getAllAttributes());
+        }
+        
+        result.addAll(
+            decorateAttributes(
+                table,
+                metadataManager,
+                decoratorFactory));
+
+        return result;
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such information.
+     */
+    public List getAttributes()
+    {
+        return
+            getAttributes(
+                getName(),
+                getChildAttributes(),
+                getMetadataManager(),
+                getDecoratorFactory(),
+                getAttributesCleanedUp());
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @param table the table name.
+     * @param childAttributes the child's attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param attributesCleanedUp whether the child attributes have been removed
+     * from the attribute list already.
+     * @return such information.
+     * @precondition table != null
+     * @precondition childAttributes != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected List getAttributes(
+        final String table,
+        final List childAttributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final boolean attributesCleanedUp)
+    {
+        List result = super.getAttributes();
+
+        if  (   (result == null)
+             || (result.size() == 0))
+        {
+            result =
+                decorateAttributes(
+                    table, metadataManager, decoratorFactory);
+        }
+        
+        if  (   (result != null)
+             && (!attributesCleanedUp))
+        {
+            result =
+                removeOverridden(
+                    childAttributes,
+                    result,
+                    table,
+                    metadataManager,
+                    TableDecoratorHelper.getInstance());
+            
+            super.setAttributes(result);
+            setAttributesCleanedUp(true);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the parent table.
+     * @return such information.
+     */
+    public Table getParentTable()
+    {
+        return getParentTable(getMetadataManager(), getDecoratorFactory());
+    }
+    
+    /**
+     * Retrieves the parent table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such information.
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected Table getParentTable(
+        final MetadataManager metadataManager, 
+        final DecoratorFactory decoratorFactory)
+    {
+        Table result = super.getParentTable();
+
+        if  (result == null)
+        {
+            String t_strParentTable =
+                metadataManager.getParentTable(getName());
+            
+            if  (t_strParentTable != null)
+            {
+                List t_lAttributes = getAttributes();
+                
+                super.setParentTable(
+                    createTableDecorator(
+                        t_strParentTable, 
+                        t_lAttributes,
+                        metadataManager,
+                        decoratorFactory));
+
+                result = super.getParentTable();
+            }
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Removes the duplicated attributes from <code>secondAttributes</code>.
+     * @param firstAttributes the child attributes.
+     * @param secondAttributes the parent attributes.
+     * @param parentTableName the parent table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the cleaned-up attributes.
+     * @precondition firstAttributes != null
+     * @precondition secondAttributes != null
+     * @precondition parentTableName != null
+     * @precondition metadataManager != null
+     */
+    public List removeOverridden(
+        final List firstAttributes,
+        final List secondAttributes,
+        final String parentTableName,
+        final MetadataManager metadataManager,
+        final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return
+            tableDecoratorHelper.removeOverridden(
+                firstAttributes,
+                secondAttributes,
+                parentTableName,
+                metadataManager);
+    }
+        
+    /**
+     * Sums up parent and child's attributes.
+     * @return such collection.
+     */
+    protected List sumUpParentAndChildAttributes()
+    {
+        return
+            sumUpParentAndChildAttributes(
+                getAttributes(),
+                getChildAttributes(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Sums up parent and child's attributes.
+     * @param parentTable the parent table.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @return such collection.
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List sumUpParentAndChildAttributes(
+        final String parentTable,
+        final List attributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return
+            tableDecoratorHelper.sumUpParentAndChildAttributes(
+                parentTable,
+                attributes,
+                metadataManager,
+                decoratorFactory);
+    }
+    
+    /**
+     * Sums up parent and child's attributes.
+     * @param attributes the attributes.
+     * @param childAttributes the child attributes.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @return such collection.
+     * @precondition attributes != null
+     * @precondition childAttributes != null
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List sumUpParentAndChildAttributes(
+        final List attributes,
+        final List childAttributes,
+        final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return
+            tableDecoratorHelper.sumUpParentAndChildAttributes(
+                attributes, childAttributes);
+    }
+
+    /**
+     * Creates a table decorator.
+     * @param name the table name.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such decorator.
+     * @precondition name != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected abstract TableDecorator createTableDecorator(
+        final String parentTable,
+        final List attributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory);
+    
+    /**
+     * Creates a table decorator.
+     * @param name the table name.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such decorator.
+     * @precondition name != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected abstract TableDecorator createTableDecorator(
+        final Table parentTable,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory);
 }

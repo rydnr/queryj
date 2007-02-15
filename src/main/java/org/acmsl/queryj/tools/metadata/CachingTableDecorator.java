@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.metadata.vo.Table;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -109,6 +110,21 @@ public class CachingTableDecorator
     private List m__lCachedNonParentAttributes;
 
     /**
+     * The cached parent table.
+     */
+    private Table m__CachedParentTable;
+
+    /**
+     * The cached all attributes.
+     */
+    private List m__lCachedAllAttributes;
+
+    /**
+     * The cached attributes.
+     */
+    private List m__lCachedAttributes;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -139,6 +155,258 @@ public class CachingTableDecorator
         final MetadataManager metadataManager)
     {
         super(name, attributes, parentTable, metadataManager);
+    }
+
+    /**
+     * Creates a <code>CachingTableDecorator</code> instance.
+     * @param table the table name.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param childAttributes the child attributes.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition decoratorFactory != null
+     */
+    public CachingTableDecorator(
+        final String table,
+        final List attributes,
+        final MetadataManager metadataManager,
+        final List childAttributes,
+        final DecoratorFactory decoratorFactory)
+    {
+        super(table, attributes, metadataManager, childAttributes, decoratorFactory);
+    }
+
+    /**
+     * Creates a <code>CachingTableDecorator</code> instance.
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected CachingTableDecorator(
+        final String table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        super(table, metadataManager, decoratorFactory);
+    }
+
+    /**
+     * Creates an <code>CachingTableDecorator</code> with the
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the decorator factory.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    public CachingTableDecorator(
+        final Table table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        super(table, metadataManager, decoratorFactory);
+    }
+
+    /**
+     * Creates a <code>CachingTableDecorator</code> instance.
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param childAttributes the child attributes.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected CachingTableDecorator(
+        final String table,
+        final MetadataManager metadataManager,
+        final List childAttributes,
+        final DecoratorFactory decoratorFactory)
+    {
+        super(table, metadataManager, childAttributes, decoratorFactory);
+    }
+
+    /**
+     * Specifies the cached all attributes.
+     * @param attributes the attributes.
+     */
+    protected final void immutableSetCachedAllAttributes(final List attributes)
+    {
+        m__lCachedAllAttributes = attributes;
+    }
+
+    /**
+     * Specifies the cached all attributes.
+     * @param attributes the attributes.
+     */
+    protected void setCachedAllAttributes(final List attributes)
+    {
+        immutableSetCachedAllAttributes(attributes);
+    }
+
+    /**
+     * Retrieves the cached all attributes.
+     * @return such attributes.
+     */
+    protected List getCachedAllAttributes()
+    {
+        return m__lCachedAllAttributes;
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such information.
+     */
+    public List getAllAttributes()
+    {
+        List result = getCachedAllAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllAttributes();
+            setCachedAllAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached attributes.
+     * @param attributes the attributes.
+     */
+    protected final void immutableSetCachedAttributes(final List attributes)
+    {
+        m__lCachedAttributes = attributes;
+    }
+
+    /**
+     * Specifies the cached attributes.
+     * @param attributes the attributes.
+     */
+    protected void setCachedAttributes(final List attributes)
+    {
+        immutableSetCachedAttributes(attributes);
+    }
+
+    /**
+     * Retrieves the cached attributes.
+     * @return such attributes.
+     */
+    protected List getCachedAttributes()
+    {
+        return m__lCachedAttributes;
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such information.
+     */
+    public List getAttributes()
+    {
+        List result = getCachedAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAttributes();
+            setCachedAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached parent table.
+     * @param parent such table.
+     */
+    protected final void immutableSetCachedParentTable(final Table parent)
+    {
+        m__CachedParentTable = parent;
+    }
+
+    /**
+     * Specifies the cached parent table.
+     * @param parent such table.
+     */
+    protected void setCachedParentTable(final Table parent)
+    {
+        immutableSetCachedParentTable(parent);
+    }
+
+    /**
+     * Retrieves the cached parent table.
+     * @return such table.
+     */
+    public Table getCachedParentTable()
+    {
+        return m__CachedParentTable;
+    }
+
+    /**
+     * Retrieves the parent table.
+     * @return such information.
+     */
+    public Table getParentTable()
+    {
+        Table result = getCachedParentTable();
+
+        if  (result == null)
+        {
+            result = super.getParentTable();
+            setCachedParentTable(result);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Specifies the cached, non-parent attributes.
+     * @param attrs such attributes.
+     */
+    protected final void immutableSetCachedNonParentAttributes(final List attrs)
+    {
+        m__lCachedNonParentAttributes = attrs;
+    }
+
+    /**
+     * Specifies the cached, non-parent attributes.
+     * @param attrs such attributes.
+     */
+    protected void setCachedNonParentAttributes(final List attrs)
+    {
+        immutableSetCachedNonParentAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the cached, non-parent attributes.
+     * @return such information.
+     */
+    protected List getCachedNonParentAttributes()
+    {
+        return m__lCachedNonParentAttributes;
+    }
+
+    /**
+     * Retrieves the non-parent attributes.
+     * @return such attributes.
+     */
+    public List getNonParentAttributes()
+    {
+        List result = getCachedNonParentAttributes();
+
+        if  (result == null)
+        {
+            result = super.getNonParentAttributes();
+            setCachedNonParentAttributes(result);
+        }
+
+        return result;
     }
 
     /**
@@ -547,46 +815,51 @@ public class CachingTableDecorator
     }
 
     /**
-     * Specifies the cached, non-parent attributes.
-     * @param attrs such attributes.
+     * Creates a table decorator.
+     * @param name the table name.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such decorator.
+     * @precondition name != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
-    protected final void immutableSetCachedNonParentAttributes(final List attrs)
+    protected TableDecorator createTableDecorator(
+        final String parentTable,
+        final List attributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
-        m__lCachedNonParentAttributes = attrs;
+        return
+            new CachingTableDecorator(
+                parentTable,
+                attributes,
+                metadataManager,
+                null,
+                decoratorFactory);
     }
 
     /**
-     * Specifies the cached, non-parent attributes.
-     * @param attrs such attributes.
+     * Creates a table decorator.
+     * @param name the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such decorator.
+     * @precondition name != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
-    protected void setCachedNonParentAttributes(final List attrs)
+    protected TableDecorator createTableDecorator(
+        final Table parentTable,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
-        immutableSetCachedNonParentAttributes(attrs);
-    }
-
-    /**
-     * Retrieves the cached, non-parent attributes.
-     * @return such information.
-     */
-    protected List getCachedNonParentAttributes()
-    {
-        return m__lCachedNonParentAttributes;
-    }
-
-    /**
-     * Retrieves the non-parent attributes.
-     * @return such attributes.
-     */
-    public List getNonParentAttributes()
-    {
-        List result = getCachedNonParentAttributes();
-
-        if  (result == null)
-        {
-            result = super.getNonParentAttributes();
-            setCachedNonParentAttributes(result);
-        }
-
-        return result;
+        return
+            new CachingTableDecorator(
+                parentTable,
+                metadataManager,
+                decoratorFactory);
     }
 }

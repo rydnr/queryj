@@ -1836,8 +1836,8 @@ oracle8Insert(input) ::= <<
  */
 public void insert(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1847,8 +1847,8 @@ public void insert(
 {
     create(
 <if(parent)>
-        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attr.nameLowercased><endif>}; separator="\n">);
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+        <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">);
 <else>
         <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">);
 <endif>
@@ -1870,8 +1870,8 @@ public void insert(
  */
 public <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1882,8 +1882,8 @@ public <input.vo_name> create(
     return
         create(
 <if(parent)>
-            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attr.nameLowercased><endif>}; separator="\n">,
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <else>
             <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
@@ -1908,8 +1908,8 @@ public <input.vo_name> create(
  */
 protected <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">,
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1921,8 +1921,8 @@ protected <input.vo_name> create(
     return
         create(
 <if(parent)>
-            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attr.nameLowercased><endif>}; separator="\n">,
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <else>
             <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
@@ -1947,8 +1947,8 @@ protected <input.vo_name> create(
  */
 protected <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">,
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1965,8 +1965,8 @@ protected <input.vo_name> create(
         result =
             create(
 <if(parent)>
-                <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attr.nameLowercased><endif>}; separator="\n">,
+                <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+                <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <else>
                 <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
@@ -1993,8 +1993,8 @@ protected <input.vo_name> create(
  */
 protected <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
-<attribute_declaration_impl(attr=attr)><endif>}; separator="\n">,
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
+    <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration_impl(attr=attr)><endif>}; separator=",\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
