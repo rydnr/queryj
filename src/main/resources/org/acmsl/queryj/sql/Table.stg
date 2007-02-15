@@ -138,10 +138,11 @@ class_impl(input, table, parent) ::= <<
  */
 public class <input.table_name_capitalized>Table
 <if(parent)>
-    extends  Table
+    extends  <parent.nameCapitalized>Table
 <else>
-    extends  <parent.voName>Table
+    extends  Table
 <endif>
+
 {
     <input.attributes:constants(attr=it); separator="\n\n">
 
@@ -168,6 +169,16 @@ public class <input.table_name_capitalized>Table
 
     /**
      * Protected constructor to avoid accidental instantiation.
+     @ param name the name of the child table.
+     * @param alias the table alias.
+     */
+    protected <input.table_name_capitalized>Table(final String name, final String alias)
+    {
+        super(name, alias);
+    }
+
+    /**
+     * Protected constructor to avoid accidental instantiation.
      */
     protected <input.table_name_capitalized>Table()
     {
@@ -179,7 +190,12 @@ public class <input.table_name_capitalized>Table
      * @param alias the desired table alias.
      * @return such instance.
      */
+<if(parent)>
+    public static <input.table_name_capitalized>Table get<table.nameCapitalized>Instance(
+<else>
     public static <input.table_name_capitalized>Table getInstance(
+<endif>
+
         final String alias)
     {
         <input.table_name_capitalized>Table result = null;
@@ -190,7 +206,12 @@ public class <input.table_name_capitalized>Table
         }
         else
         {
+<if(parent)>
+            result = get<table.nameCapitalized>Instance();
+<else>
             result = getInstance();
+<endif>
+
         }
 
         return result;
@@ -200,7 +221,12 @@ public class <input.table_name_capitalized>Table
      * Retrieves a \<code><input.table_name_capitalized>Table\</code> instance.
      * @return such instance.
      */
+<if(parent)>
+    public static <input.table_name_capitalized>Table get<table.nameCapitalized>Instance()
+<else>
     public static <input.table_name_capitalized>Table getInstance()
+<endif>
+
     {
         return <input.table_name_capitalized>TableSingletonContainer.SINGLETON;
     }
