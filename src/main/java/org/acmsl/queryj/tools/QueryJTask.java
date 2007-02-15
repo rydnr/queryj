@@ -1121,7 +1121,7 @@ public class QueryJTask
 
             result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
 
-            result.add(new TestSuiteTemplateHandlerBundle());
+//            result.add(new TestSuiteTemplateHandlerBundle());
         }
 
         return result;

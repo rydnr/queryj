@@ -1433,8 +1433,8 @@ protected void buildInsertQuery(final InsertQuery query)
 /**
  * Persists \<code><input.vo_name>\</code> information.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1444,8 +1444,8 @@ protected void buildInsertQuery(final InsertQuery query)
  */
 public void insert(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1454,7 +1454,13 @@ public void insert(
   throws DataAccessException
 {
     insert(
+<if(parent)>
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+        <attr.nameLowercased><endif>}; separator="\n">,
+<else>
         <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
         buildInsertQuery(),
         getDataSource());
 }
@@ -1462,8 +1468,8 @@ public void insert(
 /**
  * Persists \<code><input.vo_name>\</code> information.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1477,11 +1483,11 @@ public void insert(
  */
 protected void insert(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">)
+      attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1489,7 +1495,13 @@ protected void insert(
   throws DataAccessException
 {
     insert(
+<if(parent)>
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+        <attr.nameLowercased><endif>}; separator="\n">,
+<else>
         <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
         query,
         new DataSourceTransactionManager(dataSource));
 }
@@ -1497,8 +1509,8 @@ protected void insert(
 /**
  * Persists \<code><input.vo_name>\</code> information." 
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1513,11 +1525,11 @@ protected void insert(
  */
 protected void insert(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">)
+      attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1528,7 +1540,13 @@ protected void insert(
     synchronized (DataSourceTransactionManager.class)
     {
         insert(
+<if(parent)>
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+            <attr.nameLowercased><endif>}; separator="\n">,
+<else>
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
             query,
             new TransactionTemplate(transactionManager));
     }
@@ -1537,8 +1555,8 @@ protected void insert(
 /**
  * Persists \<code><input.vo_name>\</code> information.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1553,11 +1571,11 @@ protected void insert(
  */
 protected void insert(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">)
+      attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1577,8 +1595,8 @@ protected void insert(
             new QueryPreparedStatementCreator(query),
             new <input.vo_name>AttributesStatementSetter(
 <if(parent)>
-                <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.nonParentAttributes)>,
-                <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n"><endif>,
+                <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+                <attr.nameLowercased><endif>}; separator="\n">,
 <else>
                 <table.attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1591,8 +1609,8 @@ protected void insert(
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1602,8 +1620,8 @@ protected void insert(
  */
 public <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1614,9 +1632,8 @@ public <input.vo_name> create(
     return
         create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
-            <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attr.nameLowercased><endif>}; separator=",\n">,
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+            <attr.nameLowercased><endif>}; separator="\n">,
 <else>
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1630,8 +1647,8 @@ public <input.vo_name> create(
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance."
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1648,11 +1665,11 @@ public <input.vo_name> create(
  */
 protected <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">)
+      attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1663,8 +1680,8 @@ protected <input.vo_name> create(
     return
         create(
 <if(parent)>
-            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
-            <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+            <attr.nameLowercased><endif>}; separator="\n">,
 <else>
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1677,8 +1694,8 @@ protected <input.vo_name> create(
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance."
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1696,11 +1713,11 @@ protected <input.vo_name> create(
  */
 protected <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+    <attribute_declaration(attr=attr)><endif>}; separator="\n">,
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">)
+      attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1710,7 +1727,13 @@ protected <input.vo_name> create(
 {
     return
         create(
+<if(parent)>
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+            <attr.nameLowercased><endif>}; separator="\n">,
+<else>
             <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+<endif>
+
             query,
             new TransactionTemplate(transactionManager),
             factory);
@@ -1720,8 +1743,8 @@ protected <input.vo_name> create(
  * Inserts and retrieves the newly-inserted
  * \<code><input.vo_name>\</code> instance.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1738,11 +1761,10 @@ protected <input.vo_name> create(
  */
 protected <input.vo_name> create(
 <if(parent)>
-    <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-    <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">)
+    <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1777,7 +1799,7 @@ protected <input.vo_name> create(
     result =
         factory.create<input.vo_name>(
 <if(parent)>
-            <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.attributes)>,
+            <parent.allAttributes:{<it.nameLowercased>}; separator=",\n"><if(table.nonParentAttributes)>,
             <table.nonParentAttributes:{<it.nameLowercased>}; separator=",\n">);<endif>
 <else>
             <table.attributes:{<it.nameLowercased>}; separator=",\n">);
@@ -1803,73 +1825,135 @@ oracle8Insert(input) ::= <<
 !>
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
  * @throws DataAccessException if the operation fails.
  */
 public void insert(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
+<endif>
+
   throws DataAccessException
 {
     create(
-        <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-          separator=",\n">);
+<if(parent)>
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attr.nameLowercased><endif>}; separator="\n">);
+<else>
+        <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">);
+<endif>
+
 }
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
 public <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">)
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
+<endif>
+
   throws DataAccessException
 {
     return
         create(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-              separator=",\n">,
+<if(parent)>
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attr.nameLowercased><endif>}; separator="\n">,
+<else>
+            <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+<endif>
+
             getDataSource());
 }
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param dataSource the data source.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  * @precondition dataSource != null
  */
 protected <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">,
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
+<endif>
+
     final DataSource dataSource)
   throws DataAccessException
 {
     return
         create(
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-              separator=",\n">,
+<if(parent)>
+            <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attr.nameLowercased><endif>}; separator="\n">,
+<else>
+            <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+<endif>
+
             new DataSourceTransactionManager(dataSource));
 }
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param transactionManager the transaction manager.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  * @precondition transactionManager != null
  */
 protected <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">,
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
+<endif>
+
     final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
@@ -1880,8 +1964,13 @@ protected <input.vo_name> create(
     {
         result =
             create(
-                <input.all_but_externally_managed_attributes:{<it.nameLowercased>};
-                  separator=",\n">,
+<if(parent)>
+                <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attr.nameLowercased><endif>}; separator="\n">,
+<else>
+                <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+<endif>
+
                 new TransactionTemplate(transactionManager));
     }
 
@@ -1890,15 +1979,27 @@ protected <input.vo_name> create(
 
 /**
  * Persists \<code><input.vo_name>\</code> information.
+<if(parent)>
+ <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+ <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+<else>
  <input.all_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
+<endif>
+
  * @param transactionTemplate the transaction template.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
 protected <input.vo_name> create(
+<if(parent)>
+    <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">,
+<else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
+<endif>
+
     final TransactionTemplate transactionTemplate)
   throws DataAccessException
 {
@@ -1919,9 +2020,8 @@ protected <input.vo_name> create(
                 " (" +
 <if(parent)>
                 <parent.allAttributes:{"<it.nameUppercased>};
-                  separator=", \" +\n">" +
-                <table.nonParentAttributes:{"<it.nameUppercased>};
-                  separator=", \" +\n">" +
+                  separator=", \" +\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>, " +
+"<attr.nameUppercased><endif>}; separator="\n"> " +
 <else>
                 <table.attributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
@@ -1930,9 +2030,8 @@ protected <input.vo_name> create(
                 ") VALUES (" +
 <if(parent)>
                 <parent.allAttributes:insert_attribute(attr=it);
-                  separator=",\" +\n">)"<if(table.nonParentAttributes)>,
-                <table.nonParentAttributes:insert_attribute(attr=it);
-                  separator=",\" +\n">)")<endif>,
+                  separator=", \" +\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>, " +
+<insert_attribute(attr=attr)><endif>}; separator="\n">"),
 <else>
                 <table.attributes:insert_attribute(attr=it);
                   separator=",\" +\n">)"),

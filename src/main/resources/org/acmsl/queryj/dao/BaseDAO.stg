@@ -195,22 +195,20 @@ public interface <input.vo_name>DAO
     /**
      * Persists \<code><input.vo_name>\</code> information.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+     <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+     <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
-   name=it.nameLowercased); separator="\n">
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
 <endif>
-
      * @throws DataAccessException if the operation fails.
      */
     public void insert(
 <if(parent)>
-        <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-        <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">)
 <else>
-        <input.all_but_externally_managed_attributes:attribute_declaration(
-          attr=it); separator=",\n">)
+        <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
 
       throws DataAccessException;
@@ -219,22 +217,21 @@ public interface <input.vo_name>DAO
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance.
 <if(parent)>
- <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
- <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+     <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
+     <table.nonParentAttributes:{ attr | <if(!attr.managedExternally)><attribute_javadoc(name=attr.nameLowercased)><endif>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
-   name=it.nameLowercased); separator="\n">
+     <input.all_but_externally_managed_attributes:attribute_javadoc(
+       name=it.nameLowercased); separator="\n">
 <endif>
 
      * @throws DataAccessException if the operation fails.
      */
     public <input.vo_name> create(
 <if(parent)>
-        <parent.allAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">,
-        <table.nonParentAttributes:{ attr | <if(!attr.externallyManaged)><attribute_declaration(attr=it)><endif>}; separator=",\n">)
+        <parent.allAttributes:{ attr | <if(!attr.managedExternally)><attribute_declaration(attr=attr)><endif>}; separator=",\n"><table.nonParentAttributes:{ attr | <if(!attr.managedExternally)>,
+<attribute_declaration(attr=attr)><endif>}; separator="\n">)
 <else>
-        <input.all_but_externally_managed_attributes:attribute_declaration(
-          attr=it); separator=",\n">)
+        <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
 
       throws DataAccessException;
@@ -254,7 +251,7 @@ public interface <input.vo_name>DAO
     public int update(
 <if(parent)>
         <parent.allAttributes:attribute_declaration_impl(attr=it); separator=",\n"><if(table.nonParentAttributes)>,
-        <table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>)
+<table.nonParentAttributes:attribute_declaration_impl(attr=it); separator=",\n"><endif>)
 <else>
         <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <endif>

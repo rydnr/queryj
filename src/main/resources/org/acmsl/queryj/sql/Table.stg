@@ -92,7 +92,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
-<class(input=input)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -111,10 +111,21 @@ second_line_description(tableName) ::= <<
 in the persistence domain.
 >>
 
-class(input) ::= <<
+class(input, table) ::= <<
 <!
  Generates the class body.
  @param input the input.
+ @param table the table.
+!>
+<class_impl(input=input, table=table, parent=table.parentTable)>
+>>
+
+class_impl(input, table, parent) ::= <<
+<!
+ Generates the class body.
+ @param input the input.
+ @param table the table.
+ @param parent the parent table.
 !>
 /**
  * <[
@@ -126,7 +137,11 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.table_name_capitalized>Table
+<if(parent)>
     extends  Table
+<else>
+    extends  <parent.voName>Table
+<endif>
 {
     <input.attributes:constants(attr=it); separator="\n\n">
 
