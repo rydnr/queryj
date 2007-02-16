@@ -1978,7 +1978,7 @@ protected <input.vo_name> create(
                 ") VALUES (" +
 <if(parent)>
                 <table.allParentAndNonParentNonManagedExternallyAttributes:insert_attribute(attr=it);
-                  separator=", \" +\n">),
+                  separator=", \" +\n">"),
 <else>
                 <table.attributes:insert_attribute(attr=it);
                   separator=",\" +\n">)"),

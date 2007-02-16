@@ -189,9 +189,7 @@ public class <input.vo_name>AttributesStatementSetter
                 <input.tr_name_capitalized>TableRepository
 {
 <if(parent)>
-    <parent.allAttributes:attribute_member_declaration(attr=it); separator="\n\n">
-
-    <table.nonParentAttributes:attribute_member_declaration(attr=it); separator="\n\n">
+    <table.allParentAndNonParentAttributes:attribute_member_declaration(attr=it); separator="\n\n">
 <else>
     <table.attributes:attribute_member_declaration(attr=it); separator="\n\n">
 <endif>
@@ -212,9 +210,7 @@ public class <input.vo_name>AttributesStatementSetter
      * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
      * instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased);
+     <table.allParentAndNonParentAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
 <else>
      <table.attributes:attribute_javadoc(name=it.nameLowercased);
@@ -225,9 +221,7 @@ public class <input.vo_name>AttributesStatementSetter
      */
     public <input.vo_name>AttributesStatementSetter(
 <if(parent)>
-        <parent.allAttributes:attribute_isolated_declaration_impl(attr=it);
-          separator="\n">
-        <table.nonParentAttributes:attribute_isolated_declaration_impl(attr=it);
+        <table.allParentAndNonParentAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <else>
         <table.attributes:attribute_isolated_declaration_impl(attr=it);
@@ -349,9 +343,7 @@ public class <input.vo_name>AttributesStatementSetter
 
 <endif>
 <if(parent)>
-    <parent.allAttributes:attribute_accessor(attr=it); separator="\n\n">
-
-    <table.nonParentAttributes:attribute_accessor(attr=it); separator="\n\n">
+    <table.allParentAndNonParentAttributes:attribute_accessor(attr=it); separator="\n\n">
 <else>
     <table.attributes:attribute_accessor(attr=it); separator="\n\n">
 <endif>
@@ -376,8 +368,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
 <if(parent)>
-            <parent.allAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n"><if(table.nonParentAttributes)>,
-            <table.nonParentAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n"><endif>,
+            <table.allParentAndNonParentAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <else>
             <table.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <endif>
@@ -402,9 +393,7 @@ public class <input.vo_name>AttributesStatementSetter
 
 <endif>
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(name=it.nameLowercased);
+     <table.allParentAndNonParentAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
 <else>
      <table.attributes:attribute_javadoc(name=it.nameLowercased);
@@ -434,9 +423,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
 <if(parent)>
-        <parent.allAttributes:attribute_isolated_declaration_impl(attr=it);
-          separator="\n">
-        <table.nonParentAttributes:attribute_isolated_declaration_impl(attr=it);
+        <table.allParentAndNonParentAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <else>
         <table.attributes:attribute_isolated_declaration_impl(attr=it);

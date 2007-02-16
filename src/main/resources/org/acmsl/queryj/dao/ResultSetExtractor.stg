@@ -239,9 +239,7 @@ protected <input.vo_name> extractData(
     if  (resultSet.next())
     {
 <if(parent)>
-        <parent.allAttributes:nullable_attribute_extraction(
-          attr=it, input=input)>
-        <table.nonParentAttributes:nullable_attribute_extraction(
+        <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
           attr=it, input=input)>
 <else>
         <table.attributes:nullable_attribute_extraction(
@@ -252,11 +250,8 @@ protected <input.vo_name> extractData(
         result =
             factory.create<input.vo_name>ValueObject(
 <if(parent)>
-                <parent.allAttributes:attribute_extraction(attr=it);
-                  separator=",\n"><if(table.nonParentAttributes)>,
-                <table.nonParentAttributes:attribute_extraction(attr=it);
-                  separator=",\n">
-<endif>);
+                <table.allParentAndNonParentAttributes:attribute_extraction(attr=it);
+                  separator=",\n">);
 <else>
                 <table.attributes:attribute_extraction(attr=it);
                   separator=",\n">);
@@ -440,9 +435,7 @@ protected Object extractData(
     if  (resultSet.next())
     {
 <if(parent)>
-        <parent.allAttributes:nullable_attribute_extraction(
-          attr=it, input=input)>
-        <table.nonParentAttributes:nullable_attribute_extraction(
+        <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
           attr=it, input=input)>
 <else>
         <table.attributes:nullable_attribute_extraction(
@@ -455,14 +448,9 @@ protected Object extractData(
         result =
             factory.create<input.vo_name>ValueObject(
 <if(parent)>
-                // parent.allAttributes
-                <parent.allAttributes:attribute_extraction(
-                  attr=it, input=input); separator=",\n">,
-                // table.nonParentAttributes
-                <table.nonParentAttributes:attribute_extraction(
+                <table.allParentAndNonParentAttributes:attribute_extraction(
                   attr=it, input=input); separator=",\n">);
 <else>
-                // table.attributes
                 <table.attributes:attribute_extraction(
                   attr=it, input=input); separator=",\n">);
 <endif>
