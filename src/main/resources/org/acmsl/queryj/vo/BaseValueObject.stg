@@ -134,8 +134,7 @@ public abstract class Abstract<input.vo_name>ValueObject
     /**
      * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
@@ -143,9 +142,7 @@ public abstract class Abstract<input.vo_name>ValueObject
      */
     public Abstract<input.vo_name>ValueObject(
 <if(parent)>
-        <parent.allAttributes:attribute_method_declaration(attribute=it); separator=",\n">,
-        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
-          separator=",\n">)
+        <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it); separator=",\n">)
 <else>
         <table.attributes:attribute_method_declaration(attribute=it);
           separator=",\n">)

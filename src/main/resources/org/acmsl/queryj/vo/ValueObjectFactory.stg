@@ -147,8 +147,7 @@ public class <input.vo_name>ValueObjectFactory
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
@@ -156,9 +155,7 @@ public class <input.vo_name>ValueObjectFactory
      */
     public <input.vo_name> create<input.vo_name>(
 <if(parent)>
-        <parent.allAttributes:attribute_method_declaration(attribute=it);
-          separator=",\n">,
-        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+        <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
 <else>
         <table.attributes:attribute_method_declaration(attribute=it);
@@ -169,12 +166,7 @@ public class <input.vo_name>ValueObjectFactory
         return
             new <input.vo_name>ValueObject(
 <if(parent)>
-// parent.allAttributes
-                <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
-// /parent.allAttributes
-// table.nonParentAttributes
-                <table.nonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
-// /table.nonParentAttributes
+                <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 <else>
                 <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
 <endif>
@@ -184,8 +176,7 @@ public class <input.vo_name>ValueObjectFactory
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
@@ -193,9 +184,7 @@ public class <input.vo_name>ValueObjectFactory
      */
     public <input.vo_name> create<input.vo_name>ValueObject(
 <if(parent)>
-        <parent.allAttributes:attribute_method_declaration(attribute=it);
-          separator=",\n">,
-        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+        <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
 <else>
         <table.attributes:attribute_method_declaration(attribute=it);
@@ -206,9 +195,7 @@ public class <input.vo_name>ValueObjectFactory
         return
             create<input.vo_name>(
 <if(parent)>
-                <parent.allAttributes:{<it.nameUncapitalized>};
-                  separator=",\n">,
-                <table.nonParentAttributes:{<it.nameUncapitalized>};
+                <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>};
                   separator=",\n">);
 <else>
                 <table.attributes:{<it.nameUncapitalized>};
@@ -220,17 +207,14 @@ public class <input.vo_name>ValueObjectFactory
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
      */
     public <input.vo_name> create(
 <if(parent)>
-        <parent.allAttributes:attribute_method_declaration(attribute=it);
-          separator=",\n">,
-        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+        <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
 <else>
         <table.attributes:attribute_method_declaration(attribute=it);
@@ -241,9 +225,7 @@ public class <input.vo_name>ValueObjectFactory
         return
             create<input.vo_name>(
 <if(parent)>
-                <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
-                <table.nonParentAttributes:{<it.nameUncapitalized>};
-                  separator=",\n">);
+                <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 <else>
                 <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);
@@ -254,8 +236,7 @@ public class <input.vo_name>ValueObjectFactory
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
@@ -263,9 +244,7 @@ public class <input.vo_name>ValueObjectFactory
      */
     public <input.vo_name> createValueObject(
 <if(parent)>
-        <parent.allAttributes:attribute_method_declaration(attribute=it);
-          separator=",\n">,
-        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+        <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
 <else>
         <table.attributes:attribute_method_declaration(attribute=it);
@@ -276,9 +255,7 @@ public class <input.vo_name>ValueObjectFactory
         return
             create<input.vo_name>(
 <if(parent)>
-                <parent.allAttributes:{<it.nameUncapitalized>}; separator=",\n">,
-                <table.nonParentAttributes:{<it.nameUncapitalized>};
-                  separator=",\n">);
+                <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 <else>
                 <table.attributes:{<it.nameUncapitalized>};
                   separator=",\n">);

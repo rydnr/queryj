@@ -121,8 +121,7 @@ public class <input.vo_name>ValueObject
     /**
      * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
 <if(parent)>
-     <parent.allAttributes:attribute_javadoc(attribute=it); separator="\n">
-     <table.nonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
+     <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
@@ -130,9 +129,7 @@ public class <input.vo_name>ValueObject
      */
     public <input.vo_name>ValueObject(
 <if(parent)>
-        <parent.allAttributes:attribute_method_declaration(attribute=it);
-          separator=",\n">,
-        <table.nonParentAttributes:attribute_method_declaration(attribute=it);
+        <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
 <else>
         <table.attributes:attribute_method_declaration(attribute=it);
@@ -142,9 +139,7 @@ public class <input.vo_name>ValueObject
     {
         super(
 <if(parent)>
-            <parent.allAttributes:{<it.nameUncapitalized>};
-              separator=",\n">,
-            <table.nonParentAttributes:{<it.nameUncapitalized>};
+            <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>};
               separator=",\n">);
 <else>
             <table.attributes:{<it.nameUncapitalized>};
