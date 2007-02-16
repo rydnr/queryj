@@ -125,6 +125,26 @@ public class CachingTableDecorator
     private List m__lCachedAttributes;
 
     /**
+     * The cached non-parent non-managed-externally attributes.
+     */
+    private List m__lCachedNonParentNonManagedExternallyAttributes;
+
+    /**
+     * The cached parent's all attributes and the non-parent own attributes.
+     */
+    private List m__lCachedAllParentAndNonParentAttributes;
+
+    /**
+     * The cached parent's all attributes and the non-parent non-managed-externally attributes.
+     */
+    private List m__lCachedAllParentAndNonParentNonManagedExternallyAttributes;
+
+    /**
+     * The cached all non-managed externally attributes.
+     */
+    private List m__lCachedAllNonManagedExternallyAttributes;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -861,5 +881,191 @@ public class CachingTableDecorator
                 parentTable,
                 metadataManager,
                 decoratorFactory);
+    }
+
+    /**
+     * Specifies the cached list of non-parent, non-externally-managed
+     * attributes.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedNonParentNonManagedExternallyAttributes(final List list)
+    {
+        m__lCachedNonParentNonManagedExternallyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of non-parent, non-externally-managed
+     * attributes.
+     * @param list such list.
+     */
+    protected void setCachedNonParentNonManagedExternallyAttributes(final List list)
+    {
+        immutableSetCachedNonParentNonManagedExternallyAttributes(list);
+    }
+
+    /**
+     * Retrieves the list of non-parent, non-externally-managed
+     * attributes.
+     * @return such list.
+     */
+    protected List getCachedNonParentNonManagedExternallyAttributes()
+    {
+        return m__lCachedNonParentNonManagedExternallyAttributes;
+    }
+
+    /**
+     * Retrieves the list of non-parent, non-externally-managed
+     * attributes.
+     * @return such list.
+     */
+    public List getNonParentNonManagedExternallyAttributes()
+    {
+        List result = getCachedNonParentNonManagedExternallyAttributes();
+
+        if  (result == null)
+        {
+            result = super.getNonParentNonManagedExternallyAttributes();
+            setCachedNonParentNonManagedExternallyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent own attributes.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllParentAndNonParentAttributes(final List list)
+    {
+        m__lCachedAllParentAndNonParentAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent own attributes.
+     * @param list such list.
+     */
+    protected void setCachedAllParentAndNonParentAttributes(final List list)
+    {
+        immutableSetCachedAllParentAndNonParentAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached list of parent's all attributes and the non-parent own attributes.
+     * @return such list.
+     */
+    protected List getCachedAllParentAndNonParentAttributes()
+    {
+        return m__lCachedAllParentAndNonParentAttributes;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentAttributes()
+    {
+        List result = getCachedAllParentAndNonParentAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllParentAndNonParentAttributes();
+            setCachedAllParentAndNonParentAttributes(result);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent,
+     * non-managed-externally own attributes.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllParentAndNonParentNonManagedExternallyAttributes(
+        final List list)
+    {
+        m__lCachedAllParentAndNonParentNonManagedExternallyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent
+     * non-managed-externally own attributes.
+     * @param list such list.
+     */
+    protected void setCachedAllParentAndNonParentNonManagedExternallyAttributes(final List list)
+    {
+        immutableSetCachedAllParentAndNonParentNonManagedExternallyAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached list of parent's all attributes and the non-parent
+     * non-managed-externally own attributes.
+     * @return such list.
+     */
+    protected List getCachedAllParentAndNonParentNonManagedExternallyAttributes()
+    {
+        return m__lCachedAllParentAndNonParentNonManagedExternallyAttributes;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyAttributes()
+    {
+        List result = getCachedAllParentAndNonParentAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllParentAndNonParentNonManagedExternallyAttributes();
+            setCachedAllParentAndNonParentNonManagedExternallyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies cached all attributes, including the parent's, but not the externally-managed.
+     * @return such attributes.
+     */
+    protected final void immutableSetCachedAllNonManagedExternallyAttributes(final List list)
+    {
+        m__lCachedAllNonManagedExternallyAttributes = list;
+    }
+
+    /**
+     * Specifies cached all attributes, including the parent's, but not the externally-managed.
+     * @return such attributes.
+     */
+    protected void setCachedAllNonManagedExternallyAttributes(final List list)
+    {
+        immutableSetCachedAllNonManagedExternallyAttributes(list);
+    }
+
+    /**
+     * Retrieves cached all attributes, including the parent's, but not the externally-managed.
+     * @return such attributes.
+     */
+    protected List getCachedAllNonManagedExternallyAttributes()
+    {
+        return m__lCachedAllNonManagedExternallyAttributes;
+    }
+
+    /**
+     * Retrieves cached all attributes, including the parent's, but not the externally-managed.
+     * @return such attributes.
+     */
+    public List getAllNonManagedExternallyAttributes()
+    {
+        List result = getCachedAllNonManagedExternallyAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllNonManagedExternallyAttributes();
+            setCachedAllNonManagedExternallyAttributes(result);
+        }
+
+        return result;
     }
 }

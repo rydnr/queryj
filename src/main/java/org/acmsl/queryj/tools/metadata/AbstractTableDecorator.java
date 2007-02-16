@@ -45,6 +45,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
 import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
@@ -742,10 +743,19 @@ public abstract class AbstractTableDecorator
 
         if  (t_ParentTable != null)
         {
-            TableDecorator t_ParentDecorator =
-                createTableDecorator(
-                    t_ParentTable, metadataManager, decoratorFactory);
-            
+            TableDecorator t_ParentDecorator = null;
+
+            if  (t_ParentTable instanceof TableDecorator)
+            {
+                t_ParentDecorator = (TableDecorator) t_ParentTable;
+            }
+            else
+            {
+                t_ParentDecorator =
+                    createTableDecorator(
+                        t_ParentTable, metadataManager, decoratorFactory);
+            }
+
             result.addAll(t_ParentDecorator.getAllAttributes());
         }
         
@@ -990,4 +1000,187 @@ public abstract class AbstractTableDecorator
         final Table parentTable,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory);
+
+    /**
+     * Retrieves the list of non-parent, non-externally-managed
+     * attributes.
+     * @return such list.
+     */
+    public List getNonParentNonManagedExternallyAttributes()
+    {
+        List result = new ArrayList();
+
+        List t_lAttributes = getNonParentAttributes();
+
+        int t_iCount = (result != null) ? result.size() : 0;
+
+        Attribute t_Attribute;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) t_lAttributes.get(t_iIndex);
+
+            if  (   (t_Attribute != null)
+                 && (t_Attribute.getManagedExternally()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentAttributes()
+    {
+        return
+            getAllParentAndNonParentAttributes(
+                getParentTable(),
+                getNonParentAttributes(),
+                getMetadataManager(),
+                getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent own attributes.
+     * @param parent the parent table, if any.
+     * @param nonParentAttributes the non-parent attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such list.
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected List getAllParentAndNonParentAttributes(
+        final Table parent,
+        final List nonParentAttributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        List result = new ArrayList();
+
+        if  (parent != null)
+        {
+            TableDecorator t_ParentDecorator = null;
+
+            if  (parent instanceof TableDecorator)
+            {
+                t_ParentDecorator = (TableDecorator) parent;
+            }
+            else
+            {
+                t_ParentDecorator =
+                    createTableDecorator(
+                        parent, metadataManager, decoratorFactory);
+            }
+
+            result.addAll(t_ParentDecorator.getAllAttributes());
+        }
+
+        if  (nonParentAttributes != null)
+        {
+            result.addAll(nonParentAttributes);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyAttributes()
+    {
+        return
+            getAllParentAndNonParentNonManagedExternallyAttributes(
+                getParentTable(),
+                getNonParentNonManagedExternallyAttributes(),
+                getMetadataManager(),
+                getDecoratorFactory());
+    }
+
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally own attributes.
+     * @param parent the parent.
+     * @param nonParentNonManagedExternallyAttributes the non-parent, non-managed-externally
+     * own attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such list.
+     */
+    protected List getAllParentAndNonParentNonManagedExternallyAttributes(
+        final Table parent,
+        final List nonParentNonManagedExternallyAttributes,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        List result = new ArrayList();
+
+        if  (parent != null)
+        {
+            TableDecorator t_ParentDecorator = null;
+
+            if  (parent instanceof TableDecorator)
+            {
+                t_ParentDecorator = (TableDecorator) parent;
+            }
+            else
+            {
+                t_ParentDecorator =
+                    createTableDecorator(
+                        parent, metadataManager, decoratorFactory);
+            }
+            
+            result.addAll(t_ParentDecorator.getAllNonManagedExternallyAttributes());
+        }
+
+        if  (nonParentNonManagedExternallyAttributes != null)
+        {
+            result.addAll(nonParentNonManagedExternallyAttributes);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed.
+     * @return such attributes.
+     */
+    public List getAllNonManagedExternallyAttributes()
+    {
+        return getAllNonManagedExternallyAttributes(getAllAttributes());
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed.
+     * @param allAttributes the attributes.
+     * @return such attributes.
+     */
+    protected List getAllNonManagedExternallyAttributes(final List allAttributes)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (allAttributes != null) ? allAttributes.size() : 0;
+
+        Attribute t_Attribute;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) allAttributes.get(t_iIndex);
+
+            if  (   (t_Attribute != null)
+                 && (t_Attribute.getManagedExternally()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
 }
