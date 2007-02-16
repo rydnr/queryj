@@ -1101,7 +1101,7 @@ static_object_attribute_check(attr) ::= <<
 if  (t_bFound)
 {
     Object t_<attr.nameCapitalized> =
-        (t_CurrentItem.get<attr.nameCapitalized>();
+        t_CurrentItem.get<attr.nameCapitalized>();
 
     if  (t_<attr.nameCapitalized> == null)
     {
@@ -1798,7 +1798,7 @@ oracle8Insert(input) ::= <<
  */
 public void insert(
 <if(parent)>
-    <table.allParentAndNonParentnonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1808,7 +1808,7 @@ public void insert(
 {
     create(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+        <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">);
 <else>
         <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">);
 <endif>
