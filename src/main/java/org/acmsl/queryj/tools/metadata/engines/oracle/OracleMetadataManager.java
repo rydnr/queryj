@@ -51,6 +51,7 @@ import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.oracle.OracleTableRepository;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.SqlTypeResolver;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -687,17 +688,20 @@ public class OracleMetadataManager
     /**
      * Extracts the table names from given result set.
      * @param resultSet the result set with the table information.
+     * @param table the table.
      * @return the list of table names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String[] extractTableNames(final QueryResultSet resultSet)
+    protected String[] extractTableNames(
+        final QueryResultSet resultSet, final String table)
         throws  SQLException
     {
         return
             extractStringFields(
                 resultSet,
-                USER_TABLES.TABLE_NAME);
+                USER_TABLES.TABLE_NAME,
+                table);
     }
 
     /**
@@ -821,7 +825,7 @@ public class OracleMetadataManager
 
             result.addAll(
                 Arrays.asList(
-                    extractColumnNames(t_rsResults)));
+                    extractColumnNames(t_rsResults, tableName)));
         }
         catch  (final SQLException sqlException)
         {
@@ -893,17 +897,20 @@ public class OracleMetadataManager
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the table information.
+     * @param table the table.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String[] extractColumnNames(final ResultSet resultSet)
+    protected String[] extractColumnNames(
+        final ResultSet resultSet, final String table)
         throws  SQLException
     {
         return
             extractStringFields(
                 resultSet,
-                USER_TAB_COLUMNS.COLUMN_NAME);
+                USER_TAB_COLUMNS.COLUMN_NAME,
+                table);
     }
 
     /**
@@ -1018,7 +1025,9 @@ public class OracleMetadataManager
                     (Object[])
                         toIntegerArray(
                             extractColumnTypes(
-                                t_rsResults, USER_TAB_COLUMNS.DATA_TYPE))));
+                                t_rsResults,
+                                USER_TAB_COLUMNS.DATA_TYPE,
+                                tableName))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1086,51 +1095,80 @@ public class OracleMetadataManager
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet, final String fieldName, final String table)
       throws  SQLException
     {
         return
             extractColumnTypes(
-                resultSet, fieldName, getMetadataTypeManager());
+                resultSet,
+                fieldName,
+                table,
+                getMetadataTypeManager(),
+                SqlTypeResolver.getInstance());
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @param metadataTypeManager the metadata type manager.
+     * @param sqlTypeResolver the <code>SqlTypeResolver</code> instance.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition metadataTypeManager != null
+     * @precondition sqlTypeResolver != null
      */
     protected int[] extractColumnTypes(
         final ResultSet resultSet,
         final String fieldName,
-        final MetadataTypeManager metadataTypeManager)
+        final String table,
+        final MetadataTypeManager metadataTypeManager,
+        final SqlTypeResolver sqlTypeResolver)
       throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
 
-        String[] t_astrTypes = extractStringFields(resultSet, fieldName);
+        String[] t_astrTypes =
+            extractStringFields(resultSet, fieldName, table);
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 
         if  (t_iCount > 0)
         {
+            Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+
+            boolean t_bLogEnabled =
+                (   (t_Log != null)
+                 && (t_Log.isTraceEnabled()));
+
             result = new int[t_iCount];
+
+            int t_iType;
 
             for  (int t_iIndex = 0;
                       t_iIndex < t_iCount;
                       t_iIndex++) 
             {
-                result[t_iIndex] =
+                t_iType = 
                     metadataTypeManager.getJavaType(t_astrTypes[t_iIndex]);
+
+                result[t_iIndex] = t_iType;
+
+                if  (t_bLogEnabled)
+                {
+                    t_Log.trace(
+                          table + "." + fieldName + " type = "
+                        + sqlTypeResolver.resolve(t_iType)
+                        + " (" + t_iType + ")");
+                }
             }
         }
 
@@ -1250,7 +1288,8 @@ public class OracleMetadataManager
                         toBooleanArray(
                             extractAllowNull(
                                 t_rsResults,
-                                USER_TAB_COLUMNS.NULLABLE))));
+                                USER_TAB_COLUMNS.NULLABLE,
+                                tableName))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1318,17 +1357,20 @@ public class OracleMetadataManager
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table name.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
+     * @overrides
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet, final String fieldName, final String table)
       throws  SQLException
     {
         boolean[] result = EMPTY_BOOL_ARRAY;
 
-        String[] t_astrTypes = extractStringFields(resultSet, fieldName);
+        String[] t_astrTypes =
+            extractStringFields(resultSet, fieldName, table);
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 

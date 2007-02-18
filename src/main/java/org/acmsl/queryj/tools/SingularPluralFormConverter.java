@@ -104,7 +104,8 @@ public class SingularPluralFormConverter
      * Specifies the specific bundle name.
      * @param bundleName the bundle name.
      */
-    protected static final void immutableSetGrammarBundle(final File bundleName)
+    protected static final void immutableSetGrammarBundle(
+        final File bundleName)
     {
         m__GrammarBundle = bundleName;
     }

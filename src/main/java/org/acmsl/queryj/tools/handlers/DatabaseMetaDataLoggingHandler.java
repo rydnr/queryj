@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.handlers;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.SqlTypeResolver;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -67,6 +68,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.Map;
 
 /**
@@ -162,10 +164,13 @@ public class DatabaseMetaDataLoggingHandler
         
         try 
         {
-            t_Log = UniqueLogFactory.getLog(getClass());
+            t_Log =
+                UniqueLogFactory.getLog(DatabaseMetaDataLoggingHandler.class);
             
             if  (t_Log != null)
             {
+                traceSqlTypes(t_Log, SqlTypeResolver.getInstance());
+
                 t_Log.trace(
                       "Numeric functions:"
                     + metaData.getNumericFunctions());
@@ -802,5 +807,90 @@ public class DatabaseMetaDataLoggingHandler
             (DatabaseMetaData)
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+    }
+
+    /**
+     * Traces the sql type values.
+     * @param log the <code>Log</code> instance.
+     * @precondition log != null
+     */
+    protected void traceSqlTypes(
+        final Log log, final SqlTypeResolver resolver)
+    {
+        log.trace(
+            resolver.resolve(Types.BIT) + "->" + Types.BIT);
+        log.trace(
+            resolver.resolve(Types.TINYINT) + "->" + Types.TINYINT);
+        log.trace(
+            resolver.resolve(Types.SMALLINT) + "->" + Types.SMALLINT);
+        log.trace(
+            resolver.resolve(Types.INTEGER) + "->" + Types.INTEGER);
+        log.trace(
+            resolver.resolve(Types.BIGINT) + "->" + Types.BIGINT);
+        log.trace(
+            resolver.resolve(Types.FLOAT) + "->" + Types.FLOAT);
+        log.trace(
+            resolver.resolve(Types.REAL) + "->" + Types.REAL);
+        log.trace(
+            resolver.resolve(Types.DOUBLE) + "->" + Types.DOUBLE);
+        log.trace(
+            resolver.resolve(Types.NUMERIC) + "->" + Types.NUMERIC);
+        log.trace(
+            resolver.resolve(Types.DECIMAL) + "->" + Types.DECIMAL);
+        log.trace(
+            resolver.resolve(Types.CHAR) + "->" + Types.CHAR);
+        log.trace(
+            resolver.resolve(Types.VARCHAR) + "->" + Types.VARCHAR);
+        log.trace(
+            resolver.resolve(Types.LONGVARCHAR) + "->" + Types.LONGVARCHAR);
+        log.trace(
+            resolver.resolve(Types.DATE) + "->" + Types.DATE);
+        log.trace(
+            resolver.resolve(Types.TIME) + "->" + Types.TIME);
+        log.trace(
+            resolver.resolve(Types.TIMESTAMP) + "->" + Types.TIMESTAMP);
+        log.trace(
+            resolver.resolve(Types.BINARY) + "->" + Types.BINARY);
+        log.trace(
+            resolver.resolve(Types.VARBINARY) + "->" + Types.VARBINARY);
+        log.trace(
+            resolver.resolve(Types.LONGVARBINARY) + "->" + Types.LONGVARBINARY);
+        log.trace(
+            resolver.resolve(Types.NULL) + "->" + Types.NULL);
+        log.trace(
+            resolver.resolve(Types.OTHER) + "->" + Types.OTHER);
+        log.trace(
+            resolver.resolve(Types.JAVA_OBJECT) + "->" + Types.JAVA_OBJECT);
+        log.trace(
+            resolver.resolve(Types.DISTINCT) + "->" + Types.DISTINCT);
+        log.trace(
+            resolver.resolve(Types.STRUCT) + "->" + Types.STRUCT);
+        log.trace(
+            resolver.resolve(Types.ARRAY) + "->" + Types.ARRAY);
+        log.trace(
+            resolver.resolve(Types.BLOB) + "->" + Types.BLOB);
+        log.trace(
+            resolver.resolve(Types.CLOB) + "->" + Types.CLOB);
+        log.trace(
+            resolver.resolve(Types.REF) + "->" + Types.REF);
+        log.trace(
+            resolver.resolve(Types.DATALINK) + "->" + Types.DATALINK);
+        log.trace(
+            resolver.resolve(Types.BOOLEAN) + "->" + Types.BOOLEAN);
+
+    //------------------------- JDBC 4.0 -----------------------------------
+    
+        log.trace(
+            resolver.resolve(-8) + "->" + -8); //Types.ROWID
+        log.trace(
+            resolver.resolve(-15) + "->" + -15); //Types.NCHAR
+        log.trace(
+            resolver.resolve(-9) + "->" + -9); //Types.NVARCHAR
+        log.trace(
+            resolver.resolve(-16) + "->" + -16); //Types.LONGNVARCHAR
+        log.trace(
+            resolver.resolve(2011) + "->" + 2011); //Types.NCLOB
+        log.trace(
+            resolver.resolve(2009) + "->" + 2009); //Types.SQLXML
     }
 }

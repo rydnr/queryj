@@ -2846,7 +2846,7 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet)
       throws  SQLException
     {
-        return extractStringFields(resultSet, "TABLE_NAME");
+        return extractStringFields(resultSet, "TABLE_NAME", null);
     }
 
     /**
@@ -2882,7 +2882,7 @@ public abstract class AbstractJdbcMetadataManager
 
             result.addAll(
                 Arrays.asList(
-                    extractColumnNames(t_rsColumns)));
+                    extractColumnNames(t_rsColumns, tableName)));
 
             t_rsColumns.close();
         }
@@ -2902,30 +2902,33 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet, final Field field)
+        final ResultSet resultSet, final Field field, final String table)
       throws  SQLException
     {
         return
-            extractColumnNames(resultSet, field.toSimplifiedString());
+            extractColumnNames(
+                resultSet, field.toSimplifiedString(), table);
     }
 
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
+     * @param table the table.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet)
+        final ResultSet resultSet, final String table)
       throws  SQLException
     {
-        return extractColumnNames(resultSet, "COLUMN_NAME");
+        return extractColumnNames(resultSet, "COLUMN_NAME", table);
     }
 
     /**
@@ -2937,10 +2940,10 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition resultSet != null
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet, final String fieldName, final String table)
       throws  SQLException
     {
-        return extractStringFields(resultSet, fieldName);
+        return extractStringFields(resultSet, fieldName, table);
     }
 
     /**
@@ -2982,7 +2985,8 @@ public abstract class AbstractJdbcMetadataManager
                     Arrays.asList(
                         (Object[])
                             toIntegerArray(
-                                extractColumnTypes(t_rsColumns, size))));
+                                extractColumnTypes(
+                                    t_rsColumns, tableName, size))));
 
                 t_rsColumns.close();
             }
@@ -3056,61 +3060,68 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final Field field)
+        final ResultSet resultSet, final Field field, final String table)
       throws  SQLException
     {
         return
-            extractColumnTypes(resultSet, field.toSimplifiedString());
+            extractColumnTypes(resultSet, field.toSimplifiedString(), table);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
+     * @param table the table.
      * @param size the number of fields to extract.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final int size)
+        final ResultSet resultSet, final String table, final int size)
       throws  SQLException
     {
-        return extractColumnTypes(resultSet, "DATA_TYPE", size);
+        return extractColumnTypes(resultSet, "DATA_TYPE", table, size);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet, final String fieldName, final String table)
       throws  SQLException
     {
-        return extractColumnTypes(resultSet, fieldName, -1);
+        return extractColumnTypes(resultSet, fieldName, table, -1);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @param size the number of fields to extract.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String fieldName, final int size)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final int size)
       throws  SQLException
     {
-        return extractIntFields(resultSet, fieldName, size);
+        return extractIntFields(resultSet, fieldName, table, size);
     }
 
     /**
@@ -3150,7 +3161,8 @@ public abstract class AbstractJdbcMetadataManager
             result.addAll(
                 Arrays.asList(
                     (Object[])
-                        toBooleanArray(extractAllowNull(t_rsColumns, size))));
+                        toBooleanArray(
+                            extractAllowNull(t_rsColumns, tableName, size))));
             
             t_rsColumns.close();
         }
@@ -3170,63 +3182,70 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
      * @return the list of null flag.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final Field field)
+        final ResultSet resultSet, final Field field, final String table)
       throws  SQLException
     {
         return
-            extractAllowNull(resultSet, field.toSimplifiedString());
+            extractAllowNull(resultSet, field.toSimplifiedString(), table);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
+     * @param table the table.
      * @param size the number of fields to extract.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final int size)
+        final ResultSet resultSet, final String table, final int size)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, "NULLABLE", size);
+        return extractAllowNull(resultSet, "NULLABLE", table, size);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet, final String fieldName, final String table)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, fieldName, -1);
+        return extractAllowNull(resultSet, fieldName, table, -1);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @param size the number of fields to extract.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String fieldName, final int size)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final int size)
       throws  SQLException
     {
         boolean[] result =  EMPTY_BOOL_ARRAY;
 
-        int[] t_iFlags = extractIntFields(resultSet, fieldName, size);
+        int[] t_iFlags = extractIntFields(resultSet, fieldName, table, size);
 
         int t_iLength = (t_iFlags != null) ? t_iFlags.length : 0;
 
@@ -3520,31 +3539,33 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts concrete field from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
+     * @param table the table.
      * @return the list of field values.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected String[] extractStringFields(
-        final ResultSet resultSet, final Field field)
+        final ResultSet resultSet, final Field field, final String table)
         throws  SQLException
     {
         return
             extractStringFields(
-                resultSet, field.toSimplifiedString());
+                resultSet, field.toSimplifiedString(), table);
     }
 
     /**
      * Extracts fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
+     * @param table the table.
      * @return the list of field values.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected String[] extractStringFields(
-        final ResultSet resultSet, final String field)
+        final ResultSet resultSet, final String field, final String table)
       throws  SQLException
     {
         Collection t_cResult = new ArrayList();
@@ -3561,18 +3582,22 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
      * @param size the number of fields to extract.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final Field field, final int size)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final int size)
       throws  SQLException
     {
         return
             extractColumnTypes(
-                resultSet, field.toSimplifiedString(), size);
+                resultSet, field.toSimplifiedString(), table, size);
     }
 
     /**
@@ -3886,14 +3911,15 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts concrete integer fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
+     * @param table the table.
      * @return the list of field values.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractIntFields(
-        final ResultSet resultSet, final String field)
+        final ResultSet resultSet, final String field, final String table)
         throws  SQLException
     {
-        return extractIntFields(resultSet, field, -1);
+        return extractIntFields(resultSet, field, table, -1);
     }
 
     /**
@@ -3901,6 +3927,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the table information.
      * @param field the field name.
      * @param size the number of fields to extract.
+     * @param table the table.
      * @return the list of field values.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -3909,6 +3936,7 @@ public abstract class AbstractJdbcMetadataManager
     protected int[] extractIntFields(
         final ResultSet resultSet,
         final String field,
+        final String table,
         final int size)
       throws  SQLException
     {
