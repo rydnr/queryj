@@ -41,9 +41,9 @@ package org.acmsl.queryj.tools.metadata.engines;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.QueryJException;
 
@@ -78,7 +78,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public abstract class AbstractJdbcMetadataManager
-    implements  MetadataManager
+    implements MetadataManager
 {
     /**
      * An empty String array.
@@ -1270,36 +1270,28 @@ public abstract class AbstractJdbcMetadataManager
     {
         return
             isPartOfPrimaryKey(
-                fieldName, getPrimaryKey(tableName), isCaseSensitive());
+                fieldName, getPrimaryKey(tableName));
     }
 
     /**
      * Checks whether given field is a primary key or not.
      * @param fieldName the field name.
      * @param primaryKey the primary key.
-     * @param caseSensitive whether the case matters.
      * @return <code>true</code> if such field identifies a concrete row.
      * @precondition fieldName != null
      */
     public boolean isPartOfPrimaryKey(
-        final String fieldName, final String[] primaryKey, final boolean caseSensitive)
+        final String fieldName, final String[] primaryKey)
     {
         boolean result = false;
 
         if  (primaryKey != null)
         {
-            String t_strCurrentPrimaryKey;
-            
             for  (int t_iPkIndex = 0;
                       t_iPkIndex < primaryKey.length;
                       t_iPkIndex++)
             {
-                t_strCurrentPrimaryKey = primaryKey[t_iPkIndex];
-                
-                if  (   (   (caseSensitive)
-                         && (fieldName.equals(t_strCurrentPrimaryKey)))
-                     || (   (!caseSensitive)
-                         && (fieldName.equalsIgnoreCase(t_strCurrentPrimaryKey))))
+                if  (fieldName.equals(primaryKey[t_iPkIndex]))
                 {
                     result = true;
 
@@ -1349,16 +1341,16 @@ public abstract class AbstractJdbcMetadataManager
         final boolean caseSensitive)
     {
         boolean result = false;
-        
+
         int t_iFkCount = (foreignKeys != null) ? foreignKeys.length : 0;
-        
+
         String[] t_astrFk;
         String t_strFkField;
-        
+
         for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
         {
             result = false;
-                   
+
             t_astrFk = foreignKeys[t_iFkIndex];
 
             if  (matchFields(fieldNames, t_astrFk, caseSensitive))
@@ -1367,10 +1359,10 @@ public abstract class AbstractJdbcMetadataManager
                 break;
             }
         }
-        
+
         return result;
     }
-    
+
     /**
      * Checks whether given field sets are equivalent.
      * @param firstFields the first field set.
@@ -1381,18 +1373,24 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition secondFields != null
      */
     protected boolean matchFields(
-        final String[] firstFields, final String[] secondFields, final boolean caseSensitive)
+        final String[] firstFields,
+        final String[] secondFields,
+        final boolean caseSensitive)
     {
         boolean result = false;
-            
+
         int t_iFirstCount = (firstFields != null) ? firstFields.length : 0;
         int t_iSecondCount = (secondFields != null) ? secondFields.length : 0;
-            
+
         if  (t_iFirstCount == t_iSecondCount)
         {
-            for  (int t_iFirstIndex = 0; t_iFirstIndex < t_iFirstCount; t_iFirstIndex++)
+            for  (int t_iFirstIndex = 0;
+                      t_iFirstIndex < t_iFirstCount;
+                      t_iFirstIndex++)
             {
-                for  (int t_iSecondIndex = 0; t_iSecondIndex < t_iSecondCount; t_iSecondIndex++)
+                for  (int t_iSecondIndex = 0;
+                          t_iSecondIndex < t_iSecondCount;
+                          t_iSecondIndex++)
                 {
                     if  (   (caseSensitive)
                          && (firstFields[t_iFirstIndex].equals(
@@ -1416,10 +1414,10 @@ public abstract class AbstractJdbcMetadataManager
                 }
             }
         }
-        
+
         return result;
     }
-    
+
     /**
      * Specifies the foreign keys.
      * @param map the foreign keys map.
@@ -2279,33 +2277,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected Object buildKey(final Object key)
     {
-        return buildKey(key, isCaseSensitive());
-    }
-
-    /**
-     * Builds a key using given object.
-     * @param key the object key.
-     * @param caseSensitive whether the engine is case sensitive.
-     * @return the map key.
-     */
-    protected Object buildKey(final Object key, final boolean caseSensitive)
-    {
-        Object result = null;
-
-        if  (key == null)
-        {
-            result = "null";
-        }
-        else if  (caseSensitive)
-        {
-            result = "" + key;
-        }
-        else
-        {
-            result = ("" + key).toUpperCase();
-        }
-        
-        return result;
+        return ((key == null) ? "null" : key);
     }
  
     /**
@@ -2625,19 +2597,6 @@ public abstract class AbstractJdbcMetadataManager
 
             t_strParentTable = getParentTable(t_strTableName);
             
-            if  (!exists(t_strTableName, t_astrTableNames))
-            {
-                throw
-                    new QueryJException(
-                        "parent.table.not.found",
-                        new Object[]
-                        {
-                            t_strParentTable,
-                            t_strTableName,
-                            t_strTableComment
-                        });
-            }
-                
             String[] t_astrColumnNames =
                 getColumnNames(
                     metaData,
@@ -2846,7 +2805,7 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet)
       throws  SQLException
     {
-        return extractStringFields(resultSet, "TABLE_NAME", null);
+        return extractStringFields(resultSet, "TABLE_NAME", null, null)[0];
     }
 
     /**
@@ -2871,6 +2830,18 @@ public abstract class AbstractJdbcMetadataManager
     {
         Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    getColumnNames(
+                        metaData,
+                        catalog,
+                        schema,
+                        parentTable,
+                        getParentTable(parentTable))));
+        }
+        
         try 
         {
             ResultSet t_rsColumns =
@@ -2943,7 +2914,7 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet, final String fieldName, final String table)
       throws  SQLException
     {
-        return extractStringFields(resultSet, fieldName, table);
+        return extractStringFields(resultSet, fieldName, null, null)[0];
     }
 
     /**
@@ -2970,6 +2941,21 @@ public abstract class AbstractJdbcMetadataManager
     {
         Collection result = new ArrayList();
         
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toIntegerArray(
+                            getColumnTypes(
+                                metaData,
+                                catalog,
+                                schema,
+                                parentTable,
+                                getParentTable(parentTable),
+                                -1))));
+        }
+
         try 
         {
             if  (metaData != null) 
@@ -3121,7 +3107,9 @@ public abstract class AbstractJdbcMetadataManager
         final int size)
       throws  SQLException
     {
-        return extractIntFields(resultSet, fieldName, table, size);
+        return
+            toIntArray(
+                extractIntFields(resultSet, fieldName, table, null, size)[0]);
     }
 
     /**
@@ -3149,6 +3137,21 @@ public abstract class AbstractJdbcMetadataManager
     {
         Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                       toBooleanArray(
+                           getAllowNulls(
+                               metaData,
+                               catalog,
+                               schema,
+                               parentTable,
+                               getParentTable(parentTable),
+                               -1))));
+        }
+                    
         try 
         {
             ResultSet t_rsColumns =
@@ -3183,23 +3186,31 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the column information.
      * @param field the field.
      * @param table the table.
+     * @param nameField the name field.
      * @return the list of null flag.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final Field field, final String table)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final Field nameField)
       throws  SQLException
     {
         return
-            extractAllowNull(resultSet, field.toSimplifiedString(), table);
+            extractAllowNull(
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                nameField.toSimplifiedString());
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
-     * @param table the table.
+     * @param table the table name.
      * @param size the number of fields to extract.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
@@ -3208,29 +3219,35 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet, final String table, final int size)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, "NULLABLE", table, size);
+        return
+            extractAllowNull(
+                resultSet, "NULLABLE", table, "COLUMN_NAME", size);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
-     * @param table the table.
+     * @param table the table name.
+     * @param nameField the name field.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String fieldName, final String table)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final String nameField)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, fieldName, table, -1);
+        return extractAllowNull(resultSet, fieldName, table, nameField, -1);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
-     * @param table the table.
+     * @param table the table name.
      * @param size the number of fields to extract.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
@@ -3240,12 +3257,17 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet,
         final String fieldName,
         final String table,
+        final String nameField,
         final int size)
       throws  SQLException
     {
         boolean[] result =  EMPTY_BOOL_ARRAY;
 
-        int[] t_iFlags = extractIntFields(resultSet, fieldName, table, size);
+        String[][] t_astrExtractedValues =
+            extractIntFields(resultSet, fieldName, table, nameField, size);
+
+        int[] t_iFlags = toIntArray(t_astrExtractedValues[0]);
+        String[] t_astrNames = t_astrExtractedValues[1];
 
         int t_iLength = (t_iFlags != null) ? t_iFlags.length : 0;
 
@@ -3253,6 +3275,13 @@ public abstract class AbstractJdbcMetadataManager
         {
             result = new boolean[t_iLength];
         }
+
+        Log t_Log =
+            UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
+
+        boolean t_bLogEnabled =
+            (   (t_Log != null)
+             && (t_Log.isTraceEnabled()));
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -3270,6 +3299,15 @@ public abstract class AbstractJdbcMetadataManager
                 default:
                     result[t_iIndex] = true;
                     break;
+
+            }
+
+            if  (t_bLogEnabled)
+            {
+                t_Log.trace(
+                      table + "." + t_astrNames[t_iIndex]
+                    + " allows null? "
+                    + result[t_iIndex]);
             }
         }
 
@@ -3339,7 +3377,7 @@ public abstract class AbstractJdbcMetadataManager
             try 
             {
                 t_rsProcedures =
-                    metaData.getProcedures(catalog, schema, null);
+                    metaData.getProcedures(catalog, schema,null);
             }
             catch  (final SQLException sqlException)
             {
@@ -3539,43 +3577,78 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts concrete field from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @param table the table.
-     * @return the list of field values.
+     * @param table the table name.
+     * @param nameField the name field.
+     * @return the list of field values (position 0), and the field names (1).
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    protected String[] extractStringFields(
-        final ResultSet resultSet, final Field field, final String table)
-        throws  SQLException
+    protected String[][] extractStringFields(
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final Field nameField)
+      throws  SQLException
     {
         return
             extractStringFields(
-                resultSet, field.toSimplifiedString(), table);
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                (nameField != null) ? nameField.toSimplifiedString() : null);
     }
 
     /**
      * Extracts fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @param table the table.
-     * @return the list of field values.
+     * @param table the table name.
+     * @param nameField the name field.
+     * @return the list of field values (position 0), and the field names (1).
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    protected String[] extractStringFields(
-        final ResultSet resultSet, final String field, final String table)
+    protected String[][] extractStringFields(
+        final ResultSet resultSet,
+        final String field,
+        final String table,
+        final String nameField)
       throws  SQLException
     {
-        Collection t_cResult = new ArrayList();
+        String[][] result = new String[2][0];
+
+        Collection t_cFields = new ArrayList();
+
+        boolean t_bExtractNames = (nameField != null);
+        Collection t_cNames = null;
+
+        if  (t_bExtractNames)
+        {
+            t_cNames = new ArrayList();
+        }
 
         while  (resultSet.next()) 
         {
-            t_cResult.add(resultSet.getString(field));
+            t_cFields.add(resultSet.getString(field));
+
+            if  (t_bExtractNames)
+            {
+                t_cNames.add(resultSet.getString(nameField));
+            }
         }
 
-        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+        result[0] = new String[t_cFields.size()];
+        t_cFields.toArray(result[0]);
+
+        if  (t_bExtractNames)
+        {
+            result[1] = new String[t_cNames.size()];
+            t_cNames.toArray(result[1]);
+        }
+
+        return result;
     }
 
     /**
@@ -3789,11 +3862,7 @@ public abstract class AbstractJdbcMetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.database.table.comment",
-                        new Object[]
-                        {
-                            tableName
-                        },
+                        "cannot.retrieve.database.table.names",
                         sqlException);
             }
 
@@ -3856,12 +3925,7 @@ public abstract class AbstractJdbcMetadataManager
             {
                 throw
                     new QueryJException(
-                        "cannot.retrieve.database.column.comment",
-                        new Object[]
-                        {
-                            columnName,
-                            tableName
-                        },
+                        "cannot.retrieve.database.table.names",
                         sqlException);
             }
 
@@ -3912,47 +3976,63 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the table information.
      * @param field the field name.
      * @param table the table.
-     * @return the list of field values.
+     * @param nameField the column identifying the column names.
+     * @return the list of field values, plus the column names.
      * @throws SQLException if the database operation fails.
      */
-    protected int[] extractIntFields(
-        final ResultSet resultSet, final String field, final String table)
-        throws  SQLException
+    protected String[][] extractIntFields(
+        final ResultSet resultSet,
+        final String field,
+        final String table,
+        final String nameField)
+      throws  SQLException
     {
-        return extractIntFields(resultSet, field, table, -1);
+        return extractIntFields(resultSet, field, table, nameField, -1);
     }
 
     /**
      * Extracts concrete integer fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @param size the number of fields to extract.
      * @param table the table.
-     * @return the list of field values.
+     * @param nameField the column identifying the column names.
+     * @param size the number of fields to extract.
+     * @return the list of field values, plus the column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    protected int[] extractIntFields(
+    protected String[][] extractIntFields(
         final ResultSet resultSet,
         final String field,
         final String table,
+        final String nameField,
         final int size)
       throws  SQLException
     {
-        int[] result = EMPTY_INT_ARRAY;
+        String[][] result = new String[2][0];
 
         boolean t_bBounded = (size > 0);
 
         Collection t_cResult = null;
 
+        boolean t_bExtractNames = (nameField != null);
+
+        Collection t_cNames = null;
+
         if  (t_bBounded)
         {
-            result = new int[size];
+            result[0] = new String[size];
+
+            if  (t_bExtractNames)
+            {
+                result[1] = new String[size];
+            }
         }
         else
         {
             t_cResult = new ArrayList();
+            t_cNames = new ArrayList();
         }
             
         int t_iCounter = 0;
@@ -3965,7 +4045,12 @@ public abstract class AbstractJdbcMetadataManager
 
             if  (t_bBounded)
             {
-                result[t_iCounter] = t_iCurrentRecord;
+                result[0][t_iCounter] = "" + t_iCurrentRecord;
+
+                if  (t_bExtractNames)
+                {
+                    result[1][t_iCounter] = resultSet.getString(nameField);
+                }
 
                 if  (t_iCounter == size - 1)
                 {
@@ -3977,23 +4062,29 @@ public abstract class AbstractJdbcMetadataManager
             else
             {
                 t_cResult.add(new Integer(t_iCurrentRecord));
+                t_cNames.add(resultSet.getString(nameField));
             }
         }
 
         if  (!t_bBounded)
         {
-            result = new int[t_cResult.size()];
+            result[0] = new String[t_cResult.size()];
 
             t_iCounter = 0;
 
             Iterator t_itResults = t_cResult.iterator();
 
-            while  (   (t_itResults != null)
-                    && (t_itResults.hasNext()))
+            if  (t_itResults != null)
             {
-                result[t_iCounter++] =
-                    ((Integer) t_itResults.next()).intValue();
+                while  (t_itResults.hasNext())
+                {
+                    result[0][t_iCounter++] =
+                        "" + ((Integer) t_itResults.next()).intValue();
+                }
             }
+
+            result[1] = new String[t_cNames.size()];
+            t_cNames.toArray(result[1]);
         }
 
         return result;
@@ -4188,17 +4279,8 @@ public abstract class AbstractJdbcMetadataManager
     protected String getParentTable(
         final String table, final MetaLanguageUtils metaLanguageUtils)
     {
-        String result = null;
-
-        String comment = getTableComment(table);
-
-        if  (comment != null)
-        {
-            result =
-                metaLanguageUtils.retrieveDeclaredParent(comment);
-        }
-
-        return result;
+        return
+            metaLanguageUtils.retrieveDeclaredParent(getTableComment(table));
     }
 
     /**
@@ -4291,44 +4373,5 @@ public abstract class AbstractJdbcMetadataManager
         }
         
         return result;
-    }
-
-    /**
-     * Checks whether given text is part of the array.
-     * @param text the text to look for.
-     * @param array the array.
-     * @precondition text != null
-     * @precondition array != null
-     */
-    protected boolean exists(final String text, final String[] array)
-    {
-        boolean result = (text != null);
-
-        if  (result)
-        {
-            result = false;
-            
-            int t_iCount = (array != null) ? array.length : 0;
-        
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-            {
-                if  (text.equals(array[t_iIndex]))
-                {
-                    result = true;
-                    break;
-                }
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves whether the engine is case sensitive or not.
-     * @return such information.
-     */
-    protected boolean isCaseSensitive()
-    {
-        return false;
     }
 }

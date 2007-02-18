@@ -701,7 +701,8 @@ public class OracleMetadataManager
             extractStringFields(
                 resultSet,
                 USER_TABLES.TABLE_NAME,
-                table);
+                null,
+                (Field) null)[0];
     }
 
     /**
@@ -910,7 +911,8 @@ public class OracleMetadataManager
             extractStringFields(
                 resultSet,
                 USER_TAB_COLUMNS.COLUMN_NAME,
-                table);
+                table,
+                (Field) null)[0];
     }
 
     /**
@@ -992,6 +994,7 @@ public class OracleMetadataManager
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.DATA_TYPE);
+                t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
 
                 t_Query.from(USER_TAB_COLUMNS);
 
@@ -1101,7 +1104,9 @@ public class OracleMetadataManager
      * @precondition resultSet != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String fieldName, final String table)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table)
       throws  SQLException
     {
         return
@@ -1109,6 +1114,7 @@ public class OracleMetadataManager
                 resultSet,
                 fieldName,
                 table,
+                USER_TAB_COLUMNS.COLUMN_NAME.toSimplifiedString(),
                 getMetadataTypeManager(),
                 SqlTypeResolver.getInstance());
     }
@@ -1130,14 +1136,19 @@ public class OracleMetadataManager
         final ResultSet resultSet,
         final String fieldName,
         final String table,
+        final String columnNameFieldName,
         final MetadataTypeManager metadataTypeManager,
         final SqlTypeResolver sqlTypeResolver)
       throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
 
-        String[] t_astrTypes =
-            extractStringFields(resultSet, fieldName, table);
+        String[][] t_astrExtractedValues =
+            extractStringFields(
+                resultSet, fieldName, table, columnNameFieldName);
+
+        String[] t_astrTypes = t_astrExtractedValues[0];
+        String[] t_astrNames = t_astrExtractedValues[1];
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 
@@ -1165,9 +1176,9 @@ public class OracleMetadataManager
                 if  (t_bLogEnabled)
                 {
                     t_Log.trace(
-                          table + "." + fieldName + " type = "
+                          table + "." + t_astrNames[t_iIndex] + " : "
                         + sqlTypeResolver.resolve(t_iType)
-                        + " (" + t_iType + ")");
+                        + "/" + t_iType);
                 }
             }
         }
@@ -1254,6 +1265,7 @@ public class OracleMetadataManager
                 SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.NULLABLE);
+                t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
 
                 t_Query.from(USER_TAB_COLUMNS);
 
@@ -1289,7 +1301,8 @@ public class OracleMetadataManager
                             extractAllowNull(
                                 t_rsResults,
                                 USER_TAB_COLUMNS.NULLABLE,
-                                tableName))));
+                                tableName,
+                                USER_TAB_COLUMNS.COLUMN_NAME))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1358,32 +1371,58 @@ public class OracleMetadataManager
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
      * @param table the table name.
-     * @return the list of column types.
+     * @param nameField the name field.
+     * @return the information about the nullable condition of each column.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @overrides
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String fieldName, final String table)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final String nameField)
       throws  SQLException
     {
         boolean[] result = EMPTY_BOOL_ARRAY;
 
-        String[] t_astrTypes =
-            extractStringFields(resultSet, fieldName, table);
+        String[][] t_astrExtractedValues =
+            extractStringFields(
+                resultSet, fieldName, table, nameField);
+
+        String[] t_astrTypes = t_astrExtractedValues[0];
+        String[] t_astrNames = t_astrExtractedValues[1];
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 
         if  (t_iCount > 0)
         {
+            Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+
+            boolean t_bLogEnabled =
+                (   (t_Log != null)
+                 && (t_Log.isTraceEnabled()));
+
             result = new boolean[t_iCount];
+
+            boolean t_bItem;
 
             for  (int t_iIndex = 0;
                       t_iIndex < t_iCount;
                       t_iIndex++) 
             {
-                result[t_iIndex] =
+                t_bItem = 
                     !("N".equalsIgnoreCase(t_astrTypes[t_iIndex]));
+
+                result[t_iIndex] = t_bItem;
+
+                if  (t_bLogEnabled)
+                {
+                    t_Log.trace(
+                          table + "." + t_astrNames[t_iIndex]
+                        + " allows null? "
+                        + t_bItem);
+                }
             }
         }
 

@@ -65,8 +65,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class JdbcMetadataManager
-    extends AbstractJdbcMetadataManager
-    implements MetadataManager
+    extends  AbstractJdbcMetadataManager
 {
     /**
      * Creates an empty <code>JdbcMetadataManager</code> instance..
@@ -214,6 +213,15 @@ public class JdbcMetadataManager
      * @return <code>true</code> in such case.
      */
     public boolean requiresCustomClobHandling()
+    {
+        return false;
+    }
+
+    /**
+     * Retrieves whether the engine is case sensitive or not.
+     * @return such information.
+     */
+    public boolean isCaseSensitive()
     {
         return false;
     }

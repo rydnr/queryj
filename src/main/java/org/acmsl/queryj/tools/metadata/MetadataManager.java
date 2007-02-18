@@ -428,4 +428,10 @@ public interface MetadataManager
      * @return the parent's table name, or <code>null</code> otherwise.
      */
     public String getParentTable(final String table);
+
+    /**
+     * Retrieves whether the engine is case sensitive or not.
+     * @return such information.
+     */
+    public boolean isCaseSensitive();
 }
