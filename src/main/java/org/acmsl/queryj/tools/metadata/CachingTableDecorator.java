@@ -1019,7 +1019,7 @@ public class CachingTableDecorator
      */
     public List getAllParentAndNonParentNonManagedExternallyAttributes()
     {
-        List result = getCachedAllParentAndNonParentAttributes();
+        List result = getCachedAllParentAndNonParentNonManagedExternallyAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
