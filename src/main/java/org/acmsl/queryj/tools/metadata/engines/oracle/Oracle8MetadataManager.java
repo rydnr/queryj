@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 
 /*
  * Importing some JDK classes.
@@ -60,14 +61,17 @@ public class Oracle8MetadataManager
 {
     /**
      * Creates an empty <code>Oracle8MetadataManager</code>.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      */
-    protected Oracle8MetadataManager()
+    protected Oracle8MetadataManager(
+        final MetadataExtractionListener metadataExtractionListener)
     {
-        super();
+        super(metadataExtractionListener);
     }
 
     /**
      * Creates an <code>Oracle8MetadataManager</code>. using given information.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -88,6 +92,7 @@ public class Oracle8MetadataManager
      * occurs.
      */
     public Oracle8MetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -101,6 +106,7 @@ public class Oracle8MetadataManager
                 QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             disableTableExtraction,
@@ -114,6 +120,7 @@ public class Oracle8MetadataManager
 
     /**
      * Creates an <code>Oracle8MetadataManager</code> using given information.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.
@@ -124,6 +131,7 @@ public class Oracle8MetadataManager
      * occurs.
      */
     public Oracle8MetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final DatabaseMetaData metaData,
@@ -133,6 +141,7 @@ public class Oracle8MetadataManager
                 QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             metaData,

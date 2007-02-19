@@ -69,14 +69,27 @@ public interface MetadataExtractionListener
     public void tableNamesExtracted(final int count);
 
     /**
+     * Notifies the table extraction has been started.
+     * @param table the table.
+     */
+    public void tableExtractionStarted(final String table);
+
+    /**
+     * Notifies the table extraction has been completed.
+     * @param table the table.
+     */
+    public void tableExtracted(final String table);
+
+    /**
      * Notifies table metadata extraction has been started.
      */
     public void tableMetadataExtractionStarted();
 
     /**
      * Notifies the table comment extraction has been started.
+     * @param table the table.
      */
-    public void tableCommentsExtractionStarted();
+    public void tableCommentExtractionStarted(final String table);
 
     /**
      * Notifies a table comment has been extracted.
@@ -114,8 +127,9 @@ public interface MetadataExtractionListener
 
     /**
      * Notifies column comment extraction has been started.
+     * @param table the table.
      */
-    public void columnCommentsExtractionStarted();
+    public void columnCommentsExtractionStarted(final String table);
 
     /**
      * Notifies a column comment has been extracted.
@@ -134,8 +148,9 @@ public interface MetadataExtractionListener
 
     /**
      * Notifies column type extraction has been started.
+     * @param table the table.
      */
-    public void columnTypesExtractionStarted();
+    public void columnTypesExtractionStarted(final String table);
 
     /**
      * Notifies a column type has been extracted.
@@ -154,8 +169,9 @@ public interface MetadataExtractionListener
 
     /**
      * Notifies column nullable setting extraction has been extracted.
+     * @param table the table.
      */
-    public void columnNullablesExtractionStarted();
+    public void columnNullablesExtractionStarted(final String table);
 
     /**
      * Notifies a column nullable setting has been extracted.

@@ -2670,7 +2670,11 @@ public abstract class AbstractJdbcMetadataManager
 
             if  (metadataExtractionListener != null)
             {
-                metadataExtractionListener.tableCommentExtractionStarted();
+                metadataExtractionListener.tableExtractionStarted(
+                    t_strTableName);
+
+                metadataExtractionListener.tableCommentExtractionStarted(
+                    t_strTableName);
             }
 
             String t_strTableComment =
@@ -2817,6 +2821,12 @@ public abstract class AbstractJdbcMetadataManager
                     metadataExtractionListener.columnNullablesExtracted(
                         t_strTableName);
                 }
+            }
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.tableExtracted(
+                    t_strTableName);
             }
         }        
     }

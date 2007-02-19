@@ -67,7 +67,7 @@ import java.util.Collection;
            >Jose San Leandro</a>
  */
 public class MetadataExtractionLoggingListener
-    extends  MetadataExtractionListener
+    implements  MetadataExtractionListener
 {
     /**
      * The log constant (the aim of this class).
@@ -93,7 +93,7 @@ public class MetadataExtractionLoggingListener
      */
     public static MetadataExtractionListener getInstance()
     {
-        return MetatadataExtractionLoggingListenerSingletonContainer.SINGLETON;
+        return MetadataExtractionLoggingListenerSingletonContainer.SINGLETON;
     }
 
     /**
@@ -111,7 +111,7 @@ public class MetadataExtractionLoggingListener
      */
     public void tableNameExtracted(final String table)
     {
-        logDebug("Extracting " + table + ".");
+        logDebug("  Extracting " + table + " name.");
     }
 
     /**
@@ -124,11 +124,30 @@ public class MetadataExtractionLoggingListener
     }
 
     /**
-     * Notifies the table comment extraction has been started.
+     * Notifies the table extraction has been started.
+     * @param table the table.
      */
-    public void tableCommentsExtractionStarted()
+    public void tableExtractionStarted(final String table)
     {
-        logDebug("Extracting table comments...");
+        logInfo("  Extracting " + table + "...");
+    }
+
+    /**
+     * Notifies the table extraction has been completed.
+     * @param table the table.
+     */
+    public void tableExtracted(final String table)
+    {
+        logInfo("  Done.");
+    }
+
+    /**
+     * Notifies the table comment extraction has been started.
+     * @param table the table.
+     */
+    public void tableCommentExtractionStarted(final String table)
+    {
+        logDebug("    Extracting " + table + " comment...");
     }
 
     /**
@@ -147,7 +166,7 @@ public class MetadataExtractionLoggingListener
     public void tableCommentExtracted(
         final String table, final String comment)
     {
-        logDebug("Comment for " + table + " extracted: " + comment);
+        logDebug("    Comment for " + table + " extracted: " + comment);
     }
 
     /**
@@ -155,7 +174,7 @@ public class MetadataExtractionLoggingListener
      */
     public void tableCommentsExtracted()
     {
-        logInfo("Done.");
+        logInfo("  Done.");
     }
 
     /**
@@ -164,7 +183,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnNamesExtractionStarted(final String table)
     {
-        logInfo("Extracting " + table + " column names...");
+        logInfo("    Extracting " + table + " column names...");
     }
 
     /**
@@ -175,7 +194,7 @@ public class MetadataExtractionLoggingListener
     public void columnNameExtracted(
         final String table, final String column)
     {
-        logDebug(table + " column extracted: " + column);
+        logDebug("    " + table + " column extracted: " + column);
     }
 
 
@@ -186,7 +205,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnNamesExtracted(final String table, final int count)
     {
-        logDebug(count + " columns found for " + table + ".");
+        logDebug("    " + count + " columns found for " + table + ".");
     }
 
     /**
@@ -195,7 +214,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnCommentsExtractionStarted(final String table)
     {
-        logInfo("Extracting column comments for " + table + "...");
+        logInfo("    Extracting " + table + " column comments...");
     }
 
     /**
@@ -207,7 +226,7 @@ public class MetadataExtractionLoggingListener
     public void columnCommentExtracted(
         final String table, final String column, final String comment)
     {
-        logDebug("Comment for " + table + "." + column + ": " + comment);
+        logDebug("    Comment for " + table + "." + column + ": " + comment);
     }
 
     /**
@@ -216,7 +235,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnCommentsExtracted(final String table)
     {
-        logDebug("Column comments for " + table + " extracted.");
+        logDebug("    Column comments for " + table + " extracted.");
     }
 
     /**
@@ -224,7 +243,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnTypesExtractionStarted(final String table)
     {
-        logInfo("Extracting column types for " + table + "...");
+        logInfo("    Extracting " + table + " column types...");
     }
 
     /**
@@ -255,7 +274,7 @@ public class MetadataExtractionLoggingListener
         final SqlTypeResolver sqlTypeResolver)
     {
         logDebug(
-              "Type for " + table + "." + column + ": "
+              "    Type for " + table + "." + column + ": "
             + type + "/" + sqlTypeResolver.resolve(type));
     }
 
@@ -265,7 +284,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnTypesExtracted(final String table)
     {
-        logDebug("Column types for " + table + " extracted.");
+        logDebug("    Column types for " + table + " extracted.");
     }
 
     /**
@@ -274,7 +293,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnNullablesExtractionStarted(final String table)
     {
-        logInfo("Extracting column nullable settings for " + table + "...");
+        logInfo("    Extracting " + table + " column nullable settings...");
     }
 
     /**
@@ -287,7 +306,7 @@ public class MetadataExtractionLoggingListener
         final String table, final String column, final boolean nullable)
     {
         logDebug(
-            "Does " + table + "." + column + " allow nulls? " + nullable);
+            "    Does " + table + "." + column + " allow nulls? " + nullable);
     }
 
     /**
@@ -296,7 +315,7 @@ public class MetadataExtractionLoggingListener
      */
     public void columnNullablesExtracted(final String table)
     {
-        logDebug("Column types for " + table + " extracted.");
+        logDebug("    Column types for " + table + " extracted.");
     }
 
     /**
@@ -316,7 +335,7 @@ public class MetadataExtractionLoggingListener
         final String table, final String[] primaryKey)
     {
         logDebug(
-              "Primary key for " + table + ": ["
+              "  Primary key for " + table + ": ["
             + concatenate(primaryKey, ", ", StringUtils.getInstance()) + "]");
     }
 
@@ -349,7 +368,7 @@ public class MetadataExtractionLoggingListener
         final String[] foreignKey)
     {
         logDebug(
-            "Foreign key from " + table + " ["
+              "  Foreign key from " + table + " ["
             + concatenate(foreignKey, ", ", StringUtils.getInstance())
             + "] to " + targetTable + " extracted.");
     }
@@ -360,7 +379,7 @@ public class MetadataExtractionLoggingListener
      */
     public void foreignKeysExtracted(final String table)
     {
-        logDebug("Foreign keys for " + table + " extracted.");
+        logDebug("  Foreign keys for " + table + " extracted.");
     }
 
     /**
@@ -389,7 +408,7 @@ public class MetadataExtractionLoggingListener
         final String name, final int type, final String comment)
     {
         logDebug(
-              "Procedure metadata extracted."
+              "  Procedure metadata extracted."
             + " Name: " + name
             + " Type: " + type
             + " Comment: " + comment);
@@ -413,7 +432,7 @@ public class MetadataExtractionLoggingListener
         final int nullable)
     {
         logDebug(
-              "Procedure parameter metadata extracted."
+              "    Procedure parameter metadata extracted."
             + " Column name: " + columnName
             + " Column type: " + columnType
             + " Comment: " + comment
@@ -430,7 +449,7 @@ public class MetadataExtractionLoggingListener
     public void procedureExtracted(
         final String name, final ProcedureParameterMetadata[] parameters)
     {
-        logDebug("Procedure " + name + " extracted.");
+        logDebug("  Procedure " + name + " extracted.");
     }
 
     /**

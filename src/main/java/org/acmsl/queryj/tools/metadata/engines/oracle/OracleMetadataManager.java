@@ -50,8 +50,8 @@ import org.acmsl.queryj.QueryResultSet;
 import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.oracle.OracleTableRepository;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.SqlTypeResolver;
 
 /*
@@ -90,10 +90,12 @@ public class OracleMetadataManager
 {
     /**
      * Creates an empty <code>OracleMetadataManager</code>.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      */
-    protected OracleMetadataManager()
+    protected OracleMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener)
     {
-        super();
+        super(metadataExtractionListener);
     }
 
     /**
@@ -198,7 +200,8 @@ public class OracleMetadataManager
             metaData.getConnection(),
             catalog,
             schema,
-            getTableNames(metaData, catalog, schema),
+            getTableNames(
+                metaData, catalog, schema, metadataExtractionListener),
             QueryFactory.getInstance(),
             OracleTextFunctions.getInstance(),
             metadataExtractionListener);
@@ -398,7 +401,8 @@ public class OracleMetadataManager
             metaData.getConnection(),
             catalog,
             schema,
-            getTableNames(metaData, catalog, schema),
+            getTableNames(
+                metaData, catalog, schema, metadataExtractionListener),
             QueryFactory.getInstance(),
             OracleTextFunctions.getInstance(),
             metadataExtractionListener);
@@ -497,7 +501,7 @@ public class OracleMetadataManager
                     {
                         String t_strPreviousRcol = null;
                         String t_strRcol;
-                        Collection t_cFks;
+                        Collection t_cFks = null;
                         String t_strRcolColumnName;
 
                         while  (t_Results.next())
@@ -522,7 +526,7 @@ public class OracleMetadataManager
                                 t_strRcol,
                                 new String[]
                                 {
-                                    t_strRcolColumName,
+                                    t_strRcolColumnName,
                                 },
                                 t_strTableName,
                                 new String[]

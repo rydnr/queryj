@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.metadata.engines.mysql;
  */
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.QueryJException;
 
@@ -62,14 +63,17 @@ public class MySQL4xMetadataManager
 {
     /**
      * Creates an empty <code>MySQL4xMetadataManager</code>.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      */
-    protected MySQL4xMetadataManager()
+    protected MySQL4xMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener)
     {
-        super();
+        super(metadataExtractionListener);
     }
 
     /**
      * Creates a <code>MySQL4xMetadataManager</code>, using given information.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -90,6 +94,7 @@ public class MySQL4xMetadataManager
      * occurs.
      */
     public MySQL4xMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -103,6 +108,7 @@ public class MySQL4xMetadataManager
                 QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             disableTableExtraction,
@@ -116,6 +122,7 @@ public class MySQL4xMetadataManager
 
     /**
      * Creates a <code>MySQL4xMetadataManager</code> using given information.
+     * @param metadataExtractionListener the <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.
@@ -126,6 +133,7 @@ public class MySQL4xMetadataManager
      * occurs.
      */
     public MySQL4xMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final DatabaseMetaData metaData,
@@ -135,6 +143,7 @@ public class MySQL4xMetadataManager
                 QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             metaData,

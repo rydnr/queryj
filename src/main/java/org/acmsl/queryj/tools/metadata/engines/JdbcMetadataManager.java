@@ -44,6 +44,7 @@ package org.acmsl.queryj.tools.metadata.engines;
  */
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
@@ -178,6 +179,7 @@ public class JdbcMetadataManager
               QueryJException
     {
         retrieveMetadata(
+            getMetadataExtractionListener(),
             getTableNames(),
             getProcedureNames(),
             getDisableTableExtraction(),
@@ -186,8 +188,7 @@ public class JdbcMetadataManager
             getLazyProcedureExtraction(),
             getMetaData(),
             getCatalog(),
-            getSchema(),
-            getMetadataExtractionListener());
+            getSchema());
     }
 
     /**
