@@ -221,16 +221,17 @@ public class KeywordRepositoryTemplate
     {
         List t_lKeywords = getKeywords();
 
-        if  (t_lKeywords != null)
+        if  (   (t_lKeywords != null)
+             && (!t_lKeywords.contains(keyword)))
         {
             t_lKeywords.add(keyword);
-        }
 
-        Map t_mKeywordTypes = getKeywordTypes();
-
-        if  (t_mKeywordTypes != null)
-        {
-            t_mKeywordTypes.put(buildKey(keyword), fieldType);
+            Map t_mKeywordTypes = getKeywordTypes();
+            
+            if  (t_mKeywordTypes != null)
+            {
+                t_mKeywordTypes.put(buildKey(keyword), fieldType);
+            }
         }
     }
 

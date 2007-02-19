@@ -1094,6 +1094,8 @@ public class OracleMetadataManager
                     oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
                         oracleTextFunctions.upper()));
 
+                t_Query.orderBy(USER_TAB_COLUMNS.COLUMN_ID);
+
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 
                 t_Query.setString(
@@ -1365,6 +1367,8 @@ public class OracleMetadataManager
                 t_Query.where(
                     oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
                         oracleTextFunctions.upper()));
+
+                t_Query.orderBy(USER_TAB_COLUMNS.COLUMN_ID);
 
                 t_PreparedStatement = t_Query.prepareStatement(connection);
 

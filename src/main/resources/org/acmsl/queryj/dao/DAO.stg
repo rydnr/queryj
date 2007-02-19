@@ -1431,6 +1431,7 @@ protected void buildInsertQuery(final InsertQuery query)
  */
 public void insert(
 <if(parent)>
+    //\<table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | \<attribute_declaration_impl(attr=attr)>}; separator=",\n">)
     <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
@@ -1549,10 +1550,10 @@ protected void insert(
  */
 protected void insert(
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(
-      attr=it); separator=",\n">,
+      attr=it); separator=",\n">)
 <endif>
 
     final Query query,
@@ -1595,6 +1596,7 @@ protected void insert(
  */
 public <input.vo_name> create(
 <if(parent)>
+    //\<table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | \<attribute_declaration_impl(attr=attr)>}; separator=",\n">)
     <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <input.all_but_externally_managed_attributes:attribute_declaration(

@@ -4644,8 +4644,16 @@ public abstract class AbstractJdbcMetadataManager
     protected String getParentTable(
         final String table, final MetaLanguageUtils metaLanguageUtils)
     {
-        return
-            metaLanguageUtils.retrieveDeclaredParent(getTableComment(table));
+        String result = null;
+        
+        String t_strTableComment = getTableComment(table);
+        
+        if  (t_strTableComment != null)
+        {
+            result = metaLanguageUtils.retrieveDeclaredParent(t_strTableComment);
+        }
+        
+        return result;
     }
 
     /**
