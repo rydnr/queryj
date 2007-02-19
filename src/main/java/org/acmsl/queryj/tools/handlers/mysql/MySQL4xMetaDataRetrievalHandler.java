@@ -40,9 +40,10 @@ package org.acmsl.queryj.tools.handlers.mysql;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionLoggingListener;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -152,6 +153,7 @@ public class MySQL4xMetaDataRetrievalHandler
         {
             result =
                 new MySQL4xMetadataManager(
+                    MetadataExtractionLoggingListener.getInstance(),
                     tableNames,
                     procedureNames,
                     disableTableExtraction,
