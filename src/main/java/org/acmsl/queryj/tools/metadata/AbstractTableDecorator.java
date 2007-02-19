@@ -1012,7 +1012,7 @@ public abstract class AbstractTableDecorator
 
         List t_lAttributes = getNonParentAttributes();
 
-        int t_iCount = (result != null) ? result.size() : 0;
+        int t_iCount = (t_lAttributes != null) ? t_lAttributes.size() : 0;
 
         Attribute t_Attribute;
 
@@ -1021,7 +1021,7 @@ public abstract class AbstractTableDecorator
             t_Attribute = (Attribute) t_lAttributes.get(t_iIndex);
 
             if  (   (t_Attribute != null)
-                 && (t_Attribute.getManagedExternally()))
+                 && (!t_Attribute.getManagedExternally()))
             {
                 result.add(t_Attribute);
             }
@@ -1175,7 +1175,7 @@ public abstract class AbstractTableDecorator
             t_Attribute = (Attribute) allAttributes.get(t_iIndex);
 
             if  (   (t_Attribute != null)
-                 && (t_Attribute.getManagedExternally()))
+                 && (!t_Attribute.getManagedExternally()))
             {
                 result.add(t_Attribute);
             }

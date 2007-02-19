@@ -287,7 +287,8 @@ public class CachingTableDecorator
     {
         List result = getCachedAllAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getAllAttributes();
             setCachedAllAttributes(result);
@@ -331,7 +332,8 @@ public class CachingTableDecorator
     {
         List result = getCachedAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getAttributes();
             setCachedAttributes(result);
@@ -420,7 +422,8 @@ public class CachingTableDecorator
     {
         List result = getCachedNonParentAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getNonParentAttributes();
             setCachedNonParentAttributes(result);
@@ -922,7 +925,8 @@ public class CachingTableDecorator
     {
         List result = getCachedNonParentNonManagedExternallyAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getNonParentNonManagedExternallyAttributes();
             setCachedNonParentNonManagedExternallyAttributes(result);
@@ -966,7 +970,8 @@ public class CachingTableDecorator
     {
         List result = getCachedAllParentAndNonParentAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getAllParentAndNonParentAttributes();
             setCachedAllParentAndNonParentAttributes(result);
@@ -1016,7 +1021,8 @@ public class CachingTableDecorator
     {
         List result = getCachedAllParentAndNonParentAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getAllParentAndNonParentNonManagedExternallyAttributes();
             setCachedAllParentAndNonParentNonManagedExternallyAttributes(result);
@@ -1060,7 +1066,8 @@ public class CachingTableDecorator
     {
         List result = getCachedAllNonManagedExternallyAttributes();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (result.size() == 0))
         {
             result = super.getAllNonManagedExternallyAttributes();
             setCachedAllNonManagedExternallyAttributes(result);
