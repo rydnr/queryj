@@ -235,7 +235,9 @@ public interface MetadataManager
      * concrete row.
      */
     public boolean pointsToPrimaryKey(
-        final String tableName, final String[] fieldNames, final String parentTableName);
+        final String tableName,
+        final String[] fieldNames,
+        final String parentTableName);
 
     /**
      * Adds a foreign key.

@@ -51,6 +51,7 @@ import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.oracle.OracleTableRepository;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.SqlTypeResolver;
 
 /*
@@ -97,6 +98,7 @@ public class OracleMetadataManager
 
     /**
      * Creates an <code>OracleMetadataManager</code>. using given information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -117,6 +119,7 @@ public class OracleMetadataManager
      * occurs.
      */
     public OracleMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -130,6 +133,7 @@ public class OracleMetadataManager
                 QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             disableTableExtraction,
@@ -143,6 +147,7 @@ public class OracleMetadataManager
 
     /**
      * Creates an <code>OracleMetadataManager</code> using given information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.
@@ -153,6 +158,7 @@ public class OracleMetadataManager
      * occurs.
      */
     public OracleMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final DatabaseMetaData metaData,
@@ -162,6 +168,7 @@ public class OracleMetadataManager
                 QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             metaData,
@@ -174,6 +181,7 @@ public class OracleMetadataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
@@ -181,7 +189,8 @@ public class OracleMetadataManager
     protected void extractPrimaryKeys(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -191,7 +200,8 @@ public class OracleMetadataManager
             schema,
             getTableNames(metaData, catalog, schema),
             QueryFactory.getInstance(),
-            OracleTextFunctions.getInstance());
+            OracleTextFunctions.getInstance(),
+            metadataExtractionListener);
     }
 
     /**
@@ -202,6 +212,7 @@ public class OracleMetadataManager
      * @param tableNames the table names.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
@@ -215,7 +226,8 @@ public class OracleMetadataManager
         final String schema,
         final String[] tableNames,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -281,7 +293,8 @@ public class OracleMetadataManager
                     //WHERE ((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
                     // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
 
-                    if  (t_Log != null)
+                    if  (   (t_Log != null)
+                         && (t_Log.isDebugEnabled()))
                     {
                         t_Log.debug(
                             "query:" + t_Query);
@@ -296,7 +309,15 @@ public class OracleMetadataManager
                             addPrimaryKey(
                                 t_strTableName,
                                 t_rsResults.getString(
-                                    USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
+                                    USER_CONS_COLUMNS.COLUMN_NAME
+                                        .toSimplifiedString()));
+                        }
+
+                        if  (metadataExtractionListener != null)
+                        {
+                            metadataExtractionListener.primaryKeyExtracted(
+                                t_strTableName,
+                                getPrimaryKey(t_strTableName));
                         }
                     }
                 }
@@ -360,6 +381,7 @@ public class OracleMetadataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
@@ -367,7 +389,8 @@ public class OracleMetadataManager
     protected void extractForeignKeys(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -377,7 +400,8 @@ public class OracleMetadataManager
             schema,
             getTableNames(metaData, catalog, schema),
             QueryFactory.getInstance(),
-            OracleTextFunctions.getInstance());
+            OracleTextFunctions.getInstance(),
+            metadataExtractionListener);
     }
 
     /**
@@ -388,6 +412,7 @@ public class OracleMetadataManager
      * @param tableNames the table names.
      * @param queryFactory the query factory.
      * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
@@ -401,7 +426,8 @@ public class OracleMetadataManager
         final String schema,
         final String[] tableNames,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -469,21 +495,57 @@ public class OracleMetadataManager
 
                     if  (t_Results != null)
                     {
+                        String t_strPreviousRcol = null;
+                        String t_strRcol;
+                        Collection t_cFks;
+                        String t_strRcolColumnName;
+
                         while  (t_Results.next())
                         {
+                            t_strRcol = t_Results.getString(RCOL.TABLE_NAME);
+
+                            if  (   (metadataExtractionListener != null)
+                                 && (t_cFks == null))
+                            {
+                                t_cFks = new ArrayList();
+                            }
+
+                            t_strRcolColumnName =
+                                t_Results.getString(RCOL.COLUMN_NAME);
+
+                            if  (metadataExtractionListener != null)
+                            {
+                                t_cFks.add(t_strRcolColumnName);
+                            }
+
                             addForeignKey(
-                                t_Results.getString(
-                                    RCOL.TABLE_NAME),
+                                t_strRcol,
                                 new String[]
                                 {
-                                    t_Results.getString(RCOL.COLUMN_NAME)
+                                    t_strRcolColumName,
                                 },
                                 t_strTableName,
                                 new String[]
                                 {
                                     t_Results.getString(COL.COLUMN_NAME)
                                 });
+
+                            if  (   (metadataExtractionListener != null)
+                                 && (t_strPreviousRcol != null)
+                                 && (!t_strPreviousRcol.equals(t_strRcol)))
+                            {
+                                metadataExtractionListener.foreignKeyExtracted(
+                                    t_strTableName,
+                                    t_strPreviousRcol,
+                                    (String[])
+                                        t_cFks.toArray(EMPTY_STRING_ARRAY));
+
+                                t_cFks = new ArrayList();
+                            }
+
+                            t_strPreviousRcol = t_strRcol;
                         }
+
                     }
                 }
                 catch  (final SQLException sqlException)
@@ -546,6 +608,7 @@ public class OracleMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
@@ -553,7 +616,8 @@ public class OracleMetadataManager
     protected String[] getTableNames(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -562,7 +626,8 @@ public class OracleMetadataManager
                 metaData.getConnection(),
                 catalog,
                 schema,
-                QueryFactory.getInstance());
+                QueryFactory.getInstance(),
+                metadataExtractionListener);
     }
                 
     /**
@@ -571,6 +636,7 @@ public class OracleMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param queryFactory the <code>QueryFactory</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition connection != null
@@ -580,7 +646,8 @@ public class OracleMetadataManager
         final Connection connection,
         final String catalog,
         final String schema,
-        final QueryFactory queryFactory)
+        final QueryFactory queryFactory,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -616,7 +683,7 @@ public class OracleMetadataManager
                         sqlException);
             }
 
-            result = extractTableNames(t_Results);
+            result = extractTableNames(t_Results, metadataExtractionListener);
         }
         catch  (final SQLException sqlException)
         {
@@ -689,13 +756,16 @@ public class OracleMetadataManager
      * Extracts the table names from given result set.
      * @param resultSet the result set with the table information.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of table names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected String[] extractTableNames(
-        final QueryResultSet resultSet, final String table)
-        throws  SQLException
+        final QueryResultSet resultSet,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
+      throws  SQLException
     {
         return
             extractStringFields(
@@ -703,6 +773,7 @@ public class OracleMetadataManager
                 USER_TABLES.TABLE_NAME,
                 null,
                 (Field) null)[0];
+                // TODO metadataExtractionListener)[0];
     }
 
     /**
@@ -712,6 +783,7 @@ public class OracleMetadataManager
      * @param schema the schema.
      * @param tableName the table name.
      * @param parentTable the parent table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
@@ -722,7 +794,8 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
-        final String parentTable)
+        final String parentTable,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -734,7 +807,8 @@ public class OracleMetadataManager
                 tableName,
                 parentTable,
                 QueryFactory.getInstance(),
-                OracleTextFunctions.getInstance());
+                OracleTextFunctions.getInstance(),
+                metadataExtractionListener);
     }
 
     /**
@@ -746,6 +820,7 @@ public class OracleMetadataManager
      * @param parentTable the parent table.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
@@ -760,7 +835,8 @@ public class OracleMetadataManager
         final String tableName,
         final String parentTable,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -826,7 +902,8 @@ public class OracleMetadataManager
 
             result.addAll(
                 Arrays.asList(
-                    extractColumnNames(t_rsResults, tableName)));
+                    extractColumnNames(
+                        t_rsResults, tableName, metadataExtractionListener)));
         }
         catch  (final SQLException sqlException)
         {
@@ -889,7 +966,9 @@ public class OracleMetadataManager
 
         if  (result.size() == 0)
         {
-            t_Log.error("'" + t_strQuery + "' returned zero results for table " + tableName);
+            t_Log.error(
+                  "'" + t_strQuery + "' returned zero results for table "
+                + tableName);
         }
 
         return (String[]) result.toArray(EMPTY_STRING_ARRAY);
@@ -899,12 +978,15 @@ public class OracleMetadataManager
      * Extracts the column names from given result set.
      * @param resultSet the result set with the table information.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet, final String table)
+        final ResultSet resultSet,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
         throws  SQLException
     {
         return
@@ -913,6 +995,7 @@ public class OracleMetadataManager
                 USER_TAB_COLUMNS.COLUMN_NAME,
                 table,
                 (Field) null)[0];
+                // TODO metadataExtractionListener)[0];
     }
 
     /**
@@ -923,6 +1006,7 @@ public class OracleMetadataManager
      * @param tableName the table name.
      * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -934,7 +1018,8 @@ public class OracleMetadataManager
         final String schema,
         final String tableName,
         final String parentTable,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -947,7 +1032,8 @@ public class OracleMetadataManager
                 parentTable,
                 size,
                 QueryFactory.getInstance(),
-                OracleTextFunctions.getInstance());
+                OracleTextFunctions.getInstance(),
+                metadataExtractionListener);
     }
 
     /**
@@ -960,6 +1046,7 @@ public class OracleMetadataManager
      * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -975,7 +1062,8 @@ public class OracleMetadataManager
         final String parentTable,
         final int size,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1030,7 +1118,8 @@ public class OracleMetadataManager
                             extractColumnTypes(
                                 t_rsResults,
                                 USER_TAB_COLUMNS.DATA_TYPE,
-                                tableName))));
+                                tableName,
+                                metadataExtractionListener))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1099,6 +1188,7 @@ public class OracleMetadataManager
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -1106,7 +1196,8 @@ public class OracleMetadataManager
     protected int[] extractColumnTypes(
         final ResultSet resultSet,
         final String fieldName,
-        final String table)
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
@@ -1116,7 +1207,8 @@ public class OracleMetadataManager
                 table,
                 USER_TAB_COLUMNS.COLUMN_NAME.toSimplifiedString(),
                 getMetadataTypeManager(),
-                SqlTypeResolver.getInstance());
+                SqlTypeResolver.getInstance(),
+                metadataExtractionListener);
     }
 
     /**
@@ -1126,6 +1218,7 @@ public class OracleMetadataManager
      * @param table the table.
      * @param metadataTypeManager the metadata type manager.
      * @param sqlTypeResolver the <code>SqlTypeResolver</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -1138,14 +1231,19 @@ public class OracleMetadataManager
         final String table,
         final String columnNameFieldName,
         final MetadataTypeManager metadataTypeManager,
-        final SqlTypeResolver sqlTypeResolver)
+        final SqlTypeResolver sqlTypeResolver,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
 
         String[][] t_astrExtractedValues =
             extractStringFields(
-                resultSet, fieldName, table, columnNameFieldName);
+                resultSet,
+                fieldName,
+                table,
+                columnNameFieldName);
+                // TODO metadataExtractionListener);
 
         String[] t_astrTypes = t_astrExtractedValues[0];
         String[] t_astrNames = t_astrExtractedValues[1];
@@ -1154,12 +1252,6 @@ public class OracleMetadataManager
 
         if  (t_iCount > 0)
         {
-            Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
-
-            boolean t_bLogEnabled =
-                (   (t_Log != null)
-                 && (t_Log.isTraceEnabled()));
-
             result = new int[t_iCount];
 
             int t_iType;
@@ -1172,14 +1264,6 @@ public class OracleMetadataManager
                     metadataTypeManager.getJavaType(t_astrTypes[t_iIndex]);
 
                 result[t_iIndex] = t_iType;
-
-                if  (t_bLogEnabled)
-                {
-                    t_Log.trace(
-                          table + "." + t_astrNames[t_iIndex] + " : "
-                        + sqlTypeResolver.resolve(t_iType)
-                        + "/" + t_iType);
-                }
             }
         }
 
@@ -1194,6 +1278,7 @@ public class OracleMetadataManager
      * @param tableName the table name.
      * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -1205,7 +1290,8 @@ public class OracleMetadataManager
         final String schema,
         final String tableName,
         final String parentTable,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1218,7 +1304,8 @@ public class OracleMetadataManager
                 parentTable,
                 size,
                 QueryFactory.getInstance(),
-                OracleTextFunctions.getInstance());
+                OracleTextFunctions.getInstance(),
+                metadataExtractionListener);
     }
 
     /**
@@ -1231,6 +1318,7 @@ public class OracleMetadataManager
      * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -1246,7 +1334,8 @@ public class OracleMetadataManager
         final String parentTable,
         final int size,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1302,7 +1391,8 @@ public class OracleMetadataManager
                                 t_rsResults,
                                 USER_TAB_COLUMNS.NULLABLE,
                                 tableName,
-                                USER_TAB_COLUMNS.COLUMN_NAME))));
+                                USER_TAB_COLUMNS.COLUMN_NAME,
+                                metadataExtractionListener))));
         }
         catch  (final SQLException sqlException)
         {
@@ -1372,6 +1462,7 @@ public class OracleMetadataManager
      * @param fieldName the field name.
      * @param table the table name.
      * @param nameField the name field.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the information about the nullable condition of each column.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -1381,14 +1472,19 @@ public class OracleMetadataManager
         final ResultSet resultSet,
         final String fieldName,
         final String table,
-        final String nameField)
+        final String nameField,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         boolean[] result = EMPTY_BOOL_ARRAY;
 
         String[][] t_astrExtractedValues =
             extractStringFields(
-                resultSet, fieldName, table, nameField);
+                resultSet,
+                fieldName,
+                table,
+                nameField);
+                // TODO metadataExtractionListener);
 
         String[] t_astrTypes = t_astrExtractedValues[0];
         String[] t_astrNames = t_astrExtractedValues[1];
@@ -1397,12 +1493,6 @@ public class OracleMetadataManager
 
         if  (t_iCount > 0)
         {
-            Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
-
-            boolean t_bLogEnabled =
-                (   (t_Log != null)
-                 && (t_Log.isTraceEnabled()));
-
             result = new boolean[t_iCount];
 
             boolean t_bItem;
@@ -1415,14 +1505,6 @@ public class OracleMetadataManager
                     !("N".equalsIgnoreCase(t_astrTypes[t_iIndex]));
 
                 result[t_iIndex] = t_bItem;
-
-                if  (t_bLogEnabled)
-                {
-                    t_Log.trace(
-                          table + "." + t_astrNames[t_iIndex]
-                        + " allows null? "
-                        + t_bItem);
-                }
             }
         }
 
@@ -1435,6 +1517,7 @@ public class OracleMetadataManager
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
@@ -1445,7 +1528,8 @@ public class OracleMetadataManager
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1456,7 +1540,8 @@ public class OracleMetadataManager
                 schema,
                 tableName,
                 QueryFactory.getInstance(),
-                OracleTextFunctions.getInstance());
+                OracleTextFunctions.getInstance(),
+                metadataExtractionListener);
     }
 
     /**
@@ -1467,6 +1552,7 @@ public class OracleMetadataManager
      * @param tableName the table name.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
@@ -1481,7 +1567,8 @@ public class OracleMetadataManager
         final String schema,
         final String tableName,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1524,22 +1611,19 @@ public class OracleMetadataManager
                 String t_strComment = null;
 
                 if  (   (t_rsResults != null)
-                        && (t_rsResults.next()))
+                     && (t_rsResults.next()))
                 {
                     t_strComment =
                         t_rsResults.getString(
                             USER_TAB_COMMENTS.COMMENTS.toSimplifiedString());
 
-                    if  (t_strComment != null)
+                    if  (metadataExtractionListener != null)
                     {
-                        if  (t_Log != null)
-                        {
-                            t_Log.trace(
-                                  "Comments for table "+ tableName
-                                + " = " + t_strComment);
-                        }
+                        metadataExtractionListener.tableCommentExtracted(
+                            tableName, t_strComment);
                     }
-                    else
+
+                    if  (t_strComment == null)
                     {
                         t_strComment = "";
                     }
@@ -1610,6 +1694,7 @@ public class OracleMetadataManager
      * @param schema the schema.
      * @param tableName the table name.
      * @param columnNames the column names, or null if not available.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column comments.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -1619,7 +1704,8 @@ public class OracleMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
-        final String[] columnNames)
+        final String[] columnNames,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1631,7 +1717,8 @@ public class OracleMetadataManager
                 tableName,
                 columnNames,
                 QueryFactory.getInstance(),
-                OracleTextFunctions.getInstance());
+                OracleTextFunctions.getInstance(),
+                metadataExtractionListener);
     }
 
     /**
@@ -1642,7 +1729,9 @@ public class OracleMetadataManager
      * @param tableName the table name.
      * @param columnNames the column names.
      * @param queryFactory the <code>QueryFactory</code> instance.
-     * @param oracleTextFunctions the <code>OracleTextFunctions</code> instance.
+     * @param oracleTextFunctions the <code>OracleTextFunctions</code>
+     * instance.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the table comments.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
@@ -1658,7 +1747,8 @@ public class OracleMetadataManager
         final String tableName,
         final String[] columnNames,
         final QueryFactory queryFactory,
-        final OracleTextFunctions oracleTextFunctions)
+        final OracleTextFunctions oracleTextFunctions,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -1729,21 +1819,13 @@ public class OracleMetadataManager
                                 USER_COL_COMMENTS.COMMENTS
                                     .toSimplifiedString());
 
-                        if  (t_strComment != null)
+                        if  (metadataExtractionListener != null)
                         {
-                            if  (   (t_Log != null)
-                                 && (t_Log.isTraceEnabled()))
-                            {
-                                t_Log.trace(
-                                      "Comments for column "
-                                    + tableName
-                                    + "."
-                                    + t_strColumnName
-                                    + " = "
-                                    + t_strComment);
-                            }
+                            metadataExtractionListener.columnCommentExtracted(
+                                tableName, t_strColumnName, t_strComment);
                         }
-                        else
+
+                        if  (t_strComment == null)
                         {
                             t_strComment = "";
                         }

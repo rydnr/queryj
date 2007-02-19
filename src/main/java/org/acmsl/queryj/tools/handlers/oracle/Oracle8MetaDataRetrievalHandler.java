@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.metadata.MetadataExtractionLoggingListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.oracle.Oracle8MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -147,6 +148,7 @@ public class Oracle8MetaDataRetrievalHandler
         {
             result =
                 new Oracle8MetadataManager(
+                    MetadataExtractionLoggingListener.getInstance(),
                     tableNames,
                     procedureNames,
                     disableTableExtraction,

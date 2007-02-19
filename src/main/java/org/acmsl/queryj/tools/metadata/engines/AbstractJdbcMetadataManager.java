@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.metadata.engines;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
@@ -127,6 +128,11 @@ public abstract class AbstractJdbcMetadataManager
      * The database metadata.
      */
     private DatabaseMetaData m__MetaData;
+
+    /**
+     * The metadata extraction listener.
+     */
+    private MetadataExtractionListener m__MetadataExtractionListener;
 
     /**
      * The catalog.
@@ -228,9 +234,13 @@ public abstract class AbstractJdbcMetadataManager
 
     /**
      * Creates an empty <code>AbstractJdbcMetadataManager</code> instance.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      */
-    protected AbstractJdbcMetadataManager()
+    protected AbstractJdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener)
     {
+        immutableSetMetadataExtractionListener(metadataExtractionListener);
         Map t_UniqueMap = new HashMap();
         immutableSetColumnNames(t_UniqueMap);
         immutableSetColumnTypes(t_UniqueMap);
@@ -246,6 +256,8 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Creates an <code>AbstractJdbcMetadataManager</code> using given
      * information.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -269,6 +281,7 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition metaData != null
      */
     protected AbstractJdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -281,7 +294,7 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        this();
+        this(metadataExtractionListener);
         immutableSetTableNames(tableNames);
         immutableSetProcedureNames(procedureNames);
         immutableSetDisableTableExtraction(disableTableExtraction);
@@ -295,6 +308,8 @@ public abstract class AbstractJdbcMetadataManager
 
     /**
      * Retrieves the metadata.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -315,6 +330,7 @@ public abstract class AbstractJdbcMetadataManager
      * occurs.
      */
     protected void retrieveMetadata(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -327,6 +343,8 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
+        immutableSetMetadataExtractionListener(metadataExtractionListener);
+
         if  (   (!disableTableExtraction)
              && (!lazyTableExtraction))
         {
@@ -334,20 +352,55 @@ public abstract class AbstractJdbcMetadataManager
                 tableNames,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                metadataExtractionListener);
 
-            extractPrimaryKeys(metaData, catalog, schema);
-            extractForeignKeys(metaData, catalog, schema);
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.primaryKeyExtractionStarted();
+            }
+
+            extractPrimaryKeys(
+                metaData, catalog, schema, metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.allPrimaryKeysExtracted();
+            }
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.foreignKeyExtractionStarted();
+            }
+
+            extractForeignKeys(
+                metaData, catalog, schema, metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.allForeignKeysExtracted();
+            }
         }
 
         if  (   (!disableProcedureExtraction)
              && (!lazyProcedureExtraction))
         {
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.procedureExtractionStarted();
+            }
+
             extractProcedureMetadata(
                 procedureNames,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.allProceduresExtracted();
+            }
         }
     }
 
@@ -376,6 +429,35 @@ public abstract class AbstractJdbcMetadataManager
     public DatabaseMetaData getMetaData()
     {
         return m__MetaData;
+    }
+
+    /**
+     * Specifies the metadata extraction listener.
+     * @param listener such listener.
+     */
+    protected final void immutableSetMetadataExtractionListener(
+        final MetadataExtractionListener listener)
+    {
+        m__MetadataExtractionListener = listener;
+    }
+
+    /**
+     * Specifies the metadata extraction listener.
+     * @param listener such listener.
+     */
+    protected void setMetadataExtractionListener(
+        final MetadataExtractionListener listener)
+    {
+        immutableSetMetadataExtractionListener(listener);
+    }
+
+    /**
+     * Retrieves the metadata extraction listener.
+     * @return such listener.
+     */
+    public MetadataExtractionListener getMetadataExtractionListener()
+    {
+        return m__MetadataExtractionListener;
     }
 
     /**
@@ -1189,9 +1271,6 @@ public abstract class AbstractJdbcMetadataManager
         final String columnName,
         final Map primaryKeys)
     {
-        logVerbose(
-            "Adding primary key: (" + tableName + "." + columnName + ")");
-
         primaryKeys.put(
             buildPkKey(tableName, columnName),
             columnName);
@@ -1462,17 +1541,6 @@ public abstract class AbstractJdbcMetadataManager
         final String refTableName,
         final String[] refColumnNames)
     {
-        logVerbose(
-              "Adding foreign key: ("
-            + tableName
-            + ","
-            + concat(columnNames, ", ")
-            + ") -> ("
-            + refTableName
-            + ","
-            + concat(refColumnNames, ", ")
-            + ")");
-
         Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
@@ -1919,11 +1987,6 @@ public abstract class AbstractJdbcMetadataManager
 
         if  (t_mExternallyManagedFields != null) 
         {
-            logVerbose(
-                  "Adding externally-managed field:"
-                + tableName + "." + columnName
-                + "-" + keyword);
-
             t_mExternallyManagedFields.put(
                 buildExternallyManagedFieldKey(tableName, columnName),
                 buildExternallyManagedFieldValue(keyword));
@@ -2553,6 +2616,8 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -2561,23 +2626,40 @@ public abstract class AbstractJdbcMetadataManager
         final String[] tableNames,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
+        if  (metadataExtractionListener != null)
+        {
+            metadataExtractionListener.tableNamesExtractionStarted();
+        }
+
         String[] t_astrTableNames = tableNames;
 
         if  (   (t_astrTableNames == null)
              || (t_astrTableNames.length == 0))
         {
             t_astrTableNames =
-                getTableNames(metaData, catalog, schema);
+                getTableNames(
+                    metaData, catalog, schema, metadataExtractionListener);
 
             setTableNames(t_astrTableNames);
         }
 
         int t_iLength =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+
+        if  (metadataExtractionListener != null)
+        {
+            metadataExtractionListener.tableNamesExtracted(t_iLength);
+        }
+
+        if  (metadataExtractionListener != null)
+        {
+            metadataExtractionListener.tableMetadataExtractionStarted();
+        }
 
         String t_strTableName;
         String t_strParentTable;
@@ -2586,14 +2668,26 @@ public abstract class AbstractJdbcMetadataManager
         {
             t_strTableName = t_astrTableNames[t_iIndex];
 
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.tableCommentExtractionStarted();
+            }
+
             String t_strTableComment =
                 getTableComment(
                     metaData,
                     catalog,
                     schema,
-                    t_strTableName);
+                    t_strTableName,
+                    metadataExtractionListener);
 
             addTableComment(t_strTableName, t_strTableComment);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnNamesExtractionStarted(
+                    t_strTableName);
+            }
 
             t_strParentTable = getParentTable(t_strTableName);
             
@@ -2603,7 +2697,22 @@ public abstract class AbstractJdbcMetadataManager
                     catalog,
                     schema,
                     t_strTableName,
-                    t_strParentTable);
+                    t_strParentTable,
+                    metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnNamesExtracted(
+                    t_strTableName,
+                    (t_astrColumnNames != null)
+                    ? t_astrColumnNames.length : 0);
+            }
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnTypesExtractionStarted(
+                    t_strTableName);
+            }
 
             if  (t_astrColumnNames != null) 
             {
@@ -2616,7 +2725,8 @@ public abstract class AbstractJdbcMetadataManager
                         schema,
                         t_strTableName,
                         t_strParentTable,
-                        t_astrColumnNames.length);
+                        t_astrColumnNames.length,
+                        metadataExtractionListener);
 
                 int t_iColumnLength =
                     (t_aiColumnTypes != null) ? t_aiColumnTypes.length : 0;
@@ -2631,13 +2741,26 @@ public abstract class AbstractJdbcMetadataManager
                         t_aiColumnTypes[t_iColumnIndex]);
                 }
 
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnTypesExtracted(
+                        t_strTableName);
+                }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnCommentsExtractionStarted(
+                        t_strTableName);
+                }
+
                 String[] t_astrColumnComments =
                     getColumnComments(
                         metaData,
                         catalog,
                         schema,
                         t_strTableName,
-                        t_astrColumnNames);
+                        t_astrColumnNames,
+                        metadataExtractionListener);
 
                 t_iColumnLength =
                     (t_astrColumnComments != null)
@@ -2654,6 +2777,18 @@ public abstract class AbstractJdbcMetadataManager
                         t_astrColumnComments[t_iColumnIndex]);
                 }
 
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnCommentsExtracted(
+                        t_strTableName);
+                }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnNullablesExtractionStarted(
+                        t_strTableName);
+                }
+
                 boolean[] t_abAllowNull =
                     getAllowNulls(
                         metaData,
@@ -2661,7 +2796,8 @@ public abstract class AbstractJdbcMetadataManager
                         schema,
                         t_strTableName,
                         t_strParentTable,
-                        t_astrColumnNames.length);
+                        t_astrColumnNames.length,
+                        metadataExtractionListener);
 
                 t_iColumnLength =
                     (t_abAllowNull != null) ? t_abAllowNull.length : 0;
@@ -2675,6 +2811,12 @@ public abstract class AbstractJdbcMetadataManager
                         t_astrColumnNames[t_iColumnIndex],
                         t_abAllowNull[t_iColumnIndex]);
                 }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnNullablesExtracted(
+                        t_strTableName);
+                }
             }
         }        
     }
@@ -2685,6 +2827,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -2693,7 +2836,8 @@ public abstract class AbstractJdbcMetadataManager
         final String[] procedureNames,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -2702,7 +2846,8 @@ public abstract class AbstractJdbcMetadataManager
         if  (t_astrProcedureNames == null) 
         {
             t_astrProcedureNames =
-                getProcedureNames(metaData, catalog, schema);
+                getProcedureNames(
+                    metaData, catalog, schema, metadataExtractionListener);
         }
 
         setProcedureNames(t_astrProcedureNames);
@@ -2717,11 +2862,19 @@ public abstract class AbstractJdbcMetadataManager
                     metaData,
                     catalog,
                     schema,
-                    t_astrProcedureNames[t_iIndex]);
+                    t_astrProcedureNames[t_iIndex],
+                    metadataExtractionListener);
 
             addProcedureParametersMetadata(
                 t_astrProcedureNames[t_iIndex],
                 t_aProcedureParametersMetadata);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.procedureExtracted(
+                    t_astrProcedureNames[t_iIndex],
+                    t_aProcedureParametersMetadata);
+            }
         }        
     }
 
@@ -2730,6 +2883,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
@@ -2737,7 +2891,8 @@ public abstract class AbstractJdbcMetadataManager
     protected String[] getTableNames(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -2764,7 +2919,7 @@ public abstract class AbstractJdbcMetadataManager
                         sqlException);
             }
 
-            result = extractTableNames(t_rsTables);
+            result = extractTableNames(t_rsTables, metadataExtractionListener);
         }
         catch  (final SQLException sqlException)
         {
@@ -2797,15 +2952,24 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Extracts the table names from given result set.
      * @param resultSet the result set with the table information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected String[] extractTableNames(
-        final ResultSet resultSet)
+        final ResultSet resultSet,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractStringFields(resultSet, "TABLE_NAME", null, null)[0];
+        return
+            extractStringFields(
+                resultSet,
+                "TABLE_NAME",
+                null,
+                null
+                // TODO //metadataExtractionListener,
+                )[0];
     }
 
     /**
@@ -2814,6 +2978,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
@@ -2824,7 +2989,8 @@ public abstract class AbstractJdbcMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
-        final String parentTable)
+        final String parentTable,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -2839,7 +3005,8 @@ public abstract class AbstractJdbcMetadataManager
                         catalog,
                         schema,
                         parentTable,
-                        getParentTable(parentTable))));
+                        getParentTable(parentTable),
+                        metadataExtractionListener)));
         }
         
         try 
@@ -2853,7 +3020,8 @@ public abstract class AbstractJdbcMetadataManager
 
             result.addAll(
                 Arrays.asList(
-                    extractColumnNames(t_rsColumns, tableName)));
+                    extractColumnNames(
+                        t_rsColumns, tableName, metadataExtractionListener)));
 
             t_rsColumns.close();
         }
@@ -2874,47 +3042,69 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the column information.
      * @param field the field.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet, final Field field, final String table)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
             extractColumnNames(
-                resultSet, field.toSimplifiedString(), table);
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet, final String table)
+        final ResultSet resultSet,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractColumnNames(resultSet, "COLUMN_NAME", table);
+        return
+            extractColumnNames(
+                resultSet, "COLUMN_NAME", table, metadataExtractionListener);
     }
 
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected String[] extractColumnNames(
-        final ResultSet resultSet, final String fieldName, final String table)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractStringFields(resultSet, fieldName, null, null)[0];
+        return
+            extractStringFields(
+                resultSet,
+                fieldName,
+                null,
+                null)[0];
+//TODO                metadataExtractionListener)[0];
     }
 
     /**
@@ -2925,6 +3115,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -2935,7 +3126,8 @@ public abstract class AbstractJdbcMetadataManager
         final String schema,
         final String tableName,
         final String parentTable,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -2953,7 +3145,8 @@ public abstract class AbstractJdbcMetadataManager
                                 schema,
                                 parentTable,
                                 getParentTable(parentTable),
-                                -1))));
+                                -1,
+                                metadataExtractionListener))));
         }
 
         try 
@@ -2972,7 +3165,10 @@ public abstract class AbstractJdbcMetadataManager
                         (Object[])
                             toIntegerArray(
                                 extractColumnTypes(
-                                    t_rsColumns, tableName, size))));
+                                    t_rsColumns,
+                                    tableName,
+                                    size,
+                                    metadataExtractionListener))));
 
                 t_rsColumns.close();
             }
@@ -2996,6 +3192,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param schema the schema.
      * @param tableName the table name.
      * @param columnNames the column names, or null if not available.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column comments.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -3005,7 +3202,8 @@ public abstract class AbstractJdbcMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
-        final String[] columnNames)
+        final String[] columnNames,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -3026,7 +3224,8 @@ public abstract class AbstractJdbcMetadataManager
                             catalog,
                             schema,
                             tableName,
-                            columnNames[t_iIndex]));
+                            columnNames[t_iIndex],
+                            metadataExtractionListener));
                 }
             }
         }
@@ -3047,17 +3246,25 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the column information.
      * @param field the field.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final Field field, final String table)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
-            extractColumnTypes(resultSet, field.toSimplifiedString(), table);
+            extractColumnTypes(
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                metadataExtractionListener);
     }
 
     /**
@@ -3065,14 +3272,24 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the column information.
      * @param table the table.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String table, final int size)
+        final ResultSet resultSet,
+        final String table,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractColumnTypes(resultSet, "DATA_TYPE", table, size);
+        return
+            extractColumnTypes(
+                resultSet,
+                "DATA_TYPE",
+                table,
+                size,
+                metadataExtractionListener);
     }
 
     /**
@@ -3080,14 +3297,20 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
      * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String fieldName, final String table)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractColumnTypes(resultSet, fieldName, table, -1);
+        return
+            extractColumnTypes(
+                resultSet, fieldName, table, -1, metadataExtractionListener);
     }
 
     /**
@@ -3096,6 +3319,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param fieldName the field name.
      * @param table the table.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -3104,12 +3328,19 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet,
         final String fieldName,
         final String table,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
             toIntArray(
-                extractIntFields(resultSet, fieldName, table, null, size)[0]);
+                extractIntFields(
+                    resultSet,
+                    fieldName,
+                    table,
+                    null,
+                    size)[0]);
+                    // TODO metadataExtractionListener)[0]);
     }
 
     /**
@@ -3120,6 +3351,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
@@ -3131,7 +3363,8 @@ public abstract class AbstractJdbcMetadataManager
         final String schema,
         final String tableName,
         final String parentTable,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -3149,7 +3382,8 @@ public abstract class AbstractJdbcMetadataManager
                                schema,
                                parentTable,
                                getParentTable(parentTable),
-                               -1))));
+                               -1,
+                               metadataExtractionListener))));
         }
                     
         try 
@@ -3165,7 +3399,11 @@ public abstract class AbstractJdbcMetadataManager
                 Arrays.asList(
                     (Object[])
                         toBooleanArray(
-                            extractAllowNull(t_rsColumns, tableName, size))));
+                            extractAllowNull(
+                                t_rsColumns,
+                                tableName,
+                                size,
+                                metadataExtractionListener))));
             
             t_rsColumns.close();
         }
@@ -3187,6 +3425,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param field the field.
      * @param table the table.
      * @param nameField the name field.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flag.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -3196,7 +3435,8 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet,
         final Field field,
         final String table,
-        final Field nameField)
+        final Field nameField,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
@@ -3204,7 +3444,8 @@ public abstract class AbstractJdbcMetadataManager
                 resultSet,
                 field.toSimplifiedString(),
                 table,
-                nameField.toSimplifiedString());
+                nameField.toSimplifiedString(),
+                metadataExtractionListener);
     }
 
     /**
@@ -3212,16 +3453,25 @@ public abstract class AbstractJdbcMetadataManager
      * @param resultSet the result set with the column information.
      * @param table the table name.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String table, final int size)
+        final ResultSet resultSet,
+        final String table,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
             extractAllowNull(
-                resultSet, "NULLABLE", table, "COLUMN_NAME", size);
+                resultSet,
+                "NULLABLE",
+                table,
+                "COLUMN_NAME",
+                size,
+                metadataExtractionListener);
     }
 
     /**
@@ -3230,6 +3480,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param fieldName the field name.
      * @param table the table name.
      * @param nameField the name field.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
@@ -3237,10 +3488,18 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet,
         final String fieldName,
         final String table,
-        final String nameField)
+        final String nameField,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, fieldName, table, nameField, -1);
+        return
+            extractAllowNull(
+                resultSet,
+                fieldName,
+                table,
+                nameField,
+                -1,
+                metadataExtractionListener);
     }
 
     /**
@@ -3249,6 +3508,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param fieldName the field name.
      * @param table the table name.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -3258,13 +3518,20 @@ public abstract class AbstractJdbcMetadataManager
         final String fieldName,
         final String table,
         final String nameField,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         boolean[] result =  EMPTY_BOOL_ARRAY;
 
         String[][] t_astrExtractedValues =
-            extractIntFields(resultSet, fieldName, table, nameField, size);
+            extractIntFields(
+                resultSet,
+                fieldName,
+                table,
+                nameField,
+                size);
+                // TODO metadataExtractionListener);
 
         int[] t_iFlags = toIntArray(t_astrExtractedValues[0]);
         String[] t_astrNames = t_astrExtractedValues[1];
@@ -3275,13 +3542,6 @@ public abstract class AbstractJdbcMetadataManager
         {
             result = new boolean[t_iLength];
         }
-
-        Log t_Log =
-            UniqueLogFactory.getLog(AbstractJdbcMetadataManager.class);
-
-        boolean t_bLogEnabled =
-            (   (t_Log != null)
-             && (t_Log.isTraceEnabled()));
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -3301,14 +3561,6 @@ public abstract class AbstractJdbcMetadataManager
                     break;
 
             }
-
-            if  (t_bLogEnabled)
-            {
-                t_Log.trace(
-                      table + "." + t_astrNames[t_iIndex]
-                    + " allows null? "
-                    + result[t_iIndex]);
-            }
         }
 
         return result;
@@ -3319,20 +3571,23 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure names.
      * @throws SQLException if the database operation fails.
      */
     protected String[] getProcedureNames(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         String[] result = EMPTY_STRING_ARRAY;
 
         ProcedureMetadata[] t_aProceduresMetadata =
-            getProceduresMetadata(metaData, catalog, schema);
+            getProceduresMetadata(
+                metaData, catalog, schema, metadataExtractionListener);
 
         int t_iLength =
             (t_aProceduresMetadata != null) ? t_aProceduresMetadata.length : 0;
@@ -3357,6 +3612,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure metadata.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
@@ -3364,7 +3620,8 @@ public abstract class AbstractJdbcMetadataManager
     protected ProcedureMetadata[] getProceduresMetadata(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -3377,7 +3634,7 @@ public abstract class AbstractJdbcMetadataManager
             try 
             {
                 t_rsProcedures =
-                    metaData.getProcedures(catalog, schema,null);
+                    metaData.getProcedures(catalog, schema, null);
             }
             catch  (final SQLException sqlException)
             {
@@ -3387,7 +3644,9 @@ public abstract class AbstractJdbcMetadataManager
                         sqlException);
             }
 
-            result = extractProceduresMetadata(t_rsProcedures);
+            result =
+                extractProceduresMetadata(
+                    t_rsProcedures, metadataExtractionListener);
         }
         catch  (final SQLException sqlException)
         {
@@ -3417,25 +3676,38 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Extracts the procedures' metadata from given result set.
      * @param resultSet the result set with the procedure information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of procedure metadata.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected ProcedureMetadata[] extractProceduresMetadata(
-        final ResultSet resultSet)
+        final ResultSet resultSet,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
 
         List t_lProcedureList = new ArrayList();
 
-        while  (resultSet.next()) 
+        if  (resultSet.next())
         {
-            t_lProcedureList.add(
-                new ProcedureMetadata(
-                    resultSet.getString("PROCEDURE_NAME"),
-                    (int) resultSet.getShort("PROCEDURE_TYPE"),
-                    resultSet.getString("REMARKS")));
+            String t_strName;
+            int t_iType;
+            String t_strComment;
+
+            while  (resultSet.next()) 
+            {
+                t_strName = resultSet.getString("PROCEDURE_NAME");
+                t_iType = (int) resultSet.getShort("PROCEDURE_TYPE");
+                t_strComment = resultSet.getString("REMARKS");
+
+                t_lProcedureList.add(
+                    new ProcedureMetadata(t_strName, t_iType, t_strComment));
+
+                metadataExtractionListener.procedureMetadataExtracted(
+                    t_strName, t_iType, t_strComment);
+            }
         }
 
         result = (ProcedureMetadata[]) t_lProcedureList.toArray(result);
@@ -3449,6 +3721,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param procedureName the procedure name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure parameter names.
      * @throws SQLException if the database operation fails.
      */
@@ -3456,14 +3729,19 @@ public abstract class AbstractJdbcMetadataManager
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String procedureName)
+        final String procedureName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         String[] result = EMPTY_STRING_ARRAY;
 
         ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
             getProcedureParametersMetadata(
-                metaData, catalog, schema, procedureName);
+                metaData,
+                catalog,
+                schema,
+                procedureName,
+                metadataExtractionListener);
 
         int t_iLength =
             (t_aProcedureParametersMetadata != null)
@@ -3492,6 +3770,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param procedureName the procedure name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure parameter names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
@@ -3500,7 +3779,8 @@ public abstract class AbstractJdbcMetadataManager
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String procedureName)
+        final String procedureName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         ProcedureParameterMetadata[] result;
@@ -3516,7 +3796,7 @@ public abstract class AbstractJdbcMetadataManager
 
             result =
                 extractProcedureParametersMetadata(
-                    t_rsProcedureParameters);
+                    t_rsProcedureParameters, metadataExtractionListener);
 
             t_rsProcedureParameters.close();
         }
@@ -3541,12 +3821,14 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts the procedure parameter metadata from given result set.
      * @param resultSet the result set with the procedure parameter
      * information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of procedure parameter metadata.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
     protected ProcedureParameterMetadata[] extractProcedureParametersMetadata(
-        final ResultSet resultSet)
+        final ResultSet resultSet,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         ProcedureParameterMetadata[] result =
@@ -3554,16 +3836,45 @@ public abstract class AbstractJdbcMetadataManager
 
         List t_lProcedureParameterList = new ArrayList();
 
-        while  (resultSet.next()) 
+        if  (resultSet.next())
         {
-            t_lProcedureParameterList.add(
-                new ProcedureParameterMetadata(
-                    resultSet.getString("COLUMN_NAME"),
-                    (int) resultSet.getShort("COLUMN_TYPE"),
-                    resultSet.getString("REMARKS"),
-                    resultSet.getInt("DATA_TYPE"),
-                    resultSet.getInt("LENGTH"),
-                    (int) resultSet.getShort("NULLABLE")));
+            String t_strColumnName;
+            int t_iColumnType;
+            String t_strComment;
+            int t_iDataType;
+            int t_iLength;
+            int t_iNullable;
+            
+            while  (resultSet.next()) 
+            {
+                t_strColumnName = resultSet.getString("COLUMN_NAME");
+                t_iColumnType = (int) resultSet.getShort("COLUMN_TYPE");
+                t_strComment = resultSet.getString("REMARKS");
+                t_iDataType = resultSet.getInt("DATA_TYPE");
+                t_iLength = resultSet.getInt("LENGTH");
+                t_iNullable = (int) resultSet.getShort("NULLABLE");
+                
+                t_lProcedureParameterList.add(
+                    new ProcedureParameterMetadata(
+                        t_strColumnName,
+                        t_iColumnType,
+                        t_strComment,
+                        t_iDataType,
+                        t_iLength,
+                        t_iNullable));
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener
+                        .procedureParameterMetadataExtracted(
+                            t_strColumnName,
+                            t_iColumnType,
+                            t_strComment,
+                            t_iDataType,
+                            t_iLength,
+                            t_iNullable);
+                }
+            }
         }
 
         result =
@@ -3657,6 +3968,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param field the field.
      * @param table the table.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
@@ -3665,12 +3977,17 @@ public abstract class AbstractJdbcMetadataManager
         final ResultSet resultSet,
         final Field field,
         final String table,
-        final int size)
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
             extractColumnTypes(
-                resultSet, field.toSimplifiedString(), table, size);
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                size,
+                metadataExtractionListener);
     }
 
     /**
@@ -3678,6 +3995,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
@@ -3685,7 +4003,8 @@ public abstract class AbstractJdbcMetadataManager
     protected void extractPrimaryKeys(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -3693,29 +4012,37 @@ public abstract class AbstractJdbcMetadataManager
         {
             String[] t_astrTableNames = getTableNames();
 
+            String t_strTableName;
+
             int t_iLength =
                 (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-            
+
             for  (int t_iTableIndex = 0;
                       t_iTableIndex < t_iLength;
                       t_iTableIndex++)
             {
+                t_strTableName = t_astrTableNames[t_iTableIndex];
+
                 ResultSet t_rsPrimaryKeys =
                     metaData.getPrimaryKeys(
-                        catalog,
-                        schema,
-                        t_astrTableNames[t_iTableIndex]);
-
-                while  (   (t_rsPrimaryKeys != null)
-                        && (t_rsPrimaryKeys.next()))
-                {
-                    addPrimaryKey(
-                        t_astrTableNames[t_iTableIndex],
-                        t_rsPrimaryKeys.getString("COLUMN_NAME"));
-                }
+                        catalog, schema, t_strTableName);
 
                 if  (t_rsPrimaryKeys != null)
                 {
+                    while  (t_rsPrimaryKeys.next())
+                    {
+                        addPrimaryKey(
+                            t_strTableName,
+                            t_rsPrimaryKeys.getString("COLUMN_NAME"));
+                    }
+
+                    if  (metadataExtractionListener != null)
+                    {
+                        metadataExtractionListener.primaryKeyExtracted(
+                            t_strTableName,
+                            getPrimaryKey(t_strTableName));
+                    }
+
                     t_rsPrimaryKeys.close();
                 }
             }
@@ -3735,6 +4062,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
@@ -3742,13 +4070,16 @@ public abstract class AbstractJdbcMetadataManager
     protected void extractForeignKeys(
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         try 
         {
             String[] t_astrTableNames = getTableNames();
+
+            String t_strTableName;
 
             int t_iLength =
                 (t_astrTableNames != null) ? t_astrTableNames.length : 0;
@@ -3757,11 +4088,10 @@ public abstract class AbstractJdbcMetadataManager
                       t_iTableIndex < t_iLength;
                       t_iTableIndex++)
             {
+                t_strTableName = t_astrTableNames[t_iTableIndex];
+
                 ResultSet t_rsForeignKeys =
-                    metaData.getImportedKeys(
-                        catalog,
-                        schema,
-                        t_astrTableNames[t_iTableIndex]);
+                    metaData.getImportedKeys(catalog, schema, t_strTableName);
 
                 String t_strFkTableName = null;
                 String t_strPreviousFkTableName = null;
@@ -3769,48 +4099,58 @@ public abstract class AbstractJdbcMetadataManager
                 Collection t_cFkColumnNames = new ArrayList();
 
                 int t_iPkColumnCount =
-                    getPrimaryKeyColumnCount(
-                        t_astrTableNames[t_iTableIndex]);
+                    getPrimaryKeyColumnCount(t_strTableName);
                 
                 int t_iIndex = 0;
 
-                while  (   (t_rsForeignKeys != null)
-                        && (t_rsForeignKeys.next()))
-                {
-                    t_strFkTableName =
-                        t_rsForeignKeys.getString("FKTABLE_NAME");
-
-                    if  (   (   (t_strFkTableName == null)
-                             || (!t_strFkTableName.equals(
-                                     t_strPreviousFkTableName)))
-                         || (t_iIndex == t_iPkColumnCount))
-                    {
-                        addForeignKey(
-                            t_astrTableNames[t_iTableIndex],
-                            (String[])
-                                t_cPkColumnNames.toArray(EMPTY_STRING_ARRAY),
-                            t_strPreviousFkTableName,
-                            (String[])
-                                t_cFkColumnNames.toArray(EMPTY_STRING_ARRAY));
-
-                        t_cPkColumnNames = new ArrayList();
-                        t_cFkColumnNames = new ArrayList();
-                        t_iIndex = 0;
-                    }
-
-                    t_cPkColumnNames.add(
-                        t_rsForeignKeys.getString("PKCOLUMN_NAME"));
-                    
-                    t_cFkColumnNames.add(
-                        t_rsForeignKeys.getString("FKCOLUMN_NAME"));
-
-                    t_strPreviousFkTableName = t_strFkTableName;
-
-                    t_iIndex++;
-                }
-
                 if  (t_rsForeignKeys != null)
                 {
+                    while  (t_rsForeignKeys.next())
+                    {
+                        t_strFkTableName =
+                            t_rsForeignKeys.getString("FKTABLE_NAME");
+
+                        if  (   (   (t_strFkTableName == null)
+                                 || (!t_strFkTableName.equals(
+                                         t_strPreviousFkTableName)))
+                             || (t_iIndex == t_iPkColumnCount))
+                        {
+                            addForeignKey(
+                                t_strTableName,
+                                (String[])
+                                    t_cPkColumnNames.toArray(
+                                        EMPTY_STRING_ARRAY),
+                                t_strPreviousFkTableName,
+                                (String[])
+                                    t_cFkColumnNames.toArray(
+                                        EMPTY_STRING_ARRAY));
+
+                            t_cPkColumnNames = new ArrayList();
+                            t_cFkColumnNames = new ArrayList();
+                            t_iIndex = 0;
+
+                            if  (metadataExtractionListener != null)
+                            {
+                                metadataExtractionListener.foreignKeyExtracted(
+                                    t_strTableName,
+                                    t_strFkTableName,
+                                    (String[])
+                                        t_cPkColumnNames.toArray(
+                                            EMPTY_STRING_ARRAY));
+                            }
+                        }
+
+                        t_cPkColumnNames.add(
+                            t_rsForeignKeys.getString("PKCOLUMN_NAME"));
+                    
+                        t_cFkColumnNames.add(
+                            t_rsForeignKeys.getString("FKCOLUMN_NAME"));
+
+                        t_strPreviousFkTableName = t_strFkTableName;
+
+                        t_iIndex++;
+                    }
+
                     t_rsForeignKeys.close();
                 }
             }
@@ -3831,6 +4171,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
@@ -3839,7 +4180,8 @@ public abstract class AbstractJdbcMetadataManager
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -3867,6 +4209,12 @@ public abstract class AbstractJdbcMetadataManager
             }
 
             result = extractComment(t_rsTables);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.tableCommentExtracted(
+                    tableName, result);
+            }
         }
         catch  (final SQLException sqlException)
         {
@@ -3893,6 +4241,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
@@ -3902,7 +4251,8 @@ public abstract class AbstractJdbcMetadataManager
         final String catalog,
         final String schema,
         final String tableName,
-        final String columnName)
+        final String columnName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -3930,6 +4280,12 @@ public abstract class AbstractJdbcMetadataManager
             }
 
             result = extractComment(t_rsColumns);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnCommentExtracted(
+                    tableName, columnName, result);
+            }
         }
         catch  (final SQLException sqlException)
         {
@@ -3957,8 +4313,7 @@ public abstract class AbstractJdbcMetadataManager
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String extractComment(
-        final ResultSet resultSet)
+    protected String extractComment(final ResultSet resultSet)
       throws  SQLException
     {
         String result = "";

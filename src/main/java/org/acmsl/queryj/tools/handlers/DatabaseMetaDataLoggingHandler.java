@@ -43,13 +43,15 @@ package org.acmsl.queryj.tools.handlers;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.SqlTypeResolver;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.commons.utils.StringValidator;
 
 /*
  * Importing some Ant classes.
@@ -69,6 +71,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -83,41 +87,6 @@ public class DatabaseMetaDataLoggingHandler
      * Creates a DatabaseMetaDataLoggingHandler.
      */
     public DatabaseMetaDataLoggingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        DatabaseMetaDataLoggingHandler.class);
-                
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot log database metadata.",
-                        buildException);
-                }
-            }
-        }
-        
-        return result;
-    }
 
     /**
      * Handles given command.
@@ -145,7 +114,8 @@ public class DatabaseMetaDataLoggingHandler
     {
         return
             handle(
-                retrieveDatabaseMetaData(parameters));
+                retrieveDatabaseMetaData(parameters),
+                retrieveMetadataManager(parameters));
     }
 
     /**
@@ -154,8 +124,10 @@ public class DatabaseMetaDataLoggingHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition metaData != null
+     * @precondition metadataManager != null
      */
-    protected boolean handle(final DatabaseMetaData metaData)
+    protected boolean handle(
+        final DatabaseMetaData metaData, final MetadataManager metadataManager)
         throws  BuildException
     {
         boolean result = false;
@@ -777,6 +749,8 @@ public class DatabaseMetaDataLoggingHandler
                 t_Log.trace(
                       "usesLocalFiles():"
                     + metaData.usesLocalFiles());
+
+                logModel(t_Log, metadataManager);
             }
         }
         catch  (final SQLException sqlException)
@@ -817,6 +791,8 @@ public class DatabaseMetaDataLoggingHandler
     protected void traceSqlTypes(
         final Log log, final SqlTypeResolver resolver)
     {
+        log.trace("SQL Type map:");
+
         log.trace(
             resolver.resolve(Types.BIT) + "->" + Types.BIT);
         log.trace(
@@ -892,5 +868,311 @@ public class DatabaseMetaDataLoggingHandler
             resolver.resolve(2011) + "->" + 2011); //Types.NCLOB
         log.trace(
             resolver.resolve(2009) + "->" + 2009); //Types.SQLXML
+    }
+
+    /**
+     * Traces the model.
+     * @param log the <code>Log</code> instance.
+     * @param metadataManager the metadata manager.
+     * @precondition log != null
+     * @precondition metadataManager != null
+     */
+    protected void logModel(
+        final Log log, final MetadataManager metadataManager)
+    {
+        logModel(
+            log,
+            metadataManager.getTableNames(),
+            metadataManager,
+            SqlTypeResolver.getInstance(),
+            StringValidator.getInstance(),
+            StringUtils.getInstance());
+    }
+
+    /**
+     * Traces the model.
+     * @param log the <code>Log</code> instance.
+     * @param tables the tables.
+     * @param metadataManager the metadata manager.
+     * @param sqlTypeResolver the <code>SqlTypeResolver</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition log != null
+     * @precondition metadataManager != null
+     * @precondition sqlTypeResolver != null
+     * @precondition stringValidator != null
+     * @precondition stringUtils != null
+     */
+    protected void logModel(
+        final Log log,
+        final String[] tables,
+        final MetadataManager metadataManager,
+        final SqlTypeResolver sqlTypeResolver,
+        final StringValidator stringValidator,
+        final StringUtils stringUtils)
+    {
+        int t_iTableCount = (tables != null) ? tables.length : 0;
+
+        String t_strTable;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iTableCount; t_iIndex++)
+        {
+            logTable(
+                log,
+                tables[t_iIndex],
+                metadataManager,
+                sqlTypeResolver,
+                stringValidator,
+                stringUtils);
+        }
+    }
+
+    /**
+     * Traces a concrete table.
+     * @param log the <code>Log</code> instance.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param sqlTypeResolver the <code>SqlTypeResolver</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition log != null
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition sqlTypeResolver != null
+     * @precondition stringValidator != null
+     * @precondition stringUtils != null
+     */
+    protected void logTable(
+        final Log log,
+        final String table,
+        final MetadataManager metadataManager,
+        final SqlTypeResolver sqlTypeResolver,
+        final StringValidator stringValidator,
+        final StringUtils stringUtils)
+    {
+        String t_strTableComment = metadataManager.getTableComment(table);
+
+        log.info("Table " + table);
+
+        if  (stringValidator.isEmpty(t_strTableComment))
+        {
+
+            log.warn("  Comment: (Undocumented!)");
+        }
+        else
+        {
+            log.info("  Comment: " + t_strTableComment);
+        }
+
+        String[] t_astrColumnNames = metadataManager.getColumnNames(table);
+
+        int t_iColumnCount =
+            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+
+        String[] t_astrExternallyManagedFields =
+            metadataManager.getExternallyManagedFields(table);
+
+        for  (int t_iIndex = 0; t_iIndex < t_iColumnCount; t_iIndex++)
+        {
+            logColumn(
+                log,
+                t_astrColumnNames[t_iIndex],
+                table,
+                t_astrExternallyManagedFields,
+                metadataManager,
+                sqlTypeResolver,
+                stringValidator);
+        }
+
+        logForeignKeys(
+            log,
+            table,
+            metadataManager,
+            stringUtils);
+    }
+
+    /**
+     * Traces a concrete column.
+     * @param log the <code>Log</code> instance.
+     * @param columnName the column name.
+     * @param table the table.
+     * @param externallyManagedFields the externally managed fields for
+     * the table.
+     * @param metadataManager the metadata manager.
+     * @param sqlTypeResolver the <code>SqlTypeResolver</code> instance.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @precondition log != null
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition sqlTypeResolver != null
+     * @precondition stringValidator != null
+     */
+    protected void logColumn(
+        final Log log,
+        final String columnName,
+        final String table,
+        final String[] externallyManagedFields,
+        final MetadataManager metadataManager,
+        final SqlTypeResolver sqlTypeResolver,
+        final StringValidator stringValidator)
+    {
+        String t_strColumnComment =
+            metadataManager.getColumnComment(table, columnName);
+
+        if  (metadataManager.isPartOfPrimaryKey(table, columnName))
+        {
+            log.info("  " + table + "." + columnName + " *");
+        }
+        else
+        {
+            log.info("  " + table + "." + columnName);
+        }
+
+        if  (stringValidator.isEmpty(t_strColumnComment))
+        {
+            log.warn("    Comment: (Undocumented!)");
+        }
+        else
+        {
+            log.info("    Comment: " + t_strColumnComment);
+        }
+
+        int t_iColumnType = metadataManager.getColumnType(table, columnName);
+
+        log.info(
+              "    Type: "
+            + t_iColumnType + "/" + sqlTypeResolver.resolve(t_iColumnType));
+
+        boolean t_bAllowsNull =
+            metadataManager.getAllowNull(table, columnName);
+
+        log.info("    Nullable: " + t_bAllowsNull);
+
+        if  (contains(
+                 externallyManagedFields,
+                 columnName,
+                 metadataManager.isCaseSensitive()))
+        {
+            log.info("    [Managed externally]");
+        }
+    }
+
+    /**
+     * Logs the foreign keys.
+     * @param log the <code>Log</code> instance.
+     * @param table the table.
+     * @param metadataManager the metadata manager.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition log != null
+     * @precondition table != null
+     * @precondition metadataManager != null
+     * @precondition stringUtils != null
+     */
+    protected void logForeignKeys(
+        final Log log,
+        final String table,
+        final MetadataManager metadataManager,
+        final StringUtils stringUtils)
+    {
+        String[][] t_aastrForeignKeys =
+            metadataManager.getForeignKeys(table);
+
+        int t_iTableCount =
+            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
+
+        for  (int t_iTableIndex = 0;
+                  t_iTableIndex < t_iTableCount;
+                  t_iTableIndex++)
+        {
+            logForeignKey(
+                log,
+                table,
+                t_aastrForeignKeys[t_iTableIndex],
+                metadataManager,
+                stringUtils);
+        }
+    }
+
+    /**
+     * Logs the foreign keys.
+     * @param log the <code>Log</code> instance.
+     * @param table the table.
+     * @param foreignKey the foreign key.
+     * @param metadataManager the metadata manager.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @precondition log != null
+     * @precondition table != null
+     * @precondition foreignKey != null
+     * @precondition metadataManager != null
+     * @precondition stringUtils != null
+     */
+    protected void logForeignKey(
+        final Log log,
+        final String table,
+        final String[] foreignKey,
+        final MetadataManager metadataManager,
+        final StringUtils stringUtils)
+    {
+        if  (log.isInfoEnabled())
+        {
+            String t_strTargetTable =
+                metadataManager.getReferredTable(table, foreignKey);
+
+            Collection t_cFk = Arrays.asList(foreignKey);
+
+            Collection t_cPk =
+                Arrays.asList(
+                    metadataManager.getPrimaryKey(t_strTargetTable));
+
+            log.info(
+                  "  [" + stringUtils.concatenate(t_cFk, ",")
+                + "] -> [" + stringUtils.concatenate(t_cPk, ",") + "]");
+        }
+    }
+
+    /**
+     * Checks whether given array contains a concrete item.
+     * @param array the array.
+     * @param item the item.
+     * @param caseSensitiveness whether case matters.
+     * @return <code>true</code> in such case.
+     * @precondition array != null
+     */
+    protected boolean contains(
+        final String[] array,
+        final String item,
+        final boolean caseSensitiveness)
+    {
+        boolean result = false;
+
+        int t_iCount = (array != null) ? array.length : 0;
+
+        boolean t_bCheckingForNull = (item == null);
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            if  (t_bCheckingForNull)
+            {
+                result = (array[t_iIndex] == null);
+            }
+            else
+            {
+                if  (caseSensitiveness)
+                {
+                    result = (item.equals(array[t_iIndex]));
+                }
+                else
+                {
+                    result = (item.equalsIgnoreCase(array[t_iIndex]));
+                }
+            }
+
+            if  (result)
+            {
+                break;
+            }
+        }
+
+        return result;
     }
 }

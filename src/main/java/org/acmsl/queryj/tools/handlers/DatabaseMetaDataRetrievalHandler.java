@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.AntFieldFkElement;
 import org.acmsl.queryj.tools.AntTableElement;
 import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionLoggingListener;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -128,12 +129,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * The database product version.
      */
-    public static final String DATABASE_PRODUCT_VERSION = "database.product.version";
+    public static final String DATABASE_PRODUCT_VERSION =
+        "database.product.version";
     
     /**
      * The identifier quote string.
      */
-    public static final String DATABASE_IDENTIFIER_QUOTE_STRING = "identifier.quote.string";
+    public static final String DATABASE_IDENTIFIER_QUOTE_STRING =
+        "identifier.quote.string";
     
     /**
      * Creates a DatabaseMetaDataRetrievalHandler.
@@ -1234,6 +1237,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             result =
                 new JdbcMetadataManager(
+                    MetadataExtractionLoggingListener.getInstance(),
                     tableNames,
                     procedureNames,
                     disableTableExtraction,

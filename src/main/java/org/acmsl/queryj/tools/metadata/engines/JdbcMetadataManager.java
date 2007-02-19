@@ -69,14 +69,17 @@ public class JdbcMetadataManager
 {
     /**
      * Creates an empty <code>JdbcMetadataManager</code> instance..
+     * @param metadataExtractionListener the metadata extraction listener.
      */
-    public JdbcMetadataManager()
+    public JdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener)
     {
-        super();
+        super(metadataExtractionListener);
     }
 
     /**
      * Creates a <code>JdbcMetadataManager</code> using given information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -100,6 +103,7 @@ public class JdbcMetadataManager
      * @precondition metaData != null
      */
     public JdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -113,6 +117,7 @@ public class JdbcMetadataManager
               QueryJException
     {
         super(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             disableTableExtraction,
@@ -126,6 +131,7 @@ public class JdbcMetadataManager
 
     /**
      * Creates a <code>JdbcMetadataManager</code> using given information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.
@@ -139,6 +145,7 @@ public class JdbcMetadataManager
      * @precondition metaData != null
      */
     protected JdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final DatabaseMetaData metaData,
@@ -148,6 +155,7 @@ public class JdbcMetadataManager
               QueryJException
     {
         this(
+            metadataExtractionListener,
             tableNames,
             procedureNames,
             false,
@@ -178,7 +186,8 @@ public class JdbcMetadataManager
             getLazyProcedureExtraction(),
             getMetaData(),
             getCatalog(),
-            getSchema());
+            getSchema(),
+            getMetadataExtractionListener());
     }
 
     /**
