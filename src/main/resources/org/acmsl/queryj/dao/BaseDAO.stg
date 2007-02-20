@@ -205,7 +205,7 @@ public interface <input.vo_name>DAO
      */
     public void insert(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
+        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
         <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
@@ -216,7 +216,7 @@ public interface <input.vo_name>DAO
      * Inserts and retrieves the newly-inserted
      * \<code><input.vo_name>\</code> instance.
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator=",\n">
+        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator=",\n">
 <else>
      <input.all_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
@@ -226,7 +226,7 @@ public interface <input.vo_name>DAO
      */
     public <input.vo_name> create(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
+        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">)
 <else>
         <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
@@ -237,7 +237,7 @@ public interface <input.vo_name>DAO
     /**
      * Updates \<code><input.vo_name>\</code> information.
 <if(parent)>
-     <table.allParentAndNonParentAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
+     <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
 <else>
      <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
@@ -247,7 +247,7 @@ public interface <input.vo_name>DAO
      */
     public int update(
 <if(parent)>
-        <table.allParentAndNonParentAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
+        <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">)
 <else>
         <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)

@@ -1079,7 +1079,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowName the allow name.
      * @return the allow null.
-     * @see java.sql.Nulls
+     * @see java.sql.Types
      * @precondition tableName != null
      * @precondition allowName != null
      */
@@ -1094,7 +1094,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowNames the allow names.
      * @return the allow null.
-     * @see java.sql.Nulls
+     * @see java.sql.Types
      * @precondition tableName != null
      * @precondition allowNames != null
      */
@@ -1109,7 +1109,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowName the allow name.
      * @return the allow null.
-     * @see java.sql.Nulls
+     * @see java.sql.Types
      * @precondition tableName != null
      * @precondition allowName != null
      */
@@ -1124,7 +1124,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowNames the allow names.
      * @return the allow null.
-     * @see java.sql.Nulls
+     * @see java.sql.Types
      * @precondition tableName != null
      * @precondition allowNames != null
      */
@@ -1142,7 +1142,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param allowNames the allow names.
      * @param allowNulls the allow nulls.
      * @return the allow null.
-     * @see java.sql.Nulls
+     * @see java.sql.Types
      * @precondition tableName != null
      * @precondition allowNames != null
      * @precondition allowNulls != null
@@ -4651,6 +4651,44 @@ public abstract class AbstractJdbcMetadataManager
         if  (t_strTableComment != null)
         {
             result = metaLanguageUtils.retrieveDeclaredParent(t_strTableComment);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves whether given column is marked as <b>read-only</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isReadOnly(final String tableName, final String columnName)
+    {
+        return isReadOnly(tableName, columnName, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given column is marked as <b>read-only</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isReadOnly(
+        final String tableName,
+        final String columnName,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        boolean result = false;
+        
+        String t_strColumnComment = getColumnComment(tableName, columnName);
+        
+        if  (t_strColumnComment != null)
+        {
+            result = metaLanguageUtils.retrieveColumnReadOnly(t_strColumnComment);
         }
         
         return result;

@@ -189,7 +189,7 @@ public class <input.vo_name>AttributesStatementSetter
                 <input.tr_name_capitalized>TableRepository
 {
 <if(parent)>
-    <table.allParentAndNonParentAttributes:attribute_member_declaration(attr=it); separator="\n\n">
+    <table.allParentAndNonParentNonReadOnlyAttributes:attribute_member_declaration(attr=it); separator="\n\n">
 <else>
     <table.attributes:attribute_member_declaration(attr=it); separator="\n\n">
 <endif>
@@ -210,7 +210,7 @@ public class <input.vo_name>AttributesStatementSetter
      * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
      * instance.
 <if(parent)>
-     <table.allParentAndNonParentAttributes:attribute_javadoc(name=it.nameLowercased);
+     <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
 <else>
      <table.attributes:attribute_javadoc(name=it.nameLowercased);
@@ -221,7 +221,7 @@ public class <input.vo_name>AttributesStatementSetter
      */
     public <input.vo_name>AttributesStatementSetter(
 <if(parent)>
-        <table.allParentAndNonParentAttributes:attribute_isolated_declaration_impl(attr=it);
+        <table.allParentAndNonParentNonReadOnlyAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <else>
         <table.attributes:attribute_isolated_declaration_impl(attr=it);
@@ -243,6 +243,7 @@ public class <input.vo_name>AttributesStatementSetter
     /**
      * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
      * instance.
+     * // TODO: remove read-only attributes.
      <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
      * @param updateOperation whether the operation is an update.
@@ -343,7 +344,7 @@ public class <input.vo_name>AttributesStatementSetter
 
 <endif>
 <if(parent)>
-    <table.allParentAndNonParentAttributes:attribute_accessor(attr=it); separator="\n\n">
+    <table.allParentAndNonParentNonReadOnlyAttributes:attribute_accessor(attr=it); separator="\n\n">
 <else>
     <table.attributes:attribute_accessor(attr=it); separator="\n\n">
 <endif>
@@ -368,7 +369,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
 <if(parent)>
-            <table.allParentAndNonParentAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
+            <table.allParentAndNonParentNonReadOnlyAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <else>
             <table.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <endif>
@@ -393,7 +394,7 @@ public class <input.vo_name>AttributesStatementSetter
 
 <endif>
 <if(parent)>
-     <table.allParentAndNonParentAttributes:attribute_javadoc(name=it.nameLowercased);
+     <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
 <else>
      <table.attributes:attribute_javadoc(name=it.nameLowercased);
@@ -423,7 +424,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
 <if(parent)>
-        <table.allParentAndNonParentAttributes:attribute_isolated_declaration_impl(attr=it);
+        <table.allParentAndNonParentNonReadOnlyAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <else>
         <table.attributes:attribute_isolated_declaration_impl(attr=it);

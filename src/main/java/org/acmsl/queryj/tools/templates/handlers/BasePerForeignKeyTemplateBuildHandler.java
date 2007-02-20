@@ -603,6 +603,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         boolean t_bManagedExternally =
             metadataManager.isManagedExternally(tableName, attributeName);
+
+        boolean t_bReadOnly =
+            metadataManager.isReadOnly(tableName, attributeName);
         
         result =
             decoratorFactory.createDecorator(
@@ -615,7 +618,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     t_strComment,
                     t_bManagedExternally,
                     t_bAllowsNull,
-                    null), // value
+                    null, // value
+                    t_bReadOnly),
                 metadataManager);
         
         return result;

@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.antlr.PerCommentParser;
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.acmsl.commons.utils.StringValidator;
 
 /*
  * Importing some ANTLR 3 classes.
@@ -119,23 +120,26 @@ public class MetaLanguageUtils
     {
         String result = null;
 
-        try
+        if  (!isEmpty(tableComment))
         {
-            PerCommentParser t_Parser = setUpParser(tableComment);
-
-            t_Parser.tableComment();
-
-            result = t_Parser.getTableStatic();
-        }
-        catch  (final RecognitionException recognitionException)
-        {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (t_Log != null)
+            try
             {
-                t_Log.error(
-                    "Invalid table comment: " + tableComment,
-                    recognitionException);
+                PerCommentParser t_Parser = setUpParser(tableComment);
+
+                t_Parser.tableComment();
+
+                result = t_Parser.getTableStatic();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid table comment: " + tableComment,
+                        recognitionException);
+                }
             }
         }
 
@@ -153,23 +157,26 @@ public class MetaLanguageUtils
     {
         String result = null;
 
-        try
+        if  (!isEmpty(tableComment))
         {
-            PerCommentParser t_Parser = setUpParser(tableComment);
-
-            t_Parser.tableComment();
-
-            result = t_Parser.getTableIsa();
-        }
-        catch  (final RecognitionException recognitionException)
-        {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (t_Log != null)
+            try
             {
-                t_Log.error(
-                    "Invalid table comment: " + tableComment,
-                    recognitionException);
+                PerCommentParser t_Parser = setUpParser(tableComment);
+
+                t_Parser.tableComment();
+
+                result = t_Parser.getTableIsa();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid table comment: " + tableComment,
+                        recognitionException);
+                }
             }
         }
 
@@ -187,23 +194,26 @@ public class MetaLanguageUtils
     {
         String result = null;
 
-        try
+        if  (!isEmpty(tableComment))
         {
-            PerCommentParser t_Parser = setUpParser(tableComment);
-
-            t_Parser.tableComment();
-
-            result = t_Parser.getTableIsaType();
-        }
-        catch  (final RecognitionException recognitionException)
-        {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (t_Log != null)
+            try
             {
-                t_Log.error(
-                    "Invalid table comment: " + tableComment,
-                    recognitionException);
+                PerCommentParser t_Parser = setUpParser(tableComment);
+
+                t_Parser.tableComment();
+
+                result = t_Parser.getTableIsaType();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid table comment: " + tableComment,
+                        recognitionException);
+                }
             }
         }
 
@@ -222,23 +232,26 @@ public class MetaLanguageUtils
     {
         String result = null;
 
-        try
+        if  (!isEmpty(columnComment))
         {
-            PerCommentParser t_Parser = setUpParser(columnComment);
-
-            t_Parser.columnComment();
-
-            result = t_Parser.getColumnBool();
-        }
-        catch  (final RecognitionException recognitionException)
-        {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (t_Log != null)
+            try
             {
-                t_Log.error(
-                    "Invalid column comment: " + columnComment,
-                    recognitionException);
+                PerCommentParser t_Parser = setUpParser(columnComment);
+
+                t_Parser.columnComment();
+
+                result = t_Parser.getColumnBool();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid column comment: " + columnComment,
+                        recognitionException);
+                }
             }
         }
 
@@ -256,23 +269,26 @@ public class MetaLanguageUtils
     {
         boolean result = false;
 
-        try
+        if  (!isEmpty(columnComment))
         {
-            PerCommentParser t_Parser = setUpParser(columnComment);
-
-            t_Parser.columnComment();
-
-            result = t_Parser.getColumnReadOnly();
-        }
-        catch  (final RecognitionException recognitionException)
-        {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (t_Log != null)
+            try
             {
-                t_Log.error(
-                    "Invalid column comment: " + columnComment,
-                    recognitionException);
+                PerCommentParser t_Parser = setUpParser(columnComment);
+
+                t_Parser.columnComment();
+
+                result = t_Parser.getColumnReadOnly();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid column comment: " + columnComment,
+                        recognitionException);
+                }
             }
         }
 
@@ -291,22 +307,25 @@ public class MetaLanguageUtils
     {
         String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
 
-        try
+        if  (!isEmpty(columnComment))
         {
-            PerCommentParser t_Parser = setUpParser(columnComment);
-
-            t_Parser.columnComment();
-            result = t_Parser.getColumnIsaRefs();
-        }
-        catch  (final RecognitionException recognitionException)
-        {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-            if  (t_Log != null)
+            try
             {
-                t_Log.error(
-                    "Invalid column comment: " + columnComment,
-                    recognitionException);
+                PerCommentParser t_Parser = setUpParser(columnComment);
+
+                t_Parser.columnComment();
+                result = t_Parser.getColumnIsaRefs();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid column comment: " + columnComment,
+                        recognitionException);
+                }
             }
         }
 
@@ -345,5 +364,28 @@ public class MetaLanguageUtils
 
         
         return result;
+    }
+
+    /**
+     * Checks whether given input is empty or not.
+     * @param text the text.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isEmpty(final String text)
+    {
+        return isEmpty(text, StringValidator.getInstance());
+    }
+
+    /**
+     * Checks whether given input is empty or not.
+     * @param text the text.
+     * @param stringValidator the <code>StringValidator</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition stringValidator != null
+     */
+    protected boolean isEmpty(
+        final String text, final StringValidator stringValidator)
+    {
+        return stringValidator.isEmpty(text);
     }
 }

@@ -218,4 +218,60 @@ public class TableDecoratorHelper
         
         return result;
     }
+
+    /**
+     * Removes the read-only attributes from given list.
+     * @param attributes the attributes.
+     * @return the list without the read-only attributes.
+     * @precondition attributes != null
+     */
+    public List removeReadOnly(final List attributes)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (attributes != null) ? attributes.size() : 0;
+
+        Attribute t_Attribute;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) attributes.get(t_iIndex);
+
+            if  (   (t_Attribute != null)
+                 && (!t_Attribute.isReadOnly()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the table contains read-only attributes.
+     * @param attributes the attributes.
+     * @return such information.
+     * @precondition attributes != null
+     */
+    public List removeNonReadOnlyAttributes(final List attributes)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (attributes != null) ? attributes.size() : 0;
+
+        Attribute t_Attribute;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) attributes.get(t_iIndex);
+
+            if  (   (t_Attribute != null)
+                 && (t_Attribute.isReadOnly()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
 }

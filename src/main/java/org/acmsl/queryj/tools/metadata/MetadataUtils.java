@@ -553,7 +553,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection buildAttributes(
+    public List buildAttributes(
         final String[] columnNames,
         final String tableName,
         final MetadataManager metadataManager,
@@ -586,7 +586,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection buildAttributes(
+    public List buildAttributes(
         final String[] columnNames,
         final String tableName,
         final boolean allowsNullAsAWhole,
@@ -621,7 +621,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection buildAttributes(
+    public List buildAttributes(
         final String[] columnNames,
         final String[] columnValues,
         final String tableName,
@@ -658,7 +658,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection buildAttributes(
+    public List buildAttributes(
         final String[] columnNames,
         final String tableName,
         final Boolean allowsNullAsAWhole,
@@ -696,7 +696,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection buildAttributes(
+    public List buildAttributes(
         final String[] columnNames,
         final String[] columnValues,
         final String tableName,
@@ -705,7 +705,7 @@ public class MetadataUtils
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory)
     {
-        Collection result = new ArrayList();
+        List result = new ArrayList();
 
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
@@ -717,6 +717,7 @@ public class MetadataUtils
         String t_strColumnComment;
         String t_strFieldType;
         boolean t_bManagedExternally;
+        boolean t_bReadOnly;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -753,6 +754,10 @@ public class MetadataUtils
                 metadataManager.isManagedExternally(
                     tableName, t_strColumnName);
 
+            t_bReadOnly =
+                metadataManager.isReadOnly(
+                    tableName, t_strColumnName);
+
             result.add(
                 decoratorFactory.createDecorator(
                     new AttributeValueObject(
@@ -764,7 +769,8 @@ public class MetadataUtils
                         t_strColumnComment,
                         t_bManagedExternally,
                         t_bAllowsNull,
-                        columnValues[t_iIndex]),
+                        columnValues[t_iIndex],
+                        t_bReadOnly),
                     metadataManager));
         }
 
@@ -964,7 +970,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection retrieveAllButLobAttributes(
+    public List retrieveAllButLobAttributes(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -992,14 +998,14 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    protected Collection retrieveLobAttributes(
+    protected List retrieveLobAttributes(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final boolean includeLob,
         final DecoratorFactory decoratorFactory)
     {
-        Collection t_cLobAttributeNames = new ArrayList();
+        List t_lLobAttributeNames = new ArrayList();
 
         String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
@@ -1020,13 +1026,13 @@ public class MetadataUtils
 
             if  (t_bCheck)
             {
-                t_cLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
+                t_lLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
             }
         }
 
         return
             buildAttributes(
-                (String[]) t_cLobAttributeNames.toArray(EMPTY_STRING_ARRAY),
+                (String[]) t_lLobAttributeNames.toArray(EMPTY_STRING_ARRAY),
                 tableName,
                 metadataManager,
                 metadataTypeManager,

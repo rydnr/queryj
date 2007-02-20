@@ -97,6 +97,7 @@ public abstract class AbstractAttributeDecorator
             attribute.getManagedExternally(),
             attribute.getAllowsNull(),
             attribute.getValue(),
+            attribute.isReadOnly(),
             attribute,
             metadataManager,
             metadataManager.getMetadataTypeManager());
@@ -114,6 +115,7 @@ public abstract class AbstractAttributeDecorator
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional attribute value.
+     * @param readOnly whether the attribute is marked as read-only.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
@@ -136,6 +138,7 @@ public abstract class AbstractAttributeDecorator
         final boolean managedExternally,
         final boolean allowsNull,
         final String value,
+        final boolean readOnly,
         final Attribute attribute,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
@@ -149,7 +152,8 @@ public abstract class AbstractAttributeDecorator
             comment,
             managedExternally,
             allowsNull,
-            value);
+            value,
+            readOnly);
 
         immutableSetAttribute(attribute);
         immutableSetMetadataManager(metadataManager);

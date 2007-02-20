@@ -391,6 +391,22 @@ protected String trim(final String value)
 
     return result;
 }
+
+/**
+ * Called when a token mismatch occurs.
+ * We override it to raise the exception,
+ * rather than recovering, on mismatched token within alt.
+ * @param input the input.
+ * @param type the type.
+ * @param follow whatever it means in ANTLR engine.
+ * @throws RecognitionException always.
+ */
+protected void mismatch(
+    final IntStream input, final int type, final BitSet follow)
+  throws RecognitionException
+{
+    throw new MismatchedTokenException(type, input);
+}
 }
 
 /*------------------------------------------------------------------
@@ -494,7 +510,7 @@ AT
 QUOTE : ('\'' | '"');
 
 ID
-    : ( LETTER | '_' ) (NAMECHAR)* WS? {$type = ID;}
+    : ( LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
     ;
 
 // keywords

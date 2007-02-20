@@ -63,6 +63,7 @@ public final class AttributeValueObject
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
+     * @param readOnly whether the attribute is marked as read-only.
      */
     public AttributeValueObject(
         final String name,
@@ -73,7 +74,8 @@ public final class AttributeValueObject
         final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value)
+        final String value,
+        final boolean readOnly)
     {
         super(
             name,
@@ -84,7 +86,8 @@ public final class AttributeValueObject
             comment,
             managedExternally,
             allowsNull,
-            value);
+            value,
+            readOnly);
     }
 }
 

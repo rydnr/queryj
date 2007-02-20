@@ -263,7 +263,9 @@ public class CachingDecoratorFactory
                             table, t_strColumnName),
                         metadataManager.allowsNull(
                             table, t_strColumnName),
-                        null),
+                        null,
+                        metadataManager.isReadOnly(
+                            table, t_strColumnName)),
                     metadataManager));
         }
 

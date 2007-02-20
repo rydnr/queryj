@@ -100,5 +100,11 @@ public interface Attribute
      * @return such information.
      */
     public String getValue();
+
+    /**
+     * Retrieves whether the attribute is marked as read-only.
+     * @return such information.
+     */
+    public boolean isReadOnly();
 }
 

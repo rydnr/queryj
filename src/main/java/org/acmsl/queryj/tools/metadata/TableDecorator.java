@@ -141,4 +141,37 @@ public interface TableDecorator
      * @return such attributes.
      */
     public List getNonParentAttributes();
+
+    /**
+     * Retrieves the list of non-parent, non-externally-managed
+     * attributes.
+     * @return such list.
+     */
+    public List getNonParentNonManagedExternallyAttributes();
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentAttributes();
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent,
+     * non-read-only own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonReadOnlyAttributes();
+
+    /**
+     * Retrieves the parent's and non parent's read-only attributes.
+     * @return such information.
+     */
+    public List getAllParentAndNonParentReadOnlyAttributes();
 }

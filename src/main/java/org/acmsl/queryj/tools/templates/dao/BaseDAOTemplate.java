@@ -80,6 +80,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -226,7 +227,7 @@ public class BaseDAOTemplate
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
         final Collection lobAttributes,
-        final Collection allButLobAttributes,
+        final List allButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,

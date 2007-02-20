@@ -436,4 +436,12 @@ public interface MetadataManager
      * @return such information.
      */
     public boolean isCaseSensitive();
+
+    /**
+     * Retrieves whether given column is marked as <b>read-only</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isReadOnly(final String tableName, final String columnName);
 }

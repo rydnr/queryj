@@ -97,6 +97,11 @@ public abstract class AbstractAttribute
     private String m__strValue;
 
     /**
+     * Whether the attribute is marked as read-only.
+     */
+    private boolean m__bReadOnly = false;
+
+    /**
      * Creates an <code>AbstractAttribute</code> with the following
      * information.
      * @param name the name.
@@ -108,6 +113,7 @@ public abstract class AbstractAttribute
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
+     * @param readOnly whether the attribute is marked as read-only.
      */
     protected AbstractAttribute(
         final String name,
@@ -118,7 +124,8 @@ public abstract class AbstractAttribute
         final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value)
+        final String value,
+        final boolean readOnly)
     {
         immutableSetName(name);
         immutableSetType(type);
@@ -129,6 +136,7 @@ public abstract class AbstractAttribute
         immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);
         immutableSetValue(value);
+        immutableSetReadOnly(readOnly);
     }
 
     /**
@@ -379,6 +387,33 @@ public abstract class AbstractAttribute
     public String getValue()
     {
         return m__strValue;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as read-only.
+     * @param flag such condition.
+     */
+    protected final void immutableSetReadOnly(final boolean flag)
+    {
+        m__bReadOnly = flag;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as read-only.
+     * @param flag such condition.
+     */
+    protected void setReadOnly(final boolean flag)
+    {
+        immutableSetReadOnly(flag);
+    }
+
+    /**
+     * Retrieves whether the attribute is marked as read-only.
+     * @return such condition.
+     */
+    public boolean isReadOnly()
+    {
+        return m__bReadOnly;
     }
 
     /**

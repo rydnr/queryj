@@ -61,6 +61,7 @@ import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
+import org.acmsl.queryj.tools.metadata.TableDecoratorHelper;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -374,7 +375,7 @@ public abstract class BasePerTableTemplate
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cAllButLobAttributes =
+        List t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
                 tableName,
                 metadataManager,
@@ -596,7 +597,7 @@ public abstract class BasePerTableTemplate
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
         final Collection lobAttributes,
-        final Collection allButLobAttributes,
+        final List allButLobAttributes,
         final Collection foreignKeys,
         final Collection customSelects,
         final Collection customUpdatesOrInserts,
@@ -682,6 +683,8 @@ public abstract class BasePerTableTemplate
                     staticAttributeName,
                     tableName),
                 metadataManager.getAllowNull(
+                    tableName, staticAttributeName),
+                metadataManager.isReadOnly(
                     tableName, staticAttributeName),
                 metadataManager,
                 metadataTypeManager,
@@ -899,7 +902,7 @@ public abstract class BasePerTableTemplate
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
         final Collection lobAttributes,
-        final Collection allButLobAttributes,
+        final List allButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
@@ -951,6 +954,9 @@ public abstract class BasePerTableTemplate
             allButExternallyManagedAttributes);
         input.put("lob_attributes", lobAttributes);
         input.put("all_but_lob_attributes", allButLobAttributes);
+        input.put(
+            "all_but_lob_non_readonly_attributes",
+            removeReadOnly(allButLobAttributes));
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referingKeys);
         input.put("custom_selects", customSelects);
@@ -970,6 +976,7 @@ public abstract class BasePerTableTemplate
      * @param managedExternally whether the attribute is managed
      * externally.
      * @param allowsNull if the attribute allows nulls.
+     * @param readOnly whether the attribute is read-only.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -988,6 +995,7 @@ public abstract class BasePerTableTemplate
         final String staticAttributeComment,
         final boolean managedExternally,
         final boolean allowsNull,
+        final boolean readOnly,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory)
@@ -1004,7 +1012,8 @@ public abstract class BasePerTableTemplate
                     staticAttributeComment,
                     managedExternally,
                     allowsNull,
-                    null),
+                    null,
+                    readOnly),
                 metadataManager));
     }
 
@@ -1245,5 +1254,30 @@ public abstract class BasePerTableTemplate
         final DecoratorFactory decoratorFactory)
     {
         return decoratorFactory.createTableDecorator(table, metadataManager);
+    }
+
+    /**
+     * Removes the read-only attributes.
+     * @param attributes the attributes.
+     * @return the updated list.
+     * @precondition attributes != null
+     */
+    protected List removeReadOnly(final List attributes)
+    {
+        return removeReadOnly(attributes, TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Removes the read-only attributes.
+     * @param attributes the attributes.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @return the updated list.
+     * @precondition attributes != null
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List removeReadOnly(
+        final List attributes, final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return tableDecoratorHelper.removeReadOnly(attributes);
     }
 }

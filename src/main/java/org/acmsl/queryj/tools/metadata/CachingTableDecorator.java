@@ -145,6 +145,21 @@ public class CachingTableDecorator
     private List m__lCachedAllNonManagedExternallyAttributes;
 
     /**
+     * The cached all parent and non-parent non-managed-externally read-only attributes.
+     */
+    private List m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes;
+
+    /**
+     * The cached all parent and non-parent non-read-only attributes.
+     */
+    private List m__lCachedAllParentAndNonParentNonReadOnlyAttributes;
+
+    /**
+     * The cached all parent and non-parent read-only attributes.
+     */
+    private List m__lCachedAllParentAndNonParentReadOnlyAttributes;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -1071,6 +1086,155 @@ public class CachingTableDecorator
         {
             result = super.getAllNonManagedExternallyAttributes();
             setCachedAllNonManagedExternallyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(
+        final List list)
+    {
+        m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes.
+     * @param list such list.
+     */
+    protected void setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(
+        final List list)
+    {
+        immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(
+            list);
+    }
+
+    /**
+     * Retrieves the cached list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes.
+     * @return such list.
+     */
+    protected List getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes()
+    {
+        return m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes()
+    {
+        List result =
+            getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+
+        if  (   (result == null)
+             || (result.size() == 0))
+        {
+            result = super.getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+            setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached value for all parent + non parent, non-read-only
+     * attributes.
+     * @param list the list.
+     */
+    protected final void immutableSetCachedAllParentAndNonParentNonReadOnlyAttributes(
+        final List list)
+    {
+        m__lCachedAllParentAndNonParentNonReadOnlyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached value for all parent + non parent, non-read-only
+     * attributes.
+     * @param list the list.
+     */
+    protected void setCachedAllParentAndNonParentNonReadOnlyAttributes(
+        final List list)
+    {
+        immutableSetCachedAllParentAndNonParentNonReadOnlyAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached value for all parent + non parent, non-read-only
+     * attributes.
+     * @return such list.
+     */
+    protected List getCachedAllParentAndNonParentNonReadOnlyAttributes()
+    {
+        return m__lCachedAllParentAndNonParentNonReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent,
+     * non-read-only own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonReadOnlyAttributes()
+    {
+        List result = getCachedAllParentAndNonParentNonReadOnlyAttributes();
+
+        if  (   (result == null)
+             || (result.size() == 0))
+        {
+            result = super.getAllParentAndNonParentNonReadOnlyAttributes();
+            setCachedAllParentAndNonParentNonReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached list of all parent's and non parent's read-only attributes.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllParentAndNonParentReadOnlyAttributes(
+        final List list)
+    {
+        m__lCachedAllParentAndNonParentReadOnlyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of all parent's and non parent's read-only attributes.
+     * @param list such list.
+     */
+    protected void setCachedAllParentAndNonParentReadOnlyAttributes(final List list)
+    {
+        immutableSetCachedAllParentAndNonParentReadOnlyAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached list of all parent's and non parent's read-only attributes.
+     * @return such condition.
+     */
+    protected List getCachedAllParentAndNonParentReadOnlyAttributes()
+    {
+        return m__lCachedAllParentAndNonParentReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the all parent plus non-parent read-only attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentReadOnlyAttributes()
+    {
+        List result = getCachedAllParentAndNonParentReadOnlyAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllParentAndNonParentReadOnlyAttributes();
+            setCachedAllParentAndNonParentReadOnlyAttributes(result);
         }
 
         return result;

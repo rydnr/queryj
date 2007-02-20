@@ -462,8 +462,6 @@ public abstract class BasePerForeignKeyTemplate
     }
 
     /**
-<<<<<<< .working
-=======
      * Retrieves the foreign key attributes.
      * @param foreignKey the foreign key.
      * @param metadataManager the <code>MetadataManager</code>
@@ -636,6 +634,7 @@ public abstract class BasePerForeignKeyTemplate
         String t_strComment;
         String t_strFieldType;
         boolean t_bManagedExternally;
+        boolean t_bReadOnly;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -672,6 +671,10 @@ public abstract class BasePerForeignKeyTemplate
                 metadataManager.isManagedExternally(
                     tableName, t_strColumnName);
 
+            t_bReadOnly =
+                metadataManager.isReadOnly(
+                    tableName, t_strColumnName);
+
             result.add(
                 decoratorFactory.createDecorator(
                     new AttributeValueObject(
@@ -683,7 +686,8 @@ public abstract class BasePerForeignKeyTemplate
                         t_strComment,
                         t_bManagedExternally,
                         t_bAllowsNull,
-                        columnValues[t_iIndex]),
+                        columnValues[t_iIndex],
+                        t_bReadOnly),
                     metadataManager));
         }
 
@@ -705,7 +709,6 @@ public abstract class BasePerForeignKeyTemplate
     }
 
     /**
->>>>>>> .merge-right.r554
      * Capitalizes given value.
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.

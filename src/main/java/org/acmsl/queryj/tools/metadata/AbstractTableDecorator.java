@@ -1103,7 +1103,6 @@ public abstract class AbstractTableDecorator
                 getDecoratorFactory());
     }
 
-
     /**
      * Retrieves the list of parent's all attributes and the non-parent
      * non-managed-externally own attributes.
@@ -1182,5 +1181,69 @@ public abstract class AbstractTableDecorator
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes()
+    {
+        List result =
+            getAllParentAndNonParentNonManagedExternallyAttributes();
+
+        return removeReadOnly(result, TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Removes the read-only attributes from given list.
+     * @param attributes the attributes.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @return the list without the read-only attributes.
+     * @precondition attributes != null
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List removeReadOnly(
+        final List attributes, final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return tableDecoratorHelper.removeReadOnly(attributes);
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent,
+     * non-read-only own attributes.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonReadOnlyAttributes()
+    {
+        List result = getAllParentAndNonParentAttributes();
+
+        return removeReadOnly(result, TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the read-only attributes.
+     * @return such information.
+     */
+    public List getAllParentAndNonParentReadOnlyAttributes()
+    {
+        return
+            getAllParentAndNonParentReadOnlyAttributes(
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the read-only attributes.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @return such information.
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List getAllParentAndNonParentReadOnlyAttributes(
+        final TableDecoratorHelper tableDecoratorHelper)
+    {
+        return
+            tableDecoratorHelper.removeNonReadOnlyAttributes(
+                getAllParentAndNonParentAttributes());
     }
 }
