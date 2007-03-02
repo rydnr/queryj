@@ -126,91 +126,104 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated native type.
      */
     public String getNativeType(final int dataType)
     {
-        return getNativeType(dataType, false);
+        return getNativeType(dataType, false, false);
     }
 
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
     public String getNativeType(
-        final int dataType, final boolean allowsNull)
+        final int dataType, final boolean allowsNull, final boolean isBool)
     {
-        return getNativeType(dataType, allowsNull, 0);
+        return getNativeType(dataType, allowsNull, isBool, 0);
     }
 
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @param precision the precision.
      * @return the associated native type.
      */
     public String getNativeType(
-        final int dataType, final boolean allowsNull, final int precision)
+        final int dataType,
+        final boolean allowsNull,
+        final boolean isBool,
+        final int precision)
     {
         String result = null;
 
-        switch  (dataType)
+        if  (isBool)
         {
-            case Types.BIT:
-            case Types.TINYINT:
-            case Types.SMALLINT:
-                result = (allowsNull) ? "Integer" : "int";
-                break;
-
-            case Types.INTEGER:
-            case Types.BIGINT:
-            case Types.NUMERIC:
-                if  (precision > 0)
-                {
+            result = (allowsNull) ? "Boolean" : "boolean";
+        }
+        else
+        {
+            switch  (dataType)
+            {
+                case Types.BIT:
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                    result = (allowsNull) ? "Integer" : "int";
+                    break;
+    
+                case Types.INTEGER:
+                case Types.BIGINT:
+                case Types.NUMERIC:
+                    if  (precision > 0)
+                    {
+                        result = "BigDecimal";
+                    }
+                    else
+                    {
+                        result = (allowsNull) ? "Long" : "long";
+                    }
+                    break;
+    
+                case Types.FLOAT:
+    //                result = (allowsNull) ? "Float" : "float";
+    //                break;
+    
+                case Types.REAL:
+                case Types.DOUBLE:
+    //                result = (allowsNull) ? "Double" : "double";
+    //                break;
+                case Types.DECIMAL:
                     result = "BigDecimal";
-                }
-                else
-                {
-                    result = (allowsNull) ? "Long" : "long";
-                }
-                break;
-
-            case Types.FLOAT:
-//                result = (allowsNull) ? "Float" : "float";
-//                break;
-
-            case Types.REAL:
-            case Types.DOUBLE:
-//                result = (allowsNull) ? "Double" : "double";
-//                break;
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
-            case Types.TIME:
-            case Types.DATE:
-            case Types.TIMESTAMP:
-            case 11:
-//                result = "Calendar";
-                result = "Date";
-                break;
-
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.BINARY:
-            case Types.VARBINARY:
-            case Types.LONGVARBINARY:
-            case Types.CLOB:
-                result = "String";
-                break;
-
-            default:
-                result = "Object";
-                break;
+                    break;
+    
+                case Types.TIME:
+                case Types.DATE:
+                case Types.TIMESTAMP:
+                case 11:
+    //                result = "Calendar";
+                    result = "Date";
+                    break;
+    
+                case Types.CHAR:
+                case Types.VARCHAR:
+                case Types.LONGVARCHAR:
+                case Types.BINARY:
+                case Types.VARBINARY:
+                case Types.LONGVARBINARY:
+                case Types.CLOB:
+                    result = "String";
+                    break;
+    
+                default:
+                    result = "Object";
+                    break;
+            }
         }
 
         return result;
@@ -331,28 +344,30 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the QueryJ type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getQueryJFieldType(final int dataType)
+    public String getQueryJFieldType(final int dataType, final boolean isBool)
     {
         return
             getQueryJFieldType(
-                dataType, StringUtils.getInstance());
+                dataType, isBool, StringUtils.getInstance());
     }
 
     /**
      * Retrieves the QueryJ type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the QueryJ type.
      * @precondition stringUtils != null
      */
     protected String getQueryJFieldType(
-        final int dataType, final StringUtils stringUtils)
+        final int dataType, final boolean isBool, final StringUtils stringUtils)
     {
         return
             stringUtils.capitalize(
-                getFieldType(dataType), '_');
+                getFieldType(dataType, false, isBool), '_');
     }
 
     /**
@@ -362,7 +377,7 @@ public class JdbcMetadataTypeManager
      */
     public String getStatementSetterFieldType(final int dataType)
     {
-        return getFieldType(dataType, true);
+        return getFieldType(dataType, true, false);
     }
 
     /**
@@ -372,66 +387,75 @@ public class JdbcMetadataTypeManager
      */
     public String getFieldType(final int dataType)
     {
-        return getFieldType(dataType, false);
+        return getFieldType(dataType, false, false);
     }
 
     /**
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether the field allows null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getFieldType(final int dataType, final boolean allowsNull)
+    public String getFieldType(
+        final int dataType, final boolean allowsNull, final boolean isBool)
     {
         String result = "";
 
-        switch (dataType)
+        if  (isBool)
         {
-            case Types.BIT:
-            case Types.TINYINT:
-            case Types.SMALLINT:
-                result = (allowsNull) ? "Integer": "int";
-
-                break;
-
-            case Types.NUMERIC:
-            case Types.INTEGER:
-            case Types.BIGINT:
-                result = (allowsNull) ? "Long" : "long";
-                break;
-
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-//                result = (allowsNull) ? "Double" : "double";
-//                break;
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
-
-            case Types.TIME:
-            case Types.DATE:
-            case Types.TIMESTAMP:
-            case 11:
-                result = "Date";
-                break;
-
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.BINARY:
-            case Types.VARBINARY:
-            case Types.LONGVARBINARY:
-                result = "String";
-                break;
-
-            case Types.CLOB:
-                result = "Clob";
-                break;
-
-            default:
-                break;
+            result = (allowsNull) ? "Boolean" : "boolean";
+        }
+        else
+        {
+            switch (dataType)
+            {
+                case Types.BIT:
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                    result = (allowsNull) ? "Integer": "int";
+    
+                    break;
+    
+                case Types.NUMERIC:
+                case Types.INTEGER:
+                case Types.BIGINT:
+                    result = (allowsNull) ? "Long" : "long";
+                    break;
+    
+                case Types.REAL:
+                case Types.FLOAT:
+                case Types.DOUBLE:
+    //                result = (allowsNull) ? "Double" : "double";
+    //                break;
+                case Types.DECIMAL:
+                    result = "BigDecimal";
+                    break;
+    
+    
+                case Types.TIME:
+                case Types.DATE:
+                case Types.TIMESTAMP:
+                case 11:
+                    result = "Date";
+                    break;
+    
+                case Types.CHAR:
+                case Types.VARCHAR:
+                case Types.LONGVARCHAR:
+                case Types.BINARY:
+                case Types.VARBINARY:
+                case Types.LONGVARBINARY:
+                    result = "String";
+                    break;
+    
+                case Types.CLOB:
+                    result = "Clob";
+                    break;
+    
+                default:
+                    break;
+            }
         }
 
         return result;
@@ -447,7 +471,7 @@ public class JdbcMetadataTypeManager
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName)
     {
-        String result = getObjectType(dataType);
+        String result = getObjectType(dataType, false);
 
         switch  (dataType)
         {
@@ -501,7 +525,7 @@ public class JdbcMetadataTypeManager
      */
     public String getGetterMethod(final int dataType, final String param)
     {
-        String result = getObjectType(dataType);
+        String result = getObjectType(dataType, false);
 
         switch  (dataType)
         {
@@ -529,36 +553,41 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the result type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated result type.
      */
-    public String getProcedureResultType(final int dataType)
+    public String getProcedureResultType(
+        final int dataType, final boolean isBool)
     {
-        String result = getObjectType(dataType);
+        String result = getObjectType(dataType, isBool);
 
-        switch  (dataType)
+        if  (!isBool)
         {
-            case Types.BIT:
-            case Types.TINYINT:
-            case Types.SMALLINT:
-
-                result = "int";
-                break;
-
-            case Types.INTEGER:
-            case Types.NUMERIC:
-            case Types.BIGINT:
-
-                result = "long";
-                break;
-
-//            case Types.REAL:
-//            case Types.FLOAT:
-//            case Types.DOUBLE:
-//                result = "double";
-//                break;
-
-            default:
-                break;
+            switch  (dataType)
+            {
+                case Types.BIT:
+                case Types.TINYINT:
+                case Types.SMALLINT:
+    
+                    result = "int";
+                    break;
+    
+                case Types.INTEGER:
+                case Types.NUMERIC:
+                case Types.BIGINT:
+    
+                    result = "long";
+                    break;
+    
+    //            case Types.REAL:
+    //            case Types.FLOAT:
+    //            case Types.DOUBLE:
+    //                result = "double";
+    //                break;
+    
+                default:
+                    break;
+            }
         }
 
         return result;
@@ -567,36 +596,45 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the procedure's default value.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
-    public String getProcedureDefaultValue(final int dataType)
+    public String getProcedureDefaultValue(
+        final int dataType, final boolean isBool)
     {
         String result = "null";
 
-        switch  (dataType)
+        if  (isBool)
         {
-            case Types.BIT:
-            case Types.TINYINT:
-            case Types.SMALLINT:
-
-                result = "-1";
-                break;
-
-            case Types.INTEGER:
-            case Types.NUMERIC:
-            case Types.BIGINT:
-
-                result = "-1L";
-                break;
-
-//            case Types.REAL:
-//            case Types.FLOAT:
-//            case Types.DOUBLE:
-//                result = "-0.0d";
-//                break;
-
-            default:
-                break;
+            result = "false";
+        }
+        else
+        {
+            switch  (dataType)
+            {
+                case Types.BIT:
+                case Types.TINYINT:
+                case Types.SMALLINT:
+    
+                    result = "-1";
+                    break;
+    
+                case Types.INTEGER:
+                case Types.NUMERIC:
+                case Types.BIGINT:
+    
+                    result = "-1L";
+                    break;
+    
+    //            case Types.REAL:
+    //            case Types.FLOAT:
+    //            case Types.DOUBLE:
+    //                result = "-0.0d";
+    //                break;
+    
+                default:
+                    break;
+            }
         }
 
         return result;
@@ -605,58 +643,67 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getObjectType(final int dataType)
+    public String getObjectType(
+        final int dataType, final boolean isBool)
     {
         String result = null;
 
-        switch (dataType)
+        if  (isBool)
         {
-            case Types.BIT:
-                result = "Integer";
-                break;
-
-            case Types.TINYINT:
-            case Types.SMALLINT:
-            case Types.INTEGER:
-                result = "Integer";
-                break;
-
-            case Types.BIGINT:
-                result = "Long";
-                break;
-
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-//                result = "Double";
-//                break;
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
-
-            case Types.TIME:
-            case Types.DATE:
-            case 11:
-                result = "Date";
-                break;
-
-            case Types.TIMESTAMP:
-                result = "Timestamp";
-                break;
-
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.BINARY:
-            case Types.VARBINARY:
-            case Types.LONGVARBINARY:
-            default:
-                result = "String";
-                break;
+            result = "boolean";
+        }
+        else
+        {
+            switch (dataType)
+            {
+                case Types.BIT:
+                    result = "Integer";
+                    break;
+    
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                case Types.INTEGER:
+                    result = "Integer";
+                    break;
+    
+                case Types.BIGINT:
+                    result = "Long";
+                    break;
+    
+                case Types.REAL:
+                case Types.FLOAT:
+                case Types.DOUBLE:
+    //                result = "Double";
+    //                break;
+                case Types.NUMERIC:
+                case Types.DECIMAL:
+                    result = "BigDecimal";
+                    break;
+    
+    
+                case Types.TIME:
+                case Types.DATE:
+                case 11:
+                    result = "Date";
+                    break;
+    
+                case Types.TIMESTAMP:
+                    result = "Timestamp";
+                    break;
+    
+                case Types.CHAR:
+                case Types.VARCHAR:
+                case Types.LONGVARCHAR:
+                case Types.BINARY:
+                case Types.VARBINARY:
+                case Types.LONGVARBINARY:
+                default:
+                    result = "String";
+                    break;
+            }
         }
 
         return result;
@@ -665,14 +712,20 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      * @precondition dataType != null
      */
-    public String getObjectType(final String dataType)
+    public String getObjectType(
+        final String dataType, final boolean isBool)
     {
         String result = dataType;
 
-        if  (dataType.equals("int"))
+        if  (isBool)
+        {
+            result = "Boolean";
+        }
+        else if  (dataType.equals("int"))
         {
             result = "Integer";
         }
@@ -697,55 +750,64 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getSmartObjectType(final int dataType)
+    public String getSmartObjectType(
+        final int dataType, final boolean isBool)
     {
         String result = null;
 
-        switch (dataType)
+        if  (isBool)
         {
-            case Types.BIT:
-                result = "Integer";
-                break;
-
-            case Types.TINYINT:
-            case Types.SMALLINT:
-            case Types.INTEGER:
-                result = "Integer";
-                break;
-
-            case Types.BIGINT:
-                result = "Long";
-                break;
-
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-//                result = "Double";
-//                break;
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
-
-            case Types.TIME:
-            case Types.DATE:
-            case Types.TIMESTAMP:
-            case 11:
-                result = "Date";
-                break;
-
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.BINARY:
-            case Types.VARBINARY:
-            case Types.LONGVARBINARY:
-            default:
-                result = "String";
-                break;
+            result = "boolean";
+        }
+        else
+        {
+            switch (dataType)
+            {
+                case Types.BIT:
+                    result = "Integer";
+                    break;
+    
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                case Types.INTEGER:
+                    result = "Integer";
+                    break;
+    
+                case Types.BIGINT:
+                    result = "Long";
+                    break;
+    
+                case Types.REAL:
+                case Types.FLOAT:
+                case Types.DOUBLE:
+    //                result = "Double";
+    //                break;
+                case Types.NUMERIC:
+                case Types.DECIMAL:
+                    result = "BigDecimal";
+                    break;
+    
+    
+                case Types.TIME:
+                case Types.DATE:
+                case Types.TIMESTAMP:
+                case 11:
+                    result = "Date";
+                    break;
+    
+                case Types.CHAR:
+                case Types.VARCHAR:
+                case Types.LONGVARCHAR:
+                case Types.BINARY:
+                case Types.VARBINARY:
+                case Types.LONGVARBINARY:
+                default:
+                    result = "String";
+                    break;
+            }
         }
 
         return result;
@@ -754,55 +816,60 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the object type of given data type when retrieving information.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getSmartObjectRetrievalType(final int dataType)
+    public String getSmartObjectRetrievalType(
+        final int dataType, final boolean isBool)
     {
         String result = null;
 
-        switch (dataType)
+        if  (isBool)
         {
-            case Types.BIT:
-                result = "Integer";
-                break;
-
-            case Types.TINYINT:
-            case Types.SMALLINT:
-            case Types.INTEGER:
-                result = "Integer";
-                break;
-
-            case Types.BIGINT:
-                result = "Long";
-                break;
-
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-//                result = "Double";
-//                break;
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
-
-            case Types.TIME:
-            case Types.DATE:
-            case Types.TIMESTAMP:
-            case 11:
-                result = "Timestamp";
-                break;
-
-            case Types.CHAR:
-            case Types.VARCHAR:
-            case Types.LONGVARCHAR:
-            case Types.BINARY:
-            case Types.VARBINARY:
-            case Types.LONGVARBINARY:
-            default:
-                result = "String";
-                break;
+            switch (dataType)
+            {
+                case Types.BIT:
+                    result = "Integer";
+                    break;
+    
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                case Types.INTEGER:
+                    result = "Integer";
+                    break;
+    
+                case Types.BIGINT:
+                    result = "Long";
+                    break;
+    
+                case Types.REAL:
+                case Types.FLOAT:
+                case Types.DOUBLE:
+    //                result = "Double";
+    //                break;
+                case Types.NUMERIC:
+                case Types.DECIMAL:
+                    result = "BigDecimal";
+                    break;
+    
+    
+                case Types.TIME:
+                case Types.DATE:
+                case Types.TIMESTAMP:
+                case 11:
+                    result = "Timestamp";
+                    break;
+    
+                case Types.CHAR:
+                case Types.VARCHAR:
+                case Types.LONGVARCHAR:
+                case Types.BINARY:
+                case Types.VARBINARY:
+                case Types.LONGVARBINARY:
+                default:
+                    result = "String";
+                    break;
+            }
         }
 
         return result;
@@ -811,31 +878,40 @@ public class JdbcMetadataTypeManager
     /**
      * Retrieves the default value of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
-    public String getDefaultValue(final int dataType)
+    public String getDefaultValue(
+        final int dataType, final boolean isBool)
     {
         String result = "null";
 
-        switch (dataType)
+        if  (isBool)
         {
-            case Types.BIGINT:
-            case Types.BIT:
-            case Types.TINYINT:
-            case Types.SMALLINT:
-            case Types.INTEGER:
-                result = "-1";
-                break;
-
-//            case Types.REAL:
-//            case Types.FLOAT:
-//            case Types.DOUBLE:
-//                result = "-1.0d";
-//                break;
-
-            default:
-                result = "null";
-                break;
+            result = "false";
+        }
+        else
+        {
+            switch (dataType)
+            {
+                case Types.BIGINT:
+                case Types.BIT:
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                case Types.INTEGER:
+                    result = "-1";
+                    break;
+    
+    //            case Types.REAL:
+    //            case Types.FLOAT:
+    //            case Types.DOUBLE:
+    //                result = "-1.0d";
+    //                break;
+    
+                default:
+                    result = "null";
+                    break;
+            }
         }
 
         return result;

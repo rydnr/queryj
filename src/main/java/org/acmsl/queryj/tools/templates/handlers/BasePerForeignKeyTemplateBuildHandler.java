@@ -598,8 +598,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             metadataManager.getColumnComment(
                 tableName, attributeName);
 
+        boolean t_bIsBool =
+            metadataManager.isBoolean(tableName, attributeName);
+
         String t_strFieldType =
-            metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
+            metadataTypeManager.getFieldType(
+                t_iType, t_bAllowsNull, t_bIsBool);
 
         boolean t_bManagedExternally =
             metadataManager.isManagedExternally(tableName, attributeName);
@@ -607,6 +611,18 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         boolean t_bReadOnly =
             metadataManager.isReadOnly(tableName, attributeName);
         
+        String t_strBooleanTrue =
+            metadataManager.getBooleanTrue(
+                tableName, attributeName);
+
+        String t_strBooleanFalse =
+            metadataManager.getBooleanFalse(
+                tableName, attributeName);
+
+        String t_strBooleanNull =
+            metadataManager.getBooleanNull(
+                tableName, attributeName);
+
         result =
             decoratorFactory.createDecorator(
                 new AttributeValueObject(
@@ -619,7 +635,11 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     t_bManagedExternally,
                     t_bAllowsNull,
                     null, // value
-                    t_bReadOnly),
+                    t_bReadOnly,
+                    t_bIsBool,
+                    t_strBooleanTrue,
+                    t_strBooleanFalse,
+                    t_strBooleanNull),
                 metadataManager);
         
         return result;

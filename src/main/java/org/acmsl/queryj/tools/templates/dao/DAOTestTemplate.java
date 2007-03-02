@@ -600,7 +600,7 @@ public class DAOTestTemplate
                      && (metadataTypeManager.isPrimitive(t_iColumnType)))
                 {
                     t_strType =
-                        metadataTypeManager.getObjectType(t_iColumnType);
+                        metadataTypeManager.getObjectType(t_iColumnType, false);
 
                     t_Formatter =
                         t_TestNullableParametersValuesFormatter;

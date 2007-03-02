@@ -4695,6 +4695,158 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Retrieves whether given column is marked as <b>bool</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isBoolean(final String tableName, final String columnName)
+    {
+        return
+            (   (getBooleanTrue(tableName, columnName) != null)
+             || (getBooleanFalse(tableName, columnName) != null)
+             || (getBooleanNull(tableName, columnName) != null));
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public String getBooleanTrue(
+        final String tableName, final String columnName)
+    {
+        return getBooleanTrue(tableName, columnName, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getBooleanTrue(
+        final String tableName,
+        final String columnName,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        String result = null;
+        
+        String t_strColumnComment = getColumnComment(tableName, columnName);
+        
+        if  (t_strColumnComment != null)
+        {
+            String[] t_astrBooleanSymbols =
+                metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
+
+            if  (   (t_astrBooleanSymbols != null)
+                 && (t_astrBooleanSymbols.length > 0))
+            {
+                result = t_astrBooleanSymbols[0];
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>false</code> in such case.
+     */
+    public String getBooleanFalse(
+        final String tableName, final String columnName)
+    {
+        return getBooleanFalse(tableName, columnName, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <code>false</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getBooleanFalse(
+        final String tableName,
+        final String columnName,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        String result = null;
+        
+        String t_strColumnComment = getColumnComment(tableName, columnName);
+        
+        if  (t_strColumnComment != null)
+        {
+            String[] t_astrBooleanSymbols =
+                metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
+
+            if  (   (t_astrBooleanSymbols != null)
+                 && (t_astrBooleanSymbols.length > 1))
+            {
+                result = t_astrBooleanSymbols[1];
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>null</code> in such case.
+     */
+    public String getBooleanNull(
+        final String tableName, final String columnName)
+    {
+        return getBooleanNull(tableName, columnName, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <code>null</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getBooleanNull(
+        final String tableName,
+        final String columnName,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        String result = null;
+        
+        String t_strColumnComment = getColumnComment(tableName, columnName);
+        
+        if  (t_strColumnComment != null)
+        {
+            String[] t_astrBooleanSymbols =
+                metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
+
+            if  (   (t_astrBooleanSymbols != null)
+                 && (t_astrBooleanSymbols.length > 2))
+            {
+                result = t_astrBooleanSymbols[2];
+            }
+        }
+        
+        return result;
+    }
+
+    /**
      * Converts given array to integer.
      * @param array the array to convert.
      * @return the converted array.

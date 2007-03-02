@@ -64,20 +64,25 @@ public interface MetadataTypeManager
      * Retrieves the native type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated native type.
      */
     public String getNativeType(
-        final int dataType, final boolean allowsNull);
+        final int dataType, final boolean allowsNull, final boolean isBool);
 
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @param precision the precision.
      * @return the associated native type.
      */
     public String getNativeType(
-        final int dataType, final boolean allowsNull, final int precision);
+        final int dataType,
+        final boolean allowsNull,
+        final boolean isBool,
+        final int precision);
 
     /**
      * Retrieves the native type of given data type.
@@ -97,9 +102,10 @@ public interface MetadataTypeManager
     /**
      * Retrieves the QueryJ type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getQueryJFieldType(final int dataType);
+    public String getQueryJFieldType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the type of given data type.
@@ -119,9 +125,11 @@ public interface MetadataTypeManager
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether the field allows null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getFieldType(final int dataType, final boolean allowsNull);
+    public String getFieldType(
+        final int dataType, final boolean allowsNull, final boolean isBool);
 
     /**
      * Retrieves the setter method name.
@@ -160,51 +168,58 @@ public interface MetadataTypeManager
     /**
      * Retrieves the result type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated result type.
      */
-    public String getProcedureResultType(final int dataType);
+    public String getProcedureResultType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the procedure's default value.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
-    public String getProcedureDefaultValue(final int dataType);
+    public String getProcedureDefaultValue(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getObjectType(final int dataType);
+    public String getObjectType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getObjectType(final String dataType);
+    public String getObjectType(final String dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getSmartObjectType(final int dataType);
+    public String getSmartObjectType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type when retrieving information.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getSmartObjectRetrievalType(final int dataType);
+    public String getSmartObjectRetrievalType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the default value of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
-    public String getDefaultValue(final int dataType);
+    public String getDefaultValue(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the constant name of given data type.

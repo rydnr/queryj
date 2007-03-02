@@ -853,6 +853,7 @@ public class XMLDAOTemplate
         int t_iColumnType;
         boolean t_bAllowsNull;
         String t_strFieldType;
+        boolean t_bIsBool;
         
         for  (int t_iColumnIndex = 0;
                   t_iColumnIndex < t_iColumnLength;
@@ -870,8 +871,14 @@ public class XMLDAOTemplate
                     t_strTableName,
                     t_astrColumnNames[t_iColumnIndex]);
 
+            t_bIsBool =
+                metadataManager.isBoolean(
+                    t_strTableName,
+                    t_astrColumnNames[t_iColumnIndex]);
+
             t_strFieldType =
-                metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
+                metadataTypeManager.getNativeType(
+                    t_iColumnType, t_bAllowsNull, t_bIsBool);
 
             t_bIsPrimaryKey =
                 metadataManager.isPartOfPrimaryKey(
@@ -915,7 +922,7 @@ public class XMLDAOTemplate
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metadataTypeManager.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(t_iColumnType, false);
                 }
 
                 String t_strParameterDeclaration =

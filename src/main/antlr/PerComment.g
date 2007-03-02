@@ -165,9 +165,19 @@ private boolean tableDecorator;
 private String columnComment;
 
 /**
- * The column boolean attribute.
+ * The column boolean <code>true</code> values.
  */
-private String columnBool;
+private String columnBoolTrue;
+
+/**
+ * The column boolean <code>false</code> values.
+ */
+private String columnBoolFalse;
+
+/**
+ * The column boolean <code>null</code> values.
+ */
+private String columnBoolNull;
 
 /**
  * Whether the column is readonly.
@@ -299,25 +309,66 @@ public String getColumnComment()
 }
 
 /**
- * Specifies whether the column is defined as boolean,
+ * Specifies the value used as <code>true</code> for boolean attributes.
  * and how it denotes a <code>true</code> value.
- * @param value the <code>true</code> value, or null if
- * the column is not defined as boolean.
+ * @param value the value denoting <code>true</code> values.
  */
-protected void setColumnBool(final String value)
+protected void setColumnBoolTrue(final String value)
 {
-    columnBool = trim(value);
+    columnBoolTrue = value;
 }
 
 /**
- * Retrieves whether the column is defined as boolean,
+ * Retrieves the value used as <code>true</code> for boolean attributes.
  * and how it denotes a <code>true</code> value.
  * @return  the <code>true</code> value, or null if
  * the column is not defined as boolean.
  */
-public String getColumnBool()
+public String getColumnBoolTrue()
 {
-    return columnBool;
+    return columnBoolTrue;
+}
+
+/**
+ * Specifies the value used as <code>false</code> for boolean attributes.
+ * and how it denotes a <code>false</code> value.
+ * @param value the value denoting <code>false</code> values.
+ */
+protected void setColumnBoolFalse(final String value)
+{
+    columnBoolFalse = value;
+}
+
+/**
+ * Retrieves the value used as <code>false</code> for boolean attributes.
+ * and how it denotes a <code>false</code> value.
+ * @return  the <code>false</code> value, or null if
+ * the column is not defined as boolean.
+ */
+public String getColumnBoolFalse()
+{
+    return columnBoolFalse;
+}
+
+/**
+ * Specifies the value used as <code>null</code> for boolean attributes.
+ * and how it denotes a <code>null</code> value.
+ * @param value the value denoting <code>null</code> values.
+ */
+protected void setColumnBoolNull(final String value)
+{
+    columnBoolNull = value;
+}
+
+/**
+ * Retrieves the value used as <code>null</code> for boolean attributes.
+ * and how it denotes a <code>null</code> value.
+ * @return  the <code>null</code> value, or null if
+ * the column is not defined as boolean.
+ */
+public String getColumnBoolNull()
+{
+    return columnBoolNull;
 }
 
 /**
@@ -454,16 +505,20 @@ fragment tab_decorator :  DECORATOR WS?;
 fragment col_annotation
   : (
          col_readonly { setColumnReadOnly(true); }
-     | b=col_bool     { setColumnBool(b); }
+     |   col_bool
      |   col_isarefs
      | s=col_oraseq   { setColumnOraSeq(s); }
     );
 
 fragment col_readonly :  READONLY WS?;
 
-fragment col_bool returns [String result]
-@init { result = null; }
-  : BOOL WS i=identifier WS? { result = $i.text; }
+fragment col_bool
+  : BOOL WS i=identifier WS? COMMA WS? j=identifier
+        (WS? COMMA k=identifier { setColumnBoolNull($k.text); })? WS?
+    {
+      setColumnBoolTrue($i.text);
+      setColumnBoolFalse($j.text);
+    }
   ;
 
 fragment identifier : QUOTE? ID QUOTE?;

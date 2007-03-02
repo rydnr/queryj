@@ -268,7 +268,10 @@ public class TableTemplateBuildHandler
                         t_aTableTemplates[t_iTableIndex].addFieldType(
                             t_astrColumnNames[t_iColumnIndex],
                             t_MetadataTypeManager.getQueryJFieldType(
-                                t_iColumnType));
+                                t_iColumnType,
+                                metadataManager.isBoolean(
+                                    t_astrTableNames[t_iTableIndex],
+                                    t_astrColumnNames[t_iColumnIndex])));
                     }
                 }
             }

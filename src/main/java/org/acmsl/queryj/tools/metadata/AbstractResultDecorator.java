@@ -449,6 +449,12 @@ public abstract class AbstractResultDecorator
 
                 String t_strColumnName;
                 boolean t_bAllowsNull;
+                boolean t_bReadOnly;
+                boolean t_bIsBool;
+                String t_strBooleanTrue;
+                String t_strBooleanFalse;
+                String t_strBooleanNull;
+                
                 for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
                 {
                     t_strColumnName = t_astrColumnNames[t_iIndex];
@@ -457,6 +463,26 @@ public abstract class AbstractResultDecorator
                         metadataManager.allowsNull(
                             t_strTable, t_strColumnName);
 
+                    t_bReadOnly = 
+                        metadataManager.isReadOnly(
+                            t_strTable, t_strColumnName);
+
+                    t_bIsBool =
+                        metadataManager.isBoolean(
+                            t_strTable, t_strColumnName);
+
+                    t_strBooleanTrue =
+                        metadataManager.getBooleanTrue(
+                            t_strTable, t_strColumnName);
+                    
+                    t_strBooleanFalse =
+                        metadataManager.getBooleanFalse(
+                            t_strTable, t_strColumnName);
+                    
+                    t_strBooleanNull =
+                        metadataManager.getBooleanNull(
+                            t_strTable, t_strColumnName);
+                    
                     result.add(
                         decoratorFactory.createDecorator(
                             new PropertyElement(
@@ -467,8 +493,14 @@ public abstract class AbstractResultDecorator
                                 t_MetadataTypeManager.getNativeType(
                                     metadataManager.getColumnType(
                                         t_strTable, t_strColumnName),
-                                    t_bAllowsNull),
-                                t_bAllowsNull),
+                                    t_bAllowsNull,
+                                    t_bIsBool),
+                                t_bAllowsNull,
+                                t_bReadOnly,
+                                t_bIsBool,
+                                t_strBooleanTrue,
+                                t_strBooleanFalse,
+                                t_strBooleanNull),
                             metadataManager));
                 }
             }

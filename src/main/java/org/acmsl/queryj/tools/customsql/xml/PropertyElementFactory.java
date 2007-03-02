@@ -103,6 +103,33 @@ public class PropertyElementFactory
 
         String t_strNullable = attributes.getValue("nullable");
 
+        String t_strReadOnly = attributes.getValue("readonly");
+
+        String[] t_astrBooleanSymbols =
+            parseBooleanSymbols(attributes.getValue("bool"));
+
+        String t_strBooleanTrue = null;
+        String t_strBooleanFalse = null;
+        String t_strBooleanNull = null;
+        
+        if  (t_astrBooleanSymbols != null)
+        {
+            if  (t_astrBooleanSymbols.length > 0)
+            {
+                t_strBooleanTrue = t_astrBooleanSymbols[0];
+            }
+            
+            if  (t_astrBooleanSymbols.length > 1)
+            {
+                t_strBooleanFalse = t_astrBooleanSymbols[1];
+            }
+            
+            if  (t_astrBooleanSymbols.length > 2)
+            {
+                t_strBooleanNull = t_astrBooleanSymbols[2];
+            }
+        }
+        
         result =
             new PropertyElement(
                 t_strId,
@@ -110,8 +137,62 @@ public class PropertyElementFactory
                 t_iIndex,
                 t_strName,
                 t_strType,
-                Boolean.TRUE.toString().equalsIgnoreCase(t_strNullable));
+                Boolean.TRUE.toString().equalsIgnoreCase(t_strNullable),
+                (t_strReadOnly != null),
+                (t_astrBooleanSymbols != null),
+                t_strBooleanTrue,
+                t_strBooleanFalse,
+                t_strBooleanNull);
 
+        return result;
+    }
+
+    /**
+     * Parses the boolean symbols.
+     * @param value the value to parse.
+     * @return the symbols, or <code>null</code> otherwise.
+     */
+    protected String[] parseBooleanSymbols(final String value)
+    {
+        String[] result = null;
+        
+        if  (value != null)
+        {
+            String t_strAux = value.trim();
+            
+            int t_iFirstComma = t_strAux.indexOf(",");
+            int t_iLastComma = 0;
+            
+            if  (t_iFirstComma > -1)
+            {
+                result = new String[3];
+            }
+
+            if  (t_iFirstComma > 0)
+            {
+                result[0] = t_strAux.substring(t_iLastComma, t_iFirstComma - 1);
+                t_strAux = t_strAux.substring(t_iFirstComma);
+            }
+
+            t_iLastComma = t_iFirstComma;
+            t_iFirstComma = t_strAux.indexOf(",");
+
+            if  (t_iFirstComma > 0)
+            {
+                result[1] = t_strAux.substring(t_iLastComma, t_iFirstComma - 1);
+                t_strAux = t_strAux.substring(t_iFirstComma);
+            }
+
+            t_iLastComma = t_iFirstComma;
+            t_iFirstComma = t_strAux.indexOf(",");
+
+            if  (t_iFirstComma > 0)
+            {
+                result[2] = t_strAux.substring(t_iLastComma, t_iFirstComma - 1);
+                t_strAux = t_strAux.substring(t_iFirstComma);
+            }
+        }
+        
         return result;
     }
 }

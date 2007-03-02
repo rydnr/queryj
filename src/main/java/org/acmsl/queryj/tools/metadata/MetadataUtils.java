@@ -718,6 +718,10 @@ public class MetadataUtils
         String t_strFieldType;
         boolean t_bManagedExternally;
         boolean t_bReadOnly;
+        boolean t_bIsBool;
+        String t_strBooleanTrue;
+        String t_strBooleanFalse;
+        String t_strBooleanNull;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -747,8 +751,13 @@ public class MetadataUtils
                 metadataManager.getColumnComment(
                     tableName, t_strColumnName);
 
+            t_bIsBool =
+                metadataManager.isBoolean(
+                    tableName, t_strColumnName);
+
             t_strFieldType =
-                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
+                metadataTypeManager.getFieldType(
+                    t_iType, t_bAllowsNull, t_bIsBool);
 
             t_bManagedExternally =
                 metadataManager.isManagedExternally(
@@ -756,6 +765,18 @@ public class MetadataUtils
 
             t_bReadOnly =
                 metadataManager.isReadOnly(
+                    tableName, t_strColumnName);
+
+            t_strBooleanTrue =
+                metadataManager.getBooleanTrue(
+                    tableName, t_strColumnName);
+
+            t_strBooleanFalse =
+                metadataManager.getBooleanFalse(
+                    tableName, t_strColumnName);
+
+            t_strBooleanNull =
+                metadataManager.getBooleanNull(
                     tableName, t_strColumnName);
 
             result.add(
@@ -770,7 +791,11 @@ public class MetadataUtils
                         t_bManagedExternally,
                         t_bAllowsNull,
                         columnValues[t_iIndex],
-                        t_bReadOnly),
+                        t_bReadOnly,
+                        t_bIsBool,
+                        t_strBooleanTrue,
+                        t_strBooleanFalse,
+                        t_strBooleanNull),
                     metadataManager));
         }
 

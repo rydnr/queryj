@@ -98,6 +98,10 @@ public abstract class AbstractAttributeDecorator
             attribute.getAllowsNull(),
             attribute.getValue(),
             attribute.isReadOnly(),
+            attribute.isBoolean(),
+            attribute.getBooleanTrue(),
+            attribute.getBooleanFalse(),
+            attribute.getBooleanNull(),
             attribute,
             metadataManager,
             metadataManager.getMetadataTypeManager());
@@ -116,7 +120,11 @@ public abstract class AbstractAttributeDecorator
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional attribute value.
      * @param readOnly whether the attribute is marked as read-only.
+     * @param isBool whether the attribute is marked as boolean.
      * @param attribute the attribute.
+     * @param booleanTrue the symbol for <code>true</code> values in boolean attributes.
+     * @param booleanFalse the symbol for <code>false</code> values in boolean attributes.
+     * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @precondition name != null
@@ -139,6 +147,10 @@ public abstract class AbstractAttributeDecorator
         final boolean allowsNull,
         final String value,
         final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull,
         final Attribute attribute,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
@@ -153,7 +165,11 @@ public abstract class AbstractAttributeDecorator
             managedExternally,
             allowsNull,
             value,
-            readOnly);
+            readOnly,
+            isBool,
+            booleanTrue,
+            booleanFalse,
+            booleanNull);
 
         immutableSetAttribute(attribute);
         immutableSetMetadataManager(metadataManager);
@@ -420,8 +436,9 @@ public abstract class AbstractAttributeDecorator
         final int type, final MetadataTypeManager metadataTypeManager)
     {
         return
-            (metadataTypeManager.isPrimitive(type)
-             ?  Boolean.TRUE : Boolean.FALSE);
+            (   (isBoolean())
+             || (metadataTypeManager.isPrimitive(type)))
+             ?  Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -443,7 +460,7 @@ public abstract class AbstractAttributeDecorator
     protected String getObjectType(
         final int type, final MetadataTypeManager metadataTypeManager)
     {
-        return metadataTypeManager.getSmartObjectType(type);
+        return metadataTypeManager.getSmartObjectType(type, isBoolean());
     }
 
     /**
@@ -604,7 +621,7 @@ public abstract class AbstractAttributeDecorator
     protected String getQueryJFieldType(
         final int type, final MetadataTypeManager metadataTypeManager)
     {
-        return metadataTypeManager.getQueryJFieldType(type);
+        return metadataTypeManager.getQueryJFieldType(type, isBoolean());
     }
 
     /**
@@ -716,7 +733,7 @@ public abstract class AbstractAttributeDecorator
     protected String getJavaType(
         final int type, final MetadataTypeManager metadataTypeManager)
     {
-        return metadataTypeManager.getObjectType(type);
+        return metadataTypeManager.getObjectType(type, isBoolean());
     }
 
     /**

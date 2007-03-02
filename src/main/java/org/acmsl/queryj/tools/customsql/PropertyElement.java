@@ -66,6 +66,31 @@ public class PropertyElement
     private boolean m__bNullable;
     
     /**
+     * Whether the attribute is marked as read-only.
+     */
+    private boolean m__bReadOnly = false;
+
+    /**
+     * Whether the attribute is marked as boolean.
+     */
+    private boolean m__bBoolean = false;
+
+    /**
+     * The symbol for <code>true</code> values in boolean attributes.
+     */
+    private String m__strBooleanTrue;
+
+    /**
+     * The symbol for <code>false</code> values in boolean attributes.
+     */
+    private String m__strBooleanFalse;
+
+    /**
+     * The symbol for <code>null</code> values in boolean attributes.
+     */
+    private String m__strBooleanNull;
+
+    /**
      * Creates a PropertyElement with given information.
      * @param id the <i>id</i> attribute.
      * @param columnName the <i>column_name</i> attribute.
@@ -73,6 +98,11 @@ public class PropertyElement
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param nullable the <i>nullable</i> attribute.
+     * @param readOnly whether the attribute is marked as read-only.
+     * @param isBool whether the attribute is marked as boolean.
+     * @param booleanTrue the symbol for <code>true</code> values in boolean attributes.
+     * @param booleanFalse the symbol for <code>false</code> values in boolean attributes.
+     * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      * @precondition id != null
      * @precondition type != null
      */
@@ -82,11 +112,22 @@ public class PropertyElement
         final int index,
         final String name,
         final String type,
-        final boolean nullable)
+        final boolean nullable,
+        final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull)
     {
         super(id, columnName, index, name, type);
-
+        
         immutableSetNullable(nullable);
+
+        immutableSetReadOnly(readOnly);
+        immutableSetBoolean(isBool);
+        immutableSetBooleanTrue(booleanTrue);
+        immutableSetBooleanFalse(booleanFalse);
+        immutableSetBooleanNull(booleanNull);
     }
 
     /**
@@ -115,5 +156,140 @@ public class PropertyElement
     public boolean isNullable()
     {
         return m__bNullable;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as read-only.
+     * @param flag such condition.
+     */
+    protected final void immutableSetReadOnly(final boolean flag)
+    {
+        m__bReadOnly = flag;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as read-only.
+     * @param flag such condition.
+     */
+    protected void setReadOnly(final boolean flag)
+    {
+        immutableSetReadOnly(flag);
+    }
+
+    /**
+     * Retrieves whether the attribute is marked as read-only.
+     * @return such condition.
+     */
+    public boolean isReadOnly()
+    {
+        return m__bReadOnly;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as boolean.
+     * @param flag such condition.
+     */
+    protected final void immutableSetBoolean(final boolean flag)
+    {
+        m__bBoolean = flag;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as boolean.
+     * @param flag such condition.
+     */
+    protected void setBoolean(final boolean flag)
+    {
+        immutableSetBoolean(flag);
+    }
+
+    /**
+     * Retrieves whether the attribute is marked as boolean.
+     * @return such condition.
+     */
+    public boolean isBoolean()
+    {
+        return m__bBoolean;
+    }
+
+    /**
+     * Specifies the symbol for <code>true</code> values.
+     * @param value such information.
+     */
+    protected final void immutableSetBooleanTrue(final String value)
+    {
+        m__strBooleanTrue = value;
+    }
+
+    /**
+     * Specifies the symbol for <code>true</code> values.
+     * @param value such information.
+     */
+    protected void setBooleanTrue(final String value)
+    {
+        immutableSetBooleanTrue(value);
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values.
+     * @return such information.
+     */
+    public String getBooleanTrue()
+    {
+        return m__strBooleanTrue;
+    }
+
+    /**
+     * Specifies the symbol for <code>false</code> values.
+     * @param value such information.
+     */
+    protected final void immutableSetBooleanFalse(final String value)
+    {
+        m__strBooleanFalse = value;
+    }
+
+    /**
+     * Specifies the symbol for <code>false</code> values.
+     * @param value such information.
+     */
+    protected void setBooleanFalse(final String value)
+    {
+        immutableSetBooleanFalse(value);
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values.
+     * @return such information.
+     */
+    public String getBooleanFalse()
+    {
+        return m__strBooleanFalse;
+    }
+
+    /**
+     * Specifies the symbol for <code>null</code> values.
+     * @param value such information.
+     */
+    protected final void immutableSetBooleanNull(final String value)
+    {
+        m__strBooleanNull = value;
+    }
+
+    /**
+     * Specifies the symbol for <code>null</code> values.
+     * @param value such information.
+     */
+    protected void setBooleanNull(final String value)
+    {
+        immutableSetBooleanNull(value);
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values.
+     * @return such information.
+     */
+    public String getBooleanNull()
+    {
+        return m__strBooleanNull;
     }
 }

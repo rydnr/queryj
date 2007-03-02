@@ -161,6 +161,8 @@ public class KeywordRepositoryTemplateBuildHandler
                 t_cFieldElements =
                     t_ExternallyManagedFieldsElement.getFields();
 
+                boolean t_bIsBool;
+
                 if  (   (t_cFieldElements != null)
                      && (t_cFieldElements.size() > 0))
                 {
@@ -175,6 +177,11 @@ public class KeywordRepositoryTemplateBuildHandler
 
                         if  (t_Field != null)
                         {
+                            t_bIsBool =
+                                metadataManager.isBoolean(
+                                    t_Field.getTableName(),
+                                    t_Field.getName());
+
                             if  (!t_StringValidator.isEmpty(t_Field.getKeyword()))
                             {
                                 result.addKeyword(
@@ -182,7 +189,8 @@ public class KeywordRepositoryTemplateBuildHandler
                                     t_MetadataTypeManager.getQueryJFieldType(
                                         metadataManager.getColumnType(
                                             t_Field.getTableName(),
-                                            t_Field.getName())));
+                                            t_Field.getName()),
+                                        t_bIsBool));
                             }
                         }
                     }

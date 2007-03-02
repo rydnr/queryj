@@ -64,6 +64,10 @@ public final class AttributeValueObject
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
      * @param readOnly whether the attribute is marked as read-only.
+     * @param isBool whether the attribute is marked as boolean.
+     * @param booleanTrue the symbol for <code>true</code> values in boolean attributes.
+     * @param booleanFalse the symbol for <code>false</code> values in boolean attributes.
+     * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      */
     public AttributeValueObject(
         final String name,
@@ -75,7 +79,11 @@ public final class AttributeValueObject
         final boolean managedExternally,
         final boolean allowsNull,
         final String value,
-        final boolean readOnly)
+        final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull)
     {
         super(
             name,
@@ -87,7 +95,11 @@ public final class AttributeValueObject
             managedExternally,
             allowsNull,
             value,
-            readOnly);
+            readOnly,
+            isBool,
+            booleanTrue,
+            booleanFalse,
+            booleanNull);
     }
 }
 

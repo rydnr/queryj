@@ -96,9 +96,11 @@ public class MySQL4xMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getSmartObjectType(final int dataType)
+    public String getSmartObjectType(
+        final int dataType, final boolean isBool)
     {
         String result = null;
 
@@ -109,7 +111,7 @@ public class MySQL4xMetadataTypeManager
                 break;
 
             default:
-                result = super.getSmartObjectType(dataType);
+                result = super.getSmartObjectType(dataType, isBool);
                 break;
         }
 
@@ -119,9 +121,10 @@ public class MySQL4xMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    public String getObjectType(final int dataType)
+    public String getObjectType(final int dataType, final boolean isBool)
     {
         String result = null;
 
@@ -132,7 +135,7 @@ public class MySQL4xMetadataTypeManager
                 break;
 
             default:
-                result = super.getObjectType(dataType);
+                result = super.getObjectType(dataType, isBool);
                 break;
         }
 

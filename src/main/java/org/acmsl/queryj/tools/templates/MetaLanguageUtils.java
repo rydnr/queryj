@@ -224,13 +224,14 @@ public class MetaLanguageUtils
      * Retrieves the value to denote <code>true</code> values. If
      * <code>null</code>, then the column is not considered boolean.
      * @param columnComment the column comment.
-     * @return the value to use in the database to denote <code>true</code>
-     * values, or <code>null</code> if the column is not boolean.
+     * @return the values to use in the database to denote <code>true</code>,
+     * <code>false</code> and <code>null</code> values, or <code>null</code>
+     * if the column is not boolean.
      * @precondition columnComment != null
      */
-    public String retrieveColumnBool(final String columnComment)
+    public String[] retrieveColumnBool(final String columnComment)
     {
-        String result = null;
+        String[] result = null;
 
         if  (!isEmpty(columnComment))
         {
@@ -240,7 +241,15 @@ public class MetaLanguageUtils
 
                 t_Parser.columnComment();
 
-                result = t_Parser.getColumnBool();
+                String t_strTrue = t_Parser.getColumnBoolTrue();
+
+                if  (t_strTrue != null)
+                {
+                    result = new String[3];
+                    result[0] = t_strTrue;
+                    result[1] = t_Parser.getColumnBoolFalse();
+                    result[2] = t_Parser.getColumnBoolNull();
+                }
             }
             catch  (final RecognitionException recognitionException)
             {

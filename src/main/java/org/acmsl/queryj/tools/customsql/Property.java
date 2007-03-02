@@ -74,4 +74,35 @@ public interface Property
      * @return such condition.
      */
     public boolean isNullable();
+
+
+    /**
+     * Retrieves whether the attribute is marked as read-only.
+     * @return such information.
+     */
+    public boolean isReadOnly();
+
+    /**
+     * Retrieves whether the attribute is marked as boolean.
+     * @return such information.
+     */
+    public boolean isBoolean();
+
+    /**
+     * Retrieves the symbol for <code>true</code> values.
+     * @return such information.
+     */
+    public String getBooleanTrue();
+
+    /**
+     * Retrieves the symbol for <code>false</code> values.
+     * @return such information.
+     */
+    public String getBooleanFalse();
+
+    /**
+     * Retrieves the symbol for <code>null</code> values.
+     * @return such information.
+     */
+    public String getBooleanNull();
 }

@@ -238,6 +238,11 @@ public class CachingDecoratorFactory
 
         String t_strColumnName;
         int t_iColumnType;
+        boolean t_bAllowsNull;
+        boolean t_bIsBool;
+        String t_strBooleanTrue;
+        String t_strBooleanFalse;
+        String t_strBooleanNull;
 
         int t_iCount =
             (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
@@ -249,23 +254,45 @@ public class CachingDecoratorFactory
             t_iColumnType =
                 metadataManager.getColumnType(table, t_strColumnName);
 
+            t_bIsBool = metadataManager.isBoolean(table, t_strColumnName);
+
+            t_bAllowsNull =
+                metadataManager.allowsNull(table, t_strColumnName);
+
+            t_strBooleanTrue =
+                metadataManager.getBooleanTrue(
+                    table, t_strColumnName);
+
+            t_strBooleanFalse =
+                metadataManager.getBooleanFalse(
+                    table, t_strColumnName);
+
+            t_strBooleanNull =
+                metadataManager.getBooleanNull(
+                    table, t_strColumnName);
+
             result.add(
                 createDecorator(
                     new AttributeValueObject(
                         t_strColumnName,
                         t_iColumnType,
-                        metadataTypeManager.getNativeType(t_iColumnType),
-                        metadataTypeManager.getFieldType(t_iColumnType),
+                        metadataTypeManager.getNativeType(
+                            t_iColumnType, t_bAllowsNull, t_bIsBool),
+                        metadataTypeManager.getFieldType(
+                            t_iColumnType, t_bAllowsNull, t_bIsBool),
                         table,
                         metadataManager.getColumnComment(
                             table, t_strColumnName),
                         metadataManager.isManagedExternally(
                             table, t_strColumnName),
-                        metadataManager.allowsNull(
-                            table, t_strColumnName),
+                        t_bAllowsNull,
                         null,
                         metadataManager.isReadOnly(
-                            table, t_strColumnName)),
+                            table, t_strColumnName),
+                        t_bIsBool,
+                        t_strBooleanTrue,
+                        t_strBooleanFalse,
+                        t_strBooleanNull),
                     metadataManager));
         }
 

@@ -125,10 +125,11 @@ public class OracleMetadataTypeManager
      * Retrieves the native type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated native type.
      */
     public String getNativeType(
-        final int dataType, final boolean allowsNull)
+        final int dataType, final boolean allowsNull, final boolean isBool)
     {
         String result = null;
 
@@ -139,7 +140,7 @@ public class OracleMetadataTypeManager
                 break;
 
             default:
-                result = super.getNativeType(dataType, allowsNull);
+                result = super.getNativeType(dataType, allowsNull, isBool);
                 break;
         }
 
@@ -150,9 +151,11 @@ public class OracleMetadataTypeManager
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether the field allows null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getFieldType(final int dataType, final boolean allowsNull)
+    public String getFieldType(
+        final int dataType, final boolean allowsNull, final boolean isBool)
     {
         String result = "";
 
@@ -163,7 +166,7 @@ public class OracleMetadataTypeManager
                 break;
 
             default:
-                result = super.getFieldType(dataType, allowsNull);
+                result = super.getFieldType(dataType, allowsNull, isBool);
                 break;
         }
 

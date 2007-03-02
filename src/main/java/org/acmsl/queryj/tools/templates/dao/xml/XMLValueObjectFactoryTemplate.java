@@ -290,13 +290,20 @@ public class XMLValueObjectFactoryTemplate
                             t_strField);
                 }
 
+                boolean t_bIsBool =
+                    metadataManager.isBoolean(
+                        tableTemplate.getTableName(),
+                        t_strField);
+
                 String t_strFieldType =
-                    metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
+                    metadataTypeManager.getNativeType(
+                        t_iColumnType, t_bAllowsNull, t_bIsBool);
 
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metadataTypeManager.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(
+                            t_iColumnType, false);
                 }
 
                 t_sbFactoryMethodAttributeBuild.append(

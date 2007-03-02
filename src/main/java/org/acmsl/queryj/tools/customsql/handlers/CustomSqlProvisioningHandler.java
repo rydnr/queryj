@@ -247,7 +247,8 @@ public class CustomSqlProvisioningHandler
                             t_strAttributeName),
                         metadataManager.allowsNull(
                             t_strTableName,
-                            t_strAttributeName)));
+                            t_strAttributeName),
+                            false));
 
                 t_cResultData.add(t_strPropertyName);
             }

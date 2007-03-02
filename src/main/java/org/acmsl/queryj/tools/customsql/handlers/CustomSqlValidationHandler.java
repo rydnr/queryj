@@ -525,7 +525,7 @@ public class CustomSqlValidationHandler
                 t_strType =
                     metadataTypeManager.getObjectType(
                         metadataTypeManager.getJavaType(
-                            t_Parameter.getType()));
+                            t_Parameter.getType()), false);
 
                 t_Type = retrieveType(t_strType, t_Parameter.getType(), log);
             }
@@ -1160,6 +1160,11 @@ public class CustomSqlValidationHandler
             String t_strName;
             String t_strType;
             boolean t_bNullable;
+            boolean t_bReadOnly;
+            boolean t_bIsBool;
+            String t_strBooleanTrue;
+            String t_strBooleanFalse;
+            String t_strBooleanNull;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
@@ -1176,6 +1181,26 @@ public class CustomSqlValidationHandler
                 t_bNullable =
                     metadataManager.allowsNull(t_strTable, t_strColumnName);
 
+                t_bReadOnly = 
+                    metadataManager.isReadOnly(
+                        t_strTable, t_strColumnName);
+
+                t_bIsBool =
+                    metadataManager.isBoolean(
+                        t_strTable, t_strColumnName);
+
+                t_strBooleanTrue =
+                    metadataManager.getBooleanTrue(
+                        t_strTable, t_strColumnName);
+                    
+                t_strBooleanFalse =
+                    metadataManager.getBooleanFalse(
+                        t_strTable, t_strColumnName);
+                    
+                t_strBooleanNull =
+                    metadataManager.getBooleanNull(
+                        t_strTable, t_strColumnName);
+                    
                 result.add(
                     new PropertyElement(
                         t_strId,
@@ -1183,7 +1208,12 @@ public class CustomSqlValidationHandler
                         t_iIndex + 1,
                         t_strName,
                         t_strType,
-                        t_bNullable));
+                        t_bNullable,
+                        t_bReadOnly,
+                        t_bIsBool,
+                        t_strBooleanTrue,
+                        t_strBooleanFalse,
+                        t_strBooleanNull));
             }
         }
         else

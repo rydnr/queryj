@@ -529,7 +529,7 @@ public class XMLDAOTestTemplate
                     t_aParams =
                         new Object[]
                         {
-                            metadataTypeManager.getSmartObjectType(t_iColumnType),
+                            metadataTypeManager.getSmartObjectType(t_iColumnType, false),
                             t_strTestValue.toUpperCase()
                         };
                 }

@@ -85,7 +85,12 @@ public abstract class AbstractPropertyDecorator
             property.getIndex(),
             property.getName(),
             property.getType(),
-            property.isNullable());
+            property.isNullable(),
+            property.isReadOnly(),
+            property.isBoolean(),
+            property.getBooleanTrue(),
+            property.getBooleanFalse(),
+            property.getBooleanNull());
 
         immutableSetProperty(property);
         immutableSetMetadataManager(metadataManager);
@@ -205,7 +210,7 @@ public abstract class AbstractPropertyDecorator
     {
         return
             metadataTypeManager.getObjectType(
-                metadataTypeManager.getJavaType(type));
+                metadataTypeManager.getJavaType(type), false);
     }
 
     /**

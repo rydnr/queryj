@@ -444,4 +444,36 @@ public interface MetadataManager
      * @return <code>true</code> in such case.
      */
     public boolean isReadOnly(final String tableName, final String columnName);
+
+    /**
+     * Retrieves whether given column is marked as <b>bool</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isBoolean(final String tableName, final String columnName);
+
+    /**
+     * Retrieves the symbol for <code>true</code> values, in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     */
+    public String getBooleanTrue(final String tableName, final String columnName);
+
+    /**
+     * Retrieves the symbol for <code>false</code> values, in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     */
+    public String getBooleanFalse(final String tableName, final String columnName);
+
+    /**
+     * Retrieves the symbol for <code>null</code> values, in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     */
+    public String getBooleanNull(final String tableName, final String columnName);
 }

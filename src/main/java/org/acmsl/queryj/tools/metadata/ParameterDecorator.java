@@ -153,7 +153,7 @@ public class ParameterDecorator
     {
         return
             metadataTypeManager.getObjectType(
-                metadataTypeManager.getJavaType(type));
+                metadataTypeManager.getJavaType(type), false);
     }
 
     /**

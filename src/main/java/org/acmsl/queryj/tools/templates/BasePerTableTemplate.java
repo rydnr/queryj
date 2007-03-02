@@ -686,6 +686,14 @@ public abstract class BasePerTableTemplate
                     tableName, staticAttributeName),
                 metadataManager.isReadOnly(
                     tableName, staticAttributeName),
+                metadataManager.isBoolean(
+                    tableName, staticAttributeName),
+                metadataManager.getBooleanTrue(
+                    tableName, staticAttributeName),
+                metadataManager.getBooleanFalse(
+                    tableName, staticAttributeName),
+                metadataManager.getBooleanNull(
+                    tableName, staticAttributeName),
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
@@ -984,6 +992,10 @@ public abstract class BasePerTableTemplate
      * externally.
      * @param allowsNull if the attribute allows nulls.
      * @param readOnly whether the attribute is read-only.
+     * @param isBool whether the attribute is marked as boolean.
+     * @param booleanTrue the symbol for <code>true</code> values in boolean attributes.
+     * @param booleanFalse the symbol for <code>false</code> values in boolean attributes.
+     * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -1003,6 +1015,10 @@ public abstract class BasePerTableTemplate
         final boolean managedExternally,
         final boolean allowsNull,
         final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final DecoratorFactory decoratorFactory)
@@ -1020,7 +1036,11 @@ public abstract class BasePerTableTemplate
                     managedExternally,
                     allowsNull,
                     null,
-                    readOnly),
+                    readOnly,
+                    isBool,
+                    booleanTrue,
+                    booleanFalse,
+                    booleanNull),
                 metadataManager));
     }
 
