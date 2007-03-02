@@ -153,7 +153,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection retrieveNonPrimaryKeyAttributes(
+    public List retrieveNonPrimaryKeyAttributes(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -273,7 +273,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection retrieveAttributes(
+    public List retrieveAttributes(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -349,7 +349,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection retrieveAllButExternallyManagedAttributes(
+    public List retrieveAllButExternallyManagedAttributes(
         final String tableName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,

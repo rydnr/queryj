@@ -325,7 +325,7 @@ public abstract class BasePerTableTemplate
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cNonPrimaryKeyAttributes =
+        List t_lNonPrimaryKeyAttributes =
             metadataUtils.retrieveNonPrimaryKeyAttributes(
                 tableName,
                 metadataManager,
@@ -347,7 +347,7 @@ public abstract class BasePerTableTemplate
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cAttributes =
+        List t_lAttributes =
             metadataUtils.retrieveAttributes(
                 tableName,
                 metadataManager,
@@ -361,7 +361,7 @@ public abstract class BasePerTableTemplate
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cAllButExternallyManagedAttributes =
+        List t_lAllButExternallyManagedAttributes =
             metadataUtils.retrieveAllButExternallyManagedAttributes(
                 tableName,
                 metadataManager,
@@ -465,12 +465,12 @@ public abstract class BasePerTableTemplate
             defaultThemeUtils.buildDAOClassName(t_strSingularName),
             packageUtils.retrieveBaseDAOPackage(basePackageName),
             t_cPrimaryKeyAttributes,
-            t_cNonPrimaryKeyAttributes,
+            t_lNonPrimaryKeyAttributes,
             t_cForeignKeyAttributes,
             t_mReferringKeys,
-            t_cAttributes,
+            t_lAttributes,
             t_cExternallyManagedAttributes,
-            t_cAllButExternallyManagedAttributes,
+            t_lAllButExternallyManagedAttributes,
             t_cLobAttributes,
             t_cAllButLobAttributes,
             t_cForeignKeys,
@@ -590,12 +590,12 @@ public abstract class BasePerTableTemplate
         final String baseDAOClassName,
         final String baseDAOPackageName,
         final Collection primaryKeyAttributes,
-        final Collection nonPrimaryKeyAttributes,
+        final List nonPrimaryKeyAttributes,
         final Collection foreignKeyAttributes,
         final Map referingKeys,
-        final Collection attributes,
+        final List attributes,
         final Collection externallyManagedAttributes,
-        final Collection allButExternallyManagedAttributes,
+        final List allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final List allButLobAttributes,
         final Collection foreignKeys,
@@ -895,12 +895,12 @@ public abstract class BasePerTableTemplate
         final String tableRepositoryName,
         final String tableName,
         final Collection pkAttributes,
-        final Collection nonPkAttributes,
+        final List nonPkAttributes,
         final Collection fkAttributes,
         final Map referingKeys,
-        final Collection attributes,
+        final List attributes,
         final Collection externallyManagedAttributes,
-        final Collection allButExternallyManagedAttributes,
+        final List allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final List allButLobAttributes,
         final Collection foreignKeys,
@@ -945,17 +945,24 @@ public abstract class BasePerTableTemplate
 
         input.put("pk_attributes", pkAttributes);
         input.put("nonpk_attributes", nonPkAttributes);
+        input.put(
+            "nonpk_non_readonly_attributes",
+            removeReadOnly(nonPkAttributes));
         input.put("fk_attributes", fkAttributes);
         input.put("attributes", attributes);
+        input.put("non_readonly_attributes", removeReadOnly(attributes));
         input.put(
             "externally_managed_attributes", externallyManagedAttributes);
         input.put(
             "all_but_externally_managed_attributes",
             allButExternallyManagedAttributes);
+        input.put(
+            "all_non_readonly_but_externally_managed_attributes",
+            removeReadOnly(allButExternallyManagedAttributes));
         input.put("lob_attributes", lobAttributes);
         input.put("all_but_lob_attributes", allButLobAttributes);
         input.put(
-            "all_but_lob_non_readonly_attributes",
+            "all_non_readonly_but_lob_attributes",
             removeReadOnly(allButLobAttributes));
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referingKeys);

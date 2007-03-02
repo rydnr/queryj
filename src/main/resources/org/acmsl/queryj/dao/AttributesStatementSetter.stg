@@ -205,7 +205,44 @@ public class <input.vo_name>AttributesStatementSetter
      */
     private boolean m__bSelectForUpdateOperation;
 
+    /**
+     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
+     * instance.
+<if(parent)>
+    <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+    <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
+
+     * @param updateOperation whether the operation is an update.
+     * @param selectForUpdateOperation whether the operation is a select-for-update.
+     */
+    public <input.vo_name>AttributesStatementSetter(
+<if(parent)>
+        <table.allParentAndNonParentNonReadOnlyAttributes:attribute_isolated_declaration_impl(attr=it);
+          separator="\n">
+<else>
+    <table.attributes:attribute_isolated_declaration_impl(attr=it);
+          separator="\n">
+<endif>
+
+        final boolean updateOperation,
+        final boolean selectForUpdateOperation)
+    {
+<if(parent)>
+        <table.allParentAndNonParentNonReadOnlyAttributes:
+          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
+          separator="\n">
+<else>
+        <table.attributes:
+          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
+          separator="\n">
+<endif>
+
+        immutableSetUpdateOperation(updateOperation);
+        immutableSetSelectForUpdateOperation(selectForUpdateOperation);
+    }
+<else>
     /**
      * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
      * instance.
@@ -213,7 +250,7 @@ public class <input.vo_name>AttributesStatementSetter
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
 <else>
-     <table.attributes:attribute_javadoc(name=it.nameLowercased);
+     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
 <endif>
 
@@ -224,63 +261,20 @@ public class <input.vo_name>AttributesStatementSetter
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <else>
-        <table.attributes:attribute_isolated_declaration_impl(attr=it);
+        <input.non_readonly_attributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <endif>
 
         final boolean updateOperation)
     {
-        this(
-            <input.nonpk_attributes:{ attr | <attr.nameLowercased>,};
-              separator="\n">
-            updateOperation);
-
         <input.pk_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
-    }
 
-    /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
-     * instance.
-     * // TODO: remove read-only attributes.
-     <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     * @param updateOperation whether the operation is an update.
-     */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.nonpk_attributes:attribute_isolated_declaration_impl(attr=it);
-          separator="\n">
-        final boolean updateOperation)
-    {
-        <input.nonpk_attributes:
+        <input.nonpk_non_readonly_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
-        immutableSetUpdateOperation(updateOperation);
     }
-
-<if(input.clobHandling)>
-    /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
-     * instance.
-     <input.nonpk_attributes:attribute_javadoc(name=it.nameLowercased);
-        separator="\n">
-     * @param updateOperation whether the operation is an update.
-     * @param selectForUpdateOperation whether the operation is a select-for-update.
-     */
-    public <input.vo_name>AttributesStatementSetter(
-        <input.all_but_lob_attributes:attribute_isolated_declaration_impl(attr=it);
-          separator="\n">
-        final boolean updateOperation,
-        final boolean selectForUpdateOperation)
-    {
-        <input.all_but_lob_attributes:
-          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
-          separator="\n">
-        immutableSetUpdateOperation(updateOperation);
-        immutableSetSelectForUpdateOperation(selectForUpdateOperation);
-    }
-
 <endif>
 
     /**
@@ -362,16 +356,14 @@ public class <input.vo_name>AttributesStatementSetter
         setValues(
 <if(input.clobHandling)>
             preparedStatement,
-
 <else>
             (Query) preparedStatement,
-
 <endif>
 
 <if(parent)>
             <table.allParentAndNonParentNonReadOnlyAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <else>
-            <table.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
+            <input.non_readonly_attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <endif>
 
 <if(input.clobHandling)>
@@ -427,7 +419,7 @@ public class <input.vo_name>AttributesStatementSetter
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <else>
-        <table.attributes:attribute_isolated_declaration_impl(attr=it);
+        <input.non_readonly_attributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
 <endif>
 
@@ -439,6 +431,7 @@ public class <input.vo_name>AttributesStatementSetter
         final boolean updateOperation)
 
 <endif>
+
       throws  SQLException
     {
 <if(input.clobHandling)>
@@ -452,6 +445,7 @@ public class <input.vo_name>AttributesStatementSetter
             <input.externally_managed_attributes:
               attribute_preparedstatement_specification(attr=it);
               separator="\n">
+
         }
 <else>
 <if(input.externally_managed_attributes)>
@@ -464,26 +458,27 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 <endif>
 
+
 <if(input.clobHandling)>
         if  (selectForUpdateOperation)
         {
-           <input.all_but_lob_attributes:
+           <input.all_non_readonly_but_lob_attributes:
              attribute_preparedstatement_specification(attr=it);
              separator="\n">
         }
         else
         {
-           <input.all_but_externally_managed_attributes:
+           <input.all_non_readonly_but_externally_managed_attributes:
              attribute_preparedstatement_specification(attr=it);
              separator="\n">
         }
-
 <else>
-        <input.all_but_externally_managed_attributes:
+        <input.all_non_readonly_but_externally_managed_attributes:
           attribute_query_specification(attr=it);
           separator="\n">
 
 <endif>
+
     }
 }
 >>

@@ -197,7 +197,7 @@ public interface <input.vo_name>DAO
 <if(parent)>
      <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
 <else>
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
+     <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -207,7 +207,7 @@ public interface <input.vo_name>DAO
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-        <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
 
       throws DataAccessException;
@@ -218,7 +218,7 @@ public interface <input.vo_name>DAO
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator=",\n">
 <else>
-     <input.all_but_externally_managed_attributes:attribute_javadoc(
+     <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -229,7 +229,7 @@ public interface <input.vo_name>DAO
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">)
 <else>
-        <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
 <endif>
 
       throws DataAccessException;
@@ -239,7 +239,7 @@ public interface <input.vo_name>DAO
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
 <else>
-     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @return the number of entities updated.
@@ -250,7 +250,7 @@ public interface <input.vo_name>DAO
         <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">)
 <else>
-        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)
+        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <endif>
 
       throws DataAccessException;

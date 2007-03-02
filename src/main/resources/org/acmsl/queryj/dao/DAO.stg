@@ -571,7 +571,7 @@ public class <input.engine_name><input.vo_name>DAO
     protected void buildUpdateQuery(final UpdateQuery query)
     {
         query.update(<input.table_name_uppercased>);
-        <input.nonpk_attributes:attribute_query_update(
+        <input.nonpk_non_readonly_attributes:attribute_query_update(
           tableRepositoryName=input.tr_name_capitalized,
           tableNameUppercased=input.table_name_uppercased,
           nameUppercased=it.nameUppercased); separator="\n">
@@ -586,7 +586,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @return the number of entities updated.
@@ -596,7 +596,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <else>
-        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">)
+        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <endif>
 
       throws DataAccessException
@@ -606,7 +606,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 buildUpdateQuery(),
@@ -618,7 +618,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @param query the query used to perform the update operation.
@@ -632,7 +632,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <else>
-        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
         final Query query,
@@ -644,7 +644,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 query,
@@ -656,7 +656,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @param query the query used to perform the update operation.
@@ -671,7 +671,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <else>
-        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
         final Query query,
@@ -688,7 +688,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
                     <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                    <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+                    <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                     query,
@@ -703,7 +703,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <table.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @param query the query used to perform the update operation.
@@ -718,7 +718,7 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <else>
-        <table.attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
         final Query query,
@@ -735,10 +735,16 @@ public class <input.engine_name><input.vo_name>DAO
 <if(parent)>
                         <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                        <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+                        <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
+<if(input.clobHandling)>
+                        true,
+                        false),
+<else>
                         true),
+<endif>
+
                     this));
 
         if  (t_Result instanceof Integer)
@@ -1433,7 +1439,7 @@ public void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1443,7 +1449,7 @@ public void insert(
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-        <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+        <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
         buildInsertQuery(),
@@ -1469,7 +1475,7 @@ protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1481,7 +1487,7 @@ protected void insert(
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-        <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+        <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
         query,
@@ -1493,7 +1499,7 @@ protected void insert(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1508,7 +1514,7 @@ protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1523,7 +1529,7 @@ protected void insert(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
             query,
@@ -1536,7 +1542,7 @@ protected void insert(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1551,7 +1557,7 @@ protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1574,7 +1580,7 @@ protected void insert(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 true),
@@ -1587,7 +1593,7 @@ protected void insert(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1597,7 +1603,7 @@ public <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1608,7 +1614,7 @@ public <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
             buildInsertQuery(),
@@ -1622,7 +1628,7 @@ public <input.vo_name> create(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1639,7 +1645,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1653,7 +1659,7 @@ protected <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
             query,
             new DataSourceTransactionManager(dataSource),
@@ -1666,7 +1672,7 @@ protected <input.vo_name> create(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1684,7 +1690,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1698,7 +1704,7 @@ protected <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
             query,
@@ -1712,7 +1718,7 @@ protected <input.vo_name> create(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1729,7 +1735,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">,
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">,
 <endif>
 
     final Query query,
@@ -1754,25 +1760,19 @@ protected <input.vo_name> create(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                <table.attributes:{<it.nameLowercased>}; separator=",\n">,
+                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 true),
             this));
 
     result =
-<if(parent)>
 <if(table.allParentAndNonParentReadOnlyAttributes)>
         findByPrimaryKey(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
 <else>
         factory.create<input.vo_name>(
             <table.allParentAndNonParentAttributes:{<it.nameLowercased>}; separator=",\n">);
-<endif>
-
-<else>
-        factory.create<input.vo_name>(
-            <table.attributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
 
@@ -1798,7 +1798,7 @@ oracle8Insert(input) ::= <<
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
  * @throws DataAccessException if the operation fails.
@@ -1807,7 +1807,7 @@ public void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1827,7 +1827,7 @@ public void insert(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1838,7 +1838,7 @@ public <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1849,7 +1849,7 @@ public <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             getDataSource());
@@ -1860,7 +1860,7 @@ public <input.vo_name> create(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1873,7 +1873,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1885,7 +1885,7 @@ protected <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             new DataSourceTransactionManager(dataSource));
@@ -1896,7 +1896,7 @@ protected <input.vo_name> create(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1909,7 +1909,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1926,7 +1926,7 @@ protected <input.vo_name> create(
 <if(parent)>
                 <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-                <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+                <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
                 new TransactionTemplate(transactionManager));
@@ -1940,7 +1940,7 @@ protected <input.vo_name> create(
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1952,7 +1952,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_but_externally_managed_attributes:attribute_declaration(
+    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1978,22 +1978,28 @@ protected <input.vo_name> create(
                 <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n"> " +
 <else>
-                <table.attributes:{"<it.nameUppercased>};
+                <input.non_readonly_attributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <endif>
 
                 ") VALUES (" +
 <if(parent)>
-                <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:insert_attribute(attr=it);
+                <table.allParentAndNonParentNonReadOnlyAttributes:insert_attribute(attr=it);
                   separator=", \" +\n">"),
 <else>
-                <table.attributes:insert_attribute(attr=it);
+                <input.non_readonly_attributes:insert_attribute(attr=it);
                   separator=",\" +\n">)"),
 <endif>
 
             new <input.vo_name>AttributesStatementSetter(
-                <input.all_but_lob_non_readonly_attributes:{<it.nameLowercased>};
+<if(parent)>
+                <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>};
                   separator=",\n">,
+<else>
+                <input.non_readonly_attributes:{<it.nameLowercased>};
+                  separator=",\n">,
+<endif>
+
                 false,
                 true),
             this));
@@ -2003,10 +2009,10 @@ protected <input.vo_name> create(
             new QueryPreparedStatementCreator(
                 "SELECT " +
 <if(parent)>
-                <table.allParentAndNonParentNonManagedExternallyAttributes:{"<it.nameUppercased>};
+                <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <else>
-                <table.attributes:{"<it.nameUppercased>};
+                <input.non_readonly_attributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <endif>
 

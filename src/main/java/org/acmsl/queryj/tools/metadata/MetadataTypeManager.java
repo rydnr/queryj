@@ -72,9 +72,27 @@ public interface MetadataTypeManager
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @param precision the precision.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType, final boolean allowsNull, final int precision);
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
      * @return the associated native type.
      */
     public int getJavaType(final String dataType);
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param precision the precision.
+     * @return the associated native type.
+     */
+    public int getJavaType(final String dataType, final int precision);
 
     /**
      * Retrieves the QueryJ type of given data type.

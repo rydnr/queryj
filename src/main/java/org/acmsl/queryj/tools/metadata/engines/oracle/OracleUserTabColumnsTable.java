@@ -108,6 +108,12 @@ public class OracleUserTabColumnsTable
         new LongField("COLUMN_ID", this);
 
     /**
+     * The user_tab_columns table data_scale field.
+     */
+    public LongField DATA_SCALE =
+        new LongField("DATA_SCALE", this);
+
+    /**
      * Protected constructor to avoid accidental instantiation.
      * @param alias the table alias.
      */

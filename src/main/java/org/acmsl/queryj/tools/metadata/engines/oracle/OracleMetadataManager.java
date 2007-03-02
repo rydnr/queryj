@@ -1087,6 +1087,7 @@ public class OracleMetadataManager
 
                 t_Query.select(USER_TAB_COLUMNS.DATA_TYPE);
                 t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
+                t_Query.select(USER_TAB_COLUMNS.DATA_SCALE);
 
                 t_Query.from(USER_TAB_COLUMNS);
 
@@ -1243,16 +1244,47 @@ public class OracleMetadataManager
     {
         int[] result = EMPTY_INT_ARRAY;
 
-        String[][] t_astrExtractedValues =
-            extractStringFields(
-                resultSet,
-                fieldName,
-                table,
-                columnNameFieldName);
-                // TODO metadataExtractionListener);
+//         String[][] t_astrExtractedValues =
+//             extractStringFields(
+//                 resultSet,
+//                 fieldName,
+//                 table,
+//                 columnNameFieldName,
+//                 );
+//         // TODO metadataExtractionListener);
 
-        String[] t_astrTypes = t_astrExtractedValues[0];
-        String[] t_astrNames = t_astrExtractedValues[1];
+        boolean t_bExtractNames = (columnNameFieldName != null);
+
+        List t_cTypes = new ArrayList();
+        List t_cNames = new ArrayList();
+        List t_cPrecisions = new ArrayList();
+
+        if  (resultSet != null)
+        {
+            while  (resultSet.next()) 
+            {
+                t_cTypes.add(resultSet.getString(fieldName));
+
+                if  (t_bExtractNames)
+                {
+                    t_cNames.add(
+                        resultSet.getString(columnNameFieldName));
+                }
+                t_cPrecisions.add(
+                    new Integer(resultSet.getInt("DATA_SCALE")));
+            }
+        }
+
+        String[] t_astrTypes = new String[t_cTypes.size()];
+        t_cTypes.toArray(t_astrTypes);
+
+        String[] t_astrNames = new String[t_cNames.size()];
+        t_cNames.toArray(t_astrNames);
+
+        Integer[] t_aiPrecisions = new Integer[t_cPrecisions.size()];
+        t_cPrecisions.toArray(t_aiPrecisions);
+
+        int[] t_iPrecisions = toIntArray(t_aiPrecisions);
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 
@@ -1267,7 +1299,8 @@ public class OracleMetadataManager
                       t_iIndex++) 
             {
                 t_iType = 
-                    metadataTypeManager.getJavaType(t_astrTypes[t_iIndex]);
+                    metadataTypeManager.getJavaType(
+                        t_astrTypes[t_iIndex], t_iPrecisions[t_iIndex]);
 
                 result[t_iIndex] = t_iType;
             }

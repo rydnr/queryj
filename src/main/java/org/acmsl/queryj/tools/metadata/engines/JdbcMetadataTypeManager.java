@@ -142,14 +142,23 @@ public class JdbcMetadataTypeManager
     public String getNativeType(
         final int dataType, final boolean allowsNull)
     {
+        return getNativeType(dataType, allowsNull, 0);
+    }
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @param precision the precision.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType, final boolean allowsNull, final int precision)
+    {
         String result = null;
 
         switch  (dataType)
         {
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
             case Types.BIT:
             case Types.TINYINT:
             case Types.SMALLINT:
@@ -159,16 +168,26 @@ public class JdbcMetadataTypeManager
             case Types.INTEGER:
             case Types.BIGINT:
             case Types.NUMERIC:
-                result = (allowsNull) ? "Long" : "long";
+                if  (precision > 0)
+                {
+                    result = "BigDecimal";
+                }
+                else
+                {
+                    result = (allowsNull) ? "Long" : "long";
+                }
                 break;
 
             case Types.FLOAT:
-                result = (allowsNull) ? "Float" : "float";
-                break;
+//                result = (allowsNull) ? "Float" : "float";
+//                break;
 
             case Types.REAL:
             case Types.DOUBLE:
-                result = (allowsNull) ? "Double" : "double";
+//                result = (allowsNull) ? "Double" : "double";
+//                break;
+            case Types.DECIMAL:
+                result = "BigDecimal";
                 break;
 
             case Types.TIME:
@@ -204,34 +223,53 @@ public class JdbcMetadataTypeManager
      */
     public int getJavaType(final String dataType)
     {
+        return getJavaType(dataType, 0);
+    }
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param precision the precision.
+     * @return the associated native type.
+     */
+    public int getJavaType(final String dataType, final int precision)
+    {
         int result = Types.NULL;
 
         if  (dataType != null)
         {
             result = Types.OTHER;
 
-            Map t_mNative2JavaTypesMap = getNative2JavaTypeMapping();
-
-            if  (t_mNative2JavaTypesMap == null)
+            if  (   ("NUMBER".equalsIgnoreCase(dataType))
+                 && (precision > 0))
             {
-                t_mNative2JavaTypesMap = buildNative2JavaTypeMap();
-                setNative2JavaTypeMapping(t_mNative2JavaTypesMap);
+                result = Types.REAL;
             }
-
-            Object t_Result =
-                t_mNative2JavaTypesMap.get(dataType);
-
-            if  (   (t_Result == null)
-                 || !(t_Result instanceof Integer))
+            else
             {
-                t_Result =
-                    t_mNative2JavaTypesMap.get(dataType.toUpperCase());
-            }
+                Map t_mNative2JavaTypesMap = getNative2JavaTypeMapping();
 
-            if  (   (t_Result != null)
-                 && (t_Result instanceof Integer))
-            {
-                result = ((Integer) t_Result).intValue();
+                if  (t_mNative2JavaTypesMap == null)
+                {
+                    t_mNative2JavaTypesMap = buildNative2JavaTypeMap();
+                    setNative2JavaTypeMapping(t_mNative2JavaTypesMap);
+                }
+
+                Object t_Result =
+                    t_mNative2JavaTypesMap.get(dataType);
+
+                if  (   (t_Result == null)
+                     || !(t_Result instanceof Integer))
+                {
+                    t_Result =
+                        t_mNative2JavaTypesMap.get(dataType.toUpperCase());
+                }
+
+                if  (   (t_Result != null)
+                     && (t_Result instanceof Integer))
+                {
+                    result = ((Integer) t_Result).intValue();
+                }
             }
         }
 
@@ -349,10 +387,6 @@ public class JdbcMetadataTypeManager
 
         switch (dataType)
         {
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
             case Types.BIT:
             case Types.TINYINT:
             case Types.SMALLINT:
@@ -369,8 +403,12 @@ public class JdbcMetadataTypeManager
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = (allowsNull) ? "Double" : "double";
+//                result = (allowsNull) ? "Double" : "double";
+//                break;
+            case Types.DECIMAL:
+                result = "BigDecimal";
                 break;
+
 
             case Types.TIME:
             case Types.DATE:
@@ -513,11 +551,11 @@ public class JdbcMetadataTypeManager
                 result = "long";
                 break;
 
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-                result = "double";
-                break;
+//            case Types.REAL:
+//            case Types.FLOAT:
+//            case Types.DOUBLE:
+//                result = "double";
+//                break;
 
             default:
                 break;
@@ -551,11 +589,11 @@ public class JdbcMetadataTypeManager
                 result = "-1L";
                 break;
 
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-                result = "-0.0d";
-                break;
+//            case Types.REAL:
+//            case Types.FLOAT:
+//            case Types.DOUBLE:
+//                result = "-0.0d";
+//                break;
 
             default:
                 break;
@@ -575,11 +613,6 @@ public class JdbcMetadataTypeManager
 
         switch (dataType)
         {
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
             case Types.BIT:
                 result = "Integer";
                 break;
@@ -597,8 +630,13 @@ public class JdbcMetadataTypeManager
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = "Double";
+//                result = "Double";
+//                break;
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                result = "BigDecimal";
                 break;
+
 
             case Types.TIME:
             case Types.DATE:
@@ -645,7 +683,8 @@ public class JdbcMetadataTypeManager
         else if  (   (dataType.equals("float"))
                   || (dataType.equals("double")))
         {
-            result = "Double";
+//            result = "Double";
+            result = "BigDecimal";
         }
         else if  (dataType.equals("clob"))
         {
@@ -666,11 +705,6 @@ public class JdbcMetadataTypeManager
 
         switch (dataType)
         {
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
             case Types.BIT:
                 result = "Integer";
                 break;
@@ -688,8 +722,13 @@ public class JdbcMetadataTypeManager
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = "Double";
+//                result = "Double";
+//                break;
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                result = "BigDecimal";
                 break;
+
 
             case Types.TIME:
             case Types.DATE:
@@ -723,11 +762,6 @@ public class JdbcMetadataTypeManager
 
         switch (dataType)
         {
-            case Types.NUMERIC:
-            case Types.DECIMAL:
-                result = "BigDecimal";
-                break;
-
             case Types.BIT:
                 result = "Integer";
                 break;
@@ -745,8 +779,13 @@ public class JdbcMetadataTypeManager
             case Types.REAL:
             case Types.FLOAT:
             case Types.DOUBLE:
-                result = "Double";
+//                result = "Double";
+//                break;
+            case Types.NUMERIC:
+            case Types.DECIMAL:
+                result = "BigDecimal";
                 break;
+
 
             case Types.TIME:
             case Types.DATE:
@@ -788,11 +827,11 @@ public class JdbcMetadataTypeManager
                 result = "-1";
                 break;
 
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
-                result = "-1.0d";
-                break;
+//            case Types.REAL:
+//            case Types.FLOAT:
+//            case Types.DOUBLE:
+//                result = "-1.0d";
+//                break;
 
             default:
                 result = "null";
@@ -1048,6 +1087,9 @@ public class JdbcMetadataTypeManager
             case Types.DATE:
             case Types.TIME:
             case Types.TIMESTAMP:
+            case Types.REAL:
+            case Types.FLOAT:
+            case Types.DOUBLE:
                 result = true;
                 break;
 
@@ -1098,9 +1140,9 @@ public class JdbcMetadataTypeManager
             case Types.SMALLINT:
             case Types.INTEGER:
             case Types.BIGINT:
-            case Types.REAL:
-            case Types.FLOAT:
-            case Types.DOUBLE:
+//            case Types.REAL:
+//            case Types.FLOAT:
+//            case Types.DOUBLE:
                 result = true;
                 break;
 
@@ -1123,8 +1165,8 @@ public class JdbcMetadataTypeManager
 
         if  (   ("int".equals(dataType))
              || ("Integer".equalsIgnoreCase(dataType))
-             || ("long".equalsIgnoreCase(dataType))
-             || ("double".equalsIgnoreCase(dataType)))
+             || ("long".equalsIgnoreCase(dataType)))
+//             || ("double".equalsIgnoreCase(dataType)))
         {
             result = true;
         }
@@ -1143,8 +1185,8 @@ public class JdbcMetadataTypeManager
         boolean result = false;
 
         if  (   ("Integer".equals(dataType))
-             || ("Long".equals(dataType))
-             || ("Double".equals(dataType)))
+             || ("Long".equals(dataType)))
+//             || ("Double".equals(dataType)))
         {
             result = true;
         }
