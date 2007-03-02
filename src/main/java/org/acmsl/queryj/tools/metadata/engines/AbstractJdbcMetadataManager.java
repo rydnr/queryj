@@ -175,6 +175,11 @@ public abstract class AbstractJdbcMetadataManager
     private Map m__mColumnComments;
 
     /**
+     * The boolean nature of each column.
+     */
+    private Map m__mColumnBools;
+
+    /**
      * The tables' primary keys information.
      */
     private Map m__mPrimaryKeys;
@@ -251,6 +256,7 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetExternallyManagedFields(t_UniqueMap);
         immutableSetTableComments(t_UniqueMap);
         immutableSetColumnComments(t_UniqueMap);
+        immutableSetColumnBools(t_UniqueMap);
     }
 
     /**
@@ -718,6 +724,33 @@ public abstract class AbstractJdbcMetadataManager
         return m__mColumnComments;
     }
 
+    /**
+     * Specifies the column bools.
+     * @param bools such bools.
+     */
+    protected final void immutableSetColumnBools(final Map bools)
+    {
+        m__mColumnBools = bools;
+    }
+
+    /**
+     * Specifies the column bools.
+     * @param bools such bools.
+     */
+    protected void setColumnBools(final Map bools)
+    {
+        immutableSetColumnBools(bools);
+    }
+
+    /**
+     * Retrieves the column bools.
+     * @return such bools.
+     */
+    protected Map getColumnBools()
+    {
+        return m__mColumnBools;
+    }
+ 
     /**
      * Adds the comments of given table.
      * @param tableName the table name.
@@ -4717,38 +4750,41 @@ public abstract class AbstractJdbcMetadataManager
     public String getBooleanTrue(
         final String tableName, final String columnName)
     {
-        return getBooleanTrue(tableName, columnName, MetaLanguageUtils.getInstance());
+        return
+            getBooleanTrue(
+                tableName,
+                columnName,
+                getColumnBools(),
+                MetaLanguageUtils.getInstance());
     }
 
     /**
      * Retrieves the symbol for <code>true</code> values in boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
+     * @param columnBools the column boolean information.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return <code>true</code> in such case.
      * @precondition tableName != null
      * @precondition columnName != null
+     * @precondition columnBools != null
      * @precondition metaLanguageUtils != null
      */
     protected String getBooleanTrue(
         final String tableName,
         final String columnName,
+        final Map columnBools,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String result = null;
         
-        String t_strColumnComment = getColumnComment(tableName, columnName);
+        String[] t_astrBooleanSymbols =
+            getBooleanSymbols(tableName, columnName, columnBools, metaLanguageUtils);
         
-        if  (t_strColumnComment != null)
+        if  (   (t_astrBooleanSymbols != null)
+             && (t_astrBooleanSymbols.length > 0))
         {
-            String[] t_astrBooleanSymbols =
-                metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
-
-            if  (   (t_astrBooleanSymbols != null)
-                 && (t_astrBooleanSymbols.length > 0))
-            {
-                result = t_astrBooleanSymbols[0];
-            }
+            result = t_astrBooleanSymbols[0];
         }
         
         return result;
@@ -4763,38 +4799,41 @@ public abstract class AbstractJdbcMetadataManager
     public String getBooleanFalse(
         final String tableName, final String columnName)
     {
-        return getBooleanFalse(tableName, columnName, MetaLanguageUtils.getInstance());
+        return
+            getBooleanFalse(
+                tableName,
+                columnName,
+                getColumnBools(),
+                MetaLanguageUtils.getInstance());
     }
 
     /**
      * Retrieves the symbol for <code>false</code> values in boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
+     * @param columnBools the column boolean information.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return <code>false</code> in such case.
      * @precondition tableName != null
      * @precondition columnName != null
+     * @precondition columnBools != null
      * @precondition metaLanguageUtils != null
      */
     protected String getBooleanFalse(
         final String tableName,
         final String columnName,
+        final Map columnBools,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String result = null;
         
-        String t_strColumnComment = getColumnComment(tableName, columnName);
+        String[] t_astrBooleanSymbols =
+            getBooleanSymbols(tableName, columnName, columnBools, metaLanguageUtils);
         
-        if  (t_strColumnComment != null)
+        if  (   (t_astrBooleanSymbols != null)
+             && (t_astrBooleanSymbols.length > 1))
         {
-            String[] t_astrBooleanSymbols =
-                metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
-
-            if  (   (t_astrBooleanSymbols != null)
-                 && (t_astrBooleanSymbols.length > 1))
-            {
-                result = t_astrBooleanSymbols[1];
-            }
+            result = t_astrBooleanSymbols[1];
         }
         
         return result;
@@ -4809,41 +4848,99 @@ public abstract class AbstractJdbcMetadataManager
     public String getBooleanNull(
         final String tableName, final String columnName)
     {
-        return getBooleanNull(tableName, columnName, MetaLanguageUtils.getInstance());
+        return
+            getBooleanNull(
+                tableName,
+                columnName,
+                getColumnBools(),
+                MetaLanguageUtils.getInstance());
     }
 
     /**
      * Retrieves the symbol for <code>null</code> values in boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
+     * @param columnBools the column boolean information.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return <code>null</code> in such case.
      * @precondition tableName != null
      * @precondition columnName != null
+     * @precondition columnBools != null
      * @precondition metaLanguageUtils != null
      */
     protected String getBooleanNull(
         final String tableName,
         final String columnName,
+        final Map columnBools,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String result = null;
         
-        String t_strColumnComment = getColumnComment(tableName, columnName);
+        String[] t_astrBooleanSymbols =
+            getBooleanSymbols(tableName, columnName, columnBools, metaLanguageUtils);
         
-        if  (t_strColumnComment != null)
+        if  (   (t_astrBooleanSymbols != null)
+             && (t_astrBooleanSymbols.length > 2))
         {
-            String[] t_astrBooleanSymbols =
-                metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
-
-            if  (   (t_astrBooleanSymbols != null)
-                 && (t_astrBooleanSymbols.length > 2))
-            {
-                result = t_astrBooleanSymbols[2];
-            }
+            result = t_astrBooleanSymbols[2];
         }
         
         return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String[] getBooleanSymbols(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        String[] result =
+            (String[]) columnBools.get(buildColumnBoolsKey(tableName, columnName));
+        
+        if  (result == null)
+        {
+            String t_strColumnComment = getColumnComment(tableName, columnName);
+        
+            if  (t_strColumnComment != null)
+            {
+                result =
+                    metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
+
+                if  (result != null)
+                {
+                    columnBools.put(
+                        buildColumnBoolsKey(tableName, columnName), result);
+                }
+            }
+        }
+    
+        return result;
+    }
+
+    /**
+     * Builds a key for the column boolean information.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such key.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    protected Object buildColumnBoolsKey(
+        final String tableName, final String columnName)
+    {
+        return "[[column-bools]]" + tableName + "-" + columnName + "]";
     }
 
     /**

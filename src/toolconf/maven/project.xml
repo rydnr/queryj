@@ -188,7 +188,7 @@
     <dependency>
       <groupId>oracle-driver</groupId>
       <artifactId>ojdbc14dms_g</artifactId>
-      <version>1.4</version>
+      <version>10gR2</version>
       <url>http://www.oracle.com/</url>
       <properties>
         <required.to.compile>false</required.to.compile>
@@ -448,12 +448,25 @@
       </properties>
     </dependency>
 
+    <dependency>
+      <groupId>jrat</groupId>
+      <artifactId>shiftone-jrat</artifactId>
+      <version>1.0a2</version>
+      <url>http://jrat.sf.net</url>
+      <properties>
+        <required.to.compile>false</required.to.compile>
+        <required.to.run>false</required.to.run>
+        <required.to.test>false</required.to.test>
+        <required.to.build>true</required.to.build>
+      </properties>
+    </dependency>
+
   </dependencies>
 
   <build>
 
     <nagEmailAddress>
-      jsanleandro@yahoo.es
+      chous@acm-sl.org
     </nagEmailAddress>
 
     <sourceDirectory>../../java/main</sourceDirectory>

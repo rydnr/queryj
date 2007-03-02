@@ -1731,6 +1731,23 @@
         -->
         <mkdir dir="${build.dir}"/>
 
+        <delete dir="temp"/>
+
+        <mkdir dir="temp"/>
+
+        <move todir="temp">
+          <fileset dir="${classes.dir}" includes="**/*.class"/>
+        </move>
+
+        <taskdef
+          name="injectCopy"
+          classname="org.shiftone.jrat.inject.ant.InjectCopyTask"
+          classpathref="java.development.class.path"/>
+
+        <injectCopy todir="${classes.dir}" verbose="true">
+          <fileset dir="temp"/>
+        </injectCopy>
+   
         <!--
          Copy all configuration files.
         -->

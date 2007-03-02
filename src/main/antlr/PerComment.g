@@ -513,8 +513,8 @@ fragment col_annotation
 fragment col_readonly :  READONLY WS?;
 
 fragment col_bool
-  : BOOL WS i=identifier WS? COMMA WS? j=identifier
-        (WS? COMMA k=identifier { setColumnBoolNull($k.text); })? WS?
+  : BOOL WS i=identifier WS? COMMA WS? j=identifier WS?
+        (COMMA k=identifier WS? { setColumnBoolNull($k.text); })?
     {
       setColumnBoolTrue($i.text);
       setColumnBoolFalse($j.text);
@@ -564,6 +564,11 @@ AT
 
 QUOTE : ('\'' | '"');
 
+// literals
+OPEN_PAREN : '(';
+CLOSE_PAREN : ')';
+COMMA : ',';
+
 ID
     : ( LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
     ;
@@ -578,10 +583,6 @@ fragment READONLY : '@readonly';
 fragment BOOL : '@bool';
 fragment ORASEQ : '@oraseq';
 
-// literals
-OPEN_PAREN : '(';
-CLOSE_PAREN : ')';
-COMMA : ',';
 
 WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;// {$channel = HIDDEN;};
 
