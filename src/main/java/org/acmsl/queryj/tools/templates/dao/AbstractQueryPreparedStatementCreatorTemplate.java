@@ -43,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.templates.TemplateCache;
 
 /**
  * Contains the elements required to create the QueryPreparedStatementCreator
@@ -51,6 +52,7 @@ import org.acmsl.queryj.tools.templates.AbstractTemplate;
  *         >Jose San Leandro</a>
  */
 public abstract class AbstractQueryPreparedStatementCreatorTemplate
+//TOD extends  BasePerRepositoryTemplate
     extends  AbstractTemplate
 {
     /**
@@ -177,6 +179,65 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
 
         immutableSetClassEnd(
             classEnd);
+    }
+
+    /**
+     * Retrieves the template cache.
+     * @return such instance.
+     */
+    private TemplateCache getOwnTemplateCache()
+    {
+        return
+            super.immutableGetTemplateCache(
+                buildOwnTemplateCacheKey());
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return buildOwnTemplateCacheKey();
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    private Object buildOwnTemplateCacheKey()
+    {
+        return "//AbstractQueryPreparedStatementCreatorTemplate//";
+    }
+
+    /**
+     * Retrieves an item from the cache.
+     * @param key the item key.
+     * @return the item itself.
+     * @precondition key != null
+     */
+    protected Object getFromCache(final Object key)
+    {
+        Object result = null;
+
+        TemplateCache t_TemplateCache = getTemplateCache();
+
+        if  (t_TemplateCache != null)
+        {
+            result = t_TemplateCache.get(key);
+        }
+
+        if  (result == null)
+        {
+            t_TemplateCache = getOwnTemplateCache();
+
+            if  (t_TemplateCache != null)
+            {
+                result = t_TemplateCache.get(key);
+            }
+        }
+
+        return result;
     }
 
     /**

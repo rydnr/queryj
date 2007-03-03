@@ -114,6 +114,15 @@ public class TableRepositoryTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//TableRepositoryTemplate//";
+    }
+
+    /**
      * Retrieves the template name.
      * @return such information.
      */

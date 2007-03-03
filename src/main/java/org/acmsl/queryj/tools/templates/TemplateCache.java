@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -26,40 +27,35 @@
                     28660 Madrid
                     Spain
 
- ******************************************************************************
+ *****************************************************************************
  *
- * Filename: Template.java
+ * Filename: TemplateCache.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents any kind of templates.
+ * Description: Models mechanisms to cache template attributes.
  *
  */
 package org.acmsl.queryj.tools.templates;
 
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.templates.InvalidTemplateException;
-
 /**
- * Represents any kind of templates.
+ * Models mechanisms to cache template attributes.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public interface Template
+public interface TemplateCache
 {
     /**
-     * Generates the output source code.
-     * @return such output.
-     * @throws QueryJException if the template cannot be generated.
+     * Caches given template attribute.
+     * @param key the attribute  key.
+     * @param attribute the attribute to cache.
      */
-    public String generate()
-      throws  InvalidTemplateException;
+    public void put(final Object key, final Object attribute);
 
     /**
-     * Retrieves the template cache.
-     * @return such instance.
+     * Retrieves a cached template attribute.
+     * @param key the attribute key.
+     * @return such attribute.
      */
-    public TemplateCache getTemplateCache();
+    public Object get(final Object key);
 }

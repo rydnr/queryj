@@ -88,24 +88,19 @@ public abstract class AbstractTemplate
                 DefaultThemeConstants
 {
     /**
-     * Caches the StringTemplateGroup for each template class.
-     */
-    private static Map m__mSTCache;
-
-    /**
      * The optional header.
      */
     private String m__strHeader;
 
     /**
-     * The cached processed header.
-     */
-    private String m__strCachedProcessedHeader;
-    
-    /**
      * The decorator factory.
      */
     private DecoratorFactory m__DecoratorFactory;
+
+    /**
+     * The template caches.
+     */
+    private static final Map m__mTemplateCaches = new HashMap();
 
     /**
      * Builds a <code>AbstractTemplate</code> with given
@@ -119,7 +114,7 @@ public abstract class AbstractTemplate
     {
         immutableSetHeader(header);
         immutableSetDecoratorFactory(decoratorFactory);
-        immutableSetSTCache(new HashMap());
+        immutableSetTemplateCache(createTemplateCache(new HashMap()));
     }
 
     /**
@@ -150,30 +145,97 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Specifies the cached processed header.
-     * @param header such value.
+     * Specifies the template cache.
+     * @param cache such instance.
      */
-    protected final void immutableSetCachedProcessedHeader(final String header)
+    protected final void immutableSetTemplateCache(
+        final TemplateCache cache)
     {
-        m__strCachedProcessedHeader = header;
+        m__mTemplateCaches.put(buildTemplateCacheKey(), cache);
     }
-    
+
     /**
-     * Specifies the cached processed header.
-     * @param header such value.
+     * Specifies the template cache.
+     * @param cache such instance.
      */
-    protected void setCachedProcessedHeader(final String header)
+    protected void setTemplateCache(final TemplateCache cache)
     {
-        immutableSetCachedProcessedHeader(header);
+        immutableSetTemplateCache(cache);
     }
-    
+
     /**
-     * Retrieves the cached processed header.
-     * @returnsuch value.
+     * Retrieves the template cache.
+     * @return such instance.
      */
-    protected String getCachedProcessedHeader()
+    public TemplateCache getTemplateCache()
     {
-        return m__strCachedProcessedHeader;
+        return immutableGetTemplateCache(buildTemplateCacheKey());
+    }
+
+    /**
+     * Retrieves the template cache.
+     * @param templateCacheKey the template cache key.
+     * @return such instance.
+     * @precondition templateCacheKey != null
+     */
+    protected final TemplateCache immutableGetTemplateCache(
+        final Object templateCacheKey)
+    {
+        TemplateCache result =
+            (TemplateCache) m__mTemplateCaches.get(templateCacheKey);
+
+        if  (result == null)
+        {
+            result = createTemplateCache(new HashMap());
+
+            if  (result != null)
+            {
+                m__mTemplateCaches.put(templateCacheKey, result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Creates a <code>TemplateCache</code> instance with
+     * given map.
+     * @param map the map backend.
+     * @return the cache.
+     * @precondition map != null
+     */
+    protected TemplateCache createTemplateCache(final Map map)
+    {
+        return new MapBasedTemplateCache(map);
+    }
+
+    /**
+     * Puts a concrete item in the cache.
+     * @param key the key.
+     * @param item the item.
+     */
+    protected void putInCache(final Object key, final Object item)
+    {
+        putInCache(key, item, getTemplateCache());
+    }
+
+    /**
+     * Puts a concrete item in the cache.
+     * @param key the key.
+     * @param item the item.
+     * @param templateCache the <code>TemplateCache</code> instance.
+     * @precondition templateCache != null
+     */
+    protected void putInCache(
+        final Object key,
+        final Object item,
+        final TemplateCache templateCache)
+    {
+        if  (   (key != null)
+             && (item != null))
+        {
+            templateCache.put(key, item);
+        }
     }
 
     /**
@@ -184,11 +246,30 @@ public abstract class AbstractTemplate
      */
     public String getProcessedHeader(final Map input)
     {
-        String result = getCachedProcessedHeader();
+        return getProcessedHeader(input, getTemplateCache());
+    }
+
+    /**
+     * Retrieves the processed header.
+     * @param input the input.
+     * @param cache the template cache.
+     * @return such information.
+     * @precondition input != null
+     * @precondition cache != null
+     */
+    protected String getProcessedHeader(
+        final Map input, final TemplateCache cache)
+    {
+        String result = (String) cache.get(buildProcessedHeaderKey());
         
         if  (result == null)
         {
             result = processHeader(input, getHeader());
+
+            if  (result != null)
+            {
+                cache.put(buildProcessedHeaderKey(), result);
+            }
         }
         
         return result;
@@ -202,16 +283,13 @@ public abstract class AbstractTemplate
      */
     public String processHeader(final Map input, final String header)
     {
-        String result = processInnerTemplate(header, input);
-
-        setCachedProcessedHeader(result);
-        
-        return result;
+        return processInnerTemplate(header, input);
     }
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code>
+     * instance.
      */
     protected final void immutableSetDecoratorFactory(
         final DecoratorFactory factory)
@@ -221,7 +299,8 @@ public abstract class AbstractTemplate
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code>
+     * instance.
      */
     protected void setDecoratorFactory(
         final DecoratorFactory factory)
@@ -239,24 +318,6 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Specifies the ST cache.
-     * @param map the map to use as cache.
-     */
-    protected static final void immutableSetSTCache(final Map map)
-    {
-        m__mSTCache = map;
-    }
-
-    /**
-     * Retrieves the ST cache.
-     * @return the map being used as cache.
-     */
-    protected static final Map immutableGetSTCache()
-    {
-        return m__mSTCache;
-    }
-
-    /**
      * Retrieves the string template group.
      * @param path the path.
      * @return such instance.
@@ -268,21 +329,23 @@ public abstract class AbstractTemplate
             retrieveGroup(
                 path,
                 "/org/acmsl/queryj/queryj.stg",
-                immutableGetSTCache());
+                getTemplateCache());
     }
     
     /**
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
-     * @param cache the ST cache.
+     * @param cache the template cache.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
      * @precondition cache != null
      */
     protected StringTemplateGroup retrieveGroup(
-        final String path, final String theme, final Map cache)
+        final String path,
+        final String theme,
+        final TemplateCache cache)
     {
         StringTemplateGroup result = null;
         
@@ -304,6 +367,21 @@ public abstract class AbstractTemplate
     }
 
     /**
+     * Builds a key to store the processed header.
+     * @return such key.
+     */
+    protected final Object buildProcessedHeaderKey()
+    {
+        return ".:\\AbstractTemplate//ProcessedHEADER//";
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected abstract Object buildTemplateCacheKey();
+
+    /**
      * Builds a key to store the ST group associated to
      * given path and theme.
      * @param path the ST path.
@@ -312,7 +390,8 @@ public abstract class AbstractTemplate
      * @precondition path != null
      * @precondition theme != null
      */
-    protected final Object buildSTGroupKey(final String path, final String theme)
+    protected final Object buildSTGroupKey(
+        final String path, final String theme)
     {
         return ".:\\AbstractTemplate//STCACHE//" + path + "//" + theme;
     }
@@ -350,7 +429,8 @@ public abstract class AbstractTemplate
      * @return the template.
      * @precondition group != null
      */
-    protected StringTemplate retrieveTemplate(final StringTemplateGroup group)
+    protected StringTemplate retrieveTemplate(
+        final StringTemplateGroup group)
     {
         StringTemplate result = null;
         
@@ -408,7 +488,8 @@ public abstract class AbstractTemplate
     /**
      * Generates the source code.
      * @return such output.
-     * @throws InvalidTemplateException if the template cannot be generated.
+     * @throws InvalidTemplateException if the template cannot
+     * be generated.
      */
     public String generate()
       throws  InvalidTemplateException

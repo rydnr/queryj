@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.templates.functions;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.templates.TemplateCache;
 
 /*
  * Importing some ACM-SL classes.
@@ -75,6 +76,7 @@ import org.apache.commons.logging.LogFactory;
            >Jose San Leandro</a>
  */
 public abstract class FunctionsTemplate
+//TODO  extends  BasePerRepositoryTemplate
     extends  AbstractTemplate
     implements  FunctionsTemplateDefaults
 {
@@ -275,6 +277,65 @@ public abstract class FunctionsTemplate
             CLASS_CONSTRUCTOR,
             INNER_CLASS,
             DEFAULT_CLASS_END);
+    }
+
+    /**
+     * Retrieves the template cache.
+     * @return such instance.
+     */
+    private TemplateCache getOwnTemplateCache()
+    {
+        return
+            super.immutableGetTemplateCache(
+                buildOwnTemplateCacheKey());
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return buildOwnTemplateCacheKey();
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    private Object buildOwnTemplateCacheKey()
+    {
+        return "//FunctionsTemplate//";
+    }
+
+    /**
+     * Retrieves an item from the cache.
+     * @param key the item key.
+     * @return the item itself.
+     * @precondition key != null
+     */
+    protected Object getFromCache(final Object key)
+    {
+        Object result = null;
+
+        TemplateCache t_TemplateCache = getTemplateCache();
+
+        if  (t_TemplateCache != null)
+        {
+            result = t_TemplateCache.get(key);
+        }
+
+        if  (result == null)
+        {
+            t_TemplateCache = getOwnTemplateCache();
+
+            if  (t_TemplateCache != null)
+            {
+                result = t_TemplateCache.get(key);
+            }
+        }
+
+        return result;
     }
 
     /**

@@ -128,6 +128,15 @@ public class KeywordRepositoryTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//KeywordRepositoryTemplate//";
+    }
+
+    /**
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.

@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  */
 public abstract class AbstractDAOFactoryTemplate
     extends  AbstractTemplate
+//TODO    extends  BasePerTableTemplate
 {
     /**
      * The package name.
@@ -120,6 +121,24 @@ public abstract class AbstractDAOFactoryTemplate
         immutableSetQuote(quote);
         immutableSetBasePackageName(basePackageName);
         immutableSetJNDIDataSource(jndiDataSource);
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return buildOwnTemplateCacheKey();
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    private Object buildOwnTemplateCacheKey()
+    {
+        return "//AbstractDAOFactoryTemplate//";
     }
 
     /**

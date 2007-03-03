@@ -196,6 +196,15 @@ public class ConfigurationPropertiesTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//ConfigurationPropertiesTemplate//";
+    }
+
+    /**
      * Splits given value into multiple lines.
      * @param value the text.
      * @return the splitted text.

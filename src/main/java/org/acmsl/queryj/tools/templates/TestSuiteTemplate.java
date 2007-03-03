@@ -90,6 +90,15 @@ public class TestSuiteTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//TestSuiteTemplate//";
+    }
+
+    /**
      * Retrieves the source code of the test suite.
      * @param header the header.
      * @return such Java source code.

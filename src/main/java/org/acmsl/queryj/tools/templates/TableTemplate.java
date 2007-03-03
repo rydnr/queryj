@@ -133,6 +133,15 @@ public class TableTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//TableTemplate//";
+    }
+
+    /**
      * Specifies the fields.
      * @param fields the fields.
      */

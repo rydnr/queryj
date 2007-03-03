@@ -114,6 +114,15 @@ public class RepositoryDAOTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//RepositoryDAOTemplate//";
+    }
+
+    /**
      * Fills the template parameters.
      * @param input the parameter container.
      * @param template the template.
