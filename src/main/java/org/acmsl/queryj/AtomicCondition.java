@@ -161,6 +161,23 @@ public class AtomicCondition
      */
     public AtomicCondition(
         final Field leftSideField,
+        final ConditionOperator operator,
+        final boolean rightSideValue)
+    {
+        this(leftSideField, operator, (Field) null);
+        immutableSetRightSideValue("" + rightSideValue);
+    }
+
+    /**
+     * Creates a condition using given information.
+     * @param leftSideField the left-side field.
+     * @param operator the operator.
+     * @param rightSideValue the right-side value.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     */
+    public AtomicCondition(
+        final Field leftSideField,
         ConditionOperator operator,
         final double rightSideValue)
     {

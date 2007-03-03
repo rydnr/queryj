@@ -653,7 +653,7 @@ public class JdbcMetadataTypeManager
 
         if  (isBool)
         {
-            result = "boolean";
+            result = "Boolean";
         }
         else
         {
@@ -760,7 +760,7 @@ public class JdbcMetadataTypeManager
 
         if  (isBool)
         {
-            result = "boolean";
+            result = "Boolean";
         }
         else
         {

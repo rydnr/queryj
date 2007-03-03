@@ -160,6 +160,23 @@ public class ConditionFactory
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
+        final boolean value)
+    {
+        return new AtomicCondition(leftSideField, operator, value);
+    }
+
+    /**
+     * Creates a condition
+     * @param leftSideField the left-side field.
+     * @param operator the operator.
+     * @param value the fixed value.
+     * @return such type of instance.
+     * @precondition leftSideField != null
+     * @precondition operator != null
+     */
+    public Condition createCondition(
+        final Field leftSideField,
+        final ConditionOperator operator,
         final double value)
     {
         return new AtomicCondition(leftSideField, operator, value);
