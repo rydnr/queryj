@@ -5071,6 +5071,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         Object result;
 
+        /* I finally think this is not needed.
         if  (isCaseSensitive)
         {
             result =
@@ -5078,13 +5079,15 @@ public abstract class AbstractJdbcMetadataManager
         }
         else
         {
+        */
             result =
                   "[[column-bools]]"
                 + tableName.toLowerCase()
                 + "-"
                 + columnName.toLowerCase()
                 + "]";
-        }
+            /*
+        }*/
 
         return result;
     }
