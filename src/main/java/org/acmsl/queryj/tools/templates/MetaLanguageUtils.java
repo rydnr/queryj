@@ -235,33 +235,33 @@ public class MetaLanguageUtils
 
         if  (!isEmpty(columnComment))
         {
-//             try
-//             {
-//                 PerCommentParser t_Parser = setUpParser(columnComment);
+             try
+             {
+                 PerCommentParser t_Parser = setUpParser(columnComment);
 
-//                 t_Parser.columnComment();
+                 t_Parser.columnComment();
 
-//                 String t_strTrue = t_Parser.getColumnBoolTrue();
+                 String t_strTrue = t_Parser.getColumnBoolTrue();
 
-//                 if  (t_strTrue != null)
-//                 {
-//                     result = new String[3];
-//                     result[0] = t_strTrue;
-//                     result[1] = t_Parser.getColumnBoolFalse();
-//                     result[2] = t_Parser.getColumnBoolNull();
-//                 }
-//             }
-//             catch  (final RecognitionException recognitionException)
-//             {
-//                 Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                 if  (t_strTrue != null)
+                 {
+                     result = new String[3];
+                     result[0] = t_strTrue;
+                     result[1] = t_Parser.getColumnBoolFalse();
+                     result[2] = t_Parser.getColumnBoolNull();
+                 }
+             }
+             catch  (final RecognitionException recognitionException)
+             {
+                 Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
-//                 if  (t_Log != null)
-//                 {
-//                     t_Log.error(
-//                         "Invalid column comment: " + columnComment,
-//                         recognitionException);
-//                 }
-//             }
+                 if  (t_Log != null)
+                 {
+                     t_Log.error(
+                         "Invalid column comment: " + columnComment,
+                         recognitionException);
+                 }
+             }
         }
 
         return result;

@@ -1424,7 +1424,9 @@ public abstract class AbstractJdbcMetadataManager
      * concrete row.
      */
     public boolean pointsToPrimaryKey(
-        final String tableName, final String[] fieldNames, final String parentTableName)
+        final String tableName,
+        final String[] fieldNames,
+        final String parentTableName)
     {
         return
             pointsToPrimaryKey(
@@ -4733,19 +4735,65 @@ public abstract class AbstractJdbcMetadataManager
      * @param columnName the column name.
      * @return <code>true</code> in such case.
      */
-    public boolean isBoolean(final String tableName, final String columnName)
+    public boolean isBoolean(
+        final String tableName, final String columnName)
     {
         return
-            (   (getBooleanTrue(tableName, columnName) != null)
-             || (getBooleanFalse(tableName, columnName) != null)
-             || (getBooleanNull(tableName, columnName) != null));
+            isBoolean(
+                tableName,
+                columnName,
+                getColumnBools(),
+                isCaseSensitive(),
+                MetaLanguageUtils.getInstance());
     }
 
     /**
-     * Retrieves the symbol for <code>true</code> values in boolean attributes.
+     * Retrieves whether given column is marked as <b>bool</b> or not.
      * @param tableName the table name.
      * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
      * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isBoolean(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final boolean isCaseSensitive,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        boolean result = false;
+
+        String[] t_astrBooleanSymbols =
+            getBooleanSymbols(
+                tableName,
+                columnName,
+                columnBools,
+                isCaseSensitive,
+                metaLanguageUtils);
+
+        result =
+            (   (getBooleanTrue(t_astrBooleanSymbols) != null)
+             || (getBooleanFalse(t_astrBooleanSymbols) != null)
+             || (getBooleanNull(t_astrBooleanSymbols) != null));
+
+        return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
      */
     public String getBooleanTrue(
         final String tableName, final String columnName)
@@ -4755,16 +4803,20 @@ public abstract class AbstractJdbcMetadataManager
                 tableName,
                 columnName,
                 getColumnBools(),
+                isCaseSensitive(),
                 MetaLanguageUtils.getInstance());
     }
 
     /**
-     * Retrieves the symbol for <code>true</code> values in boolean attributes.
+     * Retrieves the symbol for <code>true</code> values in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnBools the column boolean information.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
-     * @return <code>true</code> in such case.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbol.
      * @precondition tableName != null
      * @precondition columnName != null
      * @precondition columnBools != null
@@ -4774,27 +4826,46 @@ public abstract class AbstractJdbcMetadataManager
         final String tableName,
         final String columnName,
         final Map columnBools,
+        final boolean isCaseSensitive,
         final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            getBooleanTrue(
+                getBooleanSymbols(
+                    tableName,
+                    columnName,
+                    columnBools,
+                    isCaseSensitive,
+                    metaLanguageUtils));
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in
+     * boolean attributes.
+     * @param booleanSymbols the boolean symbols.
+     * @return such symbol.
+     */
+    protected String getBooleanTrue(final String[] booleanSymbols)
     {
         String result = null;
         
-        String[] t_astrBooleanSymbols =
-            getBooleanSymbols(tableName, columnName, columnBools, metaLanguageUtils);
-        
-        if  (   (t_astrBooleanSymbols != null)
-             && (t_astrBooleanSymbols.length > 0))
+        if  (   (booleanSymbols != null)
+             && (booleanSymbols.length > 0))
         {
-            result = t_astrBooleanSymbols[0];
+            result = booleanSymbols[0];
         }
         
         return result;
     }
 
     /**
-     * Retrieves the symbol for <code>false</code> values in boolean attributes.
+     * Retrieves the symbol for <code>false</code> values in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
-     * @return <code>false</code> in such case.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
      */
     public String getBooleanFalse(
         final String tableName, final String columnName)
@@ -4804,16 +4875,20 @@ public abstract class AbstractJdbcMetadataManager
                 tableName,
                 columnName,
                 getColumnBools(),
+                isCaseSensitive(),
                 MetaLanguageUtils.getInstance());
     }
 
     /**
-     * Retrieves the symbol for <code>false</code> values in boolean attributes.
+     * Retrieves the symbol for <code>false</code> values in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnBools the column boolean information.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
-     * @return <code>false</code> in such case.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbol.
      * @precondition tableName != null
      * @precondition columnName != null
      * @precondition columnBools != null
@@ -4823,27 +4898,46 @@ public abstract class AbstractJdbcMetadataManager
         final String tableName,
         final String columnName,
         final Map columnBools,
+        final boolean isCaseSensitive,
         final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            getBooleanFalse(
+                getBooleanSymbols(
+                    tableName,
+                    columnName,
+                    columnBools,
+                    isCaseSensitive,
+                    metaLanguageUtils));
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values in
+     * boolean attributes.
+     * @param booleanSymbols the boolean symbols.
+     * @return such symbol.
+     */
+    protected String getBooleanFalse(final String[] booleanSymbols)
     {
         String result = null;
         
-        String[] t_astrBooleanSymbols =
-            getBooleanSymbols(tableName, columnName, columnBools, metaLanguageUtils);
-        
-        if  (   (t_astrBooleanSymbols != null)
-             && (t_astrBooleanSymbols.length > 1))
+        if  (   (booleanSymbols != null)
+             && (booleanSymbols.length > 1))
         {
-            result = t_astrBooleanSymbols[1];
+            result = booleanSymbols[1];
         }
         
         return result;
     }
 
     /**
-     * Retrieves the symbol for <code>null</code> values in boolean attributes.
+     * Retrieves the symbol for <code>null</code> values in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
-     * @return <code>null</code> in such case.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
      */
     public String getBooleanNull(
         final String tableName, final String columnName)
@@ -4853,16 +4947,20 @@ public abstract class AbstractJdbcMetadataManager
                 tableName,
                 columnName,
                 getColumnBools(),
+                isCaseSensitive(),
                 MetaLanguageUtils.getInstance());
     }
 
     /**
-     * Retrieves the symbol for <code>null</code> values in boolean attributes.
+     * Retrieves the symbol for <code>null</code> values in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnBools the column boolean information.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
-     * @return <code>null</code> in such case.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbol.
      * @precondition tableName != null
      * @precondition columnName != null
      * @precondition columnBools != null
@@ -4872,29 +4970,47 @@ public abstract class AbstractJdbcMetadataManager
         final String tableName,
         final String columnName,
         final Map columnBools,
+        final boolean isCaseSensitive,
         final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            getBooleanNull(
+                getBooleanSymbols(
+                    tableName,
+                    columnName,
+                    columnBools,
+                    isCaseSensitive,
+                    metaLanguageUtils));
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values in
+     * boolean attributes.
+     * @param booleanSymbols the boolean symbols.
+     * @return such symbol.
+     */
+    protected String getBooleanNull(final String[] booleanSymbols)
     {
         String result = null;
         
-        String[] t_astrBooleanSymbols =
-            getBooleanSymbols(tableName, columnName, columnBools, metaLanguageUtils);
-        
-        if  (   (t_astrBooleanSymbols != null)
-             && (t_astrBooleanSymbols.length > 2))
+        if  (   (booleanSymbols != null)
+             && (booleanSymbols.length > 2))
         {
-            result = t_astrBooleanSymbols[2];
+            result = booleanSymbols[2];
         }
         
         return result;
     }
 
     /**
-     * Retrieves the symbol for <code>true</code> values in boolean attributes.
+     * Retrieves the symbols in boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @param columnBools the column boolean information.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
-     * @return <code>true</code> in such case.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbols.
      * @precondition tableName != null
      * @precondition columnName != null
      * @precondition columnBools != null
@@ -4904,25 +5020,35 @@ public abstract class AbstractJdbcMetadataManager
         final String tableName,
         final String columnName,
         final Map columnBools,
+        final boolean isCaseSensitive,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String[] result =
-            (String[]) columnBools.get(buildColumnBoolsKey(tableName, columnName));
-        
+            (String[])
+                columnBools.get(
+                    buildColumnBoolsKey(
+                        tableName, columnName, isCaseSensitive));
+
         if  (result == null)
         {
-            String t_strColumnComment = getColumnComment(tableName, columnName);
+            String t_strColumnComment =
+                getColumnComment(tableName, columnName);
         
             if  (t_strColumnComment != null)
             {
                 result =
-                    metaLanguageUtils.retrieveColumnBool(t_strColumnComment);
+                    metaLanguageUtils.retrieveColumnBool(
+                        t_strColumnComment);
 
-                if  (result != null)
+                if  (result == null)
                 {
-                    columnBools.put(
-                        buildColumnBoolsKey(tableName, columnName), result);
+                    result = new String[0];
                 }
+
+                columnBools.put(
+                    buildColumnBoolsKey(
+                        tableName, columnName, isCaseSensitive),
+                    result);
             }
         }
     
@@ -4933,14 +5059,34 @@ public abstract class AbstractJdbcMetadataManager
      * Builds a key for the column boolean information.
      * @param tableName the table name.
      * @param columnName the column name.
+     * @param isCaseSensitive whether the engine is case sensitive.
      * @return such key.
      * @precondition tableName != null
      * @precondition columnName != null
      */
     protected Object buildColumnBoolsKey(
-        final String tableName, final String columnName)
+        final String tableName,
+        final String columnName,
+        final boolean isCaseSensitive)
     {
-        return "[[column-bools]]" + tableName + "-" + columnName + "]";
+        Object result;
+
+        if  (isCaseSensitive)
+        {
+            result =
+                "[[column-bools]]" + tableName + "-" + columnName + "]";
+        }
+        else
+        {
+            result =
+                  "[[column-bools]]"
+                + tableName.toLowerCase()
+                + "-"
+                + columnName.toLowerCase()
+                + "]";
+        }
+
+        return result;
     }
 
     /**
