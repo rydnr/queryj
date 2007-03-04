@@ -75,6 +75,7 @@ source(input) ::= <<
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.BigDecimalField;
+import org.acmsl.queryj.BooleanField;
 import org.acmsl.queryj.CalendarField;
 import org.acmsl.queryj.ClobField;
 import org.acmsl.queryj.DateField;

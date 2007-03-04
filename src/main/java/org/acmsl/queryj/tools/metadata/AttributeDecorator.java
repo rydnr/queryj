@@ -62,6 +62,7 @@ public interface AttributeDecorator
      * @return such instance.
      */
     public Attribute getAttribute();
+
     /**
      * Retrieves whether the attribute is a clob or not.
      * return such information.

@@ -535,6 +535,26 @@ attribute_query_specification(attr) ::= <<
  Generates the code to specify the attribute into the query.
  @param attr the attribute.
 !>
+<if(attr.boolean)>
+<if(attr.allowsNull)>
+if  (<attr.nameLowercased> == null)
+{
+    query.setNull(
+        <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+        <attr.type>);
+}
+else
+{
+    query.set<attr.objectType>(
+        <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+        (<attr.nameLowercased>.booleanValue()) ? <attr.booleanTrue> : <attr.booleanFalse>);
+}
+<else>
+query.set<attr.objectType>(
+    <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+    (<attr.nameLowercased>) ? <attr.booleanTrue> : <attr.booleanFalse>);
+<endif>
+<else>
 <if(attr.numberSmallerThanInt)>
 query.setInt(
 <else>
@@ -543,6 +563,8 @@ query.set<attr.objectType>(
 
     <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
     <attr.nameLowercased>);
+<endif>
+
 >>
 
 attribute_preparedstatement_specification(attr) ::= <<

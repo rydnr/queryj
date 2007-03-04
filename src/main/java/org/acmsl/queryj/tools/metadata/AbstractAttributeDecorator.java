@@ -745,7 +745,11 @@ public abstract class AbstractAttributeDecorator
     protected String retrieveJavaType()
     {
         return
-            retrieveJavaType(getType(), getMetadataManager(), getAllowsNull());
+            retrieveJavaType(
+                getType(),
+                getMetadataManager(),
+                getAllowsNull(),
+                isBoolean());
     }
 
     /**
@@ -755,19 +759,22 @@ public abstract class AbstractAttributeDecorator
      * @param type the type.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param allowsNull whether the attribute allows null.
+     * @param isBool whether the attribute is declared as boolean.
      * @return such information.
      * @precondition metadataManager != null
      */
     protected String retrieveJavaType(
         final int type,
         final MetadataManager metadataManager,
-        final boolean allowsNull)
+        final boolean allowsNull,
+        final boolean isBool)
     {
         return
             retrieveJavaType(
                 type,
                 metadataManager.getMetadataTypeManager(),
                 allowsNull,
+                isBool,
                 MetadataTypeUtils.getInstance());
     }
 
@@ -776,8 +783,10 @@ public abstract class AbstractAttributeDecorator
      * only a primitive Java type if the attribute type matches,
      * and the column allows nulls.
      * @param type the type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
      * @param allowsNull whether the attribute allows null.
+     * @param isBool whether the attribute is declared as boolean.
      * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
      * @return such information.
      * @precondition metadataTypeManager != null
@@ -787,9 +796,11 @@ public abstract class AbstractAttributeDecorator
         final int type,
         final MetadataTypeManager metadataTypeManager,
         final boolean allowsNull,
+        final boolean isBool,
         final MetadataTypeUtils metadataTypeUtils)
     {
-        String result = metadataTypeManager.getNativeType(type);
+        String result =
+            metadataTypeManager.getNativeType(type, allowsNull, isBool);
 
         if  (allowsNull)
         {
