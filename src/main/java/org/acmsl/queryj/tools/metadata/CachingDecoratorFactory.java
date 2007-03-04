@@ -191,6 +191,7 @@ public class CachingDecoratorFactory
                 table,
                 t_lAttributes,
                 t_ParentTable,
+                metadataManager.isTableDecorated(table),
                 metadataManager);
 
         return result;
@@ -317,6 +318,10 @@ public class CachingDecoratorFactory
     {
         return
             new CachingTableDecorator(
-                table, metadataManager, childAttributes, this);
+                table,
+                metadataManager.isTableDecorated(table),
+                metadataManager,
+                childAttributes,
+                this);
     }
 }

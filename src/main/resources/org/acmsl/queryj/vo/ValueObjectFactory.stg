@@ -164,7 +164,12 @@ public class <input.vo_name>ValueObjectFactory
 
     {
         return
+<if(table.voDecorated)>
+            new <input.vo_name>Decorator(
+<else>
             new <input.vo_name>ValueObject(
+<endif>
+
 <if(parent)>
                 <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 <else>

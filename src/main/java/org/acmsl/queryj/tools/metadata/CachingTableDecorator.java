@@ -179,6 +179,8 @@ public class CachingTableDecorator
      * @param name the name.
      * @param attributes the table attributes.
      * @param parentTable the parent table.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the metadata manager.
      * @precondition name != null
      * @precondition metadataManager != null
@@ -187,15 +189,23 @@ public class CachingTableDecorator
         final String name,
         final List attributes,
         final Table parentTable,
+        final boolean voDecorated,
         final MetadataManager metadataManager)
     {
-        super(name, attributes, parentTable, metadataManager);
+        super(
+            name,
+            attributes,
+            parentTable,
+            voDecorated,
+            metadataManager);
     }
 
     /**
      * Creates a <code>CachingTableDecorator</code> instance.
      * @param table the table name.
      * @param attributes the attributes.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param childAttributes the child attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -204,17 +214,26 @@ public class CachingTableDecorator
     public CachingTableDecorator(
         final String table,
         final List attributes,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        super(table, attributes, metadataManager, childAttributes, decoratorFactory);
+        super(
+            table,
+            attributes,
+            voDecorated,
+            metadataManager,
+            childAttributes,
+            decoratorFactory);
     }
 
     /**
      * Creates a <code>CachingTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition table != null
@@ -223,10 +242,11 @@ public class CachingTableDecorator
      */
     protected CachingTableDecorator(
         final String table,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        super(table, metadataManager, decoratorFactory);
+        super(table, voDecorated, metadataManager, decoratorFactory);
     }
 
     /**
@@ -251,6 +271,8 @@ public class CachingTableDecorator
      * Creates a <code>CachingTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the metadata manager.
      * @param childAttributes the child attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -260,18 +282,25 @@ public class CachingTableDecorator
      */
     protected CachingTableDecorator(
         final String table,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        super(table, metadataManager, childAttributes, decoratorFactory);
+        super(
+            table,
+            voDecorated,
+            metadataManager,
+            childAttributes,
+            decoratorFactory);
     }
 
     /**
      * Specifies the cached all attributes.
      * @param attributes the attributes.
      */
-    protected final void immutableSetCachedAllAttributes(final List attributes)
+    protected final void immutableSetCachedAllAttributes(
+        final List attributes)
     {
         m__lCachedAllAttributes = attributes;
     }
@@ -856,6 +885,7 @@ public class CachingTableDecorator
      * Creates a table decorator.
      * @param name the table name.
      * @param attributes the attributes.
+     * @param voDecorated whether the value-object is decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such decorator.
@@ -867,6 +897,7 @@ public class CachingTableDecorator
     protected TableDecorator createTableDecorator(
         final String parentTable,
         final List attributes,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
@@ -874,6 +905,7 @@ public class CachingTableDecorator
             new CachingTableDecorator(
                 parentTable,
                 attributes,
+                voDecorated,
                 metadataManager,
                 null,
                 decoratorFactory);

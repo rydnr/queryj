@@ -67,5 +67,11 @@ public interface Table
      * @return such table.
      */
     public Table getParentTable();
-}
 
+    /**
+     * Retrieves whether the value object for the table is
+     * decorated or not.
+     * @return such information.
+     */
+    public boolean isVoDecorated();
+}

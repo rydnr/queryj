@@ -342,6 +342,42 @@ public class MetaLanguageUtils
     }
 
     /**
+     * Retrieves whether the table is meant to be decorated.
+     * @param tableComment the table comment.
+     * @return such condition.
+     * @precondition tableComment != null
+     */
+    public boolean retrieveTableDecorator(final String tableComment)
+    {
+        boolean result = false;
+
+        if  (!isEmpty(tableComment))
+        {
+            try
+            {
+                PerCommentParser t_Parser = setUpParser(tableComment);
+
+                t_Parser.tableComment();
+
+                result = t_Parser.getTableDecorator();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid table comment: " + tableComment,
+                        recognitionException);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Sets up the comment parser.
      * @param comment the comment to parse.
      * @return the <code>PerCommentParser</code> instance.

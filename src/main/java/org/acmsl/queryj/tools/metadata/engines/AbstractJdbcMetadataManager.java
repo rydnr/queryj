@@ -180,6 +180,11 @@ public abstract class AbstractJdbcMetadataManager
     private Map m__mColumnBools;
 
     /**
+     * The decorated tables.
+     */
+    private Map m__mDecoratedTables;
+
+    /**
      * The tables' primary keys information.
      */
     private Map m__mPrimaryKeys;
@@ -257,6 +262,7 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetTableComments(t_UniqueMap);
         immutableSetColumnComments(t_UniqueMap);
         immutableSetColumnBools(t_UniqueMap);
+        immutableSetDecoratedTables(t_UniqueMap);
     }
 
     /**
@@ -749,6 +755,33 @@ public abstract class AbstractJdbcMetadataManager
     protected Map getColumnBools()
     {
         return m__mColumnBools;
+    }
+ 
+    /**
+     * Specifies the decorated tables.
+     * @param tables such tables.
+     */
+    protected final void immutableSetDecoratedTables(final Map tables)
+    {
+        m__mDecoratedTables = tables;
+    }
+
+    /**
+     * Specifies the decorated tables.
+     * @param tables such tables.
+     */
+    protected void setDecoratedTables(final Map tables)
+    {
+        immutableSetDecoratedTables(tables);
+    }
+
+    /**
+     * Retrieves the decorated tables.
+     * @return such tables.
+     */
+    protected Map getDecoratedTables()
+    {
+        return m__mDecoratedTables;
     }
  
     /**
@@ -4685,7 +4718,8 @@ public abstract class AbstractJdbcMetadataManager
         
         if  (t_strTableComment != null)
         {
-            result = metaLanguageUtils.retrieveDeclaredParent(t_strTableComment);
+            result =
+                metaLanguageUtils.retrieveDeclaredParent(t_strTableComment);
         }
         
         return result;
@@ -4697,9 +4731,12 @@ public abstract class AbstractJdbcMetadataManager
      * @param columnName the column name.
      * @return <code>true</code> in such case.
      */
-    public boolean isReadOnly(final String tableName, final String columnName)
+    public boolean isReadOnly(
+        final String tableName, final String columnName)
     {
-        return isReadOnly(tableName, columnName, MetaLanguageUtils.getInstance());
+        return
+            isReadOnly(
+                tableName, columnName, MetaLanguageUtils.getInstance());
     }
 
     /**
@@ -5075,6 +5112,75 @@ public abstract class AbstractJdbcMetadataManager
             + "-"
             + columnName.toLowerCase()
             + "]";
+    }
+
+    /**
+     * Retrieves whether given table is decorated or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableDecorated(final String table)
+    {
+        return
+            isTableDecorated(
+                table,
+                getDecoratedTables(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given table is decorated or not.
+     * @param table the table.
+     * @param decoratedTables the decorated tables map.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return <code>true</code> in such case.
+     * @precondition table != null
+     * @precondition decoratedTables != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isTableDecorated(
+        final String table,
+        final Map decoratedTables,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        Boolean result =
+            (Boolean)
+                decoratedTables.get(
+                    buildTableDecoratedKey(table));
+
+        if  (result == null)
+        {
+            String t_strTableComment = getTableComment(table);
+        
+            if  (t_strTableComment != null)
+            {
+                result =
+                    (metaLanguageUtils.retrieveTableDecorator(
+                        t_strTableComment))
+                    ?  Boolean.TRUE
+                    :  Boolean.FALSE;
+
+                decoratedTables.put(
+                    buildTableDecoratedKey(table),
+                    result);
+            }
+        }
+    
+        return result.booleanValue();
+    }
+
+    /**
+     * Builds the key to store whether a concrete table is decorated
+     * or not.
+     * @param table the table.
+     * @return the key.
+     * @precondition table != null
+     */
+    protected Object buildTableDecoratedKey(
+        final String table)
+    {
+        return "[[table-decorated]]" + table.toLowerCase();
     }
 
     /**

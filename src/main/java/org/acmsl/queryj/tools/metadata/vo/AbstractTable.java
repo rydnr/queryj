@@ -72,18 +72,29 @@ public abstract class AbstractTable
     private Table m__ParentTable;
 
     /**
+     * Whether the value-object for the table is decorated.
+     */
+    private boolean m__bVoDecorated;
+
+    /**
      * Creates an <code>AbstractTable</code> with the following
      * information.
      * @param name the name.
      * @param attributes the attributes.
      * @param parentTable the parent table, if any.
+     * @param voDecorated whether the value-object for the table
+     * is decorated.
      */
     protected AbstractTable(
-        final String name, final List attributes, final Table parentTable)
+        final String name,
+        final List attributes,
+        final Table parentTable,
+        final boolean voDecorated)
     {
         immutableSetName(name);
         immutableSetAttributes(attributes);
         immutableSetParentTable(parentTable);
+        immutableSetVoDecorated(voDecorated);
     }
     
     /**
@@ -174,5 +185,34 @@ public abstract class AbstractTable
     public Table getParentTable()
     {
         return m__ParentTable;
+    }
+
+    /**
+     * Specifies whether the value-object for the table
+     * is decorated.
+     * @param flag such flag.
+     */
+    protected final void immutableSetVoDecorated(final boolean flag)
+    {
+        m__bVoDecorated = flag;
+    }
+
+    /**
+     * Specifies whether the value-object for the table
+     * is decorated.
+     * @param flag such flag.
+     */
+    protected void setVoDecorated(final boolean flag)
+    {
+        immutableSetVoDecorated(flag);
+    }
+
+    /**
+     * Retrieves whether the value-object for the table is decorated.
+     * @return such information.
+     */
+    public boolean isVoDecorated()
+    {
+        return m__bVoDecorated;
     }
 }

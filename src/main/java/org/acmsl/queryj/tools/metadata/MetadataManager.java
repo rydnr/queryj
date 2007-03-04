@@ -443,7 +443,8 @@ public interface MetadataManager
      * @param columnName the column name.
      * @return <code>true</code> in such case.
      */
-    public boolean isReadOnly(final String tableName, final String columnName);
+    public boolean isReadOnly(
+        final String tableName, final String columnName);
 
     /**
      * Retrieves whether given column is marked as <b>bool</b> or not.
@@ -451,29 +452,43 @@ public interface MetadataManager
      * @param columnName the column name.
      * @return <code>true</code> in such case.
      */
-    public boolean isBoolean(final String tableName, final String columnName);
+    public boolean isBoolean(
+        final String tableName, final String columnName);
 
     /**
-     * Retrieves the symbol for <code>true</code> values, in boolean attributes.
+     * Retrieves the symbol for <code>true</code> values, in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @return such symbol.
      */
-    public String getBooleanTrue(final String tableName, final String columnName);
+    public String getBooleanTrue(
+        final String tableName, final String columnName);
 
     /**
-     * Retrieves the symbol for <code>false</code> values, in boolean attributes.
+     * Retrieves the symbol for <code>false</code> values, in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @return such symbol.
      */
-    public String getBooleanFalse(final String tableName, final String columnName);
+    public String getBooleanFalse(
+        final String tableName, final String columnName);
 
     /**
-     * Retrieves the symbol for <code>null</code> values, in boolean attributes.
+     * Retrieves the symbol for <code>null</code> values, in
+     * boolean attributes.
      * @param tableName the table name.
      * @param columnName the column name.
      * @return such symbol.
      */
-    public String getBooleanNull(final String tableName, final String columnName);
+    public String getBooleanNull(
+        final String tableName, final String columnName);
+
+    /**
+     * Retrieves whether given table is decorated or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableDecorated(final String table);
 }

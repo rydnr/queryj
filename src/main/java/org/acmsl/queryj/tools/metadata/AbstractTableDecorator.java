@@ -105,6 +105,7 @@ public abstract class AbstractTableDecorator
             table.getName(),
             table.getAttributes(),
             table.getParentTable(),
+            table.isVoDecorated(),
             metadataManager);
     }
 
@@ -141,9 +142,10 @@ public abstract class AbstractTableDecorator
         final String name,
         final List attributes,
         final Table parentTable,
+        final boolean voDecorated,
         final MetadataManager metadataManager)
     {
-        super(name, attributes, parentTable);
+        super(name, attributes, parentTable, voDecorated);
 
         immutableSetMetadataManager(metadataManager);
     }
@@ -152,6 +154,8 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * @param table the table name.
      * @param attributes the attributes.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param childAttributes the child attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -160,11 +164,12 @@ public abstract class AbstractTableDecorator
     public AbstractTableDecorator(
         final String table,
         final List attributes,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, attributes, null, metadataManager);
+        this(table, attributes, null, voDecorated, metadataManager);
         immutableSetChildAttributes(childAttributes);
         immutableSetDecoratorFactory(decoratorFactory);
     }
@@ -173,6 +178,8 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition table != null
@@ -181,10 +188,11 @@ public abstract class AbstractTableDecorator
      */
     protected AbstractTableDecorator(
         final String table,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, null, null, metadataManager);
+        this(table, null, null, voDecorated, metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
     }
     
@@ -192,6 +200,8 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
      * @param metadataManager the metadata manager.
      * @param childAttributes the child attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -201,11 +211,12 @@ public abstract class AbstractTableDecorator
      */
     protected AbstractTableDecorator(
         final String table,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, null, null, metadataManager);
+        this(table, null, null, voDecorated, metadataManager);
         immutableSetChildAttributes(childAttributes);
         immutableSetDecoratorFactory(decoratorFactory);
     }
@@ -315,7 +326,8 @@ public abstract class AbstractTableDecorator
      * Specifies the child attributes.
      * @param childAttributes the child attributes.
      */
-    protected final void immutableSetChildAttributes(final List childAttributes)
+    protected final void immutableSetChildAttributes(
+        final List childAttributes)
     {
         m__lChildAttributes = childAttributes;
     }
@@ -324,7 +336,8 @@ public abstract class AbstractTableDecorator
      * Specifies the child attributes.
      * @param childAttributes the child attributes.
      */
-    protected void setChildAttributes(final List childAttributes)
+    protected void setChildAttributes(
+        final List childAttributes)
     {
         immutableSetChildAttributes(childAttributes);
     }
@@ -364,7 +377,8 @@ public abstract class AbstractTableDecorator
      */
     protected String capitalize(final String value)
     {
-        return capitalize(value, DecorationUtils.getInstance());
+        return
+            capitalize(value, DecorationUtils.getInstance());
     }
     
     /**
@@ -583,13 +597,15 @@ public abstract class AbstractTableDecorator
     /**
      * Retrieves the singular of given word.
      * @param word the word.
-     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code> instance.
+     * @param singularPluralFormConverter the
+     * <code>SingularPluralFormConverter</code> instance.
      * @return the singular.
      * @precondition word != null
      * @precondition singularPluralFormConverter != null
      */
     protected String getSingular(
-        final String word, final EnglishGrammarUtils singularPluralFormConverter)
+        final String word,
+        final EnglishGrammarUtils singularPluralFormConverter)
     {
         return singularPluralFormConverter.getSingular(word);
     }
@@ -646,7 +662,8 @@ public abstract class AbstractTableDecorator
      * @param parentTable the parent table (or <code>null</code> otherwise).
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code>
+     * instance.
      * @return such attributes.
      * @precondition name != null
      * @precondition attributes != null
@@ -868,6 +885,8 @@ public abstract class AbstractTableDecorator
                     createTableDecorator(
                         t_strParentTable, 
                         t_lAttributes,
+                        metadataManager.isTableDecorated(
+                            t_strParentTable),
                         metadataManager,
                         decoratorFactory));
 
@@ -970,6 +989,7 @@ public abstract class AbstractTableDecorator
      * Creates a table decorator.
      * @param name the table name.
      * @param attributes the attributes.
+     * @param voDecorated whether the value-object is decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such decorator.
@@ -981,6 +1001,7 @@ public abstract class AbstractTableDecorator
     protected abstract TableDecorator createTableDecorator(
         final String parentTable,
         final List attributes,
+        final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory);
     

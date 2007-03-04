@@ -63,11 +63,16 @@ public final class TableValueObject
      * @param name the name.
      * @param attributes the attributes.
      * @param parentTable the parent table.
+     * @param voDecorated whether the value-object for the table
+     * is decorated.
      */
     public TableValueObject(
-        final String name, final List attributes, final Table parentTable)
+        final String name,
+        final List attributes,
+        final Table parentTable,
+        final boolean voDecorated)
     {
-        super(name, attributes, parentTable);
+        super(name, attributes, parentTable, voDecorated);
     }
 }
 
