@@ -185,12 +185,11 @@ public class <input.vo_name>ValueObjectFactory
 <endif>
 <else>
             new <input.vo_name>ValueObject(
-<endif>
-
 <if(parent)>
                 <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 <else>
                 <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
+<endif>
 <endif>
 
     }
