@@ -179,7 +179,7 @@ public class <input.vo_name>ValueObjectFactory
             new <input.vo_name>DecoratorImpl(
                 new <input.vo_name>ValueObject(
 <if(parent)>
-                    <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
+                    <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">));
 <else>
                     <table.attributes:{<it.nameUncapitalized>}; separator=",\n">));
 <endif>
