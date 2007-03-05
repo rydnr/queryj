@@ -271,6 +271,9 @@ default_nullable_attribute_extraction(attr, input) ::= <<
  @param attr the attribute.
  @param input the input.
 !>
+<if(attr.boolean)>
+<Boolean_nullable_attribute_extraction(attr=attr)>
+<else>
 <if(attr.allowsNull)>
 <if(attr.timestamp)>
 Timestamp t_<attr.columnNameNormalizedCapitalized>AsTimestamp =
@@ -303,6 +306,44 @@ if  (resultSet.wasNull())
 }
 
 <endif>
+<endif>
+
+>>
+
+Boolean_nullable_attribute_extraction(attr) ::= <<
+<!
+  Generates the code to extract a primitive nullable attribute.
+!>
+<if(attr.allowsNull)>
+Boolean t_<attr.nameLowercased>AsBoolean = null;
+<else>
+boolean t_<attr.nameLowercased>AsBoolean = false;
+<endif>
+
+<attr.actualObjectType> t_<attr.nameLowercased> =
+    resultSet.get<attr.actualObjectType>(
+        "<attr.columnName>");
+
+<if(attr.primitive)>
+if  (t_<attr.nameLowercased> == <attr.booleanTrue>)
+<else>
+if  (t_<attr.nameLowercased>.equals("" + <attr.booleanTrue>))
+<endif>
+
+{
+<if(attr.allowsNull)>
+    t_<attr.nameLowercased>AsBoolean = Boolean.TRUE;
+
+}
+else
+{
+    t_<attr.nameLowercased>AsBoolean = Boolean.FALSE;
+<else>
+    t_<attr.nameLowercased>AsBoolean = true;
+<endif>
+
+
+}
 >>
 
 String_nullable_attribute_extractor(input) ::= <<

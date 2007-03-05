@@ -436,9 +436,8 @@ public abstract class AbstractAttributeDecorator
         final int type, final MetadataTypeManager metadataTypeManager)
     {
         return
-            (   (isBoolean())
-             || (metadataTypeManager.isPrimitive(type)))
-             ?  Boolean.TRUE : Boolean.FALSE;
+            (metadataTypeManager.isPrimitive(type))
+            ?  Boolean.TRUE : Boolean.FALSE;
     }
 
     /**
@@ -800,7 +799,7 @@ public abstract class AbstractAttributeDecorator
         final MetadataTypeUtils metadataTypeUtils)
     {
         String result =
-            metadataTypeManager.getNativeType(type, allowsNull, isBool);
+            metadataTypeManager.getNativeType(type, allowsNull);
 
         if  (allowsNull)
         {

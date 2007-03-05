@@ -131,14 +131,26 @@ public class JdbcMetadataTypeManager
      */
     public String getNativeType(final int dataType)
     {
-        return getNativeType(dataType, false, false);
+        return getNativeType(dataType, false);
     }
 
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
-     * @param isBool whether the attribute is marked as boolean.
      * @param allowsNull whether to allow null or not.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType, final boolean allowsNull)
+    {
+        return getNativeType(dataType, allowsNull, false);
+    }
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated native type.
      */
     public String getNativeType(

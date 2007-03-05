@@ -100,6 +100,23 @@ public class CustomResultSetExtractorDecoratorFactory
     public PropertyDecorator createDecorator(
         final Property property, final MetadataManager metadataManager)
     {
-        return new CustomResultSetExtractorPropertyDecorator(property, metadataManager);
+        return
+            new CustomResultSetExtractorPropertyDecorator(
+                property, metadataManager);
+    }
+
+    /**
+     * Creates an <code>AttributeDecorator</code> for given
+     * attribute instance.
+     * @param attribute the attribute.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated attribute for the concrete template.
+     */
+    public AttributeDecorator createDecorator(
+        final Attribute attribute, final MetadataManager metadataManager)
+    {
+        return
+            new CustomResultSetExtractorAttributeDecorator(
+                attribute, metadataManager);
     }
 }
