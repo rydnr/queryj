@@ -427,11 +427,21 @@ public class <input.engine_name><input.vo_name>DAO
      * Retrieves \<code><input.vo_name>\</code> information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<if(table.voDecorated)>
+     * @return the \<code><input.vo_name>Decorator\</code> matching given
+<else>
      * @return the \<code><input.vo_name>\</code> matching given
+<endif>
+
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator findByPrimaryKey(
+<else>
     public <input.vo_name> findByPrimaryKey(
+<endif>
+
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException
     {
@@ -448,12 +458,22 @@ public class <input.engine_name><input.vo_name>DAO
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param dataSource the \<code>DataSource\</code> instance.
+<if(table.voDecorated)>
+     * @return the \<code><input.vo_name>Decorator\</code> matching given
+<else>
      * @return the \<code><input.vo_name>\</code> matching given
+<endif>
+
      * primary key.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("dataSource")>
      */
+<if(table.voDecorated)>
+    protected <input.vo_name>Decorator findByPrimaryKey(
+<else>
     protected <input.vo_name> findByPrimaryKey(
+<endif>
+
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final DataSource dataSource)
@@ -473,19 +493,34 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query to find by primary key.
      * @param transactionManager the \<code>PlatformTransactionManager\</code>
      * instance.
+<if(table.voDecorated)>
+     * @return the \<code><input.vo_name>Decorator\</code> matching given
+<else>
      * @return the \<code><input.vo_name>\</code> matching given
+<endif>
+
      * primary key.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
      <precondition_notnull("transactionManager")>
      */
+<if(table.voDecorated)>
+    protected <input.vo_name>Decorator findByPrimaryKey(
+<else>
     protected <input.vo_name> findByPrimaryKey(
+<endif>
+
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
+<if(table.voDecorated)>
+        <input.vo_name>Decorator result = null;
+<else>
         <input.vo_name> result = null;
+<endif>
+
 
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
@@ -507,20 +542,35 @@ public class <input.engine_name><input.vo_name>DAO
      * @param query the query to find by primary key.
      * @param transactionTemplate the \<code>TransactionTemplate\</code>
      * instance.
+<if(table.voDecorated)>
+     * @return the \<code><input.vo_class_name>Decorator\</code> matching given
+<else>
      * @return the \<code><input.vo_class_name>\</code> matching given
+<endif>
+
      * primary key.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
      <precondition_notnull("transactionTemplate")>
      */
+<if(table.voDecorated)>
+    protected <input.vo_name>Decorator findByPrimaryKey(
+<else>
     protected <input.vo_name> findByPrimaryKey(
+<endif>
+
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final Query query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
     {
         return
+<if(table.voDecorated)>
+            (<input.vo_name>Decorator)
+<else>
             (<input.vo_name>)
+<endif>
+
                 transactionTemplate.execute(
                     new QueryTransactionCallback(
                         new QueryPreparedStatementCreator(query),

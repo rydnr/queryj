@@ -152,8 +152,19 @@ public class <input.vo_name>ValueObjectFactory
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
+<if(table.voDecorated)>
+     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+<else>
+     * @return the new \<code><input.vo_name>\</code> instance.
+<endif>
+
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator create<input.vo_name>(
+<else>
     public <input.vo_name> create<input.vo_name>(
+<endif>
+
 <if(parent)>
         <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
@@ -165,7 +176,7 @@ public class <input.vo_name>ValueObjectFactory
     {
         return
 <if(table.voDecorated)>
-            new <input.vo_name>Decorator(
+            new <input.vo_name>DecoratorImpl(
 <else>
             new <input.vo_name>ValueObject(
 <endif>
@@ -186,8 +197,19 @@ public class <input.vo_name>ValueObjectFactory
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
+<if(table.voDecorated)>
+     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+<else>
+     * @return the new \<code><input.vo_name>\</code> instance.
+<endif>
+
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator create<input.vo_name>ValueObject(
+<else>
     public <input.vo_name> create<input.vo_name>ValueObject(
+<endif>
+
 <if(parent)>
         <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
@@ -216,8 +238,20 @@ public class <input.vo_name>ValueObjectFactory
 <else>
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
+
+<if(table.voDecorated)>
+     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+<else>
+     * @return the new \<code><input.vo_name>\</code> instance.
+<endif>
+
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator create(
+<else>
     public <input.vo_name> create(
+<endif>
+
 <if(parent)>
         <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)
@@ -246,8 +280,19 @@ public class <input.vo_name>ValueObjectFactory
      <table.attributes:attribute_javadoc(attribute=it); separator="\n">
 <endif>
 
+<if(table.voDecorated)>
+     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+<else>
+     * @return the new \<code><input.vo_name>\</code> instance.
+<endif>
+
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator createValueObject(
+<else>
     public <input.vo_name> createValueObject(
+<endif>
+
 <if(parent)>
         <table.allParentAndNonParentAttributes:attribute_method_declaration(attribute=it);
           separator=",\n">)

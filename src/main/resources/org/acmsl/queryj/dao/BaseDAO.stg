@@ -188,7 +188,12 @@ public interface <input.vo_name>DAO
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator findByPrimaryKey(
+<else>
     public <input.vo_name> findByPrimaryKey(
+<endif>
+
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
       throws DataAccessException;
 
