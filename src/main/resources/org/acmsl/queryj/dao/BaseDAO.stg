@@ -78,7 +78,8 @@ source(input) ::= <<
 <project_imports(
   basePackageName=input.base_package_name,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name)>
+  voName=input.vo_name,
+  table=input.table)>
 
 /*
  * Importing Spring classes.
@@ -112,17 +113,22 @@ second_line_description(tableName) ::= <<
 <tableName> structures from persistence layers.
 >>
 
-project_imports(basePackageName, voSubpackageName, voName) ::= <<
+project_imports(basePackageName, voSubpackageName, voName, table) ::= <<
 <!
  Generates the project imports.
  @param basePackageName the base package name.
  @param voSubpackageName the value-object subpackage name.
  @param voName the value-object name.
+ @param table the table.
 !>
 /*
  * Importing project classes.
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
+<if(table.voDecorated)>
+import <basePackageName>.<voSubpackageName>.<voName>Decorator;
+<endif>
+
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 >>
 

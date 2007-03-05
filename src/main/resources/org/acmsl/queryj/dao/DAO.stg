@@ -103,7 +103,8 @@ source(input) ::= <<
   damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
   fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
   fkAttributes=input.fk_attributes,
-  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName)>
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  table=input.table)>
 
 /*
  * Importing some ACM-SL classes.
@@ -214,7 +215,8 @@ project_imports(
   damSubpackageName,
   fkssSubpackageName,
   fkAttributes,
-  baseDAOSubpackageName) ::= <<
+  baseDAOSubpackageName,
+  table) ::= <<
 <!
   Generates the project imports
   @param basePackageName the base package name.
@@ -234,6 +236,7 @@ project_imports(
   statement setter.
   @param fkAttributes the foreign key attributes.
   @param baseDAOSubpackageName the subpackage of the base DAO interface.
+  @param table the table.
 !>
 /*
  * Importing project-specific classes.
@@ -248,6 +251,10 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
   subpackageName=subpackageName,
   crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
+<if(table.voDecorated)>
+import <basePackageName>.<voSubpackageName>.<voName>Decorator;
+<endif>
+
 import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
