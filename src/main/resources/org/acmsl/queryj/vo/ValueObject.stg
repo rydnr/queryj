@@ -154,9 +154,17 @@ attribute_getter(attribute) ::= <<
 
  */
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+public Boolean get<attribute.nameCapitalized>();
+<else>
 public <attribute.objectType> get<attribute.nameCapitalized>();
+<endif>
+<else>
+<if(attribute.boolean)>
+public boolean get<attribute.nameCapitalized>();
 <else>
 public <attribute.javaType> get<attribute.nameCapitalized>();
+<endif>
 <endif>
 
 >>

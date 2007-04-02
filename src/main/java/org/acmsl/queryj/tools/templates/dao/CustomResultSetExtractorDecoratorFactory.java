@@ -42,7 +42,9 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -94,15 +96,27 @@ public class CustomResultSetExtractorDecoratorFactory
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
      * @param property the attribute.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
+     * @precondition property != null
+     * @precondition result != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager)
+        final Property property,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
     {
         return
             new CustomResultSetExtractorPropertyDecorator(
-                property, metadataManager);
+                property,
+                result,
+                customSqlProvider,
+                metadataManager);
     }
 
     /**

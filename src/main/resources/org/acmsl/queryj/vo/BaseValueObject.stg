@@ -187,9 +187,17 @@ attribute_declaration(attribute) ::= <<
 
  */
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+private Boolean m__b<attribute.nameCapitalized>;
+<else>
 private <attribute.objectType> m__<attribute.nameCapitalized>;
+<endif>
+<else>
+<if(attribute.boolean)>
+private boolean m__b<attribute.nameCapitalized>;
 <else>
 private <attribute.javaType> m__<attribute.nameCapitalized>;
+<endif>
 <endif>
 
 >>
@@ -213,9 +221,17 @@ attribute_method_declaration(attribute) ::= <<
  @param attribute the attribute.
 !>
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+final Boolean <attribute.nameUncapitalized>
+<else>
 final <attribute.objectType> <attribute.nameUncapitalized>
+<endif>
+<else>
+<if(attribute.boolean)>
+final boolean <attribute.nameUncapitalized>
 <else>
 final <attribute.javaType> <attribute.nameUncapitalized>
+<endif>
 <endif>
 
 >>
@@ -254,13 +270,26 @@ attribute_setter(attribute) ::= <<
 
  */
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+protected final void immutableSet<attribute.nameCapitalized>(final Boolean value)
+<else>
 protected final void immutableSet<attribute.nameCapitalized>(final <attribute.objectType> value)
+<endif>
+<else>
+<if(attribute.boolean)>
+protected final void immutableSet<attribute.nameCapitalized>(final boolean value)
 <else>
 protected final void immutableSet<attribute.nameCapitalized>(final <attribute.javaType> value)
 <endif>
+<endif>
 
 {
+<if(attribute.boolean)>
+    m__b<attribute.nameCapitalized> = value;
+<else>
     m__<attribute.nameCapitalized> = value;
+<endif>
+
 }
 
 /**
@@ -268,9 +297,17 @@ protected final void immutableSet<attribute.nameCapitalized>(final <attribute.ja
  * @param value such information.
  */
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+protected void set<attribute.nameCapitalized>(final Boolean value)
+<else>
 protected void set<attribute.nameCapitalized>(final <attribute.objectType> value)
+<endif>
+<else>
+<if(attribute.boolean)>
+protected void set<attribute.nameCapitalized>(final boolean value)
 <else>
 protected void set<attribute.nameCapitalized>(final <attribute.javaType> value)
+<endif>
 <endif>
 
 {
@@ -293,12 +330,25 @@ attribute_getter(attribute) ::= <<
 
  */
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+public Boolean get<attribute.nameCapitalized>()
+<else>
 public <attribute.objectType> get<attribute.nameCapitalized>()
+<endif>
+<else>
+<if(attribute.boolean)>
+public boolean get<attribute.nameCapitalized>()
 <else>
 public <attribute.javaType> get<attribute.nameCapitalized>()
 <endif>
+<endif>
 
 {
+<if(attribute.boolean)>
+    return m__b<attribute.nameCapitalized>;
+<else>
     return m__<attribute.nameCapitalized>;
+<endif>
+
 }
 >>

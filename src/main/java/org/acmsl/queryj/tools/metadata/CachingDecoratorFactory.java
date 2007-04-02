@@ -103,6 +103,8 @@ public class CachingDecoratorFactory
      * @param attribute the attribute.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
+     * @precondition attribute != null
+     * @precondition metadataManager != null
      */
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager)
@@ -114,11 +116,20 @@ public class CachingDecoratorFactory
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
      * @param property the property.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
+     * @precondition property != null
+     * @precondition result != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager)
+        final Property property,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
     {
         return new CachingPropertyDecorator(property, metadataManager);
     }
@@ -130,6 +141,9 @@ public class CachingDecoratorFactory
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated result for the concrete template.
+     * @precondition result != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public ResultDecorator createDecorator(
         final Result result,
@@ -147,6 +161,9 @@ public class CachingDecoratorFactory
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
+     * @precondition sql != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public SqlDecorator createDecorator(
         final Sql sql,
@@ -163,6 +180,8 @@ public class CachingDecoratorFactory
      * @param table the table.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
+     * @precondition table != null
+     * @precondition metadataManager != null
      */
     public TableDecorator createTableDecorator(
         final String table, final MetadataManager metadataManager)
@@ -201,12 +220,9 @@ public class CachingDecoratorFactory
      * Retrieves the decorated list of attributes of given table.
      * @param table the table.
      * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
      * @return the attribute list
      * @precondition table != null
      * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     public List decorateAttributes(
         final String table, final MetadataManager metadataManager)

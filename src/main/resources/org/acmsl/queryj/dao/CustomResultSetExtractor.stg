@@ -263,6 +263,7 @@ nullable_attribute_extraction(attr, input) ::= <<
 <else>
 <default_nullable_attribute_extraction(attr=attr, input=input)>
 <endif>
+
 >>
 
 default_nullable_attribute_extraction(attr, input) ::= <<
@@ -320,15 +321,28 @@ Boolean t_<attr.nameLowercased>AsBoolean = null;
 boolean t_<attr.nameLowercased>AsBoolean = false;
 <endif>
 
+<if(attr.allowsNull)>
 <attr.actualObjectType> t_<attr.nameLowercased> =
+    new <attr.actualObjectType>(
+        resultSet.get<attr.actualObjectType>(
+            "<attr.columnName>"));
+if  (!resultSet.wasNull("<attr.columnName>"))
+{
+    t_<attr.nameLowercased> = null;
+}
+<else>
+<attr.actualJavaType> t_<attr.nameLowercased> =
     resultSet.get<attr.actualObjectType>(
         "<attr.columnName>");
+<endif>
+
 
 <if(attr.primitive)>
 if  (t_<attr.nameLowercased> == <attr.booleanTrue>)
 <else>
-if  (t_<attr.nameLowercased>.equals("" + <attr.booleanTrue>))
+if  (("" + t_<attr.nameLowercased>).equals("" + <attr.booleanTrue>))
 <endif>
+
 
 {
 <if(attr.allowsNull)>
@@ -342,8 +356,9 @@ else
     t_<attr.nameLowercased>AsBoolean = true;
 <endif>
 
-
 }
+
+
 >>
 
 String_nullable_attribute_extractor(input) ::= <<
@@ -426,6 +441,7 @@ new <attr.objectType>(
 <else>
     resultSet.get<attr.objectType>("<attr.columnName>"));
 <endif>
+
 >>
 
 object_nullable_attribute_extractor(attr) ::= <<
@@ -474,6 +490,7 @@ attribute_extraction(attr, input) ::= <<
 <else>
 <default_attribute_extraction(attr)>
 <endif>
+
 >>
 
 default_attribute_extraction(attr) ::= <<
@@ -481,6 +498,7 @@ default_attribute_extraction(attr) ::= <<
  Generates the member declaration for a concrete attribute.
  @param attr the attribute.
 !>
+//<attr.columnName>
 <if(attr.allowsNull)>
 <if(attr.timestamp)>
 t_<attr.columnNameNormalizedCapitalized>AsTimestamp
@@ -494,7 +512,11 @@ resultSet.getInt("<attr.columnName>")
 <if(attr.timestamp)>
 resultSet.getTimestamp("<attr.columnName>")
 <else>
+<if(attr.boolean)>
+t_<attr.nameLowercased>AsBoolean
+<else>
 resultSet.get<attr.objectType>("<attr.columnName>")
+<endif>
 <endif>
 <endif>
 <endif>

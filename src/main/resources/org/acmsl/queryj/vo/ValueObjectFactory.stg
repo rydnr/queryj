@@ -339,9 +339,17 @@ attribute_method_declaration(attribute) ::= <<
  @param attribute the attribute.
 !>
 <if(attribute.allowsNull)>
+<if(attribute.boolean)>
+final Boolean <attribute.nameUncapitalized>
+<else>
 final <attribute.objectType> <attribute.nameUncapitalized>
+<endif>
+<else>
+<if(attribute.boolean)>
+final boolean <attribute.nameUncapitalized>
 <else>
 final <attribute.javaType> <attribute.nameUncapitalized>
+<endif>
 <endif>
 
 >>

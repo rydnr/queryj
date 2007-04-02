@@ -1701,6 +1701,20 @@
         depends="aspectj,jar"
         description="Creates a jar with the classes, including aspects."/>
 
+    <target name="jrat" if="use.jrat">
+      <description>Prepares the jar files for an instrumented build using JRat.</description>
+
+        <taskdef
+          name="injectCopy"
+          classname="org.shiftone.jrat.inject.ant.InjectCopyTask"
+          classpathref="java.development.class.path"/>
+
+        <injectCopy todir="${classes.dir}" verbose="true">
+          <fileset dir="temp"/>
+        </injectCopy>
+   
+    </target>
+
     <!--
      Creates a jar with the classes.
      @depends init to set up required properties and paths.
@@ -1739,15 +1753,18 @@
           <fileset dir="${classes.dir}" includes="**/*.class"/>
         </move>
 
-        <taskdef
-          name="injectCopy"
-          classname="org.shiftone.jrat.inject.ant.InjectCopyTask"
-          classpathref="java.development.class.path"/>
+        <property environment="env"/>
 
-        <injectCopy todir="${classes.dir}" verbose="true">
-          <fileset dir="temp"/>
-        </injectCopy>
-   
+        <condition property="use.jrat">
+          <equals
+            arg1="${env.JRAT}"
+            arg2="true"
+            casesensitive="false"
+            trim="true"/>
+        </condition>
+
+        <antcall target="jrat"/>
+
         <!--
          Copy all configuration files.
         -->

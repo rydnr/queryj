@@ -80,11 +80,16 @@ public interface DecoratorFactory
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
      * @param property the property.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
     public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager);
+        final Property property,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager);
 
     /**
      * Creates a <code>ResultDecorator</code> for given

@@ -408,7 +408,10 @@ public abstract class AbstractResultDecorator
                     {
                         result.add(
                             decoratorFactory.createDecorator(
-                                t_Property, metadataManager));
+                                t_Property,
+                                resultElement,
+                                customSqlProvider,
+                                metadataManager));
                     }
                     else
                     {
@@ -501,6 +504,8 @@ public abstract class AbstractResultDecorator
                                 t_strBooleanTrue,
                                 t_strBooleanFalse,
                                 t_strBooleanNull),
+                            resultElement,
+                            customSqlProvider,
                             metadataManager));
                 }
             }

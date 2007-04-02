@@ -75,7 +75,6 @@ public interface Property
      */
     public boolean isNullable();
 
-
     /**
      * Retrieves whether the attribute is marked as read-only.
      * @return such information.
