@@ -1000,6 +1000,58 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Retrieves all column names, including parents'.
+     * @param tableName the table name.
+     * @return the column names.
+     * @precondition tableName != null
+     */
+    public String[] getAllColumnNames(final String tableName)
+    {
+        return getAllColumnNames(tableName, getColumnNames());
+    }
+    
+    /**
+     * Retrieves the column names.
+     * @param tableName the table name.
+     * @param columnNames the column names.
+     * @return the column names.
+     * @precondition tableName != null
+     * @precondition columnNames != null
+     */
+    protected String[] getAllColumnNames(
+        final String tableName, final Map columnNames)
+    {
+        String[] result;
+        
+        String parentTable = getParentTable(tableName);
+        
+        if  (parentTable != null)
+        {
+            Collection aux = new ArrayList();
+            
+            aux.addAll(
+                Arrays.asList(
+                    getAllColumnNames(parentTable, columnNames)));
+
+            aux.addAll(
+                Arrays.asList(
+                    getColumnNames(tableName, columnNames)));
+            
+            aux = removeDuplicates(aux);
+
+            result = new String[aux.size()];
+        
+            aux.toArray(result);
+        }
+        else
+        {
+            result = getColumnNames(tableName, columnNames);
+        }
+        
+        return result;
+    }
+    
+    /**
      * Specifies the column types.
      * @param map the column types map.
      */
@@ -1068,6 +1120,16 @@ public abstract class AbstractJdbcMetadataManager
              && (t_Result instanceof Integer))
         {
             result = ((Integer) t_Result).intValue();
+        }
+        else
+        {
+            String parentTable = getParentTable(tableName);
+            
+            if  (parentTable != null)
+            {
+                result =
+                    getColumnType(parentTable, columnName, columnTypes);
+            }
         }
         
         return result;
@@ -1143,107 +1205,131 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowName the allow name.
+     * @param columnName the column name.
      * @return the allow null.
      * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowName != null
+     * @precondition columnName != null
      */
     public boolean allowsNull(
-        final String tableName, final String allowName)
+        final String tableName, final String columnName)
     {
-        return getAllowNull(tableName, new String[] {allowName});
+        return getAllowNull(tableName, new String[] {columnName});
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowNames the allow names.
+     * @param columnNames the column names.
      * @return the allow null.
      * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowNames != null
+     * @precondition columnNames != null
      */
     public boolean allowsNull(
-        final String tableName, final String[] allowNames)
+        final String tableName, final String[] columnNames)
     {
-        return getAllowNull(tableName, allowNames);
+        return getAllowNull(tableName, columnNames);
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowName the allow name.
+     * @param columnName the column name.
      * @return the allow null.
      * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowName != null
+     * @precondition columnName != null
      */
     public boolean getAllowNull(
-        final String tableName, final String allowName)
+        final String tableName, final String columnName)
     {
-        return getAllowNull(tableName, new String[] {allowName});
+        return getAllowNull(tableName, new String[] {columnName});
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowNames the allow names.
+     * @param columnNames the column names.
      * @return the allow null.
      * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowNames != null
+     * @precondition columnNames != null
      */
     public boolean getAllowNull(
-        final String tableName, final String[] allowNames)
+        final String tableName, final String[] columnNames)
     {
         return
             getAllowNull(
-                tableName, allowNames, getAllowNulls());
+                tableName, columnNames, getAllowNulls());
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowNames the allow names.
+     * @param columnNames the column names.
      * @param allowNulls the allow nulls.
      * @return the allow null.
      * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowNames != null
+     * @precondition columnNames != null
      * @precondition allowNulls != null
      */
     protected boolean getAllowNull(
         final String tableName,
-        final String[] allowNames,
+        final String[] columnNames,
         final Map allowNulls)
     {
         boolean result = false;
 
-        int t_iLength = (allowNames != null) ? allowNames.length : 0;
+        int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            Object t_Result =
-                allowNulls.get(
-                    buildAllowNullKey(
-                        tableName, allowNames[t_iIndex]));
-
-            if  (   (t_Result != null)
-                 && (t_Result instanceof Boolean))
-            {
-                result = ((Boolean) t_Result).booleanValue();
-
-                if  (!result)
-                {
-                    break;
-                }
-            }
+            result =
+                getOwnOrParentAllowNull(
+                    tableName, columnNames[t_iIndex], allowNulls);
         }
         
         return result;
     }
 
+    /**
+     * Checks whether a concrete column allows null or not.
+     * @param tableName the table name.
+     * @param columnName the concrete column name.
+     * @param allowsNull the map.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @preocndition columnNames != null
+     * @precondition allowNulls != null
+     */
+    protected boolean getOwnOrParentAllowNull(
+        final String tableName, final String columnName, final Map allowNulls)
+    {
+        boolean result = false;
+        
+        Object t_Result =
+            allowNulls.get(
+                buildAllowNullKey(tableName, columnName));
+
+        if  (t_Result instanceof Boolean)
+        {
+            result = ((Boolean) t_Result).booleanValue();
+        }
+        else
+        {
+            String parentTable = getParentTable(tableName);
+                
+            if  (parentTable != null)
+            {
+                result = getOwnOrParentAllowNull(parentTable, columnName, allowNulls);
+            }
+        }
+
+        return result;
+    }
+    
     /**
      * Adds a null flag.
      * @param tableName the table name.
@@ -5270,6 +5356,36 @@ public abstract class AbstractJdbcMetadataManager
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
             result[t_iIndex] = Boolean.valueOf(array[t_iIndex]);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Removes the duplicates found in given collection.
+     * @param collection such collection.
+     * @return the trimmed collection.
+     * @precondition collection != null
+     */
+    protected Collection removeDuplicates(final Collection collection)
+    {
+        Collection result = new ArrayList();
+        
+        Iterator iterator = (collection != null) ? collection.iterator() : null;
+        
+        if  (iterator != null)
+        {
+            Object item;
+            
+            while  (iterator.hasNext())
+            {
+                item = iterator.next();
+                
+                if  (!result.contains(item))
+                {
+                    result.add(item);
+                }
+            }
         }
         
         return result;

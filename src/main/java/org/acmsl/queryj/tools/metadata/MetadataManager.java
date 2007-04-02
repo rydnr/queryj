@@ -119,6 +119,13 @@ public interface MetadataManager
     public String[] getColumnNames(final String tableName);
 
     /**
+     * Retrieves all column names, including the parents' if any.
+     * @param tableName the table name.
+     * @return the column names.
+     */
+    public String[] getAllColumnNames(final String tableName);
+
+    /**
      * Retrieves the column type.
      * @param tableName the table name.
      * @param columnName the column name.

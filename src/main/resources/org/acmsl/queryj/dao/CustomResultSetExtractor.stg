@@ -316,9 +316,9 @@ Boolean_nullable_attribute_extraction(attr) ::= <<
   Generates the code to extract a primitive nullable attribute.
 !>
 <if(attr.allowsNull)>
-Boolean t_<attr.nameLowercased>AsBoolean = null;
+Boolean t_<attr.columnNameNormalizedCapitalized>AsBoolean = null;
 <else>
-boolean t_<attr.nameLowercased>AsBoolean = false;
+boolean t_<attr.columnNameNormalizedCapitalized>AsBoolean = false;
 <endif>
 
 <if(attr.allowsNull)>
@@ -326,7 +326,8 @@ boolean t_<attr.nameLowercased>AsBoolean = false;
     new <attr.actualObjectType>(
         resultSet.get<attr.actualObjectType>(
             "<attr.columnName>"));
-if  (!resultSet.wasNull("<attr.columnName>"))
+
+if  (!resultSet.wasNull())
 {
     t_<attr.nameLowercased> = null;
 }
@@ -346,14 +347,14 @@ if  (("" + t_<attr.nameLowercased>).equals("" + <attr.booleanTrue>))
 
 {
 <if(attr.allowsNull)>
-    t_<attr.nameLowercased>AsBoolean = Boolean.TRUE;
+    t_<attr.columnNameNormalizedCapitalized>AsBoolean = Boolean.TRUE;
 
 }
 else
 {
-    t_<attr.nameLowercased>AsBoolean = Boolean.FALSE;
+    t_<attr.columnNameNormalizedCapitalized>AsBoolean = Boolean.FALSE;
 <else>
-    t_<attr.nameLowercased>AsBoolean = true;
+    t_<attr.columnNameNormalizedCapitalized>AsBoolean = true;
 <endif>
 
 }
@@ -513,7 +514,7 @@ resultSet.getInt("<attr.columnName>")
 resultSet.getTimestamp("<attr.columnName>")
 <else>
 <if(attr.boolean)>
-t_<attr.nameLowercased>AsBoolean
+t_<attr.columnNameNormalizedCapitalized>AsBoolean
 <else>
 resultSet.get<attr.objectType>("<attr.columnName>")
 <endif>

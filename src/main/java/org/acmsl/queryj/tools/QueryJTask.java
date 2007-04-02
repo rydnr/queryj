@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
+import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProvisioningHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
@@ -1077,6 +1078,7 @@ public class QueryJTask
             result.add(new Oracle8MetaDataRetrievalHandler());
             result.add(new OracleMetaDataRetrievalHandler());
             result.add(new JdbcMetaDataRetrievalHandler());
+            result.add(new CustomSqlProvisioningHandler());
             result.add(new CustomSqlValidationHandler());
 
             result.add(new DatabaseMetaDataLoggingHandler());

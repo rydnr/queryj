@@ -445,7 +445,7 @@ public abstract class AbstractResultDecorator
                  && (t_MetadataTypeManager != null))
             {
                 String[] t_astrColumnNames =
-                    metadataManager.getColumnNames(t_strTable);
+                    metadataManager.getAllColumnNames(t_strTable);
 
                 int t_iCount =
                     (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;

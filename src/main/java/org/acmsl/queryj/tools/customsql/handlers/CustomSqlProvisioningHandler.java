@@ -95,44 +95,6 @@ public class CustomSqlProvisioningHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     */
-    public boolean handle(final Command command)
-    {
-        boolean result = false;
-
-        if  (command instanceof AntCommand) 
-        {
-            AntCommand t_AntCommand = (AntCommand) command;
-
-            try 
-            {
-                result = handle(t_AntCommand);
-            }
-            catch  (final BuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        CustomSqlProvisioningHandler.class);
-
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                          "Cannot include default elements in the "
-                        + "custom SQL model.",
-                        buildException);
-                }
-
-                result = true;
-            }
-        }
-        
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition command != null
      */
@@ -212,14 +174,14 @@ public class CustomSqlProvisioningHandler
         Collection t_cResultData;
 
         for  (int t_iTableIndex = 0;
-              t_iTableIndex < t_iTableCount;
-              t_iTableIndex++)
+                  t_iTableIndex < t_iTableCount;
+                  t_iTableIndex++)
         {
             t_strTableName = t_astrTableNames[t_iTableIndex];
             t_strResultName = buildResultName(t_strTableName);
 
             t_astrAttributeNames =
-                metadataManager.getColumnNames(t_strTableName);
+                metadataManager.getAllColumnNames(t_strTableName);
 
             t_iAttributeCount =
                 (t_astrAttributeNames != null)
@@ -229,8 +191,8 @@ public class CustomSqlProvisioningHandler
             t_cResultData = new ArrayList();
 
             for  (int t_iAttributeIndex = 0;
-                  t_iAttributeIndex < t_iAttributeCount;
-                  t_iAttributeIndex++)
+                      t_iAttributeIndex < t_iAttributeCount;
+                      t_iAttributeIndex++)
             {
                 t_strAttributeName =
                     t_astrAttributeNames[t_iAttributeIndex];
