@@ -1713,6 +1713,14 @@
           <fileset dir="temp"/>
         </injectCopy>
    
+        <delete dir="temp"/>
+
+        <mkdir dir="temp"/>
+
+        <move todir="temp">
+          <fileset dir="${classes.dir}" includes="**/*.class"/>
+        </move>
+
     </target>
 
     <!--
@@ -1744,14 +1752,6 @@
          Creates the distribution directory.
         -->
         <mkdir dir="${build.dir}"/>
-
-        <delete dir="temp"/>
-
-        <mkdir dir="temp"/>
-
-        <move todir="temp">
-          <fileset dir="${classes.dir}" includes="**/*.class"/>
-        </move>
 
         <property environment="env"/>
 
