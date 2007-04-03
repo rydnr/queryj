@@ -352,6 +352,7 @@ public class CustomSqlValidationHandler
                     log);
 
                 if  (   (Sql.INSERT.equals(sql.getType()))
+                     || (Sql.UPDATE.equals(sql.getType()))
                      || (Sql.DELETE.equals(sql.getType())))
                 {
                     t_PreparedStatement.executeUpdate();
@@ -363,16 +364,35 @@ public class CustomSqlValidationHandler
                     ResultRefElement t_ResultRef =
                         sql.getResultRef();
                     
+                    Result t_Result = null;
+                    
                     if  (t_ResultRef != null)
+                    {
+                        t_Result =
+                            customSqlProvider.resolveReference(t_ResultRef);
+                    }
+                    else
+                    {
+                        throw new BuildException("No <result-ref> specified.");
+                    }
+                    
+                    if  (t_Result != null)
                     {
                         validateResultSet(
                             t_ResultSet,
                             sql,
-                            customSqlProvider.resolveReference(t_ResultRef),
+                            t_Result,
                             customSqlProvider,
                             metadataManager,
                             metadataTypeManager,
                             log);
+                    }
+                    else
+                    {
+                        throw
+                            new BuildException(
+                                  "Invalid <result-ref> specified. No <result id=\""
+                                + t_ResultRef.getId() + "\"> found.");
                     }
                 }
             }

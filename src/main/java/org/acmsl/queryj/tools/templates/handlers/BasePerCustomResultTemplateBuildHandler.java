@@ -201,7 +201,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveHeader(parameters),
-                retrieveCustomResult(
+                retrieveCustomResults(
                     parameters, customSqlProvider, metadataManager));
     }
 
@@ -261,30 +261,47 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
             BasePerCustomResultTemplate t_Template = null;
 
+            String t_strPackageName;
+            
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
                 t_ResultElement = resultElements[t_iIndex];
 
-                t_Template =
-                    templateFactory.createTemplate(
+                t_strPackageName =
+                    retrievePackage(
                         t_ResultElement,
                         customSqlProvider,
                         metadataManager,
-                        retrievePackage(
-                            t_ResultElement,
-                            customSqlProvider,
-                            metadataManager,
-                            engineName,
-                            parameters),
+                        engineName,
+                        parameters);
+
+                if  (shouldProcessResult(
+                        t_ResultElement,
+                        customSqlProvider,
+                        metadataManager,
+                        t_strPackageName,
                         engineName,
                         engineVersion,
                         projectPackage,
                         repository,
-                        header);
-
-                if  (t_Template != null)
+                        header))
                 {
-                    t_cTemplates.add(t_Template);
+                    t_Template =
+                        templateFactory.createTemplate(
+                            t_ResultElement,
+                            customSqlProvider,
+                            metadataManager,
+                            t_strPackageName,
+                            engineName,
+                            engineVersion,
+                            projectPackage,
+                            repository,
+                            header);
+                
+                    if  (t_Template != null)
+                    {
+                        t_cTemplates.add(t_Template);
+                    }
                 }
             }
 
@@ -362,18 +379,18 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final BasePerCustomResultTemplate[] templates, final Map parameters);
 
     /**
-     * Retrieves the foreign keys.
+     * Retrieves the custom results.
      * @param parameters the parameter map.
      * @param customSqlProvider the custom RESULT provider.
      * @param metadataManager the database metadata manager.
-     * @return such templates.
+     * @return such list.
      * @throws BuildException if the templates cannot be retrieved for any
      * reason.
      * @precondition parameters != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
-    protected Result[] retrieveCustomResult(
+    protected Result[] retrieveCustomResults(
         final Map parameters,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
@@ -383,22 +400,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
         if  (result == null)
         {
-            Collection t_cCustomResult = new ArrayList();
-
-            Result[] t_aResultElements =
+            result = 
                 retrieveCustomResultElements(
                     customSqlProvider, metadataManager);
-
-            int t_iLength =
-                (t_aResultElements != null) ? t_aResultElements.length : 0;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-            {
-                t_cCustomResult.add(t_aResultElements[t_iIndex]);
-            }
-
-            result =
-                (Result[]) t_cCustomResult.toArray(EMPTY_RESULT_ARRAY);
         }
 
         return result;
@@ -441,5 +445,32 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         }
 
         return (Result[]) t_cResult.toArray(EMPTY_RESULT_ARRAY);
+    }
+
+    /**
+     * Checks whether the result should be processed.
+     * @param customResult the custom result.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the database metadata manager.
+     * @param packageName the package name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param basePackageName the base package name.
+     * @param repositoryName the repository name.
+     * @param header the header.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean shouldProcessResult(
+        final Result customResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final String packageName,
+        final String engineName,
+        final String engineVersion,
+        final String basePackageName,
+        final String repositoryName,
+        final String header)
+    {
+        return true;
     }
 }
