@@ -799,7 +799,7 @@ public abstract class AbstractAttributeDecorator
         final MetadataTypeUtils metadataTypeUtils)
     {
         String result =
-            metadataTypeManager.getNativeType(type, allowsNull);
+            metadataTypeManager.getNativeType(type, allowsNull, isBool);
 
         if  (allowsNull)
         {

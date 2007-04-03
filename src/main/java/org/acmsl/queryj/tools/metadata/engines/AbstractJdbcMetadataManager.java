@@ -910,10 +910,23 @@ public abstract class AbstractJdbcMetadataManager
         final String columnName,
         final Map columnComments)
     {
-        return
+        String result =
             (String)
                 columnComments.get(
                     buildColumnCommentKey(tableName, columnName));
+
+        if  (result == null)
+        {
+            String parentTable = getParentTable(tableName);
+            
+            if  (parentTable != null)
+            {
+                result =
+                    getColumnComment(parentTable, columnName, columnComments);
+            }
+        }
+        
+        return result;
     }
 
     /**
