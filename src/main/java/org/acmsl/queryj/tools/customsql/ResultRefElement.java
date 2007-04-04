@@ -55,6 +55,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class ResultRefElement
     extends  AbstractIdElement
+    implements  ResultRef
 {
     /**
      * Creates a ResultRefElement with given information.
