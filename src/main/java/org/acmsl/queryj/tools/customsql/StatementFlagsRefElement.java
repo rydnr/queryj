@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class StatementFlagsRefElement
     extends  AbstractIdElement
+    implements  StatementFlagsRef
 {
     /**
      * Creates a StatementFlagsRefElement with given information.

@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class ConnectionFlagsRefElement
     extends  AbstractIdElement
+    implements  ConnectionFlagsRef
 {
     /**
      * Creates a ConnectionFlagsRefElement with given information.

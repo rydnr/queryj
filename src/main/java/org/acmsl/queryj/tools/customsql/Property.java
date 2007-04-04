@@ -104,4 +104,10 @@ public interface Property
      * @return such information.
      */
     public String getBooleanNull();
+
+    /**
+     * Checks whether the property is implicit or not.
+     * @return such condition.
+     */
+    public boolean isImplicit();
 }

@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: ResultSetFlagsRefElement.java
+ * Filename: ParameterRefElement.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <resultset-flags-ref> elements in custom-sql models.
+ * Description:  Represents parameter references in custom-sql models.
  *
  */
 package org.acmsl.queryj.tools.customsql;
@@ -40,29 +40,14 @@ package org.acmsl.queryj.tools.customsql;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.acmsl.queryj.tools.customsql.IdentifiableElement;
 
 /**
- * Models &lt;resultset-flags-ref&gt; elements in <i>custom-sql</i> models, which
- * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- *  <!ELEMENT resultset-ref EMPTY>
- *  <!ATTLIST resultset-flags-ref
- *    id IDREF #REQUIRED>
+ * Represents parameter references in custom-sql models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ResultSetFlagsRefElement
-    extends  AbstractIdElement
-    implements  ResultSetFlagsRef
+public interface ParameterRef
+    extends  IdentifiableElement
 {
-    /**
-     * Creates a ResultSetFlagsRefElement with given information.
-     * @param id the <i>id</i> attribute.
-     * @precondition id != null
-     */
-    public ResultSetFlagsRefElement(final String id)
-    {
-        super(id);
-    }
 }

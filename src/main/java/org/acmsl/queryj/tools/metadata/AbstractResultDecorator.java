@@ -44,7 +44,7 @@ import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.PropertyRef;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -391,13 +391,13 @@ public abstract class AbstractResultDecorator
 
         if  (t_PropertyRefIterator != null)
         {
-            PropertyRefElement t_PropertyRef = null;
+            PropertyRef t_PropertyRef = null;
             Property t_Property = null;
 
             while  (t_PropertyRefIterator.hasNext())
             {
                 t_PropertyRef =
-                    (PropertyRefElement) t_PropertyRefIterator.next();
+                    (PropertyRef) t_PropertyRefIterator.next();
 
                 if  (t_PropertyRef != null)
                 {

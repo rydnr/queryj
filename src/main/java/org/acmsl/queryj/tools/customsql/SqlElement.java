@@ -115,22 +115,22 @@ public class SqlElement
     /**
      * The <i>result-ref</i> element.
      */
-    private ResultRefElement m__ResultRef;
+    private ResultRef m__ResultRef;
 
     /**
      * The <i>connection-flags-ref</i> element.
      */
-    private ConnectionFlagsRefElement m__ConnectionFlagsRef;
+    private ConnectionFlagsRef m__ConnectionFlagsRef;
 
     /**
      * The <i>statement-flags-ref</i> element.
      */
-    private StatementFlagsRefElement m__StatementFlagsRef;
+    private StatementFlagsRef m__StatementFlagsRef;
 
     /**
      * The <i>resultset-flags-ref</i> element.
      */
-    private ResultSetFlagsRefElement m__ResultSetFlagsRef;
+    private ResultSetFlagsRef m__ResultSetFlagsRef;
 
     /**
      * Creates a <code>SqlElement</code> with given information.
@@ -483,7 +483,7 @@ public class SqlElement
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    public void add(final ParameterRefElement parameterRef)
+    public void add(final ParameterRef parameterRef)
     {
         add(parameterRef, getParameterRefs());
     }
@@ -494,7 +494,7 @@ public class SqlElement
      * @param parameterRefs thhe &ltparameter-ref&gt; elements.
      */
     protected synchronized void add(
-        final ParameterRefElement parameterRef, final Collection parameterRefs)
+        final ParameterRef parameterRef, final Collection parameterRefs)
     {
         Collection t_cParameterRefs = parameterRefs;
 
@@ -512,7 +512,7 @@ public class SqlElement
      * @param resultRef such element.
      */
     protected final void immutableSetResultRef(
-        final ResultRefElement resultRef)
+        final ResultRef resultRef)
     {
         m__ResultRef = resultRef;
     }
@@ -521,7 +521,7 @@ public class SqlElement
      * Specifies the &lt;result-ref&gt; element.
      * @param resultRef such element.
      */
-    public void setResultRef(final ResultRefElement resultRef)
+    public void setResultRef(final ResultRef resultRef)
     {
         immutableSetResultRef(resultRef);
     }
@@ -530,7 +530,7 @@ public class SqlElement
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
-    public ResultRefElement getResultRef()
+    public ResultRef getResultRef()
     {
         return m__ResultRef;
     }
@@ -540,7 +540,7 @@ public class SqlElement
      * @param connectionflagsRef such element.
      */
     protected final void immutableSetConnectionFlagsRef(
-        final ConnectionFlagsRefElement connectionflagsRef)
+        final ConnectionFlagsRef connectionflagsRef)
     {
         m__ConnectionFlagsRef = connectionflagsRef;
     }
@@ -549,7 +549,7 @@ public class SqlElement
      * Specifies the &lt;connection-flags-ref&gt; element.
      * @param connectionflagsRef such element.
      */
-    public void setConnectionFlagsRef(final ConnectionFlagsRefElement connectionflagsRef)
+    public void setConnectionFlagsRef(final ConnectionFlagsRef connectionflagsRef)
     {
         immutableSetConnectionFlagsRef(connectionflagsRef);
     }
@@ -558,7 +558,7 @@ public class SqlElement
      * Retrieves the &lt;connection-flags-ref&gt; element.
      * @return such element.
      */
-    public ConnectionFlagsRefElement getConnectionFlagsRef()
+    public ConnectionFlagsRef getConnectionFlagsRef()
     {
         return m__ConnectionFlagsRef;
     }
@@ -568,7 +568,7 @@ public class SqlElement
      * @param statementflagsRef such element.
      */
     protected final void immutableSetStatementFlagsRef(
-        final StatementFlagsRefElement statementflagsRef)
+        final StatementFlagsRef statementflagsRef)
     {
         m__StatementFlagsRef = statementflagsRef;
     }
@@ -577,7 +577,7 @@ public class SqlElement
      * Specifies the &lt;statement-flags-ref&gt; element.
      * @param statementflagsRef such element.
      */
-    public void setStatementFlagsRef(final StatementFlagsRefElement statementflagsRef)
+    public void setStatementFlagsRef(final StatementFlagsRef statementflagsRef)
     {
         immutableSetStatementFlagsRef(statementflagsRef);
     }
@@ -586,7 +586,7 @@ public class SqlElement
      * Retrieves the &lt;statement-flags-ref&gt; element.
      * @return such element.
      */
-    public StatementFlagsRefElement getStatementFlagsRef()
+    public StatementFlagsRef getStatementFlagsRef()
     {
         return m__StatementFlagsRef;
     }
@@ -596,7 +596,7 @@ public class SqlElement
      * @param resultsetflagsRef such element.
      */
     protected final void immutableSetResultSetFlagsRef(
-        final ResultSetFlagsRefElement resultsetflagsRef)
+        final ResultSetFlagsRef resultsetflagsRef)
     {
         m__ResultSetFlagsRef = resultsetflagsRef;
     }
@@ -605,7 +605,7 @@ public class SqlElement
      * Specifies the &lt;resultset-flags-ref&gt; element.
      * @param resultsetflagsRef such element.
      */
-    public void setResultSetFlagsRef(final ResultSetFlagsRefElement resultsetflagsRef)
+    public void setResultSetFlagsRef(final ResultSetFlagsRef resultsetflagsRef)
     {
         immutableSetResultSetFlagsRef(resultsetflagsRef);
     }
@@ -614,7 +614,7 @@ public class SqlElement
      * Retrieves the &lt;resultset-flags-ref&gt; element.
      * @return such element.
      */
-    public ResultSetFlagsRefElement getResultSetFlagsRef()
+    public ResultSetFlagsRef getResultSetFlagsRef()
     {
         return m__ResultSetFlagsRef;
     }
@@ -669,10 +669,10 @@ public class SqlElement
         final String implementation,
         final String value,
         final Collection parameterRefs,
-        final ResultRefElement resultRef,
-        final ConnectionFlagsRefElement connectionFlagsRef,
-        final StatementFlagsRefElement statementFlagsRef,
-        final ResultSetFlagsRefElement resultSetFlagsRef)
+        final ResultRef resultRef,
+        final ConnectionFlagsRef connectionFlagsRef,
+        final StatementFlagsRef statementFlagsRef,
+        final ResultSetFlagsRef resultSetFlagsRef)
     {
         return
               getClass().getName()

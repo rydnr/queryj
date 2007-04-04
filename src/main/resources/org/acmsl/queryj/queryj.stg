@@ -260,7 +260,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
     final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
-    <cs.resultClass> result = null;
+    <custom_select_result_declaration(sql=cs, result=cs.result)>
 
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
@@ -299,9 +299,9 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
     final TransactionTemplate transactionTemplate)
   throws DataAccessException
 {
-    <cs.resultClass> result = null;
+    <custom_select_result_declaration(sql=cs, result=cs.result)>
 
-   /*
+    /*
     preparedStatementCreatorFactory.setResultSetType(..);
     preparedStatementCreatorFactory.setUpdatableResults(..);
     preparedStatementCreatorFactory.setReturnGeneratedKeys(..);
@@ -312,17 +312,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
       type=it.sqlType); separator="\n">
 
     result =
-        (<cs.resultClass>)
-            transactionTemplate.execute(
-                new QueryTransactionCallback(
-                    preparedStatementCreatorFactory
-                        .newPreparedStatementCreator(params),
-                    null,
-                    // calls setXXX twice
-                    // preparedStatementCreatorFactory
-                    //     .newPreparedStatementSetter(t_aParams),
-                    <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
-                    this));
+        <custom_select_template_call(sql=cs, result=cs.result)>
 
     return result;
 }
@@ -457,8 +447,13 @@ public void <cs.nameUncapitalized>(
   throws DataAccessException
 {
 <if(cs.resultClass)>
+<if(result.implicitProperty)>
+<else>
     <cs.resultClass> result = null;
 <endif>
+<endif>
+
+
     SqlQuery t_Query =
         new SqlQuery(
             getDataSource(),
@@ -477,6 +472,7 @@ public void <cs.nameUncapitalized>(
 <else>
     t_Query.execute();
 <endif>
+
 }
 >>
 
@@ -1044,4 +1040,69 @@ resultset_extractor_constants(
 public static final ResultSetExtractor
     <crseidNormalizedUppercased>_CUSTOM_EXTRACTOR =
         new <crseidCapitalized>Extractor();
+>>
+
+custom_select_result_declaration(sql, result) ::= <<
+<!
+ Generates code to declare the custom-select result.
+ @param sql the custom select.
+ @param result the sql result.
+ !>
+<if(result.implicitProperty)>
+    <implicit_attribute_declaration(result=result, attr=cs.implicitProperty)>
+<else>
+    <result.classValue> result = null;
+<endif>
+
+>>
+
+implicit_attribute_declaration(result, attr) ::= <<
+<!
+ Generates the declaration of the property.
+ @param result the sql result.
+ @param attr the implicit property.
+!>
+<if(attr.nullable)>
+<result.classValue> result = null;
+<else>
+<attr.actualJavaType> result = null;
+<endif>
+
+>>
+
+custom_select_template_call(sql, result) ::= <<
+<!
+ Generates the call to execute the custom select.
+ @param sql the custom select.
+ @param result the sql result.
+ !>
+result =
+<if(result.implicitProperty)>
+<cs.implicitProperty:{attr |
+    <if(!attr.nullable)>(<actual_custom_select_template_call(sql=sql, result=result)>).<attr.type>Value();
+<else>
+     <actual_custom_select_template_call(sql=sql, result=result)>
+<endif>}>
+<else>
+     <actual_custom_select_template_call(sql=sql, result=result)>
+<endif>
+>>
+
+actual_custom_select_template_call(sql, result) ::= <<
+<!
+ Generates the actual call to the template for the custom select.
+ @param sql the custom select.
+ @param result the sql result.
+ !>
+(<cs.resultClass>)
+    transactionTemplate.execute(
+        new QueryTransactionCallback(
+            preparedStatementCreatorFactory
+                .newPreparedStatementCreator(params),
+            null,
+            // calls setXXX twice
+            // preparedStatementCreatorFactory
+            //     .newPreparedStatementSetter(t_aParams),
+            <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
+            this))
 >>

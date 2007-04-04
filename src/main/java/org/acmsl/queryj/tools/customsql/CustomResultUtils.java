@@ -49,7 +49,7 @@ import org.acmsl.queryj.tools.customsql.implicit.ImplicitFloatProperty;
 import org.acmsl.queryj.tools.customsql.implicit.ImplicitIntProperty;
 import org.acmsl.queryj.tools.customsql.implicit.ImplicitLongProperty;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
@@ -77,10 +77,10 @@ public class CustomResultUtils
                 Utils
 {
     /**
-     * An empty SqlElement array.
+     * An empty Sql array.
      */
-    public static final SqlElement[] EMPTY_SQLELEMENT_ARRAY =
-        new SqlElement[0];
+    public static final Sql[] EMPTY_SQL_ARRAY =
+        new Sql[0];
 
     /**
      * An empty Result array.
@@ -116,7 +116,7 @@ public class CustomResultUtils
 
     /**
      * Retrieves the table associated to the result.
-     * @param resultElement the result element.
+     * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @return the table name.
@@ -136,7 +136,7 @@ public class CustomResultUtils
         int t_iTableCount =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-        SqlElement[] t_aSqlElements = null;
+        Sql[] t_aSql = null;
 
         int t_iSqlCount = 0;
 
@@ -147,17 +147,17 @@ public class CustomResultUtils
                  (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
                   t_iTableIndex++)
         {
-            t_aSqlElements =
+            t_aSql =
                 retrieveSqlElementsByResultId(
                     customSqlProvider, resultElement.getId());
 
-            t_iSqlCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
+            t_iSqlCount = (t_aSql != null) ? t_aSql.length : 0;
 
             for  (int t_iSqlIndex = 0;
                       t_iSqlIndex < t_iSqlCount;
                       t_iSqlIndex++)
             {
-                t_strDao = t_aSqlElements[t_iSqlIndex].getDao();
+                t_strDao = t_aSql[t_iSqlIndex].getDao();
 
                 if  (   (t_strDao != null)
                      && (matches(
@@ -191,19 +191,19 @@ public class CustomResultUtils
     {
         boolean result = false;
 
-        SqlElement[] t_aSqlElements =
+        Sql[] t_aSql =
             findSqlElementsByResultId(
                 resultElement.getId(), customSqlProvider);
 
-        if  (t_aSqlElements != null)
+        if  (t_aSql != null)
         {
             for  (int t_iIndex = 0;
-                      t_iIndex < t_aSqlElements.length;
+                      t_iIndex < t_aSql.length;
                       t_iIndex++)
             {
                 if  (matches(
                          tableName,
-                         t_aSqlElements[t_iIndex].getDao(),
+                         t_aSql[t_iIndex].getDao(),
                          SingularPluralFormConverter.getInstance()))
                 {
                     result = true;
@@ -271,7 +271,7 @@ public class CustomResultUtils
     }
 
     /**
-     * Retrieves all <code>SqlElement</code> instances associated to
+     * Retrieves all <code>Sql</code> instances associated to
      * given result id.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param resultId the result id.
@@ -279,7 +279,7 @@ public class CustomResultUtils
      * @precondition sqlProvider != null
      * @precondition resultId != null
      */
-    public SqlElement[] retrieveSqlElementsByResultId(
+    public Sql[] retrieveSqlElementsByResultId(
         final CustomSqlProvider customSqlProvider,
         final String resultId)
     {
@@ -295,15 +295,15 @@ public class CustomResultUtils
             {
                 Object t_CurrentItem = null;
 
-                ResultRefElement t_ResultRef = null;
+                ResultRef t_ResultRef = null;
 
                 while  (t_itElements.hasNext())
                 {
                     t_CurrentItem = t_itElements.next();
 
-                    if  (t_CurrentItem instanceof SqlElement)
+                    if  (t_CurrentItem instanceof Sql)
                     {
-                        t_ResultRef = ((SqlElement) t_CurrentItem).getResultRef();
+                        t_ResultRef = ((Sql) t_CurrentItem).getResultRef();
 
                         if  (   (t_ResultRef != null)
                              && (resultId.equals(t_ResultRef.getId())))
@@ -316,7 +316,7 @@ public class CustomResultUtils
         }
 
         return
-            (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+            (Sql[]) t_cResult.toArray(EMPTY_SQL_ARRAY);
     }
 
     /**
@@ -333,16 +333,16 @@ public class CustomResultUtils
     {
         Collection t_cResult = new ArrayList();
 
-        SqlElement[] t_aSqlElements =
+        Sql[] t_aSql =
             retrieveSqlElementsByType(customSqlProvider, type);
 
         Result t_CurrentElement = null;
 
-        for  (int t_iIndex = 0; t_iIndex < t_aSqlElements.length; t_iIndex++)
+        for  (int t_iIndex = 0; t_iIndex < t_aSql.length; t_iIndex++)
         {
             t_CurrentElement =
                 customSqlProvider.resolveReference(
-                    t_aSqlElements[t_iIndex].getResultRef());
+                    t_aSql[t_iIndex].getResultRef());
 
             if  (t_CurrentElement != null)
             {
@@ -355,13 +355,13 @@ public class CustomResultUtils
     }
 
     /**
-     * Retrieves all <code>SqlElement</code> instances of given type.
+     * Retrieves all <code>Sql</code> instances of given type.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param type the type.
      * @return such elements.
      * @precondition type != null
      */
-    public SqlElement[] retrieveSqlElementsByType(
+    public Sql[] retrieveSqlElementsByType(
         final CustomSqlProvider customSqlProvider,
         final String type)
     {
@@ -386,8 +386,8 @@ public class CustomResultUtils
                 {
                     t_CurrentItem = t_itElements.next();
 
-                    if  (   (t_CurrentItem instanceof SqlElement)
-                         && (type.equals(((SqlElement) t_CurrentItem).getType())))
+                    if  (   (t_CurrentItem instanceof Sql)
+                         && (type.equals(((Sql) t_CurrentItem).getType())))
                     {
                         t_cResult.add(t_CurrentItem);
                     }
@@ -396,11 +396,11 @@ public class CustomResultUtils
         }
 
         return
-            (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+            (Sql[]) t_cResult.toArray(EMPTY_SQL_ARRAY);
     }
 
     /**
-     * Finds all <code>SqlElement</code> instances associated to given
+     * Finds all <code>Sql</code> instances associated to given
      * result element.
      * @param resultId such id.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -408,7 +408,7 @@ public class CustomResultUtils
      * @precondition resultId != null
      * @precondition customSqlProvider != null
      */
-    public SqlElement[] findSqlElementsByResultId(
+    public Sql[] findSqlElementsByResultId(
         final String resultId,
         final CustomSqlProvider customSqlProvider)
     {
@@ -428,13 +428,13 @@ public class CustomResultUtils
                 {
                     t_CurrentItem = t_itElements.next();
 
-                    if  (t_CurrentItem instanceof SqlElement)
+                    if  (t_CurrentItem instanceof Sql)
                     {
-                        ResultRefElement t_ResultRefElement =
-                            ((SqlElement) t_CurrentItem).getResultRef();
+                        ResultRef t_ResultRef =
+                            ((Sql) t_CurrentItem).getResultRef();
 
-                        if  (   (t_ResultRefElement != null)
-                             && (resultId.equals(t_ResultRefElement.getId())))
+                        if  (   (t_ResultRef != null)
+                             && (resultId.equals(t_ResultRef.getId())))
                         {
                             t_cResult.add(t_CurrentItem);
                         }
@@ -443,7 +443,7 @@ public class CustomResultUtils
             }
         }
 
-        return (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+        return (Sql[]) t_cResult.toArray(EMPTY_SQL_ARRAY);
     }
 
     /**

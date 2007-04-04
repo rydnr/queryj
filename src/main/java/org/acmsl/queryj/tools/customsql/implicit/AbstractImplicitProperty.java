@@ -143,4 +143,13 @@ public abstract class AbstractImplicitProperty
     {
         return null;
     }
+
+    /**
+     * Checks whether the property is implicit or not.
+     * @return such condition.
+     */
+    public boolean isImplicit()
+    {
+        return true;
+    }
 }

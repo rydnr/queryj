@@ -41,22 +41,20 @@ package org.acmsl.queryj.tools.customsql.xml;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
-import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
-import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
+import org.acmsl.queryj.tools.customsql.ConnectionFlags;
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsRef;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
+import org.acmsl.queryj.tools.customsql.Parameter;
+import org.acmsl.queryj.tools.customsql.ParameterRef;
 import org.acmsl.queryj.tools.customsql.Property;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.PropertyRef;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
-import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
-import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
-import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
-import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.ResultRef;
+import org.acmsl.queryj.tools.customsql.ResultSetFlags;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsRef;
+import org.acmsl.queryj.tools.customsql.StatementFlags;
+import org.acmsl.queryj.tools.customsql.StatementFlagsRef;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ParameterElementFactory;
 import org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory;
@@ -448,47 +446,47 @@ public class SqlXmlParser
 
                 if  (t_Object != null)
                 {
-                    if  (t_Object instanceof SqlElement)
+                    if  (t_Object instanceof Sql)
                     {
                         map.put(
                             buildSqlKey(t_Object), t_Object);
                     }
-                    else if  (t_Object instanceof ParameterElement)
+                    else if  (t_Object instanceof Parameter)
                     {
                         map.put(
                             buildParameterKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof ResultElement)
+                    else if  (t_Object instanceof Result)
                     {
                         map.put(
                             buildResultKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof PropertyElement)
+                    else if  (t_Object instanceof Property)
                     {
                         map.put(
                             buildPropertyKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof ConnectionFlagsElement)
+                    else if  (t_Object instanceof ConnectionFlags)
                     {
                         map.put(
                             buildConnectionFlagsKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof StatementFlagsElement)
+                    else if  (t_Object instanceof StatementFlags)
                     {
                         map.put(
                             buildStatementFlagsKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof ResultSetFlagsElement)
+                    else if  (t_Object instanceof ResultSetFlags)
                     {
                         map.put(
                             buildResultSetFlagsKey(
@@ -655,8 +653,8 @@ public class SqlXmlParser
      * @return the referenced parameter.
      * @precondition reference != null
      */
-    public ParameterElement resolveReference(
-        final ParameterRefElement reference)
+    public Parameter resolveReference(
+        final ParameterRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -668,16 +666,16 @@ public class SqlXmlParser
      * @return the referenced parameter.
      * @precondition reference != null
      */
-    protected ParameterElement resolveReference(
-        final ParameterRefElement reference,
+    protected Parameter resolveReference(
+        final ParameterRef reference,
         final Map map)
     {
-        ParameterElement result = null;
+        Parameter result = null;
 
         if  (map != null)
         {
             result =
-                (ParameterElement)
+                (Parameter)
                     map.get(buildParameterKey(reference.getId()));
         }
 
@@ -690,8 +688,8 @@ public class SqlXmlParser
      * @return the referenced result.
      * @precondition reference != null
      */
-    public ResultElement resolveReference(
-        final ResultRefElement reference)
+    public Result resolveReference(
+        final ResultRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -703,16 +701,16 @@ public class SqlXmlParser
      * @return the referenced result.
      * @precondition reference != null
      */
-    protected ResultElement resolveReference(
-        final ResultRefElement reference,
+    protected Result resolveReference(
+        final ResultRef reference,
         final Map map)
     {
-        ResultElement result = null;
+        Result result = null;
 
         if  (map != null)
         {
             result =
-                (ResultElement)
+                (Result)
                     map.get(buildResultKey(reference.getId()));
         }
 
@@ -725,8 +723,8 @@ public class SqlXmlParser
      * @return the referenced property.
      * @precondition reference != null
      */
-    public PropertyElement resolveReference(
-        final PropertyRefElement reference)
+    public Property resolveReference(
+        final PropertyRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -738,16 +736,16 @@ public class SqlXmlParser
      * @return the referenced property.
      * @precondition reference != null
      */
-    protected PropertyElement resolveReference(
-        final PropertyRefElement reference,
+    protected Property resolveReference(
+        final PropertyRef reference,
         final Map map)
     {
-        PropertyElement result = null;
+        Property result = null;
 
         if  (map != null)
         {
             result =
-                (PropertyElement)
+                (Property)
                     map.get(buildPropertyKey(reference.getId()));
         }
 
@@ -760,8 +758,8 @@ public class SqlXmlParser
      * @return the referenced connection flags.
      * @precondition reference != null
      */
-    public ConnectionFlagsElement resolveReference(
-        final ConnectionFlagsRefElement reference)
+    public ConnectionFlags resolveReference(
+        final ConnectionFlagsRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -773,16 +771,16 @@ public class SqlXmlParser
      * @return the referenced connection flags.
      * @precondition reference != null
      */
-    protected ConnectionFlagsElement resolveReference(
-        final ConnectionFlagsRefElement reference,
+    protected ConnectionFlags resolveReference(
+        final ConnectionFlagsRef reference,
         final Map map)
     {
-        ConnectionFlagsElement result = null;
+        ConnectionFlags result = null;
 
         if  (map != null)
         {
             result =
-                (ConnectionFlagsElement)
+                (ConnectionFlags)
                     map.get(buildConnectionFlagsKey(reference.getId()));
         }
 
@@ -795,8 +793,8 @@ public class SqlXmlParser
      * @return the referenced statement flags.
      * @precondition reference != null
      */
-    public StatementFlagsElement resolveReference(
-        final StatementFlagsRefElement reference)
+    public StatementFlags resolveReference(
+        final StatementFlagsRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -808,16 +806,16 @@ public class SqlXmlParser
      * @return the referenced statement flags.
      * @precondition reference != null
      */
-    protected StatementFlagsElement resolveReference(
-        final StatementFlagsRefElement reference,
+    protected StatementFlags resolveReference(
+        final StatementFlagsRef reference,
         final Map map)
     {
-        StatementFlagsElement result = null;
+        StatementFlags result = null;
 
         if  (map != null)
         {
             result =
-                (StatementFlagsElement)
+                (StatementFlags)
                     map.get(buildStatementFlagsKey(reference.getId()));
         }
 
@@ -830,8 +828,8 @@ public class SqlXmlParser
      * @return the referenced resultset flags.
      * @precondition reference != null
      */
-    public ResultSetFlagsElement resolveReference(
-        final ResultSetFlagsRefElement reference)
+    public ResultSetFlags resolveReference(
+        final ResultSetFlagsRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -843,16 +841,16 @@ public class SqlXmlParser
      * @return the referenced resultset flags.
      * @precondition reference != null
      */
-    protected ResultSetFlagsElement resolveReference(
-        final ResultSetFlagsRefElement reference,
+    protected ResultSetFlags resolveReference(
+        final ResultSetFlagsRef reference,
         final Map map)
     {
-        ResultSetFlagsElement result = null;
+        ResultSetFlags result = null;
 
         if  (map != null)
         {
             result =
-                (ResultSetFlagsElement)
+                (ResultSetFlags)
                     map.get(buildResultSetFlagsKey(reference.getId()));
         }
 

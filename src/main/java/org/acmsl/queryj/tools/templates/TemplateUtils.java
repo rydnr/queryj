@@ -43,8 +43,8 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Sql;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.ResultRef;
 import org.acmsl.queryj.tools.metadata.CachingResultDecorator;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -468,8 +468,8 @@ public class TemplateUtils
         {
             Object t_Content = null;
             Sql t_Sql = null;
-            ResultRefElement t_ResultRefElement = null;
-            ResultElement t_ResultElement = null;
+            ResultRef t_ResultRefElement = null;
+            Result t_ResultElement = null;
             String t_strDao;
             boolean t_bMatches;
 

@@ -65,41 +65,8 @@ import java.util.Collection;
  */
 public class ConnectionFlagsElement
     extends  AbstractIdElement
+    implements  ConnectionFlags
 {
-    /**
-     * The <b>TRANSACTION_NONE</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_NONE = "TRANSACTION_NONE";
-
-    /**
-     * The <b>TRANSACTION_READ_COMMITTED</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_READ_COMMITTED =
-        "TRANSACTION_READ_COMMITTED";
-
-    /**
-     * The <b>TRANSACTION_READ_UNCOMMITTED</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_READ_UNCOMMITTED =
-        "TRANSACTION_READ_UNCOMMITTED";
-
-    /**
-     * The <b>TRANSACTION_REPEATABLE_READ</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_REPEATABLE_READ =
-        "TRANSACTION_REPEATABLE_READ";
-
-    /**
-     * The <b>TRANSACTION_SERIALIZABLE</b> value for
-     * <i>transactionisolation</i> attribute.
-     */
-    public static final String TRANSACTION_SERIALIZABLE =
-        "TRANSACTION_SERIALIZABLE";
-
     /**
      * The <i>transactionisolation</i> attribute.
      */

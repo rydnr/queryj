@@ -44,13 +44,13 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
+import org.acmsl.queryj.tools.customsql.Parameter;
+import org.acmsl.queryj.tools.customsql.ParameterRef;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.PropertyRef;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.ResultRef;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -116,8 +116,8 @@ public class CustomSqlValidationHandler
     /**
      * A cached empty parameter element array.
      */
-    protected static final ParameterElement[] EMPTY_PARAMETERELEMENT_ARRAY =
-        new ParameterElement[0];
+    protected static final Parameter[] EMPTY_PARAMETER_ARRAY =
+        new Parameter[0];
 
     /**
      * The date format.
@@ -310,6 +310,7 @@ public class CustomSqlValidationHandler
         }
         
         PreparedStatement t_PreparedStatement = null;
+
         ResultSet t_ResultSet = null;
 
         // The standard is true, but we assume false.
@@ -375,8 +376,7 @@ public class CustomSqlValidationHandler
                 {
                     t_ResultSet = t_PreparedStatement.executeQuery();
 
-                    ResultRefElement t_ResultRef =
-                        sql.getResultRef();
+                    ResultRef t_ResultRef = sql.getResultRef();
                     
                     Result t_Result = null;
                     
@@ -519,10 +519,10 @@ public class CustomSqlValidationHandler
     {
         BuildException exceptionToThrow = null;
 
-        ParameterElement[] t_aParameters =
+        Parameter[] t_aParameters =
             retrieveParameterElements(sql, customSqlProvider);
 
-        ParameterElement t_Parameter = null;
+        Parameter t_Parameter = null;
 
         Method t_Method = null;
 
@@ -805,7 +805,7 @@ public class CustomSqlValidationHandler
      * @precondition sql != null
      * @precondition customSqlProvider != null
      */
-    protected ParameterElement[] retrieveParameterElements(
+    protected Parameter[] retrieveParameterElements(
         final Sql sql, final CustomSqlProvider customSqlProvider)
     {
         Collection t_cResult = new ArrayList();
@@ -822,14 +822,14 @@ public class CustomSqlValidationHandler
                 {
                     t_cResult.add(
                         customSqlProvider.resolveReference(
-                            (ParameterRefElement) t_itParameterRefs.next()));
+                            (ParameterRef) t_itParameterRefs.next()));
                 }
             }
         }
 
         return
-            (ParameterElement[])
-                t_cResult.toArray(EMPTY_PARAMETERELEMENT_ARRAY);
+            (Parameter[])
+                t_cResult.toArray(EMPTY_PARAMETER_ARRAY);
     }
 
     /**
@@ -1105,11 +1105,11 @@ public class CustomSqlValidationHandler
                 {
                     t_Item = t_Iterator.next();
 
-                    if  (t_Item instanceof PropertyRefElement)
+                    if  (t_Item instanceof PropertyRef)
                     {
                         t_Property =
                             customSqlProvider.resolveReference(
-                                (PropertyRefElement) t_Item);
+                                (PropertyRef) t_Item);
 
                         if  (t_Property != null)
                         {

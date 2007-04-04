@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class ParameterRefElement
     extends  AbstractIdElement
+    implements  ParameterRef
 {
     /**
      * Creates a ParameterRefElement with given information.

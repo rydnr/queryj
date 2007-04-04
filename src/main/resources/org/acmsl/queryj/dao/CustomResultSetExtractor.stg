@@ -142,8 +142,8 @@ project_imports(result, basePackageName, trSubpackageName, trName) ::= <<
 /*
  * Importing project classes.
  */
-import <result.classValue>;
 <if(!result.implicitProperty)>
+import <result.classValue>;
 import <result.classValue>ValueObjectFactory;
 <endif>
 
@@ -227,8 +227,13 @@ public class <result.idCapitalized>Extractor
 <if(result.multiple)>
         Collection result = new ArrayList();
 <else>
+<if(result.implicitProperty)>
+        <implicit_attribute_declaration(result=result, attr=result.implicitProperty)>
+<else>
         <result.classValue> result = null;
 <endif>
+<endif>
+
 
 
 <if(result.multiple)>
@@ -250,7 +255,7 @@ public class <result.idCapitalized>Extractor
 <endif>
 
 <if(result.implicitProperty)>
-                new <result.classValue>(<result.implicitProperty:{attr|resultSet.get<attr.actualObjectType>(<attr.index>)}>)<if(result.multiple)>)<endif>;
+                <implicit_nullable_attribute_extraction(result=result, attr=result.implicitProperty)>
 <else>
                 factory.createValueObject(
                     <result.properties:attribute_extraction(
@@ -262,6 +267,18 @@ public class <result.idCapitalized>Extractor
         return result;
     }
 }
+>>
+
+implicit_nullable_attribute_extraction(result, attr) ::= <<
+<!
+ Generates the code to extract implicit nullable attributes.
+ @param result the sql result.
+ @param attr the implicit attribute.
+ !>
+<if(attr.nullable)>
+new <result.classValue>(
+<endif>
+resultSet.get<attr.actualObjectType>(<attr.index>)<if(attr.nullable)>)<endif><if(result.multiple)>)<endif>;
 >>
 
 nullable_attribute_extraction(attr, input) ::= <<

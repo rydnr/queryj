@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
@@ -92,6 +93,11 @@ public class CachingSqlDecorator
     private Collection m__cCachedParameters;
 
     /**
+     * The cached result.
+     */
+    private Result m__CachedResult;
+    
+    /**
      * The cached result class.
      */
     private String m__strCachedResultClass;
@@ -107,6 +113,7 @@ public class CachingSqlDecorator
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition sql != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
@@ -114,9 +121,10 @@ public class CachingSqlDecorator
     public CachingSqlDecorator(
         final Sql sql,
         final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
-        super(sql, customSqlProvider, metadataManager);
+        super(sql, customSqlProvider, metadataManager, decoratorFactory);
     }
 
     /**
@@ -354,6 +362,50 @@ public class CachingSqlDecorator
         return result;
     }
 
+    /**
+     * Specifies the cached result.
+     * @param value such value.
+     */
+    protected final void immutableSetCachedResult(final Result result)
+    {
+        m__CachedResult = result;
+    }
+
+    /**
+     * Specifies the cached result.
+     * @param value such value.
+     */
+    protected void setCachedResult(final Result result)
+    {
+        immutableSetCachedResult(result);
+    }
+    
+    /**
+     * Retrieves the cached result.
+     * @return such result.
+     */
+    protected Result getCachedResult()
+    {
+        return m__CachedResult;
+    }
+
+    /**
+     * Retrieves the sql result.
+     * @return such information.
+     */
+    public Result getResult()
+    {
+        Result result = getCachedResult();
+        
+        if  (result == null)
+        {
+            result = super.getResult();
+            setCachedResult(result);
+        }
+        
+        return result;
+    }
+    
     /**
      * Specifies the cached result class.
      * @param value the value to cache.

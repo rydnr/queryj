@@ -41,10 +41,10 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.Parameter;
+import org.acmsl.queryj.tools.customsql.ParameterRef;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.ResultRef;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.CachingParameterDecorator;
@@ -84,6 +84,11 @@ public abstract class AbstractSqlDecorator
     private CustomSqlProvider m__CustomSqlProvider;
 
     /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
+    
+    /**
      * The metadata manager.
      */
     private MetadataManager m__MetadataManager;
@@ -93,15 +98,18 @@ public abstract class AbstractSqlDecorator
      * @param sql the <code>Sql</code> to decorate.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
-     * @param metadataTypeManager the metadata type manager.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition sql != null
      * @precondition customSqlProvider != null
-     * @precondition metadataTypeManager != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     public AbstractSqlDecorator(
         final Sql sql,
         final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(
             sql.getId(),
@@ -120,6 +128,7 @@ public abstract class AbstractSqlDecorator
         immutableSetSql(sql);
         immutableSetCustomSqlProvider(customSqlProvider);
         immutableSetMetadataManager(metadataManager);
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
@@ -205,6 +214,35 @@ public abstract class AbstractSqlDecorator
     protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param factory such instance.
+     */
+    protected final void immutableSetDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        m__DecoratorFactory = factory;
+    }
+
+    /**
+     * Specifies the decorator factory.
+     * @param factory such instance.
+     */
+    protected void setDecoratorFactory(
+        final DecoratorFactory factory)
+    {
+        immutableSetDecoratorFactory(factory);
+    }
+
+    /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return m__DecoratorFactory;
     }
 
     /**
@@ -373,13 +411,13 @@ public abstract class AbstractSqlDecorator
 
             if  (t_ParameterRefIterator != null)
             {
-                ParameterRefElement t_ParameterRef = null;
-                ParameterElement t_Parameter = null;
+                ParameterRef t_ParameterRef = null;
+                Parameter t_Parameter = null;
 
                 while  (t_ParameterRefIterator.hasNext())
                 {
                     t_ParameterRef =
-                        (ParameterRefElement) t_ParameterRefIterator.next();
+                        (ParameterRef) t_ParameterRefIterator.next();
 
                     if  (t_ParameterRef != null)
                     {
@@ -416,57 +454,106 @@ public abstract class AbstractSqlDecorator
     }
 
     /**
+     * Retrieves the result.
+     * @return such information.
+     */
+    public Result getResult()
+    {
+        return
+            getResult(
+                getResultRef(),
+                getCustomSqlProvider(),
+                getMetadataManager(),
+                getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the result.
+     * @param resultRef the result ref.
+     * @param customSqlProvider the <code>CustomSqlProvider</code>
+     * instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code>
+     * instance.
+     * @return such information.
+     * @precondition resultRef != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected Result getResult(
+        final ResultRef resultRef,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        Result result = null;
+        
+        if  (resultRef != null)
+        {
+            result = customSqlProvider.resolveReference(resultRef);
+        }
+        
+        if  (result == null)
+        {
+            try
+            {
+                // todo throw something.
+                LogFactory.getLog("custom-sql").warn(
+                    "Referenced result not found:"
+                    + resultRef.getId());
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
+        }
+        else
+        {
+            result =
+                decoratorFactory.createDecorator(
+                    result,
+                    customSqlProvider,
+                    metadataManager);
+        }
+        
+        return result;
+    }
+    
+    /**
      * Retrieves the result class.
      * @return such information.
      */
     public String getResultClass()
     {
-        return getResultClass(getResultRef(), getCustomSqlProvider());
-    }
-
-    /**
-     * Retrieves the result class.
-     * @param resultRef the result ref.
-     * @param customSqlProvider the custom sql provider.
-     * @return such information.
-     * @precondition customSqlProvider != null
-     */
-    protected String getResultClass(
-        final ResultRefElement resultRef,
-        final CustomSqlProvider customSqlProvider)
-    {
         String result = null;
 
-        if  (resultRef != null)
+        Result t_Result = getResult();
+        
+        if  (t_Result != null)
         {
-            ResultElement t_Result =
-                customSqlProvider.resolveReference(resultRef);
-
-            if  (t_Result != null)
+            if  (Result.MULTIPLE.equalsIgnoreCase(
+                     t_Result.getMatches()))
             {
-                if  (ResultElement.MULTIPLE.equalsIgnoreCase(
-                         t_Result.getMatches()))
-                {
-                    result = MULTIPLE_RESULT_CLASS;
-                }
-                else
-                {
-                    result = t_Result.getClassValue();
-                }
+                result = MULTIPLE_RESULT_CLASS;
             }
             else
             {
-                try
-                {
-                    // todo throw something.
-                    LogFactory.getLog("custom-sql").warn(
-                          "Referenced result not found:"
-                        + resultRef.getId());
-                }
-                catch  (final Throwable throwable)
-                {
-                    // class-loading problem.
-                }
+                result = t_Result.getClassValue();
+            }
+        }
+        else
+        {
+            try
+            {
+                // todo throw something.
+                LogFactory.getLog("custom-sql").warn(
+                    "Referenced result not found:"
+                    + getResultRef());
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
             }
         }
 
@@ -481,50 +568,38 @@ public abstract class AbstractSqlDecorator
     {
         return
             getResultIdAsConstant(
-                getResultRef(),
-                getCustomSqlProvider(),
-                DecorationUtils.getInstance());
+                getResult(), DecorationUtils.getInstance());
     }
-
+    
     /**
      * Retrieves the result id as constant.
-     * @param resultRef the result ref.
-     * @param customSqlProvider the custom sql provider.
+     * @param sqlResult the custom result.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such information.
-     * @precondition customSqlProvider != null
-     * @precondition decorationUtils != null
+     * @param decorationUtils != null
      */
     protected String getResultIdAsConstant(
-        final ResultRefElement resultRef,
-        final CustomSqlProvider customSqlProvider,
-        final DecorationUtils decorationUtils)
+        final Result sqlResult, final DecorationUtils decorationUtils)
     {
         String result = null;
 
-        if  (resultRef != null)
+        if  (sqlResult != null)
         {
-            ResultElement t_Result =
-                customSqlProvider.resolveReference(resultRef);
-
-            if  (t_Result != null)
+            result =
+                uppercase(normalize(sqlResult.getId(), decorationUtils));
+        }
+        else
+        {
+            try
             {
-                result =
-                    uppercase(normalize(t_Result.getId(), decorationUtils));
+                // todo throw something.
+                LogFactory.getLog("custom-sql").warn(
+                    "Referenced result not found:"
+                    + getResultRef());
             }
-            else
+            catch  (final Throwable throwable)
             {
-                try
-                {
-                    // todo throw something.
-                    LogFactory.getLog("custom-sql").warn(
-                          "Referenced result not found:"
-                        + resultRef.getId());
-                }
-                catch  (final Throwable throwable)
-                {
-                    // class-loading problem.
-                }
+                // class-loading problem.
             }
         }
 

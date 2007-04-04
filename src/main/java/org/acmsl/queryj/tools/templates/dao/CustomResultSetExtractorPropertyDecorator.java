@@ -505,14 +505,25 @@ public class CustomResultSetExtractorPropertyDecorator
     {
         String result = null;
 
-        int t_iType =
-            metadataManager.getColumnType(
-                customResultUtils.retrieveTable(
-                    sqlResult, customSqlProvider, metadataManager),
-                property.getName());
+        if  (property.isImplicit())
+        {
+            result =
+                metadataTypeManager.getQueryJFieldType(
+                    metadataTypeManager.getJavaType(
+                        sqlResult.getClassValue()),
+                    false);
+        }
+        else
+        {
+            int t_iType =
+                metadataManager.getColumnType(
+                    customResultUtils.retrieveTable(
+                        sqlResult, customSqlProvider, metadataManager),
+                    property.getName());
         
-        result =
-            metadataTypeManager.getNativeType(t_iType, getAllowsNull(), false);
+            result =
+                metadataTypeManager.getNativeType(t_iType, getAllowsNull(), false);
+        }
         
         return result;
     }

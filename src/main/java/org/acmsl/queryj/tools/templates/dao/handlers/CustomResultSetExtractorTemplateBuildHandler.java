@@ -45,7 +45,7 @@ import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.SqlElement;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -246,13 +246,13 @@ public class CustomResultSetExtractorTemplateBuildHandler
         if  (!result)
         {
             // Let's check if it's associated to the repository DAO.
-            SqlElement[] t_aSql =
+            Sql[] t_aSql =
                 customResultUtils.findSqlElementsByResultId(
                     resultElement.getId(), customSqlProvider);
 
             int t_iCount = (t_aSql != null) ? t_aSql.length : 0;
 
-            SqlElement t_Sql;
+            Sql t_Sql;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {

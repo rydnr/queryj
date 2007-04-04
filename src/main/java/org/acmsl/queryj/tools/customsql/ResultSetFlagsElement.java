@@ -63,49 +63,8 @@ import java.util.Collection;
  */
 public class ResultSetFlagsElement
     extends  AbstractIdElement
+    implements  ResultSetFlags
 {
-    /**
-     * The <b>TYPE_FORWARD_ONLY</b> value for
-     * <i>type</i> attribute.
-     */
-    public static final String TYPE_FORWARD_ONLY = "TYPE_FORWARD_ONLY";
-
-    /**
-     * The <b>TYPE_SCROLL_INSENSITIVE</b> value for
-     * <i>type</i> attribute.
-     */
-    public static final String TYPE_SCROLL_INSENSITIVE = "TYPE_SCROLL_INSENSITIVE";
-
-    /**
-     * The <b>TYPE_SCROLL_SENSITIVE</b> value for
-     * <i>type</i> attribute.
-     */
-    public static final String TYPE_SCROLL_SENSITIVE = "TYPE_SCROLL_SENSITIVE";
-
-    /**
-     * The <b>CONCUR_READ_ONLY</b> value for
-     * <i>concurrency</i> attribute.
-     */
-    public static final String CONCUR_READ_ONLY = "CONCUR_READ_ONLY";
-
-    /**
-     * The <b>CONCUR_UPDATABLE</b> value for
-     * <i>concurrency</i> attribute.
-     */
-    public static final String CONCUR_UPDATABLE = "CONCUR_UPDATABLE";
-
-    /**
-     * The <b>HOLD_CURSORS_OVER_COMMIT</b> value for
-     * <i>holdability</i> attribute.
-     */
-    public static final String HOLD_CURSORS_OVER_COMMIT = "HOLD_CURSORS_OVER_COMMIT";
-
-    /**
-     * The <b>CLOSE_CURSORS_AT_COMMIT</b> value for
-     * <i>holdability</i> attribute.
-     */
-    public static final String CLOSE_CURSORS_AT_COMMIT = "CLOSE_CURSORS_AT_COMMIT";
-
     /**
      * The <i>type</i> attribute.
      */

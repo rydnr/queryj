@@ -28,41 +28,50 @@
 
  ******************************************************************************
  *
- * Filename: ResultSetFlagsRefElement.java
+ * Filename: Parameter.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <resultset-flags-ref> elements in custom-sql models.
+ * Description: Represents parameters in custom-sql models.
  *
  */
 package org.acmsl.queryj.tools.customsql;
 
-/*
- * Importing project-specific classes.
- */
-import org.acmsl.queryj.tools.customsql.AbstractIdElement;
-
 /**
- * Models &lt;resultset-flags-ref&gt; elements in <i>custom-sql</i> models, which
- * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- *  <!ELEMENT resultset-ref EMPTY>
- *  <!ATTLIST resultset-flags-ref
- *    id IDREF #REQUIRED>
+ * Represents parameters in custom-sql models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ResultSetFlagsRefElement
-    extends  AbstractIdElement
-    implements  ResultSetFlagsRef
+public interface Parameter
+    extends  IdentifiableElement
 {
     /**
-     * Creates a ResultSetFlagsRefElement with given information.
-     * @param id the <i>id</i> attribute.
-     * @precondition id != null
+     * Retrieves the <i>column_name</i> attribute.
+     * @return such value.
      */
-    public ResultSetFlagsRefElement(final String id)
-    {
-        super(id);
-    }
+    public String getColumnName();
+    
+    /**
+     * Retrieves the <i>index</i> attribute.
+     * @return such value.
+     */
+    public int getIndex();
+    
+    /**
+     * Retrieves the <i>name</i> attribute.
+     * @return such value.
+     */
+    public String getName();
+    
+    /**
+     * Retrieves the <i>type</i> attribute.
+     * @return such value.
+     */
+    public String getType();
+    
+    /**
+     * Retrieves the validation value.
+     * @return such value.
+     */
+    public String getValidationValue();
 }

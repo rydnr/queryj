@@ -56,6 +56,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class ParameterElement
     extends  AbstractParameterElement
+    implements  Parameter
 {
     /**
      * The validation value.

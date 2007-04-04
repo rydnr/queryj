@@ -206,8 +206,10 @@ property_method_declaration(attribute) ::= <<
  @param attribute the attribute.
 !>
 <if(attribute.allowsNull)>
+// allows null
 final <attribute.objectType> <attribute.columnNameNormalizedUncapitalized>
 <else>
+// doesn't allow null
 final <attribute.javaType> <attribute.columnNameNormalizedUncapitalized>
 <endif>
 

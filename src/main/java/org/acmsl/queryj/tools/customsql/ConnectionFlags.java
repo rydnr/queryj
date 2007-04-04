@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: ResultSetFlagsRefElement.java
+ * Filename: ConnectionFlagsElement.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Models <resultset-flags-ref> elements in custom-sql models.
+ * Description: Models connection flags in custom-sql models.
  *
  */
 package org.acmsl.queryj.tools.customsql;
@@ -42,27 +42,57 @@ package org.acmsl.queryj.tools.customsql;
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 
+/*
+ * Importing JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.Collection;
+
 /**
- * Models &lt;resultset-flags-ref&gt; elements in <i>custom-sql</i> models, which
- * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- *  <!ELEMENT resultset-ref EMPTY>
- *  <!ATTLIST resultset-flags-ref
- *    id IDREF #REQUIRED>
+ * Models connection flags in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ResultSetFlagsRefElement
-    extends  AbstractIdElement
-    implements  ResultSetFlagsRef
+public interface ConnectionFlags
+    extends  IdentifiableElement
 {
     /**
-     * Creates a ResultSetFlagsRefElement with given information.
-     * @param id the <i>id</i> attribute.
-     * @precondition id != null
+     * The <b>TRANSACTION_NONE</b> value for
+     * <i>transactionisolation</i> attribute.
      */
-    public ResultSetFlagsRefElement(final String id)
-    {
-        super(id);
-    }
+    public static final String TRANSACTION_NONE = "TRANSACTION_NONE";
+
+    /**
+     * The <b>TRANSACTION_READ_COMMITTED</b> value for
+     * <i>transactionisolation</i> attribute.
+     */
+    public static final String TRANSACTION_READ_COMMITTED =
+        "TRANSACTION_READ_COMMITTED";
+
+    /**
+     * The <b>TRANSACTION_READ_UNCOMMITTED</b> value for
+     * <i>transactionisolation</i> attribute.
+     */
+    public static final String TRANSACTION_READ_UNCOMMITTED =
+        "TRANSACTION_READ_UNCOMMITTED";
+
+    /**
+     * The <b>TRANSACTION_REPEATABLE_READ</b> value for
+     * <i>transactionisolation</i> attribute.
+     */
+    public static final String TRANSACTION_REPEATABLE_READ =
+        "TRANSACTION_REPEATABLE_READ";
+
+    /**
+     * The <b>TRANSACTION_SERIALIZABLE</b> value for
+     * <i>transactionisolation</i> attribute.
+     */
+    public static final String TRANSACTION_SERIALIZABLE =
+        "TRANSACTION_SERIALIZABLE";
+
+    /**
+     * Retrieves the <i>transactionisolation</i> attribute.
+     * @return such value.
+     */
+    public String getTransactionIsolation();
 }

@@ -292,4 +292,13 @@ public class PropertyElement
     {
         return m__strBooleanNull;
     }
+
+    /**
+     * Checks whether the property is implicit or not.
+     * @return such condition.
+     */
+    public boolean isImplicit()
+    {
+        return false;
+    }
 }

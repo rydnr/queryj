@@ -172,7 +172,7 @@ public class CachingDecoratorFactory
     {
         return
             new CachingSqlDecorator(
-                sql, customSqlProvider, metadataManager);
+                sql, customSqlProvider, metadataManager, this);
     }
 
     /**

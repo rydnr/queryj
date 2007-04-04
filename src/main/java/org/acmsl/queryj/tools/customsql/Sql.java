@@ -40,8 +40,8 @@ package org.acmsl.queryj.tools.customsql;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
+import org.acmsl.queryj.tools.customsql.ParameterRef;
+import org.acmsl.queryj.tools.customsql.ResultRef;
 
 /*
  * Importing JDK classes.
@@ -192,29 +192,29 @@ public interface Sql
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    public void add(final ParameterRefElement parameterRef);
+    public void add(final ParameterRef parameterRef);
 
     /**
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
-    public ResultRefElement getResultRef();
+    public ResultRef getResultRef();
 
     /**
      * Retrieves the &lt;connection-flags-ref&gt; element.
      * @return such element.
      */
-    public ConnectionFlagsRefElement getConnectionFlagsRef();
+    public ConnectionFlagsRef getConnectionFlagsRef();
 
     /**
      * Retrieves the &lt;statement-flags-ref&gt; element.
      * @return such element.
      */
-    public StatementFlagsRefElement getStatementFlagsRef();
+    public StatementFlagsRef getStatementFlagsRef();
 
     /**
      * Retrieves the &lt;resultset-flags-ref&gt; element.
      * @return such element.
      */
-    public ResultSetFlagsRefElement getResultSetFlagsRef();
+    public ResultSetFlagsRef getResultSetFlagsRef();
 }

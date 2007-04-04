@@ -42,18 +42,18 @@ package org.acmsl.queryj.tools.customsql;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
-import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
-import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
-import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
-import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
-import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
+import org.acmsl.queryj.tools.customsql.ConnectionFlags;
+import org.acmsl.queryj.tools.customsql.ConnectionFlagsRef;
+import org.acmsl.queryj.tools.customsql.Parameter;
+import org.acmsl.queryj.tools.customsql.ParameterRef;
+import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.PropertyRef;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.customsql.ResultRef;
+import org.acmsl.queryj.tools.customsql.ResultSetFlags;
+import org.acmsl.queryj.tools.customsql.ResultSetFlagsRef;
+import org.acmsl.queryj.tools.customsql.StatementFlags;
+import org.acmsl.queryj.tools.customsql.StatementFlagsRef;
 
 /*
  * Importing some JDK classes.
@@ -79,24 +79,24 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced parameter.
      */
-    public ParameterElement resolveReference(
-        final ParameterRefElement reference);
+    public Parameter resolveReference(
+        final ParameterRef reference);
 
     /**
      * Resolves the result reference.
      * @param reference such reference.
      * @return the referenced result.
      */
-    public ResultElement resolveReference(
-        final ResultRefElement reference);
+    public Result resolveReference(
+        final ResultRef reference);
 
     /**
      * Resolves the property reference.
      * @param reference such reference.
      * @return the referenced property.
      */
-    public PropertyElement resolveReference(
-        final PropertyRefElement reference);
+    public Property resolveReference(
+        final PropertyRef reference);
 
     /**
      * Adds a new property.
@@ -119,23 +119,23 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced property.
      */
-    public ConnectionFlagsElement resolveReference(
-        final ConnectionFlagsRefElement reference);
+    public ConnectionFlags resolveReference(
+        final ConnectionFlagsRef reference);
 
     /**
      * Resolves the connection-flags reference.
      * @param reference such reference.
      * @return the referenced property.
      */
-    public StatementFlagsElement resolveReference(
-        final StatementFlagsRefElement reference);
+    public StatementFlags resolveReference(
+        final StatementFlagsRef reference);
 
     /**
      * Resolves the statement-flags reference.
      * @param reference such reference.
      * @return the referenced property.
      */
-    public ResultSetFlagsElement resolveReference(
-        final ResultSetFlagsRefElement reference);
+    public ResultSetFlags resolveReference(
+        final ResultSetFlagsRef reference);
 }
 
