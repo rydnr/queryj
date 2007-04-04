@@ -471,6 +471,16 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final String repositoryName,
         final String header)
     {
-        return true;
+        boolean result = true;
+
+        String t_strClassValue = customResult.getClassValue();
+        
+        if  (   (t_strClassValue == null)
+             || (!t_strClassValue.startsWith(basePackageName)))
+        {
+            result = false;
+        }
+            
+        return result;
     }
 }

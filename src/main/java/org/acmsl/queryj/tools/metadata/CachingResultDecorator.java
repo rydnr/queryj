@@ -42,8 +42,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -55,7 +54,7 @@ import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import java.util.Collection;
 
 /**
- * Adds a simple caching mechanism while decorating <code>ResultElement</code>
+ * Adds a simple caching mechanism while decorating <code>Result</code>
  * instances.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
@@ -94,7 +93,12 @@ public class CachingResultDecorator
     private Collection m__cCachedLobProperties;
 
     /**
-     * Creates a <code>CachingResultElementDecorator</code> with given instance.
+     * The cached implicit property.
+     */
+    private Property m__CachedImplicitProperty;
+    
+    /**
+     * Creates a <code>CachingResultDecorator</code> with given instance.
      * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
@@ -377,6 +381,52 @@ public class CachingResultDecorator
             setCachedLobProperties(result);
         }
 
+        return result;
+    }
+
+    /**
+     * Specifies the cached implicit property.
+     * @param property such property.
+     */
+    protected final void immutableSetCachedImplicitProperty(
+        final Property property)
+    {
+        m__CachedImplicitProperty = property;
+    }
+
+    /**
+     * Specifies the cached implicit property.
+     * @param property such property.
+     */
+    protected void setCachedImplicitProperty(
+        final Property property)
+    {
+        immutableSetCachedImplicitProperty(property);
+    }
+
+    /**
+     * Specifies the cached implicit property.
+     * @return such information.
+     */
+    protected Property getCachedImplicitProperty()
+    {
+        return m__CachedImplicitProperty;
+    }
+    
+    /**
+     * Retrieves the implicit property.
+     * @return such information.
+     */
+    public Property getImplicitProperty()
+    {
+        Property result = getCachedImplicitProperty();
+        
+        if  (result == null)
+        {
+            result = super.getImplicitProperty();
+            setCachedImplicitProperty(result);
+        }
+        
         return result;
     }
 }

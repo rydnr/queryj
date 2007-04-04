@@ -94,41 +94,6 @@ public class CustomValueObjectTemplateBuildHandler
     }
 
     /**
-     * Checks whether the result should be processed.
-     * @param customResult the custom result.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @return <code>true</code> in such case.
-     */
-    protected boolean shouldProcessResult(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
-    {
-        boolean result = true;
-
-        if  (   (packageName == null)
-             || (!packageName.startsWith(basePackageName)))
-        {
-            result = false;
-        }
-            
-        return result;
-    }
-
-    /**
      * Retrieves the package name.
      * @param customResult the custom result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.

@@ -143,8 +143,10 @@ project_imports(result, basePackageName, trSubpackageName, trName) ::= <<
  * Importing project classes.
  */
 import <result.classValue>;
+<if(!result.implicitProperty)>
 import <result.classValue>ValueObjectFactory;
-import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+<endif>
+
 >>
 
 class(result, input) ::= <<
@@ -163,8 +165,7 @@ class(result, input) ::= <<
  * @since <input.timestamp>
  */
 public class <result.idCapitalized>Extractor
-    implements  ResultSetExtractor,
-                <input.tr_name_capitalized>TableRepository
+    implements  ResultSetExtractor
 {
     // \<extract data\>
     /**
@@ -187,6 +188,7 @@ public class <result.idCapitalized>Extractor
         throws  SQLException,
                 DataAccessException
     {
+<if(!result.implicitProperty)>
         return
             extractData(
                 resultSet,
@@ -196,7 +198,10 @@ public class <result.idCapitalized>Extractor
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
+<if(!result.implicitProperty)>
      * @param factory the value object factory.
+<endif>
+
 <if(result.multiple)>
      * @return the \<i><input.className>\</i> instances or \<code>null\</code>
      * if the operation returned no data.
@@ -216,6 +221,9 @@ public class <result.idCapitalized>Extractor
       throws  SQLException,
               DataAccessException
     {
+<endif>
+
+
 <if(result.multiple)>
         Collection result = new ArrayList();
 <else>
@@ -241,9 +249,14 @@ public class <result.idCapitalized>Extractor
             result =
 <endif>
 
+<if(result.implicitProperty)>
+                new <result.classValue>(<result.implicitProperty:{attr|resultSet.get<attr.actualObjectType>(<attr.index>)}>)<if(result.multiple)>)<endif>;
+<else>
                 factory.createValueObject(
                     <result.properties:attribute_extraction(
                       attr=it, input=input); separator=",\n">)<if(result.multiple)>)<endif>;
+<endif>
+
         }
 
         return result;

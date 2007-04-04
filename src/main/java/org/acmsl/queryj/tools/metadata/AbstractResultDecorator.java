@@ -548,6 +548,53 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves the implicit property, if any.
+     * @return such information.
+     */
+    public Property getImplicitProperty()
+    {
+        return
+            getImplicitProperty(
+                getResult(),
+                getDecoratorFactory(),
+                getCustomSqlProvider(),
+                getMetadataManager());
+    }
+
+    /**
+     * Retrieves the implicit property, if any.
+     * @param result the sql result.
+     * @param decoratorFactory the decorator factory.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition result != null
+     * @precondition decoratorFactory != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     */
+    protected Property getImplicitProperty(
+        final Result sqlResult,
+        final DecoratorFactory decoratorFactory,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
+    {
+        Property result = sqlResult.getImplicitProperty();
+        
+        if  (result != null)
+        {
+            result =
+                decoratorFactory.createDecorator(
+                    result,
+                    this,
+                    customSqlProvider,
+                    metadataManager);
+        }
+        
+        return result;
+    }
+
+    /**
      * Retrieves the hashcode.
      * @return such value.
      */

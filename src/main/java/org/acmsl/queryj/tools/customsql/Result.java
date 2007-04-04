@@ -95,4 +95,10 @@ public interface Result
      * @param propertyRef such element.
      */
     public void add(final PropertyRefElement propertyRef);
+
+    /**
+     * Retrieves the implicit property, if any.
+     * @return such information.
+     */
+    public Property getImplicitProperty();
 }

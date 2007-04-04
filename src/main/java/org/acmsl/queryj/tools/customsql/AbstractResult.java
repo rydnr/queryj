@@ -164,6 +164,31 @@ public abstract class AbstractResult
         t_cPropertyRefs.add(propertyRef);
     }
 
+
+    /**
+     * Retrieves the implicit property, if any.
+     * @return such information.
+     */
+    public Property getImplicitProperty()
+    {
+        return getImplicitProperty(CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the standard implicit property, if given sql result
+     * doesn't define any property and its class name points to a Java
+     * primitive or wrapper.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return the standard implicit property, in such case.
+     * @precondition sqlResult != null
+     * @precondition customResultUtils != null
+     */
+    protected Property getImplicitProperty(
+        final CustomResultUtils customResultUtils)
+    {
+        return customResultUtils.buildStandardImplicitProperty(this);
+    }
+
     /**
      * Retrieves the hashcode.
      * @return such value.

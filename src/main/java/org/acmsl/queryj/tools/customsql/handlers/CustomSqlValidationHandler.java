@@ -197,6 +197,8 @@ public class CustomSqlValidationHandler
             retrieveCustomSqlProvider(parameters),
             retrieveConnection(parameters),
             retrieveMetadataManager(parameters),
+            CustomResultUtils.getInstance(),
+            ConversionUtils.getInstance(),
             log);
     }
 
@@ -206,6 +208,8 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
      * @param metadataManager the metadata manager.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @param log the log instance.
      * @throws BuildException if the build process cannot be performed.
      * @precondition connection != null
@@ -215,6 +219,8 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
         final MetadataManager metadataManager,
+        final CustomResultUtils customResultUtils,
+        final ConversionUtils conversionUtils,
         final QueryJLog log)
       throws  BuildException
     {
@@ -251,6 +257,8 @@ public class CustomSqlValidationHandler
                                 connection,
                                 metadataManager,
                                 metadataManager.getMetadataTypeManager(),
+                                customResultUtils,
+                                conversionUtils,
                                 log);
                         }
                     }
@@ -266,6 +274,8 @@ public class CustomSqlValidationHandler
      * @param connection the connection.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @param log the log instance.
      * @throws BuildException if the sql is not valid.
      * @precondition sql != null
@@ -273,6 +283,8 @@ public class CustomSqlValidationHandler
      * @precondition connection != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition customResultUtils != null
+     * @precondition conversionUtils != null
      */
     protected void validate(
         final Sql sql,
@@ -280,6 +292,8 @@ public class CustomSqlValidationHandler
         final Connection connection,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final CustomResultUtils customResultUtils,
+        final ConversionUtils conversionUtils,
         final QueryJLog log)
       throws  BuildException
     {
@@ -385,6 +399,7 @@ public class CustomSqlValidationHandler
                             customSqlProvider,
                             metadataManager,
                             metadataTypeManager,
+                            customResultUtils,
                             log);
                     }
                     else
@@ -908,6 +923,7 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @param log the log.
      * @throws SQLException if the SQL operation fails.
      * @throws BuildException if the expected result cannot be extracted.
@@ -917,6 +933,7 @@ public class CustomSqlValidationHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition customResultUtils != null
      */
     protected void validateResultSet(
         final ResultSet resultSet,
@@ -925,6 +942,7 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final CustomResultUtils customResultUtils,
         final QueryJLog log)
       throws SQLException,
              BuildException
@@ -936,6 +954,7 @@ public class CustomSqlValidationHandler
                 customSqlProvider,
                 metadataManager,
                 metadataTypeManager,
+                customResultUtils,
                 log);
         
         if  (   (t_cProperties == null)
@@ -1038,6 +1057,7 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @param log the log.
      * @return such properties.
      * @precondition sql != null
@@ -1053,6 +1073,7 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final CustomResultUtils customResultUtils,
         final QueryJLog log)
     {
         Collection result = new ArrayList();
@@ -1068,6 +1089,7 @@ public class CustomSqlValidationHandler
                     customSqlProvider,
                     metadataManager,
                     metadataTypeManager,
+                    customResultUtils,
                     log);
         }
         else
@@ -1107,13 +1129,14 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @param log the log.
      * @return such properties.
-     * @precondition sql != null
      * @precondition sqlResult != null
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
+     * @precondition customResultUtils != null
      * @precondition log != null
      */
     protected Collection retrieveImplicitProperties(
@@ -1121,134 +1144,109 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final CustomResultUtils customResultUtils,
         final QueryJLog log)
     {
-        return
-            retrieveImplicitProperties(
-                sqlResult,
-                customSqlProvider,
-                metadataManager,
-                metadataTypeManager,
-                log,
-                CustomResultUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the implicit properties declared for given result.
-     * @param sqlResult the custom sql result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param log the log.
-     * @param customResultUtils the <code>CustomResultUtils</code> instance.
-     * @return such properties.
-     * @precondition sql != null
-     * @precondition sqlResult != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition log != null
-     * @precondition customResultUtils != null
-     */
-    protected Collection retrieveImplicitProperties(
-        final Result sqlResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final QueryJLog log,
-        final CustomResultUtils customResultUtils)
-    {
         Collection result = new ArrayList();
-
-        String t_strTable =
-            customResultUtils.retrieveTable(
-                sqlResult,
-                customSqlProvider,
-                metadataManager);
-
-        if  (t_strTable != null)
+        
+        Property implicitProperty = sqlResult.getImplicitProperty();
+        
+        if  (implicitProperty != null)
         {
-            String[] t_astrColumnNames =
-                metadataManager.getColumnNames(t_strTable);
-
-            int t_iCount =
-                (t_astrColumnNames != null)
-                ? t_astrColumnNames.length : 0;
-
-            String t_strId;
-            String t_strColumnName;
-            String t_strName;
-            String t_strType;
-            boolean t_bNullable;
-            boolean t_bReadOnly;
-            boolean t_bIsBool;
-            String t_strBooleanTrue;
-            String t_strBooleanFalse;
-            String t_strBooleanNull;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-            {
-                t_strColumnName = t_astrColumnNames[t_iIndex];
-
-                t_strId = t_strTable + "." + t_strColumnName + ".property";
-                
-                t_strName = t_strColumnName;
-                t_strType =
-                    metadataTypeManager.getNativeType(
-                        metadataManager.getColumnType(
-                            t_strTable, t_strColumnName));
-                
-                t_bNullable =
-                    metadataManager.allowsNull(t_strTable, t_strColumnName);
-
-                t_bReadOnly = 
-                    metadataManager.isReadOnly(
-                        t_strTable, t_strColumnName);
-
-                t_bIsBool =
-                    metadataManager.isBoolean(
-                        t_strTable, t_strColumnName);
-
-                t_strBooleanTrue =
-                    metadataManager.getBooleanTrue(
-                        t_strTable, t_strColumnName);
-                    
-                t_strBooleanFalse =
-                    metadataManager.getBooleanFalse(
-                        t_strTable, t_strColumnName);
-                    
-                t_strBooleanNull =
-                    metadataManager.getBooleanNull(
-                        t_strTable, t_strColumnName);
-                    
-                result.add(
-                    new PropertyElement(
-                        t_strId,
-                        t_strColumnName,
-                        t_iIndex + 1,
-                        t_strName,
-                        t_strType,
-                        t_bNullable,
-                        t_bReadOnly,
-                        t_bIsBool,
-                        t_strBooleanTrue,
-                        t_strBooleanFalse,
-                        t_strBooleanNull));
-            }
+            result.add(implicitProperty);
         }
         else
         {
-            String t_strErrorMessage =
-                "Cannot retrieve table associated to SQL result " + sqlResult.getId();
+            String t_strTable =
+                customResultUtils.retrieveTable(
+                    sqlResult,
+                    customSqlProvider,
+                    metadataManager);
 
-            if  (log != null)
+            if  (t_strTable != null)
             {
-                log.warn(t_strErrorMessage);
+                String[] t_astrColumnNames =
+                    metadataManager.getColumnNames(t_strTable);
+
+                int t_iCount =
+                    (t_astrColumnNames != null)
+                    ? t_astrColumnNames.length : 0;
+
+                String t_strId;
+                String t_strColumnName;
+                String t_strName;
+                String t_strType;
+                boolean t_bNullable;
+                boolean t_bReadOnly;
+                boolean t_bIsBool;
+                String t_strBooleanTrue;
+                String t_strBooleanFalse;
+                String t_strBooleanNull;
+
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    t_strColumnName = t_astrColumnNames[t_iIndex];
+
+                    t_strId = t_strTable + "." + t_strColumnName + ".property";
+                
+                    t_strName = t_strColumnName;
+                    t_strType =
+                        metadataTypeManager.getNativeType(
+                            metadataManager.getColumnType(
+                                t_strTable, t_strColumnName));
+                
+                    t_bNullable =
+                        metadataManager.allowsNull(t_strTable, t_strColumnName);
+
+                    t_bReadOnly = 
+                        metadataManager.isReadOnly(
+                            t_strTable, t_strColumnName);
+
+                    t_bIsBool =
+                        metadataManager.isBoolean(
+                            t_strTable, t_strColumnName);
+
+                    t_strBooleanTrue =
+                        metadataManager.getBooleanTrue(
+                            t_strTable, t_strColumnName);
+                    
+                    t_strBooleanFalse =
+                        metadataManager.getBooleanFalse(
+                            t_strTable, t_strColumnName);
+                    
+                    t_strBooleanNull =
+                        metadataManager.getBooleanNull(
+                            t_strTable, t_strColumnName);
+                    
+                    result.add(
+                        new PropertyElement(
+                            t_strId,
+                            t_strColumnName,
+                            t_iIndex + 1,
+                            t_strName,
+                            t_strType,
+                            t_bNullable,
+                            t_bReadOnly,
+                            t_bIsBool,
+                            t_strBooleanTrue,
+                            t_strBooleanFalse,
+                            t_strBooleanNull));
+                }
             }
+            else
+            {
+                String t_strErrorMessage =
+                    "Cannot retrieve table associated to SQL result " + sqlResult.getId();
 
-            throw new BuildException(t_strErrorMessage);
+                if  (log != null)
+                {
+                    log.warn(t_strErrorMessage);
+                }
+
+                throw new BuildException(t_strErrorMessage);
+            }
         }
-
+        
         return result;
     }
     
@@ -1291,20 +1289,6 @@ public class CustomSqlValidationHandler
         }
         catch  (final IllegalAccessException illegalAccessException)
         {
-            if  (log != null)
-            {
-                log.warn(
-                      "Validation failed for " + sql.getId() + ":\n"
-                    + "Could not retrieve result via "
-                    + "ResultSet." + method.getName()
-                    + "("
-                    + (   (property.getIndex() > 0)
-                       ?  "" + property.getIndex()
-                       :  property.getColumnName())
-                    + ")",
-                    illegalAccessException);
-            }
-
             throw
                 new BuildException(
                       "Could not retrieve result property "
@@ -1315,20 +1299,6 @@ public class CustomSqlValidationHandler
         }
         catch  (final InvocationTargetException invocationTargetException)
         {
-            if  (log != null)
-            {
-                log.warn(
-                      "Validation failed for " + sql.getId() + ":\n"
-                    + "Could not retrieve result via "
-                    + "ResultSet." + method.getName()
-                    + "("
-                    + (   (property.getIndex() > 0)
-                       ?  "" + property.getIndex()
-                       :  property.getColumnName())
-                    + ")",
-                    invocationTargetException);
-            }
-
             throw
                 new BuildException(
                       "Validation failed for " + sql.getId() + ":\n"

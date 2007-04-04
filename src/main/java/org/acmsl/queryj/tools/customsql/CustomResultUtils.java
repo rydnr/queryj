@@ -43,6 +43,11 @@ package org.acmsl.queryj.tools.customsql;
  */
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.implicit.ImplicitBigDecimalProperty;
+import org.acmsl.queryj.tools.customsql.implicit.ImplicitDoubleProperty;
+import org.acmsl.queryj.tools.customsql.implicit.ImplicitFloatProperty;
+import org.acmsl.queryj.tools.customsql.implicit.ImplicitIntProperty;
+import org.acmsl.queryj.tools.customsql.implicit.ImplicitLongProperty;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -60,6 +65,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.math.BigDecimal;
 
 /**
  * Provides some useful methods when working with custom result elements.
@@ -438,5 +444,71 @@ public class CustomResultUtils
         }
 
         return (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+    }
+
+    /**
+     * Builds the standard implicit property, if given sql result
+     * doesn't define any property and its class name points to a Java
+     * primitive or wrapper.
+     * @param sqlResult the sql result.
+     * @return the standard implicit property, in such case.
+     * @precondition sqlResult != null
+     */
+    public Property buildStandardImplicitProperty(final Result sqlResult)
+    {
+        Property result = null;
+
+        String t_strClassValue = sqlResult.getClassValue();
+
+        String t_strId = sqlResult.getId() + ".property";
+
+        // TODO: FIX ME
+        if  (Integer.TYPE.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitIntProperty(t_strId, false); // nullable
+        }
+        else if  (Integer.class.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitIntProperty(t_strId, true); // nullable
+        }
+        else if  (Long.TYPE.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitLongProperty(t_strId, false); // nullable
+        }
+        else if  (Long.class.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitLongProperty(t_strId, true); // nullable
+        }
+        else if  (Float.TYPE.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitFloatProperty(t_strId, false); // nullable
+        }
+        else if  (Float.class.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitFloatProperty(t_strId, true); // nullable
+        }
+        else if  (Double.TYPE.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitDoubleProperty(t_strId, false); // nullable
+        }
+        else if  (Double.class.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitDoubleProperty(t_strId, true); // nullable
+        }
+        else if  (BigDecimal.class.getName().equalsIgnoreCase(t_strClassValue))
+        {
+            result =
+                new ImplicitBigDecimalProperty(t_strId, true); // nullable
+        }
+
+        return result;
     }
 }
