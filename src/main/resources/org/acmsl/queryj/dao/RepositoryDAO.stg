@@ -207,13 +207,13 @@ public class <input.engine_name><input.tr_name_capitalized>DAO
     }
 
     <input.custom_selects:custom_select(
-      cs=it, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 
     <input.custom_updates_or_inserts:custom_update_or_insert(
       cs=it, input=input); separator="\n">
 
     <input.custom_selects_for_update:custom_select_for_update(
-      cs=it, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 
     <inner_transaction_callbacks(
       daoName=input.engine_name+input.tr_name_capitalized,

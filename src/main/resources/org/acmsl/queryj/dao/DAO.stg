@@ -954,8 +954,7 @@ public class <input.engine_name><input.vo_name>DAO
       foreignKey=it, input=input); separator="\n">
 
     <input.custom_selects:custom_select(
-      cs=it,
-      input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 
     <input.custom_updates_or_inserts:custom_update_or_insert(
       cs=it,
@@ -1656,7 +1655,12 @@ protected void insert(
 
  * @throws DataAccessException if the operation fails.
  */
+<if(table.voDecorated)>
+public <input.vo_name>Decorator create(
+<else>
 public <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
@@ -1698,7 +1702,12 @@ public <input.vo_name> create(
  <precondition_notnull("dataSource")>
  <precondition_notnull("factory")>
  */
+<if(table.voDecorated)>
+protected <input.vo_name>Decorator create(
+<else>
 protected <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
@@ -1743,7 +1752,12 @@ protected <input.vo_name> create(
  <precondition_notnull("transactionManager")>
  <precondition_notnull("factory")>
  */
+<if(table.voDecorated)>
+protected <input.vo_name>Decorator create(
+<else>
 protected <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
@@ -1788,7 +1802,12 @@ protected <input.vo_name> create(
  <precondition_notnull("transactionTemplate")>
  <precondition_notnull("factory")>
  */
+<if(table.voDecorated)>
+protected <input.vo_name>Decorator create(
+<else>
 protected <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
@@ -1891,7 +1910,12 @@ public void insert(
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
+<if(table.voDecorated)>
+public <input.vo_name>Decorator create(
+<else>
 public <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
@@ -1926,7 +1950,12 @@ public <input.vo_name> create(
  * @throws DataAccessException if the operation fails.
  * @precondition dataSource != null
  */
+<if(table.voDecorated)>
+protected <input.vo_name>Decorator create(
+<else>
 protected <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
@@ -1962,7 +1991,12 @@ protected <input.vo_name> create(
  * @throws DataAccessException if the operation fails.
  * @precondition transactionManager != null
  */
+<if(table.voDecorated)>
+protected <input.vo_name>Decorator create(
+<else>
 protected <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
@@ -2005,7 +2039,12 @@ protected <input.vo_name> create(
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
+<if(table.voDecorated)>
+protected <input.vo_name>Decorator create(
+<else>
 protected <input.vo_name> create(
+<endif>
+
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>

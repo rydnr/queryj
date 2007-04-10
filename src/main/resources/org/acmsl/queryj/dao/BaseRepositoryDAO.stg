@@ -128,21 +128,22 @@ class(input) ::= <<
 public interface <input.tr_name_capitalized>DAO
 {
     <input.custom_selects:custom_select(
-      cs=it, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 
     <input.custom_updates_or_inserts:custom_update_or_insert(
       cs=it, input=input); separator="\n">
 
     <input.custom_selects_for_update:custom_select_for_update(
-      cs=it, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 }
 >>
 
-custom_select(cs, input) ::= <<
+custom_select(cs, table, input) ::= <<
 <!
-  Writes the code for a custom select query.
-  @param cs the custom select.
-  @param input the input.
+ Writes the code for a custom select query.
+ @param cs the custom select.
+ @param table the table.
+ @param input the input.
 !>
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
@@ -151,7 +152,12 @@ custom_select(cs, input) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
+<if(table.voDecorated)>
+public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<else>
 public <cs.resultClass> <cs.nameUncapitalized>(
+<endif>
+
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>
@@ -173,11 +179,12 @@ public void <cs.nameUncapitalized>(
   throws DataAccessException;
 >>
 
-custom_select_for_update(cs, input) ::= <<
+custom_select_for_update(cs, table, input) ::= <<
 <!
-  Writes the code for a custom select for update.
-  @param cs the custom sql.
-  @param input the input.
+ Writes the code for a custom select for update.
+ @param cs the custom sql.
+ @param table the table.
+ @param input the input.
 !>
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
@@ -186,7 +193,19 @@ custom_select_for_update(cs, input) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
+<if(cs.resultClass)>
+<cs.result:{rs|<if(rs.implicitProperty)><if(table.voDecorated)>
+public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<else>
 public <cs.resultClass> <cs.nameUncapitalized>(
+<endif>
+<else>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<endif>}>
+<else>
+public void <cs.nameUncapitalized>(
+<endif>
+
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>

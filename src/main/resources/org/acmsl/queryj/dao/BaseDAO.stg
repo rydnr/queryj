@@ -235,7 +235,12 @@ public interface <input.vo_name>DAO
 
      * @throws DataAccessException if the operation fails.
      */
+<if(table.voDecorated)>
+    public <input.vo_name>Decorator create(
+<else>
     public <input.vo_name> create(
+<endif>
+
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">)
@@ -278,13 +283,13 @@ public interface <input.vo_name>DAO
       foreignKey=it, input=input); separator="\n">
 
     <input.custom_selects:custom_select(
-      cs=it, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 
     <input.custom_updates_or_inserts:custom_update_or_insert(
       cs=it, input=input); separator="\n">
 
     <input.custom_selects_for_update:custom_select_for_update(
-      cs=it, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n">
 }
 >>
 
@@ -354,11 +359,12 @@ public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">);
 >>
 
-custom_select(cs, input) ::= <<
+custom_select(cs, table, input) ::= <<
 <!
-  Writes the code for a custom select query.
-  @param cs the custom select.
-  @param input the input.
+ Writes the code for a custom select query.
+ @param cs the custom select.
+ @param table the table.
+ @param input the input.
 !>
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
@@ -367,7 +373,19 @@ custom_select(cs, input) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
 public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+<if(rs.multiple)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<endif>
+<endif>
+<else>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<endif>}>
+
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>
@@ -390,11 +408,12 @@ public int <cs.nameUncapitalized>(
   throws DataAccessException;
 >>
 
-custom_select_for_update(cs, input) ::= <<
+custom_select_for_update(cs, table, input) ::= <<
 <!
-  Writes the code for a custom select for update.
-  @param cs the custom sql.
-  @param input the input.
+ Writes the code for a custom select for update.
+ @param cs the custom sql.
+ @param table the table.
+ @param input the input.
 !>
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
@@ -403,7 +422,18 @@ custom_select_for_update(cs, input) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
 public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+<if(rs.multiple)>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<else>
+public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<endif>
+<endif>
+<else>
+public <cs.resultClass> <cs.nameUncapitalized>(
+<endif>}>
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException;
 >>

@@ -5265,7 +5265,12 @@ public abstract class AbstractJdbcMetadataManager
                     result);
             }
         }
-    
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+        
         return result.booleanValue();
     }
 
