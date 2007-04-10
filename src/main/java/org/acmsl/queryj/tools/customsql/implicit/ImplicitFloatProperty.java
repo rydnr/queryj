@@ -59,6 +59,9 @@ public class ImplicitFloatProperty
     public ImplicitFloatProperty(
         final String id, final boolean nullable)
     {
-        super(id, Float.class.getName(), nullable);
+        super(
+            id,
+            (nullable) ? Float.class.getName() : Float.TYPE.getName(),
+            nullable);
     }
 }

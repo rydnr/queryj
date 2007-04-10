@@ -86,4 +86,16 @@ public interface PropertyDecorator
      * @return such condition.
      */
     public boolean isNumberSmallerThanInt();
+
+    /**
+     * Retrieves whether the attribute is a blob or not.
+     * return such information.
+     */
+    public boolean isBlob();
+
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * return such information.
+     */
+    public boolean isClob();
 }

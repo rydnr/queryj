@@ -519,6 +519,47 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Retrieves whether the attribute is a blob or not.
+     * return such information.
+     */
+    public boolean isBlob()
+    {
+        return "InputStream".equals(getType());
+    }
+
+    /**
+     * Retrieves whether the attribute is a clob or not.
+     * return such information.
+     */
+    public boolean isClob()
+    {
+        return "Clob".equals(getType());
+    }
+
+
+    /**
+     * Retrieves whether the attribute is numeric or not.
+     * @return such information.
+     */
+    public boolean isNumeric()
+    {
+        return isNumeric(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is numeric or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isNumeric(
+        final String type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isNumeric(type);
+    }
+
+    /**
      * Retrieves the property name.
      * @return such information.
      */

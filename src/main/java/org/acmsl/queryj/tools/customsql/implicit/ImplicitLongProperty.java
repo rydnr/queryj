@@ -59,6 +59,9 @@ public class ImplicitLongProperty
     public ImplicitLongProperty(
         final String id, final boolean nullable)
     {
-        super(id, Long.class.getName(), nullable);
+        super(
+            id,
+            (nullable) ? Long.class.getName() : Long.TYPE.getName(),
+            nullable);
     }
 }

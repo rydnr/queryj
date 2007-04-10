@@ -28,12 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: CustomResultSetExtractorPropertyDecorator.java
+ * Filename: DAOPropertyDecorator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Property decorator specific for CustomResultSetExtractor
- *              template.
+ * Description: Property decorator specific for DAO template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
@@ -55,205 +54,155 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class CustomResultSetExtractorPropertyDecorator
-    extends  DAOPropertyDecorator
+public class DAOPropertyDecorator
+    extends  CachingPropertyDecorator
 {
     /**
-     * The cached Java type, capitalized.
+     * The result.
      */
-    private String m__strCachedJavaTypeCapitalized;
+    private Result m__Result;
+    
+    /**
+     * The custom sql provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
+    
+    /**
+     * The actual Java type.
+     */
+    private String m__strCachedActualJavaType;
 
     /**
-     * The actual object type.
-     */
-    private String m__strCachedActualObjectType;
-
-    /**
-     * Creates a <code>CustomResultSetExtractorPropertyDecorator</code> to
+     * Creates a <code>DAOPropertyDecorator</code> to
      * decorate given property.
      * @param property the property to decorate.
      * @param result the associated result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @precondition property != null
-     * @precondition result != null
-     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
-    public CustomResultSetExtractorPropertyDecorator(
+    public DAOPropertyDecorator(
         final Property property,
         final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
-        super(property, result, customSqlProvider, metadataManager);
+        super(property, metadataManager);
+        immutableSetResult(result);
+        immutableSetCustomSqlProvider(customSqlProvider);
     }
 
     /**
-     * Specifies the cached Java type, capitalized.
-     * @param type such type.
+     * Specifies the result element.
+     * @param result the result.
      */
-    protected final void immutableSetCachedJavaTypeCapitalized(final String type)
+    protected final void immutableSetResult(final Result result)
     {
-        m__strCachedJavaTypeCapitalized = type;
+        m__Result = result;
     }
-
+        
     /**
-     * Specifies the cached Java type, capitalized.
-     * @param type such type.
+     * Specifies the result element.
+     * @param result the result.
      */
-    protected void setCachedJavaTypeCapitalized(final String type)
+    protected void setResult(final Result result)
     {
-        immutableSetCachedJavaTypeCapitalized(type);
+        immutableSetResult(result);
     }
 
     /**
-     * Retrieves the cached Java type, capitalized.
-     * @return such type.
-     */
-    public String getCachedJavaTypeCapitalized()
-    {
-        return m__strCachedJavaTypeCapitalized;
-    }
-
-    /**
-     * Retrieves the Java type of the property.
+     * Retrieves the result.
      * @return such information.
      */
-    public String getJavaTypeCapitalized()
+    public Result getResult()
     {
-        String result = getCachedJavaType();
-
-        if  (result == null)
-        {
-            result = uppercase(getJavaType());
-            setCachedJavaType(result);
-        }
-
-        return result;
+        return m__Result;
     }
 
     /**
-     * Retrieves the Java type of the property.
-     * @return such information.
+     * Specifies the custom sql provider.
+     * @param provider such provider.
      */
-    public String getJavaType()
+    protected final void immutableSetCustomSqlProvider(
+        final CustomSqlProvider provider)
     {
-        String result = getCachedJavaType();
-
-        if  (result == null)
-        {
-            result = retrieveJavaType();
-            setCachedJavaType(result);
-        }
-
-        return result;
+        m__CustomSqlProvider = provider;
     }
-
+    
     /**
-     * Retrieves the Java type of the property.
-     * @return such information.
+     * Specifies the custom sql provider.
+     * @param provider such provider.
      */
-    protected String retrieveJavaType()
+    protected void setCustomSqlProvider(final CustomSqlProvider provider)
     {
-        return retrieveJavaType(getType(), getMetadataManager(), isNullable());
+        immutableSetCustomSqlProvider(provider);
     }
 
     /**
-     * Retrieves the Java type of the property.
-     * @param type the declared type.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param allowsNull whether it allows nulls.
-     * @return such information.
-     * @precondition metadataManager != null
+     * Retrieves the custom sql provider.
+     * @return such instance.
      */
-    protected String retrieveJavaType(
-        final String type,
-        final MetadataManager metadataManager,
-        final boolean allowsNull)
+    public CustomSqlProvider getCustomSqlProvider()
     {
-        return
-            retrieveJavaType(
-                type,
-                metadataManager.getMetadataTypeManager(),
-                allowsNull,
-                MetadataTypeUtils.getInstance());
+        return m__CustomSqlProvider;
     }
-
+    
     /**
-     * Retrieves the Java type of the property.
-     * @param type the declared type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param allowsNull whether it allows nulls.
-     * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
-     * @return such information.
-     * @precondition metadataTypeManager != null
-     * @precondition metadataTypeUtils != null
-     */
-    protected String retrieveJavaType(
-        final String type,
-        final MetadataTypeManager metadataTypeManager,
-        final boolean allowsNull,
-        final MetadataTypeUtils metadataTypeUtils)
-    {
-        return type;
-    }
-
-    /**
-     * Specifies the cached actual object type.
+     * Specifies the cached actual java type.
      * @param type such information.
      */
-    protected final void immutableSetCachedActualObjectType(
+    protected final void immutableSetCachedActualJavaType(
         final String type)
     {
-        m__strCachedActualObjectType = type;
+        m__strCachedActualJavaType = type;
     }
 
     /**
-     * Specifies the cached actual object type.
+     * Specifies the cached actual java type.
      * @param type such information.
      */
-    protected void setCachedActualObjectType(
+    protected void setCachedActualJavaType(
         final String type)
     {
-        immutableSetCachedActualObjectType(type);
+        immutableSetCachedActualJavaType(type);
     }
 
     /**
-     * Retrieves the actual object type.
+     * Retrieves the actual java type.
      * @return such value.
      */
-    public String getCachedActualObjectType()
+    public String getCachedActualJavaType()
     {
-        return m__strCachedActualObjectType;
+        return m__strCachedActualJavaType;
     }
 
     /**
-     * Retrieves the actual object type.
+     * Retrieves the actual java type.
      * @return such value.
      */
-    public String getActualObjectType()
+    public String getActualJavaType()
     {
-        String result = getCachedActualObjectType();
+        String result = getCachedActualJavaType();
 
         if  (result == null)
         {
             result =
-                retrieveActualObjectType(
+                retrieveActualJavaType(
                     getProperty(),
                     getResult(),
                     getCustomSqlProvider(),
                     CustomResultUtils.getInstance(),
                     getMetadataManager());
 
-            setCachedActualObjectType(result);
+            setCachedActualJavaType(result);
         }
 
         return result;
     }
 
     /**
-     * Retrieves the actual object type.
+p     * Retrieves the actual java type.
      * @param property the property.
      * @param result the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -267,7 +216,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * @procondition customResultUtils != null
      * @precondition metadataManager != null
      */
-    protected String retrieveActualObjectType(
+    protected String retrieveActualJavaType(
         final Property property,
         final Result result,
         final CustomSqlProvider customSqlProvider,
@@ -275,7 +224,7 @@ public class CustomResultSetExtractorPropertyDecorator
         final MetadataManager metadataManager)
     {
         return
-            retrieveActualObjectType(
+            retrieveActualJavaType(
                 property,
                 result,
                 customSqlProvider,
@@ -285,7 +234,7 @@ public class CustomResultSetExtractorPropertyDecorator
     }
     
     /**
-     * Retrieves the actual object type.
+     * Retrieves the actual java type.
      * @param property the property.
      * @param sqlResult the result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -300,7 +249,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
-    protected String retrieveActualObjectType(
+    protected String retrieveActualJavaType(
         final Property property,
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
@@ -313,9 +262,10 @@ public class CustomResultSetExtractorPropertyDecorator
         if  (property.isImplicit())
         {
             result =
-                metadataTypeManager.getObjectType(
-                    property.getType(),
-                    property.isNullable());
+                metadataTypeManager.getQueryJFieldType(
+                    metadataTypeManager.getJavaType(
+                        sqlResult.getClassValue()),
+                    false);
         }
         else
         {
@@ -326,7 +276,7 @@ public class CustomResultSetExtractorPropertyDecorator
                     property.getName());
         
             result =
-                metadataTypeManager.getObjectType(t_iType, false);
+                metadataTypeManager.getNativeType(t_iType, getAllowsNull(), false);
         }
         
         return result;

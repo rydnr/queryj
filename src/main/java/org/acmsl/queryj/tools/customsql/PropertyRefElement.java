@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  */
 public class PropertyRefElement
     extends  AbstractIdElement
+    implements  PropertyRef
 {
     /**
      * Creates a PropertyRefElement with given information.

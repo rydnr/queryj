@@ -74,6 +74,7 @@ source(input) ::= <<
 /*
  * Importing some JDK classes.
  */
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Calendar;

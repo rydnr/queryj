@@ -264,9 +264,27 @@ public class <result.idCapitalized>Extractor
 
         }
 
+<if(result.implicitProperty)>
+        <implicit_attribute_result(attr=result.implicitProperty)>
+<else>
         return result;
+<endif>
+
     }
 }
+>>
+
+implicit_attribute_result(attr) ::= <<
+<!
+ Prints the correct return clause for the implicit attribute.
+ @param attr the implicit attribute.
+ !>
+<if(attr.nullable)>
+return result;
+<else>
+return new <attr.actualObjectType>(result);
+<endif>
+
 >>
 
 implicit_nullable_attribute_extraction(result, attr) ::= <<
@@ -502,6 +520,7 @@ resultSet.getTimestamp("<attr.columnName>");
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt("<attr.columnName>");
 <else>
+// <attr> : object_nullable_clobhandling_attribute_extractor
 resultSet.get<attr.objectType>("<attr.columnName>");
 <endif>
 <endif>
@@ -546,7 +565,13 @@ resultSet.getTimestamp("<attr.columnName>")
 <if(attr.boolean)>
 t_<attr.columnNameNormalizedCapitalized>AsBoolean
 <else>
+// <attr> : default_attribute_extraction
+<if(attr.blob)>
+// TODO
+null
+<else>
 resultSet.get<attr.objectType>("<attr.columnName>")
+<endif>
 <endif>
 <endif>
 <endif>
@@ -568,6 +593,7 @@ t_<attr.nameCapitalized>As<attr.objectType>
 <if(attr.numberSmallerThanInt)>
 resultSet.getInt("<attr.nameUppercased>")
 <else>
+// <attr> : default_clobhandling_attribute_extraction
 resultSet.get<attr.objectType>("<attr.nameUppercased>")
 <endif>
 <endif>

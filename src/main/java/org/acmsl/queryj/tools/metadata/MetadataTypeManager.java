@@ -342,9 +342,25 @@ public interface MetadataTypeManager
     public boolean isClob(final String dataType);
 
     /**
+     * Checks if given data type represents blobs.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * blob.
+     */
+    public boolean isBlob(final int dataType);
+
+    /**
+     * Checks if given data type represents blobs.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * blob.
+     */
+    public boolean isBlob(final String dataType);
+
+    /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final int dataType);
@@ -356,4 +372,19 @@ public interface MetadataTypeManager
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final String dataType);
+
+    /**
+     * Checks if given data type represents numbers.
+     * @param dataType the data type.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isNumeric(final int dataType);
+
+    /**
+     * Checks if given data type represents numbers.
+     * @param dataType the data type.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isNumeric(final String dataType);
+
 }

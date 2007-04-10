@@ -41,11 +41,14 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.CachingPropertyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
+import org.acmsl.queryj.tools.templates.dao.DAOPropertyDecorator;
 
 /**
  * Property decorator specific for CustomResultSetExtractor template.
@@ -53,19 +56,27 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
  *         >Jose San Leandro</a>
  */
 public class CustomValueObjectPropertyDecorator
-    extends  CachingPropertyDecorator
+    extends  DAOPropertyDecorator
 {
     /**
      * Creates a <code>CustomResultSetExtractorPropertyDecorator</code> to
      * decorate given property.
      * @param property the property to decorate.
+     * @param result the associated result element.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @precondition property != null
+     * @precondition result != null
+     * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
     public CustomValueObjectPropertyDecorator(
-        final Property property, final MetadataManager metadataManager)
+        final Property property,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
     {
-        super(property, metadataManager);
+        super(property, result, customSqlProvider, metadataManager);
     }
 
     /**

@@ -59,6 +59,6 @@ public class ImplicitDoubleProperty
     public ImplicitDoubleProperty(
         final String id, final boolean nullable)
     {
-        super(id, Double.class.getName(), nullable);
+        super(id, (nullable) ? Double.class.getName() : Double.TYPE.getName(), nullable);
     }
 }

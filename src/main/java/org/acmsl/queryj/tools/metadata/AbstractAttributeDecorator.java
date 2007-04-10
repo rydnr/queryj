@@ -463,6 +463,29 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Retrieves whether the attribute is a blob or not.
+     * return such information.
+     */
+    public boolean isBlob()
+    {
+        return isBlob(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a blob or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isBlob(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isBlob(type);
+    }
+
+    /**
      * Retrieves whether the attribute is a clob or not.
      * return such information.
      */
@@ -704,6 +727,40 @@ public abstract class AbstractAttributeDecorator
         final int type, final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isNumberSmallerThanInt(type);
+    }
+
+    /**
+     * Retrieves whether the attribute is numeric or not.
+     * @return such information.
+     */
+    public boolean isNumeric()
+    {
+        return isNumeric(getType(), getMetadataManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is numeric or not.
+     * @param type the type.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition metadataManager != null
+     */
+    protected boolean isNumeric(final int type, final MetadataManager metadataManager)
+    {
+        return isNumeric(type, metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is numeric or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such information.
+     * @precondition metadataTypeManager != null
+     */
+    protected boolean isNumeric(
+        final int type, final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isNumeric(type);
     }
 
     /**

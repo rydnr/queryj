@@ -59,6 +59,9 @@ public class ImplicitIntProperty
     public ImplicitIntProperty(
         final String id, final boolean nullable)
     {
-        super(id, Integer.class.getName(), nullable);
+        super(
+            id,
+            (nullable) ? Integer.class.getName() : Integer.TYPE.getName(),
+            nullable);
     }
 }

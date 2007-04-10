@@ -98,10 +98,9 @@ public class OracleMetadataTypeManager
     }
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents clobs.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a clob.
      */
     public boolean isClob(final int dataType)
     {

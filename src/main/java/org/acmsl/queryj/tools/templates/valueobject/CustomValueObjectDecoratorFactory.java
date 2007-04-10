@@ -42,11 +42,13 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.PropertyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
@@ -92,16 +94,42 @@ public class CustomValueObjectDecoratorFactory
     }
 
     /**
+     * Creates an <code>AttributeDecorator</code> for given
+     * attribute instance.
+     * @param attribute the attribute.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated attribute for the concrete template.
+     */
+    public AttributeDecorator createDecorator(
+        final Attribute attribute, final MetadataManager metadataManager)
+    {
+        return new CustomValueObjectAttributeDecorator(attribute, metadataManager);
+    }
+
+    /**
      * Creates a <code>PropertyDecorator</code> for given
      * property instance.
      * @param property the attribute.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
+     * @precondition property != null
+     * @precondition result != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
      */
     public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager)
+        final Property property,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager)
     {
         return
-            new CustomValueObjectPropertyDecorator(property, metadataManager);
+            new CustomValueObjectPropertyDecorator(
+                property,
+                result,
+                customSqlProvider,
+                metadataManager);
     }
 }

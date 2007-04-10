@@ -1283,10 +1283,9 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents clobs.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a clob.
      */
     public boolean isClob(final int dataType)
     {
@@ -1294,10 +1293,9 @@ public class JdbcMetadataTypeManager
     }
 
     /**
-     * Checks if given data type represents integers.
+     * Checks if given data type represents clobs.
      * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as an
-     * integer.
+     * @return <code>true</code> if such data type can be managed as a clob.
      */
     public boolean isClob(final String dataType)
     {
@@ -1305,9 +1303,29 @@ public class JdbcMetadataTypeManager
     }
 
     /**
+     * Checks if given data type represents blobs.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a blob.
+     */
+    public boolean isBlob(final int dataType)
+    {
+        return (dataType == Types.BLOB);
+    }
+
+    /**
+     * Checks if given data type represents blobs.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a blob.
+     */
+    public boolean isBlob(final String dataType)
+    {
+        return "Blob".equals(dataType);
+    }
+
+    /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final int dataType)
@@ -1334,7 +1352,7 @@ public class JdbcMetadataTypeManager
     /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final String dataType)
@@ -1345,6 +1363,65 @@ public class JdbcMetadataTypeManager
              || ("bit".equalsIgnoreCase(dataType))
              || ("tinyint".equalsIgnoreCase(dataType))
              || ("smallint".equalsIgnoreCase(dataType)))
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents numbers.
+     * @param dataType the data type.
+     * @return <code>true</code> in such case.
+     * or similar.
+     */
+    public boolean isNumeric(final int dataType)
+    {
+        boolean result = isNumberSmallerThanInt(dataType);
+
+        if  (!result)
+        {
+            switch (dataType)
+            {
+                case Types.INTEGER:
+                case Types.BIGINT:
+                case Types.DOUBLE:
+                case Types.FLOAT:
+                case Types.NUMERIC:
+                case Types.REAL:
+                    result = true;
+                    break;
+
+                default:
+                    result = false;
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks if given data type represents numbers.
+     * @param dataType the data type.
+     * @return <code>true</code> in such case.
+     * or similar.
+     */
+    public boolean isNumeric(final String dataType)
+    {
+        boolean result = isNumberSmallerThanInt(dataType);
+
+        if  (   (!result)
+             && (   ("java.long.Integer".equalsIgnoreCase(dataType))
+                 || ("int".equalsIgnoreCase(dataType))
+                 || ("long".equalsIgnoreCase(dataType))
+                 || ("java.lang.Long".equalsIgnoreCase(dataType))
+                 || ("double".equalsIgnoreCase(dataType))
+                 || ("java.lang.Double".equalsIgnoreCase(dataType))
+                 || ("float".equalsIgnoreCase(dataType))
+                 || ("java.lang.Float".equalsIgnoreCase(dataType))
+                 || ("java.math.BigDecimal".equalsIgnoreCase(dataType))))
         {
             result = true;
         }

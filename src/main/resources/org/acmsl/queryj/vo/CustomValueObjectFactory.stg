@@ -75,6 +75,7 @@ source(input) ::= <<
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
+import java.io.InputStream;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
@@ -209,7 +210,7 @@ property_method_declaration(attribute) ::= <<
 // allows null
 final <attribute.objectType> <attribute.columnNameNormalizedUncapitalized>
 <else>
-// doesn't allow null
+// <attribute> doesn't allow null
 final <attribute.javaType> <attribute.columnNameNormalizedUncapitalized>
 <endif>
 

@@ -1049,9 +1049,9 @@ custom_select_result_declaration(sql, result) ::= <<
  @param result the sql result.
  !>
 <if(result.implicitProperty)>
-    <implicit_attribute_declaration(result=result, attr=cs.implicitProperty)>
+<implicit_attribute_declaration(result=result, attr=result.implicitProperty)>
 <else>
-    <result.classValue> result = null;
+<sql.resultClass> result = null;
 <endif>
 
 >>
@@ -1059,11 +1059,37 @@ custom_select_result_declaration(sql, result) ::= <<
 implicit_attribute_declaration(result, attr) ::= <<
 <!
  Generates the declaration of the property.
- @param result the sql result.
+ @param result the custom result.
  @param attr the implicit property.
 !>
 <if(attr.nullable)>
+<if(result.multiple)>
+List result = null;
+<else>
 <result.classValue> result = null;
+<endif>
+<else>
+<if(attr.numeric)>
+<attr.type> result = 0;
+<else>
+<if(attr.boolean)>
+<attr.type> result = false;
+<else>
+<attr.type> result = null;
+<endif>
+<endif>
+<endif>
+
+>>
+
+implicit_custom_select_attribute_declaration(sql, attr) ::= <<
+<!
+ Generates the declaration of the property.
+ @param sql the custom sql.
+ @param attr the implicit property.
+!>
+<if(attr.nullable)>
+<sql.resultClass> result = null;
 <else>
 <attr.actualJavaType> result = null;
 <endif>
@@ -1076,15 +1102,15 @@ custom_select_template_call(sql, result) ::= <<
  @param sql the custom select.
  @param result the sql result.
  !>
-result =
 <if(result.implicitProperty)>
-<cs.implicitProperty:{attr |
-    <if(!attr.nullable)>(<actual_custom_select_template_call(sql=sql, result=result)>).<attr.type>Value();
-<else>
-     <actual_custom_select_template_call(sql=sql, result=result)>
+<result.implicitProperty:{attr |
+    <if(!attr.nullable)>((<attr.actualJavaType>)
+    (<actual_custom_select_template_call(sql=sql, result=result)>)).<attr.type>Value();
+<else>(<sql.resultClass>)
+     <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>}>
-<else>
-     <actual_custom_select_template_call(sql=sql, result=result)>
+<else>(<sql.resultClass>)
+     <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>
 >>
 
@@ -1094,15 +1120,14 @@ actual_custom_select_template_call(sql, result) ::= <<
  @param sql the custom select.
  @param result the sql result.
  !>
-(<cs.resultClass>)
-    transactionTemplate.execute(
-        new QueryTransactionCallback(
-            preparedStatementCreatorFactory
-                .newPreparedStatementCreator(params),
-            null,
-            // calls setXXX twice
-            // preparedStatementCreatorFactory
-            //     .newPreparedStatementSetter(t_aParams),
-            <cs.resultIdAsConstant>_CUSTOM_EXTRACTOR,
-            this))
+transactionTemplate.execute(
+    new QueryTransactionCallback(
+        preparedStatementCreatorFactory
+            .newPreparedStatementCreator(params),
+        null,
+        // calls setXXX twice
+        // preparedStatementCreatorFactory
+        //     .newPreparedStatementSetter(t_aParams),
+        <sql.resultIdAsConstant>_CUSTOM_EXTRACTOR,
+        this))
 >>

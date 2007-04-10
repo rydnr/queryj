@@ -64,6 +64,12 @@ public interface AttributeDecorator
     public Attribute getAttribute();
 
     /**
+     * Retrieves whether the attribute is a blob or not.
+     * return such information.
+     */
+    public boolean isBlob();
+
+    /**
      * Retrieves whether the attribute is a clob or not.
      * return such information.
      */
@@ -99,4 +105,10 @@ public interface AttributeDecorator
      * @return such information.
      */
     public boolean isBoolean();
+
+    /**
+     * Retrieves whether the attribute is numeric or not.
+     * @return such information.
+     */
+    public boolean isNumeric();
 }
