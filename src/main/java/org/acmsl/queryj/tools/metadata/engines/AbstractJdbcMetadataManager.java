@@ -1060,6 +1060,11 @@ public abstract class AbstractJdbcMetadataManager
         {
             result = getColumnNames(tableName, columnNames);
         }
+
+        if  (result == null)
+        {
+            result = new String[0];
+        }
         
         return result;
     }

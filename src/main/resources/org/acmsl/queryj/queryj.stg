@@ -294,7 +294,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
     final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
-    <custom_select_result_declaration(sql=cs, result=cs.result)>
+    <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
 
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
@@ -344,7 +344,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
     final TransactionTemplate transactionTemplate)
   throws DataAccessException
 {
-    <custom_select_result_declaration(sql=cs, result=cs.result)>
+    <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
 
     /*
     preparedStatementCreatorFactory.setResultSetType(..);
@@ -357,7 +357,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
       type=it.sqlType); separator="\n">
 
     result =
-        <custom_select_template_call(sql=cs, result=cs.result)>
+        <custom_select_template_call(sql=cs, result=cs.result, table=table)>
 
     return result;
 }
@@ -506,7 +506,7 @@ public void <cs.nameUncapitalized>(
     <cs.resultClass> result = null;
 <else>
     <cs.resultClass>Decorator result = null;
-w<endif>
+<endif>
 <endif>
 <else>
     <cs.resultClass> result = null;
@@ -1102,16 +1102,21 @@ public static final ResultSetExtractor
         new <crseidCapitalized>Extractor();
 >>
 
-custom_select_result_declaration(sql, result) ::= <<
+custom_select_result_declaration(sql, result, table) ::= <<
 <!
  Generates code to declare the custom-select result.
  @param sql the custom select.
  @param result the sql result.
+ @param table the table.
  !>
 <if(result.implicitProperty)>
 <implicit_attribute_declaration(result=result, attr=result.implicitProperty)>
 <else>
+<if(table.voDecorated)>
+<sql.resultClass>Decorator result = null;
+<else>
 <sql.resultClass> result = null;
+<endif>
 <endif>
 
 >>
@@ -1156,11 +1161,12 @@ implicit_custom_select_attribute_declaration(sql, attr) ::= <<
 
 >>
 
-custom_select_template_call(sql, result) ::= <<
+custom_select_template_call(sql, result, table) ::= <<
 <!
  Generates the call to execute the custom select.
  @param sql the custom select.
  @param result the sql result.
+ @param table the table.
  !>
 <if(result.implicitProperty)>
 <result.implicitProperty:{attr |
@@ -1169,7 +1175,8 @@ custom_select_template_call(sql, result) ::= <<
 <else>(<sql.resultClass>)
      <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>}>
-<else>(<sql.resultClass>)
+<else><if(table.voDecorated)>(<sql.resultClass>Decorator)<else>(<sql.resultClass>)<endif>
+
      <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>
 >>

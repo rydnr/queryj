@@ -444,9 +444,9 @@ public class <input.engine_name><input.vo_name>DAO
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    public <input.vo_name>Decorator findByPrimaryKey(
+public <input.vo_name>Decorator findByPrimaryKey(
 <else>
-    public <input.vo_name> findByPrimaryKey(
+public <input.vo_name> findByPrimaryKey(
 <endif>
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
