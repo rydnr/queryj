@@ -1819,7 +1819,12 @@ protected <input.vo_name> create(
     final <input.vo_name>ValueObjectFactory factory)
   throws DataAccessException
 {
+<if(table.voDecorated)>
+    <input.vo_name>Decorator result = null;
+<else>
     <input.vo_name> result = null;
+<endif>
+
 
     Map t_mMap = null;
 
