@@ -1113,7 +1113,11 @@ custom_select_result_declaration(sql, result, table) ::= <<
 <implicit_attribute_declaration(result=result, attr=result.implicitProperty)>
 <else>
 <if(table.voDecorated)>
+<if(result.multiple)>
+<sql.resultClass> result = null;
+<else>
 <sql.resultClass>Decorator result = null;
+<endif>
 <else>
 <sql.resultClass> result = null;
 <endif>
@@ -1175,8 +1179,7 @@ custom_select_template_call(sql, result, table) ::= <<
 <else>(<sql.resultClass>)
      <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>}>
-<else><if(table.voDecorated)>(<sql.resultClass>Decorator)<else>(<sql.resultClass>)<endif>
-
+<else><if(table.voDecorated)><if(result.multiple)>(<sql.resultClass>)<else>(<sql.resultClass>Decorator)<endif><else>(<sql.resultClass>)<endif>
      <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>
 >>
