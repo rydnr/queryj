@@ -301,7 +301,12 @@ public class ParameterValidationHandler
      */
     public static final String GRAMMAR_BUNDLE_NOT_FOUND =
         "Specified grammar bundle cannot be found";
-    
+
+    /**
+     * The optional JMX support.
+     */
+    public static final String JMX = "jmx";
+
     /**
      * Creates a ParameterValidationHandler.
      */
@@ -361,6 +366,7 @@ public class ParameterValidationHandler
                 (String) parameters.get(CUSTOM_SQL_MODEL),
                 (File) parameters.get(SQL_XML_FILE),
                 (File) parameters.get(GRAMMAR_BUNDLE_NAME),
+                (Boolean) parameters.get(JMX),
                 parameters);
         }
     }
@@ -389,6 +395,7 @@ public class ParameterValidationHandler
      * @param customSqlModel the model for custom-sql information.
      * @param sqlXmlFile the sql.xml file.
      * @param grammarBundleName the grammar bundle name.
+     * @param jmx whether to support JMX.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
      * @throws BuildException whenever the required
@@ -416,6 +423,7 @@ public class ParameterValidationHandler
         final String customSqlModel,
         final File sqlXmlFile,
         final File grammarBundleName,
+        final Boolean jmx,
         final Map parameters)
       throws  BuildException
     {

@@ -65,6 +65,7 @@ public interface ResultSetExtractorTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @return such template.
      */
@@ -78,6 +79,7 @@ public interface ResultSetExtractorTemplateFactory
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final boolean jmx,
         final String header)
       throws  QueryJException;
 }

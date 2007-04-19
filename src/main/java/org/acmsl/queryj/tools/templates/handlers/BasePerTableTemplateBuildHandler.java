@@ -145,6 +145,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveTemplateFactory(),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveJmx(parameters),
                 retrieveHeader(parameters),
                 retrieveTableTemplates(parameters));
     }
@@ -166,6 +167,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
      * @param repository the repository.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -189,6 +191,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final BasePerTableTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
+        final boolean jmx,
         final String header,
         final TableTemplate[] tableTemplates)
       throws  BuildException
@@ -220,6 +223,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         quote,
                         projectPackage,
                         repository,
+                        jmx,
                         header);
             }
 

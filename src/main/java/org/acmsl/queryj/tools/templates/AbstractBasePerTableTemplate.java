@@ -103,6 +103,11 @@ public abstract class AbstractBasePerTableTemplate
     private String m__strRepositoryName;
 
     /**
+     * Whether to support JMX or not.
+     */
+    private boolean m__bJmx = true;
+
+    /**
      * Builds an <code>AbstractBasePerTableTemplate</code> using given
      * information.
      * @param tableName the table name.
@@ -116,6 +121,7 @@ public abstract class AbstractBasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      */
     protected AbstractBasePerTableTemplate(
         final String tableName,
@@ -128,7 +134,8 @@ public abstract class AbstractBasePerTableTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(header, decoratorFactory);
 
@@ -159,6 +166,7 @@ public abstract class AbstractBasePerTableTemplate
         immutableSetRepositoryName(
             repositoryName);
 
+        immutableSetJmx(jmx);
     }
 
     /**
@@ -406,6 +414,33 @@ public abstract class AbstractBasePerTableTemplate
     public String getRepositoryName()
     {
         return m__strRepositoryName;
+    }
+
+    /**
+     * Specifies whether to support JMX.
+     * @param jmx such information.
+     */
+    protected final void immutableSetJmx(final boolean jmx)
+    {
+        m__bJmx = jmx;
+    }
+
+    /**
+     * Specifies whether to support JMX.
+     * @param jmx such information.
+     */
+    protected void setJmx(final boolean jmx)
+    {
+        immutableSetJmx(jmx);
+    }
+
+    /**
+     * Retrieves whether to support JMX.
+     * @return such information.
+     */
+    public boolean getJmx()
+    {
+        return m__bJmx;
     }
 
     /**

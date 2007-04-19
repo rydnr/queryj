@@ -244,6 +244,16 @@ public class QueryJTask
     private File m__GrammarBundle;
 
     /**
+     * The "jmx" property.
+     */
+    private String m__strJmx;
+
+    /**
+     * The "jmx" flag.
+     */
+    private boolean m__bJmx;
+
+    /**
      * The nested tables.
      */
     private AntTablesElement m__Tables;
@@ -636,6 +646,57 @@ public class QueryJTask
     protected boolean getOutputdirsubfoldersFlag()
     {
         return m__bOutputdirsubfolders;
+    }
+
+    /**
+     * Specifies whether to support JMX.
+     * @param jmx such setting.
+     */
+    protected final void immutableSetJmx(
+        final String jmx)
+    {
+        m__strJmx = jmx;
+    }
+
+    /**
+     * Specifies whether to suport JMX.
+     * @param jmx such setting.
+     */
+    public void setJmx(final String jmx)
+    {
+        immutableSetJmx(jmx);
+
+        setJmxFlag(
+            (   (jmx == null)
+             || (jmx.trim().toLowerCase().equals("yes")
+             || (jmx.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to support JMX.
+     * @return such setting.
+     */
+    public String getJmx()
+    {
+        return m__strJmx;
+    }
+
+    /**
+     * Specifies the "jmx" flag.
+     * @param flag such flag.
+     */
+    protected void setJmxFlag(final boolean flag)
+    {
+        m__bJmx = flag;
+    }
+
+    /**
+     * Retrieves the "jmx" flag.
+     * @return such flag.
+     */
+    protected boolean getJmxFlag()
+    {
+        return m__bJmx;
     }
 
     /**
@@ -1167,6 +1228,7 @@ public class QueryJTask
             File   t_Header = getHeaderfile();
 
             boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
+            boolean t_bJmx = getJmxFlag();
             boolean t_bExtractTables = getExtractTablesFlag();
             boolean t_bExtractProcedures = getExtractProceduresFlag();
             boolean t_bExtractFunctions = getExtractFunctionsFlag();
@@ -1267,6 +1329,12 @@ public class QueryJTask
                 t_mAttributes.put(
                     ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS,
                     (t_bOutputdirsubfolders
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.JMX,
+                    (t_bJmx
                      ?  Boolean.TRUE
                      :  Boolean.FALSE));
 

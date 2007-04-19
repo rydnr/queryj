@@ -86,6 +86,7 @@ public class DAOTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      */
     public DAOTemplate(
         final String tableName,
@@ -98,7 +99,8 @@ public class DAOTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(
             tableName,
@@ -111,7 +113,8 @@ public class DAOTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            jmx);
     }
 
     /**

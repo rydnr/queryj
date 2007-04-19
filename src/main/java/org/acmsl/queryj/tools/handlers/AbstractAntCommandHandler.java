@@ -355,4 +355,22 @@ public abstract class AbstractAntCommandHandler
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_IDENTIFIER_QUOTE_STRING);
     }
+
+    /**
+     * Retrieves whether to support JMX or not.
+     * @param parameters the command parameters.
+     * @return <code>true</code> in such case.
+     * @precondition parameters != null
+     */
+    protected boolean retrieveJmx(final Map parameters)
+    {
+        boolean result;
+
+        Boolean aux =
+            (Boolean) parameters.get(ParameterValidationHandler.JMX);
+
+        result = (aux != null) ? aux.booleanValue() : true;
+
+        return result;
+    }
 }

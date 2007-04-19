@@ -80,6 +80,7 @@ public class ResultSetExtractorTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      */
     public ResultSetExtractorTemplate(
         final String tableName,
@@ -92,7 +93,8 @@ public class ResultSetExtractorTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(
             tableName,
@@ -105,7 +107,8 @@ public class ResultSetExtractorTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            jmx);
     }
 
     /**

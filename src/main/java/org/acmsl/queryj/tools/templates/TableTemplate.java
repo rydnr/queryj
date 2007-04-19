@@ -92,6 +92,7 @@ public class TableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      */
     public TableTemplate(
         final String tableName,
@@ -104,7 +105,8 @@ public class TableTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(
             tableName,
@@ -117,7 +119,8 @@ public class TableTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            jmx);
 
         immutableSetFields(new ArrayList());
         immutableSetFieldTypes(new HashMap());

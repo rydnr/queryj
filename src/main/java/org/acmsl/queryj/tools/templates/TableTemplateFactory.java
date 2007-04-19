@@ -65,6 +65,7 @@ public interface TableTemplateFactory
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param jmx whether to support JMX.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -78,6 +79,7 @@ public interface TableTemplateFactory
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
       throws  QueryJException;
 }

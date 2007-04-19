@@ -78,6 +78,7 @@ public class ValueObjectImplTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      */
     public ValueObjectImplTemplate(
         final String tableName,
@@ -90,7 +91,8 @@ public class ValueObjectImplTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(
             tableName,
@@ -103,7 +105,8 @@ public class ValueObjectImplTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            jmx);
     }
 
     /**

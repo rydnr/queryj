@@ -146,6 +146,7 @@ public class ResultSetExtractorTemplateBuildHandler
                 retrieveCustomSqlProvider(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveJmx(parameters),
                 retrieveHeader(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
                 filterTableTemplates(
@@ -163,6 +164,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param basePackageName the base package name.
      * @param repository the repository.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
@@ -187,6 +189,7 @@ public class ResultSetExtractorTemplateBuildHandler
         final CustomSqlProvider customSqlProvider,
         final String basePackageName,
         final String repositoryName,
+        final boolean jmx,
         final String header,
         final ResultSetExtractorTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
@@ -219,6 +222,7 @@ public class ResultSetExtractorTemplateBuildHandler
                         quote,
                         basePackageName,
                         repositoryName,
+                        jmx,
                         header);
             }
 

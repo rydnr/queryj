@@ -110,6 +110,7 @@ public class TableTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
+     * @param jmx whether to support JMX.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -123,7 +124,8 @@ public class TableTemplateGenerator
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
       throws  QueryJException
     {
         return
@@ -138,7 +140,8 @@ public class TableTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                jmx);
     }
 
     /**

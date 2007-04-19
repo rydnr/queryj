@@ -114,6 +114,7 @@ public class ValueObjectFactoryTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @return the fresh new template.
      * @precondition tableName != null
@@ -134,6 +135,7 @@ public class ValueObjectFactoryTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final boolean jmx,
         final String header)
     {
         return
@@ -148,7 +150,8 @@ public class ValueObjectFactoryTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                jmx);
     }
 
     /**

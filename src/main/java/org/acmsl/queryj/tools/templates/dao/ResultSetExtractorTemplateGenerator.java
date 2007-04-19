@@ -111,6 +111,7 @@ public class ResultSetExtractorTemplateGenerator
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @return such template.
      * @precondition tableName != null
@@ -131,6 +132,7 @@ public class ResultSetExtractorTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final boolean jmx,
         final String header)
       throws  QueryJException
     {
@@ -146,7 +148,8 @@ public class ResultSetExtractorTemplateGenerator
                 engineVersion,
                 quote,
                 basePackageName,
-                repositoryName);
+                repositoryName,
+                jmx);
     }
 
     /**

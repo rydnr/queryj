@@ -77,6 +77,7 @@ public class MockDAOTemplate
      * @param tableName the table name.
      * @param metadataManager the datamock metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param engineName the engine name.
@@ -84,7 +85,7 @@ public class MockDAOTemplate
      * @param quote the identifier quote string.
      * @param mockPackageName the mock package name.
      * @param repositoryName the repository name.
-     * @param header the header.
+     * @param jmx whether to support JMX.
      */
     public MockDAOTemplate(
         final String tableName,
@@ -97,7 +98,8 @@ public class MockDAOTemplate
         final String engineVersion,
         final String quote,
         final String mockPackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(
             tableName,
@@ -110,7 +112,8 @@ public class MockDAOTemplate
             engineVersion,
             quote,
             mockPackageName,
-            repositoryName);
+            repositoryName,
+            jmx);
     }
 
     /**

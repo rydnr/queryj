@@ -120,6 +120,7 @@ public abstract class BasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      */
     public BasePerTableTemplate(
         final String tableName,
@@ -132,7 +133,8 @@ public abstract class BasePerTableTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String repositoryName)
+        final String repositoryName,
+        final boolean jmx)
     {
         super(
             tableName,
@@ -145,7 +147,8 @@ public abstract class BasePerTableTemplate
             engineVersion,
             quote,
             basePackageName,
-            repositoryName);
+            repositoryName,
+            jmx);
     }
 
     /**
@@ -245,6 +248,7 @@ public abstract class BasePerTableTemplate
                 getQuote(),
                 getBasePackageName(),
                 getRepositoryName(),
+                getJmx(),
                 header,
                 getDecoratorFactory(),
                 StringUtils.getInstance(),
@@ -270,6 +274,7 @@ public abstract class BasePerTableTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the StringUtils instance.
@@ -307,6 +312,7 @@ public abstract class BasePerTableTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
+        final boolean jmx,
         final String header,
         final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils,
@@ -557,6 +563,7 @@ public abstract class BasePerTableTemplate
             t_strRepositoryName,
             metadataManager,
             metadataTypeManager,
+            jmx,
             header,
             decoratorFactory,
             metadataUtils,
@@ -611,6 +618,7 @@ public abstract class BasePerTableTemplate
      * @param tableRepositoryName the table repository.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
@@ -682,6 +690,7 @@ public abstract class BasePerTableTemplate
         final String tableRepositoryName,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
+        final boolean jmx,
         final String header,
         final DecoratorFactory decoratorFactory,
         final MetadataUtils metadataUtils,
@@ -694,6 +703,7 @@ public abstract class BasePerTableTemplate
             tableName,
             engineName,
             engineVersion,
+            jmx,
             metadataManager,
             decoratorFactory);
 
@@ -791,6 +801,7 @@ public abstract class BasePerTableTemplate
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
+     * @param jmx whether to support JMX.
      * @param metadataManager the database metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition input != null
@@ -805,6 +816,7 @@ public abstract class BasePerTableTemplate
         final String tableName,
         final String engineName,
         final String engineVersion,
+        final boolean jmx,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
@@ -814,6 +826,7 @@ public abstract class BasePerTableTemplate
             decorate(tableName, metadataManager, decoratorFactory));
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
+        input.put("jmx", jmx ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**

@@ -165,6 +165,7 @@ public class TableTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
+                retrieveJmx(parameters),
                 retrieveHeader(parameters));
     }
 
@@ -180,6 +181,7 @@ public class TableTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageName the package name.
      * @param repository the repository.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -204,6 +206,7 @@ public class TableTemplateBuildHandler
         final String projectPackage,
         final String packageName,
         final String repository,
+        final boolean jmx,
         final String header)
       throws  BuildException,
               QueryJException
@@ -240,7 +243,8 @@ public class TableTemplateBuildHandler
                         engineVersion,
                         quote,
                         projectPackage,
-                        repository);
+                        repository,
+                        jmx);
 
                 t_astrColumnNames =
                     metadataManager.getColumnNames(

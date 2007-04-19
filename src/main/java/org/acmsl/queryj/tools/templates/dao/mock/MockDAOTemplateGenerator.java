@@ -114,6 +114,7 @@ public class MockDAOTemplateGenerator
      * @param quote the identifier quote string.
      * @param mockPackageName the mock package name.
      * @param repositoryName the name of the repository.
+     * @param jmx whether to support JMX.
      * @param header the header.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
@@ -136,6 +137,7 @@ public class MockDAOTemplateGenerator
         final String quote,
         final String mockPackageName,
         final String repositoryName,
+        final boolean jmx,
         final String header)
       throws  QueryJException
     {
@@ -151,7 +153,8 @@ public class MockDAOTemplateGenerator
                 engineVersion,
                 quote,
                 mockPackageName,
-                repositoryName);
+                repositoryName,
+                jmx);
     }
 
     /**

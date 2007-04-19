@@ -127,6 +127,7 @@ project_imports(basePackageName, voSubpackageName, voName, table) ::= <<
 import <basePackageName>.<voSubpackageName>.<voName>;
 <if(table.voDecorated)>
 import <basePackageName>.<voSubpackageName>.<voName>Decorator;
+import <basePackageName>.<voSubpackageName>.<voName>DecoratorImpl;
 <endif>
 
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
@@ -166,8 +167,18 @@ public interface <input.vo_name>DAO
     /**
      * The static constants.
      */
+<if(table.voDecorated)>
+    public static final <input.vo_name>Decorator[] FIXED_CONSTANTS =
+<else>
     public static final <input.vo_name>[] FIXED_CONSTANTS =
+<endif>
+
+<if(table.voDecorated)>
+        new <input.vo_name>Decorator[]
+<else>
         new <input.vo_name>[]
+<endif>
+
         {
             <input.cached_rows:{<it.nameNormalizedUppercased>};
               separator=",\n">
@@ -177,7 +188,12 @@ public interface <input.vo_name>DAO
      * The static constants.
      * @deprecated Use <input.vo_name>DAO.FIXED_CONSTANTS instead.
      */
+<if(table.voDecorated)>
+    public static final <input.vo_name>Decorator[] _ALL_QUERYJ_CONSTANTS_ =
+<else>
     public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
+<endif>
+
         FIXED_CONSTANTS;
 
     <input.static_attribute:find_constant_methods(
@@ -302,9 +318,20 @@ cached_constants(row, voName) ::= <<
 /**
  * The <row.name> constant.
  */
+<if(table.voDecorated)>
+public static final <voName>Decorator <row.nameNormalizedUppercased> =
+<else>
 public static final <voName> <row.nameNormalizedUppercased> =
+<endif>
+
+<if(table.voDecorated)>
+    new <voName>DecoratorImpl(
+        new <voName>ValueObject(
+            <row.attributes:attribute_specification(attr=it); separator=",\n">));
+<else>
     new <voName>ValueObject(
         <row.attributes:attribute_specification(attr=it); separator=",\n">);
+<endif>
 >>
 
 attribute_specification(attr) ::= <<
