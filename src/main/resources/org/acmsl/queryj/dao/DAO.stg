@@ -403,7 +403,16 @@ public class <input.engine_name><input.vo_name>DAO
 <input.attributes:{attr|
         +   "?}; separator=", \"\n"> "
         + ")";
-        
+
+      // custom sql
+
+<input.custom_selects:{sql|
+      /**
+       * The <sql.id> SQL.
+       */
+     public static final String <sql.idAsConstant>_SQL =
+         <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
+               
     /**
      * The result set extractor for \<i><input.vo_name>\</i>
      * value objects.
@@ -444,49 +453,6 @@ public class <input.engine_name><input.vo_name>DAO
 <endif>
 
     /**
-     * Builds the query for finding the \<i><input.vo_name>\</i>
-     * information searching by its primary key.
-     * @return the \<code>SelectQuery\</code> instance.
-     */
-    protected Query buildFindByPrimaryKeyQuery()
-    {
-        return buildFindByPrimaryKeyQuery(QueryFactory.getInstance());
-    }
-
-    /**
-     * Creates the query for finding the \<i><input.table_name>\</i>
-     * information searching by its primary key.
-     * @param queryFactory the \<code>QueryFactory\</code> instance.
-     * @return the \<code>SelectQuery\</code> instance.
-     <precondition_notnull("queryFactory")>
-     */
-    protected Query buildFindByPrimaryKeyQuery(
-        final QueryFactory queryFactory)
-    {
-        SelectQuery result = queryFactory.createSelectQuery();
-
-        buildFindByPrimaryKeyQuery(result);
-
-        return result;
-    }
-
-    /**
-     * Builds the query for finding the \<i><input.table_name>\</i>
-     * information searching by its primary key.
-     * @param query the \<code>SelectQuery\</code> to configure.
-     <precondition_notnull("query")>
-     */
-    protected void buildFindByPrimaryKeyQuery(final SelectQuery query)
-    {
-        query.select(<input.table_name_uppercased>.getAll());
-        query.from(<input.table_name_uppercased>);
-        <input.pk_attributes:attribute_query_filter(
-          tableRepositoryName=input.tr_name_capitalized,
-          tableNameUppercased=input.table_name_uppercased,
-          nameUppercased=it.nameUppercased); separator="\n">
-    }
-
-    /**
      * Retrieves \<code><input.vo_name>\</code> information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
@@ -511,7 +477,7 @@ public <input.vo_name> findByPrimaryKey(
         return
             findByPrimaryKey(
                 <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-                buildFindByPrimaryKeyQuery(),
+                auditSql(_FIND_BY_PK_SQL),
                 getDataSource());
     }
 
@@ -538,7 +504,7 @@ public <input.vo_name> findByPrimaryKey(
 <endif>
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final Query query,
+        final String query,
         final DataSource dataSource)
       throws DataAccessException
     {
@@ -574,7 +540,7 @@ public <input.vo_name> findByPrimaryKey(
 <endif>
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final Query query,
+        final String query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
@@ -623,7 +589,7 @@ public <input.vo_name> findByPrimaryKey(
 <endif>
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final Query query,
+        final String query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
     {
@@ -648,51 +614,6 @@ public <input.vo_name> findByPrimaryKey(
 <else>
     <defaultInsert(input=input, table=table, parent=parent)>
 <endif>
-
-    /**
-     * Builds the query required to \<i>update\</i> a concrete
-     * \<code><input.vo_name>\</code> entity, determined by its primary key.
-     * @return the \<code>UpdateQuery\</code> instance.
-     */
-    protected Query buildUpdateQuery()
-    {
-        return buildUpdateQuery(QueryFactory.getInstance());
-    }
-
-    /**
-     * Builds the query required to \<i>update\</i> a concrete
-     * \<code><input.vo_name>\</code> entity, determined by its primary key.
-     * @param queryFactory the \<code>QueryFactory\</code> instance.
-     * @return the \<code>UpdateQuery\</code> instance.
-     <precondition_notnull("queryFactory")>
-     */
-    protected Query buildUpdateQuery(final QueryFactory queryFactory)
-    {
-        UpdateQuery result = queryFactory.createUpdateQuery();
-
-        buildUpdateQuery(result);
-
-        return result;
-    }
-
-    /**
-     * Builds the query required to \<i>update\</i> a concrete
-     * \<code><input.vo_name>\</code> entity, determined by its primary key.
-     * @param query the \<code>UpdateQuery\</code> instance to set up.
-     <precondition_notnull("query")>
-     */
-    protected void buildUpdateQuery(final UpdateQuery query)
-    {
-        query.update(<input.table_name_uppercased>);
-        <input.nonpk_non_readonly_attributes:attribute_query_update(
-          tableRepositoryName=input.tr_name_capitalized,
-          tableNameUppercased=input.table_name_uppercased,
-          nameUppercased=it.nameUppercased); separator="\n">
-        <input.pk_attributes:attribute_query_filter(
-          tableRepositoryName=input.tr_name_capitalized,
-          tableNameUppercased=input.table_name_uppercased,
-          nameUppercased=it.nameUppercased); separator="\n">
-    }
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
@@ -722,7 +643,7 @@ public <input.vo_name> findByPrimaryKey(
                 <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-                buildUpdateQuery(),
+                auditSql(_UPDATE_SQL),
                 getDataSource());
     }
 
@@ -748,7 +669,7 @@ public <input.vo_name> findByPrimaryKey(
         <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
-        final Query query,
+        final String query,
         final DataSource dataSource)
       throws DataAccessException
     {
@@ -787,7 +708,7 @@ public <input.vo_name> findByPrimaryKey(
         <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
-        final Query query,
+        final String query,
         final PlatformTransactionManager transactionManager)
       throws DataAccessException
     {
@@ -834,7 +755,7 @@ public <input.vo_name> findByPrimaryKey(
         <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
-        final Query query,
+        final String query,
         final TransactionTemplate transactionTemplate)
       throws DataAccessException
     {
@@ -869,49 +790,6 @@ public <input.vo_name> findByPrimaryKey(
     }
 
     /**
-     * Builds the query required to \<i>delete\</i> a concrete
-     * \<code><input.vo_name>\</code> entity, determined by its primary key.
-     * @return the \<code>DeleteQuery\</code> instance.
-     */
-    protected Query buildDeleteQuery()
-    {
-        return buildDeleteQuery(QueryFactory.getInstance());
-    }
-
-    /**
-     * Builds the query required to \<i>delete\</i> a concrete
-     * \<code><input.vo_name>\</code> entity, determined by its primary key.
-     * @param queryFactory the \<code>QueryFactory\</code>
-     * instance.
-     * @return the \<code>DeleteQuery\</code> instance.
-     <precondition_notnull("queryFactory")>
-     */
-    protected Query buildDeleteQuery(
-        final QueryFactory queryFactory)
-    {
-        DeleteQuery result = queryFactory.createDeleteQuery();
-
-        buildDeleteQuery(result);
-
-        return result;
-    }
-
-    /**
-     * Builds the query required to \<i>delete\</i> a concrete
-     * \<code><input.vo_name>\</code> entity, determined by its primary key.
-     * @param query the \<code>DeleteQuery\</code> instance.
-     <precondition_notnull("query")>
-     */
-    protected void buildDeleteQuery(final DeleteQuery query)
-    {
-        query.deleteFrom(<input.table_name_uppercased>);
-        <input.pk_attributes:attribute_query_filter(
-          tableRepositoryName=input.tr_name_capitalized,
-          tableNameUppercased=input.table_name_uppercased,
-          nameUppercased=it.nameUppercased); separator="\n">
-    }
-
-    /**
      * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
@@ -920,7 +798,7 @@ public <input.vo_name> findByPrimaryKey(
     {
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            buildDeleteQuery(),
+            auditSql(_DELETE_SQL),
             getDataSource());
     }
 
@@ -934,7 +812,7 @@ public <input.vo_name> findByPrimaryKey(
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final Query query,
+        final String query,
         final DataSource dataSource)
     {
         deleteNoFk(
@@ -954,7 +832,7 @@ public <input.vo_name> findByPrimaryKey(
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final Query query,
+        final String query,
         final PlatformTransactionManager transactionManager)
     {
         // Enabling transactions temporarily.
@@ -978,7 +856,7 @@ public <input.vo_name> findByPrimaryKey(
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
-        final Query query,
+        final String query,
         final TransactionTemplate transactionTemplate)
     {
         transactionTemplate.execute(
@@ -1328,6 +1206,24 @@ dao_declaration(name,uncapitalizedName) ::= <<
 final <name>DAO <uncapitalizedName>DAO
 >>
 
+fk_delete_query(foreignKey, input) ::= <<
+<!
+ Defines the SQL to delete referred entities.
+ @param foreignKey the foreign key.
+ @param input the input.
+!>
+/**
+ * The SQL to delete <foreignKey>-associated entities.
+ */
+public static final String _DELETE_BY_<foreignKey.nameUppercased>_SQL =
+      "DELETE "
+    + "FROM <input.table_name_uppercased> "
+    + "WHERE "
+<foreignKey:{attr|
+    +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
+
+>>
+
 fk_delete_method(foreignKey,input) ::= <<
 <!
   Writes the deleteByXX method for a concrete foreign key.
@@ -1484,59 +1380,6 @@ jdbcInsert(input, table, parent) ::= <<
  @param input the input.
  !>
 /**
- * Builds the query required to \<i>insert\</i> a concrete
- * \<code><input.table_name>\</code> instance.
- * @return the \<code>InsertQuery\</code> instance.
- */
-protected Query buildInsertQuery()
-{
-    return buildInsertQuery(QueryFactory.getInstance());
-}
-
-/**
- * Builds the query required to \<i>insert\</i> a concrete
- * \<code><input.table_name>\</code> instance.
- * @param queryFactory the \<code>QueryFactory\</code> instance.
- * @return the \<code>InsertQuery\</code> instance.
- <precondition_notnull("queryFactory")>
- */
-protected Query buildInsertQuery(final QueryFactory queryFactory)
-{
-    InsertQuery result = queryFactory.createInsertQuery();
-
-    buildInsertQuery(result);
-
-    return result;
-}
-
-/**
- * Builds the query required to \<i>insert\</i> a concrete
- * \<code><input.vo_name>\</code> instance.
- * @param query the \<code>InsertQuery\</code> instance.
- <precondition_notnull("queryFactory")>
- */
-protected void buildInsertQuery(final InsertQuery query)
-{
-    query.insertInto(<input.table_name_uppercased>);
-<if(parent)>
-    <parent.allAttributes:attribute_query_insert(
-      tableRepositoryName=input.tr_name_capitalized,
-      tableNameUppercased=input.table_name_uppercased,
-      nameUppercased=it.nameUppercased); separator="\n">
-    <table.nonParentAttributes:attribute_query_insert(
-      tableRepositoryName=input.tr_name_capitalized,
-      tableNameUppercased=input.table_name_uppercased,
-      nameUppercased=it.nameUppercased); separator="\n">
-<else>
-    <table.attributes:attribute_query_insert(
-      tableRepositoryName=input.tr_name_capitalized,
-      tableNameUppercased=input.table_name_uppercased,
-      nameUppercased=it.nameUppercased); separator="\n">
-<endif>
-
-}
-
-/**
  * Persists \<code><input.vo_name>\</code> information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
@@ -1564,7 +1407,7 @@ public void insert(
         <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-        buildInsertQuery(),
+        _INSERT_SQL,
         getDataSource());
 }
 
@@ -1591,7 +1434,7 @@ protected void insert(
       attr=it); separator=",\n">,
 <endif>
 
-    final Query query,
+    final String query,
     final DataSource dataSource)
   throws DataAccessException
 {
@@ -1630,7 +1473,7 @@ protected void insert(
       attr=it); separator=",\n">,
 <endif>
 
-    final Query query,
+    final String query,
     final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
@@ -1673,7 +1516,7 @@ protected void insert(
       attr=it); separator=",\n">,
 <endif>
 
-    final Query query,
+    final String query,
     final TransactionTemplate transactionTemplate)
   throws DataAccessException
 {
@@ -1734,7 +1577,7 @@ public <input.vo_name> create(
             <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-            buildInsertQuery(),
+            _INSERT_SQL,
             getDataSource(),
             <input.vo_name>ValueObjectFactory.getInstance());
 }
@@ -1771,7 +1614,7 @@ protected <input.vo_name> create(
       attr=it); separator=",\n">,
 <endif>
 
-    final Query query,
+    final String query,
     final DataSource dataSource,
     final <input.vo_name>ValueObjectFactory factory)
   throws DataAccessException
@@ -1821,7 +1664,7 @@ protected <input.vo_name> create(
       attr=it); separator=",\n">,
 <endif>
 
-    final Query query,
+    final String query,
     final PlatformTransactionManager transactionManager,
     final <input.vo_name>ValueObjectFactory factory)
   throws DataAccessException
@@ -1870,7 +1713,7 @@ protected <input.vo_name> create(
     <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">,
 <endif>
 
-    final Query query,
+    final String query,
     final TransactionTemplate transactionTemplate,
     final <input.vo_name>ValueObjectFactory factory)
   throws DataAccessException

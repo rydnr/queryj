@@ -208,7 +208,7 @@ public <cs.resultClass> <cs.nameUncapitalized>(
         <cs.nameUncapitalized>(
             <cs.parameters:{<it.nameLowercased>,}; separator="\n">
             new PreparedStatementCreatorFactory(
-                auditSql(<cs.splittedQuotedValue; separator=" +\n">)),
+                auditSql(<cs.idAsConstant>_SQL)),
             new Object[]
             {
                 <cs.parameters:custom_select_parameter_value(
@@ -408,7 +408,7 @@ public int <cs.nameUncapitalized>(
     PreparedStatementCreatorFactory
         preparedStatementCreatorFactory =
             new PreparedStatementCreatorFactory(
-                auditSql(<cs.splittedQuotedValue; separator=" +\n">));
+                auditSql(<cs.idAsConstant>_SQL));
 
     /*
     t_PreparedStatementCreatorFactory.setResultSetType(..);
