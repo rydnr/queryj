@@ -349,6 +349,62 @@ public class <input.engine_name><input.vo_name>DAO
               <input.tr_name_capitalized>TableRepository
 {
     /**
+     * The SQL to find by primary key.
+     */
+    public static final String _FIND_BY_PK_SQL =
+          "SELECT "
+<input.attributes:{attr |
+        +   "<attr.nameUppercased>}; separator=", \"\n"> "
+        + "FROM <input.table_name_uppercased> "
+        + "WHERE "
+<input.pk_attributes:{attr |
+        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+
+    /**
+     * The SQL to update.
+     */
+    public static final String _UPDATE_SQL =
+          "UPDATE <input.table_name_uppercased> "
+        + "SET "
+<if(input.nonpk_non_readonly_attributes)>
+<input.nonpk_non_readonly_attributes:{attr|
+        +   "<attr.nameUppercased> = ?}; separator=", \"\n"> "
+<else>
+<input.pk_attributes:{attr|
+        +   "<attr.nameUppercased> = ?}; separator=", \"\n"> "
+<endif>
+
+        + "WHERE "
+<input.pk_attributes:{attr |
+        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+
+     /**
+      * The SQL to delete.
+      */
+     public static final String _DELETE_SQL =
+          "DELETE "
+        + "FROM <input.table_name_uppercased> "
+        + "WHERE "
+<input.pk_attributes:{attr |
+        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+
+      /**
+       * The SQL to insert.
+       */
+      public static final String _INSERT_SQL =
+          "INSERT "
+        + "INTO <input.table_name_uppercased> "
+        + "( "
+<input.attributes:{attr|
+        +   "<attr.nameUppercased>}; separator=", \"\n"> "
+        + ") "
+        + "VALUES "
+        + "( "
+<input.attributes:{attr|
+        +   "?}; separator=", \"\n"> "
+        + ")";
+        
+    /**
      * The result set extractor for \<i><input.vo_name>\</i>
      * value objects.
      */
