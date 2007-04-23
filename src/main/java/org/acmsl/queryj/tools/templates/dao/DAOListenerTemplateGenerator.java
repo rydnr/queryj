@@ -193,7 +193,6 @@ public class DAOListenerTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + template.getEngineName()
             + decorationUtils.capitalize(template.getRepositoryName())
             + "DAOListener.java",
             template.generate());
