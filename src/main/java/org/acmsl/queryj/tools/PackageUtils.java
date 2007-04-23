@@ -1769,6 +1769,39 @@ public class PackageUtils
     {
         return retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
     }
+
+    /**
+     * Retrieves the package name for DAOListener templates.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @return the package for the associated DAO class.
+     */
+    public String retrieveDAOListenerPackage(
+        final String packageName, final String engineName)
+    {
+        return retrieveDAOPackage(packageName, engineName);
+    }
+
+    /**
+     * Retrieves the folder for DAOListener templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAO should be
+     * generated.
+     */
+    public File retrieveDAOListenerFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveDAOFolder(
+                parentFolder, packageName, engineName, useSubfolders);
+    }
+
     /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.

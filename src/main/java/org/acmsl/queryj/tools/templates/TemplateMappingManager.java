@@ -532,6 +532,11 @@ public class TemplateMappingManager
         "base.repository.dao.factory";
 
     /**
+     * The DAO listener template attribute name.
+     */
+    public static final String DAO_LISTENER_TEMPLATE = "dao.listener";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

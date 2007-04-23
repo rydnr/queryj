@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemp
 import org.acmsl.queryj.tools.templates.dao.handlers.CustomResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
@@ -96,7 +97,8 @@ public class DAOBundle
                 new QueryPreparedStatementCreatorTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
                 (includeMock ? new MockDAOBundle() : null),
-                (includeXML ? new XMLDAOBundle() : null)
+                (includeXML ? new XMLDAOBundle() : null),
+                new DAOListenerTemplateHandlerBundle()
             });
     }
 }
