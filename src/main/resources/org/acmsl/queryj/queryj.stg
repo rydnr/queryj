@@ -466,7 +466,6 @@ public int <cs.nameUncapitalized>(
 }
 >>
 
-
 custom_select_for_update(cs, table, input) ::= <<
 <!
  Writes the code for a custom select for update.
@@ -516,8 +515,7 @@ public void <cs.nameUncapitalized>(
 
     SqlQuery t_Query =
         new SqlQuery(
-            getDataSource(),
-            <cs.splittedQuotedValue; separator=" +\n">);
+            getDataSource(), <cs.idAsConstant>_SQL);
 
 <if(cs.resultClass)>
     List t_lResult = t_Query.execute();
