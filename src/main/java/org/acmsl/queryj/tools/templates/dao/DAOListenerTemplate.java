@@ -46,7 +46,6 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 
 /*
  * Importing some StringTemplate classes.
@@ -55,15 +54,9 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.StringUtils;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Collection;
-import java.util.Map;
 
 /**
  * Is able to generate DAO listeners.
