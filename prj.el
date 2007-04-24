@@ -8,7 +8,11 @@
  '(jde-lib-directory-names (quote ("./dependencies/lib/java" "./dependencies/lib/java/build" "./dependencies/lib/java/runtime" "./dependencies/lib/java/development" "./dependencies/lib/java/unittest")))
  '(jde-sourcepath (quote ("./src/main/java")))
  '(jde-project-file-name "prj.el")
- '(jde-import-excluded-packages (quote ("target.*"))))
+ '(jde-import-excluded-packages (quote ("target.*")))
+ '(jde-docindex-project-alist '("QueryJ"))
+ '(jde-db-source-directories '("./src/main/java"))
+ '(jde-docindex-dest-directory "./target/docs/apidocs"))
+(setq jtags-javadoc-root "./target/docs/apidocs")
 (make-symbolic-link "./src/toolconf/maven/project.xml" "./project.xml" "ignore")
 (require 'pom)
 (custom-set-variables

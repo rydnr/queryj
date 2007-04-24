@@ -52,7 +52,7 @@ import java.math.BigDecimal;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public abstract class BigDecimalField
+public class BigDecimalField
     extends  DoubleField
 {
     /**
