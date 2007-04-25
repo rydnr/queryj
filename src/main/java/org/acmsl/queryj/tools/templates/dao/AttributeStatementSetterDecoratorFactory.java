@@ -63,7 +63,6 @@ import org.acmsl.commons.patterns.Singleton;
  */
 public class AttributeStatementSetterDecoratorFactory
     extends  CachingDecoratorFactory
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

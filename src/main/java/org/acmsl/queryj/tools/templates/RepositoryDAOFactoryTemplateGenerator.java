@@ -113,6 +113,7 @@ public class RepositoryDAOFactoryTemplateGenerator
      * @param jndiDataSource the JNDI location of the data source.
      * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -126,7 +127,8 @@ public class RepositoryDAOFactoryTemplateGenerator
         final String engineName,
         final String jndiDataSource,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException
     {
         return
@@ -135,6 +137,7 @@ public class RepositoryDAOFactoryTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

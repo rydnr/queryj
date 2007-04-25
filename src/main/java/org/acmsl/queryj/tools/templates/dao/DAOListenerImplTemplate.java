@@ -29,15 +29,14 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOTemplate.java
+ * Filename: DAOListenerTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate base DAO repositories according to database
- *              metadata.
+ * Description: Is able to generate DAO listeners.
  *
  */
-package org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates.dao;
 
 /*
  * Importing some project-specific classes.
@@ -46,10 +45,12 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
  * Importing some StringTemplate classes.
  */
+import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -58,21 +59,21 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import java.util.Collection;
 
 /**
- * Is able to generate base DAO repositories according to database metadata.
+ * Is able to generate DAO listeners.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class BaseRepositoryDAOTemplate
-    extends  RepositoryDAOTemplate
+public class DAOListenerImplTemplate
+    extends  BasePerRepositoryTemplate
 {
     /**
-     * Builds a <code>BaseRepositoryDAOTemplate</code> using given
+     * Builds a <code>DAOListenerImplTemplate</code> using given
      * information.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the database metadata type manager.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
-     * @param jmx whether to support JMX or not.
+     * @param jmx whether to support JMX.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -80,7 +81,7 @@ public class BaseRepositoryDAOTemplate
      * @param engineName the engine name.
      * @param tables the tables.
      */
-    public BaseRepositoryDAOTemplate(
+    public DAOListenerImplTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
@@ -108,12 +109,21 @@ public class BaseRepositoryDAOTemplate
     }
 
     /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//DAOListenerImplTemplate//";
+    }
+
+    /**
      * Retrieves the string template group.
      * @return such instance.
      */
     protected StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/BaseRepositoryDAO.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/DAOListenerImpl.stg");
     }
 
     /**
@@ -122,6 +132,6 @@ public class BaseRepositoryDAOTemplate
      */
     public String getTemplateName()
     {
-        return "Base Repository DAO";
+        return "DAO listener implementation";
     }
 }

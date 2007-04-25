@@ -72,6 +72,7 @@ public interface RepositoryDAOFactoryTemplateFactory
      * @param jndiDataSource the JNDI location of the data source.
      * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -85,6 +86,7 @@ public interface RepositoryDAOFactoryTemplateFactory
         final String engineName,
         final String jndiDataSource,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException;
 }

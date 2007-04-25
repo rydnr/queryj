@@ -102,6 +102,9 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param engineName the engine name.
      * @param tableNames the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
+     * @param tableNames the table names.
+     * @param parameters the parameters.
      * @return the template.
      * @throws QueryJException on invalid input.
      * @precondition metadataManager != null
@@ -124,6 +127,7 @@ public class KeywordRepositoryTemplateBuildHandler
         final String repository,
         final String engineName,
         final String header,
+        final boolean jmx,
         final Collection tableNames,
         final Map parameters)
       throws  QueryJException
@@ -143,7 +147,8 @@ public class KeywordRepositoryTemplateBuildHandler
                             projectPackage,
                             repository,
                             engineName,
-                            header);
+                            header,
+                            jmx);
 
             Collection t_cFieldElements = null;
 

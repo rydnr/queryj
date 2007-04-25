@@ -74,7 +74,6 @@ import java.io.IOException;
  */
 public class OracleNumericFunctionsTestTemplateGenerator
     extends  NumericFunctionsTestTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

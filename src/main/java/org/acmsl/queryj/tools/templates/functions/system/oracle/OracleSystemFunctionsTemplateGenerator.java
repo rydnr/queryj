@@ -73,7 +73,6 @@ import java.io.IOException;
  */
 public class OracleSystemFunctionsTemplateGenerator
     extends  SystemFunctionsTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

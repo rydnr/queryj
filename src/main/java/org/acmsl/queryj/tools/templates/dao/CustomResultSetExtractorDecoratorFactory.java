@@ -64,7 +64,6 @@ import org.acmsl.commons.patterns.Singleton;
  */
 public class CustomResultSetExtractorDecoratorFactory
     extends  CachingDecoratorFactory
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

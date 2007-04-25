@@ -115,6 +115,7 @@ public class DAOChooserTemplateGenerator
      * @param engineName the engine name.
      * @param tables the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition metadataManager != null
@@ -133,7 +134,8 @@ public class DAOChooserTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException
     {
         return
@@ -142,6 +144,7 @@ public class DAOChooserTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

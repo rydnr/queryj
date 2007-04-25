@@ -29,14 +29,14 @@
 
  ******************************************************************************
  *
- * Filename: RepositoryDAOTemplateBuildHandler.java
+ * Filename: DAOListenerImplTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a repository DAO if requested.
+ * Description: Builds a DAO listener implementations if requested.
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
  * Importing some project classes.
@@ -46,7 +46,8 @@ import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplateGenerator;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -64,11 +65,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Builds a repository DAO if requested.
+ * Builds a DAO listener implementations if requested.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class RepositoryDAOTemplateBuildHandler
+public class DAOListenerImplTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
 {
     /**
@@ -77,7 +78,7 @@ public class RepositoryDAOTemplateBuildHandler
      */
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
-        return RepositoryDAOTemplateGenerator.getInstance();
+        return DAOListenerImplTemplateGenerator.getInstance();
     }
 
     /**
@@ -123,28 +124,21 @@ public class RepositoryDAOTemplateBuildHandler
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
-        boolean result = false;
-
-        if  (definesRepositoryScopedSql(customSqlProvider))
-        {
-            result =
-                super.handle(
-                    parameters,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    metadataManager,
-                    customSqlProvider,
-                    templateFactory,
-                    projectPackage,
-                    packageName,
-                    repository,
-                    header,
-                    jmx,
-                    tableTemplates);
-        }
-
-        return result;
+        return
+            super.handle(
+                parameters,
+                engineName,
+                engineVersion,
+                quote,
+                metadataManager,
+                customSqlProvider,
+                templateFactory,
+                projectPackage,
+                packageName,
+                repository,
+                header,
+                jmx,
+                tableTemplates);
     }
     
     /**
@@ -163,7 +157,7 @@ public class RepositoryDAOTemplateBuildHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveRepositoryDAOPackage(
+            packageUtils.retrieveDAOListenerImplPackage(
                 projectPackage, engineName);
     }
 
@@ -178,48 +172,7 @@ public class RepositoryDAOTemplateBuildHandler
         final BasePerRepositoryTemplate template, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.REPOSITORY_DAO_TEMPLATE,
+            TemplateMappingManager.DAO_LISTENER_IMPL_TEMPLATE,
             template);
-    }
-
-    /**
-     * Checks whether there's any custom SQL for the whole repository.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @return <code>true</code> in such case.
-     * @precondition customSqlProvider != null
-     */
-    protected boolean definesRepositoryScopedSql(
-        final CustomSqlProvider customSqlProvider)
-    {
-        boolean result = false;
-
-        Collection t_cElements = customSqlProvider.getCollection();
-        
-        Iterator t_Iterator =
-            (t_cElements != null) ? t_cElements.iterator() : null;
-        
-        if  (t_Iterator != null)
-        {
-            Object t_Item;
-            Sql t_Sql;
-            
-            while  (t_Iterator.hasNext())
-            {
-                t_Item = t_Iterator.next();
-                
-                if  (t_Item instanceof Sql)
-                {
-                    t_Sql = (Sql) t_Item;
-
-                    if  (t_Sql.getRepositoryScope() != null)
-                    {
-                        result = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        return result;
     }
 }

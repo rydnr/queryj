@@ -113,6 +113,7 @@ public class DAOListenerTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -125,7 +126,8 @@ public class DAOListenerTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException
     {
         return
@@ -134,6 +136,7 @@ public class DAOListenerTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

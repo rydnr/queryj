@@ -73,7 +73,6 @@ import java.io.IOException;
  */
 public class OracleNumericFunctionsTemplateGenerator
     extends  NumericFunctionsTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

@@ -69,7 +69,6 @@ import java.util.HashMap;
  */
 public class OracleMetadataTypeManager
     extends  JdbcMetadataTypeManager
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -130,17 +129,15 @@ public class OracleMetadataTypeManager
     public String getNativeType(
         final int dataType, final boolean allowsNull, final boolean isBool)
     {
-        String result = null;
+        String result;
 
-        switch  (dataType)
+        if  (dataType == Types.OTHER)
         {
-            case Types.OTHER:
-                result = "String";
-                break;
-
-            default:
-                result = super.getNativeType(dataType, allowsNull, isBool);
-                break;
+            result = "String";
+        }
+        else
+        {
+            result = super.getNativeType(dataType, allowsNull, isBool);
         }
 
         return result;
@@ -156,17 +153,15 @@ public class OracleMetadataTypeManager
     public String getFieldType(
         final int dataType, final boolean allowsNull, final boolean isBool)
     {
-        String result = "";
+        String result;
 
-        switch  (dataType)
+        if  (dataType == Types.OTHER)
         {
-            case Types.OTHER:
-                result = "Clob";
-                break;
-
-            default:
-                result = super.getFieldType(dataType, allowsNull, isBool);
-                break;
+            result = "Clob";
+        }
+        else
+        {
+            result = super.getFieldType(dataType, allowsNull, isBool);
         }
 
         return result;

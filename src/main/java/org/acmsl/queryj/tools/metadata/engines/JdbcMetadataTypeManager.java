@@ -1088,19 +1088,7 @@ public class JdbcMetadataTypeManager
      */
     public boolean isDate(final int dataType)
     {
-        boolean result = false;
-
-        switch (dataType)
-        {
-            case Types.DATE:
-                result = true;
-                break;
-
-            default:
-                break;
-        }
-
-        return result;
+        return (dataType == Types.DATE);
     }
 
     /**
@@ -1196,19 +1184,7 @@ public class JdbcMetadataTypeManager
      */
     public boolean isBoolean(final int dataType)
     {
-        boolean result = false;
-
-        switch (dataType)
-        {
-            case Types.BIT:
-                result = true;
-                break;
-
-            default:
-                break;
-        }
-
-        return result;
+        return (dataType == Types.BIT);
     }
 
     /**

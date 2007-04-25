@@ -61,7 +61,6 @@ import org.acmsl.commons.patterns.Singleton;
  */
 public class BaseDAODecoratorFactory
     extends  CachingDecoratorFactory
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

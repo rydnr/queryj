@@ -157,6 +157,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveHeader(parameters),
+                retrieveJmx(parameters),
                 retrieveTableTemplates(parameters));
     }
 
@@ -179,6 +180,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -204,6 +206,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final String packageName,
         final String repository,
         final String header,
+        final boolean jmx,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
@@ -231,6 +234,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                     repository,
                     engineName,
                     header,
+                    jmx,
                     t_cTableNames,
                     parameters);
 
@@ -257,6 +261,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param engineName the engine name.
      * @param tableNames the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
+     * @param tableNames the table names.
+     * @param parameters the parameters.
      * @return the template.
      * @throws QueryJException on invalid input.
      * @precondition metadataManager != null
@@ -279,6 +286,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final String repository,
         final String engineName,
         final String header,
+        final boolean jmx,
         final Collection tableNames,
         final Map parameters)
       throws  QueryJException
@@ -298,7 +306,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                         repository,
                         engineName,
                         tableNames,
-                        header);
+                        header,
+                        jmx);
         }
         else
         {

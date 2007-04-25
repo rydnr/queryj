@@ -94,6 +94,7 @@ public class DAOListenerTemplateBuildHandler
      * @param packageName the package name.
      * @param repository the repository.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -119,6 +120,7 @@ public class DAOListenerTemplateBuildHandler
         final String packageName,
         final String repository,
         final String header,
+        final boolean jmx,
         final TableTemplate[] tableTemplates)
       throws  BuildException
     {
@@ -135,6 +137,7 @@ public class DAOListenerTemplateBuildHandler
                 packageName,
                 repository,
                 header,
+                jmx,
                 tableTemplates);
     }
     

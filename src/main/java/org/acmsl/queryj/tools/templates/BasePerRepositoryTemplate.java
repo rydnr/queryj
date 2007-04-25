@@ -92,6 +92,7 @@ public abstract class BasePerRepositoryTemplate
      * @param metadataTypeManager the database metadata type manager. 
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -104,6 +105,7 @@ public abstract class BasePerRepositoryTemplate
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
         final String header,
+        final boolean jmx,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
@@ -116,6 +118,7 @@ public abstract class BasePerRepositoryTemplate
             metadataTypeManager,
             customSqlProvider,
             header,
+            jmx,
             decoratorFactory,
             packageName,
             basePackageName,

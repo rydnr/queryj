@@ -537,6 +537,11 @@ public class TemplateMappingManager
     public static final String DAO_LISTENER_TEMPLATE = "dao.listener";
 
     /**
+     * The DAO listener implementation template attribute name.
+     */
+    public static final String DAO_LISTENER_IMPL_TEMPLATE = "dao.listener.impl";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

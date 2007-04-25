@@ -73,6 +73,7 @@ public class BaseRepositoryDAOFactoryTemplate
      * @param metadataTypeManager the database metadata type manager.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -85,6 +86,7 @@ public class BaseRepositoryDAOFactoryTemplate
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
         final String header,
+        final boolean jmx,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
@@ -97,6 +99,7 @@ public class BaseRepositoryDAOFactoryTemplate
             metadataTypeManager,
             customSqlProvider,
             header,
+            jmx,
             decoratorFactory,
             packageName,
             basePackageName,

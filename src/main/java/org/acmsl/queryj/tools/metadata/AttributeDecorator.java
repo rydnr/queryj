@@ -101,12 +101,6 @@ public interface AttributeDecorator
     public boolean isNumberSmallerThanInt();
 
     /**
-     * Retrieves whether the attribute is marked as boolean or not.
-     * @return such information.
-     */
-    public boolean isBoolean();
-
-    /**
      * Retrieves whether the attribute is numeric or not.
      * @return such information.
      */

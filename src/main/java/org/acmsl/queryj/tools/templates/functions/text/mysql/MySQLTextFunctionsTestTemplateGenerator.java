@@ -74,7 +74,6 @@ import java.io.IOException;
  */
 public class MySQLTextFunctionsTestTemplateGenerator
     extends  TextFunctionsTestTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

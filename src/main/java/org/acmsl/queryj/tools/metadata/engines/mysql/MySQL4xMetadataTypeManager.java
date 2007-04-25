@@ -65,7 +65,6 @@ import java.util.HashMap;
  */
 public class MySQL4xMetadataTypeManager
     extends  JdbcMetadataTypeManager
-    implements  Manager
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -102,17 +101,15 @@ public class MySQL4xMetadataTypeManager
     public String getSmartObjectType(
         final int dataType, final boolean isBool)
     {
-        String result = null;
+        String result;
 
-        switch (dataType)
+        if  (dataType == Types.INTEGER)
         {
-            case Types.INTEGER:
-                result = "Long";
-                break;
-
-            default:
-                result = super.getSmartObjectType(dataType, isBool);
-                break;
+            result = "Long";
+        }
+        else
+        {
+            result = super.getSmartObjectType(dataType, isBool);
         }
 
         return result;
@@ -128,15 +125,13 @@ public class MySQL4xMetadataTypeManager
     {
         String result = null;
 
-        switch (dataType)
+        if  (dataType == Types.INTEGER)
         {
-            case Types.INTEGER:
-                result = "Long";
-                break;
-
-            default:
-                result = super.getObjectType(dataType, isBool);
-                break;
+            result = "Long";
+        }
+        else
+        {
+            result = super.getObjectType(dataType, isBool);
         }
 
         return result;

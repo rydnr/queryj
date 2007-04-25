@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: DAOListenerTemplateHandlerBundle.java
+ * Filename: DAOListenerImplTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles a pair of DAOListener template build and writing
+ * Description: Bundles a pair of DAOListenerImpl template build and writing
  *              handlers.
  *
  */
@@ -42,25 +42,25 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerImplTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerImplTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of DAOListener template build and writing
+ * Bundles a pair of DAOListenerImpl template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public class DAOListenerTemplateHandlerBundle
+public class DAOListenerImplTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
      */
-    public DAOListenerTemplateHandlerBundle()
+    public DAOListenerImplTemplateHandlerBundle()
     {
         super(
-            new DAOListenerTemplateBuildHandler(),
-            new DAOListenerTemplateWritingHandler());
+            new DAOListenerImplTemplateBuildHandler(),
+            new DAOListenerImplTemplateWritingHandler());
     }
 }

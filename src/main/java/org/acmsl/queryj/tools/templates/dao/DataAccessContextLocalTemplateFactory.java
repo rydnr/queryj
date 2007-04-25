@@ -74,6 +74,7 @@ public interface DataAccessContextLocalTemplateFactory
      * @param jndiLocation the JNDI location.
      * @param tables the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the input is invalid.
      */
@@ -87,6 +88,7 @@ public interface DataAccessContextLocalTemplateFactory
         final String engineName,
         final String jndiLocation,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException;
 }

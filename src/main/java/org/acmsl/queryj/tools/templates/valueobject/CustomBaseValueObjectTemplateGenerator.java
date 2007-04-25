@@ -75,7 +75,6 @@ import java.io.IOException;
  */
 public class CustomBaseValueObjectTemplateGenerator
     extends  CustomValueObjectTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

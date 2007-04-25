@@ -92,6 +92,7 @@ public class DataAccessContextLocalTemplate
      * information.
      * @param metadataManager the database metadata manager.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -105,6 +106,7 @@ public class DataAccessContextLocalTemplate
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
         final String header,
+        final boolean jmx,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
@@ -118,6 +120,7 @@ public class DataAccessContextLocalTemplate
             metadataTypeManager,
             customSqlProvider,
             header,
+            jmx,
             decoratorFactory,
             packageName,
             basePackageName,

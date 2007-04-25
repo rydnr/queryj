@@ -69,7 +69,6 @@ import java.io.IOException;
  */
 public class OracleTimeFunctionsTemplateGenerator
     extends  TimeFunctionsTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

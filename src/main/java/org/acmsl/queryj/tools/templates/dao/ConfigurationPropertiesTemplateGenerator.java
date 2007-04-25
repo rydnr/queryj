@@ -117,6 +117,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param engineName the engine name.
      * @param tables the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition metadataManager != null
@@ -135,7 +136,8 @@ public class ConfigurationPropertiesTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException
     {
         return
@@ -144,6 +146,7 @@ public class ConfigurationPropertiesTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

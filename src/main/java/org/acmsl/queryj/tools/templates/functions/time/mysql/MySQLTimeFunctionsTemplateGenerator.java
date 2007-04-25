@@ -70,7 +70,6 @@ import java.io.IOException;
  */
 public class MySQLTimeFunctionsTemplateGenerator
     extends  TimeFunctionsTemplateGenerator
-    implements  Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

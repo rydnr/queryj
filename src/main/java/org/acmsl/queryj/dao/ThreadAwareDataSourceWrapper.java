@@ -152,12 +152,14 @@ public class ThreadAwareDataSourceWrapper
         {
             result = super.getConnection();
 
+            Thread currentThread = Thread.currentThread();
+
             synchronized (this)
             {
                 setConnection(result);
                 setThreadBasedHashCode(
                     buildThreadBasedHashCode(
-                        Thread.currentThread()));
+                        currentThread));
             }
         }
 

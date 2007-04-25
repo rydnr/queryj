@@ -73,6 +73,7 @@ public class DAOListenerTemplate
      * @param metadataTypeManager the database metadata type manager.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param header the header.
+     * @param jmx whether to support JMX.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
@@ -85,6 +86,7 @@ public class DAOListenerTemplate
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
         final String header,
+        final boolean jmx,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String basePackageName,
@@ -97,6 +99,7 @@ public class DAOListenerTemplate
             metadataTypeManager,
             customSqlProvider,
             header,
+            jmx,
             decoratorFactory,
             packageName,
             basePackageName,

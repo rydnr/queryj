@@ -115,6 +115,7 @@ public class DataAccessContextLocalTemplateGenerator
      * @param jndiLocation the JNDI location.
      * @param tables the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition metadataManager != null
@@ -137,7 +138,8 @@ public class DataAccessContextLocalTemplateGenerator
         final String engineName,
         final String jndiLocation,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
       throws  QueryJException
     {
         return
@@ -146,6 +148,7 @@ public class DataAccessContextLocalTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

@@ -103,7 +103,12 @@ public abstract class AbstractBasePerRepositoryTemplate
      * The tables.
      */
     private Collection m__cTables;
-    
+
+    /**
+     * Whether to support JMX.
+     */
+    private boolean m__bJmx = true;
+
     /**
      * Builds an <code>AbstractBasePerRepositoryTemplate</code> using given
      * information.
@@ -111,6 +116,7 @@ public abstract class AbstractBasePerRepositoryTemplate
      * @param metadataTypeManager the database metadata type manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
@@ -123,6 +129,7 @@ public abstract class AbstractBasePerRepositoryTemplate
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
         final String header,
+        final boolean jmx,
         final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
@@ -139,6 +146,7 @@ public abstract class AbstractBasePerRepositoryTemplate
         immutableSetRepositoryName(repositoryName);
         immutableSetEngineName(engineName);
         immutableSetTables(tables);
+        immutableSetJmx(jmx);
     }
 
     /**
@@ -364,5 +372,32 @@ public abstract class AbstractBasePerRepositoryTemplate
     public Collection getTables()
     {
         return m__cTables;
+    }
+
+    /**
+     * Specifies whether to support JMX.
+     * @param jmx such information.
+     */
+    protected final void immutableSetJmx(final boolean jmx)
+    {
+        m__bJmx = jmx;
+    }
+
+    /**
+     * Specifies whether to support JMX.
+     * @param jmx such information.
+     */
+    protected void setJmx(final boolean jmx)
+    {
+        immutableSetJmx(jmx);
+    }
+
+    /**
+     * Retrieves whether to support JMX.
+     * @return such information.
+     */
+    public boolean getJmx()
+    {
+        return m__bJmx;
     }
 }

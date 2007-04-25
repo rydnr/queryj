@@ -476,20 +476,6 @@ public abstract class FunctionsTestTemplate
     }
 
     /**
-     * Builds the mappings.
-     * @param mappings the initial mapping collection.
-     * @return the updated collection.
-     */
-    protected abstract Map fillUpMappings(Map mappings);
-
-    /**
-     * Creates the special function mappings.
-     * @param mapping the initial mapping.
-     * @return the updated mapping.
-     */
-    protected abstract Map fillUpSpecialMappings(Map mappings);
-
-    /**
      * Creates the special function mappings' return types.
      * @param mapping the initial mapping.
      * @return the updated mapping.

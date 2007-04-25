@@ -29,14 +29,15 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOFactoryTemplateGenerator.java
+ * Filename: DAOListenerImplTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate the DAO repository interface.
+ * Description: Is able to generate DAO listeners implementations from
+ * templates.
  *
  */
-package org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates.dao;
 
 /*
  * Importing some project-specific classes.
@@ -48,14 +49,16 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
+import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
@@ -65,11 +68,11 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Is able to generate the repository DAO interface.
+ * Is able to generate DAO listeners from templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class BaseRepositoryDAOFactoryTemplateGenerator
+public class DAOListenerImplTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator,
                 Singleton
@@ -77,31 +80,31 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class BaseRepositoryDAOFactoryTemplateGeneratorSingletonContainer
+    private static class DAOListenerImplTemplateGeneratorSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final BaseRepositoryDAOFactoryTemplateGenerator SINGLETON =
-            new BaseRepositoryDAOFactoryTemplateGenerator();
+        public static final DAOListenerImplTemplateGenerator SINGLETON =
+            new DAOListenerImplTemplateGenerator();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected BaseRepositoryDAOFactoryTemplateGenerator() {};
+    protected DAOListenerImplTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>BaseRepositoryDAOFactoryTemplateGenerator</code> instance.
+     * Retrieves a DAOListenerTemplateGenerator instance.
      * @return such instance.
      */
-    public static BaseRepositoryDAOFactoryTemplateGenerator getInstance()
+    public static DAOListenerImplTemplateGenerator getInstance()
     {
-        return BaseRepositoryDAOFactoryTemplateGeneratorSingletonContainer.SINGLETON;
+        return DAOListenerImplTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**
-     * Generates a <i>per-repository</i> template.
+     * Generates a <i>per-repository</i> DAO listener template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -129,7 +132,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
       throws  QueryJException
     {
         return
-            new BaseRepositoryDAOFactoryTemplate(
+            new DAOListenerImplTemplate(
                 metadataManager,
                 metadataTypeManager,
                 customSqlProvider,
@@ -179,6 +182,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
+     * @precondition decorationUtils != null
      * @precondition fileUtils != null
      */
     public void write(
@@ -194,7 +198,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + decorationUtils.capitalize(template.getRepositoryName())
-            + "DAOFactory.java",
+            + "DAOListenerImpl.java",
             template.generate());
     }
 }

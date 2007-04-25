@@ -99,6 +99,9 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @param engineName the engine name.
      * @param tableNames the table names.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
+     * @param tableNames the table names.
+     * @param parameters the parameters.
      * @return the template.
      * @throws QueryJException on invalid input.
      * @precondition metadataManager != null
@@ -121,6 +124,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         final String repository,
         final String engineName,
         final String header,
+        final boolean jmx,
         final Collection tableNames,
         final Map parameters)
       throws  QueryJException
@@ -141,7 +145,8 @@ public class RepositoryDAOFactoryTemplateBuildHandler
                         engineName,
                         retrieveJNDIDataSource(parameters),
                         tableNames,
-                        header);
+                        header,
+                        jmx);
         }
         else
         {

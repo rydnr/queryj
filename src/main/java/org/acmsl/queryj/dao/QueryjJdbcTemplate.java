@@ -110,7 +110,7 @@ public class QueryjJdbcTemplate
     /**
      * Whether to enable auditlog or not.
      */
-    private static boolean enableAuditLog = false;
+    private static boolean m__bEnableAuditLog = false;
 
     /**
      * Construct a new JdbcTemplate for bean usage.
@@ -724,7 +724,7 @@ public class QueryjJdbcTemplate
      */
     protected static final void immutableSetEnableAuditLog(final boolean flag)
     {
-        enableAuditLog = flag;
+        m__bEnableAuditLog = flag;
     }
 
     /**
@@ -742,7 +742,7 @@ public class QueryjJdbcTemplate
      */
     protected static final boolean immutableGetEnableAuditLog()
     {
-        return enableAuditLog;
+        return m__bEnableAuditLog;
     }
 
     /**
