@@ -77,19 +77,13 @@ source(input) ::= <<
   basePackageName=input.base_package_name,
   voSubpackageName=typeInitMap.voSubpackageName,
   voName=input.vo_name,
-  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   trName=input.tr_name_capitalized)>
 
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-
-/*
- * Importing some JDK extension classes
- */
-import javax.sql.DataSource;
 
 /*
  * Importing some JDK classes.
@@ -118,13 +112,13 @@ Extracts <tableName> entities from ResultSets.
 >>
 
 project_imports(
-  basePackageName, voSubpackageName, voName, trSubpackageName, trName) ::= <<
+  basePackageName, voSubpackageName, voName, baseDAOSubpackageName, trName) ::= <<
 <!
  Generates the project imports.
  @param basePackageName the base package name.
  @param voSubpackageName the value-object subpackage name.
  @param voName the value-object name.
- @param trSubpackageName the table repository subpackage name.
+ @param baseDAOSubpackageName the base DAO subpackage name.
  @param trName the table repository name.
 !>
 /*
@@ -132,7 +126,7 @@ project_imports(
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
-import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+import <basePackageName>.<baseDAOSubpackageName>.<trName>ResultSetExtractor;
 >>
 
 class(input, table) ::= <<
@@ -161,8 +155,6 @@ classImpl(input, table, parent) ::= <<
  */
 public class <input.vo_name>ResultSetExtractor
     extends     <input.tr_name_capitalized>ResultSetExtractor
-    implements  ResultSetExtractor,
-//                <input.tr_name_capitalized>TableRepository
 {
 <if(input.clobHandling)>
     <indirect_template(name=input.clobHandling+"Extractor", input=input, extra1=table, extra2=parent)>

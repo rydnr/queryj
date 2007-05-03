@@ -79,11 +79,6 @@ source(input) ::= <<
   voName=input.vo_name)>
 
 /*
- * Importing Spring classes.
- */
-import org.springframework.dao.DataAccessException;
-
-/*
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
@@ -158,8 +153,7 @@ public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>
 
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
 >>
 
 custom_update_or_insert(cs, input) ::= <<
@@ -175,8 +169,7 @@ custom_update_or_insert(cs, input) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 public void <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
 >>
 
 custom_select_for_update(cs, table, input) ::= <<
@@ -206,6 +199,5 @@ public <cs.resultClass> <cs.nameUncapitalized>(
 public void <cs.nameUncapitalized>(
 <endif>
 
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
 >>

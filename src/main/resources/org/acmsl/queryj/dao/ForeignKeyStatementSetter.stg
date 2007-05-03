@@ -92,7 +92,6 @@ import org.acmsl.queryj.Query;
 /*
  * Importing Spring classes.
  */
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
 /*

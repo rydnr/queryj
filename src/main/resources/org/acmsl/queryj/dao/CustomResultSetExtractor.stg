@@ -76,24 +76,13 @@ source(input) ::= <<
 <project_imports(
   result=input.result,
   basePackageName=input.base_package_name,
-  trSubpackageName=typeInitMap.tableRepositorySubpackageName,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   trName=input.tr_name_capitalized)>
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.QueryResultSet;
 
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
-
-/*
- * Importing some JDK extension classes
- */
-import javax.sql.DataSource;
 
 /*
  * Importing some JDK classes.
@@ -131,13 +120,13 @@ second_line_description(result) ::= <<
  from java.sql.ResultSets.
 >>
 
-project_imports(result, basePackageName, trSubpackageName, trName) ::= <<
+project_imports(result, basePackageName, baseDAOSubpackageName, trName) ::= <<
 <!
  Generates the project imports.
  @param result the result instance.
  @param basePackageName the base package name.
- @param trSubpackageName the table repository subpackage name.
- @param trName the table repository name.
+ @param baseDAOSubpackageName the subpackage for base DAO classes.
+ @param trName the repository name.
 !>
 /*
  * Importing project classes.
@@ -146,7 +135,7 @@ project_imports(result, basePackageName, trSubpackageName, trName) ::= <<
 import <result.classValue>;
 import <result.classValue>ValueObjectFactory;
 <endif>
-
+import <basePackageName>.<baseDAOSubpackageName>.<trName>ResultSetExtractor;
 >>
 
 class(result, input) ::= <<
@@ -165,12 +154,13 @@ class(result, input) ::= <<
  * @since <input.timestamp>
  */
 public class <result.idCapitalized>Extractor
-    implements  ResultSetExtractor
+    extends  <input.tr_name_capitalized>ResultSetExtractor
 {
     // \<extract data\>
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
 <if(result.multiple)>
      * @return the \<i><input.className>\</i> instances or \<code>null\</code>
      * if the operation returned no data.
@@ -184,20 +174,24 @@ public class <result.idCapitalized>Extractor
      * custom exception.
      <precondition_notnull("resultSet")>
      */
-    public Object extractData(final ResultSet resultSet)
-        throws  SQLException,
-                DataAccessException
+    public Object extractData(
+        final ResultSet resultSet,
+        final <input.tr_name_capitalized>DAOListener daoListener)
+      throws  SQLException,
+              DataAccessException
     {
 <if(!result.implicitProperty)>
         return
             extractData(
                 resultSet,
+                daoListener,
                 <result.classValue>ValueObjectFactory.getInstance());
     }
 
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
 <if(!result.implicitProperty)>
      * @param factory the value object factory.
 <endif>
@@ -217,6 +211,7 @@ public class <result.idCapitalized>Extractor
      */
     protected Object extractData(
         final ResultSet resultSet,
+        final <input.tr_name_capitalized>DAOListener daoListener,
         final <result.classValue>ValueObjectFactory factory)
       throws  SQLException,
               DataAccessException
@@ -243,6 +238,11 @@ public class <result.idCapitalized>Extractor
 <endif>
 
         {
+            if  (daoListener != null)
+            {
+                daoListener.resultSetMovedForward(this);
+            }
+
             <result.properties:nullable_attribute_extraction(
               attr=it, input=input)>
             <result.lobProperties:special_attribute_extraction(
@@ -263,6 +263,12 @@ public class <result.idCapitalized>Extractor
 <endif>
 
         }
+
+        if  (daoListener != null)
+        {
+            daoListener.resultSetClosed(this);
+        }
+
 
 <if(result.implicitProperty)>
         <implicit_attribute_result(attr=result.implicitProperty)>

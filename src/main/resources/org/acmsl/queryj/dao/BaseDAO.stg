@@ -82,11 +82,6 @@ source(input) ::= <<
   table=input.table)>
 
 /*
- * Importing Spring classes.
- */
-import org.springframework.dao.DataAccessException;
-
-/*
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
@@ -216,8 +211,7 @@ public <input.vo_name>Decorator findByPrimaryKey(
 public <input.vo_name> findByPrimaryKey(
 <endif>
 
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
-      throws DataAccessException;
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">);
 
     /**
      * Persists \<code><input.vo_name>\</code> information.
@@ -232,12 +226,11 @@ public <input.vo_name> findByPrimaryKey(
      */
     public void insert(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
+        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">);
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">);
 <endif>
 
-      throws DataAccessException;
 
     /**
      * Inserts and retrieves the newly-inserted
@@ -259,12 +252,11 @@ public <input.vo_name> findByPrimaryKey(
 
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
-          separator=",\n">)
+          separator=",\n">);
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">);
 <endif>
 
-      throws DataAccessException;
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
@@ -280,20 +272,18 @@ public <input.vo_name> findByPrimaryKey(
     public int update(
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
-          separator=",\n">)
+          separator=",\n">);
 <else>
-        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">)
+        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">);
 <endif>
 
-      throws DataAccessException;
 
     /**
      * Deletes \<code><input.vo_name>\</code> information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
-      throws DataAccessException;
+        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">);
 
     <input.foreign_keys:fk_delete_method(
       foreignKey=it, input=input); separator="\n">
@@ -413,8 +403,7 @@ public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
 
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
 >>
 
 custom_update_or_insert(cs, input) ::= <<
@@ -431,8 +420,7 @@ custom_update_or_insert(cs, input) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 public int <cs.nameUncapitalized>(
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
 >>
 
 custom_select_for_update(cs, table, input) ::= <<
@@ -461,6 +449,5 @@ public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 <else>
 public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
-  throws DataAccessException;
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
 >>

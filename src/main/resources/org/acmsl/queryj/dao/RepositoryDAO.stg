@@ -98,7 +98,6 @@ import org.acmsl.queryj.dao.QueryjJdbcTemplate;
 /*
  * Importing Spring classes.
  */
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ParameterDisposer;
 import org.springframework.jdbc.core.PreparedStatementCallback;

@@ -473,7 +473,6 @@ public <input.vo_name> findByPrimaryKey(
 <endif>
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
-      throws DataAccessException
     {
         return
             findByPrimaryKey(
@@ -507,7 +506,6 @@ public <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
         final DataSource dataSource)
-      throws DataAccessException
     {
         return
             findByPrimaryKey(
@@ -543,7 +541,6 @@ public <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
         final PlatformTransactionManager transactionManager)
-      throws DataAccessException
     {
 <if(table.voDecorated)>
         <input.vo_name>Decorator result = null;
@@ -592,7 +589,6 @@ public <input.vo_name> findByPrimaryKey(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
         final TransactionTemplate transactionTemplate)
-      throws DataAccessException
     {
         return
 <if(table.voDecorated)>
@@ -634,7 +630,6 @@ public <input.vo_name> findByPrimaryKey(
         <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <endif>
 
-      throws DataAccessException
     {
         return
             update(
@@ -672,7 +667,6 @@ public <input.vo_name> findByPrimaryKey(
 
         final String query,
         final DataSource dataSource)
-      throws DataAccessException
     {
         return
             update(
@@ -711,7 +705,6 @@ public <input.vo_name> findByPrimaryKey(
 
         final String query,
         final PlatformTransactionManager transactionManager)
-      throws DataAccessException
     {
         int result;
 
@@ -758,7 +751,6 @@ public <input.vo_name> findByPrimaryKey(
 
         final String query,
         final TransactionTemplate transactionTemplate)
-      throws DataAccessException
     {
         int result = -10;
 
@@ -874,7 +866,6 @@ public <input.vo_name> findByPrimaryKey(
      */
     public void delete(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
-      throws DataAccessException
     {
 <if(input.fk_attributes)>
         <input.fk_attributes:fk_dao_delete_call(
@@ -900,12 +891,13 @@ public <input.vo_name> findByPrimaryKey(
      * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
      */
     public static class <input.vo_name>PkResultSetExtractor
-        implements  ResultSetExtractor
+        extends  <input.tr_name_capitalized>ResultSetExtractor
     {
         // \<extract data>
         /**
          * Extracts \<i><input.vo_name>\</i> information from given result set.
          * @param resultSet the result set.
+         * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
          * @return the \<code><input.vo_name>\</code> or \<code>null\</code>
          * if the operation returned no data.
          * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -913,14 +905,21 @@ public <input.vo_name> findByPrimaryKey(
          * custom exception.
          <precondition_notnull("resultSet")>
          */
-        public Object extractData(final ResultSet resultSet)
-            throws  SQLException,
-                    DataAccessException
+        public Object extractData(
+            final ResultSet resultSet,
+            final <input.tr_name_capitalized>DAOListener daoListener)
+        throws  SQLException,
+                DataAccessException
         {
             Map result = new HashMap();
 
             if  (resultSet.next())
             {
+                if  (daoListener != null)
+                {
+                    daoListener.resultSetMovedForward(this);
+                }
+
                 int index = 1;
 
                 <input.pk_attributes:pk_resultset_extractor_parameter_retrieval(
@@ -928,6 +927,11 @@ public <input.vo_name> findByPrimaryKey(
                   getterMethod=it.getterMethod,
                   objectType=it.objectType,
                   isPrimitive=it.primitive)>
+            }
+
+            if  (daoListener != null)
+            {
+                daoListener.resultSetClosed(this);
             }
 
             return result;
@@ -1399,7 +1403,6 @@ public void insert(
       attr=it); separator=",\n">)
 <endif>
 
-  throws DataAccessException
 {
     insert(
 <if(parent)>
@@ -1437,7 +1440,6 @@ protected void insert(
 
     final String query,
     final DataSource dataSource)
-  throws DataAccessException
 {
     insert(
 <if(parent)>
@@ -1476,7 +1478,6 @@ protected void insert(
 
     final String query,
     final PlatformTransactionManager transactionManager)
-  throws DataAccessException
 {
     // Enabling transactions temporarily.
     synchronized (DataSourceTransactionManager.class)
@@ -1519,7 +1520,6 @@ protected void insert(
 
     final String query,
     final TransactionTemplate transactionTemplate)
-  throws DataAccessException
 {
     Map t_mMap = null;
 
@@ -1568,7 +1568,6 @@ public <input.vo_name> create(
       attr=it); separator=",\n">)
 <endif>
 
-  throws DataAccessException
 {
     return
         create(
@@ -1618,7 +1617,6 @@ protected <input.vo_name> create(
     final String query,
     final DataSource dataSource,
     final <input.vo_name>ValueObjectFactory factory)
-  throws DataAccessException
 {
     return
         create(
@@ -1668,7 +1666,6 @@ protected <input.vo_name> create(
     final String query,
     final PlatformTransactionManager transactionManager,
     final <input.vo_name>ValueObjectFactory factory)
-  throws DataAccessException
 {
     return
         create(
@@ -1717,7 +1714,6 @@ protected <input.vo_name> create(
     final String query,
     final TransactionTemplate transactionTemplate,
     final <input.vo_name>ValueObjectFactory factory)
-  throws DataAccessException
 {
 <if(table.voDecorated)>
     <input.vo_name>Decorator result = null;
@@ -1792,7 +1788,6 @@ public void insert(
       attr=it); separator=",\n">)
 <endif>
 
-  throws DataAccessException
 {
     create(
 <if(parent)>
@@ -1828,7 +1823,6 @@ public <input.vo_name> create(
       attr=it); separator=",\n">)
 <endif>
 
-  throws DataAccessException
 {
     return
         create(
@@ -1869,7 +1863,6 @@ protected <input.vo_name> create(
 <endif>
 
     final DataSource dataSource)
-  throws DataAccessException
 {
     return
         create(
@@ -1910,7 +1903,6 @@ protected <input.vo_name> create(
 <endif>
 
     final PlatformTransactionManager transactionManager)
-  throws DataAccessException
 {
     <input.vo_name> result = null;
 
@@ -1958,7 +1950,6 @@ protected <input.vo_name> create(
 <endif>
 
     final TransactionTemplate transactionTemplate)
-  throws DataAccessException
 {
     <input.vo_name> result = null;
 
