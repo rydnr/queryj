@@ -110,13 +110,8 @@ source(input) ::= <<
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.DeleteQuery;
-import org.acmsl.queryj.dao.QueryjJdbcTemplate;
-import org.acmsl.queryj.dao.ThreadLocalBag;
-import org.acmsl.queryj.InsertQuery;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.QueryFactory;
-import org.acmsl.queryj.SelectQuery;
-import org.acmsl.queryj.UpdateQuery;
 
 /*
  * Importing Spring classes.
@@ -256,6 +251,8 @@ import <basePackageName>.<voSubpackageName>.<voName>Decorator;
 <endif>
 
 import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
+import <basePackageName>.<baseDAOSubpackageName>.DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<trName>DAOJdbcTemplate;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
 import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
@@ -344,9 +341,9 @@ classImpl(input, foreign_keys_by_table, table, parent) ::= <<
  * @since <input.timestamp>
  */
 public class <input.engine_name><input.vo_name>DAO
-  extends     QueryjJdbcTemplate
-  implements  <input.vo_name>DAO,
-              <input.tr_name_capitalized>TableRepository
+  extends     <input.tr_name_capitalized>DAOJdbcTemplate
+  implements  <input.vo_name>DAO
+//              <input.tr_name_capitalized>TableRepository
 {
     /**
      * The SQL to find by primary key.
@@ -454,11 +451,15 @@ public class <input.engine_name><input.vo_name>DAO
      * Builds a \<code><input.class_name>\</code> instance
      * with given data source.
      * @param dataSource the required data source.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      <precondition_notnull("dataSource")>
+     <precondition_notnull("daoListener")>
      */
-    public <input.class_name>(final DataSource dataSource)
+    public <input.class_name>(
+        final DataSource dataSource,
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
-        super(dataSource);
+        super(dataSource, daoListener);
     }
 
 <if(input.static_table)>

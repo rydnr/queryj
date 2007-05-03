@@ -106,11 +106,32 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * layer takes place.
      * @param sql the sql sentence.
      * @param parameters the sql parameters.
+     * @precondition sql != null
      */
     public void preparedStatementExecuted(
         final String sql, final Object[] parameters)
     {
-        // TODO
+        annotatePreparedStatementExecuted(
+            sql, parameters, DAOStatisticsProvider.getInstance());
+    }
+
+    /**
+     * Receives notifications whenever a operation on the persistence
+     * layer takes place.
+     * @param sql the sql sentence.
+     * @param parameters the sql parameters.
+     * @param daoStatisticsProvider the \<code>DAOStatisticsProvider\</code>
+     * instance.
+     * @precondition sql != null
+     * @precondition daoStatisticsProvider != null
+     */
+    protected void preparedStatementExecuted(
+        final String sql,
+        final Object[] parameters,
+        final DAOStatisticsProvider daoStatisticsProvider)
+    {
+        daoStatisticsProvider.annotatePreparedStatementExecuted(
+            sql, parameters);
     }
 }
 >>

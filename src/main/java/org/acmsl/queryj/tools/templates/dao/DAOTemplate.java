@@ -50,19 +50,7 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * Is able to create engine-specific DAO interfaces for each
@@ -115,6 +103,15 @@ public class DAOTemplate
             basePackageName,
             repositoryName,
             jmx);
+    }
+
+    /**
+     * Builds a key to store the template cache.
+     * @return such key.
+     */
+    protected Object buildTemplateCacheKey()
+    {
+        return "//DAOTemplate//";
     }
 
     /**

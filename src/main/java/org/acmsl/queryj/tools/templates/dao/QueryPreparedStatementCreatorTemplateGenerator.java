@@ -34,42 +34,47 @@
  * Author: Jose San Leandro Armendariz
  *
  * Description: Is able to generate QueryPreparedStatementCreator
- *              templates.
+ *              implementations.
  *
  */
 package org.acmsl.queryj.tools.templates.dao;
 
 /*
- * Importing some project classes.
+ * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplate;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateFactory;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 
 /**
- * Is able to generate QueryPreparedStatementCreator templates.
+ * Is able to generate QueryPreparedStatementCreator implementations.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+           >Jose San Leandro</a>
  */
 public class QueryPreparedStatementCreatorTemplateGenerator
-    implements  QueryPreparedStatementCreatorTemplateFactory,
+    implements  DefaultBasePerRepositoryTemplateFactory,
+                BasePerRepositoryTemplateGenerator,
                 Singleton
 {
     /**
@@ -90,8 +95,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     protected QueryPreparedStatementCreatorTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>QueryPreparedStatementCreatorTemplateGenerator</code>
-     * instance.
+     * Retrieves a <code>QueryPreparedStatementCreatorTemplateGenerator</code> instance.
      * @return such instance.
      */
     public static QueryPreparedStatementCreatorTemplateGenerator getInstance()
@@ -100,20 +104,46 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     }
 
     /**
-     * Generates a QueryPreparedStatementCreator template.
+     * Generates a <i>PreparedStatementCreator</i> template.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param packageName the package name.
+     * @param basePackageName the base package name.
+     * @param engineName the engine name.
+     * @param repositoryName the name of the repository.
+     * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX or not.
      * @return a template.
-     * @throws QueryJException if the factory class is invalid.
-     * @precondition packageName != null
+     * @throws QueryJException if the input values are invalid.
      */
-    public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
-        final String packageName, final String header)
+    public BasePerRepositoryTemplate createTemplate(
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final String basePackageName,
+        final String repositoryName,
+        final String engineName,
+        final Collection tables,
+        final String header,
+        final boolean jmx)
       throws  QueryJException
     {
         return
             new QueryPreparedStatementCreatorTemplate(
-                header, getDecoratorFactory(), packageName);
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
+                header,
+                jmx,
+                getDecoratorFactory(),
+                packageName,
+                basePackageName,
+                repositoryName,
+                engineName,
+                tables);
     }
 
     /**
@@ -126,37 +156,39 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     }
 
     /**
-     * Writes a QueryPreparedStatementCreator template to disk.
-     * @param template the template to write.
+     * Writes a table repository template to disk.
+     * @param template the table repository template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
      */
     public void write(
-        final QueryPreparedStatementCreatorTemplate template,
+        final BasePerRepositoryTemplate template,
         final File outputDir)
       throws  IOException
     {
         write(
             template,
-            outputDir, 
+            outputDir,
+            DecorationUtils.getInstance(),
             FileUtils.getInstance());
     }
-
+            
     /**
-     * Writes a QueryPreparedStatementCreator template to disk.
+     * Writes a table repository template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
+     * @precondition decorationUtils != null
      * @precondition fileUtils != null
      */
-    protected void write(
-        final QueryPreparedStatementCreatorTemplate template,
+    public void write(
+        final BasePerRepositoryTemplate template,
         final File outputDir,
+        final DecorationUtils decorationUtils,
         final FileUtils fileUtils)
       throws  IOException
     {

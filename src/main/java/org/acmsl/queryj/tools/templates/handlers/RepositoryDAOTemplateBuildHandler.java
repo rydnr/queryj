@@ -52,11 +52,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
- * Importing some Apache Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Collection;
@@ -121,7 +116,6 @@ public class RepositoryDAOTemplateBuildHandler
         final String header,
         final boolean jmx,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
     {
         boolean result = false;
 

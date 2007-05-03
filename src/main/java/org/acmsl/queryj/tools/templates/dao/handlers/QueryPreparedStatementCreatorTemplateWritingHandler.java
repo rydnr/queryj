@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -28,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryPreparedStatementCreatorTemplateWritingHandler.java
+ * Filename: RepositoryDAOTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes QueryPreparedStatementCreator templates.
+ * Description: Writes the QueryPreparedStatementCreator template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -40,120 +41,52 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplate;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
- * Writes QueryPreparedStatementCreator templates.
+ * Writes the table repository.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+           >Jose San Leandro</a>
  */
 public class QueryPreparedStatementCreatorTemplateWritingHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
-     * Creates a QueryPreparedStatementCreatorTemplateWritingHandler.
+     * Retrieves the template generator.
+     * @return such instance.
      */
-    public QueryPreparedStatementCreatorTemplateWritingHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
+    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return handle(command.getAttributeMap());
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the information to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                retrieveTemplate(parameters),
-                retrieveOutputDir(parameters),
-                QueryPreparedStatementCreatorTemplateGenerator.getInstance());
-    }
-                
-    /**
-     * Handles given information.
-     * @param template the template.
-     * @param outputDir the output dir.
-     * @param generator the generator.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition generator != null
-     */
-    protected boolean handle(
-        final QueryPreparedStatementCreatorTemplate template,
-        final File outputDir,
-        final QueryPreparedStatementCreatorTemplateGenerator generator)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try 
-        {
-            generator.write(template, outputDir);
-        }
-        catch  (final IOException ioException)
-        {
-            throw new BuildException(ioException);
-        }
-        
-        return result;
+        return QueryPreparedStatementCreatorTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the template from the attribute map.
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
-     * @precondition parameters != null
      */
-    protected QueryPreparedStatementCreatorTemplate retrieveTemplate(
+    protected BasePerRepositoryTemplate retrieveTemplate(
         final Map parameters)
-        throws  BuildException
     {
         return
-            (QueryPreparedStatementCreatorTemplate)
+            (BasePerRepositoryTemplate)
                 parameters.get(
                     TemplateMappingManager
                         .QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE);
@@ -161,45 +94,32 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
 
     /**
      * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected File retrieveOutputDir(final Map parameters)
-        throws  BuildException
-    {
-        return
-            retrieveOutputDir(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters),
-                PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectOutputDir the project output dir.
-     * @param projectPackage the project package.
-     * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition projectOutputDir != null
-     * @precondition projectPackage != null
+     * @precondition engineName != null
+     * @precondition parameters != null
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final File projectOutputDir,
+        final File projectFolder,
         final String projectPackage,
-        final boolean subFolders,
+        final boolean useSubfolders,
+        final String engineName,
+        final Map parameters,
         final PackageUtils packageUtils)
       throws  BuildException
     {
         return
             packageUtils.retrieveQueryPreparedStatementCreatorFolder(
-                projectOutputDir,
+                projectFolder,
                 projectPackage,
-                subFolders);
+                useSubfolders);
     }
 }
