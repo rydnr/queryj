@@ -578,6 +578,12 @@ public class TemplateMappingManager
         "datasource.transaction.token.template";
 
     /**
+     * The StatisticsProvider template type.
+     */
+    public static final String STATISTICS_PROVIDER_TEMPLATE =
+        "statistics.provider.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

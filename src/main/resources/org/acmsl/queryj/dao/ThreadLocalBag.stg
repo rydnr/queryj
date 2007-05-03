@@ -29,7 +29,7 @@
 //
 //***************************************************************************
 //
-// Filename: JdbcTemplate.stg
+// Filename: ThreadLocalBag.stg
 //
 // Author: Jose San Leandro Armendariz
 //
@@ -37,9 +37,9 @@
 //
 // Version: $Revision: 1769 $ ($Author: chous $ at $Date: 2007-04-23 10:14:02 +0200 (Mon, 23 Apr 2007) $)
 //
-// $Id: JdbcTemplate.stg 1769 2007-04-23 08:14:02Z chous $
+// $Id: ThreadLocalBag.stg 1769 2007-04-23 08:14:02Z chous $
 //
-group JdbcTemplate;
+group ThreadLocalBag;
 
 source(input) ::= <<
 <!
