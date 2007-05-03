@@ -179,7 +179,7 @@ public interface <input.tr_name_capitalized>DAOListener
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor);
 
     /**
-     * Receives notifications whenever a result-set is closed
+     * Receives notifications whenever a result-set is closed.
      * @param resultSetExtractor the ResultSet extractor.
      */
     public void resultSetClosed(

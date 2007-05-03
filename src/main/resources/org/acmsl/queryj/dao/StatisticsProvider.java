@@ -69,6 +69,13 @@ source(input) ::= <<
   ])>
 
 /*
+ * Importing some Spring classes.
+ */
+import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.StatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.HashMap;
@@ -100,6 +107,108 @@ class(input) ::= <<
  */
 public class <input.tr_name_capitalized>StatisticsProvider
 {
-    // TODO
+    /**
+     * Annotates an operation on the persistence
+     * layer takes place.
+     * @param sql the sql sentence.
+     * @param parameters the sql parameters.
+     */
+    public void annotatePreparedStatementExecuted(
+        final String sql, final Object[] parameters)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param connectionCallback the connection callback.
+     */
+    public void annotateConnectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final ConnectionCallback connectionCallback)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a connection is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param connectionCallback the connection callback.
+     */
+    public void annotateConnectionReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final ConnectionCallback connectionCallback)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param statementCallback the statement callback.
+     */
+    public void annotateConnectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final StatementCallback statementCallback)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a connection is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param statementCallback the statement callback.
+     */
+    public void annotateConnectionReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final StatementCallback statementCallback)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a statement is created.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCreator the statement creator.
+     */
+    public void annotateStatementCreated(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCreator preparedStatementCreator)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a statement is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCreator the statement creator.
+     */
+    public void annotateStatementReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCreator preparedStatementCreator)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a result-set moves forward one row.
+     * @param resultSetExtractor the ResultSet extractor.
+     */
+    public void annotateResultSetMovedForward(
+        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
+    {
+        // TODO
+    }
+
+    /**
+     * Annotates a result-set is closed.
+     * @param resultSetExtractor the ResultSet extractor.
+     */
+    public void annotateResultSetClosed(
+        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
+    {
+        // TODO
+    }
 }
 >>
