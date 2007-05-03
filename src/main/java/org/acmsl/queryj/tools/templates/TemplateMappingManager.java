@@ -566,6 +566,18 @@ public class TemplateMappingManager
         "transaction.manager.template";
 
     /**
+     * The JndiUtils template type.
+     */
+    public static final String JNDI_UTILS_TEMPLATE =
+        "jndi.utils.template";
+
+    /**
+     * The DataSourceTransactionToken template type.
+     */
+    public static final String DATASOURCE_TRANSACTION_TOKEN_TEMPLATE =
+        "datasource.transaction.token.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

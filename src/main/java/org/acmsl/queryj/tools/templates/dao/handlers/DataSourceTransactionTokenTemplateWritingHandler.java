@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: JndiUtilsTemplateWritingHandler.java
+ * Filename: DataSourceTransactionTokenTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the JndiUtils template.
+ * Description: Writes the DataSourceTransactionToken template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -44,9 +44,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.JndiUtilsTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.DataSourceTransactionTokenTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.dao.JndiUtilsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.DataSourceTransactionTokenTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -56,11 +56,11 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the JndiUtils template.
+ * Writes the DataSourceTransactionToken template.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class JndiUtilsTemplateWritingHandler
+public class DataSourceTransactionTokenTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
@@ -69,7 +69,7 @@ public class JndiUtilsTemplateWritingHandler
      */
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return JndiUtilsTemplateGenerator.getInstance();
+        return DataSourceTransactionTokenTemplateGenerator.getInstance();
     }
 
     /**
@@ -82,7 +82,7 @@ public class JndiUtilsTemplateWritingHandler
     {
         return
             (BasePerRepositoryTemplate)
-                parameters.get(TemplateMappingManager.JNDI_UTILS_TEMPLATE);
+                parameters.get(TemplateMappingManager.DATASOURCE_TRANSACTION_TOKEN_TEMPLATE);
     }
 
     /**
@@ -108,7 +108,7 @@ public class JndiUtilsTemplateWritingHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveJndiUtilsFolder(
+            packageUtils.retrieveDataSourceTransactionTokenFolder(
                 projectFolder,
                 projectPackage,
                 useSubfolders);

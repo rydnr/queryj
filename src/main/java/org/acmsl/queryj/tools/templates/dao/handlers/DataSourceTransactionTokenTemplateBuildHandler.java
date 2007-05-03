@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: JndiUtilsTemplateBuildHandler.java
+ * Filename: DataSourceTransactionTokenTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a JndiUtils template.
+ * Description: Builds a DataSourceTransactionToken template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.JndiUtilsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.DataSourceTransactionTokenTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -54,20 +54,20 @@ import org.acmsl.queryj.tools.PackageUtils;
 import java.util.Map;
 
 /**
- * Builds a <code>JndiUtils</code> template.
+ * Builds a <code>DataSourceTransactionToken</code> template.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class JndiUtilsTemplateBuildHandler
+public class DataSourceTransactionTokenTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
 {
     /**
-     * Retrieves the JndiUtils template factory.
+     * Retrieves the DataSourceTransactionToken template factory.
      * @return such instance.
      */
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
-        return JndiUtilsTemplateGenerator.getInstance();
+        return DataSourceTransactionTokenTemplateGenerator.getInstance();
     }
 
     /**
@@ -86,7 +86,7 @@ public class JndiUtilsTemplateBuildHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveJndiUtilsPackage(
+            packageUtils.retrieveDataSourceTransactionTokenPackage(
                 projectPackage);
     }
 
@@ -101,7 +101,7 @@ public class JndiUtilsTemplateBuildHandler
         final BasePerRepositoryTemplate template, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.JNDI_UTILS_TEMPLATE,
+            TemplateMappingManager.DATASOURCE_TRANSACTION_TOKEN_TEMPLATE,
             template);
     }
 
