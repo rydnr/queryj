@@ -426,22 +426,6 @@ public class <input.engine_name><input.vo_name>DAO
      public static final String <sql.idAsConstant>_SQL =
          <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
                
-    /**
-     * The result set extractor for \<i><input.vo_name>\</i>
-     * value objects.
-     */
-    public static final ResultSetExtractor
-        <input.table_name_uppercased>_EXTRACTOR =
-            new <input.vo_name>ResultSetExtractor();
-
-    /**
-     * The result set extractor for \<i><input.vo_name>\</i>
-     * primary keys (see inner class).
-     */
-    public static final ResultSetExtractor
-        <input.table_name_uppercased>_PK_EXTRACTOR =
-            new <input.vo_name>PkResultSetExtractor();
-
     <input.custom_results:resultset_extractor_constants(
       crseid=it.id,
       crseidCapitalized=it.idCapitalized,
@@ -622,7 +606,7 @@ public <input.vo_name> findByPrimaryKey(
                         new QueryPreparedStatementCreator(query),
                         new <input.vo_name>PkStatementSetter(
                             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-                        <input.table_name_uppercased>_EXTRACTOR,
+                        new <input.vo_name>Extractor(getDAOListener()),
                         this));
     }
 
@@ -1170,7 +1154,7 @@ t_mMap =
         transactionTemplate.execute(
             new QueryTransactionCallback(
                 "<query>",
-                <input.table_name_uppercased>_PK_EXTRACTOR,
+                new <input.vo_name>PkExtractor(getDAOListener()),
                 this));
 
 <nativeType> <nameLowercased> =

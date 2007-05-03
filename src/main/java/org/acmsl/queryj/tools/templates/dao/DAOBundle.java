@@ -45,6 +45,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.templates.dao.handlers.AttributesStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.BaseResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.CustomResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOChooserTemplateHandlerBundle;
@@ -114,7 +115,8 @@ public class DAOBundle
                 new TransactionManagerTemplateHandlerBundle(),
                 new JndiUtilsTemplateHandlerBundle(),
                 new DataSourceTransactionTokenTemplateHandlerBundle(),
-                new StatisticsProviderTemplateHandlerBundle()
+                new StatisticsProviderTemplateHandlerBundle(),
+                new BaseResultSetExtractorTemplateHandlerBundle()
             });
     }
 }

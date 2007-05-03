@@ -75,6 +75,13 @@ source(input) ::= <<
     input.subpackage_name
   ])>
 
+/*
+ * Importing some Spring classes.
+ */
+import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.StatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+
 <class(input=input)>
 >>
 
@@ -109,5 +116,73 @@ public interface <input.tr_name_capitalized>DAOListener
      */
     public void preparedStatementExecuted(
         final String sql, final Object[] parameters);
+
+    /**
+     * Receives notifications whenever a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param connectionCallback the connection callback.
+     */
+    public void connectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final ConnectionCallback connectionCallback);
+
+    /**
+     * Receives notifications whenever a connection is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param connectionCallback the connection callback.
+     */
+    public void connectionReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final ConnectionCallback connectionCallback);
+
+    /**
+     * Receives notifications whenever a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param statementCallback the statement callback.
+     */
+    public void connectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final StatementCallback statementCallback);
+
+    /**
+     * Receives notifications whenever a connection is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param statementCallback the statement callback.
+     */
+    public void connectionReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final StatementCallback statementCallback);
+
+    /**
+     * Receives notifications whenever a statement is created.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCreator the statement creator.
+     */
+    public void statementCreated(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCreator preparedStatementCreator);
+
+    /**
+     * Receives notifications whenever a statement is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCreator the statement creator.
+     */
+    public void statementReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCreator preparedStatementCreator);
+
+    /**
+     * Receives notifications whenever a result-set moves forward one row.
+     * @param resultSetExtractor the ResultSet extractor.
+     */
+    public void resultSetMovedForward(
+        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor);
+
+    /**
+     * Receives notifications whenever a result-set is closed
+     * @param resultSetExtractor the ResultSet extractor.
+     */
+    public void resultSetClosed(
+        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor);
 }
 >>

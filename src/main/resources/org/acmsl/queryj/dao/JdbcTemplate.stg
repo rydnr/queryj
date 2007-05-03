@@ -201,16 +201,23 @@ public class <input.tr_name_capitalized>JdbcTemplate
     private static boolean m__bEnableAuditLog = false;
 
     /**
+     * The DAOListener instance.
+     *
+    private <input.tr_name_capitalized>DAOListener m__DAOListener;
+
+    /**
      * Construct a new JdbcTemplate for bean usage.
      * Note: The DataSource has to be set before using the instance.
      * This constructor can be used to prepare a JdbcTemplate via a BeanFactory,
      * typically setting the DataSource via setDataSource.
      * @see #setDataSource
      */
-    public <input.tr_name_capitalized>JdbcTemplate()
+    public <input.tr_name_capitalized>JdbcTemplate(
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
-        super();
+        immutableSetDAOListener(daoListener);
     }
+
 
     /**
      * Construct a new \<code><input.tr_name_capitalized>JdbcTemplate\</code>,
@@ -218,9 +225,41 @@ public class <input.tr_name_capitalized>JdbcTemplate
      * Note: This will trigger eager initialization of the exception translator.
      * @param dataSource JDBC DataSource to obtain connections from
      */
-    public <input.tr_name_capitalized>JdbcTemplate(final DataSource dataSource)
+    public <input.tr_name_capitalized>JdbcTemplate(
+        final DataSource dataSource,
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
         super(dataSource);
+        immutableSetDAOListener(daoListener);
+    }
+
+    /**
+     * Specifies the DAO listener.
+     * @param daoListener such listener.
+     */
+    protected final void immutableSetDAOListener(
+        final <input.tr_name_capitalized>DAOListener daoListener)
+    {
+        m__DAOListener = daoListener;
+    }
+
+    /**
+     * Specifies the DAO listener.
+     * @param daoListener such listener.
+     */
+    protected void setDAOListener(
+        final <input.tr_name_capitalized>DAOListener daoListener)
+    {
+        immutableSetDAOListener(daoListener);
+    }
+
+    /**
+     * Retrieves the DAO listener.
+     * @return such instance.
+     */
+    protected <input.tr_name_capitalized>DAOListener getDAOListener()
+    {
+        return m__DAOListener;
     }
 
     /**
@@ -249,6 +288,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
                 execute(
                     action,
                     getDataSource(),
+                    getDAOListener(),
                     getNativeJdbcExtractor(),
                     getExceptionTranslator());
         }
@@ -260,6 +300,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
      * Executes a operation, taking into account a proper connection handling.
      * @param action the \<code>ConnectionCallback\</code> instance.
      * @param dataSource the \<code>DataSource\</code> instance.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      * @param nativeJdbcExtractor the native JDBC extractor.
      * @param exceptionTranslator the exception translator.
      * @return the result of the operation.
@@ -271,6 +312,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
     protected Object execute(
         final ConnectionCallback action,
         final DataSource dataSource,
+        final <input.tr_name_capitalized>DAOListener daoListener,
         final NativeJdbcExtractor nativeJdbcExtractor,
         final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException
@@ -305,6 +347,11 @@ public class <input.tr_name_capitalized>JdbcTemplate
                 t_bCloseConnection = true;
             }
 
+            if  (daoListener != null)
+            {
+                daoListener.connectionRetrieved(this, action);
+            }
+
             if  (   (TransactionSynchronizationManager
                          .isSynchronizationActive())
                  && (t_bCloseConnection))
@@ -333,7 +380,9 @@ public class <input.tr_name_capitalized>JdbcTemplate
         {
             throw
                 exceptionTranslator.translate(
-                    "executing ConnectionCallback", getSql(action), sqlException);
+                    "executing ConnectionCallback",
+                    getSql(action),
+                    sqlException);
         }
         finally
         {
@@ -350,6 +399,11 @@ public class <input.tr_name_capitalized>JdbcTemplate
                         "Could not close connection",
                         sqlException);
                 }
+            }
+
+            if  (daoListener != null)
+            {
+                daoListener.connectionReleased(this, action);
             }
         }
 
@@ -369,6 +423,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
             execute(
                 action,
                 getDataSource(),
+                getDAOListener(),
                 getNativeJdbcExtractor(),
                 getExceptionTranslator());
     }
@@ -377,6 +432,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
      * Executes a operation, taking into account a proper connection handling.
      * @param action the \<code>StatementCallback\</code> instance.
      * @param dataSource the \<code>DataSource\</code> instance.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      * @param nativeJdbcExtractor the native JDBC extractor.
      * @param exceptionTranslator the exception translator.
      * @return the result of the operation.
@@ -388,6 +444,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
     protected Object execute(
         final StatementCallback action,
         final DataSource dataSource,
+        final <input.tr_name_capitalized>DAOListener daoListener,
         final NativeJdbcExtractor nativeJdbcExtractor,
         final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException
@@ -422,6 +479,11 @@ public class <input.tr_name_capitalized>JdbcTemplate
             {
                 t_Connection = t_DataSource.getConnection();
                 t_bCloseConnection = true;
+            }
+
+            if  (daoListener != null)
+            {
+                daoListener.connectionRetrieved(this, action);
             }
 
             if  (   (TransactionSynchronizationManager
@@ -491,6 +553,11 @@ public class <input.tr_name_capitalized>JdbcTemplate
                         "Could not close connection",
                         sqlException);
                 }
+            }
+
+            if  (daoListener != null)
+            {
+                daoListener.connectionReleased(this, action);
             }
         }
 
@@ -573,6 +640,11 @@ public class <input.tr_name_capitalized>JdbcTemplate
                 t_bCloseConnection = true;
             }
 
+            if  (daoListener != null)
+            {
+                daoListener.connectionRetrieved(this, action);
+            }
+
             if  (   (TransactionSynchronizationManager
                          .isSynchronizationActive())
                  && (t_bCloseConnection))
@@ -602,6 +674,12 @@ public class <input.tr_name_capitalized>JdbcTemplate
             t_PreparedStatement =
                 preparedStatementCreator.createPreparedStatement(
                     t_ConnectionToUse);
+
+            if  (daoListener != null)
+            {
+                daoListener.statementCreated(
+                    this, preparedStatementCreator);
+            }
 
             DataSourceUtils.applyTransactionTimeout(
                 t_PreparedStatement, t_DataSource);
@@ -641,6 +719,12 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             JdbcUtils.closeStatement(t_PreparedStatement);
 
+            if  (daoListener != null)
+            {
+                daoListener.statementReleased(
+                    this, preparedStatementCreator);
+            }
+
             if  (   (t_bCloseConnection)
                  && (t_Connection != null))
             {
@@ -654,6 +738,11 @@ public class <input.tr_name_capitalized>JdbcTemplate
                         "Could not close connection",
                         sqlException);
                 }
+            }
+
+            if  (daoListener != null)
+            {
+                daoListener.connectionReleased(this, action);
             }
         }
 

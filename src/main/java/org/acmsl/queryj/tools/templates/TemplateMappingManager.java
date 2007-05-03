@@ -584,6 +584,12 @@ public class TemplateMappingManager
         "statistics.provider.template";
 
     /**
+     * The BaseResultSetExtractor template type.
+     */
+    public static final String BASE_RESULTSET_EXTRACTOR_TEMPLATE =
+        "base.resultset.extractor.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;

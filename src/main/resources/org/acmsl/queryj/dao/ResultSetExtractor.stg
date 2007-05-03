@@ -81,11 +81,6 @@ source(input) ::= <<
   trName=input.tr_name_capitalized)>
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.QueryResultSet;
-
-/*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
@@ -165,8 +160,9 @@ classImpl(input, table, parent) ::= <<
  * @since <input.timestamp>
  */
 public class <input.vo_name>ResultSetExtractor
+    extends     <input.tr_name_capitalized>ResultSetExtractor
     implements  ResultSetExtractor,
-                <input.tr_name_capitalized>TableRepository
+//                <input.tr_name_capitalized>TableRepository
 {
 <if(input.clobHandling)>
     <indirect_template(name=input.clobHandling+"Extractor", input=input, extra1=table, extra2=parent)>
@@ -197,40 +193,17 @@ defaultExtractorImpl(input, table, parent) ::= <<
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.
  <precondition_notnull("resultSet")>
- <precondition_instanceof(name="resultSet", className="QueryResultSet")>
  */
-public Object extractData(final ResultSet resultSet)
-    throws  SQLException,
-            DataAccessException
-{
-    return
-        extractData(
-            (QueryResultSet) resultSet,
-            <input.vo_name>ValueObjectFactory.getInstance());
-}
-
-/**
- * Extracts \<i><input.vo_name>\</i> information from given result set.
- * @param resultSet the result set.
- * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
- * instance.
- * @return the \<code><input.vo_name>\</code> or
- * \<code>null\</code> if the operation returned no data.
- * @throws SQLException intercepted by \<i>Spring\</i>.
- * @throws DataAccessException with information about any
- * custom exception.
- <precondition_notnull("resultSet")>
- <precondition_notnull("factory")>
- */
-protected <input.vo_name> extractData(
-    final QueryResultSet resultSet,
-    final <input.vo_name>ValueObjectFactory factory)
+public Object extractData(
+    final ResultSet resultSet,
+    final <input.tr_name_capitalized>DAOListener daoListener)
   throws  SQLException,
           DataAccessException
 {
@@ -238,6 +211,11 @@ protected <input.vo_name> extractData(
 
     if  (resultSet.next())
     {
+        if  (daoListener != null)
+        {
+            daoListener.resultSetMovedForward(this);
+        }
+
 <if(parent)>
         <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
           attr=it, input=input)>
@@ -257,6 +235,11 @@ protected <input.vo_name> extractData(
                   separator=",\n">);
 <endif>
 
+    }
+
+    if  (daoListener != null)
+    {
+        daoListener.resultSetClosed(this);
     }
 
     return result;
@@ -314,10 +297,13 @@ private boolean m__bSelectForUpdateMode;
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update\</code> (required to perform some operations
  * such as \<b>insert\</b>s), or not.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  */
 protected <input.vo_name>ResultSetExtractor(
-    final boolean selectForUpdateMode)
+    final boolean selectForUpdateMode,
+    final <input.tr_name_capitalized>DAOListener daoListener)
 {
+    super(daoListener);
     immutableSetSelectForUpdateMode(selectForUpdateMode);
 }
 
@@ -329,23 +315,27 @@ protected <input.vo_name>ResultSetExtractor(
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update\</code> (required to perform some operations
  * such as \<b>insert\</b>s), or not.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  */
 public <input.vo_name>ResultSetExtractor(
     <input.lob_attributes:attribute_method_declaration(attr=it);
       separator=",\n">,
-    final boolean selectForUpdateMode)
+    final boolean selectForUpdateMode,
+    final <input.tr_name_capitalized>DAOListener daoListener)
 {
-    this(selectForUpdateMode);
+    this(selectForUpdateMode, daoListener);
     <input.lob_attributes:attribute_setter_call(attr=it); separator="\n">
 }
 
 /**
  * Creates a Oracle-based \<code>ResultSetExtractor\</code>
  * to extract <input.vo_name> information, managing LOB stuff.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  */
-public <input.vo_name>ResultSetExtractor()
+public <input.vo_name>ResultSetExtractor(
+    final <input.tr_name_capitalized>DAOListener daoListener)
 {
-    this(false);
+    this(false, daoListener);
 }
 
 <input.lob_attributes:attribute_accessors(attr=it); separator="\n\n">
@@ -384,20 +374,23 @@ public boolean getSelectForUpdateMode()
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @return the \<code><input.vo_name>\</code> or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.
- <precondition_instanceof(name="resultSet", className="QueryResultSet")>
  */
-public Object extractData(final ResultSet resultSet)
-    throws  SQLException,
-            DataAccessException
+protected Object extractData(
+    final ResultSet resultSet,
+    final <input.tr_name_capitalized>DAOListener daoListener)
+  throws  SQLException,
+          DataAccessException
 {
     return
         extractData(
             resultSet,
+            daoListener,
             <input.lob_attributes:{get<it.nameCapitalized>()};
               separator=",\n">,
             getSelectForUpdateMode(),
@@ -407,6 +400,7 @@ public Object extractData(final ResultSet resultSet)
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
    separator="\n">
  * @param selectForUpdate whether the operation is a
@@ -423,6 +417,7 @@ public Object extractData(final ResultSet resultSet)
  */
 protected Object extractData(
     final ResultSet resultSet,
+    final <input.tr_name_capitalized>DAOListener daoListener,
     <input.lob_attributes:attribute_method_declaration(attr=it);
       separator=",\n">,
     final boolean selectForUpdateMode,
@@ -434,6 +429,11 @@ protected Object extractData(
 
     if  (resultSet.next())
     {
+        if  (daoListener != null)
+        {
+            daoListener.resultSetMovedForward(this);
+        }
+
 <if(parent)>
         <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
           attr=it, input=input)>
@@ -455,6 +455,11 @@ protected Object extractData(
                   attr=it, input=input); separator=",\n">);
 <endif>
 
+    }
+
+    if  (daoListener != null)
+    {
+        daoListener.resultSetClosed(this);
     }
 
     return result;
