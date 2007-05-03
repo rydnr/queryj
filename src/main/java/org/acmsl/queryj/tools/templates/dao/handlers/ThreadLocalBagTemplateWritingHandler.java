@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: RepositoryDAOTemplateWritingHandler.java
+ * Filename: ThreadLocalBagTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the QueryPreparedStatementCreator template.
+ * Description: Writes the ThreadLocalBag template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -44,9 +44,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.ThreadLocalBagTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.ThreadLocalBagTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -56,11 +56,11 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the table repository.
+ * Writes the ThreadLocalBag template.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class QueryPreparedStatementCreatorTemplateWritingHandler
+public class ThreadLocalBagTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
@@ -69,7 +69,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      */
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return QueryPreparedStatementCreatorTemplateGenerator.getInstance();
+        return ThreadLocalBagTemplateGenerator.getInstance();
     }
 
     /**
@@ -82,9 +82,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
     {
         return
             (BasePerRepositoryTemplate)
-                parameters.get(
-                    TemplateMappingManager
-                        .QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE);
+            parameters.get(TemplateMappingManager.THREAD_LOCAL_BAG_TEMPLATE);
     }
 
     /**
@@ -110,7 +108,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveQueryPreparedStatementCreatorFolder(
+            packageUtils.retrieveThreadLocalBagFolder(
                 projectFolder,
                 projectPackage,
                 useSubfolders);

@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryPreparedStatementCreatorTemplateGenerator.java
+ * Filename: JdbcTemplateTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate QueryPreparedStatementCreator
+ * Description: Is able to generate JdbcTemplate
  *              implementations.
  *
  */
@@ -68,11 +68,11 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Is able to generate QueryPreparedStatementCreator implementations.
+ * Is able to generate JdbcTemplate implementations.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class QueryPreparedStatementCreatorTemplateGenerator
+public class JdbcTemplateTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator,
                 Singleton
@@ -80,27 +80,27 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer
+    private static class JdbcTemplateTemplateGeneratorSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final QueryPreparedStatementCreatorTemplateGenerator SINGLETON =
-            new QueryPreparedStatementCreatorTemplateGenerator();
+        public static final JdbcTemplateTemplateGenerator SINGLETON =
+            new JdbcTemplateTemplateGenerator();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected QueryPreparedStatementCreatorTemplateGenerator() {};
+    protected JdbcTemplateTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>QueryPreparedStatementCreatorTemplateGenerator</code> instance.
+     * Retrieves a <code>JdbcTemplateTemplateGenerator</code> instance.
      * @return such instance.
      */
-    public static QueryPreparedStatementCreatorTemplateGenerator getInstance()
+    public static JdbcTemplateTemplateGenerator getInstance()
     {
-        return QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer.SINGLETON;
+        return JdbcTemplateTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**
@@ -132,7 +132,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
       throws  QueryJException
     {
         return
-            new QueryPreparedStatementCreatorTemplate(
+            new JdbcTemplateTemplate(
                 metadataManager,
                 metadataTypeManager,
                 customSqlProvider,
@@ -198,7 +198,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + template.getRepositoryName()
-            + "QueryPreparedStatementCreator.java",
+            + "JdbcTemplate.java",
             template.generate());
     }
 }

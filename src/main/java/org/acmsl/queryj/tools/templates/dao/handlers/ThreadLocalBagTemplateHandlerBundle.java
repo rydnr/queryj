@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -28,36 +29,42 @@
 
  ******************************************************************************
  *
- * Filename: QueryPreparedStatementCreatorTemplateFactory.java
+ * Filename: ThreadLocalBagTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create
- *              QueryPreparedStatementCreator templates.
+ * Description: Bundles a pair of ThreadLocalBag template
+ *              build and writing handlers.
  *
  */
-package org.acmsl.queryj.tools.templates.dao;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
- * Importing project classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.templates.dao.handlers.ThreadLocalBagTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.ThreadLocalBagTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Represents entities able to create QueryPreparedStatementCreator templates.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * Bundles a pair of ThreadLocalBag template build and writing
+ * handlers.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
-public interface QueryPreparedStatementCreatorTemplateFactory
+public class ThreadLocalBagTemplateHandlerBundle
+    extends  TemplateHandlerBundle
 {
     /**
-     * Generates a QueryPreparedStatementCreator template.
-     * @param packageName the package name.
-     * @param header the header.
-     * @return a template.
-     * @throws QueryJException if the input values are invalid.
+     * Builds a bundle with given handlers.
+     * @param buildHandler the template build handler.
+     * @param writingHandler the writing handler.
+     * @precondition buildHandler != null
+     * @precondition writingHandler != null
      */
-    public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
-        final String packageName, final String header)
-      throws  QueryJException;
+    public ThreadLocalBagTemplateHandlerBundle()
+    {
+        super(
+            new ThreadLocalBagTemplateBuildHandler(),
+            new ThreadLocalBagTemplateWritingHandler());
+    }
 }

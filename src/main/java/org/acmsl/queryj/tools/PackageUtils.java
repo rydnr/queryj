@@ -1835,6 +1835,87 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for JdbcTemplate class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveJdbcTemplatePackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for JdbcTemplate class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveJdbcTemplateFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for ThreadAwareDataSourceWrapper class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveThreadAwareDataSourceWrapperPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for ThreadAwareDataSourceWrapper class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveThreadAwareDataSourceWrapperFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for ThreadLocalBag class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveThreadLocalBagPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for ThreadLocalBag class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveThreadLocalBagFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
      * @return the class name.

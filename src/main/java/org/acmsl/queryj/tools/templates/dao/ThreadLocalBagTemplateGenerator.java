@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryPreparedStatementCreatorTemplateGenerator.java
+ * Filename: ThreadLocalBagTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate QueryPreparedStatementCreator
+ * Description: Is able to generate ThreadLocalBag
  *              implementations.
  *
  */
@@ -68,11 +68,11 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Is able to generate QueryPreparedStatementCreator implementations.
+ * Is able to generate ThreadLocalBag implementations.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class QueryPreparedStatementCreatorTemplateGenerator
+public class ThreadLocalBagTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator,
                 Singleton
@@ -80,27 +80,27 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer
+    private static class ThreadLocalBagTemplateGeneratorSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final QueryPreparedStatementCreatorTemplateGenerator SINGLETON =
-            new QueryPreparedStatementCreatorTemplateGenerator();
+        public static final ThreadLocalBagTemplateGenerator SINGLETON =
+            new ThreadLocalBagTemplateGenerator();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected QueryPreparedStatementCreatorTemplateGenerator() {};
+    protected ThreadLocalBagTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>QueryPreparedStatementCreatorTemplateGenerator</code> instance.
+     * Retrieves a <code>ThreadLocalBagTemplateGenerator</code> instance.
      * @return such instance.
      */
-    public static QueryPreparedStatementCreatorTemplateGenerator getInstance()
+    public static ThreadLocalBagTemplateGenerator getInstance()
     {
-        return QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer.SINGLETON;
+        return ThreadLocalBagTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**
@@ -132,7 +132,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
       throws  QueryJException
     {
         return
-            new QueryPreparedStatementCreatorTemplate(
+            new ThreadLocalBagTemplate(
                 metadataManager,
                 metadataTypeManager,
                 customSqlProvider,
@@ -198,7 +198,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + template.getRepositoryName()
-            + "QueryPreparedStatementCreator.java",
+            + "ThreadLocalBag.java",
             template.generate());
     }
 }

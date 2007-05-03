@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryPreparedStatementCreatorTemplateBuildHandler.java
+ * Filename: ThreadLocalBagTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a QueryPreparedStatement template.
+ * Description: Builds a ThreadLocalBag template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.ThreadLocalBagTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -54,20 +54,20 @@ import org.acmsl.queryj.tools.PackageUtils;
 import java.util.Map;
 
 /**
- * Builds a <code>QueryPreparedStatementCreator</code> template.
+ * Builds a <code>ThreadLocalBag</code> template.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class QueryPreparedStatementCreatorTemplateBuildHandler
+public class ThreadLocalBagTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
 {
     /**
-     * Retrieves the per-repository template factory.
+     * Retrieves the ThreadLocalBag template factory.
      * @return such instance.
      */
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
-        return QueryPreparedStatementCreatorTemplateGenerator.getInstance();
+        return ThreadLocalBagTemplateGenerator.getInstance();
     }
 
     /**
@@ -86,7 +86,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveQueryPreparedStatementCreatorPackage(
+            packageUtils.retrieveThreadLocalBagPackage(
                 projectPackage);
     }
 
@@ -101,7 +101,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         final BasePerRepositoryTemplate template, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE,
+            TemplateMappingManager.THREAD_LOCAL_BAG_TEMPLATE,
             template);
     }
 

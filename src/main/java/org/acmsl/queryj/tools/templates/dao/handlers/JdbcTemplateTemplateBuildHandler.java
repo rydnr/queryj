@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryPreparedStatementCreatorTemplateBuildHandler.java
+ * Filename: JdbcTemplateTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a QueryPreparedStatement template.
+ * Description: Builds a JdbcTemplate template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -43,7 +43,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.JdbcTemplateTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -54,20 +54,20 @@ import org.acmsl.queryj.tools.PackageUtils;
 import java.util.Map;
 
 /**
- * Builds a <code>QueryPreparedStatementCreator</code> template.
+ * Builds a <code>JdbcTemplate</code> template.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class QueryPreparedStatementCreatorTemplateBuildHandler
+public class JdbcTemplateTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
 {
     /**
-     * Retrieves the per-repository template factory.
+     * Retrieves the JdbcTemplate template factory.
      * @return such instance.
      */
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
-        return QueryPreparedStatementCreatorTemplateGenerator.getInstance();
+        return JdbcTemplateTemplateGenerator.getInstance();
     }
 
     /**
@@ -86,7 +86,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveQueryPreparedStatementCreatorPackage(
+            packageUtils.retrieveJdbcTemplatePackage(
                 projectPackage);
     }
 
@@ -101,7 +101,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
         final BasePerRepositoryTemplate template, final Map parameters)
     {
         parameters.put(
-            TemplateMappingManager.QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE,
+            TemplateMappingManager.JDBC_TEMPLATE_TEMPLATE,
             template);
     }
 

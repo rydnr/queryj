@@ -29,11 +29,11 @@
 
  ******************************************************************************
  *
- * Filename: RepositoryDAOTemplateWritingHandler.java
+ * Filename: JdbcTemplateTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the QueryPreparedStatementCreator template.
+ * Description: Writes the JdbcTemplate template.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -44,9 +44,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.dao.handlers.JdbcTemplateTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.JdbcTemplateTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -60,7 +60,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class QueryPreparedStatementCreatorTemplateWritingHandler
+public class JdbcTemplateTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
 {
     /**
@@ -69,7 +69,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      */
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return QueryPreparedStatementCreatorTemplateGenerator.getInstance();
+        return JdbcTemplateTemplateGenerator.getInstance();
     }
 
     /**
@@ -82,9 +82,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
     {
         return
             (BasePerRepositoryTemplate)
-                parameters.get(
-                    TemplateMappingManager
-                        .QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE);
+                parameters.get(TemplateMappingManager.JDBC_TEMPLATE_TEMPLATE);
     }
 
     /**
@@ -110,7 +108,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveQueryPreparedStatementCreatorFolder(
+            packageUtils.retrieveJdbcTemplateFolder(
                 projectFolder,
                 projectPackage,
                 useSubfolders);

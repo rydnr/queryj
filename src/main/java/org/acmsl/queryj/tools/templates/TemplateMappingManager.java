@@ -542,6 +542,24 @@ public class TemplateMappingManager
     public static final String DAO_LISTENER_IMPL_TEMPLATE = "dao.listener.impl";
 
     /**
+     * The JdbcTemplate template type.
+     */
+    public static final String JDBC_TEMPLATE_TEMPLATE =
+        "jdbc.template.template";
+
+    /**
+     * The ThreadAwareDataSourceWrapper template type.
+     */
+    public static final String THREAD_AWARE_DATASOURCE_WRAPPER_TEMPLATE =
+        "thread.aware.datasource.wrapper.template";
+
+    /**
+     * The ThreadLocalBag template type.
+     */
+    public static final String THREAD_LOCAL_BAG_TEMPLATE =
+        "thread.local.bag.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;
