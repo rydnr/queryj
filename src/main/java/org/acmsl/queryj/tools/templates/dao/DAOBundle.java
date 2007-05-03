@@ -63,6 +63,7 @@ import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreat
 import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ThreadAwareDataSourceWrapperTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ThreadLocalBagTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.dao.handlers.TransactionManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundle;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
@@ -106,7 +107,8 @@ public class DAOBundle
                 new DAOListenerImplTemplateHandlerBundle(),
                 new JdbcTemplateTemplateHandlerBundle(),
                 new ThreadLocalBagTemplateHandlerBundle(),
-                new ThreadAwareDataSourceWrapperTemplateHandlerBundle()
+                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
+                new TransactionManagerTemplateHandlerBundle()
             });
     }
 }

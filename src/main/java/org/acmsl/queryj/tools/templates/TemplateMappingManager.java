@@ -560,6 +560,12 @@ public class TemplateMappingManager
         "thread.local.bag.template";
 
     /**
+     * The TransactionManager template type.
+     */
+    public static final String TRANSACTION_MANAGER_TEMPLATE =
+        "transaction.manager.template";
+
+    /**
      * The engine-template mapping.
      */
     private Map m__mMapping;
