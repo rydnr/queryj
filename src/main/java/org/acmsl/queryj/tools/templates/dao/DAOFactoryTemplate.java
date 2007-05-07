@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -42,6 +43,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
+import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
@@ -83,6 +85,7 @@ public class DAOFactoryTemplate
      * @param engineName the engine name.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
+     * @param repository the repository.
      */
     public DAOFactoryTemplate(
         final String header,
@@ -91,7 +94,8 @@ public class DAOFactoryTemplate
         final String packageName,
         final String engineName,
         final String basePackageName,
-        final String jndiDataSource)
+        final String jndiDataSource,
+        final String repository)
     {
         super(
             header,
@@ -102,7 +106,8 @@ public class DAOFactoryTemplate
             null,
             null,
             basePackageName,
-            jndiDataSource);
+            jndiDataSource,
+            repository);
     }
 
     /**
@@ -120,10 +125,12 @@ public class DAOFactoryTemplate
                 getEngineName(),
                 getBasePackageName(),
                 getJNDIDataSource(),
+                getRepositoryName(),
                 StringUtils.getInstance(),
                 SingularPluralFormConverter.getInstance(),
                 DefaultThemeUtils.getInstance(),
-                PackageUtils.getInstance());
+                PackageUtils.getInstance(),
+                DecorationUtils.getInstance());
     }
 
     /**
@@ -135,17 +142,20 @@ public class DAOFactoryTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
+     * @param repositoryName the repository name.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such source code.
      * @precondition tableTemplate != null
      * @precondition stringUtils != null
      * @precondition singularPluralFormConverter != null
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
+     * @precondition decorationUtils != null
      */
     protected String generateOutput(
         final String header,
@@ -154,10 +164,12 @@ public class DAOFactoryTemplate
         final String engineName,
         final String basePackageName,
         final String jndiDataSource,
+        final String repositoryName,
         final StringUtils stringUtils,
         final EnglishGrammarUtils singularPluralFormConverter,
         final DefaultThemeUtils defaultThemeUtils,
-        final PackageUtils packageUtils)
+        final PackageUtils packageUtils,
+        final DecorationUtils decorationUtils)
     {
         String result = "";
 
@@ -168,6 +180,9 @@ public class DAOFactoryTemplate
                 singularPluralFormConverter.getSingular(
                     t_strTableName.toLowerCase()),
                 '_');
+
+        String t_strCapitalizedRepositoryName =
+            decorationUtils.capitalize(repositoryName);
 
         StringTemplateGroup t_Group = retrieveGroup();
 
@@ -202,7 +217,8 @@ public class DAOFactoryTemplate
                 t_strCapitalizedEngine, t_strSingularName),
             packageUtils.retrieveDAOPackage(
                 basePackageName, engineName),
-            jndiDataSource);
+            jndiDataSource,
+            t_strCapitalizedRepositoryName);
 
         result = t_Template.toString();
 
@@ -268,7 +284,8 @@ public class DAOFactoryTemplate
         final String daoFactoryPackageName,
         final String daoImplementationClassName,
         final String daoImplementationPackageName,
-        final String jndiLocation)
+        final String jndiLocation,
+        final String capitalizedRepositoryName)
     {
         Map input = new HashMap();
 
@@ -283,6 +300,8 @@ public class DAOFactoryTemplate
         input.put("engine_name", engineName);
         input.put("timestamp", timestamp);
 
+        input.put("tr_name_capitalized", capitalizedRepositoryName);
+        
         input.put("class_name", daoFactoryImplementationClassName);
 
         input.put("dao_class_name", daoClassName);

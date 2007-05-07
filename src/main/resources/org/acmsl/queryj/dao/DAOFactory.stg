@@ -86,6 +86,7 @@ source(input) ::= <<
   daoFactoryClassName=input.dao_factory_class_name,
   daoImplementationPackageName=input.dao_implementation_package_name,
   daoImplementationClassName=input.dao_implementation_class_name,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trName=input.tr_name_capitalized)>
 
 /*
@@ -132,6 +133,7 @@ project_imports(
   daoFactoryClassName,
   daoImplementationPackageName,
   daoImplementationClassName,
+  rdbSubpackageName,
   trName) ::= <<
 <!
   Generates the import statements for the project classes.
@@ -146,16 +148,13 @@ project_imports(
 /*
  * Importing some project classes.
  */
-import <daoPackageName>.<trName>DAOListenerImpl;
+import <daoPackageName>.<rdbSubpackageName>.<trName>DAOListener;
+import <daoPackageName>.<rdbSubpackageName>.<trName>DAOListenerImpl;
 import <daoPackageName>.<daoClassName>;
 import <daoFactoryPackageName>.<daoFactoryClassName>;
 import <daoImplementationPackageName>.<daoImplementationClassName>;
-
-/*
- * Importing some QueryJ classes.
- */
-import org.acmsl.queryj.dao.JndiUtils;
-import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
+import <daoPackageName>.<rdbSubpackageName>.<trName>JndiUtils;
+import <daoPackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
 >>
 
 class(input, table) ::= <<
@@ -245,7 +244,7 @@ public class <input.class_name>
         {
             result =
 <if(table.dynamicSql)>
-                new Dynamic<input.dao_implementation_class_name>(
+                new <input.dao_implementation_class_name>Impl(
 <else>
                 new <input.dao_implementation_class_name>(
 <endif>
@@ -263,16 +262,16 @@ public class <input.class_name>
      */
     protected DataSource getDataSource()
     {
-        return getDataSource(JndiUtils.getInstance());
+        return getDataSource(<input.tr_name_capitalized>JndiUtils.getInstance());
     }
 
     /**
      * Retrieves the data source.
-     * @param jndiUtils the \<code\>JndiUtils\</code\> instance.
+     * @param jndiUtils the \<code\><input.tr_name_capitalized>JndiUtils\</code\> instance.
      * @return such data source.
      <precondition_notnull("jndiUtils")>
      */
-    protected DataSource getDataSource(final JndiUtils jndiUtils)
+    protected DataSource getDataSource(final <input.tr_name_capitalized>JndiUtils jndiUtils)
     {
         DataSource result = null;
 

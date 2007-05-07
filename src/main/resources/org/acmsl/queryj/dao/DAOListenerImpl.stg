@@ -70,10 +70,15 @@ source(input) ::= <<
   [
     input.base_package_name,
     typeInitMap.baseDAOSubpackageName,
-    typeInitMap.rdbSubpackageName,
-    input.engine_name_lowercased,
-    input.subpackage_name
+    typeInitMap.rdbSubpackageName
   ])>
+
+/*
+ * Importing Spring classes.
+ */
+import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.StatementCallback;
 
 <class(input=input)>
 >>
@@ -100,7 +105,7 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.tr_name_capitalized>DAOListenerImpl
-    implements  <input.tr_name_capitalized>DAOListenerImpl
+    implements  <input.tr_name_capitalized>DAOListener
 {
     /**
      * Receives notifications whenever a operation on the persistence

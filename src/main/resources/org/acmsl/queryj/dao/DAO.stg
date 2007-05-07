@@ -251,11 +251,12 @@ import <basePackageName>.<voSubpackageName>.<voName>Decorator;
 <endif>
 
 import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
-import <basePackageName>.<baseDAOSubpackageName>.DAOListener;
-import <basePackageName>.<baseDAOSubpackageName>.<trName>DAOJdbcTemplate;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.QueryPreparedStatementCreator;
-import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JdbcTemplate;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>QueryPreparedStatementCreator;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
+//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
@@ -341,7 +342,7 @@ classImpl(input, foreign_keys_by_table, table, parent) ::= <<
  * @since <input.timestamp>
  */
 public class <input.engine_name><input.vo_name>DAO
-  extends     <input.tr_name_capitalized>DAOJdbcTemplate
+  extends     <input.tr_name_capitalized>JdbcTemplate
   implements  <input.vo_name>DAO
 //              <input.tr_name_capitalized>TableRepository
 {

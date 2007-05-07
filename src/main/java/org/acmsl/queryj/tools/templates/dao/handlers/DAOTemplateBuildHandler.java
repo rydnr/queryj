@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -49,11 +50,6 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandle
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.Map;
@@ -66,11 +62,6 @@ import java.util.Map;
 public class DAOTemplateBuildHandler
     extends  BasePerTableTemplateBuildHandler
 {
-    /**
-     * Creates a <code>DAOTemplateBuildHandler</code> instance.
-     */
-    public DAOTemplateBuildHandler() {};
-
     /**
      * Retrieves the template factory.
      * @return such instance.
@@ -96,7 +87,6 @@ public class DAOTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return packageUtils.retrieveDAOPackage(projectPackage, engineName);
     }

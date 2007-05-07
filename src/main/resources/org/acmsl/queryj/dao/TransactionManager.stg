@@ -212,31 +212,6 @@ public class <input.tr_name_capitalized>TransactionManager
         final TransactionDefinition transactionDefinition)
       throws  TransactionException
     {
-        return
-            begin(
-                dataSource,
-                transactionDefinition,
-                TransactionStatusFactory.getInstance());
-    }
-
-    /**
-     * Starts a transaction for given data source.
-     * @param dataSource the data source.
-     * @param transactionDefinition the transaction definition.
-     * @param transactionTokenFactory the \<code>TransactionStatusFactory\</code>
-     * instance.
-     * @throws TransactionException if the transaction cannot be started for
-     * some reason.
-     * @precondition dataSource != null
-     * @precondition transactionDefinition != null
-     * @precondition transactionTokenFactory != null
-     */
-    protected TransactionStatus begin(
-        final DataSource dataSource,
-        final TransactionDefinition transactionDefinition,
-        final TransactionStatusFactory transactionTokenFactory)
-      throws  TransactionException
-    {
         TransactionStatus result = null;
 
         DataSource t_DataSource = dataSource;
@@ -253,7 +228,7 @@ public class <input.tr_name_capitalized>TransactionManager
         if  (t_<input.tr_name_capitalized>TransactionManager != null)
         {
             // Performs an implicit transaction start.
-            TransactionStatus t_TransactionStatus =
+            result =
                 t_<input.tr_name_capitalized>TransactionManager.getTransaction(
                     transactionDefinition);
 
@@ -261,8 +236,8 @@ public class <input.tr_name_capitalized>TransactionManager
                  && (t_TransactionStatus instanceof DefaultTransactionStatus))
             {
                 result =
-                    transactionTokenFactory.createTransactionStatus(
-                        (DefaultTransactionStatus) t_TransactionStatus,
+                    new <input.tr_name_capitalized>DataSourceTransactionToken(
+                        (DefaultTransactionStatus) result,
                         t_DataSource);
             }
         }

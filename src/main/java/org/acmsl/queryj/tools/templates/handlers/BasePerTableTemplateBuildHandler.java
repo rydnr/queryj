@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -53,11 +54,6 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
@@ -80,11 +76,6 @@ public abstract class BasePerTableTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a <code>BasePerTableTemplateBuildHandler</code> instance.
-     */
-    public BasePerTableTemplateBuildHandler() {};
-
-    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -92,7 +83,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition command != null
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         return handle(command.getAttributeMap());
     }
@@ -105,7 +95,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
     {
         return
             handle(
@@ -132,7 +121,6 @@ public abstract class BasePerTableTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  BuildException
     {
         return
             handle(
@@ -194,7 +182,6 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean jmx,
         final String header,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
     {
         boolean result = false;
 
@@ -248,7 +235,6 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected String retrievePackage(
         final String tableName, final String engineName, final Map parameters)
-      throws  BuildException
     {
         return
             retrievePackage(
@@ -293,7 +279,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected TableTemplate[] retrieveTableTemplates(final Map parameters)
-        throws  BuildException
     {
         return
             (TableTemplate[])

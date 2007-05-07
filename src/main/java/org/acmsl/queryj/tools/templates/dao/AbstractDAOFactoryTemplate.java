@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -91,6 +92,11 @@ public abstract class AbstractDAOFactoryTemplate
     private String m__strJNDIDataSource;
 
     /**
+     * The repository name.
+     */
+    private String m__strRepositoryName;
+
+    /**
      * Builds an <code>AbstractDAOFactoryTemplate</code> using given information.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -101,6 +107,7 @@ public abstract class AbstractDAOFactoryTemplate
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
+     * @param repositoryName the repository name.
      */
     protected AbstractDAOFactoryTemplate(
         final String header,
@@ -111,7 +118,8 @@ public abstract class AbstractDAOFactoryTemplate
         final String engineVersion,
         final String quote,
         final String basePackageName,
-        final String jndiDataSource)
+        final String jndiDataSource,
+        final String repositoryName)
     {
         super(header, decoratorFactory);
         immutableSetTableTemplate(tableTemplate);
@@ -121,6 +129,7 @@ public abstract class AbstractDAOFactoryTemplate
         immutableSetQuote(quote);
         immutableSetBasePackageName(basePackageName);
         immutableSetJNDIDataSource(jndiDataSource);
+        immutableSetRepositoryName(repositoryName);
     }
 
     /**
@@ -328,6 +337,33 @@ public abstract class AbstractDAOFactoryTemplate
     public String getJNDIDataSource() 
     {
         return m__strJNDIDataSource;
+    }
+
+    /**
+     * Specifies the repository name.
+     * @param repositoryName the new repository name.
+     */
+    private void immutableSetRepositoryName(final String repositoryName)
+    {
+        m__strRepositoryName = repositoryName;
+    }
+
+    /**
+     * Specifies the repository name.
+     * @param repositoryName the new repository name.
+     */
+    protected void setRepositoryName(final String repositoryName)
+    {
+        immutableSetRepositoryName(repositoryName);
+    }
+
+    /**
+     * Retrieves the repository name.
+     * @return such information.
+     */
+    public String getRepositoryName()
+    {
+        return m__strRepositoryName;
     }
 
     /**

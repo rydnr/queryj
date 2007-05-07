@@ -65,7 +65,8 @@ source(input) ::= <<
   packageNames=
   [
     input.base_package_name,
-    typeInitMap.baseDAOSubpackageName
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName
   ])>
 
 /*

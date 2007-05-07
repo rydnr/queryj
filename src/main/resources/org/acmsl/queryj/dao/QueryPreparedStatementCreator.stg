@@ -86,7 +86,7 @@ source(input) ::= <<
   basePackageName=input.base_package_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
-  trName=input.tr_name_capitalized) ::= <<
+  trName=input.tr_name_capitalized)>
 
 /*
  * Importing temporarily QueryJ classes.

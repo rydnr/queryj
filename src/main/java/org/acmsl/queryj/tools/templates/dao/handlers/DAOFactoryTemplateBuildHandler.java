@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -55,16 +56,9 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
-
-/*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.Task;
 
 /*
  * Importing some JDK classes.
@@ -102,7 +96,6 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition command != null
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         return handle(command.getAttributeMap());
     }
@@ -116,7 +109,6 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-      throws  BuildException
     {
         handle(
             parameters,
@@ -126,6 +118,7 @@ public class DAOFactoryTemplateBuildHandler
                 retrieveDatabaseProductName(parameters).toLowerCase()),
             retrieveProjectPackage(parameters),
             retrieveDatabaseProductName(parameters),
+            retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
             retrieveTableTemplates(parameters),
             DAOFactoryTemplateGenerator.getInstance());
@@ -140,6 +133,7 @@ public class DAOFactoryTemplateBuildHandler
      * @param packageName the package name.
      * @param basePackage the base package.
      * @param engineName the engine name.
+     * @param repository the repository.
      * @param header the header.
      * @param tableTemplates the table templates.
      * @param templateFactory the template factory.
@@ -158,10 +152,10 @@ public class DAOFactoryTemplateBuildHandler
         final String packageName,
         final String basePackage,
         final String engineName,
+        final String repository,
         final String header,
         final TableTemplate[] tableTemplates,
         final DAOFactoryTemplateFactory templateFactory)
-      throws  BuildException
     {
         try
         {
@@ -182,6 +176,7 @@ public class DAOFactoryTemplateBuildHandler
                         engineName,
                         basePackage,
                         jndiDataSource,
+                        repository,
                         header);
             }
 

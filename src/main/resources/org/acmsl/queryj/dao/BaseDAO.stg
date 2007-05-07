@@ -404,7 +404,12 @@ public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
 
+<if(cs.dynamic)>
+    final Object[] parameters);
+<else>
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
+<endif>
+
 >>
 
 custom_update_or_insert(cs, input) ::= <<
@@ -421,7 +426,12 @@ custom_update_or_insert(cs, input) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 public int <cs.nameUncapitalized>(
+<if(cs.dynamic)>
+    final Object[] parameters);
+<else>
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
+<endif>
+
 >>
 
 custom_select_for_update(cs, table, input) ::= <<
@@ -450,5 +460,10 @@ public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 <else>
 public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
+<if(cs.dynamic)>
+    final Object[] parameters);
+<else>
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
+<endif>
+
 >>

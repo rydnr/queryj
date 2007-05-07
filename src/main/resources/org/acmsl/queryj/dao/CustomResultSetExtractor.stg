@@ -77,6 +77,7 @@ source(input) ::= <<
   result=input.result,
   basePackageName=input.base_package_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trName=input.tr_name_capitalized)>
 
 /*
@@ -120,12 +121,13 @@ second_line_description(result) ::= <<
  from java.sql.ResultSets.
 >>
 
-project_imports(result, basePackageName, baseDAOSubpackageName, trName) ::= <<
+project_imports(result, basePackageName, baseDAOSubpackageName, rdbSubpackageName, trName) ::= <<
 <!
  Generates the project imports.
  @param result the result instance.
  @param basePackageName the base package name.
  @param baseDAOSubpackageName the subpackage for base DAO classes.
+ @param rdbSubpackageName the subpackage for rdb classes.
  @param trName the repository name.
 !>
 /*
@@ -135,7 +137,8 @@ project_imports(result, basePackageName, baseDAOSubpackageName, trName) ::= <<
 import <result.classValue>;
 import <result.classValue>ValueObjectFactory;
 <endif>
-import <basePackageName>.<baseDAOSubpackageName>.<trName>ResultSetExtractor;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
 >>
 
 class(result, input) ::= <<
