@@ -404,11 +404,14 @@ public class <input.engine_name><input.vo_name>DAO
       // custom selects
 
 <input.custom_selects:{sql|
+<if(!sql.dynamic)>
       /**
        * The <sql.id> SQL.
        */
      public static final String <sql.idAsConstant>_SQL =
-         <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
+         <sql.splittedQuotedValue; separator=" +\n">;
+<endif>
+}; separator="\n\n">
 
       // custom selects-for-update
 <input.custom_selects_for_update:{sql|
@@ -420,11 +423,14 @@ public class <input.engine_name><input.vo_name>DAO
                
       // custom updates or inserts
 <input.custom_updates_or_inserts:{sql|
+<if(!sql.dynamic)>
       /**
        * The <sql.id> SQL.
        */
      public static final String <sql.idAsConstant>_SQL =
-         <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
+         <sql.splittedQuotedValue; separator=" +\n">;
+<endif>
+}; separator="\n\n">
                
     <input.custom_results:resultset_extractor_constants(
       crseid=it.id,

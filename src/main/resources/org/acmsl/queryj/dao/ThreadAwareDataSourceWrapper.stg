@@ -116,7 +116,6 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.tr_name_capitalized>ThreadAwareDataSourceWrapper
-{
     extends  TransactionAwareDataSourceProxy
 //    implements  SmartDataSource
 {
@@ -442,9 +441,9 @@ public class <input.tr_name_capitalized>ThreadAwareDataSourceWrapper
 
     /** 
      * Should we close this connection, obtained from this DataSource?
-     * <p>Code that uses connections from a SmartDataSource should always
+     * Code that uses connections from a SmartDataSource should always
      * perform a check via this method before invoking \<code>close()\</code>.
-     * <p>However, the JdbcTemplate class in the core package should take care of
+     * However, the JdbcTemplate class in the core package should take care of
      * closing JDBC connections, freeing application code of this responsibility.
      * @param con connection, which should have been obtained
      * from this data source, to check closure status of.

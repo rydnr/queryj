@@ -197,8 +197,33 @@ public class ThreadAwareDataSourceWrapperTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + template.getRepositoryName()
+            + capitalize(template.getRepositoryName())
             + "ThreadAwareDataSourceWrapper.java",
             template.generate());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return the capitalized value.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the capitalized value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
 }

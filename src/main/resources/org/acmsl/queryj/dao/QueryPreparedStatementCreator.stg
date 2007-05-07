@@ -78,8 +78,15 @@ source(input) ::= <<
   packageNames=
   [
     input.base_package_name,
-    typeInitMap.baseDAOSubpackageName
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName
   ])>
+
+<project_imports(
+  basePackageName=input.base_package_name,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
+  trName=input.tr_name_capitalized) ::= <<
 
 /*
  * Importing temporarily QueryJ classes.
@@ -121,6 +128,24 @@ second_line_description(tableName, engineName, engineVersion) ::= <<
 required to perform any \<i>JDBC\</i> operation.
 >>
 
+project_imports(
+  basePackageName,
+  baseDAOSubpackageName,
+  rdbSubpackageName,
+  trName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param rdbSubpackageName the rdb subpackage name.
+ @param trName the table repository name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
+>>
+
 class(input) ::= <<
 <!
  Generates the class body.
@@ -160,15 +185,22 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
     private String m__strSql;
 
     /**
+     * The DAO listener.
+     */
+    private <input.tr_name_capitalized>DAOListener m__DAOListener;
+
+    /**
      * Builds a \<code>QueryPreparedStatementCreator\</code>
      * for given query.
      * @param query the query.
      * @deprecated QueryJ should not be a runtime dependency. Use <input.tr_name_capitalized>QueryPreparedStatementCreator(String) instead.
      * @precondition query != null
      */
-    public <input.tr_name_capitalized>QueryPreparedStatementCreator(final Query query)
+    public <input.tr_name_capitalized>QueryPreparedStatementCreator(
+        final Query query, final <input.tr_name_capitalized>DAOListener daoListener)
     {
         immutableSetQuery(query);
+        immutableSetDAOListener(daoListener);
     }
 
     /**
@@ -177,7 +209,8 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
      * @param query the query.
      * @precondition query != null
      */
-    public QueryPreparedStatementCreator(final String query)
+    public <input.tr_name_capitalized>QueryPreparedStatementCreator(
+        final String query, final <input.tr_name_capitalized>DAOListener daoListener)
     {
         immutableSetSql(query);
     }
@@ -185,7 +218,7 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
     /**
      * Specifies the query.
      * @param query such query.
-     */\n"
+     */
     protected final void immutableSetQuery(final Query query)
     {
         m__Query = query;
@@ -237,7 +270,37 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
         return m__strSql;
     }
 
-    // <create prepared statement>\n\n"
+    /**
+     * Specifies the DAO listener.
+     * @param daoListener such listener.
+     */
+    protected final void immutableSetDAOListener(
+        final <input.tr_name_capitalized>DAOListener daoListener)
+    {
+        m__DAOListener = daoListener;
+    }
+
+    /**
+     * Specifies the DAO listener.
+     * @param daoListener such listener.
+     */
+    protected void setDAOListener(
+        final <input.tr_name_capitalized>DAOListener daoListener)
+    {
+        immutableSetDAOListener(daoListener);
+    }
+
+    /**
+     * Retrieves the DAO listener.
+     * @return such instance.
+     */
+    protected <input.tr_name_capitalized>DAOListener getDAOListener()
+    {
+        return m__DAOListener;
+    }
+
+    // \<create prepared statement\>
+
     /**
      * Creates the prepared statement required to accomplish the
      * \<i>SQL\</i> operation.
@@ -253,17 +316,18 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
     {
         return
             createPreparedStatement(
-                connection, getQuery(), getSql());
+                connection, getQuery(), getSql(), getDAOListener());
     }
 
     /**
      * Creates the prepared statement required to accomplish the
-     * <i>SQL</i> operation.
+     * \<i>SQL\</i> operation.
      * @param connection the connection.
      * @param query the query.
      * @param sql the sql query.
-     * @return the <code>PreparedStatement</code> instance.
-     * @throws SQLException if something wrong occurs. <b>Spring</b> takes
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @return the \<code>PreparedStatement\</code> instance.
+     * @throws SQLException if something wrong occurs. \<b>Spring\</b> takes
      * care of this.
      * @precondition connection != null
      * @precondition (query != null) || (sql != null)
@@ -271,7 +335,8 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
     protected PreparedStatement createPreparedStatement(
         final Connection connection,
         final Query query,
-        final String sql)
+        final String sql,
+        final <input.tr_name_capitalized>DAOListener daoListener)
       throws SQLException
     {
         PreparedStatement result = null;
@@ -279,11 +344,22 @@ public class <input.tr_name_capitalized>QueryPreparedStatementCreator
         if  (query != null)
         {
             result = query.prepareStatement(connection);
+
+            if  (daoListener != null)
+            {
+                daoListener.statementPrepared(query.toString());
+            }
         }
         else if  (sql != null)
         {
             result = connection.prepareStatement(sql);
         }
+
+//        if  (daoListener != null)
+//        {
+//            daoListener.statementPrepared(
+//                (query != null) ? query.toString() : sql);
+//        }
 
         return result;
     }

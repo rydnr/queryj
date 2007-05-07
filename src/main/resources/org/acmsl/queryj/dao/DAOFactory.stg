@@ -104,7 +104,7 @@ import javax.sql.DataSource;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input)>
+<class(input=input, table=input.table)>
 >>
 
 first_line_description(className, engineName) ::= <<
@@ -158,7 +158,7 @@ import org.acmsl.queryj.dao.JndiUtils;
 import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
 >>
 
-class(input) ::= <<
+class(input, table) ::= <<
 <!
   Generates the class body.
   @param input.dao_factory_implementation_class_name the class name.
@@ -169,6 +169,7 @@ class(input) ::= <<
   @param input.dao_factory_class_name the DAO factory class name.
   @param input.jndi_location the JNDI location.
   @param input.table_name the table name.
+  @param table the table.
 !>
 /**
  * <[
@@ -243,7 +244,12 @@ public class <input.class_name>
         if  (dataSource != null)
         {
             result =
+<if(table.dynamicSql)>
+                new Dynamic<input.dao_implementation_class_name>(
+<else>
                 new <input.dao_implementation_class_name>(
+<endif>
+
                     dataSource,
                     new <input.tr_name_capitalized>DAOListenerImpl());
         }

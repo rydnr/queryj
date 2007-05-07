@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -73,6 +74,11 @@ public abstract class AbstractSqlDecorator
     implements  SqlDecorator
 {
     /**
+     * A cached empty String array.
+     */
+    protected static final String[] EMPTY_STRING_ARRAY = new String[0];
+    
+    /**
      * The wrapped sql element.
      */
     private Sql m__Sql;
@@ -117,7 +123,8 @@ public abstract class AbstractSqlDecorator
             sql.getName(),
             sql.getType(),
             sql.getImplementation(),
-            sql.getValidate());
+            sql.getValidate(),
+            sql.isDynamic());
         immutableSetDescription(sql.getDescription());
         immutableSetValue(sql.getValue());
         immutableSetParameterRefs(sql.getParameterRefs());
@@ -280,19 +287,25 @@ public abstract class AbstractSqlDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the splitted value.
-     * @precondition value != null
      * @precondition decorationUtils != null
      */
     protected String[] splitAndQuote(
         final String value, final DecorationUtils decorationUtils)
     {
-        return
-            decorationUtils.surround(
-                decorationUtils.trim(
-                    decorationUtils.split(
-                        decorationUtils.escape(value, '\"'))),
-                "\"",
-                " \"");
+        String[] result = EMPTY_STRING_ARRAY;
+        
+        if  (value != null)
+        {
+            result =
+                decorationUtils.surround(
+                    decorationUtils.trim(
+                        decorationUtils.split(
+                            decorationUtils.escape(value, '\"'))),
+                    "\"",
+                    " \"");
+        }
+        
+        return result;
     }
 
     /**

@@ -131,7 +131,7 @@ public class <input.tr_name_capitalized>DataSourceTransactionToken
      * @precondition transactionStatus != null
      * @precondition dataSource != null
      */
-    public DataSourceTransactionToken(
+    public <input.tr_name_capitalized>DataSourceTransactionToken(
         final DefaultTransactionStatus transactionStatus,
         final DataSource dataSource)
     {

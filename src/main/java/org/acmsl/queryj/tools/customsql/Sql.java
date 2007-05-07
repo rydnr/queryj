@@ -177,10 +177,16 @@ public interface Sql
     public boolean isValidate();
 
     /**
-     * Retrieves the &lt;value&gt; element.
+     * Retrieves the <i>value</i>; element.
      * @return such value.
      */
     public String getValue();
+
+    /**
+     * Checks whether the query is dynamic.
+     * @return such information.
+     */
+    public boolean isDynamic();
 
     /**
      * Retrieves the &lt;parameter-ref&gt; elements.

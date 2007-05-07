@@ -100,6 +100,7 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.tr_name_capitalized>DAOListenerImpl
+    implements  <input.tr_name_capitalized>DAOListenerImpl
 {
     /**
      * Receives notifications whenever a operation on the persistence
@@ -211,7 +212,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
         annotateConnectionRetrieved(
             jdbcTemplate,
             statementCallback,
-            <input.tr_name_capitalized>StatisticsProvider.getInstance())
+            <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
     /**

@@ -115,6 +115,15 @@ public class SqlElementFactory
             t_bValidate = conversionUtils.toBoolean(t_strValidate);
         }
 
+        boolean t_bDynamic = false;
+
+        String t_strDynamic = attributes.getValue("dynamic");
+
+        if  (t_strDynamic != null)
+        {
+            t_bDynamic = conversionUtils.toBoolean(t_strDynamic);
+        }
+
         if  (t_strRepositoryScope == null)
         {
             result =
@@ -124,7 +133,8 @@ public class SqlElementFactory
                     t_strName,
                     t_strType,
                     t_strImplementation,
-                    t_bValidate);
+                    t_bValidate,
+                    t_bDynamic);
         }
         else
         {
@@ -135,7 +145,8 @@ public class SqlElementFactory
                     t_strType,
                     t_strImplementation,
                     t_bValidate,
-                    t_strRepositoryScope);
+                    t_strRepositoryScope,
+                    t_bDynamic);
         }
 
         return result;

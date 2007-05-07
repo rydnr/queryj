@@ -78,6 +78,7 @@ source(input) ::= <<
   voSubpackageName=typeInitMap.voSubpackageName,
   voName=input.vo_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trName=input.tr_name_capitalized)>
 
 /*
@@ -112,13 +113,19 @@ Extracts <tableName> entities from ResultSets.
 >>
 
 project_imports(
-  basePackageName, voSubpackageName, voName, baseDAOSubpackageName, trName) ::= <<
+  basePackageName,
+  voSubpackageName,
+  voName,
+  baseDAOSubpackageName,
+  rdbSubpackageName,
+  trName) ::= <<
 <!
  Generates the project imports.
  @param basePackageName the base package name.
  @param voSubpackageName the value-object subpackage name.
  @param voName the value-object name.
  @param baseDAOSubpackageName the base DAO subpackage name.
+ @param rdbSubpackageName the rdb subpackage name.
  @param trName the table repository name.
 !>
 /*
@@ -127,6 +134,7 @@ project_imports(
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<trName>ResultSetExtractor;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
 >>
 
 class(input, table) ::= <<

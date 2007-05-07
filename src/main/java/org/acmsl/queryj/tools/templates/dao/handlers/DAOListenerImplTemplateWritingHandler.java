@@ -90,7 +90,7 @@ public class DAOListenerImplTemplateWritingHandler
         return
             (BasePerRepositoryTemplate)
                 parameters.get(
-                    TemplateMappingManager.DAO_LISTENER_TEMPLATE);
+                    TemplateMappingManager.DAO_LISTENER_IMPL_TEMPLATE);
     }
 
     /**
@@ -121,7 +121,6 @@ public class DAOListenerImplTemplateWritingHandler
             packageUtils.retrieveDAOListenerImplFolder(
                 projectFolder,
                 projectPackage,
-                engineName,
                 useSubfolders);
     }
 }

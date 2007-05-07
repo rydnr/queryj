@@ -78,8 +78,12 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 <class(input=input)>
 >>
@@ -240,7 +244,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * @param map the map to decorate.
          * @param size the upper bound.
          */
-        public BoundedMapDecorator(
+        public KeyBoundedMapDecorator(
             final Map map, final int size)
         {
             immutableSetDecoratedMap(map);
@@ -376,8 +380,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * 
          * @throws ClassCastException if the key is of an inappropriate type for
          * 		  this map (optional).
-         * @throws NullPointerException if the key is <tt>null</tt> and this map
-         *            does not permit <tt>null</tt> keys (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
          */
         public boolean containsKey(final Object key)
         {
@@ -392,8 +396,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * 
          * @throws ClassCastException if the key is of an inappropriate type for
          * 		  this map (optional).
-         * @throws NullPointerException if the key is <tt>null</tt> and this map
-         *            does not permit <tt>null</tt> keys (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
          */
         protected boolean containsKey(final Object key, final Map decoratedMap)
         {
@@ -406,8 +410,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * @return \<tt>true\</tt> in such case.
          * @throws ClassCastException if the value is of an inappropriate type for
          * 		  this map (optional).
-         * @throws NullPointerException if the value is <tt>null</tt> and this map
-         *            does not permit <tt>null</tt> values (optional).
+         * @throws NullPointerException if the value is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> values (optional).
          */
         public boolean containsValue(final Object value)
         {
@@ -420,8 +424,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * @return \<tt>true\</tt> in such case.
          * @throws ClassCastException if the value is of an inappropriate type for
          * 		  this map (optional).
-         * @throws NullPointerException if the value is <tt>null</tt> and this map
-         *            does not permit <tt>null</tt> values (optional).
+         * @throws NullPointerException if the value is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> values (optional).
          */
         protected boolean containsValue(final Object value, final Map decoratedMap)
         {
@@ -436,8 +440,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * 
          * @throws ClassCastException if the key is of an inappropriate type for
          * 		  this map (optional).
-         * @throws NullPointerException if the key is <tt>null</tt> and this map
-         *		  does not permit <tt>null</tt> keys (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *		  does not permit \<tt>null\</tt> keys (optional).
          * 
          */
         public Object get(final Object key)
@@ -453,8 +457,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * 
          * @throws ClassCastException if the key is of an inappropriate type for
          * 		  this map (optional).
-         * @throws NullPointerException if the key is <tt>null</tt> and this map
-         *		  does not permit <tt>null</tt> keys (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *		  does not permit \<tt>null\</tt> keys (optional).
          * 
          */
         protected Object get(final Object key, final Map decoratedMap)
@@ -473,7 +477,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * @param value value to be associated with the specified key.
          * @return previous value associated with specified key, or \<tt>null\</tt>
          *	       if there was no mapping for key.  A \<tt>null\</tt> return can
-         *	       also indicate that the map previously associated <tt>null</tt>
+         *	       also indicate that the map previously associated \<tt>null\</tt>
          *	       with the specified key, if the implementation supports
          *	       \<tt>null\</tt> values.
          * 
@@ -504,7 +508,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * @param keyList the key list.
          * @return previous value associated with specified key, or \<tt>null\</tt>
          *	       if there was no mapping for key.  A \<tt>null\</tt> return can
-         *	       also indicate that the map previously associated <tt>null</tt>
+         *	       also indicate that the map previously associated \<tt>null\</tt>
          *	       with the specified key, if the implementation supports
          *	       \<tt>null\</tt> values.
          * 
@@ -562,14 +566,14 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * the specified  key once the call returns.
          *
          * @param key key whose mapping is to be removed from the map.
-         * @return previous value associated with specified key, or <tt>null</tt>
+         * @return previous value associated with specified key, or \<tt>null\</tt>
          *	       if there was no mapping for key.
          *
          * @throws ClassCastException if the key is of an inappropriate type for
          * 		  this map (optional).
          * @throws NullPointerException if the key is \<tt>null\</tt> and this map
          *            does not permit \<tt>null\</tt> keys (optional).
-         * @throws UnsupportedOperationException if the <tt>remove</tt> method is
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
          *         not supported by this map.
          */
         public Object remove(final Object key)
@@ -598,7 +602,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * 		  this map (optional).
          * @throws NullPointerException if the key is \<tt>null\</tt> and this map
          *            does not permit \<tt>null\</tt> keys (optional).
-         * @throws UnsupportedOperationException if the <tt>remove</tt> method is
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
          *         not supported by this map.
          */
         protected Object remove(
@@ -790,7 +794,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
          * @param decoratedMap the decorated map.
          * @return \<tt>true\</tt> if the specified object is equal to this map.
          */
-        portected boolean areEqual(final Object o, final Map decoratedMap)
+        protected boolean areEqual(final Object o, final Map decoratedMap)
         {
             return decoratedMap.equals(o);
         }
@@ -826,7 +830,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
 
             int t_iCount = (list != null) ? list.size() : 0;
 
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            for  (int t_iIndex = 0; t_iIndex \< t_iCount; t_iIndex++)
             {
                 if  (result.contains(t_Item))
                 {

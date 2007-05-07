@@ -75,6 +75,12 @@ source(input) ::= <<
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 <class(input=input)>
 >>
 
@@ -168,7 +174,7 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
         throws  SQLException,
                 DataAccessException
     {
-        return extractData(resultSet, getDAOListener())
+        return extractData(resultSet, getDAOListener());
     }
 
 

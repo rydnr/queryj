@@ -182,6 +182,7 @@ custom_select(cs, table, input) ::= <<
  @param table the table.
  @param input the input.
 !>
+<if(!cs.dynamic)>
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
@@ -361,6 +362,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
 
     return result;
 }
+<endif>
 >>
 
 custom_select_parameter_type_specification(type) ::= <<
@@ -392,6 +394,7 @@ custom_update_or_insert(cs, input) ::= <<
   @param cs the custom sql.
   @param input the input.
 !>
+<if(!cs.dynamic)>
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
@@ -464,6 +467,7 @@ public int <cs.nameUncapitalized>(
 
     return result;
 }
+<endif>
 >>
 
 custom_select_for_update(cs, table, input) ::= <<
@@ -473,6 +477,7 @@ custom_select_for_update(cs, table, input) ::= <<
  @param table the table.
  @param input the input.
 !>
+<if(!cs.dynamic)>
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
@@ -532,6 +537,7 @@ public void <cs.nameUncapitalized>(
 <endif>
 
 }
+<endif>
 >>
 
 inner_transaction_callbacks(daoName, voName, clobHandling) ::= <<
@@ -1158,7 +1164,7 @@ implicit_custom_select_attribute_declaration(sql, attr) ::= <<
 <if(attr.nullable)>
 <sql.resultClass> result = null;
 <else>
-<attr.actualJavaType> result = null;
+<attr.javaType> result = null;
 <endif>
 
 >>
@@ -1172,7 +1178,7 @@ custom_select_template_call(sql, result, table) ::= <<
  !>
 <if(result.implicitProperty)>
 <result.implicitProperty:{attr |
-    <if(!attr.nullable)>((<attr.actualJavaType>)
+    <if(!attr.nullable)>((<attr.javaType>)
     (<actual_custom_select_template_call(sql=sql, result=result)>)).<attr.type>Value();
 <else>(<sql.resultClass>)
      <actual_custom_select_template_call(sql=sql, result=result)>;

@@ -157,8 +157,7 @@ public class DAOListenerTemplateBuildHandler
         final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveDAOListenerPackage(
-                projectPackage, engineName);
+            packageUtils.retrieveDAOListenerPackage(projectPackage);
     }
 
     /**

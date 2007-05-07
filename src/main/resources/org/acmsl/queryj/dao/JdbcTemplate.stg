@@ -78,8 +78,15 @@ source(input) ::= <<
   packageNames=
   [
     input.base_package_name,
-    typeInitMap.baseDAOSubpackageName
+    typeInitMap.baseDAOSubpackageName,
+    typeInitMap.rdbSubpackageName
   ])>
+
+<project_imports(
+  basePackageName=input.base_package_name,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
+  trName=input.tr_name_capitalized)>
 
 /*
  * Importing Spring classes.
@@ -162,6 +169,24 @@ second_line_description(tableName, engineName, engineVersion) ::= <<
 required to perform any \<i>JDBC\</i> operation.
 >>
 
+project_imports(
+  basePackageName,
+  baseDAOSubpackageName,
+  rdbSubpackageName,
+  trName) ::= <<
+<!
+ Generates the project imports.
+ @param basePackageName the base package name.
+ @param baseDAOSubpackageName the base DAO subpackage name.
+ @param rdbSubpackageName the rdb subpackage name.
+ @param trName the table repository name.
+!>
+/*
+ * Importing project classes.
+ */
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
+>>
+
 class(input) ::= <<
 <!
  Generates the class body.
@@ -224,6 +249,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
      * given a DataSource to obtain connections from.
      * Note: This will trigger eager initialization of the exception translator.
      * @param dataSource JDBC DataSource to obtain connections from
+     * @param dao
      */
     public <input.tr_name_capitalized>JdbcTemplate(
         final DataSource dataSource,

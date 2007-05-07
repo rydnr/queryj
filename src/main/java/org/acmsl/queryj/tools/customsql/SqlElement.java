@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -108,6 +109,11 @@ public class SqlElement
     private String m__strValue;
 
     /**
+     * The <i>dynamic</i> attribute.
+     */
+    private boolean m__bDynamic = false;
+    
+    /**
      * The <i>parameter-ref</i> elements.
      */
     private Collection m__cParameterRefs;
@@ -140,6 +146,7 @@ public class SqlElement
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
+     * @param dynamic whether the sql is dynamic.
      * @precondition id != null
      * @precondition dao != null
      * @precondition name != null
@@ -152,9 +159,10 @@ public class SqlElement
         final String name,
         final String type,
         final String implementation,
-        final boolean validate)
+        final boolean validate,
+        final boolean dynamic)
     {
-        this(id, dao, null, name, type, implementation, validate);
+        this(id, dao, null, name, type, implementation, validate, dynamic);
     }
 
     /**
@@ -164,6 +172,7 @@ public class SqlElement
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
+     * @param dynamic whether the sql is dynamic.
      * @param repositoryScope the <i>repositoryScope</i> attribute.
      * @precondition id != null
      * @precondition name != null
@@ -177,10 +186,18 @@ public class SqlElement
         final String type,
         final String implementation,
         final boolean validate,
-        final String repositoryScope)
+        final String repositoryScope,
+        final boolean dynamic)
     {
         this(
-            id, null, repositoryScope, name, type, implementation, validate);
+            id,
+            null,
+            repositoryScope,
+            name,
+            type,
+            implementation,
+            validate,
+            dynamic);
     }
 
     /**
@@ -192,6 +209,7 @@ public class SqlElement
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
+     * @param dynamic whether the sql is dynamic.
      * @precondition id != null
      * @precondition (dao != null) || (repositoryScope != null)
      * @precondition name != null
@@ -205,7 +223,8 @@ public class SqlElement
         final String name,
         final String type,
         final String implementation,
-        final boolean validate)
+        final boolean validate,
+        final boolean dynamic)
     {
         super(id);
         immutableSetDAO(dao);
@@ -214,6 +233,7 @@ public class SqlElement
         immutableSetType(type);
         immutableSetImplementation(implementation);
         immutableSetValidate(validate);
+        immutableSetDynamic(dynamic);
     }
 
     /**
@@ -404,6 +424,51 @@ public class SqlElement
     public boolean isValidate()
     {
         return getValidate();
+    }
+
+    /**
+     * Specifies the <i>dynamic</i> attribute.
+     * @param dynamic such flag.
+     */
+    protected final void immutableSetDynamic(final boolean dynamic)
+    {
+        m__bDynamic = dynamic;
+    }
+
+    /**
+     * Specifies the <i>dynamic</i> attribute.
+     * @param dynamic such flag.
+     */
+    protected void setDynamic(final boolean dynamic)
+    {
+        immutableSetDynamic(dynamic);
+    }
+
+    /**
+     * Specifies the <i>dynamic</i> attribute.
+     * @param dynamic such flag.
+     */
+    protected void isDynamic(final boolean dynamic)
+    {
+        immutableSetDynamic(dynamic);
+    }
+
+    /**
+     * Retrieves the <i>dynamic</i> attribute.
+     * @return such information.
+     */
+    public boolean getDynamic()
+    {
+        return m__bDynamic;
+    }
+
+    /**
+     * Retrieves the <i>dynamic</i> attribute.
+     * @return such information.
+     */
+    public boolean isDynamic()
+    {
+        return getDynamic();
     }
 
     /**

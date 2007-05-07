@@ -144,4 +144,5 @@ public class <input.tr_name_capitalized>JndiUtils
     {
         return DataSourceUtils.getDataSourceFromJndi(location);
     }
+}
 >>
