@@ -133,8 +133,8 @@ project_imports(
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObjectFactory;
-import <basePackageName>.<baseDAOSubpackageName>.<trName>ResultSetExtractor;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
 >>
 
 class(input, table) ::= <<
@@ -204,6 +204,31 @@ defaultExtractorImpl(input, table, parent) ::= <<
 public Object extractData(
     final ResultSet resultSet,
     final <input.tr_name_capitalized>DAOListener daoListener)
+  throws  SQLException,
+          DataAccessException
+{
+    return
+        extractData(
+            resultSet,
+            daoListener,
+            <input.vo_name>ValueObjectFactory.getInstance());
+}
+
+/**
+ * Extracts \<i><input.vo_name>\</i> information from given result set.
+ * @param resultSet the result set.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @return the \<code><input.vo_name>\</code> or
+ * \<code>null\</code> if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ <precondition_notnull("resultSet")>
+ */
+protected Object extractData(
+    final ResultSet resultSet,
+    final <input.tr_name_capitalized>DAOListener daoListener,
+    final <input.vo_name>ValueObjectFactory factory)
   throws  SQLException,
           DataAccessException
 {
