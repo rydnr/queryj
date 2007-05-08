@@ -1364,6 +1364,22 @@ public abstract class Query
     }
 
     /**
+     * See java.sql.PreparedStatement#setBlob(int,Blob).
+     * @see java.sql.PreparedStatement#setBlob(int,java.sql.Blob)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setBlob(
+        final int index, final java.io.InputStream value, final long length)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setBlob(index, value, length);
+    }
+
+    /**
      * See java.sql.PreparedStatement#setBytes(int,byte[]).
      * @see java.sql.PreparedStatement#setBytes(int,byte[])
      * @param index (Taken from Sun's Javadoc) the first parameter
@@ -3325,8 +3341,8 @@ public abstract class Query
 
     // New in JDBC 4.0
     /**
-     * See java.sql.PreparedStatement#setClob(int,Clob).
-     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * See java.sql.PreparedStatement#setClob(int,io.Reader).
+     * @see java.sql.PreparedStatement#setClob(int,java.io.Reader)
      * @param index (Taken from Sun's Javadoc) the first parameter
      * is 1, the second is 2, ...
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
@@ -3336,6 +3352,21 @@ public abstract class Query
         throws  SQLException
     {
         retrievePreparedStatement().setClob(index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setClob(int,java.io.Reader, long).
+     * @see java.sql.PreparedStatement#setClob(int,java.io.Reader,long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setClob(final int index, final Reader value, final long length)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setClob(index, value, length);
     }
 
     /**
@@ -3353,8 +3384,38 @@ public abstract class Query
     }
 
     /**
-     * See java.sql.PreparedStatement#setClob(int,Clob).
-     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * See java.sql.PreparedStatement#setNClob(int,java.io.Reader).
+     * @see java.sql.PreparedStatement#setNClob(int,java.io.Reader)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setNClob(final int index, final Reader value, final long length)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setNClob(index, value, length);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setNClob(int,NClob).
+     * @see java.sql.PreparedStatement#setNClob(int,NClob)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setNClob(final int index, final NClob value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setNClob(
+            index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setNClob(int,String).
+     * @see java.sql.PreparedStatement#setNClob(int,String)
      * @param index (Taken from Sun's Javadoc) the first parameter
      * is 1, the second is 2, ...
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
@@ -3512,4 +3573,66 @@ public abstract class Query
             index, value);
     }
 
+    /**
+     * See java.sql.PreparedStatement#updateBlob(String,java.io.InputStream).
+     * @see java.sql.PreparedStatement#updateBlob(String,java.io.InputStream)
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void updateBlob(
+        final int index, final java.io.InputStream value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().updateBlob(
+            index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#updateBlob(String,java.io.InputStream).
+     * @see java.sql.PreparedStatement#updateBlob(String,java.io.InputStream)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void updateBlob(
+        final int index, final java.io.InputStream value, final long length)
+      throws  SQLException
+    {
+        retrievePreparedStatement().updateBlob(
+            index, value, length);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setNCharacterStream(int,java.io.Reader,long).
+     * @see java.sql.PreparedStatement#setNCharacterStream(int,java.io.Reader,long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setNCharacterStream(
+        final int index, final java.io.Reader value, final long length)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setNCharacterStream(
+            index, value, length);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setNString(int,String).
+     * @see java.sql.PreparedStatement#setNString(int,String)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setNString(final int index, final String value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setNString(index, value);
+    }
 }
