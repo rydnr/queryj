@@ -269,15 +269,15 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Receives notifications whenever a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
+     * @param statementCallback the statement callback.
      */
     public void connectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback)
+        final StatementCallback statementCallback)
     {
         annotateConnectionReleased(
             jdbcTemplate,
-            preparedStatementCallback,
+            statementCallback,
             <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
@@ -290,7 +290,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      */
     protected void annotateConnectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final tatementCallback statementCallback,
+        final StatementCallback statementCallback,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateConnectionReleased(

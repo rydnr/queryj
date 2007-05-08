@@ -171,6 +171,18 @@ public class <input.tr_name_capitalized>StatisticsProvider
     }
 
     /**
+     * Annotates a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param statementCallback the statement callback.
+     */
+    public void annotateConnectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final StatementCallback statementCallback)
+    {
+        // TODO
+    }
+
+    /**
      * Annotates a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
      * @param connectionCallback the connection callback.

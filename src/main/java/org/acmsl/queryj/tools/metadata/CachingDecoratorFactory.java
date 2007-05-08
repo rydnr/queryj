@@ -211,7 +211,8 @@ public class CachingDecoratorFactory
                 t_lAttributes,
                 t_ParentTable,
                 metadataManager.isTableDecorated(table),
-                metadataManager);
+                metadataManager,
+                this);
 
         return result;
     }

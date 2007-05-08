@@ -164,13 +164,16 @@ public class CachingTableDecorator
      * <code>Table</code> to decorate.
      * @param table the table.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the decorator factory.
      * @precondition table != null
      * @precondition metadataManager != null
      */
     public CachingTableDecorator(
-        final Table table, final MetadataManager metadataManager)
+        final Table table,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
-        super(table, metadataManager);
+        super(table, metadataManager, decoratorFactory);
     }
 
     /**
@@ -182,6 +185,7 @@ public class CachingTableDecorator
      * @param voDecorated whether the value-object for the table is
      * decorated.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the decorator factory.
      * @precondition name != null
      * @precondition metadataManager != null
      */
@@ -190,14 +194,16 @@ public class CachingTableDecorator
         final List attributes,
         final Table parentTable,
         final boolean voDecorated,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(
             name,
             attributes,
             parentTable,
             voDecorated,
-            metadataManager);
+            metadataManager,
+            decoratorFactory);
     }
 
     /**
@@ -247,24 +253,6 @@ public class CachingTableDecorator
         final DecoratorFactory decoratorFactory)
     {
         super(table, voDecorated, metadataManager, decoratorFactory);
-    }
-
-    /**
-     * Creates an <code>CachingTableDecorator</code> with the
-     * <code>Table</code> to decorate.
-     * @param table the table.
-     * @param metadataManager the metadata manager.
-     * @param decoratorFactory the decorator factory.
-     * @precondition table != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     */
-    public CachingTableDecorator(
-        final Table table,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
-    {
-        super(table, metadataManager, decoratorFactory);
     }
 
     /**

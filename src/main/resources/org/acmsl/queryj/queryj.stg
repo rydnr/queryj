@@ -1202,6 +1202,6 @@ transactionTemplate.execute(
         // calls setXXX twice
         // preparedStatementCreatorFactory
         //     .newPreparedStatementSetter(t_aParams),
-        new <sql.resultIdCapitalized>ResultSetExtractor(getDAOListener()),
+        new <sql.resultIdCapitalized>Extractor(getDAOListener()),
         this))
 >>

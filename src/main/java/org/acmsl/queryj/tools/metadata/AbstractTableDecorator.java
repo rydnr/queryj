@@ -95,25 +95,6 @@ public abstract class AbstractTableDecorator
      * <code>Table</code> to decorate.
      * @param table the table.
      * @param metadataManager the metadata manager.
-     * @precondition table != null
-     * @precondition metadataManager != null
-     */
-    public AbstractTableDecorator(
-        final Table table, final MetadataManager metadataManager)
-    {
-        this(
-            table.getName(),
-            table.getAttributes(),
-            table.getParentTable(),
-            table.isVoDecorated(),
-            metadataManager);
-    }
-
-    /**
-     * Creates an <code>AbstractTableDecorator</code> with the
-     * <code>Table</code> to decorate.
-     * @param table the table.
-     * @param metadataManager the metadata manager.
      * @param decoratorFactory the decorator factory.
      * @precondition table != null
      * @precondition metadataManager != null
@@ -124,8 +105,13 @@ public abstract class AbstractTableDecorator
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, metadataManager);
-        immutableSetDecoratorFactory(decoratorFactory);
+        this(
+            table.getName(),
+            table.getAttributes(),
+            table.getParentTable(),
+            table.isVoDecorated(),
+            metadataManager, 
+            decoratorFactory);
     }
 
     /**
@@ -135,19 +121,23 @@ public abstract class AbstractTableDecorator
      * @param attributes the attributes.
      * @param parentTable the parent table.
      * @param metadataManager the metadata manager.
+     * @param decoratorFactory the decorator factory.
      * @precondition name != null
      * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     public AbstractTableDecorator(
         final String name,
         final List attributes,
         final Table parentTable,
         final boolean voDecorated,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         super(name, attributes, parentTable, voDecorated);
 
         immutableSetMetadataManager(metadataManager);
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
@@ -169,9 +159,9 @@ public abstract class AbstractTableDecorator
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, attributes, null, voDecorated, metadataManager);
+        this(
+            table, attributes, null, voDecorated, metadataManager, decoratorFactory);
         immutableSetChildAttributes(childAttributes);
-        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
@@ -192,8 +182,7 @@ public abstract class AbstractTableDecorator
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, null, null, voDecorated, metadataManager);
-        immutableSetDecoratorFactory(decoratorFactory);
+        this(table, null, null, voDecorated, metadataManager, decoratorFactory);
     }
     
     /**
@@ -216,9 +205,8 @@ public abstract class AbstractTableDecorator
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, null, null, voDecorated, metadataManager);
+        this(table, null, null, voDecorated, metadataManager, decoratorFactory);
         immutableSetChildAttributes(childAttributes);
-        immutableSetDecoratorFactory(decoratorFactory);
     }
     
     /**
