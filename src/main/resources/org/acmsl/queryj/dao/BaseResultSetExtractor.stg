@@ -119,8 +119,8 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
 {
     /**
      * The DAOListener instance.
-     *
-    private <input.tr_name_capitalized>DAOListener m__DAOListener;
+     */
+    private <input.tr_name_capitalized>DAOListener m__<input.tr_name_capitalized>DAOListener;
 
     /**
      * Constructs a new \<code><input.tr_name_capitalized>ResultSetExtractor\</code>.

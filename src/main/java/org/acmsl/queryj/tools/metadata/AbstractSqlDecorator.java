@@ -618,4 +618,50 @@ public abstract class AbstractSqlDecorator
 
         return result;
     }
+
+    /**
+     * Retrieves the result id capitalized.
+     * @return such information.
+     */
+    public String getResultIdCapitalized()
+    {
+        return
+            getResultIdCapitalized(
+                getResult(), DecorationUtils.getInstance());
+    }
+    
+    /**
+     * Retrieves the result id capitalized.
+     * @param sqlResult the custom result.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such information.
+     * @param decorationUtils != null
+     */
+    protected String getResultIdCapitalized(
+        final Result sqlResult, final DecorationUtils decorationUtils)
+    {
+        String result = null;
+
+        if  (sqlResult != null)
+        {
+            result =
+                capitalize(sqlResult.getId(), decorationUtils);
+        }
+        else
+        {
+            try
+            {
+                // todo throw something.
+                LogFactory.getLog("custom-sql").warn(
+                    "Referenced result not found:"
+                    + getResultRef());
+            }
+            catch  (final Throwable throwable)
+            {
+                // class-loading problem.
+            }
+        }
+
+        return result;
+    }
 }

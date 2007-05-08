@@ -77,8 +77,9 @@ source(input) ::= <<
  * Importing some Spring classes.
  */
 import org.springframework.jdbc.core.ConnectionCallback;
-import org.springframework.jdbc.core.StatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.StatementCallback;
 
 <class(input=input)>
 >>
@@ -125,6 +126,15 @@ public interface <input.tr_name_capitalized>DAOListener
         final ConnectionCallback connectionCallback);
 
     /**
+     * Receives notifications whenever a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCallback the prepared-statement callback.
+     */
+    public void connectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCallback preparedStatementCallback);
+
+    /**
      * Receives notifications whenever a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
      * @param connectionCallback the connection callback.
@@ -132,6 +142,15 @@ public interface <input.tr_name_capitalized>DAOListener
     public void connectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
         final ConnectionCallback connectionCallback);
+
+    /**
+     * Receives notifications whenever a connection is released.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCallback the prepared-statement callback.
+     */
+    public void connectionReleased(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCallback preparedStatementCallback);
 
     /**
      * Receives notifications whenever a connection is retrieved.

@@ -227,7 +227,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
     /**
      * The DAOListener instance.
-     *
+     */
     private <input.tr_name_capitalized>DAOListener m__<input.tr_name_capitalized>DAOListener;
 
     /**

@@ -112,6 +112,11 @@ public class <input.tr_name_capitalized>ThreadLocalBag
     public static final String URL = "url";
 
     /**
+     * The key to access the principal (logged-in user).
+     */
+    public static final String PRINCIPAL = "principal";
+
+    /**
      * The Map associated to this thread.
      */
     private static final ThreadLocal THREAD_BAG =

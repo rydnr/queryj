@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -106,6 +107,11 @@ public class CachingSqlDecorator
      * The cached result id as constant.
      */
     private String m__strCachedResultIdAsConstant;
+
+    /**
+     * The cached result id capitalized.
+     */
+    private String m__strCachedResultIdCapitalized;
 
     /**
      * Creates a <code>CachingSqlDecorator</code> with given information.
@@ -491,6 +497,51 @@ public class CachingSqlDecorator
         {
             result = super.getResultIdAsConstant();
             setCachedResultIdAsConstant(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached result id capitalized.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedResultIdCapitalized(
+        final String value)
+    {
+        m__strCachedResultIdCapitalized = value;
+    }
+
+    /**
+     * Specifies the cached result id capitalized.
+     * @param value the value to cache.
+     */
+    protected void setCachedResultIdCapitalized(final String value)
+    {
+        immutableSetCachedResultIdCapitalized(value);
+    }
+
+    /**
+     * Retrieves the cached result id capitalized.
+     * @return such value.
+     */
+    public String getCachedResultIdCapitalized()
+    {
+        return m__strCachedResultIdCapitalized;
+    }
+
+    /**
+     * Retrieves the result id capitalized.
+     * @return such information.
+     */
+    public String getResultIdCapitalized()
+    {
+        String result = getCachedResultIdCapitalized();
+
+        if  (result == null)
+        {
+            result = super.getResultIdCapitalized();
+            setCachedResultIdCapitalized(result);
         }
 
         return result;

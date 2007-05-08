@@ -433,11 +433,6 @@ public class <input.engine_name><input.vo_name>DAO
 <endif>
 }; separator="\n\n">
                
-    <input.custom_results:resultset_extractor_constants(
-      crseid=it.id,
-      crseidCapitalized=it.idCapitalized,
-      crseidNormalizedUppercased=it.idNormalizedUppercased); separator="\n\n">
-
     /**
      * Builds a \<code><input.class_name>\</code> instance
      * with given data source.
@@ -563,7 +558,8 @@ public <input.vo_name> findByPrimaryKey(
                 findByPrimaryKey(
                     <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                     query,
-                    new TransactionTemplate(transactionManager));
+                    new TransactionTemplate(transactionManager),
+                    getDAOListener());
         }
 
         return result;
@@ -576,6 +572,7 @@ public <input.vo_name> findByPrimaryKey(
      * @param query the query to find by primary key.
      * @param transactionTemplate the \<code>TransactionTemplate\</code>
      * instance.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
 <if(table.voDecorated)>
      * @return the \<code><input.vo_class_name>Decorator\</code> matching given
 <else>
@@ -595,7 +592,8 @@ public <input.vo_name> findByPrimaryKey(
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
-        final TransactionTemplate transactionTemplate)
+        final TransactionTemplate transactionTemplate,
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
         return
 <if(table.voDecorated)>
@@ -606,10 +604,11 @@ public <input.vo_name> findByPrimaryKey(
 
                 transactionTemplate.execute(
                     new QueryTransactionCallback(
-                        new QueryPreparedStatementCreator(query),
+                        new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                            query, daoListener),
                         new <input.vo_name>PkStatementSetter(
                             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-                        new <input.vo_name>Extractor(getDAOListener()),
+                        new <input.vo_name>ResultSetExtractor(daoListener),
                         this));
     }
 
@@ -727,7 +726,8 @@ public <input.vo_name> findByPrimaryKey(
 <endif>
 
                     query,
-                    new TransactionTemplate(transactionManager));
+                    new TransactionTemplate(transactionManager),
+                    getDAOListener());
         }
 
         return result;
@@ -744,6 +744,7 @@ public <input.vo_name> findByPrimaryKey(
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
@@ -757,14 +758,16 @@ public <input.vo_name> findByPrimaryKey(
 <endif>
 
         final String query,
-        final TransactionTemplate transactionTemplate)
+        final TransactionTemplate transactionTemplate,
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
         int result = -10;
 
         Object t_Result =
             transactionTemplate.execute(
                 new UpdateTransactionCallback(
-                    new QueryPreparedStatementCreator(query),
+                    new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                        query, daoListener),
                     new <input.vo_name>AttributesStatementSetter(
 <if(parent)>
                         <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
@@ -841,7 +844,8 @@ public <input.vo_name> findByPrimaryKey(
             deleteNoFk(
                 <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
-                new TransactionTemplate(transactionManager));
+                new TransactionTemplate(transactionManager),
+                getDAOListener());
         }
     }
 
@@ -851,17 +855,20 @@ public <input.vo_name> findByPrimaryKey(
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      <precondition_notnull("query")>
      <precondition_notnull("transactionTemplate")>
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
-        final TransactionTemplate transactionTemplate)
+        final TransactionTemplate transactionTemplate,
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
         transactionTemplate.execute(
             new UpdateTransactionCallback(
-                new QueryPreparedStatementCreator(query),
+                new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                    query, daoListener),
                 new <input.vo_name>PkStatementSetter(
                     <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
                 this));
@@ -900,6 +907,16 @@ public <input.vo_name> findByPrimaryKey(
     public static class <input.vo_name>PkResultSetExtractor
         extends  <input.tr_name_capitalized>ResultSetExtractor
     {
+        /**
+         * Constructs a new \<code><input.vo_name>ResultSetExtractor\</code>.
+         * @param daoListener the dao listener.
+         */
+        public <input.vo_name>PkResultSetExtractor(
+            final <input.tr_name_capitalized>DAOListener daoListener)
+        {
+            super(daoListener);
+        }
+
         // \<extract data>
         /**
          * Extracts \<i><input.vo_name>\</i> information from given result set.
@@ -912,7 +929,7 @@ public <input.vo_name> findByPrimaryKey(
          * custom exception.
          <precondition_notnull("resultSet")>
          */
-        public Object extractData(
+        protected Object extractData(
             final ResultSet resultSet,
             final <input.tr_name_capitalized>DAOListener daoListener)
         throws  SQLException,
@@ -1165,7 +1182,7 @@ t_mMap =
         transactionTemplate.execute(
             new QueryTransactionCallback(
                 "<query>",
-                new <input.vo_name>PkExtractor(getDAOListener()),
+                new <input.vo_name>PkResultSetExtractor(getDAOListener()),
                 this));
 
 <nativeType> <nameLowercased> =
@@ -1356,19 +1373,22 @@ protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
  * @param query the delete query.
  * @param transactionTemplate the \<code>TransactionTemplate\<code>
  * instance.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  <precondition_notnull("query")>
  <precondition_notnull("transactionTemplate")>
  */
 protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">,
     final Query query,
-    final TransactionTemplate transactionTemplate)
+    final TransactionTemplate transactionTemplate,
+        final <input.tr_name_capitalized>DAOListener daoListener)
 {
     throw new IllegalArgumentException("Not implemented yet");
     /*
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new QueryPreparedStatementCreator(query),
+            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                query, daoListener),
             new <input.vo_name>By<foreignKey:{attr |<attr.nameCapitalized>}>StatementSetter(
                 <foreignKey:{attr |<attr.nameLowercased>}; separator=",\n">),
             this));
@@ -1497,7 +1517,8 @@ protected void insert(
 <endif>
 
             query,
-            new TransactionTemplate(transactionManager));
+            new TransactionTemplate(transactionManager),
+            getDAOListener());
     }
 }
 
@@ -1513,6 +1534,7 @@ protected void insert(
  * @param query the query to insert the values.
  * @param transactionTemplate the \<code>TransactionTemplate\</code>
  * instance.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
  <precondition_notnull("transactionTemplate")>
@@ -1526,7 +1548,8 @@ protected void insert(
 <endif>
 
     final String query,
-    final TransactionTemplate transactionTemplate)
+    final TransactionTemplate transactionTemplate,
+    final <input.tr_name_capitalized>DAOListener daoListener)
 {
     Map t_mMap = null;
 
@@ -1538,7 +1561,8 @@ protected void insert(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new QueryPreparedStatementCreator(query),
+            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                query, daoListener),
             new <input.vo_name>AttributesStatementSetter(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
@@ -1684,7 +1708,8 @@ protected <input.vo_name> create(
 
             query,
             new TransactionTemplate(transactionManager),
-            factory);
+            factory,
+            getDAOListener());
 }
 
 /**
@@ -1702,6 +1727,7 @@ protected <input.vo_name> create(
  * instance.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("transactionTemplate")>
  <precondition_notnull("factory")>
@@ -1720,7 +1746,8 @@ protected <input.vo_name> create(
 
     final String query,
     final TransactionTemplate transactionTemplate,
-    final <input.vo_name>ValueObjectFactory factory)
+    final <input.vo_name>ValueObjectFactory factory,
+    final <input.tr_name_capitalized>DAOListener daoListener)
 {
 <if(table.voDecorated)>
     <input.vo_name>Decorator result = null;
@@ -1739,7 +1766,8 @@ protected <input.vo_name> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new QueryPreparedStatementCreator(query),
+            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                query, daoListener),
             new <input.vo_name>AttributesStatementSetter(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
@@ -1924,7 +1952,8 @@ protected <input.vo_name> create(
                 <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
-                new TransactionTemplate(transactionManager));
+                new TransactionTemplate(transactionManager),
+                getDAOListener());
     }
 
     return result;
@@ -1940,6 +1969,7 @@ protected <input.vo_name> create(
 <endif>
 
  * @param transactionTemplate the transaction template.
+ * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
@@ -1956,7 +1986,8 @@ protected <input.vo_name> create(
       attr=it); separator=",\n">,
 <endif>
 
-    final TransactionTemplate transactionTemplate)
+    final TransactionTemplate transactionTemplate,
+    final <input.tr_name_capitalized>DAOListener daoListener)
 {
     <input.vo_name> result = null;
 
@@ -1970,7 +2001,7 @@ protected <input.vo_name> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new QueryPreparedStatementCreator(
+            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
                 "insert into <input.table_name_uppercased>" +
                 " (" +
 <if(parent)>
@@ -1984,12 +2015,12 @@ protected <input.vo_name> create(
                 ") VALUES (" +
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:insert_attribute(attr=it);
-                  separator=", \" +\n">"),
+                  separator=", \" +\n">",
 <else>
                 <input.non_readonly_attributes:insert_attribute(attr=it);
-                  separator=",\" +\n">)"),
+                  separator=",\" +\n">)",
 <endif>
-
+                daoListener),
             new <input.vo_name>AttributesStatementSetter(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>};
@@ -2005,7 +2036,7 @@ protected <input.vo_name> create(
 
     SelectForUpdateTransactionCallback t_Callback =
         new SelectForUpdateTransactionCallback(
-            new QueryPreparedStatementCreator(
+            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
                 "SELECT " +
 <if(parent)>
                 <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
@@ -2019,7 +2050,8 @@ protected <input.vo_name> create(
                 " WHERE " +
                 <input.pk_attributes:{"<it.nameUppercased> = ?};
                   separator=" AND \" +\n">" +
-                " FOR UPDATE"),
+                " FOR UPDATE",
+                daoListener),
             new <input.vo_name>PkStatementSetter(
                 <input.pk_attributes:{<it.nameLowercased>};
                   separator=",\n">),

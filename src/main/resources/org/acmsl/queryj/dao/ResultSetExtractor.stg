@@ -191,6 +191,16 @@ defaultExtractorImpl(input, table, parent) ::= <<
  @param parent the parent.
 !>
 /**
+ * Constructs a new \<code><input.vo_name>ResultSetExtractor\</code>.
+ * @param daoListener the dao listener.
+ */
+public <input.vo_name>ResultSetExtractor(
+    final <input.tr_name_capitalized>DAOListener daoListener)
+{
+    super(daoListener);
+}
+
+/**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
      * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
@@ -201,7 +211,7 @@ defaultExtractorImpl(input, table, parent) ::= <<
  * custom exception.
  <precondition_notnull("resultSet")>
  */
-public Object extractData(
+protected Object extractData(
     final ResultSet resultSet,
     final <input.tr_name_capitalized>DAOListener daoListener)
   throws  SQLException,
@@ -342,7 +352,7 @@ protected <input.vo_name>ResultSetExtractor(
  * such as \<b>insert\</b>s), or not.
  * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  */
-public <input.vo_name>ResultSetExtractor(
+protected <input.vo_name>ResultSetExtractor(
     <input.lob_attributes:attribute_method_declaration(attr=it);
       separator=",\n">,
     final boolean selectForUpdateMode,

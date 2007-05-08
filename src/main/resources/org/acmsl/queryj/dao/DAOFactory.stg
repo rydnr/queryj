@@ -298,13 +298,13 @@ public class <input.class_name>
 
         if  (result == null)
         {
-            result = new ThreadAwareDataSourceWrapper();
+            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
         }
         else
         {
             try
             {
-                result = new ThreadAwareDataSourceWrapper(result);
+                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
             }
             catch  (final CannotGetJdbcConnectionException exception)
             {

@@ -77,6 +77,7 @@ source(input) ::= <<
  * Importing Spring classes.
  */
 import org.springframework.jdbc.core.ConnectionCallback;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.StatementCallback;
 
@@ -124,8 +125,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     }
 
     /**
-     * Receives notifications whenever a operation on the persistence
-     * layer takes place.
+     * Annotates whenever a prepared statement is executed.
      * @param sql the sql sentence.
      * @param parameters the sql parameters.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
@@ -133,7 +133,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * @precondition sql != null
      * @precondition daoStatisticsProvider != null
      */
-    protected void preparedStatementExecuted(
+    protected void annotatePreparedStatementExecuted(
         final String sql,
         final Object[] parameters,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
@@ -174,35 +174,65 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     }
 
     /**
+     * Receives notifications whenever a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCallback the prepared-statement callback.
+     */
+    public void connectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCallback preparedStatementCallback)
+    {
+        annotateConnectionRetrieved(
+            jdbcTemplate,
+            preparedStatementCallback, 
+            <input.tr_name_capitalized>StatisticsProvider.getInstance());
+    }
+
+    /**
+     * Annotates when a connection is retrieved.
+     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param preparedStatementCallback the prepared-statement callback.
+     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * instance.
+     */
+    protected void annotateConnectionRetrieved(
+        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final PreparedStatementCallback preparedStatementCallback,
+        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+    {
+        statisticsProvider.annotateConnectionRetrieved(
+            jdbcTemplate, preparedStatementCallback);
+    }
+
+    /**
      * Receives notifications whenever a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param preparedStatementCallback the prepared-statement callback.
      */
     public void connectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback)
+        final PreparedStatementCallback preparedStatementCallback)
     {
         annotateConnectionReleased(
             jdbcTemplate,
-            connectionCallback,
+            preparedStatementCallback,
             <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
     /**
      * Annotates a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param preparedStatementCallback the prepared-statement callback.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
-    public void connectionReleased(
+    public void annotateConnectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback,
+        final PreparedStatementCallback preparedStatementCallback,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateConnectionReleased(
-            jdbcTemplate,
-            connectionCallback);
+            jdbcTemplate, preparedStatementCallback);
     }
 
     /**
@@ -239,15 +269,15 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Receives notifications whenever a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
+     * @param preparedStatementCallback the prepared-statement callback.
      */
     public void connectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback)
+        final PreparedStatementCallback preparedStatementCallback)
     {
         annotateConnectionReleased(
             jdbcTemplate,
-            statementCallback,
+            preparedStatementCallback,
             <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
@@ -255,10 +285,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Annotates a connection is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
      * @param statementCallback the statement callback.
+     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * instance.
      */
     protected void annotateConnectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback,
+        final tatementCallback statementCallback,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateConnectionReleased(
@@ -363,12 +395,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     }
 
     /**
-     * Receives notifications whenever a result-set moves forward one row.
+     * Annotates whenever a result-set moves forward one row.
      * @param resultSetExtractor the ResultSet extractor.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
-    protected void resultSetMovedForward(
+    protected void annotateResultSetMovedForward(
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
@@ -394,7 +426,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
-    public void resultSetClosed(
+    public void annotateResultSetClosed(
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
