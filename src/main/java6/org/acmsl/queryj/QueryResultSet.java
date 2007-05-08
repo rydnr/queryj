@@ -5990,7 +5990,7 @@ public class QueryResultSet
     }
 
     /**
-     * Updates a Clob column using the field cloberence.
+     * Updates a Clob column using the field reference.
      * @param field the field.
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
@@ -6034,6 +6034,75 @@ public class QueryResultSet
             {
                 t_ResultSet.updateArray(t_iFieldIndex, value);
             }
+        }
+    }
+
+    // New in JDBC4.0
+    /**
+     * Updates a Clob column using the field reference.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNClob(final int index, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNClob(index, value);
+        }
+    }
+
+    /**
+     * Updates a Clob column using the field reference.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNClob(final String name, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNClob(name, value);
+        }
+    }
+
+    /**
+     * Updates a Clob column using the field reference.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateClob(final int index, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateClob(index, value);
+        }
+    }
+
+    /**
+     * Updates a Clob column using the field reference.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateClob(final String name, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateClob(name, value);
         }
     }
 }
