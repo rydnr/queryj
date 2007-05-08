@@ -139,7 +139,7 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
     protected final void immutableSetDAOListener(
         final <input.tr_name_capitalized>DAOListener daoListener)
     {
-        m__DAOListener = daoListener;
+        m__<input.tr_name_capitalized>DAOListener = daoListener;
     }
 
     /**
@@ -158,7 +158,7 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
      */
     protected <input.tr_name_capitalized>DAOListener getDAOListener()
     {
-        return m__DAOListener;
+        return m__<input.tr_name_capitalized>DAOListener;
     }
 
     /**

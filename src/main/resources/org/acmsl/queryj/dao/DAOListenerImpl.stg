@@ -258,7 +258,8 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      */
     protected void annotateConnectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback)
+        final StatementCallback statementCallback,
+        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateConnectionReleased(
             jdbcTemplate, statementCallback);
@@ -288,10 +289,34 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      */
     protected void annotateStatementCreated(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCreator preparedStatementCreator)
+        final PreparedStatementCreator preparedStatementCreator,
+        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementCreated(
             jdbcTemplate, preparedStatementCreator);
+    }
+
+    /**
+     * Receives notifications whenever a statement is prepared.
+     * @param sql the sql.
+     */
+    public void statementPrepared(final String sql)
+    {
+        annotateStatementPrepared(
+            sql, <input.tr_name_capitalized>StatisticsProvider.getInstance());
+    }
+
+    /**
+     * Annotates a statement is prepared.
+     * @param sql the sql.
+     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * instance.
+     */
+    protected void annotateStatementPrepared(
+        final String sql,
+        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+    {
+        statisticsProvider.annotateStatementPrepared(sql);
     }
 
     /**
@@ -313,10 +338,13 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Annotates a statement is released.
      * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
      * @param preparedStatementCreator the statement creator.
+     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * instance.
      */
     protected void annotateStatementReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCreator preparedStatementCreator)
+        final PreparedStatementCreator preparedStatementCreator,
+        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementReleased(
             jdbcTemplate, preparedStatementCreator);

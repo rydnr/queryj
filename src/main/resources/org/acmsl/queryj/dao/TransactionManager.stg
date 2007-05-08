@@ -216,13 +216,13 @@ public class <input.tr_name_capitalized>TransactionManager
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(t_DataSource instanceof ThreadAwareDataSourceWrapper))
+        if  (!(t_DataSource instanceof <input.tr_name_capitalized>ThreadAwareDataSourceWrapper))
         {
             t_DataSource =
-                new ThreadAwareDataSourceWrapper(t_DataSource);
+                new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(t_DataSource);
         }
 
-        PlatformTransactionManager t_TransactionManager =
+        PlatformTransactionManager t_<input.tr_name_capitalized>TransactionManager =
             createTransactionManager(t_DataSource, true);
 
         if  (t_<input.tr_name_capitalized>TransactionManager != null)
@@ -232,8 +232,8 @@ public class <input.tr_name_capitalized>TransactionManager
                 t_<input.tr_name_capitalized>TransactionManager.getTransaction(
                     transactionDefinition);
 
-            if  (   (t_TransactionStatus != null)
-                 && (t_TransactionStatus instanceof DefaultTransactionStatus))
+            if  (   (result != null)
+                 && (result instanceof DefaultTransactionStatus))
             {
                 result =
                     new <input.tr_name_capitalized>DataSourceTransactionToken(

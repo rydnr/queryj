@@ -266,7 +266,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
     protected final void immutableSetDAOListener(
         final <input.tr_name_capitalized>DAOListener daoListener)
     {
-        m__DAOListener = daoListener;
+        m__<input.tr_name_capitalized>DAOListener = daoListener;
     }
 
     /**
@@ -285,7 +285,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
      */
     protected <input.tr_name_capitalized>DAOListener getDAOListener()
     {
-        return m__DAOListener;
+        return m__<input.tr_name_capitalized>DAOListener;
     }
 
     /**
@@ -351,9 +351,9 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(dataSource instanceof ThreadAwareDataSourceWrapper))
+        if  (!(dataSource instanceof <input.tr_name_capitalized>ThreadAwareDataSourceWrapper))
         {
-            t_DataSource = new ThreadAwareDataSourceWrapper(dataSource);
+            t_DataSource = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(dataSource);
         }
 
         try
@@ -485,9 +485,9 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(dataSource instanceof ThreadAwareDataSourceWrapper))
+        if  (!(dataSource instanceof <input.tr_name_capitalized>ThreadAwareDataSourceWrapper))
         {
-            t_DataSource = new ThreadAwareDataSourceWrapper(dataSource);
+            t_DataSource = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(dataSource);
         }
 
         try
@@ -644,9 +644,9 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(dataSource instanceof ThreadAwareDataSourceWrapper))
+        if  (!(dataSource instanceof <input.tr_name_capitalized>ThreadAwareDataSourceWrapper))
         {
-            t_DataSource = new ThreadAwareDataSourceWrapper(dataSource);
+            t_DataSource = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(dataSource);
         }
 
         try
@@ -869,15 +869,15 @@ public class <input.tr_name_capitalized>JdbcTemplate
     {
         StringBuffer result = new StringBuffer();
     
-        Map map = ThreadLocalBag.getThreadBag();
+        Map map = <input.tr_name_capitalized>ThreadLocalBag.getThreadBag();
 
         boolean enableAuditLog = getEnableAuditLog();
         
         if  (   (enableAuditLog)
              && (map != null))
         {
-            String user = (String) map.get(ThreadLocalBag.PRINCIPAL);
-            String ip = (String) map.get(ThreadLocalBag.REMOTE_IP);
+            String user = (String) map.get(<input.tr_name_capitalized>ThreadLocalBag.PRINCIPAL);
+            String ip = (String) map.get(<input.tr_name_capitalized>ThreadLocalBag.REMOTE_IP);
     
             if  (   (user != null)
                  || (ip != null))
@@ -919,7 +919,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
     protected static void auditLog()
     {
         Log log = LogFactory.getLog(AUDITLOG_CATEGORY);
-        Map map = ThreadLocalBag.getThreadBag();
+        Map map = <input.tr_name_capitalized>ThreadLocalBag.getThreadBag();
     
         if  (   (map != null)
              && (getEnableAuditLog())

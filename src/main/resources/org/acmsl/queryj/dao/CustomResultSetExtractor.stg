@@ -159,6 +159,16 @@ class(result, input) ::= <<
 public class <result.idCapitalized>Extractor
     extends  <input.tr_name_capitalized>ResultSetExtractor
 {
+    /**
+     * Constructs a new \<code><result.idCapitalized>ResultSetExtractor\</code>.
+     * @param daoListener the dao listener.
+     */
+    public <result.idCapitalized>ResultSetExtractor(
+        final <input.tr_name_capitalized>DAOListener daoListener)
+    {
+        super(daoListener);
+    }
+
     // \<extract data\>
     /**
      * Extracts \<i><result.id>\</i> information from given result set.

@@ -113,6 +113,27 @@ class(input) ::= <<
 public class <input.tr_name_capitalized>StatisticsProvider
 {
     /**
+     * Singleton implemented to avoid double-check locking.
+     */
+    protected static final class <input.tr_name_capitalized>StatisticsProviderSingletonContainer
+    {
+        /**
+         * The actual singleton.
+         */
+        public static final <input.tr_name_capitalized>StatisticsProvider SINGLETON =
+            <input.tr_name_capitalized>StatisticsProvider();
+    }
+
+    /**
+     * Retrieves the singleton instance.
+     * @return such instance.
+     */
+    public static <input.tr_name_capitalized>StatisticsProvider getInstance()
+    {
+        return <input.tr_name_capitalized>StatisticsProviderSingletonContainer.SINGLETON;
+    }
+
+    /**
      * Annotates an operation on the persistence
      * layer takes place.
      * @param sql the sql sentence.
@@ -831,8 +852,12 @@ public class <input.tr_name_capitalized>StatisticsProvider
 
             int t_iCount = (list != null) ? list.size() : 0;
 
+            Object t_Item;
+
             for  (int t_iIndex = 0; t_iIndex \< t_iCount; t_iIndex++)
             {
+                t_Item = list.get(t_iIndex);
+
                 if  (result.contains(t_Item))
                 {
                     result.remove(t_Item);
