@@ -307,10 +307,15 @@
       -->
       <property name="html.dir" value="${src.dir}/site"/>
 
-      <!--
-         Java source folder.
-      -->
-      <property name="java.src.dir" value="${src.dir}/main/java"/>
+      <condition property="java.src.dir" value="${src.dir}/main/java6">
+         <available classname="java.sql.NClob"/>
+      </condition>
+
+      <condition property="java.src.dir" value="${src.dir}/main/java">
+         <not><available classname="java.sql.NClob"/></not>
+      </condition>
+
+      <echo message="java.src.dir: ${java.src.dir}"/>
 
       <!--
          Java source folder.
