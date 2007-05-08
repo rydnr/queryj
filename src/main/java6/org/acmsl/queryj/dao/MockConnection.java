@@ -2195,4 +2195,226 @@ public class MockConnection
 
         return result;
     }
+
+    // New in JDBC4.0
+    /**
+     * Implements JDBC4.0's <code>createStruct</code> method.
+     * @param typeName the type name.
+     * @param attributes the attributes.
+     * @return the newly-created <code>Struct</code> instance.
+     */
+    public java.sql.Struct createStruct(
+        final String typeName, final Object[] attributes)
+      throws  SQLException
+    {
+        java.sql.Struct result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result =
+                    t_Connection.createStruct(
+                        typeName, attributes);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+
+        return result;
+    }
+
+    /**
+     * Implements JDBC4.0's <code>createArrayOf</code> method.
+     * @param typeName the type name.
+     * @param elements the elements.
+     * @return the newly-created <code>Array</code> instance.
+     */
+    public java.sql.Array createArrayOf(
+        final String typeName, final Object[] elements)
+      throws  SQLException
+    {
+        java.sql.Array result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result =
+                    t_Connection.createArrayOf(
+                        typeName, elements);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+
+        return result;
+    }
+
+    /**
+     * Implements JDBC4.0's <code>getClientInfo</code> method.
+     * @return the client properties.
+     */
+    public java.util.Properties getClientInfo()
+      throws  SQLException
+    {
+        java.util.Properties result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result = t_Connection.getClientInfo();
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+
+        return result;
+    }
+
+    /**
+     * Implements JDBC4.0's <code>setClientInfo(java.util.Properties)</code> method.
+     * @param properties the client properties.
+     */
+    public void setClientInfo(java.util.Properties properties)
+    {
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                t_Connection.setClientInfo(properties);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+    }
+
+    /**
+     * Implements JDBC4.0's <code>getClientInfo(String)</code> method.
+     * @param name the property name.
+     * @return the client property.
+     */
+    public String getClientInfo(final String name)
+      throws  SQLException
+    {
+        String result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result = t_Connection.getClientInfo(name);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+
+        return result;
+    }
 }

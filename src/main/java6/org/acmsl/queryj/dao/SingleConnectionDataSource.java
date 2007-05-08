@@ -284,6 +284,43 @@ public class   SingleConnectionDataSource
         return m__iLoginTimeout;
     }
 
+
+    // New in JDBC4.0
+    /**
+     * Checks whether this instance is a wrapper for given class.
+     * @param classInstance the class instance.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isWrapperFor(final Class classInstance)
+    {
+        boolean result = false;
+
+        if  (Connection.class.isAssignableFrom(classInstance))
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether this instance is a wrapper for given class.
+     * @param classInstance the class instance.
+     * @return <tt>true</tt> in such case.
+     */
+    public Object unwrap(final Class classInstance)
+    {
+        Object result = null;
+
+        if  (SingleConnectionDataSource.class.isAssignableFrom(
+                 classInstance))
+        {
+            result = this;
+        }
+
+        return result;
+    }
+
     /**
      * Checks whether given object is logically equal to this instance.
      * @param object the object to check.

@@ -625,4 +625,32 @@ public class MockDataSource
     {
         return m__iLoginTimeout;
     }
+
+    // New in JDBC4.0
+    /**
+     * Checks whether this instance is a wrapper for given class.
+     * @param classInstance the class instance.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isWrapperFor(final Class classInstance)
+    {
+        return false;
+    }
+
+    /**
+     * Checks whether this instance is a wrapper for given class.
+     * @param classInstance the class instance.
+     * @return <tt>true</tt> in such case.
+     */
+    public Object unwrap(final Class classInstance)
+    {
+        Object result = null;
+
+        if  (MockDataSource.class.isAssignableFrom(classInstance))
+        {
+            result = this;
+        }
+
+        return result;
+    }
 }

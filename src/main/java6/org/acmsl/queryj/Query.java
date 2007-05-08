@@ -3322,4 +3322,194 @@ public abstract class Query
     {
         return retrievePreparedStatement().getParameterMetaData();
     }
+
+    // New in JDBC 4.0
+    /**
+     * See java.sql.PreparedStatement#setClob(int,Clob).
+     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setClob(final int index, final Reader value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setClob(index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setNClob(int,java.io.Reader).
+     * @see java.sql.PreparedStatement#setNClob(int,java.io.Reader)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setNClob(final int index, final Reader value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setNClob(index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setClob(int,Clob).
+     * @see java.sql.PreparedStatement#setClob(int,java.sql.Clob)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setNClob(final int index, final String value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setNClob(
+            index, new StringReader(value));
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setBlob(int,java.io.InputStream).
+     * @see java.sql.PreparedStatement#setBlob(int,java.io.InputStream)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setBlob(final int index, final InputStream value)
+        throws  SQLException
+    {
+        retrievePreparedStatement().setBlob(index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setCharacterStrem(int,java.io.Reader).
+     * @see java.sql.PreparedStatement#setCharacterStream(int,java.io.Reader)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setCharacterStream(
+        final int index, final java.io.Reader value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setCharacterStream(
+            index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setCharacterStrem(int,java.io.Reader).
+     * @see java.sql.PreparedStatement#setCharacterStream(int,java.io.Reader)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setCharacterStream(
+        final int index, final java.io.Reader value, final long length)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setCharacterStream(
+            index, value, length);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setNCharacterStream(int,java.io.Reader).
+     * @see java.sql.PreparedStatement#setNCharacterStream(int,java.io.Reader)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setNCharacterStream(
+        final int index, final java.io.Reader value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setNCharacterStream(
+            index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setBinaryStream(int,java.io.InputStream).
+     * @see java.sql.PreparedStatement#setBinaryStream(int,java.io.InputStream)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setBinaryStream(
+        final int index, final java.io.InputStream value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setBinaryStream(
+            index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setBinaryStream(int,java.io.InputStream).
+     * @see java.sql.PreparedStatement#setBinaryStream(int,java.io.InputStream)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setBinaryStream(
+        final int index, final java.io.InputStream value, final long length)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setBinaryStream(
+            index, value, length);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setAsciiStream(int,java.io.InputStream).
+     * @see java.sql.PreparedStatement#setAsciiStream(int,java.io.InputStream)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setAsciiStream(
+        final int index, final java.io.InputStream value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setAsciiStream(
+            index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setAsciiStream(int,java.io.InputStream, long).
+     * @see java.sql.PreparedStatement#setAsciiStream(int,java.io.InputStream, long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void setAsciiStream(
+        final int index, final java.io.InputStream value, final long length)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setAsciiStream(
+            index, value, length);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setSQLXML(int,java.sql.SQLXML).
+     * @see java.sql.PreparedStatement#setSQLXML(int,java.sql.SQLXML)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setSQLXML(
+        final int index, final java.sql.SQLXML value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setSQLXML(
+            index, value);
+    }
+
 }
