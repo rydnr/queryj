@@ -228,7 +228,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
     /**
      * The DAOListener instance.
      *
-    private <input.tr_name_capitalized>DAOListener m__DAOListener;
+    private <input.tr_name_capitalized>DAOListener m__<input.tr_name_capitalized>DAOListener;
 
     /**
      * Construct a new JdbcTemplate for bean usage.
@@ -607,6 +607,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
                 preparedStatementCreator,
                 action,
                 getDataSource(),
+                getDAOListener(),
                 getNativeJdbcExtractor(),
                 getExceptionTranslator());
     }
@@ -617,6 +618,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
      * instance.
      * @param action the \<code>PreparedStatementCallback\</code> instance.
      * @param dataSource the \<code>DataSource\</code> instance.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      * @param nativeJdbcExtractor the native JDBC extractor.
      * @param exceptionTranslator the exception translator.
      * @return the result of the operation.
@@ -630,6 +632,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
         final PreparedStatementCreator preparedStatementCreator,
         final PreparedStatementCallback action,
         final DataSource dataSource,
+        final <input.tr_name_capitalized>DAOListener daoListener,
         final NativeJdbcExtractor nativeJdbcExtractor,
         final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException

@@ -160,10 +160,10 @@ public class <result.idCapitalized>Extractor
     extends  <input.tr_name_capitalized>ResultSetExtractor
 {
     /**
-     * Constructs a new \<code><result.idCapitalized>ResultSetExtractor\</code>.
+     * Constructs a new \<code><result.idCapitalized>Extractor\</code>.
      * @param daoListener the dao listener.
      */
-    public <result.idCapitalized>ResultSetExtractor(
+    public <result.idCapitalized>Extractor(
         final <input.tr_name_capitalized>DAOListener daoListener)
     {
         super(daoListener);
