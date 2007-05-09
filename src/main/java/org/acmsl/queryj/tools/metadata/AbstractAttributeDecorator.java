@@ -77,6 +77,11 @@ public abstract class AbstractAttributeDecorator
     private MetadataTypeManager m__MetadataTypeManager;
 
     /**
+     * The stack trace.
+     */
+    private StackTraceElement[] m__StackTrace;
+
+    /**
      * Creates an <code>AttributeDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
@@ -174,6 +179,7 @@ public abstract class AbstractAttributeDecorator
         immutableSetAttribute(attribute);
         immutableSetMetadataManager(metadataManager);
         immutableSetMetadataTypeManager(metadataTypeManager);
+        m__StackTrace = new  RuntimeException().getStackTrace();
     }
 
     /**

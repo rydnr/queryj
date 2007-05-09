@@ -2217,7 +2217,7 @@ public abstract class BasePerTableTemplate
      */
     protected Object buildAttributesKey(final String tableName)
     {
-        return "//BasePerTableTemplate//attributes--" + tableName;
+        return "//BasePerTableTemplate//attributes--" + tableName + "--" + getClass();
     }
 
     /**
@@ -2274,7 +2274,7 @@ public abstract class BasePerTableTemplate
     {
         return
              "//BasePerTableTemplate//externallyManagedAttributes--"
-            + tableName;
+            + tableName + "--" + getClass();
     }
 
     /**
@@ -2331,7 +2331,7 @@ public abstract class BasePerTableTemplate
     {
         return
              "//BasePerTableTemplate//allButExternallyManagedAttributes--"
-            + tableName;
+            + tableName + "--" + getClass();
     }
 
     /**
@@ -2385,7 +2385,7 @@ public abstract class BasePerTableTemplate
      */
     protected Object buildLobAttributesKey(final String tableName)
     {
-        return "//BasePerTableTemplate//lobAttributes--" + tableName;
+        return "//BasePerTableTemplate//lobAttributes--" + tableName + "--" + getClass();
     }
 
     /**
@@ -2439,7 +2439,7 @@ public abstract class BasePerTableTemplate
      */
     protected Object buildAllButLobAttributesKey(final String tableName)
     {
-        return "//BasePerTableTemplate//allButLobAttributes--" + tableName;
+        return "//BasePerTableTemplate//allButLobAttributes--" + tableName + "--" + getClass();
     }
 
     /**
@@ -2493,6 +2493,6 @@ public abstract class BasePerTableTemplate
      */
     protected Object buildForeignKeysKey(final String tableName)
     {
-        return "//BasePerTableTemplate//foreignKeys--" + tableName;
+        return "//BasePerTableTemplate//foreignKeys--" + tableName + "--" + getClass();
     }
 }
