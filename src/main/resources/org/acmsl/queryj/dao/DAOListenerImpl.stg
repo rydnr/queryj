@@ -211,7 +211,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      */
     public void connectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback)
+        final ConnectionCallback connectionCallback)
     {
         annotateConnectionReleased(
             jdbcTemplate,

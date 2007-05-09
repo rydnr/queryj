@@ -213,7 +213,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public void annotateConnectionReleased(
         final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final statementCallback statementCallback)
+        final StatementCallback statementCallback)
     {
         // TODO
     }
