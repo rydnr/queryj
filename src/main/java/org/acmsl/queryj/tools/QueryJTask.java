@@ -254,6 +254,16 @@ public class QueryJTask
     private boolean m__bJmx;
 
     /**
+     * The "disable-sql-validation" property.
+     */
+    private String m__strDisableSqlValidation;
+
+    /**
+     * The "disable-sql-validation" flag.
+     */
+    private boolean m__bDisableSqlValidation = false;
+
+    /**
      * The nested tables.
      */
     private AntTablesElement m__Tables;
@@ -697,6 +707,57 @@ public class QueryJTask
     protected boolean getJmxFlag()
     {
         return m__bJmx;
+    }
+
+    /**
+     * Specifies whether to disable SQL validation.
+     * @param flag such setting.
+     */
+    protected final void immutableSetDisableSqlValidation(
+        final String flag)
+    {
+        m__strDisableSqlValidation = flag;
+    }
+
+    /**
+     * Specifies whether to disable SQL validation.
+     * @param flag such setting.
+     */
+    public void setDisableSqlValidation(final String flag)
+    {
+        immutableSetDisableSqlValidation(flag);
+
+        setDisableSqlValidationFlag(
+            (   (flag == null)
+             || (flag.trim().toLowerCase().equals("yes")
+             || (flag.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to disable SQL validation.
+     * @return such setting.
+     */
+    public String getDisableSqlValidation()
+    {
+        return m__strDisableSqlValidation;
+    }
+
+    /**
+     * Specifies the "disable-sql-validation" flag.
+     * @param flag such flag.
+     */
+    protected void setDisableSqlValidationFlag(final boolean flag)
+    {
+        m__bDisableSqlValidation = flag;
+    }
+
+    /**
+     * Retrieves the "disable-sql-validation" flag.
+     * @return such flag.
+     */
+    protected boolean getDisableSqlValidationFlag()
+    {
+        return m__bDisableSqlValidation;
     }
 
     /**
@@ -1229,6 +1290,7 @@ public class QueryJTask
 
             boolean t_bOutputdirsubfolders = getOutputdirsubfoldersFlag();
             boolean t_bJmx = getJmxFlag();
+            boolean t_bDisableSqlValidation = getDisableSqlValidationFlag();
             boolean t_bExtractTables = getExtractTablesFlag();
             boolean t_bExtractProcedures = getExtractProceduresFlag();
             boolean t_bExtractFunctions = getExtractFunctionsFlag();
@@ -1335,6 +1397,12 @@ public class QueryJTask
                 t_mAttributes.put(
                     ParameterValidationHandler.JMX,
                     (t_bJmx
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.DISABLE_SQL_VALIDATION,
+                    (t_bDisableSqlValidation
                      ?  Boolean.TRUE
                      :  Boolean.FALSE));
 

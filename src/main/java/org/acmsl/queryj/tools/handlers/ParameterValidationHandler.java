@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -308,9 +309,9 @@ public class ParameterValidationHandler
     public static final String JMX = "jmx";
 
     /**
-     * Creates a ParameterValidationHandler.
+     * Whether to disable SQL validation.
      */
-    public ParameterValidationHandler() {};
+    public static final String DISABLE_SQL_VALIDATION = "disableSqlValidation";
 
     /**
      * Handles given command.
@@ -319,7 +320,6 @@ public class ParameterValidationHandler
      * @throws BuildException if the build process cannot be performed.
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         boolean result = false;
 
@@ -367,6 +367,7 @@ public class ParameterValidationHandler
                 (File) parameters.get(SQL_XML_FILE),
                 (File) parameters.get(GRAMMAR_BUNDLE_NAME),
                 (Boolean) parameters.get(JMX),
+                (Boolean) parameters.get(DISABLE_SQL_VALIDATION),
                 parameters);
         }
     }
@@ -396,6 +397,7 @@ public class ParameterValidationHandler
      * @param sqlXmlFile the sql.xml file.
      * @param grammarBundleName the grammar bundle name.
      * @param jmx whether to support JMX.
+     * @param disableJmxValidation whether to disable SQL validation.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
      * @throws BuildException whenever the required
@@ -424,8 +426,8 @@ public class ParameterValidationHandler
         final File sqlXmlFile,
         final File grammarBundleName,
         final Boolean jmx,
+        final Boolean disableSqlValidation,
         final Map parameters)
-      throws  BuildException
     {
         Log t_Log =
             UniqueLogFactory.getLog(ParameterValidationHandler.class);

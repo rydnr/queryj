@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -125,11 +126,6 @@ public class CustomSqlValidationHandler
     public final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/DD/yyyy");
 
     /**
-     * Creates a CustomSqlValidationHandler.
-     */
-    public CustomSqlValidationHandler() {};
-
-    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -170,7 +166,6 @@ public class CustomSqlValidationHandler
      * @precondition command != null
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         boolean result = false;
 
@@ -191,12 +186,12 @@ public class CustomSqlValidationHandler
     protected void handle(
         final Map parameters,
         final QueryJLog log)
-      throws  BuildException
     {
         handle(
             retrieveCustomSqlProvider(parameters),
             retrieveConnection(parameters),
             retrieveMetadataManager(parameters),
+            retrieveDisableSqlValidationFlag(parameters),
             CustomResultUtils.getInstance(),
             ConversionUtils.getInstance(),
             log);
@@ -208,6 +203,7 @@ public class CustomSqlValidationHandler
      * @param customSqlProvider the custom sql provider.
      * @param connection the connection.
      * @param metadataManager the metadata manager.
+     * @param disableSqlValidation whether the user has disabled SQL validation.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @param conversionUtils the <code>ConversionUtils</code> instance.
      * @param log the log instance.
@@ -219,47 +215,50 @@ public class CustomSqlValidationHandler
         final CustomSqlProvider customSqlProvider,
         final Connection connection,
         final MetadataManager metadataManager,
+        final boolean disableSqlValidation,
         final CustomResultUtils customResultUtils,
         final ConversionUtils conversionUtils,
         final QueryJLog log)
-      throws  BuildException
     {
-        Collection t_cElements = null;
-
-        if  (customSqlProvider != null)
+        if  (!disableSqlValidation)
         {
-            t_cElements = customSqlProvider.getCollection();
-        }
+            Collection t_cElements = null;
 
-        if  (t_cElements != null)
-        {
-            Iterator t_itElements = t_cElements.iterator();
-
-            if  (t_itElements != null)
+            if  (customSqlProvider != null)
             {
-                Object t_CurrentItem = null;
+                t_cElements = customSqlProvider.getCollection();
+            }
 
-                Sql t_Sql = null;
+            if  (t_cElements != null)
+            {
+                Iterator t_itElements = t_cElements.iterator();
 
-                while  (t_itElements.hasNext())
+                if  (t_itElements != null)
                 {
-                    t_CurrentItem = t_itElements.next();
+                    Object t_CurrentItem = null;
 
-                    if  (t_CurrentItem instanceof Sql)
+                    Sql t_Sql = null;
+
+                    while  (t_itElements.hasNext())
                     {
-                        t_Sql = (Sql) t_CurrentItem;
+                        t_CurrentItem = t_itElements.next();
 
-                        if  (t_Sql.isValidate())
+                        if  (t_CurrentItem instanceof Sql)
                         {
-                            validate(
-                                t_Sql,
-                                customSqlProvider,
-                                connection,
-                                metadataManager,
-                                metadataManager.getMetadataTypeManager(),
-                                customResultUtils,
-                                conversionUtils,
-                                log);
+                            t_Sql = (Sql) t_CurrentItem;
+
+                            if  (t_Sql.isValidate())
+                            {
+                                validate(
+                                    t_Sql,
+                                    customSqlProvider,
+                                    connection,
+                                    metadataManager,
+                                    metadataManager.getMetadataTypeManager(),
+                                    customResultUtils,
+                                    conversionUtils,
+                                    log);
+                            }
                         }
                     }
                 }
@@ -295,7 +294,6 @@ public class CustomSqlValidationHandler
         final CustomResultUtils customResultUtils,
         final ConversionUtils conversionUtils,
         final QueryJLog log)
-      throws  BuildException
     {
         String t_strSql = sql.getValue().trim();
 
@@ -514,8 +512,7 @@ public class CustomSqlValidationHandler
         final MetadataTypeManager metadataTypeManager,
         final ConversionUtils conversionUtils,
         final QueryJLog log)
-     throws  SQLException,
-             BuildException
+     throws  SQLException
     {
         BuildException exceptionToThrow = null;
 
@@ -840,7 +837,6 @@ public class CustomSqlValidationHandler
      * @precondition parameters != null
      */
     protected Connection retrieveConnection(final Map parameters)
-      throws  BuildException
     {
         return
             (Connection)
@@ -944,8 +940,7 @@ public class CustomSqlValidationHandler
         final MetadataTypeManager metadataTypeManager,
         final CustomResultUtils customResultUtils,
         final QueryJLog log)
-      throws SQLException,
-             BuildException
+      throws SQLException
     {
         Collection t_cProperties =
             retrieveProperties(

@@ -402,6 +402,8 @@ public class <input.engine_name><input.vo_name>DAO
         +   "?}; separator=", \"\n"> "
         + ")";
 
+    <input.foreign_keys:delete_by_fk_sql(foreignKey=it, input=input); separator="\n\n">
+
       // custom selects
 
 <input.custom_selects:{sql|
@@ -1314,7 +1316,7 @@ public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
 {
     deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-        buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(),
+        DELETE_BY_<foreignKey.attributes:{attr| attr.nameUpperCased}>_SQL,
         getDataSource());
 }
 
@@ -1330,7 +1332,7 @@ public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
  */
 protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">,
-    final Query query,
+    final String query,
     final DataSource dataSource)
 {
     deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
@@ -1352,7 +1354,7 @@ protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
  */
 protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">,
-    final Query query,
+    final String query,
     final PlatformTransactionManager transactionManager)
 {
     // Enabling transactions temporarily.
@@ -1361,7 +1363,8 @@ protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
         deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
             <foreignKey:{<it.nameLowercased>}; separator=",\n">,
             query,
-            new TransactionTemplate(transactionManager));
+            new TransactionTemplate(transactionManager),
+            getDAOListener());
     }
 }
 
@@ -1379,7 +1382,7 @@ protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
  */
 protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">,
-    final Query query,
+    final String query,
     final TransactionTemplate transactionTemplate,
         final <input.tr_name_capitalized>DAOListener daoListener)
 {
@@ -2080,3 +2083,18 @@ insert_attribute(attr) ::= <<
 "?
 <endif>
 >>
+
+delete_by_fk_sql(foreignKey, input) ::= <<
+<!
+ Generates the constant with the SQL to delete by given fk.
+ @param foreignKey the foreign key.
+ @param input the input.
+!>
+ /**
+  * The SQL to delete by <foreignKey>.
+  */
+public static final String DELETE_BY_<foreignKey.attributes:{attr|attr.nameUppercased}>_SQL =
+    "DELETE FROM <input.table_name_uppercased> "
+    + "WHERE "
+<foreignKey.attributes:{attr|
+    + "<attr.nameUppercased> = ? "}; separator="\n    + \"AND \"">;

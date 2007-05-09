@@ -119,7 +119,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters != null
      */
     protected File retrieveProjectOutputDir(final Map parameters)
-        throws  BuildException
     {
         return
             (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
@@ -133,7 +132,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters !0 null
      */
     protected String retrieveProjectPackage(final Map parameters)
-        throws  BuildException
     {
         return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
@@ -147,7 +145,6 @@ public abstract class AbstractAntCommandHandler
      */
     protected DatabaseMetaData retrieveDatabaseMetaData(
         final Map parameters)
-      throws  BuildException
     {
         return
             (DatabaseMetaData)
@@ -165,7 +162,6 @@ public abstract class AbstractAntCommandHandler
      */
     protected MetadataManager retrieveMetadataManager(
         final Map parameters)
-      throws  BuildException
     {
         return
             (MetadataManager)
@@ -203,7 +199,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters != null
      */
     protected String retrieveJdbcDriver(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
@@ -217,7 +212,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters != null
      */
     protected String retrieveJdbcUrl(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_URL);
@@ -231,7 +225,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters != null
      */
     protected String retrieveJdbcUsername(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
@@ -245,7 +238,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters != null
      */
     protected String retrieveJdbcPassword(final Map parameters)
-        throws  BuildException
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
@@ -282,7 +274,6 @@ public abstract class AbstractAntCommandHandler
      */
     public static CustomSqlProvider retrieveCustomSqlProvider(
         final Map parameters)
-      throws  BuildException
     {
         return
             (CustomSqlProvider)
@@ -312,7 +303,6 @@ public abstract class AbstractAntCommandHandler
      * @precondition parameters !0 null
      */
     protected String retrieveHeader(final Map parameters)
-        throws  BuildException
     {
         return (String) parameters.get(ParameterValidationHandler.HEADER);
     }
@@ -373,5 +363,19 @@ public abstract class AbstractAntCommandHandler
         result = (aux != null) ? aux.booleanValue() : true;
 
         return result;
+    }
+
+    /**
+     * Retrieves whether the user has disabled SQL validation.
+     * @param parameters the parameters.
+     * @return <tt>true</tt> in such case.
+     * @precondition parameters != null
+     */
+    protected boolean retrieveDisableSqlValidationFlag(final Map parameters)
+    {
+        Boolean result =
+            (Boolean) parameters.get(ParameterValidationHandler.DISABLE_SQL_VALIDATION);
+
+        return (result != null) ? result.booleanValue() : false;
     }
 }

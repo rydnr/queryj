@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -96,11 +97,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
             new CustomResultSetExtractorTemplate[0];
 
     /**
-     * Creates a CustomResultSetExtractorTemplateBuildHandler.
-     */
-    public CustomResultSetExtractorTemplateBuildHandler() {};
-
-    /**
      * Retrieves the template factory.
      * @return such instance.
      */
@@ -154,7 +150,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final String engineName,
         final String projectPackage,
         final PackageUtils packageUtils)
-      throws BuildException
     {
         return
             packageUtils.retrieveCustomResultSetExtractorPackage(

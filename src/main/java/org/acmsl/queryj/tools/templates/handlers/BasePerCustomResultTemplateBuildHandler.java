@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -102,11 +103,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     public static final String CUSTOM_RESULT = "..CustOMresult:::";
 
     /**
-     * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
-     */
-    public BasePerCustomResultTemplateBuildHandler() {};
-
-    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -114,7 +110,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition command != null
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         return handle(command.getAttributeMap());
     }
@@ -127,14 +122,14 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
     {
         return
             handle(
                 parameters,
                 retrieveDatabaseProductName(parameters),
                 retrieveDatabaseProductVersion(parameters),
-                retrieveDatabaseIdentifierQuoteString(parameters));
+                retrieveDatabaseIdentifierQuoteString(parameters),
+                retrieveDisableSqlValidationFlag(parameters));
     }
 
     /**
@@ -143,6 +138,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the quote character.
+     * @param disableSqlValidationFlag whether to disable SQL validation or not.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -153,17 +149,24 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final Map parameters,
         final String engineName,
         final String engineVersion,
-        final String quote)
-      throws  BuildException
+        final String quote,
+        final boolean disableSqlValidationFlag)
     {
-        return
-            handle(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
-                retrieveMetadataManager(parameters),
-                retrieveCustomSqlProvider(parameters));
+        boolean result = false;
+
+        if  (!disableSqlValidationFlag)
+        {
+            result =
+                handle(
+                    parameters,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    retrieveMetadataManager(parameters),
+                    retrieveCustomSqlProvider(parameters));
+        }
+        
+        return result;
     }
 
     /**
@@ -187,7 +190,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final String quote,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider)
-      throws  BuildException
     {
         return
             handle(
@@ -247,7 +249,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final String repository,
         final String header,
         final Result[] resultElements)
-      throws  BuildException
     {
         boolean result = false;
 
