@@ -2369,8 +2369,6 @@ public class MockConnection
                 LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
-
-            throw sqlException;
         }
     }
 
@@ -2452,8 +2450,6 @@ public class MockConnection
                 LogFactory.getLog(MockConnection.class).fatal(
                     "Wrapped data source null");
             }
-
-            throw sqlException;
         }
     }
 
@@ -2462,6 +2458,7 @@ public class MockConnection
      * @param timeout the timeout.
      */
     public boolean isValid(final int timeout)
+      throws  SQLException
     {
         boolean result = false;
 
@@ -2495,6 +2492,8 @@ public class MockConnection
 
             throw sqlException;
         }
+
+        return result;
     }
 
     /**
@@ -2502,6 +2501,7 @@ public class MockConnection
      * @return such instance.
      */
     public java.sql.SQLXML createSQLXML()
+      throws  SQLException
     {
         java.sql.SQLXML result = null;
 
@@ -2535,6 +2535,8 @@ public class MockConnection
 
             throw sqlException;
         }
+
+        return result;
     }
 
     /**
@@ -2542,6 +2544,7 @@ public class MockConnection
      * @return such instance.
      */
     public java.sql.NClob createNClob()
+      throws  SQLException
     {
         java.sql.NClob result = null;
 
@@ -2575,6 +2578,8 @@ public class MockConnection
 
             throw sqlException;
         }
+
+        return result;
     }
 
     /**
@@ -2582,6 +2587,7 @@ public class MockConnection
      * @return such instance.
      */
     public java.sql.Blob createBlob()
+      throws  SQLException
     {
         java.sql.Blob result = null;
 
@@ -2615,6 +2621,8 @@ public class MockConnection
 
             throw sqlException;
         }
+
+        return result;
     }
 
     /**
@@ -2622,6 +2630,7 @@ public class MockConnection
      * @return such instance.
      */
     public java.sql.Clob createClob()
+      throws  SQLException
     {
         java.sql.Clob result = null;
 
@@ -2655,6 +2664,8 @@ public class MockConnection
 
             throw sqlException;
         }
+
+        return result;
     }
 
     /**
@@ -2663,39 +2674,23 @@ public class MockConnection
      * @return such information.
      */
     public boolean isWrapperFor(final Class clazz)
+        throws  SQLException
     {
         boolean result = false;
 
-        try
+        Connection t_Connection = getConnection();
+
+        if  (t_Connection != null)
         {
-            Connection t_Connection = getConnection();
-
-            if  (t_Connection != null)
-            {
-                result = t_Connection.isWrapperFor(clazz);
-            }
-            else 
-            {
-                LogFactory.getLog(MockConnection.class).fatal(
-                    "Wrapped connection null");
-            }
+            result = t_Connection.isWrapperFor(clazz);
         }
-        catch  (final SQLException sqlException)
+        else 
         {
-            MockDataSource t_MockDataSource = getMockDataSource();
-
-            if  (t_MockDataSource != null)
-            {
-                t_MockDataSource.addException(sqlException);
-            }
-            else 
-            {
-                LogFactory.getLog(MockConnection.class).fatal(
-                    "Wrapped data source null");
-            }
-
-            throw sqlException;
+            LogFactory.getLog(MockConnection.class).fatal(
+                "Wrapped connection null");
         }
+
+        return result;
     }
 
     /**
@@ -2704,38 +2699,22 @@ public class MockConnection
      * @return the wrapped instance.
      */
     public Object unwrap(final Class clazz)
+        throws  SQLException
     {
         Object result = null;
 
-        try
+        Connection t_Connection = getConnection();
+
+        if  (t_Connection != null)
         {
-            Connection t_Connection = getConnection();
-
-            if  (t_Connection != null)
-            {
-                result = t_Connection.unwrap(clazz);
-            }
-            else 
-            {
-                LogFactory.getLog(MockConnection.class).fatal(
-                    "Wrapped connection null");
-            }
+            result = t_Connection.unwrap(clazz);
         }
-        catch  (final SQLException sqlException)
+        else 
         {
-            MockDataSource t_MockDataSource = getMockDataSource();
-
-            if  (t_MockDataSource != null)
-            {
-                t_MockDataSource.addException(sqlException);
-            }
-            else 
-            {
-                LogFactory.getLog(MockConnection.class).fatal(
-                    "Wrapped data source null");
-            }
-
-            throw sqlException;
+            LogFactory.getLog(MockConnection.class).fatal(
+                "Wrapped connection null");
         }
+
+        return result;
     }
 }

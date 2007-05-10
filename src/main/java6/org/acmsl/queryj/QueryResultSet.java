@@ -58,11 +58,14 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -6158,11 +6161,45 @@ public class QueryResultSet
 
     /**
      * Updates a Clob column using the field reference.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNClob(final int index, final NClob value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNClob(index, value);
+        }
+    }
+
+    /**
+     * Updates a Clob column using the field reference.
      * @param name the name.
      * @param value (Taken from Sun's Javadoc) the new column value.
      * @exception SQLException if an error occurs.
      */
     public void updateNClob(final String name, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNClob(name, value);
+        }
+    }
+
+    /**
+     * Updates a Clob column using the field reference.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNClob(final String name, final NClob value)
         throws  SQLException
     {
         ResultSet t_ResultSet = getResultSet();
@@ -6381,4 +6418,622 @@ public class QueryResultSet
         }
     }
 
+    /**
+     * Updates a Clob.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateClob(
+        final String name, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateClob(name, value, length);
+        }
+    }
+
+    /**
+     * Updates a Clob.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateClob(
+        final int index, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateClob(index, value, length);
+        }
+    }
+
+    /**
+     * Updates a Blob.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateBlob(
+        final String name, final InputStream value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateBlob(name, value, length);
+        }
+    }
+
+    /**
+     * Updates a character stream.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateCharacterStream(
+        final String name, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateCharacterStream(name, value, length);
+        }
+    }
+
+    /**
+     * Updates a binary stream.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateBinaryStream(
+        final String name, final InputStream value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateBinaryStream(name, value, length);
+        }
+    }
+
+    /**
+     * Updates a binary stream.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateBinaryStream(
+        final int index, final InputStream value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateBinaryStream(index, value, length);
+        }
+    }
+
+    /**
+     * Updates an ascii stream.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateAsciiStream(
+        final String name, final InputStream value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateAsciiStream(name, value, length);
+        }
+    }
+
+    /**
+     * Updates an ascii stream.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateAsciiStream(
+        final int index, final InputStream value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateAsciiStream(index, value, length);
+        }
+    }
+
+    /**
+     * Updates a character stream.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateCharacterStream(
+        final int index, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateCharacterStream(index, value, length);
+        }
+    }
+
+    /**
+     * Updates a character stream.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNCharacterStream(
+        final String name, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNCharacterStream(name, value, length);
+        }
+    }
+
+    /**
+     * Updates a character stream.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNCharacterStream(
+        final int index, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNCharacterStream(index, value, length);
+        }
+    }
+
+    /**
+     * Retrieves a character stream.
+     * @param index the index.
+     * @return such stream.
+     * @exception SQLException if an error occurs.
+     */
+    public Reader getNCharacterStream(final int index)
+        throws  SQLException
+    {
+        Reader result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getNCharacterStream(index);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a character stream.
+     * @param name the name.
+     * @return such stream.
+     * @exception SQLException if an error occurs.
+     */
+    public Reader getNCharacterStream(final String name)
+        throws  SQLException
+    {
+        Reader result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getNCharacterStream(name);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a string.
+     * @param name the name.
+     * @return such string.
+     * @exception SQLException if an error occurs.
+     */
+    public String getNString(final String name)
+        throws  SQLException
+    {
+        String result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getNString(name);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a string.
+     * @param name the name.
+     * @return such string.
+     * @exception SQLException if an error occurs.
+     */
+    public String getNString(final int index)
+        throws  SQLException
+    {
+        String result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getNString(index);
+        }
+
+        return result;
+    }
+
+    /**
+     * Updates a string.
+     * @param index the index.
+     * @param value such string.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNString(final int index, final String value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNString(index, value);
+        }
+    }
+
+    /**
+     * Updates a string.
+     * @param name the name.
+     * @param value such string.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNString(final String name, final String value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNString(name, value);
+        }
+    }
+
+    /**
+     * Updates a SQLXML.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateSQLXML(
+        final String name, final java.sql.SQLXML value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateSQLXML(name, value);
+        }
+    }
+
+    /**
+     * Updates a SQLXML.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateSQLXML(
+        final int index, final java.sql.SQLXML value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateSQLXML(index, value);
+        }
+    }
+
+    /**
+     * Retrieves a SQLXML.
+     * @param name the name.
+     * @return such instance.
+     * @exception SQLException if an error occurs.
+     */
+    public SQLXML getSQLXML(final String name)
+        throws  SQLException
+    {
+        SQLXML result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getSQLXML(name);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a SQLXML.
+     * @param name the name.
+     * @return such instance.
+     * @exception SQLException if an error occurs.
+     */
+    public SQLXML getSQLXML(final int index)
+        throws  SQLException
+    {
+        SQLXML result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getSQLXML(index);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Retrieves a NClob.
+     * @param name the name.
+     * @return such instance.
+     * @exception SQLException if an error occurs.
+     */
+    public NClob getNClob(final String name)
+        throws  SQLException
+    {
+        NClob result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getNClob(name);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves a NClob.
+     * @param name the name.
+     * @return such instance.
+     * @exception SQLException if an error occurs.
+     */
+    public NClob getNClob(final int index)
+        throws  SQLException
+    {
+        NClob result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getNClob(index);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the resultset is closed.
+     * @return such information.
+     * @throws SQLException if the operation fails.
+     */
+    public boolean isClosed()
+        throws SQLException
+    {
+        boolean result = false;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.isClosed();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the holdability constant.
+     * @return either ResultSet.HOLD_CURSORS_OVER_COMMIT
+     * or ResultSet.CLOSE_CURSORS_AT_COMMIT.
+     * @throws SQLException if the operation fails.
+     */
+    public int getHoldability()
+        throws SQLException
+    {
+        int result = ResultSet.CLOSE_CURSORS_AT_COMMIT;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getHoldability();
+        }
+
+        return result;
+    }
+
+    /**
+     * Updates given rowid value.
+     * @param name the name.
+     * @param value the value.
+     * @throws SQLException if the operation fails.
+     */
+    public void updateRowId(final String name, final RowId value)
+        throws SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateRowId(name, value);
+        }
+    }
+
+    /**
+     * Updates given rowid value.
+     * @param index the index.
+     * @param value the value.
+     * @throws SQLException if the operation fails.
+     */
+    public void updateRowId(final int index, final RowId value)
+        throws SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateRowId(index, value);
+        }
+    }
+
+    /**
+     * Retrieves given rowid value.
+     * @param index the index.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     */
+    public RowId getRowId(final int index)
+        throws SQLException
+    {
+        RowId result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getRowId(index);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves given rowid value.
+     * @param name the name.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     */
+    public RowId getRowId(final String name)
+        throws SQLException
+    {
+        RowId result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.getRowId(name);
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether this instance is a wrapper of given class.
+     * @param clazz the class.
+     * @return <tt>true</tt> in such case.
+     * @throws SQLException if the operation fails.
+     */
+    public boolean isWrapperFor(final Class clazz)
+        throws SQLException
+    {
+        boolean result = false;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            result = t_ResultSet.isWrapperFor(clazz);
+        }
+
+        if  (!result)
+        {
+            result = (QueryResultSet.class.isAssignableFrom(clazz));
+        }
+
+        return result;
+    }
+
+    /**
+     * Unwraps the resultset if given class matches.
+     * @param clazz the class.
+     * @return the wrapped instance, or <tt>null</tt> otherwise.
+     * @throws SQLException if the operation fails.
+     */
+    public Object unwrap(final Class clazz)
+        throws SQLException
+    {
+        Object result = null;
+
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            if  (isWrapperFor(clazz))
+            {
+                result = t_ResultSet;
+            }
+            else
+            {
+                result = t_ResultSet.unwrap(clazz);
+            }
+        }
+
+        return result;
+    }
 }
