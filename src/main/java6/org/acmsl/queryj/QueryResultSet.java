@@ -4398,6 +4398,107 @@ public class QueryResultSet
     }
 
     /**
+     * See java.sql.ResultSet#updateBlob(int,java.io.InputStream).
+     * @see java.sql.ResultSet#updateBlob(int,java.io.InputStream)
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void updateBlob(
+        final int index, final java.io.InputStream value)
+      throws  SQLException
+    {
+        updateBlob(index, value, getResultSet());
+    }
+
+    /**
+     * See java.sql.ResultSet#updateBlob(int,java.io.InputStream).
+     * @see java.sql.ResultSet#updateBlob(int,java.io.InputStream)
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param resultSet the wrapped result set.
+     * @throws SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final int index,
+        final java.io.InputStream value,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBlob(index, value);
+    }
+
+    /**
+     * See java.sql.ResultSet#updateBlob(String,java.io.InputStream).
+     * @see java.sql.ResultSet#updateBlob(String,java.io.InputStream)
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void updateBlob(
+        final String name, final java.io.InputStream value)
+      throws  SQLException
+    {
+        updateBlob(name, value, getResultSet());
+    }
+
+    /**
+     * See java.sql.ResultSet#updateBlob(String,java.io.InputStream).
+     * @see java.sql.ResultSet#updateBlob(String,java.io.InputStream)
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param resultSet the wrapped result set.
+     * @throws SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final String name,
+        final java.io.InputStream value,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBlob(name, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#updateBlob(int,java.io.InputStream,long).
+     * @see java.sql.PreparedStatement#updateBlob(int,java.io.InputStream,long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @throws SQLException if an error occurs.
+     */
+    public void updateBlob(
+        final int index, final java.io.InputStream value, final long length)
+      throws  SQLException
+    {
+        updateBlob(index, value, length, getResultSet());
+    }
+
+    /**
+     * See java.sql.PreparedStatement#updateBlob(int,java.io.InputStream,long).
+     * @see java.sql.PreparedStatement#updateBlob(int,java.io.InputStream,long)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @param length the length.
+     * @param resultSet the wrapped result set.
+     * @throws SQLException if an error occurs.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final int index,
+        final java.io.InputStream value,
+        final long length,
+        final ResultSet resultSet)
+      throws  SQLException
+    {
+        resultSet.updateBlob(index, value, length);
+    }
+
+    /**
      * See ResultSet#updateClob(int,Clob)
      * @see java.sql.ResultSet#updateClob(int,java.sql.Clob)
      * @param columnIndex (Taken from Sun's Javadoc) the index of the column
@@ -6105,4 +6206,160 @@ public class QueryResultSet
             t_ResultSet.updateClob(name, value);
         }
     }
+
+    /**
+     * Updates a character stream column.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateCharacterStream(final String name, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateCharacterStream(name, value);
+        }
+    }
+
+    /**
+     * Updates a binary column.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateBinaryStream(final String name, final InputStream value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateBinaryStream(name, value);
+        }
+    }
+
+    /**
+     * Updates a ascii column.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateAsciiStream(final String name, final InputStream value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateAsciiStream(name, value);
+        }
+    }
+
+    /**
+     * Updates a character column.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateCharacterStream(final int index, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateCharacterStream(index, value);
+        }
+    }
+
+    /**
+     * Updates a binary column.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateBinaryStream(final int index, final InputStream value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateBinaryStream(index, value);
+        }
+    }
+
+    /**
+     * Updates a ascii column.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateAsciiStream(final int index, final InputStream value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateAsciiStream(index, value);
+        }
+    }
+
+    /**
+     * Updates a character stream column.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNCharacterStream(final String name, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNCharacterStream(name, value);
+        }
+    }
+
+    /**
+     * Updates a character stream column.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNCharacterStream(final int index, final Reader value)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNCharacterStream(index, value);
+        }
+    }
+
+    /**
+     * Updates a NClob.
+     * @param name the name.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNClob(
+        final String name, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNClob(name, value, length);
+        }
+    }
+
 }

@@ -3406,7 +3406,7 @@ public abstract class Query
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
      * @throws SQLException if an error occurs.
      */
-    public void setNClob(final int index, final NClob value)
+    public void setNClob(final int index, final java.sql.NClob value)
         throws  SQLException
     {
         retrievePreparedStatement().setNClob(
@@ -3574,38 +3574,6 @@ public abstract class Query
     }
 
     /**
-     * See java.sql.PreparedStatement#updateBlob(String,java.io.InputStream).
-     * @see java.sql.PreparedStatement#updateBlob(String,java.io.InputStream)
-     * @param index the index.
-     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
-     * @throws SQLException if an error occurs.
-     */
-    public void updateBlob(
-        final int index, final java.io.InputStream value)
-      throws  SQLException
-    {
-        retrievePreparedStatement().updateBlob(
-            index, value);
-    }
-
-    /**
-     * See java.sql.PreparedStatement#updateBlob(String,java.io.InputStream).
-     * @see java.sql.PreparedStatement#updateBlob(String,java.io.InputStream)
-     * @param index (Taken from Sun's Javadoc) the first parameter
-     * is 1, the second is 2, ...
-     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
-     * @param length the length.
-     * @throws SQLException if an error occurs.
-     */
-    public void updateBlob(
-        final int index, final java.io.InputStream value, final long length)
-      throws  SQLException
-    {
-        retrievePreparedStatement().updateBlob(
-            index, value, length);
-    }
-
-    /**
      * See java.sql.PreparedStatement#setNCharacterStream(int,java.io.Reader,long).
      * @see java.sql.PreparedStatement#setNCharacterStream(int,java.io.Reader,long)
      * @param index (Taken from Sun's Javadoc) the first parameter
@@ -3634,5 +3602,78 @@ public abstract class Query
       throws  SQLException
     {
         retrievePreparedStatement().setNString(index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setRowId(int,RowId).
+     * @see java.sql.PreparedStatement#setRowId(int,java.sql.RowId)
+     * @param index (Taken from Sun's Javadoc) the first parameter
+     * is 1, the second is 2, ...
+     * @param value (Taken from Sun's Javadoc) the parameter value (!!).
+     * @throws SQLException if an error occurs.
+     */
+    public void setRowId(final int index, final java.sql.RowId value)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setRowId(index, value);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#isPoolable().
+     * @see java.sql.PreparedStatement#isPoolable()
+     * @throws SQLException if an error occurs.
+     */
+    public boolean isPoolable()
+      throws  SQLException
+    {
+        return retrievePreparedStatement().isPoolable();
+    }
+
+    /**
+     * See java.sql.PreparedStatement#setPoolable(boolean).
+     * @see java.sql.PreparedStatement#setPoolable(boolean)
+     * @param flag such condition.
+     * @throws SQLException if an error occurs.
+     */
+    public void setPoolable(final boolean flag)
+      throws  SQLException
+    {
+        retrievePreparedStatement().setPoolable(flag);
+    }
+
+    /**
+     * See java.sql.PreparedStatement#isClosed().
+     * @see java.sql.PreparedStatement#isClosed()
+     * @return such information.
+     * @throws SQLException if an error occurs.
+     */
+    public boolean isClosed()
+      throws  SQLException
+    {
+        return retrievePreparedStatement().isClosed();
+    }
+
+    /**
+     * Implements JDBC4.0's <code>isWrapperFor(Class)</code> method.
+     * @param clazz the clazz to check.
+     * @return such information.
+     * @throws SQLException if an error occurs.
+     */
+    public boolean isWrapperFor(final Class clazz)
+        throws SQLException
+    {
+        return retrievePreparedStatement().isWrapperFor(clazz);
+    }
+
+    /**
+     * Implements JDBC4.0's <code>unwrap(Class)</code> method.
+     * @param clazz the clazz to check.
+     * @return the wrapped instance.
+     * @throws SQLException if an error occurs.
+     */
+    public Object unwrap(final Class clazz)
+        throws SQLException
+    {
+        return retrievePreparedStatement().unwrap(clazz);
     }
 }

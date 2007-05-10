@@ -2576,4 +2576,166 @@ public class MockConnection
             throw sqlException;
         }
     }
+
+    /**
+     * Implements JDBC4.0's <code>createBlob()</code> method.
+     * @return such instance.
+     */
+    public java.sql.Blob createBlob()
+    {
+        java.sql.Blob result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result = t_Connection.createBlob();
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+    }
+
+    /**
+     * Implements JDBC4.0's <code>createClob()</code> method.
+     * @return such instance.
+     */
+    public java.sql.Clob createClob()
+    {
+        java.sql.Clob result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result = t_Connection.createClob();
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+    }
+
+    /**
+     * Implements JDBC4.0's <code>isWrapperFor(Class)</code> method.
+     * @param clazz the clazz to check.
+     * @return such information.
+     */
+    public boolean isWrapperFor(final Class clazz)
+    {
+        boolean result = false;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result = t_Connection.isWrapperFor(clazz);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+    }
+
+    /**
+     * Implements JDBC4.0's <code>unwrap(Class)</code> method.
+     * @param clazz the clazz to check.
+     * @return the wrapped instance.
+     */
+    public Object unwrap(final Class clazz)
+    {
+        Object result = null;
+
+        try
+        {
+            Connection t_Connection = getConnection();
+
+            if  (t_Connection != null)
+            {
+                result = t_Connection.unwrap(clazz);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped connection null");
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            MockDataSource t_MockDataSource = getMockDataSource();
+
+            if  (t_MockDataSource != null)
+            {
+                t_MockDataSource.addException(sqlException);
+            }
+            else 
+            {
+                LogFactory.getLog(MockConnection.class).fatal(
+                    "Wrapped data source null");
+            }
+
+            throw sqlException;
+        }
+    }
 }
