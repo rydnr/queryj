@@ -6362,4 +6362,23 @@ public class QueryResultSet
         }
     }
 
+    /**
+     * Updates a NClob.
+     * @param index the index.
+     * @param value (Taken from Sun's Javadoc) the new column value.
+     * @param length the length.
+     * @exception SQLException if an error occurs.
+     */
+    public void updateNClob(
+        final int index, final Reader value, final long length)
+        throws  SQLException
+    {
+        ResultSet t_ResultSet = getResultSet();
+
+        if  (t_ResultSet != null) 
+        {
+            t_ResultSet.updateNClob(index, value, length);
+        }
+    }
+
 }
