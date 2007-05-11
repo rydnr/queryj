@@ -72,8 +72,11 @@ source(input) ::= <<
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 <class(input=input)>
 >>
@@ -128,7 +131,8 @@ public class <input.tr_name_capitalized>ThreadLocalBag
              */
             protected synchronized Object initialValue()
             {
-                return new HashMap();
+                return
+                    new KeyBoundedMapDecorator(new HashMap(), 100);
             }
         };
 
@@ -147,6 +151,1220 @@ public class <input.tr_name_capitalized>ThreadLocalBag
     public static void resetThreadBag()
     {
         THREAD_BAG.set(null);
+    }
+
+    /**
+     * A map whose keys are limitted in number.
+     * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
+     * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+     * @since <input.timestamp>
+     */
+    public abstract static class AbstractMapDecorator
+        implements  Map
+    {
+        /**
+         * The actual map.
+         */
+        private Map m__DecoratedMap;
+
+        /**
+         * Builds an \<code>AbstractMapDecorator\</code> instance.
+         * @param map the map to decorate.
+         */
+        public AbstractMapDecorator(final Map map)
+        {
+            immutableSetDecoratedMap(map);
+        }
+
+        /**
+         * Specifies the decorated map.
+         * @param map such map.
+         */
+        protected final void immutableSetDecoratedMap(final Map map)
+        {
+            m__DecoratedMap = map;
+        }
+
+        /**
+         * Specifies the decorated map.
+         * @param map such map.
+         */
+        protected void setDecoratedMap(final Map map)
+        {
+            immutableSetDecoratedMap(map);
+        }
+
+        /**
+         * Retrieves the decorated map.
+         * @return such map.
+         */
+        public Map getDecoratedMap()
+        {
+            return m__DecoratedMap;
+        }
+
+        /**
+         * Returns the size of the decorated map.
+         *
+         * @return such information.
+         */
+        public int size()
+        {
+            return size(getDecoratedMap());
+        }
+
+        /**
+         * Returns the size of the decorated map.
+         * @param decoratedMap the decorated map.
+         * @return such information.
+         */
+        protected int size(final Map decoratedMap)
+        {
+            return decoratedMap.size();
+        }
+
+        /**
+         * Checks whether the decorated map is empty.
+         *
+         * @return \<tt>true\</tt> in such case.
+         */
+        public boolean isEmpty()
+        {
+            return isEmpty(getDecoratedMap());
+        }
+    
+        /**
+         * Checks whether the decorated map is empty.
+         * @param decoratedMap the decorated map.
+         * @return \<tt>true\</tt> in such case.
+         */
+        protected boolean isEmpty(final Map decoratedMap)
+        {
+            return decoratedMap.isEmpty();
+        }
+    
+        /**
+         * Checks whether the decorated map contains given key.
+         * @param key key whose presence in this map is to be tested.
+         * @return \<tt>true\</tt> in such case.
+         * 
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         */
+        public boolean containsKey(final Object key)
+        {
+            return containsKey(key, getDecoratedMap());
+        }
+
+        /**
+         * Checks whether the decorated map contains given key.
+         * @param decoratedMap the decorated map.
+         * @param key key whose presence in this map is to be tested.
+         * @return \<tt>true\</tt> in such case.
+         * 
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         */
+        protected boolean containsKey(final Object key, final Map decoratedMap)
+        {
+            return decoratedMap.containsKey(key);
+        }
+
+        /**
+         * Checks whether the decorated map contains given value.
+         * @param value value whose presence in this map is to be tested.
+         * @return \<tt>true\</tt> in such case.
+         * @throws ClassCastException if the value is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the value is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> values (optional).
+         */
+        public boolean containsValue(final Object value)
+        {
+            return containsValue(value, getDecoratedMap());
+        }
+
+        /**
+         * Checks whether the decorated map contains given value.
+         * @param value value whose presence in this map is to be tested.
+         * @return \<tt>true\</tt> in such case.
+         * @throws ClassCastException if the value is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the value is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> values (optional).
+         */
+        protected boolean containsValue(final Object value, final Map decoratedMap)
+        {
+            return decoratedMap.containsValue(value);
+        }
+
+        /**
+         * Retrieves the value associated to given key in the decorated map.
+         * @param key key whose associated value is to be returned.
+         * @return the value to which this map maps the specified key, or
+         * \<tt>null\</tt> if the decorated map contains no mappingfor this key.
+         * 
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *          does not permit \<tt>null\</tt> keys (optional).
+         * 
+         */
+        public Object get(final Object key)
+        {
+            return get(key, getDecoratedMap());
+        }
+    
+        /**
+         * Retrieves the value associated to given key in the decorated map.
+         * @param key key whose associated value is to be returned.
+         * @return the value to which this map maps the specified key, or
+         * \<tt>null\</tt> if the decorated map contains no mappingfor this key.
+         * 
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *          does not permit \<tt>null\</tt> keys (optional).
+         * 
+         */
+        protected Object get(final Object key, final Map decoratedMap)
+        {
+            return decoratedMap.get(key);
+        }
+    
+        // Modification Operations
+    
+        /**
+         * Associates the specified value with the specified key in the decorated map
+         * (optional operation).  If the map previously contained a mapping for
+         * this key, the old value is replaced by the specified value. 
+         *
+         * @param key key with which the specified value is to be associated.
+         * @param value value to be associated with the specified key.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.  A \<tt>null\</tt> return can
+         *           also indicate that the map previously associated \<tt>null\</tt>
+         *           with the specified key, if the implementation supports
+         *           \<tt>null\</tt> values.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>put\</tt> operation is
+         *              not supported by this map.
+         * @throws ClassCastException if the class of the specified key or value
+         *               prevents it from being stored in this map.
+         * @throws IllegalArgumentException if some aspect of this key or value
+         *              prevents it from being stored in this map.
+         * @throws NullPointerException if this map does not permit \<tt>null\</tt>
+         *            keys or values, and the specified key or value is
+         *            \<tt>null\</tt>.
+         */
+        public Object put(final Object key, final Object value)
+        {
+            return put(key, value, getDecoratedMap());
+        }
+    
+        /**
+         * Associates the specified value with the specified key in the decorated map
+         * (optional operation).  If the map previously contained a mapping for
+         * this key, the old value is replaced by the specified value. 
+         *
+         * @param key key with which the specified value is to be associated.
+         * @param value value to be associated with the specified key.
+         * @param decoratedMap the decorated map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.  A \<tt>null\</tt> return can
+         *           also indicate that the map previously associated \<tt>null\</tt>
+         *           with the specified key, if the implementation supports
+         *           \<tt>null\</tt> values.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>put\</tt> operation is
+         *              not supported by this map.
+         * @throws ClassCastException if the class of the specified key or value
+         *               prevents it from being stored in this map.
+         * @throws IllegalArgumentException if some aspect of this key or value
+         *              prevents it from being stored in this map.
+         * @throws NullPointerException if this map does not permit \<tt>null\</tt>
+         *            keys or values, and the specified key or value is
+         *            \<tt>null\</tt>.
+         */
+        protected Object put(
+            final Object key,
+            final Object value,
+            final Map decoratedMap,
+            final int maxSize)
+        {
+            return decoratedMap.put(key, value);
+        }
+    
+        /**
+         * Removes the mapping for this key from this map if it is present
+         * (optional operation).
+         *
+         * Returns the value to which the decorated map previously associated the key, or
+         * \<tt>null\</tt> if the map contained no mapping for this key.  (A
+         * \<tt>null\</tt> return can also indicate that the map previously
+         * associated \<tt>null\</tt> with the specified key if the implementation
+         * supports \<tt>null\</tt> values.)  The map will not contain a mapping for
+         * the specified  key once the call returns.
+         *
+         * @param key key whose mapping is to be removed from the map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.
+         *
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
+         *         not supported by this map.
+         */
+        public Object remove(final Object key)
+        {
+            return remove(key, getDecoratedMap());
+        }
+    
+        /**
+         * Removes the mapping for this key from this map if it is present
+         * (optional operation).
+         *
+         * Returns the value to which the decorated map previously associated the key, or
+         * \<tt>null\</tt> if the map contained no mapping for this key.  (A
+         * \<tt>null\</tt> return can also indicate that the map previously
+         * associated \<tt>null\</tt> with the specified key if the implementation
+         * supports \<tt>null\</tt> values.)  The map will not contain a mapping for
+         * the specified  key once the call returns.
+         *
+         * @param key key whose mapping is to be removed from the map.
+         * @param decoratedMap the decorated map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.
+         *
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
+         *         not supported by this map.
+         */
+        protected Object remove(
+            final Object key, final Map decoratedMap)
+        {
+            return decoratedMap.remove(key);
+        }
+    
+    
+        // Bulk Operations
+    
+        /**
+         * Copies all of the mappings from the specified map to the decorated map
+         * (optional operation). The behavior of this operation is unspecified if the
+         * specified map is modified while the operation is in progress.
+         *
+         * @param t Mappings to be stored in this map.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>putAll\</tt> method is
+         *           not supported by this map.
+         * 
+         * @throws ClassCastException if the class of a key or value in the
+         *               specified map prevents it from being stored in this map.
+         * 
+         * @throws IllegalArgumentException some aspect of a key or value in the
+         *              specified map prevents it from being stored in this map.
+         * @throws NullPointerException if the specified map is \<tt>null\</tt>, or if
+         *         this map does not permit \<tt>null\</tt> keys or values, and the
+         *         specified map contains \<tt>null\</tt> keys or values.
+         */
+        public void putAll(final Map t)
+        {
+            putAll(t, getDecoratedMap());
+        }
+    
+        /**
+         * Copies all of the mappings from the specified map to the decorated map
+         * (optional operation). The behavior of this operation is unspecified if the
+         * specified map is modified while the operation is in progress.
+         *
+         * @param t Mappings to be stored in this map.
+         * @param decoratedMap the decorated map.
+         * @throws UnsupportedOperationException if the \<tt>putAll\</tt> method is
+         *           not supported by this map.
+         * 
+         * @throws ClassCastException if the class of a key or value in the
+         *               specified map prevents it from being stored in this map.
+         * 
+         * @throws IllegalArgumentException some aspect of a key or value in the
+         *              specified map prevents it from being stored in this map.
+         * @throws NullPointerException if the specified map is \<tt>null\</tt>, or if
+         *         this map does not permit \<tt>null\</tt> keys or values, and the
+         *         specified map contains \<tt>null\</tt> keys or values.
+         */
+        protected void putAll(
+            final Map t,
+            final Map decoratedMap)
+        {
+            decoratedMap.putAll(t);
+        }
+    
+        /**
+         * Removes all mappings from the decorated map (optional operation).
+         *
+         * @throws UnsupportedOperationException clear is not supported by this
+         *           map.
+         */
+        public void clear()
+        {
+            clear(getDecoratedMap());
+        }
+    
+        /**
+         * Removes all mappings from the decorated map (optional operation).
+         *
+         * @param decoratedMap the decorated map.
+         * @throws UnsupportedOperationException clear is not supported by this
+         *           map.
+         */
+        protected void clear(final Map decoratedMap)
+        {
+            decoratedMap.clear();
+        }
+    
+        // Views
+    
+        /**
+         * Returns a set view of the keys contained in the decorated map.
+         * Note: the keys retrieved are not monitored, so changes in this set
+         * would not be taken into account (regarding bound checking) until
+         * the map changes using Map standard interface.
+         * @return a set view of the keys contained in such map.
+         */
+        public Set keySet()
+        {
+            return getKeySet(getDecoratedMap()); 
+        }
+
+        /**
+         * Returns a set view of the keys contained in the decorated map.
+         * @param decoratedMap the decorated map.
+         * @return a set view of the keys contained in such map.
+         */
+        protected Set getKeySet(final Map decoratedMap)
+        {
+            return decoratedMap.keySet();
+        }
+
+        /**
+         * Returns a collection view of the values contained in the decorated map.
+         * @return a collection view of the values contained in such map.
+         */
+        public Collection values()
+        {
+            return getValues(getDecoratedMap());
+        }
+    
+        /**
+         * Returns a collection view of the values contained in the decorated map.
+         * @param decoratedMap the decorated map.
+         * @return a collection view of the values contained in such map.
+         */
+        protected Collection getValues(final Map decoratedMap)
+        {
+            return decoratedMap.values();
+        }
+    
+        /**
+         * Returns a set view of the mappings contained in the decorated map.
+         * Note: the keys retrieved are not monitored, so changes in this set
+         * would not be taken into account (regarding bound checking) until
+         * the map changes using Map standard interface.
+         * @return a set view of the mappings contained in such map.
+         */
+        public Set entrySet()
+        {
+            return getEntrySet(getDecoratedMap());
+        }
+
+        /**
+         * Returns a set view of the mappings contained in the decorated map.
+         * @return a set view of the mappings contained in such map.
+         */
+        protected Set getEntrySet(final Map decoratedMap)
+        {
+            return decoratedMap.entrySet();
+        }
+
+        // Comparison and hashing
+    
+        /**
+         * Compares the specified object with the decorated map for equality.
+         * @param o object to be compared for equality with such map.
+         * @return \<tt>true\</tt> if the specified object is equal to this map.
+         */
+        public boolean equals(final Object o)
+        {
+            return areEqual(o, getDecoratedMap());
+        }
+    
+        /**
+         * Compares the specified object with the decorated map for equality.
+         * @param o object to be compared for equality with such map.
+         * @param decoratedMap the decorated map.
+         * @return \<tt>true\</tt> if the specified object is equal to this map.
+         */
+        protected boolean areEqual(final Object o, final Map decoratedMap)
+        {
+            return decoratedMap.equals(o);
+        }
+    
+        /**
+         * Returns the hash code value of the decorated instance.
+         *
+         * @return such hash code value.
+         */
+        public int hashCode()
+        {
+            return getHashCode(getDecoratedMap());
+        }
+
+        /**
+         * Returns the hash code value of the decorated instance.
+         * @param decoratedMap the decorated map.
+         * @return such hash code value.
+         */
+        protected int getHashCode(final Map decoratedMap)
+        {
+            return decoratedMap.hashCode();
+        }
+    }
+
+    /**
+     * A map whose keys are limitted in number.
+     * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
+     * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+     * @since <input.timestamp>
+     */
+    public static class KeyBoundedMapDecorator
+        extends  AbstractMapDecorator
+    {
+        /**
+         * The max size.
+         */
+        private int m__iMaxSize;
+
+        /**
+         * A list with the map keys, ordered by insertion time.
+         */
+        private List m__lKeys;
+
+        /**
+         * Builds a \<code>BoundedMapDecorator\</code> instance.
+         * @param map the map to decorate.
+         * @param size the upper bound.
+         */
+        public KeyBoundedMapDecorator(
+            final Map map, final int size)
+        {
+            super(map);
+            immutableSetMaxSize(size);
+            immutableSetKeyList(new ArrayList());
+        }
+
+        /**
+         * Specifies the max size.
+         * @param size such information.
+         */
+        protected final void immutableSetMaxSize(final int size)
+        {
+            m__iMaxSize = size;
+        }
+
+        /**
+         * Specifies the max size.
+         * @param size such information.
+         */
+        protected void setMaxSize(final int size)
+        {
+            immutableSetMaxSize(size);
+        }
+
+        /**
+         * Retrieves the max size.
+         * @return such information.
+         */
+        public int getMaxSize()
+        {
+            return m__iMaxSize;
+        }
+
+        /**
+         * Specifies the key list.
+         * @param list such list.
+         */
+        protected final void immutableSetKeyList(final List list)
+        {
+            m__lKeys = list;
+        }
+
+        /**
+         * Specifies the key list.
+         * @param list such list.
+         */
+        protected void setKeyList(final List list)
+        {
+            immutableSetKeyList(list);
+        }
+
+        /**
+         * Retrieves the key list.
+         * @return such list.
+         */
+        public List getKeyList()
+        {
+            return m__lKeys;
+        }
+    
+        // Modification Operations
+    
+        /**
+         * Associates the specified value with the specified key in the decorated map
+         * (optional operation).  If the map previously contained a mapping for
+         * this key, the old value is replaced by the specified value. 
+         *
+         * @param key key with which the specified value is to be associated.
+         * @param value value to be associated with the specified key.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.  A \<tt>null\</tt> return can
+         *           also indicate that the map previously associated \<tt>null\</tt>
+         *           with the specified key, if the implementation supports
+         *           \<tt>null\</tt> values.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>put\</tt> operation is
+         *              not supported by this map.
+         * @throws ClassCastException if the class of the specified key or value
+         *               prevents it from being stored in this map.
+         * @throws IllegalArgumentException if some aspect of this key or value
+         *              prevents it from being stored in this map.
+         * @throws NullPointerException if this map does not permit \<tt>null\</tt>
+         *            keys or values, and the specified key or value is
+         *            \<tt>null\</tt>.
+         */
+        public Object put(final Object key, final Object value)
+        {
+            return put(key, value, getDecoratedMap(), getMaxSize(), getKeyList());
+        }
+    
+        /**
+         * Associates the specified value with the specified key in the decorated map
+         * (optional operation).  If the map previously contained a mapping for
+         * this key, the old value is replaced by the specified value. 
+         *
+         * @param key key with which the specified value is to be associated.
+         * @param value value to be associated with the specified key.
+         * @param decoratedMap the decorated map.
+         * @param maxSize the maximum size of the map.
+         * @param keyList the key list.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.  A \<tt>null\</tt> return can
+         *           also indicate that the map previously associated \<tt>null\</tt>
+         *           with the specified key, if the implementation supports
+         *           \<tt>null\</tt> values.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>put\</tt> operation is
+         *              not supported by this map.
+         * @throws ClassCastException if the class of the specified key or value
+         *               prevents it from being stored in this map.
+         * @throws IllegalArgumentException if some aspect of this key or value
+         *              prevents it from being stored in this map.
+         * @throws NullPointerException if this map does not permit \<tt>null\</tt>
+         *            keys or values, and the specified key or value is
+         *            \<tt>null\</tt>.
+         */
+        protected Object put(
+            final Object key,
+            final Object value,
+            final Map decoratedMap,
+            final int maxSize,
+            final List keyList)
+        {
+            Object result = decoratedMap.put(key, value);
+
+            if  (keyList.contains(key))
+            {
+                // Put the key as the newest item.
+                keyList.remove(key);
+            }
+
+            keyList.add(key);
+
+            if  (keyList.size() > maxSize)
+            {
+                Object t_OldestKey = keyList.get(0);
+
+                if  (t_OldestKey != null)
+                {
+                    decoratedMap.remove(t_OldestKey);
+                }
+
+                keyList.remove(0);
+            }
+
+            return result;
+        }
+    
+        /**
+         * Removes the mapping for this key from this map if it is present
+         * (optional operation).
+         *
+         * Returns the value to which the decorated map previously associated the key, or
+         * \<tt>null\</tt> if the map contained no mapping for this key.  (A
+         * \<tt>null\</tt> return can also indicate that the map previously
+         * associated \<tt>null\</tt> with the specified key if the implementation
+         * supports \<tt>null\</tt> values.)  The map will not contain a mapping for
+         * the specified  key once the call returns.
+         *
+         * @param key key whose mapping is to be removed from the map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.
+         *
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
+         *         not supported by this map.
+         */
+        public Object remove(final Object key)
+        {
+            return remove(key, getDecoratedMap(), getKeyList());
+        }
+    
+        /**
+         * Removes the mapping for this key from this map if it is present
+         * (optional operation).
+         *
+         * Returns the value to which the decorated map previously associated the key, or
+         * \<tt>null\</tt> if the map contained no mapping for this key.  (A
+         * \<tt>null\</tt> return can also indicate that the map previously
+         * associated \<tt>null\</tt> with the specified key if the implementation
+         * supports \<tt>null\</tt> values.)  The map will not contain a mapping for
+         * the specified  key once the call returns.
+         *
+         * @param key key whose mapping is to be removed from the map.
+         * @param decoratedMap the decorated map.
+         * @param keyList the key list.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.
+         *
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
+         *         not supported by this map.
+         */
+        protected Object remove(
+            final Object key, final Map decoratedMap, final List keyList)
+        {
+            Object result = decoratedMap.remove(key);
+
+            keyList.remove(key);
+
+            return result;
+        }
+    
+    
+        // Bulk Operations
+    
+        /**
+         * Copies all of the mappings from the specified map to the decorated map
+         * (optional operation). The behavior of this operation is unspecified if the
+         * specified map is modified while the operation is in progress.
+         *
+         * @param t Mappings to be stored in this map.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>putAll\</tt> method is
+         *           not supported by this map.
+         * 
+         * @throws ClassCastException if the class of a key or value in the
+         *               specified map prevents it from being stored in this map.
+         * 
+         * @throws IllegalArgumentException some aspect of a key or value in the
+         *              specified map prevents it from being stored in this map.
+         * @throws NullPointerException if the specified map is \<tt>null\</tt>, or if
+         *         this map does not permit \<tt>null\</tt> keys or values, and the
+         *         specified map contains \<tt>null\</tt> keys or values.
+         */
+        public void putAll(final Map t)
+        {
+            putAll(t, getDecoratedMap(), getMaxSize(), getKeyList());
+        }
+    
+        /**
+         * Copies all of the mappings from the specified map to the decorated map
+         * (optional operation). The behavior of this operation is unspecified if the
+         * specified map is modified while the operation is in progress.
+         *
+         * @param t Mappings to be stored in this map.
+         * @param decoratedMap the decorated map.
+         * @param maxSize the maximum allowed size for the map keys.
+         * @param keyList the list of keys.
+         * @throws UnsupportedOperationException if the \<tt>putAll\</tt> method is
+         *           not supported by this map.
+         * 
+         * @throws ClassCastException if the class of a key or value in the
+         *               specified map prevents it from being stored in this map.
+         * 
+         * @throws IllegalArgumentException some aspect of a key or value in the
+         *              specified map prevents it from being stored in this map.
+         * @throws NullPointerException if the specified map is \<tt>null\</tt>, or if
+         *         this map does not permit \<tt>null\</tt> keys or values, and the
+         *         specified map contains \<tt>null\</tt> keys or values.
+         */
+        protected void putAll(
+            final Map t,
+            final Map decoratedMap, 
+            final int maxSize,
+            final List keyList)
+        {
+            decoratedMap.putAll(t);
+
+            List t_lNewKeyList = keyList;
+
+            t_lNewKeyList.addAll(t.keySet());
+
+            t_lNewKeyList = removeDuplicates(t_lNewKeyList);
+            setKeyList(t_lNewKeyList);
+
+            Object lastKey;
+
+            while  (t_lNewKeyList.size() > maxSize)
+            {
+                lastKey = t_lNewKeyList.remove(0);
+                decoratedMap.remove(lastKey);
+            }
+        }
+    
+        /**
+         * Removes all mappings from the decorated map (optional operation).
+         *
+         * @throws UnsupportedOperationException clear is not supported by this
+         *           map.
+         */
+        public void clear()
+        {
+            clear(getDecoratedMap(), getKeyList());
+        }
+    
+        /**
+         * Removes all mappings from the decorated map (optional operation).
+         *
+         * @param decoratedMap the decorated map.
+         * @param keyList the key list.
+         * @throws UnsupportedOperationException clear is not supported by this
+         *           map.
+         */
+        protected void clear(final Map decoratedMap, final List keyList)
+        {
+            decoratedMap.clear();
+            keyList.clear();
+        }
+    
+        /**
+         * Removes any duplicated entries in given list.
+         * @param list the list.
+         * @return the modified list.
+         */
+        protected List removeDuplicates(final List list)
+        {
+            List result = new ArrayList();
+
+            int t_iCount = (list != null) ? list.size() : 0;
+
+            Object t_Item;
+
+            for  (int t_iIndex = 0; t_iIndex \< t_iCount; t_iIndex++)
+            {
+                t_Item = list.get(t_iIndex);
+
+                if  (result.contains(t_Item))
+                {
+                    result.remove(t_Item);
+                }
+
+                result.add(t_Item);
+            }
+
+            return result;
+        }
+    }
+
+    /**
+     * A map whose values have an extra timestamp annotation.
+     * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
+     * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+     * @since <input.timestamp>
+     */
+    public static class TimestampMapDecorator
+        extends  AbstractMapDecorator
+    {
+        /**
+         * The timestamp map.
+         */
+        private Map m__mTimestamps;
+
+        /**
+         * Builds a \<code>TimestampMapDecorator\</code> instance.
+         * @param map the map to decorate.
+         * @param size the upper bound.
+         */
+        public TimestampMapDecorator(final Map map)
+        {
+            super(map);
+            immutableSetTimestampMap(new HashMap());
+        }
+
+        /**
+         * Specifies the decorated map.
+         * @param map such map.
+         */
+        protected final void immutableSetDecoratedMap(final Map map)
+        {
+            m__DecoratedMap = map;
+        }
+
+        /**
+         * Specifies the decorated map.
+         * @param map such map.
+         */
+        protected void setDecoratedMap(final Map map)
+        {
+            immutableSetDecoratedMap(map);
+        }
+
+        /**
+         * Retrieves the decorated map.
+         * @return such map.
+         */
+        public Map getDecoratedMap()
+        {
+            return m__DecoratedMap;
+        }
+
+        /**
+         * Specifies the timestamp map.
+         * @param map such map.
+         */
+        protected final void immutableSetTimestampMap(final Map map)
+        {
+            m__mTimestamps = map;
+        }
+
+        /**
+         * Specifies the timestamp map.
+         * @param map such map.
+         */
+        protected void setTimestampMap(final Map map)
+        {
+            immutableSetTimestampMap(map);
+        }
+
+        /**
+         * Retrieves the timestamp map.
+         * @return such map.
+         */
+        public Map getTimestampMap()
+        {
+            return m__mTimestamps;
+        }
+
+        /**
+         * Retrieves the value associated to given key in the decorated map.
+         * @param key key whose associated value is to be returned.
+         * @return the value to which this map maps the specified key, or
+         * \<tt>null\</tt> if the decorated map contains no mappingfor this key.
+         * 
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *          does not permit \<tt>null\</tt> keys (optional).
+         * 
+         */
+        public Date getTimestamp(final Object key)
+        {
+            return getTimestamp(key, getTimestampMap());
+        }
+    
+        /**
+         * Retrieves the timestamp associated to the value referred by given key.
+         * @param key key whose associated value is to be returned.
+         * @param timestampMap the timestamp map.
+         * @return the value to which this map maps the specified key, or
+         * \<tt>null\</tt> if the decorated map contains no mappingfor this key.
+         * 
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *          does not permit \<tt>null\</tt> keys (optional).
+         * 
+         */
+        protected Date getTimestamp(final Object key, final Map timestampMap)
+        {
+            Date result = null;
+
+            Object t_Value = get(key);
+
+            if  (t_Value != null)
+            {
+                result = timestampMap.get(buildTimestampKey(key, t_Value));
+            }
+
+            return result;
+        }
+
+        /**
+         * Builds a timestamp key.
+         * @param key the key.
+         * @param value the value.
+         * @return such key.
+         */
+        protected Object buildTimestampKey(final Object key, final Object value)
+        {
+            return "asd3e23::" + key.hashCode() + "//\\\\" + value.hashCode();
+        }
+
+        // Modification Operations
+    
+        /**
+         * Associates the specified value with the specified key in the decorated map
+         * (optional operation).  If the map previously contained a mapping for
+         * this key, the old value is replaced by the specified value. 
+         *
+         * @param key key with which the specified value is to be associated.
+         * @param value value to be associated with the specified key.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.  A \<tt>null\</tt> return can
+         *           also indicate that the map previously associated \<tt>null\</tt>
+         *           with the specified key, if the implementation supports
+         *           \<tt>null\</tt> values.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>put\</tt> operation is
+         *              not supported by this map.
+         * @throws ClassCastException if the class of the specified key or value
+         *               prevents it from being stored in this map.
+         * @throws IllegalArgumentException if some aspect of this key or value
+         *              prevents it from being stored in this map.
+         * @throws NullPointerException if this map does not permit \<tt>null\</tt>
+         *            keys or values, and the specified key or value is
+         *            \<tt>null\</tt>.
+         */
+        public Object put(final Object key, final Object value)
+        {
+            return put(key, value, getDecoratedMap(), getTimestampMap());
+        }
+    
+        /**
+         * Associates the specified value with the specified key in the decorated map
+         * (optional operation).  If the map previously contained a mapping for
+         * this key, the old value is replaced by the specified value. 
+         *
+         * @param key key with which the specified value is to be associated.
+         * @param value value to be associated with the specified key.
+         * @param decoratedMap the decorated map.
+         * @param timestampMap the timestamp map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.  A \<tt>null\</tt> return can
+         *           also indicate that the map previously associated \<tt>null\</tt>
+         *           with the specified key, if the implementation supports
+         *           \<tt>null\</tt> values.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>put\</tt> operation is
+         *              not supported by this map.
+         * @throws ClassCastException if the class of the specified key or value
+         *               prevents it from being stored in this map.
+         * @throws IllegalArgumentException if some aspect of this key or value
+         *              prevents it from being stored in this map.
+         * @throws NullPointerException if this map does not permit \<tt>null\</tt>
+         *            keys or values, and the specified key or value is
+         *            \<tt>null\</tt>.
+         */
+        protected Object put(
+            final Object key,
+            final Object value,
+            final Map decoratedMap,
+            final Map timestampMap)
+        {
+            Object result;
+
+            Object t_TimestampKey = buildTimestampKey(key, value);
+
+            timestampMap.remove(t_TimestampKey);
+
+            Date t_Timestamp = new Date();
+
+            result = super.put(key, value, decoratedMap);
+
+            timestampMap.put(t_TimestampKey, t_Timestamp);
+
+            return result;
+        }
+    
+        /**
+         * Removes the mapping for this key from this map if it is present
+         * (optional operation).
+         *
+         * Returns the value to which the decorated map previously associated the key, or
+         * \<tt>null\</tt> if the map contained no mapping for this key.  (A
+         * \<tt>null\</tt> return can also indicate that the map previously
+         * associated \<tt>null\</tt> with the specified key if the implementation
+         * supports \<tt>null\</tt> values.)  The map will not contain a mapping for
+         * the specified  key once the call returns.
+         *
+         * @param key key whose mapping is to be removed from the map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.
+         *
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
+         *         not supported by this map.
+         */
+        public Object remove(final Object key)
+        {
+            return remove(key, getDecoratedMap(), getTimestampMap());
+        }
+    
+        /**
+         * Removes the mapping for this key from this map if it is present
+         * (optional operation).
+         *
+         * Returns the value to which the decorated map previously associated the key, or
+         * \<tt>null\</tt> if the map contained no mapping for this key.  (A
+         * \<tt>null\</tt> return can also indicate that the map previously
+         * associated \<tt>null\</tt> with the specified key if the implementation
+         * supports \<tt>null\</tt> values.)  The map will not contain a mapping for
+         * the specified  key once the call returns.
+         *
+         * @param key key whose mapping is to be removed from the map.
+         * @param decoratedMap the decorated map.
+         * @param timestampMap the timestamp map.
+         * @return previous value associated with specified key, or \<tt>null\</tt>
+         *           if there was no mapping for key.
+         *
+         * @throws ClassCastException if the key is of an inappropriate type for
+         *           this map (optional).
+         * @throws NullPointerException if the key is \<tt>null\</tt> and this map
+         *            does not permit \<tt>null\</tt> keys (optional).
+         * @throws UnsupportedOperationException if the \<tt>remove\</tt> method is
+         *         not supported by this map.
+         */
+        protected Object remove(
+            final Object key, final Map decoratedMap, final Map timestampMap)
+        {
+            Object result = super.remove(key, decoratedMap);
+
+            timestampMap.remove(buildTimestampKey(key, result));
+
+            return result;
+        }
+    
+    
+        // Bulk Operations
+    
+        /**
+         * Copies all of the mappings from the specified map to the decorated map
+         * (optional operation). The behavior of this operation is unspecified if the
+         * specified map is modified while the operation is in progress.
+         *
+         * @param t Mappings to be stored in this map.
+         * 
+         * @throws UnsupportedOperationException if the \<tt>putAll\</tt> method is
+         *           not supported by this map.
+         * 
+         * @throws ClassCastException if the class of a key or value in the
+         *               specified map prevents it from being stored in this map.
+         * 
+         * @throws IllegalArgumentException some aspect of a key or value in the
+         *              specified map prevents it from being stored in this map.
+         * @throws NullPointerException if the specified map is \<tt>null\</tt>, or if
+         *         this map does not permit \<tt>null\</tt> keys or values, and the
+         *         specified map contains \<tt>null\</tt> keys or values.
+         */
+        public void putAll(final Map t)
+        {
+            putAll(t, getDecoratedMap(), getTimestampMap());
+        }
+    
+        /**
+         * Copies all of the mappings from the specified map to the decorated map
+         * (optional operation). The behavior of this operation is unspecified if the
+         * specified map is modified while the operation is in progress.
+         *
+         * @param t Mappings to be stored in this map.
+         * @param decoratedMap the decorated map.
+         * @param timestampMap the timestamp map.
+         * @throws UnsupportedOperationException if the \<tt>putAll\</tt> method is
+         *           not supported by this map.
+         * 
+         * @throws ClassCastException if the class of a key or value in the
+         *               specified map prevents it from being stored in this map.
+         * 
+         * @throws IllegalArgumentException some aspect of a key or value in the
+         *              specified map prevents it from being stored in this map.
+         * @throws NullPointerException if the specified map is \<tt>null\</tt>, or if
+         *         this map does not permit \<tt>null\</tt> keys or values, and the
+         *         specified map contains \<tt>null\</tt> keys or values.
+         */
+        protected void putAll(
+            final Map t,
+            final Map decoratedMap, 
+            final Map timestampMap)
+        {
+            Collection t_cKeys = (t != null) ? t.keySet() : null;
+
+            Iterator t_itKeys =
+                (t_cKeys != null) ? t_cKeys.iterator() : null;
+
+            if  (t_itKeys != null)
+            {
+                Object t_Key;
+                Object t_Value;
+
+                while  (t_itKeys.hasNext())
+                {
+                    t_Key = t_itKeys.next();
+                    put(t_Key, t_itKeys.next(), decoratedMap, timestampMap);
+                }
+            }
+        }
+    
+        /**
+         * Removes all mappings from the decorated map (optional operation).
+         *
+         * @throws UnsupportedOperationException clear is not supported by this
+         *           map.
+         */
+        public void clear()
+        {
+            clear(getDecoratedMap(), getTimestampMap());
+        }
+    
+        /**
+         * Removes all mappings from the decorated map (optional operation).
+         *
+         * @param decoratedMap the decorated map.
+         * @param timestampMap the timestamp map.
+         * @throws UnsupportedOperationException clear is not supported by this
+         *           map.
+         */
+        protected void clear(final Map decoratedMap, final Map timestampMap)
+        {
+            decoratedMap.clear();
+            timestampMap.clear();
+        }
     }
 }
 >>
