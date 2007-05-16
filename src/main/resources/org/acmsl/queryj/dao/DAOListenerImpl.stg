@@ -144,219 +144,80 @@ public class <input.tr_name_capitalized>DAOListenerImpl
 
     /**
      * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param sql the sql sentence.
      */
-    public void connectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback)
+    public void connectionRetrieved(final String sql)
     {
         annotateConnectionRetrieved(
-            jdbcTemplate,
-            connectionCallback, 
-            <input.tr_name_capitalized>StatisticsProvider.getInstance());
+            sql, <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
     /**
      * Annotates when a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param sql the sql sentence.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
     protected void annotateConnectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback,
+        final String sql,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
-        statisticsProvider.annotateConnectionRetrieved(
-            jdbcTemplate, connectionCallback);
-    }
-
-    /**
-     * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
-     */
-    public void connectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback)
-    {
-        annotateConnectionRetrieved(
-            jdbcTemplate,
-            preparedStatementCallback, 
-            <input.tr_name_capitalized>StatisticsProvider.getInstance());
-    }
-
-    /**
-     * Annotates when a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
-     * instance.
-     */
-    protected void annotateConnectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
-    {
-        statisticsProvider.annotateConnectionRetrieved(
-            jdbcTemplate, preparedStatementCallback);
+        statisticsProvider.annotateConnectionRetrieved(sql);
     }
 
     /**
      * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param sql the SQL sentence.
      */
-    public void connectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback)
+    public void connectionReleased(final String sql)
     {
         annotateConnectionReleased(
-            jdbcTemplate,
-            connectionCallback,
+            sql,
             <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
     /**
      * Annotates a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param sql the SQL sentence.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
     public void annotateConnectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback,
+        final String sql,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
-        statisticsProvider.annotateConnectionReleased(
-            jdbcTemplate, connectionCallback);
-    }
-
-    /**
-     * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
-     */
-    public void connectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback)
-    {
-        annotateConnectionReleased(
-            jdbcTemplate,
-            preparedStatementCallback,
-            <input.tr_name_capitalized>StatisticsProvider.getInstance());
-    }
-
-    /**
-     * Annotates a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
-     * instance.
-     */
-    public void annotateConnectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
-    {
-        statisticsProvider.annotateConnectionReleased(
-            jdbcTemplate, preparedStatementCallback);
-    }
-
-    /**
-     * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
-     */
-    public void connectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback)
-    {
-        annotateConnectionRetrieved(
-            jdbcTemplate,
-            statementCallback,
-            <input.tr_name_capitalized>StatisticsProvider.getInstance());
-    }
-
-    /**
-     * Annotates a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
-     * instance.
-     */
-    protected void annotateConnectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
-    {
-        statisticsProvider.annotateConnectionRetrieved(
-            jdbcTemplate, statementCallback);
-    }
-
-    /**
-     * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
-     */
-    public void connectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback)
-    {
-        annotateConnectionReleased(
-            jdbcTemplate,
-            statementCallback,
-            <input.tr_name_capitalized>StatisticsProvider.getInstance());
-    }
-
-    /**
-     * Annotates a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
-     * instance.
-     */
-    protected void annotateConnectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
-    {
-        statisticsProvider.annotateConnectionReleased(
-            jdbcTemplate, statementCallback);
+        statisticsProvider.annotateConnectionReleased(sql);
     }
 
     /**
      * Receives notifications whenever a statement is created.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
      */
     public void statementCreated(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final String sql,
         final PreparedStatementCreator preparedStatementCreator)
     {
         annotateStatementCreated(
-            jdbcTemplate,
+            sql,
             preparedStatementCreator,
             <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
     /**
      * Annotates a statement is created.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
     protected void annotateStatementCreated(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final String sql,
         final PreparedStatementCreator preparedStatementCreator,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementCreated(
-            jdbcTemplate, preparedStatementCreator);
+            sql, preparedStatementCreator);
     }
 
     /**
@@ -384,33 +245,32 @@ public class <input.tr_name_capitalized>DAOListenerImpl
 
     /**
      * Receives notifications whenever a statement is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
      */
     public void statementReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCreator preparedStatementCreator)
+        final String sql, final PreparedStatementCreator preparedStatementCreator)
     {
         annotateStatementReleased(
-            jdbcTemplate,
+            sql,
             preparedStatementCreator,
             <input.tr_name_capitalized>StatisticsProvider.getInstance());
     }
 
     /**
      * Annotates a statement is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
      * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
      * instance.
      */
     protected void annotateStatementReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final String sql,
         final PreparedStatementCreator preparedStatementCreator,
         final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementReleased(
-            jdbcTemplate, preparedStatementCreator);
+            sql, preparedStatementCreator);
     }
 
     /**

@@ -74,7 +74,10 @@ source(input) ::= <<
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -393,8 +396,7 @@ public class <input.tr_name_capitalized>ThreadLocalBag
         protected Object put(
             final Object key,
             final Object value,
-            final Map decoratedMap,
-            final int maxSize)
+            final Map decoratedMap)
         {
             return decoratedMap.put(key, value);
         }
@@ -1026,33 +1028,6 @@ public class <input.tr_name_capitalized>ThreadLocalBag
         }
 
         /**
-         * Specifies the decorated map.
-         * @param map such map.
-         */
-        protected final void immutableSetDecoratedMap(final Map map)
-        {
-            m__DecoratedMap = map;
-        }
-
-        /**
-         * Specifies the decorated map.
-         * @param map such map.
-         */
-        protected void setDecoratedMap(final Map map)
-        {
-            immutableSetDecoratedMap(map);
-        }
-
-        /**
-         * Retrieves the decorated map.
-         * @return such map.
-         */
-        public Map getDecoratedMap()
-        {
-            return m__DecoratedMap;
-        }
-
-        /**
          * Specifies the timestamp map.
          * @param map such map.
          */
@@ -1117,7 +1092,7 @@ public class <input.tr_name_capitalized>ThreadLocalBag
 
             if  (t_Value != null)
             {
-                result = timestampMap.get(buildTimestampKey(key, t_Value));
+                result = (Date) timestampMap.get(buildTimestampKey(key, t_Value));
             }
 
             return result;

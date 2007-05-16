@@ -375,7 +375,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             if  (daoListener != null)
             {
-                daoListener.connectionRetrieved(this, action);
+                daoListener.connectionRetrieved(getSql(action));
             }
 
             if  (   (TransactionSynchronizationManager
@@ -429,7 +429,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             if  (daoListener != null)
             {
-                daoListener.connectionReleased(this, action);
+                daoListener.connectionReleased(getSql(action));
             }
         }
 
@@ -509,7 +509,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             if  (daoListener != null)
             {
-                daoListener.connectionRetrieved(this, action);
+                daoListener.connectionRetrieved(getSql(action));
             }
 
             if  (   (TransactionSynchronizationManager
@@ -583,7 +583,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             if  (daoListener != null)
             {
-                daoListener.connectionReleased(this, action);
+                daoListener.connectionReleased(getSql(action));
             }
         }
 
@@ -671,7 +671,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             if  (daoListener != null)
             {
-                daoListener.connectionRetrieved(this, action);
+                daoListener.connectionRetrieved(getSql(action));
             }
 
             if  (   (TransactionSynchronizationManager
@@ -707,7 +707,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
             if  (daoListener != null)
             {
                 daoListener.statementCreated(
-                    this, preparedStatementCreator);
+                    getSql(action), preparedStatementCreator);
             }
 
             DataSourceUtils.applyTransactionTimeout(
@@ -751,7 +751,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
             if  (daoListener != null)
             {
                 daoListener.statementReleased(
-                    this, preparedStatementCreator);
+                    getSql(action), preparedStatementCreator);
             }
 
             if  (   (t_bCloseConnection)
@@ -771,7 +771,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
             if  (daoListener != null)
             {
-                daoListener.connectionReleased(this, action);
+                daoListener.connectionReleased(getSql(action));
             }
         }
 

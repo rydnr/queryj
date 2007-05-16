@@ -122,8 +122,8 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * The map storing per-thread statistics.
      */
     private static final Map THREAD_MAP =
-        new <input.tr_name_capitalized>ThreadLocalBag.TimestampMap(
-            new <input.tr_name_capitalized>ThreadLocalBag.KeyBoundedMap(
+        new <input.tr_name_capitalized>ThreadLocalBag.TimestampMapDecorator(
+            new <input.tr_name_capitalized>ThreadLocalBag.KeyBoundedMapDecorator(
                 new HashMap(), 100));
 
     /**
@@ -166,12 +166,13 @@ public class <input.tr_name_capitalized>StatisticsProvider
     public void annotatePreparedStatementExecuted(
         final String sql, final Object[] parameters)
     {
-        Map t_mValues = new new HashMap();
-        t_mValues.put(SQL_KEY, sql);
-        t_mValues.put(SQL_PARAMETERS_KEY, parameters);
+        Map values = new HashMap();
+
+        values.put(SQL_KEY, sql);
+        values.put(SQL_PARAMETERS_KEY, parameters);
 
         THREAD_MAP.put(
-            buildStatementKey(Thread.currentThread()), t_mValues);
+            buildStatementKey(Thread.currentThread()), values);
     }
 
     /**
@@ -186,86 +187,45 @@ public class <input.tr_name_capitalized>StatisticsProvider
 
     /**
      * Annotates a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param sql the SQL sentence.
      */
-    public void annotateConnectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback)
+    public void annotateConnectionRetrieved(final String sql)
     {
-        // TODO
-    }
-
-    /**
-     * Annotates a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
-     */
-    public void annotateConnectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback)
-    {
-        // TODO
-    }
-
-    /**
-     * Annotates a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
-     */
-    public void annotateConnectionRetrieved(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback)
-    {
-        // TODO
+        THREAD_MAP.put(
+            buildConnectionKey(Thread.currentThread()), sql);
     }
 
     /**
      * Annotates a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param connectionCallback the connection callback.
+     * @param sql the SQL sentence.
      */
-    public void annotateConnectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final ConnectionCallback connectionCallback)
+    public void annotateConnectionReleased(final String sql)
     {
-        // TODO
+        THREAD_MAP.remove(
+            buildConnectionKey(Thread.currentThread()));
     }
 
     /**
-     * Annotates a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param preparedStatementCallback the prepared-statement callback.
+     * Builds a connection key for given thread.
+     * @param thread the thread.
+     * @return such key.
      */
-    public void annotateConnectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final PreparedStatementCallback preparedStatementCallback)
+    protected Object buildConnectionKey(final Thread thread)
     {
-        // TODO
-    }
-
-    /**
-     * Annotates a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
-     * @param statementCallback the statement callback.
-     */
-    public void annotateConnectionReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
-        final StatementCallback statementCallback)
-    {
-        // TODO
+        return "connection-thread-key::" + thread.hashCode();
     }
 
     /**
      * Annotates a statement is created.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
      */
     public void annotateStatementCreated(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final String sql,
         final PreparedStatementCreator preparedStatementCreator)
     {
-        // TODO
+        THREAD_MAP.put(
+            buildStatementKey(Thread.currentThread()), sql);
     }
 
     /**
@@ -274,19 +234,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public void annotateStatementPrepared(final String sql)
     {
-        // TODO
+        THREAD_MAP.put(
+            buildStatementKey(Thread.currentThread()), sql);
     }
 
     /**
      * Annotates a statement is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
      */
     public void annotateStatementReleased(
-        final <input.tr_name_capitalized>JdbcTemplate jdbcTemplate,
+        final String sql,
         final PreparedStatementCreator preparedStatementCreator)
     {
-        // TODO
+        THREAD_MAP.remove(
+            buildStatementKey(Thread.currentThread()));
     }
 
     /**
@@ -296,7 +258,16 @@ public class <input.tr_name_capitalized>StatisticsProvider
     public void annotateResultSetMovedForward(
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
     {
-        // TODO
+        Object key = buildResultSetKey(Thread.currentThread());
+
+        Integer rowsRetrieved = (Integer) THREAD_MAP.get(key);
+
+        if  (rowsRetrieved == null)
+        {
+            rowsRetrieved = new Integer(0);
+        }
+
+        THREAD_MAP.put(key, new Integer(rowsRetrieved.intValue() + 1));
     }
 
     /**
@@ -306,7 +277,18 @@ public class <input.tr_name_capitalized>StatisticsProvider
     public void annotateResultSetClosed(
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
     {
-        // TODO
+//        THREAD_MAP.remove(
+//            buildResultSetKey(Thread.currentThread()));
+    }
+
+    /**
+     * Builds a resultset key for given thread.
+     * @param thread the thread.
+     * @return such key.
+     */
+    protected Object buildResultSetKey(final Thread thread)
+    {
+        return "resultset-thread-key::" + thread.hashCode();
     }
 
 }
