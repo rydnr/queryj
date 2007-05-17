@@ -90,11 +90,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a <code>BasePerRepositoryTemplateBuildHandler</code> instance.
-     */
-    public BasePerRepositoryTemplateBuildHandler() {};
-
-    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -102,7 +97,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition command != null
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         return handle(command.getAttributeMap());
     }
@@ -115,7 +109,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
     {
         return
             handle(
@@ -142,7 +135,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  BuildException
     {
         return
             handle(
@@ -208,7 +200,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final String header,
         final boolean jmx,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
     {
         boolean result = false;
 

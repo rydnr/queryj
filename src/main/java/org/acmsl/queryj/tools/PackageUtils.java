@@ -2017,6 +2017,33 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for StatisticsProviderMBeanPublisher class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveStatisticsProviderMBeanPublisherPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for StatisticsProviderMBeanPublisher class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveStatisticsProviderMBeanPublisherFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
      * Retrieves the package name for BaseResultSetExtractor class.
      * @param packageName the original package.
      * @return the package for such class.

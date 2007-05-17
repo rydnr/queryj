@@ -134,7 +134,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
     /**
      * The key to store the SQL parameters.
      */
-    public static final String SQL_PARAMETERS_KEY = "sql-paramters";
+    public static final String SQL_PARAMETERS_KEY = "sql-parameters";
 
     /**
      * Singleton implemented to avoid double-check locking.
@@ -195,7 +195,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the values associated to the last annotated connection.
      * @return such information.
      */
-    public String retrieveLastConnectionSql()
+    public String getLastConnectionSql()
     {
         String result =
             (String) THREAD_MAP.get(buildConnectionKey(Thread.currentThread()));
@@ -213,7 +213,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the values associated to the last annotated connection.
      * @return such information.
      */
-    public int retrieveConnectionCount()
+    public int getConnectionCount()
     {
         Integer result = (Integer) THREAD_MAP.get(buildConnectionCountKey());
 
@@ -308,7 +308,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the values associated to the last annotated statement.
      * @return such information.
      */
-    public Map retrieveLastPreparedStatementData()
+    public Map getLastPreparedStatementData()
     {
         return (Map) THREAD_MAP.get(buildPreparedStatementKey(Thread.currentThread()));
     }
@@ -346,7 +346,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the values associated to the last annotated statement.
      * @return such information.
      */
-    public String retrieveLastStatementSql()
+    public String getLastStatementSql()
     {
         String result = (String) THREAD_MAP.get(buildStatementKey(Thread.currentThread()));
 
@@ -371,7 +371,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the values associated to the last annotated statement.
      * @return such information.
      */
-    public int retrieveStatementCount()
+    public int getStatementCount()
     {
         Integer result = (Integer) THREAD_MAP.get(buildStatementCountKey());
 
@@ -540,7 +540,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the number of rows fetched for the last annotated result-set.
      * @return such information.
      */
-    public int retrieveLastResultSetRetrievedRows()
+    public int getLastResultSetRetrievedRows()
     {
         Integer result = (Integer) THREAD_MAP.get(buildResultSetKey(Thread.currentThread()));
 
@@ -560,7 +560,7 @@ public class <input.tr_name_capitalized>StatisticsProvider
      * Retrieves the number of used result-set so far.
      * @return such information.
      */
-    public int retrieveResultSetCount()
+    public int getResultSetCount()
     {
         Integer result = (Integer) THREAD_MAP.get(buildResultSetCountKey());
 

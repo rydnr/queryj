@@ -584,6 +584,12 @@ public class TemplateMappingManager
         "statistics.provider.template";
 
     /**
+     * The StatisticsProviderMBeanPublisher template type.
+     */
+    public static final String STATISTICS_PROVIDER_MBEAN_PUBLISHER_TEMPLATE =
+        "statistics.provider.mbean.publisher.template";
+
+    /**
      * The BaseResultSetExtractor template type.
      */
     public static final String BASE_RESULTSET_EXTRACTOR_TEMPLATE =

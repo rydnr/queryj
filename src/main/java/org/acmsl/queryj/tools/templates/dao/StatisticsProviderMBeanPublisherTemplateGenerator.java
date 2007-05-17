@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * Filename: StatisticsProviderTemplateGenerator.java
+ * Filename: StatisticsProviderMBeanPublisherTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -68,11 +68,11 @@ import java.io.IOException;
 import java.util.Collection;
 
 /**
- * Is able to generate StatisticsProvider implementations.
+ * Is able to generate StatisticsProviderMBeanPublisher implementations.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class StatisticsProviderTemplateGenerator
+public class StatisticsProviderMBeanPublisherTemplateGenerator
     implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator,
                 Singleton
@@ -80,31 +80,31 @@ public class StatisticsProviderTemplateGenerator
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class StatisticsProviderTemplateGeneratorSingletonContainer
+    private static class StatisticsProviderMBeanPublisherTemplateGeneratorSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final StatisticsProviderTemplateGenerator SINGLETON =
-            new StatisticsProviderTemplateGenerator();
+        public static final StatisticsProviderMBeanPublisherTemplateGenerator SINGLETON =
+            new StatisticsProviderMBeanPublisherTemplateGenerator();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected StatisticsProviderTemplateGenerator() {};
+    protected StatisticsProviderMBeanPublisherTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>StatisticsProviderTemplateGenerator</code> instance.
+     * Retrieves a <code>StatisticsProviderMBeanPublisherTemplateGenerator</code> instance.
      * @return such instance.
      */
-    public static StatisticsProviderTemplateGenerator getInstance()
+    public static StatisticsProviderMBeanPublisherTemplateGenerator getInstance()
     {
-        return StatisticsProviderTemplateGeneratorSingletonContainer.SINGLETON;
+        return StatisticsProviderMBeanPublisherTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**
-     * Generates a <i>StatisticsProvider</i> template.
+     * Generates a <i>StatisticsProviderMBeanPublisher</i> template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -132,7 +132,7 @@ public class StatisticsProviderTemplateGenerator
       throws  QueryJException
     {
         return
-            new StatisticsProviderTemplate(
+            new StatisticsProviderMBeanPublisherTemplate(
                 metadataManager,
                 metadataTypeManager,
                 customSqlProvider,
@@ -198,7 +198,7 @@ public class StatisticsProviderTemplateGenerator
               outputDir.getAbsolutePath()
             + File.separator
             + capitalize(template.getRepositoryName())
-            + "StatisticsProvider.java",
+            + "StatisticsProviderMBeanPublisher.java",
             template.generate());
     }
 
