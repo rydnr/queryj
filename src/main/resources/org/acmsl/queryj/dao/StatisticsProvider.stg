@@ -158,6 +158,120 @@ public class <input.tr_name_capitalized>StatisticsProvider
     }
 
     /**
+     * Annotates a connection is retrieved.
+     * @param sql the SQL sentence.
+     */
+    public void annotateConnectionRetrieved(final String sql)
+    {
+        THREAD_MAP.put(
+            buildConnectionKey(Thread.currentThread()), sql);
+
+        Object connectionCountKey = buildConnectionCountKey();
+
+        Integer connectionCount = (Integer) THREAD_MAP.get(connectionCountKey);
+
+        if  (connectionCount == null)
+        {
+            connectionCount = new Integer(1);
+        }
+        else
+        {
+            connectionCount = new Integer(connectionCount.intValue() + 1);
+        }
+
+        THREAD_MAP.put(connectionCountKey, connectionCount);
+    }
+
+    /**
+     * Builds the last-connection-key key.
+     * @return such key.
+     */
+    protected Object buildLastConnectionSqlKey()
+    {
+        return "::last-connection-sql-key::";
+    }
+
+    /**
+     * Retrieves the values associated to the last annotated connection.
+     * @return such information.
+     */
+    public String retrieveLastConnectionSql()
+    {
+        String result =
+            (String) THREAD_MAP.get(buildConnectionKey(Thread.currentThread()));
+
+        if  (result == null)
+        {
+            result =
+                (String) THREAD_MAP.get(buildLastConnectionSqlKey());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the values associated to the last annotated connection.
+     * @return such information.
+     */
+    public int retrieveConnectionCount()
+    {
+        Integer result = (Integer) THREAD_MAP.get(buildConnectionCountKey());
+
+        return (result == null) ? 0 : result.intValue();
+    }
+
+    /**
+     * Annotates a connection is released.
+     * @param sql the SQL sentence.
+     */
+    public void annotateConnectionReleased(final String sql)
+    {
+       String lastConnectionSql =
+           (String) THREAD_MAP.remove(buildConnectionKey(Thread.currentThread()));
+
+       if  (lastConnectionSql != null)
+       {
+           THREAD_MAP.put(
+                buildLastConnectionSqlKey(),
+                lastConnectionSql);
+        }
+
+        Object connectionCountKey = buildConnectionCountKey();
+
+        Integer connectionCount = (Integer) THREAD_MAP.get(connectionCountKey);
+
+        if  (connectionCount == null)
+        {
+            connectionCount = new Integer(0);
+        }
+        else
+        {
+            connectionCount = new Integer(connectionCount.intValue() - 1);
+        }
+
+        THREAD_MAP.put(connectionCountKey, connectionCount);
+    }
+
+    /**
+     * Builds a connection key for given thread.
+     * @param thread the thread.
+     * @return such key.
+     */
+    protected Object buildConnectionKey(final Thread thread)
+    {
+        return "connection-thread-key::" + thread.hashCode();
+    }
+
+    /**
+     * Builds a connection count key.
+     * @return such key.
+     */
+    protected Object buildConnectionCountKey()
+    {
+        return "::connection-count-key::";
+    }
+
+    /**
      * Annotates an operation on the persistence
      * layer takes place.
      * @param sql the sql sentence.
@@ -172,7 +286,41 @@ public class <input.tr_name_capitalized>StatisticsProvider
         values.put(SQL_PARAMETERS_KEY, parameters);
 
         THREAD_MAP.put(
-            buildStatementKey(Thread.currentThread()), values);
+            buildPreparedStatementKey(Thread.currentThread()), values);
+
+        Object statementCountKey = buildStatementCountKey();
+
+        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
+
+        if  (statementCount == null)
+        {
+            statementCount = new Integer(1);
+        }
+        else
+        {
+            statementCount = new Integer(statementCount.intValue() + 1);
+        }
+
+        THREAD_MAP.put(statementCountKey, statementCount);
+    }
+
+    /**
+     * Retrieves the values associated to the last annotated statement.
+     * @return such information.
+     */
+    public Map retrieveLastPreparedStatementData()
+    {
+        return (Map) THREAD_MAP.get(buildPreparedStatementKey(Thread.currentThread()));
+    }
+
+    /**
+     * Builds a statement key for given thread.
+     * @param thread the thread.
+     * @return such key.
+     */
+    protected Object buildPreparedStatementKey(final Thread thread)
+    {
+        return "prepared-statement-thread-key::" + thread.hashCode();
     }
 
     /**
@@ -186,33 +334,48 @@ public class <input.tr_name_capitalized>StatisticsProvider
     }
 
     /**
-     * Annotates a connection is retrieved.
-     * @param sql the SQL sentence.
-     */
-    public void annotateConnectionRetrieved(final String sql)
-    {
-        THREAD_MAP.put(
-            buildConnectionKey(Thread.currentThread()), sql);
-    }
-
-    /**
-     * Annotates a connection is released.
-     * @param sql the SQL sentence.
-     */
-    public void annotateConnectionReleased(final String sql)
-    {
-        THREAD_MAP.remove(
-            buildConnectionKey(Thread.currentThread()));
-    }
-
-    /**
-     * Builds a connection key for given thread.
-     * @param thread the thread.
+     * Builds the last-statement-sql key.
      * @return such key.
      */
-    protected Object buildConnectionKey(final Thread thread)
+    protected Object buildLastStatementSqlKey()
     {
-        return "connection-thread-key::" + thread.hashCode();
+        return "::last-statement-sql-key::";
+    }
+
+    /**
+     * Retrieves the values associated to the last annotated statement.
+     * @return such information.
+     */
+    public String retrieveLastStatementSql()
+    {
+        String result = (String) THREAD_MAP.get(buildStatementKey(Thread.currentThread()));
+
+        if  (result == null)
+        {
+            result = (String) THREAD_MAP.get(buildLastStatementSqlKey());
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds a statement count key.
+     * @return such key.
+     */
+    protected Object buildStatementCountKey()
+    {
+        return "::statement-count-key::";
+    }
+
+    /**
+     * Retrieves the values associated to the last annotated statement.
+     * @return such information.
+     */
+    public int retrieveStatementCount()
+    {
+        Integer result = (Integer) THREAD_MAP.get(buildStatementCountKey());
+
+        return (result == null) ? 0 : result.intValue();
     }
 
     /**
@@ -226,6 +389,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
     {
         THREAD_MAP.put(
             buildStatementKey(Thread.currentThread()), sql);
+
+        Object statementCountKey = buildStatementCountKey();
+
+        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
+
+        if  (statementCount == null)
+        {
+            statementCount = new Integer(1);
+        }
+        else
+        {
+            statementCount = new Integer(statementCount.intValue() + 1);
+        }
+
+        THREAD_MAP.put(statementCountKey, statementCount);
     }
 
     /**
@@ -236,6 +414,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
     {
         THREAD_MAP.put(
             buildStatementKey(Thread.currentThread()), sql);
+
+        Object statementCountKey = buildStatementCountKey();
+
+        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
+
+        if  (statementCount == null)
+        {
+            statementCount = new Integer(1);
+        }
+        else
+        {
+            statementCount = new Integer(statementCount.intValue() + 1);
+        }
+
+        THREAD_MAP.put(statementCountKey, statementCount);
     }
 
     /**
@@ -247,8 +440,30 @@ public class <input.tr_name_capitalized>StatisticsProvider
         final String sql,
         final PreparedStatementCreator preparedStatementCreator)
     {
-        THREAD_MAP.remove(
-            buildStatementKey(Thread.currentThread()));
+       String lastStatementSql =
+           (String) THREAD_MAP.remove(buildStatementKey(Thread.currentThread()));
+
+       if  (lastStatementSql != null)
+       {
+           THREAD_MAP.put(
+                buildLastStatementSqlKey(), lastStatementSql);
+        }
+
+
+        Object statementCountKey = buildStatementCountKey();
+
+        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
+
+        if  (statementCount == null)
+        {
+            statementCount = new Integer(0);
+        }
+        else
+        {
+            statementCount = new Integer(statementCount.intValue() - 1);
+        }
+
+        THREAD_MAP.put(statementCountKey, statementCount);
     }
 
     /**
@@ -265,6 +480,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
         if  (rowsRetrieved == null)
         {
             rowsRetrieved = new Integer(0);
+
+            Object resultSetCountKey = buildResultSetCountKey();
+
+            Integer resultSetCount = (Integer) THREAD_MAP.get(resultSetCountKey);
+
+            if  (resultSetCount == null)
+            {
+                resultSetCount = new Integer(1);
+            }
+            else
+            {
+                resultSetCount = new Integer(resultSetCount.intValue() + 1);
+            }
+
+            THREAD_MAP.put(resultSetCountKey, resultSetCount);
         }
 
         THREAD_MAP.put(key, new Integer(rowsRetrieved.intValue() + 1));
@@ -279,6 +509,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
     {
 //        THREAD_MAP.remove(
 //            buildResultSetKey(Thread.currentThread()));
+
+        Object resultSetCountKey = buildResultSetCountKey();
+
+        Integer resultSetCount = (Integer) THREAD_MAP.get(resultSetCountKey);
+
+        if  (resultSetCount == null)
+        {
+            resultSetCount = new Integer(1);
+        }
+        else
+        {
+            resultSetCount = new Integer(resultSetCount.intValue() + 1);
+        }
+
+        THREAD_MAP.put(resultSetCountKey, resultSetCount);
     }
 
     /**
@@ -289,6 +534,37 @@ public class <input.tr_name_capitalized>StatisticsProvider
     protected Object buildResultSetKey(final Thread thread)
     {
         return "resultset-thread-key::" + thread.hashCode();
+    }
+
+    /**
+     * Retrieves the number of rows fetched for the last annotated result-set.
+     * @return such information.
+     */
+    public int retrieveLastResultSetRetrievedRows()
+    {
+        Integer result = (Integer) THREAD_MAP.get(buildResultSetKey(Thread.currentThread()));
+
+        return (result == null) ? 0 : result.intValue();
+    }
+
+    /**
+     * Builds a result-set count key.
+     * @return such key.
+     */
+    protected Object buildResultSetCountKey()
+    {
+        return "::resultset-count-key::";
+    }
+
+    /**
+     * Retrieves the number of used result-set so far.
+     * @return such information.
+     */
+    public int retrieveResultSetCount()
+    {
+        Integer result = (Integer) THREAD_MAP.get(buildResultSetCountKey());
+
+        return (result == null) ? 0 : result.intValue();
     }
 
 }
