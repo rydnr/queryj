@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -66,6 +67,7 @@ public interface TableTemplateFactory
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -80,6 +82,7 @@ public interface TableTemplateFactory
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
       throws  QueryJException;
 }

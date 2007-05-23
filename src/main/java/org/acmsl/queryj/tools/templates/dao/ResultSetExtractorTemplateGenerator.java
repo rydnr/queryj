@@ -113,6 +113,7 @@ public class ResultSetExtractorTemplateGenerator
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return such template.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -133,7 +134,8 @@ public class ResultSetExtractorTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final boolean jmx,
-        final String header)
+        final String header,
+        final String jndiLocation)
       throws  QueryJException
     {
         return
@@ -149,7 +151,8 @@ public class ResultSetExtractorTemplateGenerator
                 quote,
                 basePackageName,
                 repositoryName,
-                jmx);
+                jmx,
+                jndiLocation);
     }
 
     /**

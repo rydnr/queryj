@@ -378,4 +378,18 @@ public abstract class AbstractAntCommandHandler
 
         return (result != null) ? result.booleanValue() : false;
     }
+
+    /**
+     * Retrieves the JNDI location of the data source.
+     * @param parameters such parameters.
+     * @return such information.
+     * @precondition parameters != null
+     */
+    protected String retrieveJndiLocation(final Map parameters)
+    {
+        return
+            (String)
+                parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
+    }
+    
 }

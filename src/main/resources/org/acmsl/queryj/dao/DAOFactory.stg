@@ -80,13 +80,12 @@ source(input) ::= <<
   ])>
 
 <project_imports(
-  daoPackageName=input.dao_package_name,
-  daoClassName=input.dao_class_name,
-  daoFactoryPackageName=input.dao_factory_package_name,
-  daoFactoryClassName=input.dao_factory_class_name,
-  daoImplementationPackageName=input.dao_implementation_package_name,
-  daoImplementationClassName=input.dao_implementation_class_name,
+  basePackageName=input.base_package_name,
+  baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
+  subpackageName=input.subpackage_name,
+  engineName=input.engine_name,
+  voName=input.vo_name,
   trName=input.tr_name_capitalized)>
 
 /*
@@ -127,34 +126,34 @@ information in the <engineName>-based persistence domain.
 >>
 
 project_imports(
-  daoPackageName,
-  daoClassName,
-  daoFactoryPackageName,
-  daoFactoryClassName,
-  daoImplementationPackageName,
-  daoImplementationClassName,
+  basePackageName,
+  baseDAOSubpackageName,
   rdbSubpackageName,
+  subpackageName,
+  engineName,
+  voName,
   trName) ::= <<
 <!
-  Generates the import statements for the project classes.
-  @param daoPackageName the DAO package name.
-  @param daoClassName the DAO class name.
-  @param daoFactoryPackageName the DAO factory package name.
-  @param daoFactoryClassName the DAO factory class name.
-  @param daoImplementationPackageName the DAO implementation package name.
-  @param daoImplementationClassName the DAO implementation class name.
-  @param trName the name of the repository.
+  Generates the project imports
+  @param basePackageName the base package name.
+  @param baseDAOSubpackageName the subpackage name.
+  @param rdbSubpackageName the subpackage for the relational-specific DAO stuff.
+  @param subpackageName the subpackage name.
+  @param engineName the engine name.
+  @param voName the class name of the value-object.
+  @param trName the name of the table repository.
 !>
 /*
- * Importing some project classes.
+ * Importing project-specific classes.
  */
-import <daoPackageName>.<rdbSubpackageName>.<trName>DAOListener;
-import <daoPackageName>.<rdbSubpackageName>.<trName>DAOListenerImpl;
-import <daoPackageName>.<daoClassName>;
-import <daoFactoryPackageName>.<daoFactoryClassName>;
-import <daoImplementationPackageName>.<daoImplementationClassName>;
-import <daoPackageName>.<rdbSubpackageName>.<trName>JndiUtils;
-import <daoPackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListenerImpl;
+import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.<voName>DAOFactory;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<engineName><voName>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JndiUtils;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
+
 >>
 
 class(input, table) ::= <<
@@ -183,8 +182,8 @@ class(input, table) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.class_name>
-    extends  <input.dao_factory_class_name>
+public class <input.engine_name><input.vo_name>DAOFactory
+    extends  <input.vo_name>DAOFactory
 {
     /**
      * The data source JNDI location.
@@ -196,37 +195,37 @@ public class <input.class_name>
      * \<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html#dcl"
      * >double-checked locking\</a>.
      */
-    private static class <input.class_name>SingletonContainer
+    private static class <input.engine_name><input.vo_name>DAOFactorySingletonContainer
     {
         /**
          * The concrete singleton instance.
          */
-        public static final <input.class_name> SINGLETON =
-            new <input.class_name>();
+        public static final <input.engine_name><input.vo_name>DAOFactory SINGLETON =
+            new <input.engine_name><input.vo_name>DAOFactory();
     }
 
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public <input.class_name>() {};
+    public <input.engine_name><input.vo_name>DAOFactory() {};
 
     /**
-     * Retrieves a \<code\><input.dao_factory_implementation_class_name>\</code\>
+     * Retrieves a \<code\><input.engine_name><input.vo_name>DAOFactory\</code\>
      * instance.
      * @return such instance.
      */
-    public static <input.class_name> get<input.engine_name>Instance()
+    public static <input.engine_name><input.vo_name>DAOFactory get<input.engine_name>Instance()
     {
-        return <input.class_name>SingletonContainer.SINGLETON;
+        return <input.engine_name><input.vo_name>DAOFactorySingletonContainer.SINGLETON;
     }
 
     /**
      * Creates <input.engine_name>-specific <input.table_name> DAO.
      * @return such DAO.
      */
-    public <input.dao_class_name> create<input.dao_class_name>()
+    public <input.vo_name>DAO create<input.vo_name>DAO()
     {
-        return create<input.dao_class_name>(getDataSource());
+        return create<input.vo_name>DAO(getDataSource());
     }
 
     /**
@@ -236,17 +235,17 @@ public class <input.class_name>
      * @return such DAO.
      <precondition_notnull("dataSource")>
      */
-    protected <input.dao_class_name> create<input.dao_class_name>(final DataSource dataSource)
+    protected <input.vo_name>DAO create<input.vo_name>DAO(final DataSource dataSource)
     {
-        <input.dao_implementation_class_name> result = null;
+        <input.vo_name>DAO result = null;
 
         if  (dataSource != null)
         {
             result =
-<if(table.dynamicSql)>
-                new <input.dao_implementation_class_name>Impl(
+<if(input.dynamic_queries)>
+                new <input.engine_name><input.vo_name>DAOImpl(
 <else>
-                new <input.dao_implementation_class_name>(
+                new <input.engine_name><input.vo_name>DAO(
 <endif>
 
                     dataSource,

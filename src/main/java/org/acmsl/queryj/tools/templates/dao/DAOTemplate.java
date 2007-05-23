@@ -75,6 +75,7 @@ public class DAOTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public DAOTemplate(
         final String tableName,
@@ -88,7 +89,8 @@ public class DAOTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
             tableName,
@@ -102,7 +104,8 @@ public class DAOTemplate
             quote,
             basePackageName,
             repositoryName,
-            jmx);
+            jmx,
+            jndiLocation);
     }
 
     /**

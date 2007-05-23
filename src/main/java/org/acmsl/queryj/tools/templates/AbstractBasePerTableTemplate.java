@@ -108,6 +108,11 @@ public abstract class AbstractBasePerTableTemplate
     private boolean m__bJmx = true;
 
     /**
+     * The JNDI location.
+     */
+    private String m__strJndiLocation;
+
+    /**
      * Builds an <code>AbstractBasePerTableTemplate</code> using given
      * information.
      * @param tableName the table name.
@@ -122,6 +127,7 @@ public abstract class AbstractBasePerTableTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     protected AbstractBasePerTableTemplate(
         final String tableName,
@@ -135,7 +141,8 @@ public abstract class AbstractBasePerTableTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(header, decoratorFactory);
 
@@ -167,6 +174,8 @@ public abstract class AbstractBasePerTableTemplate
             repositoryName);
 
         immutableSetJmx(jmx);
+
+        immutableSetJndiLocation(jndiLocation);
     }
 
     /**
@@ -441,6 +450,33 @@ public abstract class AbstractBasePerTableTemplate
     public boolean getJmx()
     {
         return m__bJmx;
+    }
+
+    /**
+     * Specifies the JNDI location.
+     * @param location the location.
+     */
+    protected final void immutableSetJndiLocation(final String location)
+    {
+        m__strJndiLocation = location;
+    }
+
+    /**
+     * Specifies the JNDI location.
+     * @param location the location.
+     */
+    protected final void setJndiLocation(final String location)
+    {
+        immutableSetJndiLocation(location);
+    }
+
+    /**
+     * Retrieves the JNDI location.
+     * @return such location.
+     */
+    public String getJndiLocation()
+    {
+        return m__strJndiLocation;
     }
 
     /**

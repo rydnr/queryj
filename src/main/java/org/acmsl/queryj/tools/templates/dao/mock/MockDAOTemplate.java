@@ -86,6 +86,7 @@ public class MockDAOTemplate
      * @param mockPackageName the mock package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public MockDAOTemplate(
         final String tableName,
@@ -99,7 +100,8 @@ public class MockDAOTemplate
         final String quote,
         final String mockPackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
             tableName,
@@ -113,7 +115,8 @@ public class MockDAOTemplate
             quote,
             mockPackageName,
             repositoryName,
-            jmx);
+            jmx,
+            jndiLocation);
     }
 
     /**

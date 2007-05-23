@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -48,11 +49,6 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHand
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -89,7 +85,6 @@ public class DAOTemplateWritingHandler
      */
     protected BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
-      throws  BuildException
     {
         return
             (BasePerTableTemplate[])
@@ -121,7 +116,6 @@ public class DAOTemplateWritingHandler
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveDAOFolder(

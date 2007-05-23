@@ -215,9 +215,7 @@ project_imports(
 <!
   Generates the project imports
   @param basePackageName the base package name.
-  @param subpackageName the subpackage name.
-  @param tableName the table name.
-  @param tableNameLowercased the table name, in lower-case.
+  @param baseDAOSubpackageName the subpackage name.
   @param jdbcOperationsSubpackageName the subpackage for the JDBC operations.
   @param customResults the results of the custom queries.
   @param voSubpackageName the subpackage for the value
@@ -341,7 +339,7 @@ classImpl(input, foreign_keys_by_table, table, parent) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
-public class <input.engine_name><input.vo_name>DAO
+public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><input.vo_name>DAO
   extends     <input.tr_name_capitalized>JdbcTemplate
   implements  <input.vo_name>DAO
 //              <input.tr_name_capitalized>TableRepository
@@ -408,16 +406,19 @@ public class <input.engine_name><input.vo_name>DAO
 
 <input.custom_selects:{sql|
 <if(!sql.dynamic)>
+<if(sql.splittedQuotedValue)>
       /**
        * The <sql.id> SQL.
        */
      public static final String <sql.idAsConstant>_SQL =
          <sql.splittedQuotedValue; separator=" +\n">;
 <endif>
+<endif>
 }; separator="\n\n">
 
       // custom selects-for-update
 <input.custom_selects_for_update:{sql|
+<if(!sql.dynamic)>
       /**
        * The <sql.id> SQL.
        */
@@ -427,11 +428,13 @@ public class <input.engine_name><input.vo_name>DAO
       // custom updates or inserts
 <input.custom_updates_or_inserts:{sql|
 <if(!sql.dynamic)>
+<if(sql.splittedQuotedValue)>
       /**
        * The <sql.id> SQL.
        */
      public static final String <sql.idAsConstant>_SQL =
          <sql.splittedQuotedValue; separator=" +\n">;
+<endif>
 <endif>
 }; separator="\n\n">
                
@@ -471,9 +474,9 @@ public class <input.engine_name><input.vo_name>DAO
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-public <input.vo_name>Decorator findByPrimaryKey(
+    public <input.vo_name>Decorator findByPrimaryKey(
 <else>
-public <input.vo_name> findByPrimaryKey(
+    public <input.vo_name> findByPrimaryKey(
 <endif>
 
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
@@ -1141,32 +1144,6 @@ if  (t_bFound)
 }
 >>
 
-attribute_query_filter(
-  tableRepositoryName,
-  tableNameUppercased,
-  nameUppercased) ::= <<
-<!
-  Writes the sentence to configure a query to filter by a concrete attribute.
-  @param tableRepositoryName the name of the table repository.
-  @param tableNameUppercased the table name, in upper-case.
-  @param nameUppercased the attribute name, in upper-case.
-!>
-query.where(<tableNameUppercased>.<nameUppercased>.equals());
->>
-
-attribute_query_insert(
-  tableRepositoryName,
-  tableNameUppercased,
-  nameUppercased) ::= <<
-<!
-  Writes the sentence to specify an attribute value inside an insert query.
-  @param tableRepositoryName the name of the table repository.
-  @param tableNameUppercased the table name, in upper-case.
-  @param nameUppercased the attribute name, in upper-case.
-!>
-query.value(<tableNameUppercased>.<nameUppercased>);
->>
-
 em_attribute_value_retrieval(
   query,
   nativeType,
@@ -1189,19 +1166,6 @@ t_mMap =
 
 <nativeType> <nameLowercased> =
     ((<type>) t_mMap.get("<nameLowercased>")).<nativeType>Value();
->>
-
-attribute_query_update(
-  tableRepositoryName,
-  tableNameUppercased,
-  nameUppercased) ::= <<
-<!
-  Writes the sentence to specify an attribute value inside an update query.
-  @param tableRepositoryName the name of the table repository.
-  @param tableNameUppercased the table name, in upper-case.
-  @param nameUppercased the attribute name, in upper-case.
-!>
-query.set(<tableNameUppercased>.<nameUppercased>);
 >>
 
 fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
@@ -1262,50 +1226,6 @@ fk_delete_method(foreignKey,input) ::= <<
   @param foreignKey the foreign key.
 !>
 /**
- * Builds the query required to \<i>delete\</i> a concrete
- * \<code><input.table_name>\</code> entity, determined by a foreign key.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<code>DeleteQuery\</code> instance.
- */
-protected Query buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query()
-{
-    return buildDeleteBy<foreignKey:{<it.nameCapitalized>}>Query(QueryFactory.getInstance());
-}
-
-/**
- * Builds the query required to \<i>delete\</i> a concrete
- * \<code><input.table_name>\</code> entity, determined by a foreign key.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<code>DeleteQuery\</code> instance.
- */
-protected Query buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(final QueryFactory queryFactory)
-{
-    DeleteQuery result = queryFactory.createDeleteQuery();
-
-    buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(result);
-
-    return result;
-}
-
-/**
- * Builds the query required to \<i>delete\</i> a concrete
- * \<code><input.table_name>\</code> entity, determined by a foreign key.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @param query the query to initialize.
- <precondition_notnull("query")>
- */
-protected void buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
-    final DeleteQuery query)
-{
-    query.deleteFrom(<input.table_name_uppercased>);
-
-    <foreignKey:attribute_query_filter(
-      tableRepositoryName=input.table_repository_name,
-      tableNameUppercased=input.table_name_uppercased,
-      nameUppercased=it.nameUppercased); separator="\n">
-}
-
-/**
  * Deletes <input.table_name> information from the persistence layer filtering
  * by given foreign keys.
  * \<br/>\<b>This method is not implemented yet\</b>.
@@ -1314,88 +1234,8 @@ protected void buildDeleteBy<foreignKey:{attr |<attr.nameCapitalized>}>Query(
 public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">)
 {
-    deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-        <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-        DELETE_BY_<foreignKey.attributes:{attr| attr.nameUpperCased}>_SQL,
-        getDataSource());
-}
-
-/**
- * Deletes <input.table_name> information from the persistence layer filtering
- * by given foreign keys.
- * \<br/>\<b>This method is not implemented yet\</b>.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @param query the delete query.
- * @param dataSource the \<code>DataSource\<code> instance.
- <precondition_notnull("query")>
- <precondition_notnull("dataSource")>
- */
-protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-    <foreignKey:attribute_declaration(attr=it); separator=",\n">,
-    final String query,
-    final DataSource dataSource)
-{
-    deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-        <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-        query,
-        new DataSourceTransactionManager(dataSource));
-}
-
-/**
- * Deletes <input.table_name> information from the persistence layer filtering
- * by given foreign keys.
- * \<br/>\<b>This method is not implemented yet\</b>.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @param query the delete query.
- * @param transactionManager the
- * \<code>PlaformTransactionManager\<code> instance.
- <precondition_notnull("query")>
- <precondition_notnull("transactionManager")>
- */
-protected void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-    <foreignKey:attribute_declaration(attr=it); separator=",\n">,
-    final String query,
-    final PlatformTransactionManager transactionManager)
-{
-    // Enabling transactions temporarily.
-    synchronized (DataSourceTransactionManager.class)
-    {
-        deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-            <foreignKey:{<it.nameLowercased>}; separator=",\n">,
-            query,
-            new TransactionTemplate(transactionManager),
-            getDAOListener());
-    }
-}
-
-/**
- * Deletes <input.table_name> information from the persistence layer filtering
- * by given foreign keys.
- * \<br/>\<b>This method is not implemented yet\</b>.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @param query the delete query.
- * @param transactionTemplate the \<code>TransactionTemplate\<code>
- * instance.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
- <precondition_notnull("query")>
- <precondition_notnull("transactionTemplate")>
- */
-protected void deleteBy<foreignKey:{attr | <attr.nameCapitalized>}>(
-    <foreignKey:attribute_declaration(attr=it); separator=",\n">,
-    final String query,
-    final TransactionTemplate transactionTemplate,
-        final <input.tr_name_capitalized>DAOListener daoListener)
-{
+    // TODO: not refactored yet. Removed till then.
     throw new IllegalArgumentException("Not implemented yet");
-    /*
-    transactionTemplate.execute(
-        new UpdateTransactionCallback(
-            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
-                query, daoListener),
-            new <input.vo_name>By<foreignKey:{attr |<attr.nameCapitalized>}>StatementSetter(
-                <foreignKey:{attr |<attr.nameLowercased>}; separator=",\n">),
-            this));
-    */
 }
 >>
 
@@ -2093,9 +1933,9 @@ delete_by_fk_sql(foreignKey, input) ::= <<
  /**
   * The SQL to delete by <foreignKey>.
   */
-public static final String DELETE_BY_<foreignKey.attributes:{attr|attr.nameUppercased}>_SQL =
-    "DELETE FROM <input.table_name_uppercased> "
-    + "WHERE "
-<foreignKey.attributes:{attr|
-    + "<attr.nameUppercased> = ? "}; separator="\n    + \"AND \"">;
+//public static final String DELETE_BY_<foreignKey>_SQL =
+//    "DELETE FROM <input.table_name_uppercased> "
+//    + "WHERE "
+//<foreignKey:{attr|
+//    + "<attr.nameUppercased> = ? "}; separator="\n    + \"AND \"">;
 >>

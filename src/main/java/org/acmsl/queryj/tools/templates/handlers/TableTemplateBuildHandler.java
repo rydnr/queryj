@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -86,11 +87,6 @@ public class TableTemplateBuildHandler
     public static final String TABLE_NAMES = "table.names";
 
     /**
-     * Creates a TableTemplateBuildHandler.
-     */
-    public TableTemplateBuildHandler() {};
-
-    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -98,7 +94,6 @@ public class TableTemplateBuildHandler
      * @precondition command != null
      */
     public boolean handle(final AntCommand command)
-        throws  BuildException
     {
         return handle(command.getAttributeMap());
     }
@@ -111,7 +106,6 @@ public class TableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected boolean handle(final Map parameters)
-        throws  BuildException
     {
         boolean result = false;
 
@@ -150,8 +144,7 @@ public class TableTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote)
-      throws  BuildException,
-              QueryJException
+      throws  QueryJException
     {
         return
             handle(
@@ -166,7 +159,8 @@ public class TableTemplateBuildHandler
                 retrievePackage(engineName, parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveJmx(parameters),
-                retrieveHeader(parameters));
+                retrieveHeader(parameters),
+                retrieveJndiLocation(parameters));
     }
 
     /**
@@ -183,6 +177,7 @@ public class TableTemplateBuildHandler
      * @param repository the repository.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @throws QueryJException in case of error.
@@ -207,9 +202,9 @@ public class TableTemplateBuildHandler
         final String packageName,
         final String repository,
         final boolean jmx,
-        final String header)
-      throws  BuildException,
-              QueryJException
+        final String header,
+        final String jndiLocation)
+      throws  QueryJException
     {
         String[] t_astrTableNames = metadataManager.getTableNames();
 
@@ -244,7 +239,8 @@ public class TableTemplateBuildHandler
                         quote,
                         projectPackage,
                         repository,
-                        jmx);
+                        jmx,
+                        jndiLocation);
 
                 t_astrColumnNames =
                     metadataManager.getColumnNames(
@@ -297,7 +293,6 @@ public class TableTemplateBuildHandler
      */
     protected String retrievePackage(
         final String engineName, final Map parameters)
-        throws  BuildException
     {
         return retrievePackage(parameters, PackageUtils.getInstance());
     }
@@ -313,7 +308,6 @@ public class TableTemplateBuildHandler
      */
     protected String retrievePackage(
         final Map parameters, final PackageUtils packageUtils)
-        throws  BuildException
     {
         return
             packageUtils.retrieveTablePackage(
@@ -331,7 +325,6 @@ public class TableTemplateBuildHandler
     protected void storeTableNames(
         final String[] tableNames,
         final Map parameters)
-      throws  BuildException
     {
         parameters.put(TABLE_NAMES, tableNames);
     }
@@ -347,7 +340,6 @@ public class TableTemplateBuildHandler
     protected void storeTableTemplates(
         final TableTemplate[] tableTemplates,
         final Map parameters)
-        throws  BuildException
     {
         parameters.put(TABLE_TEMPLATES, tableTemplates);
     }

@@ -33,7 +33,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate DAO factories according to
+ * Description: Is able to generate DAO implementations according to
  *              database metadata.
  *
  */
@@ -42,14 +42,17 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
+import org.acmsl.queryj.tools.templates.dao.DAODecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -66,14 +69,14 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Is able to generate DAO factories according to database
+ * Is able to generate DAOFactory implementations according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+           >Jose San Leandro</a>
  */
 public class DAOFactoryTemplateGenerator
-    implements  DAOFactoryTemplateFactory,
-                Singleton
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -93,7 +96,7 @@ public class DAOFactoryTemplateGenerator
     protected DAOFactoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>DAOFactoryTemplateGenerator</code> instance.
+     * Retrieves a DAOFactoryTemplateGenerator instance.
      * @return such instance.
      */
     public static DAOFactoryTemplateGenerator getInstance()
@@ -102,40 +105,60 @@ public class DAOFactoryTemplateGenerator
     }
 
     /**
-     * Generates a DAO factory template.
-     * @param tableTemplate the table template.
+     * Generates a DAOFactory template.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param repositoryName the repository name.
+     * @param repositoryName the name of the repository.
+     * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
-     * @precondition tableTemplate != null
+     * @throws QueryJException if the factory class is invalid.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
-    public DAOFactoryTemplate createDAOFactoryTemplate(
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
-        final String jndiDataSource,
         final String repositoryName,
-        final String header)
+        final boolean jmx,
+        final String header,
+        final String jndiLocation)
       throws  QueryJException
     {
         return
             new DAOFactoryTemplate(
+                tableName,
+                metadataManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
-                tableTemplate,
                 packageName,
                 engineName,
+                engineVersion,
+                quote,
                 basePackageName,
-                jndiDataSource,
-                repositoryName);
+                repositoryName,
+                jmx,
+                jndiLocation);
     }
 
     /**
@@ -144,47 +167,46 @@ public class DAOFactoryTemplateGenerator
      */
     public DecoratorFactory getDecoratorFactory()
     {
-        return CachingDecoratorFactory.getInstance();
+        return DAODecoratorFactory.getInstance();
     }
 
     /**
-     * Writes a DAO factory template to disk.
-     * @param template the DAO factory template to write.
+     * Writes a DAOFactory template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof DAOTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final DAOFactoryTemplate template,
-        final File outputDir)
-        throws  IOException
+        final BasePerTableTemplate template, final File outputDir)
+      throws  IOException
     {
         write(
             template,
-            outputDir,
+            outputDir, 
             StringUtils.getInstance(),
             SingularPluralFormConverter.getInstance(),
             FileUtils.getInstance());
     }
 
     /**
-     * Writes a DAO factory template to disk.
-     * @param template the DAO factory template to write.
+     * Writes a DAO template to disk.
+     * @param template the template to write.
      * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
      * instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
-     * @precondition template != null
+     * @precondition template instanceof DAOTemplate
      * @precondition outputDir != null
      * @precondition stringUtils != null
      * @precondition singularPluralFormConverter != null
      * @precondition fileUtils != null
      */
     protected void write(
-        final DAOFactoryTemplate template,
+        final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils singularPluralFormConverter,
@@ -199,9 +221,7 @@ public class DAOFactoryTemplateGenerator
             + template.getEngineName()
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    template
-                        .getTableTemplate().getTableName()
-                            .toLowerCase()),
+                    template.getTableName().toLowerCase()),
                 '_')
             + "DAOFactory.java",
             template.generate());

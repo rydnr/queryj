@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -71,8 +72,15 @@ public class TemplateHandlerBundle
         final TemplateBuildHandler buildHandler,
         final TemplateWritingHandler writingHandler)
     {
-        immutableAddHandler(buildHandler);
-        immutableAddHandler(writingHandler);
+        if  (buildHandler != null)
+        {
+            immutableAddHandler(buildHandler);
+        }
+
+        if  (writingHandler != null)
+        {
+            immutableAddHandler(writingHandler);
+        }
     }
 
     /**

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -148,6 +149,7 @@ public class ResultSetExtractorTemplateBuildHandler
                 retrieveTableRepositoryName(parameters),
                 retrieveJmx(parameters),
                 retrieveHeader(parameters),
+                retrieveJndiLocation(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance(),
                 filterTableTemplates(
                     retrieveTableTemplates(parameters),
@@ -166,6 +168,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @param repository the repository.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
@@ -191,6 +194,7 @@ public class ResultSetExtractorTemplateBuildHandler
         final String repositoryName,
         final boolean jmx,
         final String header,
+        final String jndiLocation,
         final ResultSetExtractorTemplateFactory templateFactory,
         final TableTemplate[] tableTemplates)
       throws  BuildException
@@ -223,7 +227,8 @@ public class ResultSetExtractorTemplateBuildHandler
                         basePackageName,
                         repositoryName,
                         jmx,
-                        header);
+                        header,
+                        jndiLocation);
             }
 
             storeTemplates(t_aTemplates, parameters);

@@ -82,6 +82,7 @@ public class BaseDAOFactoryTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public BaseDAOFactoryTemplate(
         final String tableName,
@@ -95,7 +96,8 @@ public class BaseDAOFactoryTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
             tableName,
@@ -109,7 +111,8 @@ public class BaseDAOFactoryTemplate
             quote,
             basePackageName,
             repositoryName,
-            jmx);
+            jmx,
+            jndiLocation);
     }
 
     /**

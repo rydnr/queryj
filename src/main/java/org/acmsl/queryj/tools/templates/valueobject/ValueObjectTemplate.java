@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -79,6 +80,7 @@ public class ValueObjectTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public ValueObjectTemplate(
         final String tableName,
@@ -92,7 +94,8 @@ public class ValueObjectTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
             tableName,
@@ -106,7 +109,8 @@ public class ValueObjectTemplate
             quote,
             basePackageName,
             repositoryName,
-            jmx);
+            jmx,
+            jndiLocation);
     }
 
     /**

@@ -117,6 +117,7 @@ public class ValueObjectTemplateGenerator
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return the fresh new template.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -137,7 +138,8 @@ public class ValueObjectTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final boolean jmx,
-        final String header)
+        final String header,
+        final String jndiLocation)
     {
         return
             new ValueObjectTemplate(
@@ -152,7 +154,8 @@ public class ValueObjectTemplateGenerator
                 quote,
                 basePackageName,
                 repositoryName,
-                jmx);
+                jmx,
+                jndiLocation);
     }
 
     /**

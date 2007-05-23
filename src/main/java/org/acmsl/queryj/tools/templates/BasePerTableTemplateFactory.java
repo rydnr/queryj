@@ -66,6 +66,7 @@ public interface BasePerTableTemplateFactory
      * @param repositoryName the name of the repository.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -80,6 +81,7 @@ public interface BasePerTableTemplateFactory
         final String basePackageName,
         final String repositoryName,
         final boolean jmx,
-        final String header)
+        final String header,
+        final String jndiLocation)
       throws  QueryJException;
 }

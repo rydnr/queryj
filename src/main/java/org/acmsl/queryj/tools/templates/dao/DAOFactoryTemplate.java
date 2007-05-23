@@ -42,29 +42,21 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.SingularPluralFormConverter;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.HashMap;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,63 +66,203 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public class DAOFactoryTemplate
-     extends AbstractDAOFactoryTemplate
+    extends  BasePerTableTemplate
 {
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param repository the repository.
+     * @param repositoryName the repository name.
+     * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public DAOFactoryTemplate(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String header,
         final DecoratorFactory decoratorFactory,
-        final TableTemplate tableTemplate,
         final String packageName,
         final String engineName,
+        final String engineVersion,
+        final String quote,
         final String basePackageName,
-        final String jndiDataSource,
-        final String repository)
+        final String repositoryName,
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
+            tableName,
+            metadataManager,
+            customSqlProvider,
             header,
             decoratorFactory,
-            tableTemplate,
             packageName,
             engineName,
-            null,
-            null,
+            engineVersion,
+            quote,
             basePackageName,
-            jndiDataSource,
-            repository);
+            repositoryName,
+            jmx,
+            jndiLocation);
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @param header the header.
-     * @return such source code.
+     * Builds a key to store the template cache.
+     * @return such key.
      */
-    protected String generateOutput(final String header)
+    protected Object buildTemplateCacheKey()
     {
-        return
-            generateOutput(
-                header,
-                getTableTemplate(),
-                getPackageName(),
-                getEngineName(),
-                getBasePackageName(),
-                getJNDIDataSource(),
-                getRepositoryName(),
-                StringUtils.getInstance(),
-                SingularPluralFormConverter.getInstance(),
-                DefaultThemeUtils.getInstance(),
-                PackageUtils.getInstance(),
-                DecorationUtils.getInstance());
+        return "//DAOTemplate//";
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    protected StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/dao/DAOFactory.stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    public String getTemplateName()
+    {
+        return "DAOFactory";
+    }
+
+    /**
+     * Fills the parameters required by <code>class</code> rule.
+     * @param input the input.
+     * @param voName the name of the value object.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param timestamp the timestamp.
+     * @param customResults the custom results.
+     * @param staticTable whether the table is static or not.
+     * @param tableRepositoryName the table repository name.
+     * @param tableName the table name.
+     * @param pkAttributes the primary key attributes.
+     * @param nonPkAttributes the ones not part of the primary key.
+     * @param fkAttributes the foreign key attributes.
+     * @param referingKeys the foreign keys of other tables pointing
+     * to this one. It's expected to be
+     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * lists).
+     * @param attributes the attributes.
+     * @param externallyManagedAttributes the attributes which are
+     * managed externally.
+     * @param allButExternallyManagedAttributes all but the attributes which
+     * are managed externally.
+     * @param lobAttributes all attributes whose type is Clob or Blob.
+     * @param allButLobAttributes all but the attributes whose type is
+     * Clob or Blob.
+     * @param foreignKeys the entities pointing to this instance's table.
+     * @param staticAttributeName the name of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param staticAttributeType the type of the static attribute, or
+     * <code>null</code> for non-static tables.
+     * @param parentTable the parent table, or <code>null</code> if not
+     * part of an ISA relationship.
+     * @param customSelects the custom selects.
+     * @param customUpdatesOrInserts the custom updates and inserts.
+     * @param customSelectsForUpdate the custom selects for update.
+     * @param customResults the custom results.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition input != null
+     * @precondition voName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition timestamp != null
+     * @precondition tableRepositoryName != null
+     * @precondition tableName != null
+     * @precondition pkAttributes != null
+     * @precondition nonPkAttributes != null
+     * @precondition fkAttributes != null
+     * @precondition attributes != null
+     * @precondition externallyManagedAttributes != null
+     * @precondition allButExternallyManagedAttributes != null
+     * @precondition lobAttributes != null
+     * @precondition allButLobAttributes != null
+     * @precondition foreignKeys != null
+     * @precondition customSelects != null
+     * @precondition customUpdatesOrInserts != null
+     * @precondition customSelectsForUpdate != null
+     * @precondition customResults != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected void fillClassParameters(
+        final Map input,
+        final String voName,
+        final String engineName,
+        final String engineVersion,
+        final String timestamp,
+        final boolean staticTable,
+        final String tableRepositoryName,
+        final String tableName,
+        final Collection pkAttributes,
+        final List nonPkAttributes,
+        final Collection fkAttributes,
+        final Map referingKeys,
+        final List attributes,
+        final Collection externallyManagedAttributes,
+        final List allButExternallyManagedAttributes,
+        final Collection lobAttributes,
+        final List allButLobAttributes,
+        final Collection foreignKeys,
+        final String staticAttributeName,
+        final String staticAttributeType,
+        final String parentTable,
+        final Collection customSelects,
+        final Collection customUpdatesOrInserts,
+        final Collection customSelectsForUpdate,
+        final Collection customResults,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        super.fillClassParameters(
+            input,
+            voName,
+            engineName,
+            engineVersion,
+            timestamp,
+            staticTable,
+            tableRepositoryName,
+            tableName,
+            pkAttributes,
+            nonPkAttributes,
+            fkAttributes,
+            referingKeys,
+            attributes,
+            externallyManagedAttributes,
+            allButExternallyManagedAttributes,
+            lobAttributes,
+            allButLobAttributes,
+            foreignKeys,
+            staticAttributeName,
+            staticAttributeType,
+            parentTable,
+            customSelects,
+            customUpdatesOrInserts,
+            customSelectsForUpdate,
+            customResults,
+            metadataManager,
+            decoratorFactory);
+
+        input.put("jndi_location", getJndiLocation());
     }
 
     /**
@@ -156,7 +288,7 @@ public class DAOFactoryTemplate
      * @precondition defaultThemeUtils != null
      * @precondition packageUtils != null
      * @precondition decorationUtils != null
-     */
+     *
     protected String generateOutput(
         final String header,
         final TableTemplate tableTemplate,
@@ -266,7 +398,7 @@ public class DAOFactoryTemplate
      * @precondition daoImplementationClassName != null
      * @precondition daoImplementationPackageName != null
      * @precondition jndiLocation != null
-     */
+     *
     protected void fillParameters(
         final StringTemplate template,
         final Integer[] copyrightYears,
@@ -337,7 +469,7 @@ public class DAOFactoryTemplate
      * @precondition input != null
      * @precondition basePackageName != null
      * @precondition subpackageName != null
-     */
+     *
     protected void fillPackageDeclarationParameters(
         final Map input,
         final String basePackageName,
@@ -346,13 +478,5 @@ public class DAOFactoryTemplate
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
     }
-
-    /**
-     * Retrieves the string template group.
-     * @return such instance.
-     */
-    protected StringTemplateGroup retrieveGroup()
-    {
-        return retrieveGroup("/org/acmsl/queryj/dao/DAOFactory.stg");
-    }
+    */
 }

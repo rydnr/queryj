@@ -135,6 +135,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveTableRepositoryName(parameters),
                 retrieveJmx(parameters),
                 retrieveHeader(parameters),
+                retrieveJndiLocation(parameters),
                 retrieveTableTemplates(parameters));
     }
 
@@ -157,6 +158,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param repository the repository.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
@@ -181,6 +183,7 @@ public abstract class BasePerTableTemplateBuildHandler
         final String repository,
         final boolean jmx,
         final String header,
+        final String jndiLocation,
         final TableTemplate[] tableTemplates)
     {
         boolean result = false;
@@ -211,7 +214,8 @@ public abstract class BasePerTableTemplateBuildHandler
                         projectPackage,
                         repository,
                         jmx,
-                        header);
+                        header,
+                        jndiLocation);
             }
 
             storeTemplates(t_aTemplates, parameters);

@@ -93,6 +93,7 @@ public class TableTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public TableTemplate(
         final String tableName,
@@ -106,7 +107,8 @@ public class TableTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
             tableName,
@@ -120,7 +122,8 @@ public class TableTemplate
             quote,
             basePackageName,
             repositoryName,
-            jmx);
+            jmx,
+            jndiLocation);
 
         immutableSetFields(new ArrayList());
         immutableSetFieldTypes(new HashMap());

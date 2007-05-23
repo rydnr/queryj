@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -64,6 +65,6 @@ public class TableTemplateHandlerBundle
     {
         super(
             new TableTemplateBuildHandler(),
-            new TableTemplateWritingHandler());
+            null); // no need to write Table sources // new TableTemplateWritingHandler());
     }
 }

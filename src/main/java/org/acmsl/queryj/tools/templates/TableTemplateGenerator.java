@@ -111,6 +111,7 @@ public class TableTemplateGenerator
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
@@ -125,7 +126,8 @@ public class TableTemplateGenerator
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
       throws  QueryJException
     {
         return
@@ -141,7 +143,8 @@ public class TableTemplateGenerator
                 quote,
                 basePackageName,
                 repositoryName,
-                jmx);
+                jmx,
+                jndiLocation);
     }
 
     /**

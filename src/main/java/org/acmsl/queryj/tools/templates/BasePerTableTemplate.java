@@ -121,6 +121,7 @@ public abstract class BasePerTableTemplate
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the location of the datasource in JNDI.
      */
     public BasePerTableTemplate(
         final String tableName,
@@ -134,7 +135,8 @@ public abstract class BasePerTableTemplate
         final String quote,
         final String basePackageName,
         final String repositoryName,
-        final boolean jmx)
+        final boolean jmx,
+        final String jndiLocation)
     {
         super(
             tableName,
@@ -148,7 +150,8 @@ public abstract class BasePerTableTemplate
             quote,
             basePackageName,
             repositoryName,
-            jmx);
+            jmx,
+            jndiLocation);
     }
 
     /**
@@ -1063,6 +1066,13 @@ public abstract class BasePerTableTemplate
         input.put("custom_updates_or_inserts", customUpdatesOrInserts);
         input.put("custom_selects_for_update", customSelectsForUpdate);
         input.put("custom_results", customResults);
+
+        input.put(
+            "dynamic_queries",
+            (   (containsDynamicSql(customSelects))
+             || (containsDynamicSql(customUpdatesOrInserts))
+             || (containsDynamicSql(customSelectsForUpdate)))
+            ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
@@ -2494,5 +2504,37 @@ public abstract class BasePerTableTemplate
     protected Object buildForeignKeysKey(final String tableName)
     {
         return "//BasePerTableTemplate//foreignKeys--" + tableName + "--" + getClass();
+    }
+
+    /**
+     * Checks whether given list contains dynamic SQL or not.
+     * @param queries the query list.
+     * @return <tt>true</tt> in such case.
+     * @precondition queries != null
+     */
+    protected boolean containsDynamicSql(final Collection queries)
+    {
+        boolean result = false;
+
+        Iterator t_Iterator = (queries != null) ? queries.iterator() : null;
+
+        if  (t_Iterator != null)
+        {
+            Object item;
+
+            while  (t_Iterator.hasNext())
+            {
+                item = t_Iterator.next();
+
+                if  (   (item instanceof Sql)
+                     && (((Sql) item).isDynamic()))
+                {
+                    result = true;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 }

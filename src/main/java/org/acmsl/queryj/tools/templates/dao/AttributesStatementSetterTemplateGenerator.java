@@ -115,6 +115,7 @@ public class AttributesStatementSetterTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param jmx whether to support JMX.
      * @param header the optional header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -137,7 +138,8 @@ public class AttributesStatementSetterTemplateGenerator
         final String basePackageName,
         final String repositoryName,
         final boolean jmx,
-        final String header)
+        final String header,
+        final String jndiLocation)
      throws  QueryJException
     {
         return
@@ -153,7 +155,8 @@ public class AttributesStatementSetterTemplateGenerator
                 quote,
                 basePackageName,
                 repositoryName,
-                jmx);
+                jmx,
+                jndiLocation);
     }
 
     /**

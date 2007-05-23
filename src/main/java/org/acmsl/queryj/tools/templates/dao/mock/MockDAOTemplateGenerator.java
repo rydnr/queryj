@@ -116,6 +116,7 @@ public class MockDAOTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
@@ -138,7 +139,8 @@ public class MockDAOTemplateGenerator
         final String mockPackageName,
         final String repositoryName,
         final boolean jmx,
-        final String header)
+        final String header,
+        final String jndiLocation)
       throws  QueryJException
     {
         return
@@ -154,7 +156,8 @@ public class MockDAOTemplateGenerator
                 quote,
                 mockPackageName,
                 repositoryName,
-                jmx);
+                jmx,
+                jndiLocation);
     }
 
     /**

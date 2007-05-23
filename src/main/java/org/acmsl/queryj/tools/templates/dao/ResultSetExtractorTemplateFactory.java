@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -67,6 +68,7 @@ public interface ResultSetExtractorTemplateFactory
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return such template.
      */
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
@@ -80,6 +82,7 @@ public interface ResultSetExtractorTemplateFactory
         final String basePackageName,
         final String repositoryName,
         final boolean jmx,
-        final String header)
+        final String header,
+        final String jndiLocation)
       throws  QueryJException;
 }
