@@ -153,7 +153,7 @@ project_imports(
 /*
  * Importing project classes.
  */
-import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
 class(input, foreignKey) ::= <<
@@ -173,8 +173,8 @@ class(input, foreignKey) ::= <<
  * @since <input.timestamp>
  */
 public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
-    implements  PreparedStatementSetter,
-                <input.tr_name_capitalized>TableRepository
+    implements  PreparedStatementSetter
+//                <input.tr_name_capitalized>TableRepository
 {
     <foreignKey.attributes:attribute_member_declaration(attr=it); separator="\n">
 

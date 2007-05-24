@@ -155,7 +155,7 @@ project_imports(
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
-import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
 class(input, table) ::= <<
@@ -185,8 +185,8 @@ classImpl(input, table, parent) ::= <<
  * @since <input.timestamp>
  */
 public class <input.vo_name>AttributesStatementSetter
-    implements  PreparedStatementSetter,
-                <input.tr_name_capitalized>TableRepository
+    implements  PreparedStatementSetter
+//                <input.tr_name_capitalized>TableRepository
 {
 <if(parent)>
     <table.allParentAndNonParentNonReadOnlyAttributes:attribute_member_declaration(attr=it); separator="\n\n">

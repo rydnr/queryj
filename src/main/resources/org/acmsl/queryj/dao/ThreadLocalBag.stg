@@ -1088,11 +1088,17 @@ public class <input.tr_name_capitalized>ThreadLocalBag
         {
             Date result = null;
 
-            Object t_Value = get(key);
-
-            if  (t_Value != null)
+            if  (key != null)
             {
-                result = (Date) timestampMap.get(buildTimestampKey(key, t_Value));
+                Object t_Value = get(key);
+
+                if  (t_Value != null)
+                {
+                    result =
+                        (Date)
+                            timestampMap.get(
+                                buildTimestampKey(key, t_Value));
+                }
             }
 
             return result;
@@ -1106,7 +1112,11 @@ public class <input.tr_name_capitalized>ThreadLocalBag
          */
         protected Object buildTimestampKey(final Object key, final Object value)
         {
-            return "asd3e23::" + key.hashCode() + "//\\\\" + value.hashCode();
+            return
+                "asd3e23::"
+                + ((key != null) ? key.hashCode() : "null")
+                + "//\\\\"
+                + ((value != null) ? value.hashCode() : "null");
         }
 
         // Modification Operations
@@ -1172,15 +1182,19 @@ public class <input.tr_name_capitalized>ThreadLocalBag
         {
             Object result;
 
-            Object t_TimestampKey = buildTimestampKey(key, value);
+            if  (   (key != null)
+                 && (value != null))
+            {
+                Object t_TimestampKey = buildTimestampKey(key, value);
 
-            timestampMap.remove(t_TimestampKey);
+                timestampMap.remove(t_TimestampKey);
 
-            Date t_Timestamp = new Date();
+                Date t_Timestamp = new Date();
 
-            result = super.put(key, value, decoratedMap);
+                result = super.put(key, value, decoratedMap);
 
-            timestampMap.put(t_TimestampKey, t_Timestamp);
+                timestampMap.put(t_TimestampKey, t_Timestamp);
+            }
 
             return result;
         }
@@ -1239,9 +1253,14 @@ public class <input.tr_name_capitalized>ThreadLocalBag
         protected Object remove(
             final Object key, final Map decoratedMap, final Map timestampMap)
         {
-            Object result = super.remove(key, decoratedMap);
+            Object result = null;
 
-            timestampMap.remove(buildTimestampKey(key, result));
+            if  (key != null)
+            {
+                result = super.remove(key, decoratedMap);
+
+                timestampMap.remove(buildTimestampKey(key, result));
+            }
 
             return result;
         }
