@@ -211,7 +211,7 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
         throws  SQLException
     {
         setValues(
-            (Query) preparedStatement,
+            preparedStatement,
             <foreignKey.attributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">);
     }
 
@@ -222,14 +222,15 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
         separator="\n">
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
-     <precondition_notnull("query")>
      */
     protected void setValues(
-        final Query query,
+        final PreparedStatement preparedStatement,
         <foreignKey.attributes:attribute_declaration(attr=it);
           separator=",\n">)
       throws  SQLException
     {
+        int index = 1;
+
         <foreignKey.attributes:attribute_query_specification(attr=it);
           separator="\n">
     }
@@ -288,7 +289,22 @@ attribute_query_specification(attr) ::= <<
  Generates the code to specify the attribute into the query.
  @param attr the attribute.
 !>
-query.set<attr.objectType>(
-    <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
-    <attr.nameLowercased>);
+<if(attr.allowsNull)>
+if  (<attr.nameLowercased> == null)
+{
+    preparedStatement.setNull(index++, <attr.type>);
+}
+else
+{
+    preparedStatement.set<attr.objectType>(
+        index++, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
+}
+<else>
+preparedStatement.set<attr.objectType>(
+<if(attr.timestamp)>
+    index++, new Timestamp(<attr.nameLowercased>.getTime()));
+<else>
+    index++, <attr.nameLowercased>);
+<endif>
+<endif>
 >>

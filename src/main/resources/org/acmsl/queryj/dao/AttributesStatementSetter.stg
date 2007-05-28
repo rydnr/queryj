@@ -354,12 +354,7 @@ public class <input.vo_name>AttributesStatementSetter
         throws  SQLException
     {
         setValues(
-<if(input.clobHandling)>
             preparedStatement,
-<else>
-            (Query) preparedStatement,
-<endif>
-
 <if(parent)>
             <table.allParentAndNonParentNonReadOnlyAttributes:{attr | get<attr.nameCapitalized>()}; separator=",\n">,
 <else>
@@ -378,13 +373,7 @@ public class <input.vo_name>AttributesStatementSetter
 
     /**
      * Specifies the values on given \<code>PreparedStatement\</code>
-<if(input.clobHandling)>
      * @param preparedStatement the prepared statement.
-
-<else>
-     * @param query the query.
-
-<endif>
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
@@ -400,21 +389,11 @@ public class <input.vo_name>AttributesStatementSetter
 
 <endif>
      * @throws SQLException intercepted by \<i>Spring\</i>.
-<if(input.clobHandling)>
      <precondition_notnull("preparedStatement")>
 
-<else>
-     <precondition_notnull("query")>
-
-<endif>
      */
     protected void setValues(
-<if(input.clobHandling)>
         final PreparedStatement preparedStatement,
-<else>
-        final Query query,
-<endif>
-
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_isolated_declaration_impl(attr=it);
           separator="\n">
@@ -434,11 +413,8 @@ public class <input.vo_name>AttributesStatementSetter
 
       throws  SQLException
     {
-<if(input.clobHandling)>
-        int t_iIndex = 1;
+        int index = 1;
 
-
-<endif>
 <if(input.clobHandling)>
         if  (updateOperation)
         {
@@ -452,7 +428,7 @@ public class <input.vo_name>AttributesStatementSetter
         if  (updateOperation)
         {
             <input.externally_managed_attributes:
-              attribute_query_specification(attr=it);
+              attribute_preparedstatement_specification(attr=it);
               separator="\n">
         }
 <endif>
@@ -474,7 +450,7 @@ public class <input.vo_name>AttributesStatementSetter
         }
 <else>
         <input.all_non_readonly_but_externally_managed_attributes:
-          attribute_query_specification(attr=it);
+          attribute_preparedstatement_specification(attr=it);
           separator="\n">
 
 <endif>
@@ -539,30 +515,33 @@ attribute_query_specification(attr) ::= <<
 <if(attr.allowsNull)>
 if  (<attr.nameLowercased> == null)
 {
-    query.setNull(
-        <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
-        <attr.type>);
+    preparedStatement.setNull(
+        index++, <attr.type>);
 }
 else
 {
-    query.set<attr.objectType>(
-        <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+    preparedStatement.set<attr.objectType>(
+        index++,
         (<attr.nameLowercased>.booleanValue()) ? <attr.booleanTrue> : <attr.booleanFalse>);
 }
 <else>
-query.set<attr.objectType>(
-    <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+preparedStatement.set<attr.objectType>(
+    index++,
     (<attr.nameLowercased>) ? <attr.booleanTrue> : <attr.booleanFalse>);
 <endif>
 <else>
 <if(attr.numberSmallerThanInt)>
-query.setInt(
+preparedStatement.setInt(
 <else>
-query.set<attr.objectType>(
+preparedStatement.set<attr.objectType>(
 <endif>
 
-    <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
+    index++,
+<if(attr.timestamp)>
+    new Timestamp(<attr.nameLowercased>));
+<else>
     <attr.nameLowercased>);
+<endif>
 <endif>
 
 >>
@@ -576,74 +555,21 @@ attribute_preparedstatement_specification(attr) ::= <<
 <if(attr.allowsNull)>
 if  (<attr.nameLowercased> == null)
 {
-    preparedStatement.setNull(t_iIndex++, <attr.type>);
+    preparedStatement.setNull(index++, <attr.type>);
 }
 else
 {
     preparedStatement.set<attr.objectType>(
-        t_iIndex++, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
+        index++, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
 }
 <else>
 preparedStatement.set<attr.objectType>(
-    t_iIndex++, <attr.nameLowercased>);
-<endif>
-<endif>
-
->>
-
-Integer_to_primitive(input) ::= <<
-<!
- Generates the method call to convert the attribute into an int primitive.
- @param input the attribute.
-!><input.nameLowercased>.intValue()>>
-
-Long_to_primitive(input) ::= <<
-<!
- Generates the method call to convert the attribute into a long primitive.
- @param input the attribute.
-!><input.nameLowercased>.longValue()>>
-
-Float_to_primitive(input) ::= <<
-<!
- Generates the method call to convert the attribute into a float primitive.
- @param input the attribute.
-!><input.nameLowercased>.floatValue()>>
-
-Double_to_primitive(input) ::= <<
-<!
- Generates the method call to convert the attribute into a double primitive.
- @param input the attribute.
-!><input.nameLowercased>.doubleValue()>>
-
-String_to_primitive(input) ::= <<
-<!
- Don't try to convert the String to anything.
- @param input the attribute.
-!><Object_to_primitive(input=input)>
->>
-
-BigDecimal_to_primitive(input) ::= <<
-<!
- Don't try to convert the BigDecimal to anything.
- @param input the attribute.
-!><Object_to_primitive(input=input)>
->>
-
-Timestamp_to_primitive(input) ::= <<
-<!
- Don't try to convert the Timestamp to anything.
- @param input the attribute.
-!>
-<if(input.date)>
-new Timestamp(<input.nameLowercased>.getTime())
+<if(attr.timestamp)>
+    index++, new Timestamp(<attr.nameLowercased>.getTime()));
 <else>
-<Object_to_primitive(input=input)>
+    index++, <attr.nameLowercased>);
 <endif>
->>
+<endif>
+<endif>
 
-Object_to_primitive(input) ::= <<
-<!
- Don't try to convert the attribute to anything.
- @param input the attribute.
-!><input.nameLowercased>
 >>

@@ -1114,9 +1114,9 @@ public class <input.tr_name_capitalized>ThreadLocalBag
         {
             return
                 "asd3e23::"
-                + ((key != null) ? key.hashCode() : "null")
+                + ((key != null) ? "" + key.hashCode() : "null")
                 + "//\\\\"
-                + ((value != null) ? value.hashCode() : "null");
+                + ((value != null) ? "" + value.hashCode() : "null");
         }
 
         // Modification Operations
@@ -1180,7 +1180,7 @@ public class <input.tr_name_capitalized>ThreadLocalBag
             final Map decoratedMap,
             final Map timestampMap)
         {
-            Object result;
+            Object result = null;
 
             if  (   (key != null)
                  && (value != null))

@@ -1205,3 +1205,60 @@ transactionTemplate.execute(
         new <sql.resultIdCapitalized>Extractor(getDAOListener()),
         this))
 >>
+
+Integer_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into an int primitive.
+ @param input the attribute.
+!><input.nameLowercased>.intValue()>>
+
+Long_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a long primitive.
+ @param input the attribute.
+!><input.nameLowercased>.longValue()>>
+
+Float_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a float primitive.
+ @param input the attribute.
+!><input.nameLowercased>.floatValue()>>
+
+Double_to_primitive(input) ::= <<
+<!
+ Generates the method call to convert the attribute into a double primitive.
+ @param input the attribute.
+!><input.nameLowercased>.doubleValue()>>
+
+String_to_primitive(input) ::= <<
+<!
+ Don't try to convert the String to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+BigDecimal_to_primitive(input) ::= <<
+<!
+ Don't try to convert the BigDecimal to anything.
+ @param input the attribute.
+!><Object_to_primitive(input=input)>
+>>
+
+Timestamp_to_primitive(input) ::= <<
+<!
+ Don't try to convert the Timestamp to anything.
+ @param input the attribute.
+!>
+<if(input.date)>
+new Timestamp(<input.nameLowercased>.getTime())
+<else>
+<Object_to_primitive(input=input)>
+<endif>
+>>
+
+Object_to_primitive(input) ::= <<
+<!
+ Don't try to convert the attribute to anything.
+ @param input the attribute.
+!><input.nameLowercased>
+>>

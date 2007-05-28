@@ -82,8 +82,12 @@ public class PerCommentParserTest
     /**
      * The table comment.
      */
-    protected static final String TABLE_COMMENT =
-        "Dummy table used in tests.";
+    protected static final String[] TABLE_COMMENTS =
+        new String[]
+        {
+            "DummyTable",
+            "Dummy table used in tests."
+        };
     
     /**
      * The table 'static' annotation.
@@ -103,31 +107,18 @@ public class PerCommentParserTest
     /**
      * The table comment tests.
      */
-    public static final String[] TABLE_COMMENT_TESTS =
-        new String[]
-        {
-            TABLE_COMMENT,
-            TABLE_COMMENT +                                                       " @static " + TABLE_STATIC,
-            TABLE_COMMENT +                                " @isa " + TABLE_ISA,
-            TABLE_COMMENT +                                " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
-            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE,
-            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE                        + " @static " + TABLE_STATIC,
-            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE + " @isa " + TABLE_ISA,
-            TABLE_COMMENT + " @isatype " + TABLE_ISATYPE + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
-            TABLE_COMMENT +                                                     " @isatype " + TABLE_ISATYPE,
-            TABLE_COMMENT +                        " @static " + TABLE_STATIC,
-            TABLE_COMMENT +                        " @static " + TABLE_STATIC + " @isatype " + TABLE_ISATYPE,
-            TABLE_COMMENT + " @isa " + TABLE_ISA,
-            TABLE_COMMENT + " @isa " + TABLE_ISA                              + " @isatype " + TABLE_ISATYPE,
-            TABLE_COMMENT + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
-            TABLE_COMMENT + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC + " @isatype " + TABLE_ISATYPE
-        };
+    public static final String[][] TABLE_COMMENT_TESTS =
+        new String[TABLE_COMMENTS.length][15]; // see below
 
     /**
      * The column comment.
      */
-    protected static final String COLUMN_COMMENT =
-        "Dummy column used in tests.";
+    protected static final String[] COLUMN_COMMENTS =
+        new String[]
+        {
+            "DummyColumn",
+            "Dummy column used in tests."
+        };
 
     /**
      * The column 'bool' annotation.
@@ -161,39 +152,23 @@ public class PerCommentParserTest
     /**
      * The column comment tests.
      */
-    protected static final String[] COLUMN_COMMENT_TESTS =
-        new String[]
+    protected static final String[][] COLUMN_COMMENT_TESTS =
+        new String[COLUMN_COMMENTS.length][29]; // see below
+
+    static
+    {
+        for  (int index = 0; index < TABLE_COMMENTS.length; index++)
         {
-/*0*/       COLUMN_COMMENT,
-/*1*/       COLUMN_COMMENT +                                                           " @readonly",
-/*2*/       COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL,
-/*3*/            COLUMN_COMMENT +                                 " @bool " + COLUMN_BOOL + " @readonly",
-/*4*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
-/*5*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
-/*6*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL,
-/*7*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL + " @readonly",
-/*8*/            COLUMN_COMMENT +                                                           " @readonly",
-/*9*/            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS,
-/*10*/            COLUMN_COMMENT +                           " @isarefs " + COLUMN_ISAREFS + " @readonly",
-/*11*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL,
-/*12*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL +                                 " @readonly",
-/*13*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
-/*14*/            COLUMN_COMMENT + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly",
-/*15*/            COLUMN_COMMENT +                                                           " @readonly",
-/*16*/            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ,
-/*17*/            COLUMN_COMMENT +                                 " @oraseq " + COLUMN_ORASEQ + " @readonly",
-/*18*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS,
-/*19*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @readonly",
-/*20*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ,
-/*21*/            COLUMN_COMMENT + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ + " @readonly",
-/*22*/            COLUMN_COMMENT +                                                           " @readonly",
-/*23*/            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS,
-/*24*/            COLUMN_COMMENT +                               " @isarefs " + COLUMN_ISAREFS + " @readonly",
-/*25*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ,
-/*26*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ +                                 " @readonly",
-/*27*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS,
-/*28*/            COLUMN_COMMENT + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS + " @readonly"
-        };
+            TABLE_COMMENT_TESTS[index] =
+                buildTableCommentInputTests(TABLE_COMMENTS[index]);
+        }
+
+        for  (int index = 0; index < COLUMN_COMMENTS.length; index++)
+        {
+            COLUMN_COMMENT_TESTS[index] =
+                buildColumnCommentInputTests(COLUMN_COMMENTS[index]);
+        }
+    }
 
     /**
      * Constructs a test case with the given name.
@@ -202,6 +177,78 @@ public class PerCommentParserTest
     public PerCommentParserTest(final String name)
     {
         super(name);
+    }
+
+    /**
+     * Builds a set of test inputs for given table comment.
+     * @param tableComment the table comment.
+     * @return the list of test inputs.
+     */
+    protected static final String[] buildTableCommentInputTests(
+        final String tableComment)
+    {
+        return
+            new String[]
+            {
+                tableComment,
+                tableComment +                                                       " @static " + TABLE_STATIC,
+                tableComment +                                " @isa " + TABLE_ISA,
+                tableComment +                                " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
+                tableComment + " @isatype " + TABLE_ISATYPE,
+                tableComment + " @isatype " + TABLE_ISATYPE                        + " @static " + TABLE_STATIC,
+                tableComment + " @isatype " + TABLE_ISATYPE + " @isa " + TABLE_ISA,
+                tableComment + " @isatype " + TABLE_ISATYPE + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
+                tableComment +                                                     " @isatype " + TABLE_ISATYPE,
+                tableComment +                        " @static " + TABLE_STATIC,
+                tableComment +                        " @static " + TABLE_STATIC + " @isatype " + TABLE_ISATYPE,
+                tableComment + " @isa " + TABLE_ISA,
+                tableComment + " @isa " + TABLE_ISA                              + " @isatype " + TABLE_ISATYPE,
+                tableComment + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC,
+                tableComment + " @isa " + TABLE_ISA + " @static " + TABLE_STATIC + " @isatype " + TABLE_ISATYPE
+            };
+    }
+
+    /**
+     * Builds a set of test inputs for given column comment.
+     * @param columnComment the column comment.
+     * @return the list of test inputs.
+     */
+    protected static final String[] buildColumnCommentInputTests(
+        final String columnComment)
+    {
+        return
+            new String[]
+            {
+/*0*/             columnComment,
+/*1*/             columnComment +                                                           " @readonly",
+/*2*/             columnComment +                                 " @bool " + COLUMN_BOOL,
+/*3*/             columnComment +                                 " @bool " + COLUMN_BOOL + " @readonly",
+/*4*/             columnComment + " @isarefs " + COLUMN_ISAREFS,
+/*5*/             columnComment + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*6*/             columnComment + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL,
+/*7*/             columnComment + " @isarefs " + COLUMN_ISAREFS + " @bool " + COLUMN_BOOL + " @readonly",
+/*8*/             columnComment +                                                           " @readonly",
+/*9*/             columnComment +                           " @isarefs " + COLUMN_ISAREFS,
+/*10*/            columnComment +                           " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*11*/            columnComment + " @bool " + COLUMN_BOOL,
+/*12*/            columnComment + " @bool " + COLUMN_BOOL +                                 " @readonly",
+/*13*/            columnComment + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS,
+/*14*/            columnComment + " @bool " + COLUMN_BOOL + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*15*/            columnComment +                                                           " @readonly",
+/*16*/            columnComment +                                 " @oraseq " + COLUMN_ORASEQ,
+/*17*/            columnComment +                                 " @oraseq " + COLUMN_ORASEQ + " @readonly",
+/*18*/            columnComment + " @isarefs " + COLUMN_ISAREFS,
+/*19*/            columnComment + " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*20*/            columnComment + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ,
+/*21*/            columnComment + " @isarefs " + COLUMN_ISAREFS + " @oraseq " + COLUMN_ORASEQ + " @readonly",
+/*22*/            columnComment +                                                           " @readonly",
+/*23*/            columnComment +                               " @isarefs " + COLUMN_ISAREFS,
+/*24*/            columnComment +                               " @isarefs " + COLUMN_ISAREFS + " @readonly",
+/*25*/            columnComment + " @oraseq " + COLUMN_ORASEQ,
+/*26*/            columnComment + " @oraseq " + COLUMN_ORASEQ +                                 " @readonly",
+/*27*/            columnComment + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS,
+/*28*/            columnComment + " @oraseq " + COLUMN_ORASEQ + " @isarefs " + COLUMN_ISAREFS + " @readonly"
+            };
     }
 
     /**
@@ -220,6 +267,7 @@ public class PerCommentParserTest
     public void testTableComment()
     {
         int t_iIndex = 0;
+        int t_iTestIndex = 0;
         
         try
         {
@@ -228,25 +276,32 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = TABLE_COMMENT_TESTS[t_iIndex];
+                
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                t_Parser.tableComment();
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
+                {
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                assertEquals(
-                      "Test failed on table comment "
-                    + t_iIndex
-                    + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
-                    TABLE_COMMENT,
-                    t_Parser.getTableComment());
+                    t_Parser.tableComment();
+
+                    assertEquals(
+                            "Test failed on table comment ("
+                          + t_iIndex + "/" + t_iTestIndex + ")"
+                          + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                          TABLE_COMMENTS[t_iIndex],
+                          t_Parser.getTableComment());
+                }
             }
         }
         catch  (final RecognitionException recognitionException)
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + TABLE_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -257,6 +312,7 @@ public class PerCommentParserTest
     public void testColumnComment()
     {
         int t_iIndex = 0;
+        int t_iTestIndex = 0;
         
         try
         {
@@ -267,25 +323,33 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = 
+                    COLUMN_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.columnComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                assertEquals(
-                      "Test failed on column comment "
-                    + t_iIndex
-                    + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                    COLUMN_COMMENT,
-                    t_Parser.getColumnComment());
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
+                {
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
+
+                    t_Parser.columnComment();
+
+                    assertEquals(
+                          "Test failed on column comment ("
+                        + t_iIndex + "/" + t_iTestIndex + ")"
+                        + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                        COLUMN_COMMENTS[t_iIndex],
+                        t_Parser.getColumnComment());
+                }
             }
         }
         catch  (final RecognitionException recognitionException)
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + COLUMN_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + COLUMN_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -296,6 +360,7 @@ public class PerCommentParserTest
     public void testTableStatic()
     {
         int t_iIndex = 0;
+        int t_iTestIndex = 0;
         
         try
         {
@@ -304,36 +369,44 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = TABLE_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.tableComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 1:
-                    case 3:
-                    case 5:
-                    case 7:
-                    case 9:
-                    case 10:
-                    case 13:
-                    case 14:
-                        assertEquals(
-                              "@static test failed on table comment "
-                            + t_iIndex
-                            + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
-                            TABLE_STATIC,
-                            t_Parser.getTableStatic());
-                        break;
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                    default:
-                        assertNull(
-                              "@static test failed on table comment "
-                            + t_iIndex
-                            + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_Parser.getTableStatic());
-                        break;
+                    t_Parser.tableComment();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                        case 9:
+                        case 10:
+                        case 13:
+                        case 14:
+                            assertEquals(
+                                  "@static test failed on table comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                TABLE_STATIC,
+                                t_Parser.getTableStatic());
+                            break;
+
+                        default:
+                            assertNull(
+                                  "@static test failed on table comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\": "
+                                + t_Parser.getTableStatic(),
+                                t_Parser.getTableStatic());
+                            break;
+                    }
                 }
             }
         }
@@ -341,8 +414,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + TABLE_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -353,7 +426,8 @@ public class PerCommentParserTest
     public void testTableIsa()
     {
         int t_iIndex = 0;
-        
+        int t_iTestIndex = 0;
+
         try
         {
             int t_iCount =
@@ -361,36 +435,43 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = TABLE_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.tableComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 2:
-                    case 3:
-                    case 6:
-                    case 7:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                        assertEquals(
-                              "@isa test failed on table comment "
-                            + t_iIndex
-                            + " \"" + TABLE_COMMENT_TESTS[t_iIndex] + "\"",
-                            TABLE_ISA,
-                            t_Parser.getTableIsa());
-                        break;
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                    default:
-                        assertNull(
-                              "@isa test failed on table comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_Parser.getTableIsa());
+                    t_Parser.tableComment();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 2:
+                        case 3:
+                        case 6:
+                        case 7:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                            assertEquals(
+                                  "@isa test failed on table comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                TABLE_ISA,
+                                t_Parser.getTableIsa());
+                            break;
+
+                        default:
+                            assertNull(
+                                  "@isa test failed on table comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                t_Parser.getTableIsa());
                         break;
+                    }
                 }
             }
         }
@@ -398,8 +479,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + TABLE_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -410,7 +491,8 @@ public class PerCommentParserTest
     public void testTableIsaType()
     {
         int t_iIndex = 0;
-        
+        int t_iTestIndex = 0;
+
         try
         {
             int t_iCount =
@@ -418,36 +500,43 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(TABLE_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = TABLE_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.tableComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 10:
-                    case 12:
-                    case 14:
-                        assertEquals(
-                              "@isatype test failed on table comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            TABLE_ISATYPE,
-                            t_Parser.getTableIsaType());
-                        break;
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                    default:
-                        assertNull(
-                              "@isatype test failed on table comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_Parser.getTableIsaType());
-                        break;
+                    t_Parser.tableComment();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 8:
+                        case 10:
+                        case 12:
+                        case 14:
+                            assertEquals(
+                                  "@isatype test failed on table comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                TABLE_ISATYPE,
+                                t_Parser.getTableIsaType());
+                            break;
+
+                        default:
+                            assertNull(
+                                  "@isatype test failed on table comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                t_Parser.getTableIsaType());
+                            break;
+                    }
                 }
             }
         }
@@ -455,8 +544,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + TABLE_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -467,7 +556,8 @@ public class PerCommentParserTest
     public void testColumnReadOnly()
     {
         int t_iIndex = 0;
-        
+        int t_iTestIndex = 0;
+
         try
         {
             int t_iCount =
@@ -477,43 +567,50 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = COLUMN_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.columnComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 1:
-                    case 3:
-                    case 5:
-                    case 7:
-                    case 8:
-                    case 10:
-                    case 12:
-                    case 14:
-                    case 15:
-                    case 17:
-                    case 19:
-                    case 21:
-                    case 22:
-                    case 24:
-                    case 26:
-                    case 28:
-                        assertTrue(
-                              "@readonly test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_Parser.getColumnReadOnly());
-                        break;
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                    default:
-                        assertFalse(
-                              "@readonly test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_Parser.getColumnReadOnly());
-                        break;
+                    t_Parser.columnComment();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 1:
+                        case 3:
+                        case 5:
+                        case 7:
+                        case 8:
+                        case 10:
+                        case 12:
+                        case 14:
+                        case 15:
+                        case 17:
+                        case 19:
+                        case 21:
+                        case 22:
+                        case 24:
+                        case 26:
+                        case 28:
+                            assertTrue(
+                                  "@readonly test failed on column comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                t_Parser.getColumnReadOnly());
+                            break;
+
+                        default:
+                            assertFalse(
+                                  "@readonly test failed on column comment "
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                t_Parser.getColumnReadOnly());
+                            break;
+                    }
                 }
             }
         }
@@ -521,8 +618,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + COLUMN_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -533,6 +630,7 @@ public class PerCommentParserTest
     public void testColumnBool()
     {
         int t_iIndex = 0;
+        int t_iTestIndex = 0;
         
         try
         {
@@ -543,36 +641,43 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = COLUMN_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.columnComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 2:
-                    case 3:
-                    case 6:
-                    case 7:
-                    case 11:
-                    case 12:
-                    case 13:
-                    case 14:
-                        assertEquals(
-                              "@bool test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            COLUMN_BOOL,
-                            t_Parser.getColumnBool());
-                        break;
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                    default:
-                        assertNull(
-                              "@bool test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                              t_Parser.getColumnBool());
-                        break;
+                    t_Parser.columnComment();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 2:
+                        case 3:
+                        case 6:
+                        case 7:
+                        case 11:
+                        case 12:
+                        case 13:
+                        case 14:
+                            assertEquals(
+                                  "@bool test failed on column comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                COLUMN_BOOL,
+                                t_Parser.getColumnBoolTrue());
+                            break;
+
+                        default:
+                            assertNull(
+                                  "@bool test failed on column comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                t_Parser.getColumnBoolTrue());
+                            break;
+                    }
                 }
             }
         }
@@ -580,8 +685,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + COLUMN_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -592,6 +697,7 @@ public class PerCommentParserTest
     public void testColumnIsaRefs()
     {
         int t_iIndex = 0;
+        int t_iTestIndex = 0;
         
         try
         {
@@ -602,87 +708,94 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = COLUMN_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.columnComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                String[][] t_astrIsaRefs = t_Parser.getColumnIsaRefs();
-
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                    case 9:
-                    case 10:
-                    case 13:
-                    case 14:
-                    case 18:
-                    case 19:
-                    case 20:
-                    case 21:
-                    case 23:
-                    case 24:
-                    case 27:
-                    case 28:
-                    case 29:
-                    case 32:
-                    case 33:
-                        assertNotNull(
-                              "@isarefs test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_astrIsaRefs);
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                        for  (int t_iIsaRefIndex = 0;
-                                  t_iIsaRefIndex < ISAREFS_IDS.length; 
-                                  t_iIsaRefIndex++)
-                        {
+                    t_Parser.columnComment();
+
+                    String[][] t_astrIsaRefs = t_Parser.getColumnIsaRefs();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 4:
+                        case 5:
+                        case 6:
+                        case 7:
+                        case 9:
+                        case 10:
+                        case 13:
+                        case 14:
+                        case 18:
+                        case 19:
+                        case 20:
+                        case 21:
+                        case 23:
+                        case 24:
+                        case 27:
+                        case 28:
+                        case 29:
+                        case 32:
+                        case 33:
                             assertNotNull(
                                   "@isarefs test failed on column comment "
-                                + t_iIndex
-                                + " \""
-                                + COLUMN_COMMENT_TESTS[t_iIndex]
-                                + "\"",
-                                t_astrIsaRefs[t_iIsaRefIndex]);
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                t_astrIsaRefs);
 
-                            assertTrue(
+                            for  (int t_iIsaRefIndex = 0;
+                                      t_iIsaRefIndex < ISAREFS_IDS.length; 
+                                      t_iIsaRefIndex++)
+                            {
+                                assertNotNull(
+                                      "@isarefs test failed on column comment "
+                                    + t_iIndex
+                                    + " \""
+                                    + t_astrTests[t_iTestIndex]
+                                    + "\"",
+                                    t_astrIsaRefs[t_iIsaRefIndex]);
+
+                                assertTrue(
+                                      "@isarefs test failed on column comment "
+                                    + t_iIndex
+                                    + " \""
+                                    + t_astrTests[t_iTestIndex]
+                                    + "\"",
+                                    t_astrIsaRefs[t_iIsaRefIndex].length == 2);
+
+                                assertEquals(
                                   "@isarefs test failed on column comment "
-                                + t_iIndex
-                                + " \""
-                                + COLUMN_COMMENT_TESTS[t_iIndex]
-                                + "\"",
-                                t_astrIsaRefs[t_iIsaRefIndex].length == 2);
+                                    + t_iIndex
+                                    + " \""
+                                    + t_astrTests[t_iTestIndex]
+                                    + "\"",
+                                    ISAREFS_IDS[t_iIsaRefIndex],
+                                    t_astrIsaRefs[t_iIsaRefIndex][0]);
 
-                            assertEquals(
+                                assertEquals(
+                                      "@isarefs test failed on column comment "
+                                    + t_iIndex
+                                    + " \""
+                                    + t_astrTests[t_iTestIndex]
+                                    + "\"",
+                                    ISAREFS_REFERENCES[t_iIsaRefIndex],
+                                    t_astrIsaRefs[t_iIsaRefIndex][1]);
+                            }
+                            break;
+
+                        default:
+                            assertNull(
                                   "@isarefs test failed on column comment "
-                                + t_iIndex
-                                + " \""
-                                + COLUMN_COMMENT_TESTS[t_iIndex]
-                                + "\"",
-                                ISAREFS_IDS[t_iIsaRefIndex],
-                                t_astrIsaRefs[t_iIsaRefIndex][0]);
-
-                            assertEquals(
-                                  "@isarefs test failed on column comment "
-                                + t_iIndex
-                                + " \""
-                                + COLUMN_COMMENT_TESTS[t_iIndex]
-                                + "\"",
-                                ISAREFS_REFERENCES[t_iIsaRefIndex],
-                                t_astrIsaRefs[t_iIsaRefIndex][1]);
-                        }
-                        break;
-
-                    default:
-                        assertNull(
-                              "@isarefs test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            t_astrIsaRefs);
-                        break;
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                t_astrIsaRefs);
+                            break;
+                    }
                 }
             }
         }
@@ -690,8 +803,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + COLUMN_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 
@@ -702,6 +815,7 @@ public class PerCommentParserTest
     public void testColumnOraSeq()
     {
         int t_iIndex = 0;
+        int t_iTestIndex = 0;
         
         try
         {
@@ -712,36 +826,43 @@ public class PerCommentParserTest
             
             for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                PerCommentParser t_Parser =
-                    setUpParser(COLUMN_COMMENT_TESTS[t_iIndex]);
+                String[] t_astrTests = COLUMN_COMMENT_TESTS[t_iIndex];
 
-                t_Parser.columnComment();
+                int t_iTestCount = (t_astrTests != null) ? t_astrTests.length : 0;
 
-                switch  (t_iIndex)
+                for  (t_iTestIndex = 0; t_iTestIndex < t_iTestCount; t_iTestIndex++)
                 {
-                    case 16:
-                    case 17:
-                    case 20:
-                    case 21:
-                    case 25:
-                    case 26:
-                    case 27:
-                    case 28:
-                        assertEquals(
-                              "@oraseq test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                            COLUMN_ORASEQ,
-                            t_Parser.getColumnOraSeq());
-                        break;
+                    PerCommentParser t_Parser =
+                        setUpParser(t_astrTests[t_iTestIndex]);
 
-                    default:
-                        assertNull(
-                              "@oraseq test failed on column comment "
-                            + t_iIndex
-                            + " \"" + COLUMN_COMMENT_TESTS[t_iIndex] + "\"",
-                              t_Parser.getColumnOraSeq());
-                        break;
+                    t_Parser.columnComment();
+
+                    switch  (t_iTestIndex)
+                    {
+                        case 16:
+                        case 17:
+                        case 20:
+                        case 21:
+                        case 25:
+                        case 26:
+                        case 27:
+                        case 28:
+                            assertEquals(
+                                  "@oraseq test failed on column comment "
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                COLUMN_ORASEQ,
+                                t_Parser.getColumnOraSeq());
+                            break;
+
+                        default:
+                            assertNull(
+                                  "@oraseq test failed on column comment "
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                t_Parser.getColumnOraSeq());
+                            break;
+                    }
                 }
             }
         }
@@ -749,8 +870,8 @@ public class PerCommentParserTest
         {
             fail(
                   recognitionException.getMessage()
-                + " on test " + t_iIndex + " "
-                + COLUMN_COMMENT_TESTS[t_iIndex]);
+                + " on test (" + t_iIndex + "/" + t_iTestIndex + ") "
+                + TABLE_COMMENT_TESTS[t_iIndex][t_iTestIndex]);
         }
     }
 

@@ -472,7 +472,8 @@ fragment text returns [String result]
 @init { result = null; StringBuffer aux = new StringBuffer(); }
   : (  t=TEXT  { aux.append($t.text); }
      | q=QUOTE { aux.append($q.text); }
-     | c=COMMA { aux.append($c.text); })+
+     | c=COMMA { aux.append($c.text); }
+     | i=ID    { aux.append($i.text); })+
     { result = aux.toString(); }
   ;
         
@@ -569,10 +570,6 @@ OPEN_PAREN : '(';
 CLOSE_PAREN : ')';
 COMMA : ',';
 
-ID
-    : ( LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
-    ;
-
 // keywords
 fragment STATIC : '@static';
 fragment ISA : '@isa';
@@ -585,6 +582,10 @@ fragment ORASEQ : '@oraseq';
 
 
 WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;// {$channel = HIDDEN;};
+
+ID
+    : ( LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
+    ;
 
 TEXT
    : (  ('\t') => WS {$type = WS;}

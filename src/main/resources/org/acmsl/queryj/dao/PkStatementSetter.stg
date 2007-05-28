@@ -206,26 +206,14 @@ public class <input.vo_name>PkStatementSetter
         throws  SQLException
     {
         setValues(
-<if(input.clobHandling)>
             preparedStatement,
-
-<else>
-            (Query) preparedStatement,
-
-<endif>
             <input.pk_attributes:{attr | get<attr.nameCapitalized>()};
               separator=",\n">);
     }
 
     /**
      * Specifies the values on given \<code>PreparedStatement\</code>
-<if(input.clobHandling)>
      * @param preparedStatement the prepared statement.
-
-<else>
-     * @param query the query.
-
-<endif>
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
      * @throws SQLException intercepted by \<i>Spring\</i>.
@@ -238,30 +226,16 @@ public class <input.vo_name>PkStatementSetter
 <endif>
      */
     protected void setValues(
-<if(input.clobHandling)>
         final PreparedStatement preparedStatement,
-
-<else>
-        final Query query,
-
-<endif>
         <input.pk_attributes:attribute_declaration(attr=it);
           separator=",\n">)
       throws  SQLException
     {
-<if(input.clobHandling)>
-        int t_iIndex = 1;
+        int index = 1;
 
         <input.pk_attributes:
           attribute_preparedstatement_specification(attr=it);
           separator="\n">
-
-<else>
-        <input.pk_attributes:
-          attribute_query_specification(attr=it);
-          separator="\n">
-
-<endif>
     }
 }
 >>
@@ -318,9 +292,8 @@ attribute_query_specification(attr) ::= <<
  Generates the code to specify the attribute into the query.
  @param attr the attribute.
 !>
-query.set<attr.queryJFieldType>(
-    <attr.tableNameUppercased>.<attr.nameUppercased>.equals(),
-    <attr.nameLowercased>);
+preparedStatement.set<attr.queryJFieldType>(
+    index++, <attr.nameLowercased>);
 >>
 
 attribute_preparedstatement_specification(attr) ::= <<
@@ -330,6 +303,6 @@ attribute_preparedstatement_specification(attr) ::= <<
 !>
 <if(!attr.clob)>
 preparedStatement.set<attr.queryJFieldType>(
-    t_iIndex++, <attr.nameLowercased>);
+    index++, <attr.nameLowercased>);
 <endif>
 >>
