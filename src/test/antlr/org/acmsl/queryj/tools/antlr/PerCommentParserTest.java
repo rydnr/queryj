@@ -123,7 +123,7 @@ public class PerCommentParserTest
     /**
      * The column 'bool' annotation.
      */
-    protected static final String COLUMN_BOOL = "'Y'";
+    protected static final String COLUMN_BOOL = "'Y','N'";
 
     /**
      * The isaref ids.
@@ -599,7 +599,7 @@ public class PerCommentParserTest
                             assertTrue(
                                   "@readonly test failed on column comment ("
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 t_Parser.getColumnReadOnly());
                             break;
 
@@ -607,7 +607,7 @@ public class PerCommentParserTest
                             assertFalse(
                                   "@readonly test failed on column comment "
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 t_Parser.getColumnReadOnly());
                             break;
                     }
@@ -665,16 +665,22 @@ public class PerCommentParserTest
                             assertEquals(
                                   "@bool test failed on column comment ("
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
-                                COLUMN_BOOL,
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                "Y",
                                 t_Parser.getColumnBoolTrue());
+                            assertEquals(
+                                  "@bool test failed on column comment ("
+                                + t_iIndex + "/" + t_iTestIndex + ")"
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
+                                "N",
+                                t_Parser.getColumnBoolFalse());
                             break;
 
                         default:
                             assertNull(
                                   "@bool test failed on column comment ("
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 t_Parser.getColumnBoolTrue());
                             break;
                     }
@@ -745,7 +751,7 @@ public class PerCommentParserTest
                             assertNotNull(
                                   "@isarefs test failed on column comment "
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 t_astrIsaRefs);
 
                             for  (int t_iIsaRefIndex = 0;
@@ -792,7 +798,7 @@ public class PerCommentParserTest
                             assertNull(
                                   "@isarefs test failed on column comment "
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 t_astrIsaRefs);
                             break;
                     }
@@ -850,7 +856,7 @@ public class PerCommentParserTest
                             assertEquals(
                                   "@oraseq test failed on column comment "
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 COLUMN_ORASEQ,
                                 t_Parser.getColumnOraSeq());
                             break;
@@ -859,7 +865,7 @@ public class PerCommentParserTest
                             assertNull(
                                   "@oraseq test failed on column comment "
                                 + t_iIndex + "/" + t_iTestIndex + ")"
-                                + " \"" + t_astrTests[t_iIndex] + "\"",
+                                + " \"" + t_astrTests[t_iTestIndex] + "\"",
                                 t_Parser.getColumnOraSeq());
                             break;
                     }

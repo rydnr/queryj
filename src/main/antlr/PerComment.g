@@ -470,10 +470,8 @@ columnComment : WS? t=text ( col_annotation )* { setColumnComment(t); };
 
 fragment text returns [String result]
 @init { result = null; StringBuffer aux = new StringBuffer(); }
-  : (  t=TEXT  { aux.append($t.text); }
-     | q=QUOTE { aux.append($q.text); }
-     | c=COMMA { aux.append($c.text); }
-     | i=ID    { aux.append($i.text); })+
+  : (  t=text_or_id  { aux.append($t.text); }
+     | c=COMMA { aux.append($c.text); })+
     { result = aux.toString(); }
   ;
         
@@ -488,17 +486,17 @@ fragment tab_annotation
 
 fragment tab_static returns [String result]
 @init { result = null; }
-  : STATIC WS i=identifier WS? { result = $i.text; }
+  : STATIC WS i=ident WS? { result = $i.text; }
   ;
 
 fragment tab_isa returns [String result]
 @init { result = null; }
-  : ISA WS i=identifier WS? { result = $i.text; }
+  : ISA WS i=ident WS? { result = $i.text; }
   ;
 
 fragment tab_isatype returns [String result]
 @init { result = null; }
-  : ISATYPE WS i=identifier WS? { result = $i.text; }
+  : ISATYPE WS i=ident WS? { result = $i.text; }
   ;
 
 fragment tab_decorator :  DECORATOR WS?;
@@ -514,27 +512,49 @@ fragment col_annotation
 fragment col_readonly :  READONLY WS?;
 
 fragment col_bool
-  : BOOL WS i=identifier WS? COMMA WS? j=identifier WS?
-        (COMMA k=identifier WS? { setColumnBoolNull($k.text); })?
+  : BOOL WS
+    i=ident
     {
       setColumnBoolTrue($i.text);
-      setColumnBoolFalse($j.text);
     }
+    WS? COMMA WS?
+    j=ident { setColumnBoolFalse($j.text); }
+    WS? (COMMA WS? k=ident WS? { setColumnBoolNull($k.text); })?
   ;
 
-fragment identifier : QUOTE? ID QUOTE?;
+fragment text_or_id 
+	:	ID
+	| 	TEXT
+	;
+
+fragment ident returns [String text]
+@init {text = null;}
+	:   (SQUOTE i=ID SQUOTE) {text = ($i.text);}
+	|   (DQUOTE j=ID DQUOTE) {text = ($j.text);}
+	| k=ID {text = $k.text;}
+	;
 
 fragment col_isarefs
 @init
 {
     List contents = new ArrayList();
+    String first = null;
+    String second = null;
 }
   :  ISAREFS
      WS
      (
-       OPEN_PAREN WS? QUOTE? a=TEXT QUOTE? WS? COMMA WS? QUOTE? b=ID QUOTE? WS? CLOSE_PAREN WS? COMMA?
+       OPEN_PAREN WS?
+       (  (SQUOTE a=text_or_id SQUOTE) { first = $a.text; }
+        | (DQUOTE b=text_or_id DQUOTE) { first = $b.text; }
+        | (c=text_or_id) { first = $c.text; })
+       WS? COMMA WS?
+       (  (SQUOTE d=ID SQUOTE) { second = $d.text; }
+        | (DQUOTE e=ID DQUOTE) { second = $e.text; }
+        | (f=ID) { second = $f.text; })
+       WS? CLOSE_PAREN WS? COMMA?
        {
-         contents.add(new String[] { trim($a.text), trim($b.text) });
+         contents.add(new String[] { trim(first), trim(second) });
        }
      )+
      {
@@ -544,7 +564,7 @@ fragment col_isarefs
 
 fragment col_oraseq returns [String result]
 @init { result = null; }
-  : ORASEQ WS i=identifier WS? { result = $i.text; }
+  : ORASEQ WS i=ident WS? { result = $i.text; }
   ;
 
 /*------------------------------------------------------------------
@@ -563,7 +583,9 @@ AT
         | '@')
     ;
 
-QUOTE : ('\'' | '"');
+SQUOTE : ('\'');
+DQUOTE : ('"');
+fragment QUOTE : (SQUOTE | DQUOTE);
 
 // literals
 OPEN_PAREN : '(';
@@ -580,15 +602,15 @@ fragment READONLY : '@readonly';
 fragment BOOL : '@bool';
 fragment ORASEQ : '@oraseq';
 
-
 WS : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+;// {$channel = HIDDEN;};
 
 ID
-    : ( LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
+    : (LETTER | '_' | DIGIT ) (NAMECHAR)* WS? {$type = ID;}
     ;
 
 TEXT
-   : (  ('\t') => WS {$type = WS;}
+   : (  (ID) => ID {$type = ID;}
+      | ('\t') => WS {$type = WS;}
       | (' ')  => WS {$type = WS;}
       | ('\r') => WS {$type = WS;}
       | ('\n') => WS {$type = WS;}
