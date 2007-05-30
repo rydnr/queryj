@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -180,6 +181,11 @@ public abstract class AbstractJdbcMetadataManager
     private Map m__mColumnBools;
 
     /**
+     * The static tables.
+     */
+    private Map m__mStaticTables;
+
+    /**
      * The decorated tables.
      */
     private Map m__mDecoratedTables;
@@ -262,6 +268,7 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetTableComments(t_UniqueMap);
         immutableSetColumnComments(t_UniqueMap);
         immutableSetColumnBools(t_UniqueMap);
+        immutableSetStaticTables(t_UniqueMap);
         immutableSetDecoratedTables(t_UniqueMap);
     }
 
@@ -755,6 +762,33 @@ public abstract class AbstractJdbcMetadataManager
     protected Map getColumnBools()
     {
         return m__mColumnBools;
+    }
+ 
+    /**
+     * Specifies the static tables.
+     * @param tables such tables.
+     */
+    protected final void immutableSetStaticTables(final Map tables)
+    {
+        m__mStaticTables = tables;
+    }
+
+    /**
+     * Specifies the static tables.
+     * @param tables such tables.
+     */
+    protected void setStaticTables(final Map tables)
+    {
+        immutableSetStaticTables(tables);
+    }
+
+    /**
+     * Retrieves the static tables.
+     * @return such tables.
+     */
+    protected Map getStaticTables()
+    {
+        return m__mStaticTables;
     }
  
     /**
@@ -5216,6 +5250,80 @@ public abstract class AbstractJdbcMetadataManager
             + "-"
             + columnName.toLowerCase()
             + "]";
+    }
+
+    /**
+     * Retrieves whether given table is static or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableStatic(final String table)
+    {
+        return
+            isTableStatic(
+                table,
+                getStaticTables(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given table is static or not.
+     * @param table the table.
+     * @param staticTables the static tables map.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return <code>true</code> in such case.
+     * @precondition table != null
+     * @precondition staticTables != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isTableStatic(
+        final String table,
+        final Map staticTables,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        Boolean result =
+            (Boolean)
+                staticTables.get(
+                    buildTableStaticKey(table));
+
+        if  (result == null)
+        {
+            String t_strTableComment = getTableComment(table);
+        
+            if  (t_strTableComment != null)
+            {
+                result =
+                    (metaLanguageUtils.isStatic(
+                        t_strTableComment))
+                    ?  Boolean.TRUE
+                    :  Boolean.FALSE;
+
+                staticTables.put(
+                    buildTableStaticKey(table),
+                    result);
+            }
+        }
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+        
+        return result.booleanValue();
+    }
+
+    /**
+     * Builds the key to store whether a concrete table is static
+     * or not.
+     * @param table the table.
+     * @return the key.
+     * @precondition table != null
+     */
+    protected Object buildTableStaticKey(
+        final String table)
+    {
+        return "[[table-static]]" + table.toLowerCase();
     }
 
     /**

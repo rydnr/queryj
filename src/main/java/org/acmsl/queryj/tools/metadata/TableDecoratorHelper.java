@@ -274,4 +274,5 @@ public class TableDecoratorHelper
 
         return result;
     }
+
 }

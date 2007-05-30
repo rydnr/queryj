@@ -154,8 +154,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     {
         boolean result = false;
 
-        if  (!disableSqlValidationFlag)
-        {
+//         if  (!disableSqlValidationFlag)
+//         {
             result =
                 handle(
                     parameters,
@@ -164,7 +164,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                     quote,
                     retrieveMetadataManager(parameters),
                     retrieveCustomSqlProvider(parameters));
-        }
+//         }
         
         return result;
     }

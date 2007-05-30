@@ -63,6 +63,7 @@ public final class TableValueObject
      * @param name the name.
      * @param attributes the attributes.
      * @param parentTable the parent table.
+     * @param isStatic whether the table contains static values or not.
      * @param voDecorated whether the value-object for the table
      * is decorated.
      */
@@ -70,9 +71,10 @@ public final class TableValueObject
         final String name,
         final List attributes,
         final Table parentTable,
+        final boolean isStatic,
         final boolean voDecorated)
     {
-        super(name, attributes, parentTable, voDecorated);
+        super(name, attributes, parentTable, isStatic, voDecorated);
     }
 }
 

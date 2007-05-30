@@ -493,6 +493,13 @@ public interface MetadataManager
         final String tableName, final String columnName);
 
     /**
+     * Retrieves whether given table is static or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableStatic(final String table);
+
+    /**
      * Retrieves whether given table is decorated or not.
      * @param table the table.
      * @return <code>true</code> in such case.

@@ -1863,6 +1863,7 @@ protected <input.vo_name> create(
                 <input.non_readonly_attributes:insert_attribute(attr=it);
                   separator=",\" +\n">)",
 <endif>
+
                 daoListener),
             new <input.vo_name>AttributesStatementSetter(
 <if(parent)>
@@ -1901,7 +1902,8 @@ protected <input.vo_name> create(
             new <input.vo_name>ResultSetExtractor(
                 <input.lob_attributes:{<it.nameLowercased>};
                   separator=",\n">,
-                true),
+                true,
+                daoListener),
             this);
 
     result = (<input.vo_name>) transactionTemplate.execute(t_Callback);

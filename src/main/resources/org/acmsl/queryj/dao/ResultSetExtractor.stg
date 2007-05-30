@@ -334,7 +334,7 @@ private boolean m__bSelectForUpdateMode;
  * such as \<b>insert\</b>s), or not.
  * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  */
-protected <input.vo_name>ResultSetExtractor(
+public <input.vo_name>ResultSetExtractor(
     final boolean selectForUpdateMode,
     final <input.tr_name_capitalized>DAOListener daoListener)
 {
@@ -352,7 +352,7 @@ protected <input.vo_name>ResultSetExtractor(
  * such as \<b>insert\</b>s), or not.
  * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  */
-protected <input.vo_name>ResultSetExtractor(
+public <input.vo_name>ResultSetExtractor(
     <input.lob_attributes:attribute_method_declaration(attr=it);
       separator=",\n">,
     final boolean selectForUpdateMode,

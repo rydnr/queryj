@@ -69,6 +69,12 @@ public interface Table
     public Table getParentTable();
 
     /**
+     * Retrieves whether the table contains static values or not.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isStatic();
+    
+    /**
      * Retrieves whether the value object for the table is
      * decorated or not.
      * @return such information.

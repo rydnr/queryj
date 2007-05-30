@@ -506,46 +506,6 @@ protected <if(attr.clob)>String<else><attr.javaType><endif> get<attr.nameCapital
 }
 >>
 
-attribute_query_specification(attr) ::= <<
-<!
- Generates the code to specify the attribute into the query.
- @param attr the attribute.
-!>
-<if(attr.boolean)>
-<if(attr.allowsNull)>
-if  (<attr.nameLowercased> == null)
-{
-    preparedStatement.setNull(
-        index++, <attr.type>);
-}
-else
-{
-    preparedStatement.set<attr.objectType>(
-        index++,
-        (<attr.nameLowercased>.booleanValue()) ? <attr.booleanTrue> : <attr.booleanFalse>);
-}
-<else>
-preparedStatement.set<attr.objectType>(
-    index++,
-    (<attr.nameLowercased>) ? <attr.booleanTrue> : <attr.booleanFalse>);
-<endif>
-<else>
-<if(attr.numberSmallerThanInt)>
-preparedStatement.setInt(
-<else>
-preparedStatement.set<attr.objectType>(
-<endif>
-
-    index++,
-<if(attr.timestamp)>
-    new Timestamp(<attr.nameLowercased>));
-<else>
-    <attr.nameLowercased>);
-<endif>
-<endif>
-
->>
-
 attribute_preparedstatement_specification(attr) ::= <<
 <!
  Generates the code to specify the attribute into the PreparedStatement.
@@ -555,21 +515,57 @@ attribute_preparedstatement_specification(attr) ::= <<
 <if(attr.allowsNull)>
 if  (<attr.nameLowercased> == null)
 {
+<if(attr.booleanNull)>
+<if(attr.string)>
+    preparedStatement.set<attr.objectType>(index++, "<attr.booleanNull>");
+<else>
+    preparedStatement.set<attr.objectType>(index++, <attr.booleanNull>);
+<endif>
+<else>
     preparedStatement.setNull(index++, <attr.type>);
+<endif>
+
 }
 else
 {
-    preparedStatement.set<attr.objectType>(
-        index++, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
+    <preparedstatement_set(attr)>
 }
 <else>
+<preparedstatement_set(attr)>
+<endif>
+<endif>
+
+>>
+
+preparedstatement_set(attr) ::= <<
+<!
+ Generates just the call to preparedstatement.setXXX()
+ @param attr the attribute.
+!>
 preparedStatement.set<attr.objectType>(
+<if(attr.allowsNull)>
+<if(attr.boolean)>
+<if(attr.string)>
+    index++, <attr.nameLowercased>.booleanValue() ? "<attr.booleanTrue>" : "<attr.booleanFalse>");
+<else>
+    index++, <attr.nameLowercased>.booleanValue() ? <attr.booleanTrue> : <attr.booleanFalse>);
+<endif>   
+<else>
+    index++, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
+<endif>
+<else>
 <if(attr.timestamp)>
     index++, new Timestamp(<attr.nameLowercased>.getTime()));
+<else>
+<if(attr.boolean)>
+<if(attr.string)>
+    index++, (<attr.nameLowercased>) ? "<attr.booleanTrue>" : "<attr.booleanFalse>");
+<else>
+    index++, (<attr.nameLowercased>) ? <attr.booleanTrue> : <attr.booleanFalse>);
+<endif>
 <else>
     index++, <attr.nameLowercased>);
 <endif>
 <endif>
 <endif>
-
 >>

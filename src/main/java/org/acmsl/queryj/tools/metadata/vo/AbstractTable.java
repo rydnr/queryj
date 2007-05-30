@@ -72,6 +72,11 @@ public abstract class AbstractTable
     private Table m__ParentTable;
 
     /**
+     * Flag indicating whether the table is static.
+     */
+    private boolean m__bStatic;
+
+    /**
      * Whether the value-object for the table is decorated.
      */
     private boolean m__bVoDecorated;
@@ -82,6 +87,7 @@ public abstract class AbstractTable
      * @param name the name.
      * @param attributes the attributes.
      * @param parentTable the parent table, if any.
+     * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table
      * is decorated.
      */
@@ -89,11 +95,13 @@ public abstract class AbstractTable
         final String name,
         final List attributes,
         final Table parentTable,
+        final boolean isStatic,
         final boolean voDecorated)
     {
         immutableSetName(name);
         immutableSetAttributes(attributes);
         immutableSetParentTable(parentTable);
+        immutableSetStatic(isStatic);
         immutableSetVoDecorated(voDecorated);
     }
     
@@ -185,6 +193,33 @@ public abstract class AbstractTable
     public Table getParentTable()
     {
         return m__ParentTable;
+    }
+
+    /**
+     * Specifies whether the table is static or not.
+     * @param flag such flag.
+     */
+    protected final void immutableSetStatic(final boolean flag)
+    {
+        m__bStatic = flag;
+    }
+
+    /**
+     * Specifies whether the table is static or not.
+     * @param flag such flag.
+     */
+    protected void setStatic(final boolean flag)
+    {
+        immutableSetStatic(flag);
+    }
+
+    /**
+     * Retrieves whether the table is static or not.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isStatic()
+    {
+        return m__bStatic;
     }
 
     /**

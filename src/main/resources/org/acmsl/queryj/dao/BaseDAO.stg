@@ -156,7 +156,7 @@ classImpl(input, table, parent) ::= <<
  */
 public interface <input.vo_name>DAO
 {
-<if(input.static_table)>
+<if(table.static)>
     <input.cached_rows:cached_constants(
       row=it, voName=input.vo_name); separator="\n\n">
 

@@ -109,6 +109,7 @@ public abstract class AbstractTableDecorator
             table.getName(),
             table.getAttributes(),
             table.getParentTable(),
+            table.isStatic(),
             table.isVoDecorated(),
             metadataManager, 
             decoratorFactory);
@@ -120,6 +121,8 @@ public abstract class AbstractTableDecorator
      * @param name the name.
      * @param attributes the attributes.
      * @param parentTable the parent table.
+     * @param isStatic whether the table is static.
+     * @param voDecorated whether the value-object should be decorated.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the decorator factory.
      * @precondition name != null
@@ -130,11 +133,12 @@ public abstract class AbstractTableDecorator
         final String name,
         final List attributes,
         final Table parentTable,
+        final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        super(name, attributes, parentTable, voDecorated);
+        super(name, attributes, parentTable, isStatic, voDecorated);
 
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
@@ -144,6 +148,7 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * @param table the table name.
      * @param attributes the attributes.
+     * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table is
      * decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
@@ -154,13 +159,21 @@ public abstract class AbstractTableDecorator
     public AbstractTableDecorator(
         final String table,
         final List attributes,
+        final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
         this(
-            table, attributes, null, voDecorated, metadataManager, decoratorFactory);
+            table,
+            attributes,
+            null,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
+
         immutableSetChildAttributes(childAttributes);
     }
 
@@ -168,6 +181,7 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table is
      * decorated.
      * @param metadataManager the metadata manager.
@@ -178,17 +192,26 @@ public abstract class AbstractTableDecorator
      */
     protected AbstractTableDecorator(
         final String table,
+        final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, null, null, voDecorated, metadataManager, decoratorFactory);
+        this(
+            table,
+            null,
+            null,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
     }
     
     /**
      * Creates a <code>AbstractTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table is
      * decorated.
      * @param metadataManager the metadata manager.
@@ -200,12 +223,20 @@ public abstract class AbstractTableDecorator
      */
     protected AbstractTableDecorator(
         final String table,
+        final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
         final List childAttributes,
         final DecoratorFactory decoratorFactory)
     {
-        this(table, null, null, voDecorated, metadataManager, decoratorFactory);
+        this(
+            table,
+            null,
+            null,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
         immutableSetChildAttributes(childAttributes);
     }
     
@@ -873,6 +904,8 @@ public abstract class AbstractTableDecorator
                     createTableDecorator(
                         t_strParentTable, 
                         t_lAttributes,
+                        metadataManager.isTableStatic(
+                            t_strParentTable),
                         metadataManager.isTableDecorated(
                             t_strParentTable),
                         metadataManager,
@@ -977,6 +1010,7 @@ public abstract class AbstractTableDecorator
      * Creates a table decorator.
      * @param name the table name.
      * @param attributes the attributes.
+     * @param isStatic whether the table contains static values or not.
      * @param voDecorated whether the value-object is decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -989,6 +1023,7 @@ public abstract class AbstractTableDecorator
     protected abstract TableDecorator createTableDecorator(
         final String parentTable,
         final List attributes,
+        final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory);
