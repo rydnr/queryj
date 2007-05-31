@@ -1838,7 +1838,7 @@
 
                 <attribute
                     name="Implementation-Version"
-                    value="${project.version} build #${build.number}"/>
+                    value="${project.version}${project.status} build #${build.number}"/>
 
                 <attribute
                     name="Implementation-Vendor"

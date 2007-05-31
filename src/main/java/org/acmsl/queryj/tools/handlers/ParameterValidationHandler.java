@@ -314,6 +314,11 @@ public class ParameterValidationHandler
     public static final String DISABLE_SQL_VALIDATION = "disableSqlValidation";
 
     /**
+     * The QueryJ version.
+     */
+    public static final String QUERYJ_VERSION = "queryjVersion";
+
+    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
