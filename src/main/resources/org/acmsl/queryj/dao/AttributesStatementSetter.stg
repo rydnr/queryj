@@ -274,6 +274,8 @@ public class <input.vo_name>AttributesStatementSetter
         <input.nonpk_non_readonly_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
+
+        immutableSetUpdateOperation(updateOperation);
     }
 <endif>
 
