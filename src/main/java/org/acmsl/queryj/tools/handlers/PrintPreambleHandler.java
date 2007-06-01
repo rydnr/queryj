@@ -80,7 +80,7 @@ public class PrintPreambleHandler
      */
     public static final String PREAMBLE =
           "\n"
-        + "    Copyright (C) 2002-2007  Jose San Leandro Armendariz\n"
+        + "    Copyright (C) 2002-2007  ACM-SL\n"
         + "                        chous@acm-sl.org\n"
         + "\n"
         + "    This library is free software; you can redistribute it and/or\n"
