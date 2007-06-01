@@ -199,6 +199,11 @@ public class <input.vo_name>AttributesStatementSetter
      */
     private boolean m__bUpdateOperation;
 
+    /**
+     * The \<i>insert\</i> operation.
+     */
+    private boolean m__bInsertOperation;
+
 <if(input.clobHandling)>
     /**
      * The \<i>select for update\</i> operation.
@@ -227,6 +232,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
         final boolean updateOperation,
+        final boolean insertOperation,
         final boolean selectForUpdateOperation)
     {
 <if(parent)>
@@ -240,6 +246,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
         immutableSetUpdateOperation(updateOperation);
+        immutableSetInsertOperation(insertOperation);
         immutableSetSelectForUpdateOperation(selectForUpdateOperation);
     }
 <else>
@@ -265,7 +272,8 @@ public class <input.vo_name>AttributesStatementSetter
           separator="\n">
 <endif>
 
-        final boolean updateOperation)
+        final boolean updateOperation,
+        final boolean insertOperation)
     {
         <input.pk_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
@@ -276,6 +284,7 @@ public class <input.vo_name>AttributesStatementSetter
           separator="\n">
 
         immutableSetUpdateOperation(updateOperation);
+        immutableSetInsertOperation(insertOperation);
     }
 <endif>
 
@@ -305,6 +314,34 @@ public class <input.vo_name>AttributesStatementSetter
     public boolean isUpdateOperation()
     {
         return m__bUpdateOperation;
+    }
+
+    /**
+     * Specifies whether the operation is an insert or not.
+     * @param insertOperation such information.
+     */
+    protected final void immutableSetInsertOperation(
+        final boolean insertOperation)
+    {
+        m__bInsertOperation = insertOperation;
+    }
+
+    /**
+     * Specifies whether the operation is an insert or not.
+     * @param insertOperation such information.
+     */
+    protected void setInsertOperation(final boolean insertOperation)
+    {
+        immutableSetInsertOperation(insertOperation);
+    }
+
+    /**
+     * Retrieves whether the operation is an insert or not.
+     * @return such information.
+     */
+    public boolean isInsertOperation()
+    {
+        return m__bInsertOperation;
     }
 
 <if(input.clobHandling)>
@@ -365,10 +402,12 @@ public class <input.vo_name>AttributesStatementSetter
 
 <if(input.clobHandling)>
             isUpdateOperation(),
+            isInsertOperation(),
             isSelectForUpdateOperation());
 
 <else>
-            isUpdateOperation());
+            isUpdateOperation(),
+            isInsertOperation());
 
 <endif>
     }
@@ -385,6 +424,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
      * @param updateOperation whether the operation is an update.
+     * @param insertOperation whether the operation is an insert.
 <if(input.clobHandling)>
      * @param selectForUpdateOperation whether the operation is a
      * select-for-update.
@@ -406,10 +446,12 @@ public class <input.vo_name>AttributesStatementSetter
 
 <if(input.clobHandling)>
         final boolean updateOperation,
+        final boolean insertOperation,
         final boolean selectForUpdateOperation)
 
 <else>
-        final boolean updateOperation)
+        final boolean updateOperation,
+        final boolean insertOperation)
 
 <endif>
 
@@ -418,7 +460,7 @@ public class <input.vo_name>AttributesStatementSetter
         int index = 1;
 
 <if(input.clobHandling)>
-        if  (updateOperation)
+        if  (insertOperation)
         {
             <input.externally_managed_attributes:
               attribute_preparedstatement_specification(attr=it);
@@ -427,7 +469,7 @@ public class <input.vo_name>AttributesStatementSetter
         }
 <else>
 <if(input.externally_managed_attributes)>
-        if  (updateOperation)
+        if  (insertOperation)
         {
             <input.externally_managed_attributes:
               attribute_preparedstatement_specification(attr=it);
@@ -435,7 +477,6 @@ public class <input.vo_name>AttributesStatementSetter
         }
 <endif>
 <endif>
-
 
 <if(input.clobHandling)>
         if  (selectForUpdateOperation)
@@ -455,6 +496,25 @@ public class <input.vo_name>AttributesStatementSetter
           attribute_preparedstatement_specification(attr=it);
           separator="\n">
 
+<endif>
+
+<if(input.clobHandling)>
+        if  (updateOperation)
+        {
+            <input.externally_managed_attributes:
+              attribute_preparedstatement_specification(attr=it);
+              separator="\n">
+
+        }
+<else>
+<if(input.externally_managed_attributes)>
+        if  (updateOperation)
+        {
+            <input.externally_managed_attributes:
+              attribute_preparedstatement_specification(attr=it);
+              separator="\n">
+        }
+<endif>
 <endif>
 
     }

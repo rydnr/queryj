@@ -782,9 +782,11 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
 <if(input.clobHandling)>
                         true,
+                        false,
                         false),
 <else>
-                        true),
+                        true,
+                        false),
 <endif>
 
                     this));
@@ -1412,7 +1414,7 @@ protected void insert(
 <else>
                 <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
-
+                false,
                 true),
             this));
 }
@@ -1617,7 +1619,7 @@ protected <input.vo_name> create(
 <else>
                 <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
-
+                false,
                 true),
             this));
 
@@ -1873,8 +1875,8 @@ protected <input.vo_name> create(
                 <input.non_readonly_attributes:{<it.nameLowercased>};
                   separator=",\n">,
 <endif>
-
                 false,
+                true,
                 true),
             this));
 
