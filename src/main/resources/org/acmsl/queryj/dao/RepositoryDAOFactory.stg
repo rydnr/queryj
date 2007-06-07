@@ -78,13 +78,8 @@ source(input) ::= <<
 <project_imports(
   basePackageName=input.base_package_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
+  rdbSubpackageName=typeInitMap.rdbSubpackageName,
   repository=input.tr_name_capitalized)>
-
-/*
- * Importing some QueryJ classes.
- */
-import org.acmsl.queryj.dao.JndiUtils;
-import org.acmsl.queryj.dao.ThreadAwareDataSourceWrapper;
 
 /*
  * Importing some Spring classes.
@@ -116,6 +111,7 @@ Is able to create the repository DAO.
 project_imports(
   basePackageName,
   baseDAOSubpackageName,
+  rdbSubpackageName,
   repository) ::= <<
 <!
  Generates the project imports.
@@ -127,8 +123,12 @@ project_imports(
 /*
  * Importing project classes.
  */
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>DAOListenerImpl;
 import <basePackageName>.<baseDAOSubpackageName>.<repository>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<repository>DAOFactory;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>JndiUtils;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>ThreadAwareDataSourceWrapper;
 >>
 
 class(input) ::= <<
@@ -208,7 +208,15 @@ public class <input.engine_name><input.tr_name_capitalized>DAOFactory
 
         if  (dataSource != null)
         {
-            result = new <input.engine_name><input.tr_name_capitalized>DAO(dataSource);
+            result =
+<if(input.dynamic_queries)>
+                new <input.engine_name><input.tr_name_capitalized>DAOImpl(
+<else>
+                new <input.engine_name><input.tr_name_capitalized>DAO(
+<endif>
+
+                    dataSource,
+                    new <input.tr_name_capitalized>DAOListenerImpl());
         }
 
         return result;
@@ -220,16 +228,16 @@ public class <input.engine_name><input.tr_name_capitalized>DAOFactory
      */
     protected DataSource getDataSource()
     {
-        return getDataSource(JndiUtils.getInstance());
+        return getDataSource(<input.tr_name_capitalized>JndiUtils.getInstance());
     }
 
     /**
      * Retrieves the data source.
-     * @param jndiUtils the \<code\>JndiUtils\</code\> instance.
+     * @param jndiUtils the \<code\><input.tr_name_capitalized>JndiUtils\</code\> instance.
      * @return such data source.
      <precondition_notnull("jndiUtils")>
      */
-    protected DataSource getDataSource(final JndiUtils jndiUtils)
+    protected DataSource getDataSource(final <input.tr_name_capitalized>JndiUtils jndiUtils)
     {
         DataSource result = null;
 
@@ -256,13 +264,13 @@ public class <input.engine_name><input.tr_name_capitalized>DAOFactory
 
         if  (result == null)
         {
-            result = new ThreadAwareDataSourceWrapper();
+            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
         }
         else
         {
             try
             {
-                result = new ThreadAwareDataSourceWrapper(result);
+                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
             }
             catch  (final CannotGetJdbcConnectionException exception)
             {

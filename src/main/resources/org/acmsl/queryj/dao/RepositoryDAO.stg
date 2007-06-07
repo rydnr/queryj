@@ -79,9 +79,8 @@ source(input) ::= <<
 <project_imports(
   basePackageName=input.base_package_name,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
-  voSubpackageName=typeInitMap.voSubpackageName,
   repository=input.tr_name_capitalized,
-  voName=input.vo_name)>
+  rdbSubpackageName=typeInitMap.rdbSubpackageName)>
 
 <customResults:resultset_extractor_import(
   basePackageName=basePackageName,
@@ -91,17 +90,15 @@ source(input) ::= <<
   crseIdCapitalized=it.idCapitalized); separator="\n">
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.dao.QueryjJdbcTemplate;
-
-/*
  * Importing Spring classes.
  */
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ParameterDisposer;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -154,20 +151,21 @@ project_imports(
   basePackageName,
   baseDAOSubpackageName,
   repository,
-  voSubpackageName,
-  voName) ::= <<
+  rdbSubpackageName) ::= <<
 <!
  Generates the project imports.
  @param basePackageName the base package name.
  @param baseDAOSubpackageName the BaseDAO subpackage name.
- @param voSubpackageName the value-object subpackage name.
  @param repository the repository.
- @param voName the value-object name.
+ @param rdbSubpackageName the subpackage name.
 !>
 /*
  * Importing project classes.
  */
 import <basePackageName>.<baseDAOSubpackageName>.<repository>DAO;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>DAOListener;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>JdbcTemplate;
+
 >>
 
 class(input) ::= <<
@@ -184,23 +182,58 @@ class(input) ::= <<
  * @since <input.timestamp>
  */
 public class <input.engine_name><input.tr_name_capitalized>DAO
-    extends     QueryjJdbcTemplate
+    extends     <input.tr_name_capitalized>JdbcTemplate
     implements  <input.tr_name_capitalized>DAO
 {
-    <input.custom_results:resultset_extractor_constants(
-      crseid=it.id,
-      crseidCapitalized=it.idCapitalized,
-      crseidNormalizedUppercased=it.idNormalizedUppercased); separator="\n\n">
+      // custom selects
+
+<input.custom_selects:{sql|
+<if(!sql.dynamic)>
+<if(sql.splittedQuotedValue)>
+      /**
+       * The <sql.id> SQL.
+       */
+     public static final String <sql.idAsConstant>_SQL =
+         <sql.splittedQuotedValue; separator=" +\n">;
+<endif>
+<endif>
+}; separator="\n\n">
+
+      // custom selects-for-update
+<input.custom_selects_for_update:{sql|
+<if(!sql.dynamic)>
+      /**
+       * The <sql.id> SQL.
+       */
+     public static final String <sql.idAsConstant>_SQL =
+         <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
+               
+      // custom updates or inserts
+<input.custom_updates_or_inserts:{sql|
+<if(!sql.dynamic)>
+<if(sql.splittedQuotedValue)>
+      /**
+       * The <sql.id> SQL.
+       */
+     public static final String <sql.idAsConstant>_SQL =
+         <sql.splittedQuotedValue; separator=" +\n">;
+<endif>
+<endif>
+}; separator="\n\n">
 
     /**
-     * Builds a \<code><input.class_name>\</code> instance
+     * Builds a \<code><input.engine_name><input.tr_name_capitalized>DAO\</code> instance
      * with given data source.
      * @param dataSource the required data source.
+     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      <precondition_notnull("dataSource")>
+     <precondition_notnull("daoListener")>
      */
-    public <input.engine_name><input.tr_name_capitalized>DAO(final DataSource dataSource)
+    public <input.engine_name><input.tr_name_capitalized>DAO(
+        final DataSource dataSource,
+        final <input.tr_name_capitalized>DAOListener daoListener)
     {
-        super(dataSource);
+        super(dataSource, daoListener);
     }
 
     <input.custom_selects:custom_select(
