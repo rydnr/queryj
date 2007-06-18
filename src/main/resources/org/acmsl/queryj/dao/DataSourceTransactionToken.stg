@@ -285,19 +285,19 @@ public class <input.tr_name_capitalized>DataSourceTransactionToken
         implements  DataSource
     {
         /**
-        * Concrete wrapped data source.
-        */
+         * Concrete wrapped data source.
+         */
         private DataSource m__DataSource;
 
         /**
-        * The connection used in the transaction.
-        */
+         * The connection used in the transaction.
+         */
         private Connection m__Connection;
 
         /**
-        * Creates a _DataSourceWrapper using given data source.
-        * @param dataSource the data source to wrap.
-        */
+         * Creates a _DataSourceWrapper using given data source.
+         * @param dataSource the data source to wrap.
+         */
         public _DataSourceWrapper(final DataSource dataSource)
         {
             immutableSetDataSource(dataSource);
@@ -546,6 +546,36 @@ public class <input.tr_name_capitalized>DataSourceTransactionToken
             }
         }
 
+        /**
+         * Checks whether this instance is wrapper for given class.
+         * @param clazz the class to check.
+         * @return \<tt>true\</tt> in such case.
+         */
+        public boolean isWrapperFor(final Class clazz)
+        {
+            return (   (clazz != null)
+                    && (   (DataSource.class.equals(clazz))
+                        || (clazz.isAssignableFrom(DataSource.class))));
+        }
+
+        /**
+         * Checks whether this instance is a wrapper for given class.
+         * @param classInstance the class instance.
+         * @return \<tt>true\</tt> in such case.
+         */
+        public Object unwrap(final Class classInstance)
+        {
+            Object result = null;
+
+            if  (   (classInstance != null)
+                 && (DataSource.class.isAssignableFrom(classInstance)))
+            {
+                result = this;
+            }
+
+            return result;
+        }
+        
         /**
          * Checks if the data source is equal logically to given object.
          * @param object the object to compare to.

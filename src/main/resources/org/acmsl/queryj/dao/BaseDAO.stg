@@ -330,7 +330,11 @@ attribute_specification(attr) ::= <<
  Prints the value of the attribute, optionally escaping it.
  @param attr the attribute.
 !>
-<if(attr.string)>"<attr.value>"<else><attr.value><endif>
+<if(attr.nullable)>
+<indirect_template(name="primitive_to_" + attr.objectType + "_value", input=attr)
+<else>
+<attr.value>
+<endif>
 >>
 
 find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
