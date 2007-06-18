@@ -44,8 +44,9 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
-import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
@@ -80,6 +81,16 @@ public abstract class AbstractTableDecorator
      */
     private DecoratorFactory m__DecoratorFactory;
     
+    /**
+     * The foreign keys.
+     */
+    private List m__lForeignKeys;
+
+    /**
+     * The parent foreign key.
+     */
+    private ForeignKey m__ParentForeignKey;
+
     /**
      * The child's attributes.
      */
@@ -368,6 +379,259 @@ public abstract class AbstractTableDecorator
     public List getChildAttributes()
     {
         return m__lChildAttributes;
+    }
+
+    /**
+     * Specifies the foreign keys.
+     * @param fk the foreign keys.
+     */
+    protected final void immutableSetForeignKeys(final List foreignKeys)
+    {
+        m__lForeignKeys = foreignKeys;
+    }
+
+    /**
+     * Specifies the foreign keys.
+     * @param fk the foreign keys.
+     */
+    protected void setForeignKeys(final List foreignKeys)
+    {
+        immutableSetForeignKeys(foreignKeys);
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @return such list.
+     */
+    protected final List immutableGetForeignKeys()
+    {
+        return m__lForeignKeys;
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @return such list.
+     */
+    public List getForeignKeys()
+    {
+        List result = immutableGetForeignKeys();
+
+        if  (result == null)
+        {
+            result = retrieveForeignKeys(getName(), getMetadataManager());
+
+            if  (result != null)
+            {
+                setForeignKeys(result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @param name the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such foreign keys.
+     * @precondition name != null
+     * @precondition metadataManager != null
+     */
+    protected List retrieveForeignKeys(
+        final String name, final MetadataManager metadataManager)
+    {
+        List result = null;
+
+        String[] t_astrReferredTables = metadataManager.getReferredTables(name);
+
+        int t_iCount =
+            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            String t_strReferredTale = t_astrReferredTables[t_iIndex];
+
+            String[][] t_aastrForeignKeys =
+                metadataManager.getForeignKeys(name, t_strReferredTable);
+
+            if  (t_aastrForeignKeys != null)
+            {
+                result =
+                    convertToForeignKeyList(
+                        name,
+                        t_strReferredTable,
+                        t_aastrForeignKeys,
+                        metadataManager);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts given foreign key information into a <code>ForeignKey</code> list.
+     * @param sourceTable the source table.
+     * @param targetTable the target table.
+     * @param fks the foreign key information.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the list of <code>ForeignKey</code> instance.
+     * @precondition sourceTable != null
+     * @precondition targetTable != null
+     * @precondition fks != null
+     * @precondition metadataManager != null
+     */
+    protected List convertToForeignKeyList(
+        final String sourceTable,
+        final String targetTable,
+        final String[][] fks,
+        final MetadataManager metadataManager)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (fks != null) ? fks.length : 0;
+
+        boolean t_bAllowNull = false;
+
+        List t_lAttributes = null;
+
+        String t_astrCurrentFk;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_astrCurrentFk = fks[t_iIndex];
+
+            t_bAllowNull = metadataManager.allowNull(sourceTable, t_astrCurrentFk);
+
+            t_lAttributes = new ArrayList();
+
+            int t_iAttrCount = (t_astrCurrentFk != null) ? t_astrCurrentFk.length : 0;
+
+            for  (int t_iAttrIndex = 0; t_iAttrIndex < t_iAttrCount; t_iAttrIndex++)
+            {
+                t_lAttributes.add(
+                    buildAttributeDecorator(
+                        sourceTable,
+                        t_astrCurrentFk[t_iAttrIndex],
+                        metadataManager));
+            }
+
+            result.add(
+                buildForeignKeyDecorator(
+                    sourceTable,
+                    t_lAttributes,
+                    targetTable,
+                    t_bAllowNull,
+                    metadataManager));
+                    
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds an attribute decorator with given information.
+     * @param table the table name.
+     * @param name the attribute name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such decorator.
+     * @precondition table != null
+     * @precondition name != null
+     * @precondition metadataManager != null
+     */
+    protected AttributeDecorator buildAttributeDecorator(
+        final String table,
+        final String name,
+        final MetadataManager metadataManager)
+    {
+        return
+            new LazyAttributeDecorator(
+                table,
+                name,
+                metadataManager);
+    }
+
+    /**
+     * Builds a foreign-key decorator with given information.
+     * @param sourceTable the source table name.
+     * @param attributes the attributes.
+     * @param targetTable the target table name.
+     * @param allowNull whether the foreign-key allows null.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such decorator.
+     * @precondition sourceTable != null
+     * @precondition attributes != null
+     * @precondition targetTable != null
+     * @precondition metadataManager != null
+     */
+    protected ForeignKeyDecorator buildForeignKeyDecorator(
+        final String sourceTable,
+        final List attributes,
+        final String targetTable,
+        final boolean allowNull,
+        final MetadataManager metadataManager)
+    {
+        return
+            new ForeignKeyDecorator(
+                sourceTable,
+                attributes,
+                targetTable,
+                allowNull);
+    }
+
+    /**
+     * Specifies the parent foreign-key.
+     * @param fk such fk.
+     */
+    protected final void immutableSetParentForeignKey(
+        final ForeignKey foreignKey)
+    {
+        m__ParentForeignKey = foreignKey;
+    }
+
+    /**
+     * Specifies the parent foreign-key.
+     * @param fk such fk.
+     */
+    protected void setParentForeignKey(
+        final ForeignKey foreignKey)
+    {
+        immutableSetParentForeignKey(foreignKey);
+    }
+
+    /**
+     * Retrieves the parent foreign-key.
+     * @return such foreign key.
+     */
+    protected final ForeignKey immutableGetParentForeignKey()
+    {
+        return m__ParentForeignKey;
+    }
+
+    /**
+     * Retrieves the parent foreign-key.
+     * @return such foreign key.
+     */
+    public ForeignKey getParentForeignKey()
+    {
+        ForeignKey result = immutableGetParentForeignKey();
+
+        if  (result == null)
+        {
+            Table t_Parent - getParentTable();
+
+            if  (t_Parent != null)
+            {
+                result =
+                    retrieveParentForeignKey(t_Parent, getMetadataManager());
+
+                if  (result != null)
+                {
+                    setParentForeignKey(result);
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

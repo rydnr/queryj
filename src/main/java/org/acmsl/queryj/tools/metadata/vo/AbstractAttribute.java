@@ -122,6 +122,19 @@ public abstract class AbstractAttribute
     private String m__strBooleanNull;
 
     /**
+     * Creates an <code>AbstractAttribute</code> with minimal information,
+     * allowing lazy-loading mechanisms for non-essential information.
+     * @param tableName the table name.
+     * @param name the name.
+     */
+    protected AbstractAttribute(
+        final String tableName, final String name)
+    {
+        immutableSetTableName(tableName);
+        immutableSetName(name);
+    }
+
+    /**
      * Creates an <code>AbstractAttribute</code> with the following
      * information.
      * @param name the name.
@@ -155,11 +168,10 @@ public abstract class AbstractAttribute
         final String booleanFalse,
         final String booleanNull)
     {
-        immutableSetName(name);
+        this(tableName, name);
         immutableSetType(type);
         immutableSetNativeType(nativeType);
         immutableSetFieldType(fieldType);
-        immutableSetTableName(tableName);
         immutableSetComment(comment);
         immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);

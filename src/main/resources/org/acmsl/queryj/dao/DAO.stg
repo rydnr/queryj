@@ -349,12 +349,21 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      */
     public static final String _FIND_BY_PK_SQL =
           "SELECT "
+<if(parent)>
+<table.allParentAndNonParentAttributes:{ attr |
+        +   "<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
+        + "FROM <parent.nameUppercased>, <input.table_name_uppercased>"
+        + "WHERE "
+<input.pk_attributes:{attr |
+        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+<else>
 <input.attributes:{attr |
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
         + "FROM <input.table_name_uppercased> "
         + "WHERE "
 <input.pk_attributes:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+<endif>
 
     /**
      * The SQL to update.

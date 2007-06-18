@@ -63,6 +63,18 @@ public interface Table
     public List getAttributes();
 
     /**
+     * Retrieves the foreign keys.
+     * @return such list.
+     */
+    public List getForeignKeys();
+
+    /**
+     * Retrieves the parent foreign-key.
+     * @return such foreign key.
+     */
+    public ForeignKey getParentForeignKey();
+
+    /**
      * Retrieves the parent table.
      * @return such table.
      */
