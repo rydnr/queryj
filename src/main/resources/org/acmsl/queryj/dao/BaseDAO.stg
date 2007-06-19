@@ -330,11 +330,33 @@ attribute_specification(attr) ::= <<
  Prints the value of the attribute, optionally escaping it.
  @param attr the attribute.
 !>
-<if(attr.nullable)>
-<indirect_template(name="primitive_to_" + attr.objectType + "_value", input=attr)
+<if(attr.allowsNull)>
+<primitive_to(templateName="primitive_to_", attr=attr)>
 <else>
+<if(attr.numeric)>
 <attr.value>
+<else>
+"<attr.value>"
 <endif>
+<endif>
+>>
+
+primitive_to(templateName, attr) ::= <<
+<!
+ Prints the name of the correct template.
+ @param templateName the template name.
+ @param attr the attribute.
+ !>
+<primitive_to2(templateName=templateName + attr.objectType, attr=attr)>
+>>
+
+primitive_to2(templateName, attr) ::= <<
+<!
+ Prints the name of the correct template.
+ @param templateName the template name.
+ @param attr the attribute.
+ !>
+<indirect_template(name=templateName + "_value", input=attr)>
 >>
 
 find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<

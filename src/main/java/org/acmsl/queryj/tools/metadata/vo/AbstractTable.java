@@ -62,6 +62,11 @@ public abstract class AbstractTable
     private String m__strName;
 
     /**
+     * The primary key attributes.
+     */
+    private List m__lPrimaryKey;
+
+    /**
      * The attribute list.
      */
     private List m__lAttributes;
@@ -85,6 +90,7 @@ public abstract class AbstractTable
      * Creates an <code>AbstractTable</code> with the following
      * information.
      * @param name the name.
+     * @param primaryKey the primary key attributes.
      * @param attributes the attributes.
      * @param parentTable the parent table, if any.
      * @param isStatic whether the table is static.
@@ -93,12 +99,14 @@ public abstract class AbstractTable
      */
     protected AbstractTable(
         final String name,
+        final List primaryKey,
         final List attributes,
         final Table parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {
         immutableSetName(name);
+        immutableSetPrimaryKey(primaryKey);
         immutableSetAttributes(attributes);
         immutableSetParentTable(parentTable);
         immutableSetStatic(isStatic);
@@ -133,8 +141,44 @@ public abstract class AbstractTable
     }
 
     /**
+     * Specifies the primary key attributes.
+     * @param attrs the primary key attributes.
+     */
+    protected final void immutableSetPrimaryKey(final List attrs)
+    {
+        m__lPrimaryKey = attrs;
+    }
+
+    /**
+     * Specifies the primary key attributes.
+     * @param attrs the primary key attributes.
+     */
+    protected void setPrimaryKey(final List attrs)
+    {
+        immutableSetPrimaryKey(attrs);
+    }
+
+    /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    protected final List immutableGetPrimaryKey()
+    {
+        return m__lPrimaryKey;
+    }
+
+    /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    public List getPrimaryKey()
+    {
+        return immutableGetPrimaryKey();
+    }
+
+    /**
      * Specifies the attributes.
-     * @param atts the attributes.
+     * @param attrs the attributes.
      */
     protected final void immutableSetAttributes(final List attrs)
     {
@@ -143,7 +187,7 @@ public abstract class AbstractTable
 
     /**
      * Specifies the attributes.
-     * @param atts the attributes.
+     * @param attrs the attributes.
      */
     protected void setAttributes(final List attrs)
     {

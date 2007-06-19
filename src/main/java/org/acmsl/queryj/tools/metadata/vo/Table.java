@@ -57,22 +57,16 @@ public interface Table
     public String getName();
 
     /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    public List getPrimaryKey();
+
+    /**
      * Retrieves the attributes.
      * @return such list.
      */
     public List getAttributes();
-
-    /**
-     * Retrieves the foreign keys.
-     * @return such list.
-     */
-    public List getForeignKeys();
-
-    /**
-     * Retrieves the parent foreign-key.
-     * @return such foreign key.
-     */
-    public ForeignKey getParentForeignKey();
 
     /**
      * Retrieves the parent table.

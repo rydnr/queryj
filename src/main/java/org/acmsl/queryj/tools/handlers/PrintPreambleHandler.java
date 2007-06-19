@@ -98,12 +98,7 @@ public class PrintPreambleHandler
         + "    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
         + "\n"
         + "    Thanks to ACM S.L. for distributing this library under the GPL license.\n"
-        + "    Contact info: jose.sanleandro@acm-sl.com\n"
-        + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabanas\n"
-        + "                    Boadilla del monte\n"
-        + "                    28660 Madrid\n"
-        + "                    Spain\n\n";
+        + "    Contact info: jose.sanleandro@acm-sl.com\n";
 
     /**
      * Creates a <code>PrintPreambleHandler</code> instance.

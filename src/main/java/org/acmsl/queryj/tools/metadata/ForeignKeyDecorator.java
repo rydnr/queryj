@@ -55,7 +55,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Decorates <code>ForeignKey</code> instances to provide required alternate
@@ -94,7 +94,7 @@ public class ForeignKeyDecorator
      */
     public ForeignKeyDecorator(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull)
     {

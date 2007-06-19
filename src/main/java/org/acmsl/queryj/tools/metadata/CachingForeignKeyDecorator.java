@@ -48,7 +48,7 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Adds a simple caching mechanism while decorating <code>ForeignKey</code>
@@ -98,7 +98,7 @@ public class CachingForeignKeyDecorator
      */
     public CachingForeignKeyDecorator(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull)
     {

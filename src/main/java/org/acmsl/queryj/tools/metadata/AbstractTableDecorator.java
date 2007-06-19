@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.LazyAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
@@ -118,6 +119,7 @@ public abstract class AbstractTableDecorator
     {
         this(
             table.getName(),
+            table.getPrimaryKey(),
             table.getAttributes(),
             table.getParentTable(),
             table.isStatic(),
@@ -130,6 +132,7 @@ public abstract class AbstractTableDecorator
      * Creates an <code>AbstractTableDecorator</code> with the following
      * information.
      * @param name the name.
+     * @param primaryKey the primary key.
      * @param attributes the attributes.
      * @param parentTable the parent table.
      * @param isStatic whether the table is static.
@@ -142,6 +145,7 @@ public abstract class AbstractTableDecorator
      */
     public AbstractTableDecorator(
         final String name,
+        final List primaryKey,
         final List attributes,
         final Table parentTable,
         final boolean isStatic,
@@ -149,7 +153,8 @@ public abstract class AbstractTableDecorator
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        super(name, attributes, parentTable, isStatic, voDecorated);
+        super(
+            name, primaryKey, attributes, parentTable, isStatic, voDecorated);
 
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
@@ -158,6 +163,7 @@ public abstract class AbstractTableDecorator
     /**
      * Creates a <code>AbstractTableDecorator</code> instance.
      * @param table the table name.
+     * @param primaryKey the primary key.
      * @param attributes the attributes.
      * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table is
@@ -169,6 +175,7 @@ public abstract class AbstractTableDecorator
      */
     public AbstractTableDecorator(
         final String table,
+        final List primaryKey,
         final List attributes,
         final boolean isStatic,
         final boolean voDecorated,
@@ -178,6 +185,7 @@ public abstract class AbstractTableDecorator
     {
         this(
             table,
+            primaryKey,
             attributes,
             null,
             isStatic,
@@ -212,6 +220,7 @@ public abstract class AbstractTableDecorator
             table,
             null,
             null,
+            null,
             isStatic,
             voDecorated,
             metadataManager,
@@ -242,6 +251,7 @@ public abstract class AbstractTableDecorator
     {
         this(
             table,
+            null,
             null,
             null,
             isStatic,
@@ -418,7 +428,10 @@ public abstract class AbstractTableDecorator
 
         if  (result == null)
         {
-            result = retrieveForeignKeys(getName(), getMetadataManager());
+            result =
+                retrieveForeignKeys(
+                    getName(),
+                    getMetadataManager());
 
             if  (result != null)
             {
@@ -438,7 +451,30 @@ public abstract class AbstractTableDecorator
      * @precondition metadataManager != null
      */
     protected List retrieveForeignKeys(
-        final String name, final MetadataManager metadataManager)
+        final String name,
+        final MetadataManager metadataManager)
+    {
+        return
+            retrieveForeignKeys(
+                name,
+                metadataManager,
+                metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @param name the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @return such foreign keys.
+     * @precondition name != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     */
+    protected List retrieveForeignKeys(
+        final String name,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
     {
         List result = null;
 
@@ -447,9 +483,11 @@ public abstract class AbstractTableDecorator
         int t_iCount =
             (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
 
+        String t_strReferredTable;
+
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            String t_strReferredTale = t_astrReferredTables[t_iIndex];
+            t_strReferredTable = t_astrReferredTables[t_iIndex];
 
             String[][] t_aastrForeignKeys =
                 metadataManager.getForeignKeys(name, t_strReferredTable);
@@ -461,7 +499,8 @@ public abstract class AbstractTableDecorator
                         name,
                         t_strReferredTable,
                         t_aastrForeignKeys,
-                        metadataManager);
+                        metadataManager,
+                        metadataTypeManager);
             }
         }
 
@@ -474,17 +513,20 @@ public abstract class AbstractTableDecorator
      * @param targetTable the target table.
      * @param fks the foreign key information.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return the list of <code>ForeignKey</code> instance.
      * @precondition sourceTable != null
      * @precondition targetTable != null
      * @precondition fks != null
      * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
      */
     protected List convertToForeignKeyList(
         final String sourceTable,
         final String targetTable,
         final String[][] fks,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
     {
         List result = new ArrayList();
 
@@ -494,13 +536,13 @@ public abstract class AbstractTableDecorator
 
         List t_lAttributes = null;
 
-        String t_astrCurrentFk;
+        String[] t_astrCurrentFk;
 
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
             t_astrCurrentFk = fks[t_iIndex];
 
-            t_bAllowNull = metadataManager.allowNull(sourceTable, t_astrCurrentFk);
+            t_bAllowNull = metadataManager.allowsNull(sourceTable, t_astrCurrentFk);
 
             t_lAttributes = new ArrayList();
 
@@ -512,7 +554,8 @@ public abstract class AbstractTableDecorator
                     buildAttributeDecorator(
                         sourceTable,
                         t_astrCurrentFk[t_iAttrIndex],
-                        metadataManager));
+                        metadataManager,
+                        metadataTypeManager));
             }
 
             result.add(
@@ -533,6 +576,7 @@ public abstract class AbstractTableDecorator
      * @param table the table name.
      * @param name the attribute name.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such decorator.
      * @precondition table != null
      * @precondition name != null
@@ -541,12 +585,16 @@ public abstract class AbstractTableDecorator
     protected AttributeDecorator buildAttributeDecorator(
         final String table,
         final String name,
-        final MetadataManager metadataManager)
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager)
     {
         return
-            new LazyAttributeDecorator(
-                table,
-                name,
+            new CachingAttributeDecorator(
+                new LazyAttribute(
+                    table,
+                    name,
+                    metadataManager,
+                    metadataTypeManager),
                 metadataManager);
     }
 
@@ -617,18 +665,110 @@ public abstract class AbstractTableDecorator
 
         if  (result == null)
         {
-            Table t_Parent - getParentTable();
+            Table t_Parent = getParentTable();
 
             if  (t_Parent != null)
             {
                 result =
-                    retrieveParentForeignKey(t_Parent, getMetadataManager());
+                    retrieveParentForeignKey(t_Parent, getForeignKeys());
 
                 if  (result != null)
                 {
                     setParentForeignKey(result);
                 }
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the parent foreign key.
+     * @param parent the parent table.
+     * @param foreignKeys the foreign keys.
+     * @return such foreign key.
+     * @precondition parent != null
+     * @precondition foreignKeys != null
+     */
+    protected ForeignKey retrieveParentForeignKey(
+        final Table parent, final List foreignKeys)
+    {
+        ForeignKey result = null;
+
+        int t_iCount = (foreignKeys != null) ? foreignKeys.size() : 0;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result = (ForeignKey) foreignKeys.get(t_iIndex);
+
+            if  (   (result != null)
+                 && (parent.getName().equalsIgnoreCase(
+                         result.getTargetTableName()))
+                 && (attributeListMatch(
+                         getPrimaryKey(), result.getAttributes())))
+            {
+                break;
+            }
+
+            result = null;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given attribute lists match.
+     * @param first the first attribute list.
+     * @param second the second attribute list.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean attributeListMatch(final List first, final List second)
+    {
+        boolean result =
+            (   (first != null)
+             && (second != null));
+
+        if  (result)
+        {
+            int t_iCount = first.size();
+            result = (t_iCount == second.size());
+
+            if  (result)
+            {
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    result =
+                        attributesMatch(
+                            (Attribute) first.get(t_iIndex),
+                            (Attribute) second.get(t_iIndex));
+
+                    if  (!result)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given attributes match.
+     * @param first the first attribute.
+     * @param second the second attribute.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean attributesMatch(
+        final Attribute first, final Attribute second)
+    {
+        boolean result =
+            (   (first != null)
+             && (second != null));
+
+        if  (result)
+        {
+            result = first.equals(second);
         }
 
         return result;
@@ -1167,6 +1307,9 @@ public abstract class AbstractTableDecorator
                 super.setParentTable(
                     createTableDecorator(
                         t_strParentTable, 
+                        decoratorFactory.decoratePrimaryKey(
+                            t_strParentTable,
+                            metadataManager),
                         t_lAttributes,
                         metadataManager.isTableStatic(
                             t_strParentTable),
@@ -1187,7 +1330,7 @@ public abstract class AbstractTableDecorator
      * Removes the duplicated attributes from <code>secondAttributes</code>.
      * @param firstAttributes the child attributes.
      * @param secondAttributes the parent attributes.
-     * @param parentTableName the parent table name.
+     * @param parentTableName the parent table nameq.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
      * @precondition firstAttributes != null
@@ -1273,6 +1416,7 @@ public abstract class AbstractTableDecorator
     /**
      * Creates a table decorator.
      * @param name the table name.
+     * @param primaryKey the primary key.
      * @param attributes the attributes.
      * @param isStatic whether the table contains static values or not.
      * @param voDecorated whether the value-object is decorated.
@@ -1286,6 +1430,7 @@ public abstract class AbstractTableDecorator
      */
     protected abstract TableDecorator createTableDecorator(
         final String parentTable,
+        final List primaryKey,
         final List attributes,
         final boolean isStatic,
         final boolean voDecorated,

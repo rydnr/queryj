@@ -352,10 +352,12 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <if(parent)>
 <table.allParentAndNonParentAttributes:{ attr |
         +   "<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
-        + "FROM <parent.nameUppercased>, <input.table_name_uppercased>"
+        + "FROM <parent.nameUppercased>, <input.table_name_uppercased> "
         + "WHERE "
-<input.pk_attributes:{attr |
-        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+<input.pk_attributes:{pk |
+        +   "<pk.nameUppercased> = ?}; separator=" AND \"\n">"
+<table.parentForeignKey,parent.primaryKey:{ pk, parentPk |
+        +   "AND <pk.tableNameUppercased>.<pk.nameUppercased> = <parentPk.tableNameUppercased>.<parentPk.nameUppercased> "}; separator="\n">";
 <else>
 <input.attributes:{attr |
         +   "<attr.nameUppercased>}; separator=", \"\n"> "

@@ -212,7 +212,7 @@ public class MetadataUtils
         int t_iLength =
             (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
 
-        Collection t_cAttributes = null;
+        List t_lAttributes = null;
         Iterator t_itAttributeIterator = null;
         ForeignKey t_CurrentFk = null;
         Attribute t_FirstAttribute = null;
@@ -220,7 +220,7 @@ public class MetadataUtils
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            t_cAttributes =
+            t_lAttributes =
                 buildAttributes(
                     t_aastrForeignKeys[t_iIndex],
                     tableName,
@@ -228,13 +228,13 @@ public class MetadataUtils
                     metadataTypeManager,
                     decoratorFactory);
 
-            if  (   (t_cAttributes != null)
-                 && (t_cAttributes.size() > 0))
+            if  (   (t_lAttributes != null)
+                 && (t_lAttributes.size() > 0))
             {
                 t_bAllowsNullAsAWhole =
-                    allowsNullAsAWhole(t_cAttributes);
+                    allowsNullAsAWhole(t_lAttributes);
 
-                t_itAttributeIterator = t_cAttributes.iterator();
+                t_itAttributeIterator = t_lAttributes.iterator();
 
                 if  (   (t_itAttributeIterator != null)
                      && (t_itAttributeIterator.hasNext()))
@@ -247,7 +247,7 @@ public class MetadataUtils
                         t_CurrentFk =
                             new CachingForeignKeyDecorator(
                                 t_FirstAttribute.getTableName(),
-                                t_cAttributes,
+                                t_lAttributes,
                                 tableName,
                                 t_bAllowsNullAsAWhole);
 

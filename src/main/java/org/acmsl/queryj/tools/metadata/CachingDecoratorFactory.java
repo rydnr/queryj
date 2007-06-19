@@ -190,11 +190,9 @@ public class CachingDecoratorFactory
 
         Table t_ParentTable = null;
 
-        List t_lAttributes =
-            decorateAttributes(
-                table,
-                metadataManager,
-                metadataManager.getMetadataTypeManager());
+        List t_lAttributes = decorateAttributes(table, metadataManager);
+
+        List t_lPrimaryKey = decoratePrimaryKey(table, metadataManager);
 
         String t_strParentTable = metadataManager.getParentTable(table);
 
@@ -208,6 +206,7 @@ public class CachingDecoratorFactory
         result =
             new CachingTableDecorator(
                 table,
+                t_lPrimaryKey,
                 t_lAttributes,
                 t_ParentTable,
                 metadataManager.isTableStatic(table),
@@ -231,29 +230,51 @@ public class CachingDecoratorFactory
     {
         return
             decorateAttributes(
-                table, metadataManager, metadataManager.getMetadataTypeManager());
+                table,
+                metadataManager.getColumnNames(table),
+                metadataManager,
+                metadataManager.getMetadataTypeManager());
     }
 
     /**
      * Retrieves the decorated list of attributes of given table.
      * @param table the table.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     * @precondition table != null
+     * @precondition metadataManager != null
+     */
+    public List decoratePrimaryKey(
+        final String table, final MetadataManager metadataManager)
+    {
+        return
+            decorateAttributes(
+                table,
+                metadataManager.getPrimaryKey(table),
+                metadataManager,
+                metadataManager.getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param columnNames the column names to decorate.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
      * @return the attribute list
      * @precondition table != null
+     * @precondition columnNames != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
     protected List decorateAttributes(
         final String table,
+        final String[] columnNames,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
     {
         List result = new ArrayList();
-
-        String[] t_astrColumnNames =
-            metadataManager.getColumnNames(table);
 
         String t_strColumnName;
         int t_iColumnType;
@@ -264,11 +285,11 @@ public class CachingDecoratorFactory
         String t_strBooleanNull;
 
         int t_iCount =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+            (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            t_strColumnName = t_astrColumnNames[t_iIndex];
+            t_strColumnName = columnNames[t_iIndex];
 
             t_iColumnType =
                 metadataManager.getColumnType(table, t_strColumnName);

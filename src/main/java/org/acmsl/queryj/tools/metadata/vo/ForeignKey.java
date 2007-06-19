@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents foreign keys.
@@ -60,7 +60,7 @@ public interface ForeignKey
      * Retrieves the attributes.
      * @return such information.
      */
-    public Collection getAttributes();
+    public List getAttributes();
     
     /**
      * Retrieves the target table name.

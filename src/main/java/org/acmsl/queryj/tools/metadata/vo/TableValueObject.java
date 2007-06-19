@@ -61,6 +61,7 @@ public final class TableValueObject
      * Creates an <code>TableValueObject</code> with the following
      * information.
      * @param name the name.
+     * @param primaryKey the primary key.
      * @param attributes the attributes.
      * @param parentTable the parent table.
      * @param isStatic whether the table contains static values or not.
@@ -69,12 +70,14 @@ public final class TableValueObject
      */
     public TableValueObject(
         final String name,
+        final List primaryKey,
         final List attributes,
         final Table parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {
-        super(name, attributes, parentTable, isStatic, voDecorated);
+        super(
+            name, primaryKey, attributes, parentTable, isStatic, voDecorated);
     }
 }
 

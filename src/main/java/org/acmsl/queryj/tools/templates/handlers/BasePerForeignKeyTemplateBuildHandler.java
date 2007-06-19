@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -75,6 +76,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -525,7 +527,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     {
         ForeignKey result = null;
 
-        Collection t_cAttributes = new ArrayList();
+        List t_lAttributes = new ArrayList();
 
         int t_iAttributeLength = (attributes != null) ? attributes.length : 0;
 
@@ -547,7 +549,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
             if  (t_Attribute != null)
             {
-                t_cAttributes.add(t_Attribute);
+                t_lAttributes.add(t_Attribute);
 
                 if  (   (!t_bAllowsNull)
                      && (t_Attribute.getAllowsNull()))
@@ -559,7 +561,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         result =
             new ForeignKeyValueObject(
-                sourceTable, t_cAttributes, targetTable, t_bAllowsNull);
+                sourceTable, t_lAttributes, targetTable, t_bAllowsNull);
 
         return result;
     }

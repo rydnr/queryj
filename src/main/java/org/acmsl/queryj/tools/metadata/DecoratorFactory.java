@@ -132,10 +132,16 @@ public interface DecoratorFactory
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
      * @return the attribute list
-     * @precondition table != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     public List decorateAttributes(
+        final String table, final MetadataManager metadataManager);
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     */
+    public List decoratePrimaryKey(
         final String table, final MetadataManager metadataManager);
 }
