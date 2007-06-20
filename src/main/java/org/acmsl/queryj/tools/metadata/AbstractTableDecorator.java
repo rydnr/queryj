@@ -768,7 +768,12 @@ public abstract class AbstractTableDecorator
 
         if  (result)
         {
-            result = first.equals(second);
+            String t_strFirstName = first.getName();
+
+            result =
+                (   (first.getType() == second.getType())
+                 && (t_strFirstName != null)
+                 && (t_strFirstName.equalsIgnoreCase(second.getName())));
         }
 
         return result;

@@ -355,9 +355,8 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         + "FROM <parent.nameUppercased>, <input.table_name_uppercased> "
         + "WHERE "
 <input.pk_attributes:{pk |
-        +   "<pk.nameUppercased> = ?}; separator=" AND \"\n">"
-<table.parentForeignKey,parent.primaryKey:{ pk, parentPk |
-        +   "AND <pk.tableNameUppercased>.<pk.nameUppercased> = <parentPk.tableNameUppercased>.<parentPk.nameUppercased> "}; separator="\n">";
+        +   "<pk.nameUppercased> = ? }; separator="AND \"\n">"
+<find_by_pk_sql_join(parentForeignKey=table.parentForeignKey,parentPrimaryKey=parent.primaryKey)>
 <else>
 <input.attributes:{attr |
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
@@ -2041,4 +2040,14 @@ delete_by_fk_sql(foreignKey, input) ::= <<
 //    + "WHERE "
 //<foreignKey:{attr|
 //    + "<attr.nameUppercased> = ? "}; separator="\n    + \"AND \"">;
+>>
+
+find_by_pk_sql_join(parentForeignKey, parentPrimaryKey) ::= <<
+<!
+ Generates the part of the where clause in find-by-pk-sql.
+ @param parentForeignKey the ForeignKey of the child, pointing to its parent.
+ @param parentPrimaryKey the parent's primary key.
+!>
+<parentForeignKey.attributes,parentPrimaryKey:{ pk, parentPk |
+        +   "AND <pk.tableNameUppercased>.<pk.nameUppercased> = <parentPk.tableNameUppercased>.<parentPk.nameUppercased> "}; separator="\n">;
 >>
