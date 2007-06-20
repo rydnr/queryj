@@ -200,17 +200,20 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param primaryKey the primary key.
      * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table is
      * decorated.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition table != null
+     * @precondition primaryKey != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
     protected AbstractTableDecorator(
         final String table,
+        final List primaryKey,
         final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
@@ -218,7 +221,7 @@ public abstract class AbstractTableDecorator
     {
         this(
             table,
-            null,
+            primaryKey,
             null,
             null,
             isStatic,
@@ -231,6 +234,7 @@ public abstract class AbstractTableDecorator
      * Creates a <code>AbstractTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param primaryKey the primary key.
      * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object for the table is
      * decorated.
@@ -238,11 +242,13 @@ public abstract class AbstractTableDecorator
      * @param childAttributes the child attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition table != null
+     * @precondition primaryKey != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
     protected AbstractTableDecorator(
         final String table,
+        final List primaryKey,
         final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
@@ -251,7 +257,7 @@ public abstract class AbstractTableDecorator
     {
         this(
             table,
-            null,
+            primaryKey,
             null,
             null,
             isStatic,

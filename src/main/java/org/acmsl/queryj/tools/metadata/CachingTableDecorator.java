@@ -250,30 +250,39 @@ public class CachingTableDecorator
      * Creates a <code>CachingTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param primaryKey the primary key.
      * @param isStatic whether the table contains static values or not.
      * @param voDecorated whether the value-object for the table is
      * decorated.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @precondition table != null
+     * @precondition primaryKey != null
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
     protected CachingTableDecorator(
         final String table,
+        final List primaryKey,
         final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
         super(
-            table, isStatic, voDecorated, metadataManager, decoratorFactory);
+            table,
+            primaryKey,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
     }
 
     /**
      * Creates a <code>CachingTableDecorator</code> instance.
      * <code>Table</code> to decorate.
      * @param table the table.
+     * @param primaryKey the primary key.
      * @param isStatic whether the table contains static values or not.
      * @param voDecorated whether the value-object for the table is
      * decorated.
@@ -286,6 +295,7 @@ public class CachingTableDecorator
      */
     protected CachingTableDecorator(
         final String table,
+        final List primaryKey,
         final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
@@ -294,6 +304,7 @@ public class CachingTableDecorator
     {
         super(
             table,
+            primaryKey,
             isStatic,
             voDecorated,
             metadataManager,

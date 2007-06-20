@@ -358,6 +358,8 @@ public class CachingDecoratorFactory
         return
             new CachingTableDecorator(
                 table,
+                decoratePrimaryKey(
+                    table, metadataManager),
                 metadataManager.isTableStatic(table),
                 metadataManager.isTableDecorated(table),
                 metadataManager,
