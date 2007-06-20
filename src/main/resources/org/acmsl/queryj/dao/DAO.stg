@@ -624,7 +624,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                             query, daoListener),
                         new <input.vo_name>PkStatementSetter(
                             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-                        new <input.vo_name>ResultSetExtractor(daoListener),
+                        new <input.vo_name>PkResultSetExtractor(daoListener),
                         this));
     }
 
@@ -981,6 +981,73 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         // \</extract data>
     }
 
+        /**
+     * Extracts \<i><input.vo_name>\</i> value objects from result sets.
+     * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
+     */
+    public static class <input.vo_name>ResultSetExtractor
+        extends  <input.tr_name_capitalized>ResultSetExtractor
+    {
+    
+    	private String fieldName;
+        /**
+         * Constructs a new \<code><input.vo_name>ResultSetExtractor\</code>.
+         * @param daoListener the dao listener.
+         */
+        public <input.vo_name>ResultSetExtractor(
+            final String fieldName,
+            final <input.tr_name_capitalized>DAOListener daoListener)
+        {
+            super(daoListener);
+            this.fieldName = fieldName;
+        }
+
+        // \<extract data>
+        /**
+         * Extracts \<i><input.vo_name>\</i> information from given result set.
+         * @param resultSet the result set.
+         * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+         * @return the \<code><input.vo_name>\</code> or \<code>null\</code>
+         * if the operation returned no data.
+         * @throws SQLException intercepted by \<i>Spring\</i>.
+         * @throws DataAccessException with information about any
+         * custom exception.
+         <precondition_notnull("resultSet")>
+         */
+        protected Object extractData(
+            final ResultSet resultSet,
+            final <input.tr_name_capitalized>DAOListener daoListener)
+        throws  SQLException,
+                DataAccessException
+        {
+            Map result = new HashMap();
+
+            if  (resultSet.next())
+            {
+                if  (daoListener != null)
+                {
+                    daoListener.resultSetMovedForward(this);
+                }
+
+                int index = 1;
+
+                <input.pk_attributes:resultset_extractor_parameter_retrieval(
+                  getterMethod=it.getterMethod,
+                  objectType=it.objectType,
+                  isPrimitive=it.primitive)>
+            }
+
+            if  (daoListener != null)
+            {
+                daoListener.resultSetClosed(this);
+            }
+
+            return result;
+        }
+        // \</extract data>
+    }
+    
+
     /**
      * Executes the update method on JdbcTemplate class.
      * @param creator the \<code>PreparedStatementCreator\</code> instance.
@@ -1026,6 +1093,25 @@ pk_resultset_extractor_parameter_retrieval(
 !>
 result.put(
     "<name>",
+<if(isPrimitive)>
+    new <objectType>(resultSet.<getterMethod>(index++)));
+<else>
+    resultSet.<getterMethod>(index++));
+<endif>
+>>
+
+resultset_extractor_parameter_retrieval(
+  name, getterMethod, objectType, isPrimitive) ::= <<
+<!
+  Generates the piece of code to build a concrete value-object attribute.
+  @param name the attribute name.
+  @param getterMethod the getter method associated to such attribute.
+  @param objectType the attribute type (Java version).
+  @param isPrimitive whether the attribute is modelled as an instance or as
+  a primitive type.
+!>
+result.put(
+    fieldName,
 <if(isPrimitive)>
     new <objectType>(resultSet.<getterMethod>(index++)));
 <else>
@@ -1174,7 +1260,9 @@ t_mMap =
         transactionTemplate.execute(
             new QueryTransactionCallback(
                 "<query>",
-                new <input.vo_name>PkResultSetExtractor(getDAOListener()),
+                new <input.vo_name>ResultSetExtractor(
+                "<nameLowercased>",
+                getDAOListener()),
                 this));
 
 <nativeType> <nameLowercased> =
