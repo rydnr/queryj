@@ -413,9 +413,12 @@ custom_select(cs, table, input) ::= <<
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
-<if(cs.dynamic)> * @param params the query parameters.
-<else>
+<if(cs.parameters)>
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+<else>
+<if(cs.dynamic)>
+ * @param params the query parameters.
+<endif>
 <endif>
 
  * @return the \<i><cs.resultClass>\</i> information retrieved.
@@ -434,10 +437,12 @@ public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
 
+<if(cs.parameters)>
+    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
+<else>
 <if(cs.dynamic)>
     final Object[] parameters);
-<else>
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">);
+<endif>
 <endif>
 
 >>
