@@ -54,6 +54,21 @@ source(input) ::= <<
   @params project_imports
   @params class
 !>
+<sourceImpl(table=input.table, input=input)>
+>>
+
+sourceImpl(table, input) ::= <<
+<!
+  Generates a DAO database implementation source file.
+  @param input.copyright_years the copyright's years.
+  @param input.table_name the table name.
+  @param input.package the package.
+  @param input.dao_class_name the DAO class name.
+  @param input.dao_factory_class_name the DAO factory class name.
+  @param input.dao_implementation_class_name the DAO implementation class name.
+  @params project_imports
+  @params class
+!>
 <if(input.header)>
 <input.header>
 <else>
@@ -104,7 +119,8 @@ source(input) ::= <<
   fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
   fkAttributes=input.fk_attributes,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
-  table=input.table)>
+  table=table,
+  parent=table.parentTable)>
 
 /*
  * Importing some ACM-SL classes.
@@ -211,7 +227,8 @@ project_imports(
   fkssSubpackageName,
   fkAttributes,
   baseDAOSubpackageName,
-  table) ::= <<
+  table,
+  parent) ::= <<
 <!
   Generates the project imports
   @param basePackageName the base package name.
@@ -230,6 +247,7 @@ project_imports(
   @param fkAttributes the foreign key attributes.
   @param baseDAOSubpackageName the subpackage of the base DAO interface.
   @param table the table.
+  @param parent the parent table (optional).
 !>
 /*
  * Importing project-specific classes.
@@ -244,6 +262,11 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackage
   subpackageName=subpackageName,
   crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
+<if(parent)>
+import <basePackageName>.<baseDAOSubpackageName>.<parent.voName>DAO;
+import <basePackageName>.<voSubpackageName>.<parent.voName>;
+<endif>
+
 <if(table.voDecorated)>
 import <basePackageName>.<voSubpackageName>.<voName>Decorator;
 <endif>
@@ -401,12 +424,12 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
           "INSERT "
         + "INTO <input.table_name_uppercased> "
         + "( "
-<input.attributes:{attr|
+<input.non_readonly_attributes:{attr|
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
         + ") "
         + "VALUES "
         + "( "
-<input.attributes:{attr|
+<input.non_readonly_attributes:{attr|
         +   "?}; separator=", \"\n"> "
         + ")";
 
@@ -632,6 +655,14 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <else>
     <defaultInsert(input=input, table=table, parent=parent)>
 <endif>
+
+    <input.externally_managed_attributes:attribute_resultset_extractor_class(
+      table=table,
+      trNameCapitalized=input.tr_name_capitalized,
+      nameCapitalized=it.nameCapitalized,
+      getterMethod=it.getterMethod,
+      objectType=it.objectType,
+      isPrimitive=it.primitive)>
 
     /**
      * Updates \<code><input.vo_name>\</code> information.
@@ -980,73 +1011,6 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         // \</extract data>
     }
 
-        /**
-     * Extracts \<i><input.vo_name>\</i> value objects from result sets.
-     * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
-     */
-    public static class <input.vo_name>ResultSetExtractor
-        extends  <input.tr_name_capitalized>ResultSetExtractor
-    {
-    
-    	private String fieldName;
-        /**
-         * Constructs a new \<code><input.vo_name>ResultSetExtractor\</code>.
-         * @param daoListener the dao listener.
-         */
-        public <input.vo_name>ResultSetExtractor(
-            final String fieldName,
-            final <input.tr_name_capitalized>DAOListener daoListener)
-        {
-            super(daoListener);
-            this.fieldName = fieldName;
-        }
-
-        // \<extract data>
-        /**
-         * Extracts \<i><input.vo_name>\</i> information from given result set.
-         * @param resultSet the result set.
-         * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
-         * @return the \<code><input.vo_name>\</code> or \<code>null\</code>
-         * if the operation returned no data.
-         * @throws SQLException intercepted by \<i>Spring\</i>.
-         * @throws DataAccessException with information about any
-         * custom exception.
-         <precondition_notnull("resultSet")>
-         */
-        protected Object extractData(
-            final ResultSet resultSet,
-            final <input.tr_name_capitalized>DAOListener daoListener)
-        throws  SQLException,
-                DataAccessException
-        {
-            Map result = new HashMap();
-
-            if  (resultSet.next())
-            {
-                if  (daoListener != null)
-                {
-                    daoListener.resultSetMovedForward(this);
-                }
-
-                int index = 1;
-
-                <input.pk_attributes:resultset_extractor_parameter_retrieval(
-                  getterMethod=it.getterMethod,
-                  objectType=it.objectType,
-                  isPrimitive=it.primitive)>
-            }
-
-            if  (daoListener != null)
-            {
-                daoListener.resultSetClosed(this);
-            }
-
-            return result;
-        }
-        // \</extract data>
-    }
-    
-
     /**
      * Executes the update method on JdbcTemplate class.
      * @param creator the \<code>PreparedStatementCreator\</code> instance.
@@ -1127,11 +1091,11 @@ static_table(
   @param voName the value object name.
 !>
 /**
- * Loads \<i><voName>\</i> information from the constant pool,
+ * Loads \<i\><voName>\</i\> information from the constant pool,
  * filtering by <attribute.name>.
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
- * @return the \<code><voName>\</code> instance.
+ * @return the \<code\><voName>\</code\> instance.
  <precondition_notnull(name=attribute.name)>
  */
 public <voName> findConstantBy<attribute.nameCapitalized>(
@@ -1246,12 +1210,14 @@ em_attribute_value_retrieval(
   query,
   nativeType,
   nameLowercased,
+  nameCapitalized,
   type) ::= <<
 <!
   Writes the sentence to retrieve an externally-managed value.
   @param query the query to retrieve the externally-managed value.
   @param nativeType the native type of the attribute (Java-specific).
   @param nameLowercased the attribute name, in lower-case.
+  @param nameCapitalized the name, capitalized.
   @param type the type.
 !>
 t_mMap =
@@ -1259,7 +1225,7 @@ t_mMap =
         transactionTemplate.execute(
             new QueryTransactionCallback(
                 "<query>",
-                new <input.vo_name>ResultSetExtractor(
+                new <nameCapitalized>ResultSetExtractor(
                 "<nameLowercased>",
                 getDAOListener()),
                 this));
@@ -1289,7 +1255,7 @@ dao_javadoc(name,uncapitalizedName) ::= <<
   @param name the name of the DAO.
   @param uncapitalizedName the name of the DAO, uncapitalized.
 !>
-* @param <uncapitalizedName>DAO the \<i><name>DAO\</i> instance.
+* @param <uncapitalizedName>DAO the \<i\><name>DAO\</i\> instance.
 >>
 
 dao_declaration(name,uncapitalizedName) ::= <<
@@ -1419,6 +1385,9 @@ protected void insert(
 <endif>
 
         query,
+<if(parent)>
+        <input.tr_name_capitalized>DataAccessManager.getInstance(),
+<endif>
         new DataSourceTransactionManager(dataSource));
 }
 
@@ -1432,10 +1401,18 @@ protected void insert(
 <endif>
 
  * @param query the query to insert the values.
+<if(parent)>
+ * @param dataAccessManager the \<tt\><input.tr_name_capitalized>DataAccessManager\</tt\> instance.
+<endif>
+
  * @param transactionManager the \<code>PlatformTransactionManager\</code>
  * instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
+<if(parent)>
+ <precondition_notnull("dataAccessManager")>
+<endif>
+
  <precondition_notnull("transactionManager")>
  */
 protected void insert(
@@ -1447,6 +1424,10 @@ protected void insert(
 <endif>
 
     final String query,
+<if(parent)>
+    final <input.tr_name_capitalized>DataAccessManager dataAccessManager,
+<endif>
+
     final PlatformTransactionManager transactionManager)
 {
     // Enabling transactions temporarily.
@@ -1461,6 +1442,9 @@ protected void insert(
 
             query,
             new TransactionTemplate(transactionManager),
+<if(parent)>
+            dataAccessManager.get<parent.voName>DAO(),
+<endif>
             getDAOListener());
     }
 }
@@ -1477,10 +1461,18 @@ protected void insert(
  * @param query the query to insert the values.
  * @param transactionTemplate the \<code>TransactionTemplate\</code>
  * instance.
+<if(parent)>
+ * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
+<endif>
+
  * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
  <precondition_notnull("transactionTemplate")>
+<if(parent)>
+ * @precondition <parent.nameLowercased>DAO != null
+<endif>
+
  */
 protected void insert(
 <if(parent)>
@@ -1492,8 +1484,21 @@ protected void insert(
 
     final String query,
     final TransactionTemplate transactionTemplate,
+<if(parent)>
+    final <parent.voName>DAO <parent.nameLowercased>DAO,
+<endif>
+
     final <input.tr_name_capitalized>DAOListener daoListener)
 {
+<if(parent)>
+    <parent.voName> <parent.nameLowercased> =
+        <parent.nameLowercased>DAO.create(
+            <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+
+<table.primaryKey:{attr |
+    <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
+
+<else>
     Map t_mMap = null;
 
     <input.externally_managed_attributes:em_attribute_value_retrieval(
@@ -1501,6 +1506,7 @@ protected void insert(
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
       type=it.objectType); separator="\n">
+<endif>
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
@@ -1601,6 +1607,10 @@ protected <input.vo_name> create(
 <endif>
             query,
             new DataSourceTransactionManager(dataSource),
+<if(parent)>
+            <input.tr_name_capitalized>DataAccessManager.getInstance(),
+<endif>
+
             factory);
 }
 
@@ -1617,12 +1627,20 @@ protected <input.vo_name> create(
  * @param query the query required to insert given information.
  * @param transactionManager the \<code>PlatformTransactionManager\</code>
  * instance.
+<if(parent)>
+ * @param dataAccessManager the \<tt\><input.tr_name_capitalized>DataAccessManager\</tt\> instance.
+<endif>
+
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
  <precondition_notnull("transactionManager")>
  <precondition_notnull("factory")>
+<if(parent)>
+ <precondition_notnull("dataAccessManager")>
+<endif>
+
  */
 <if(table.voDecorated)>
 protected <input.vo_name>Decorator create(
@@ -1639,7 +1657,13 @@ protected <input.vo_name> create(
 
     final String query,
     final PlatformTransactionManager transactionManager,
+<if(parent)>
+    final <input.tr_name_capitalized>DataAccessManager dataAccessManager,
     final <input.vo_name>ValueObjectFactory factory)
+<else>
+    final <input.vo_name>ValueObjectFactory factory)
+<endif>
+
 {
     return
         create(
@@ -1652,6 +1676,10 @@ protected <input.vo_name> create(
             query,
             new TransactionTemplate(transactionManager),
             factory,
+<if(parent)>
+            dataAccessManager.get<parent.voName>DAO(),
+<endif>
+
             getDAOListener());
 }
 
@@ -1670,9 +1698,17 @@ protected <input.vo_name> create(
  * instance.
  * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
  * instance.
+<if(parent)>
+ * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
+<endif>
+
  * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("transactionTemplate")>
+<if(parent)>
+ * @precondition <parent.nameLowercased>DAO != null
+<endif>
+
  <precondition_notnull("factory")>
  */
 <if(table.voDecorated)>
@@ -1690,6 +1726,10 @@ protected <input.vo_name> create(
     final String query,
     final TransactionTemplate transactionTemplate,
     final <input.vo_name>ValueObjectFactory factory,
+<if(parent)>
+    final <parent.voName>DAO <parent.nameLowercased>DAO,
+<endif>
+
     final <input.tr_name_capitalized>DAOListener daoListener)
 {
 <if(table.voDecorated)>
@@ -1698,7 +1738,15 @@ protected <input.vo_name> create(
     <input.vo_name> result = null;
 <endif>
 
+<if(parent)>
+    <parent.voName> <parent.nameLowercased> =
+        <parent.nameLowercased>DAO.create(
+            <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 
+<table.primaryKey:{attr |
+    <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
+
+<else>
     Map t_mMap = null;
 
     <input.externally_managed_attributes:em_attribute_value_retrieval(
@@ -1706,6 +1754,8 @@ protected <input.vo_name> create(
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
       type=it.objectType); separator="\n">
+<endif>
+
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
@@ -1717,6 +1767,7 @@ protected <input.vo_name> create(
 <else>
                 <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
+
                 false,
                 true),
             this));
@@ -1940,6 +1991,7 @@ protected <input.vo_name> create(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
+      nameCapitalized=it.nameCapitalized,
       type=it.objectType); separator="\n">
 
     transactionTemplate.execute(
@@ -2050,4 +2102,141 @@ find_by_pk_sql_join(parentForeignKey, parentPrimaryKey) ::= <<
 !>
 <parentForeignKey.attributes,parentPrimaryKey:{ pk, parentPk |
         +   "AND <pk.tableNameUppercased>.<pk.nameUppercased> = <parentPk.tableNameUppercased>.<parentPk.nameUppercased> "}; separator="\n">;
+>>
+
+attribute_resultset_extractor_class(
+  table,
+  trNameCapitalized,
+  nameCapitalized,
+  getterMethod,
+  objectType,
+  isPrimitive) ::= <<
+<!
+ Generates an inner resultset-extractor class for given attribute.
+ @param table the table.
+ @param trNameCapitalized the table repository name, capitalized.
+ @param nameCapitalized the attribute name, capitalized.
+ @param getterMethod the getter method for given attribute.
+ @param objectType its object type.
+ @param isPrimitive whether it's primitive.
+!>
+/**
+ * Extracts \<i><input.vo_name>\</i> value objects from result sets.
+ * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
+ */
+public static class <nameCapitalized><table.voName>ResultSetExtractor
+    extends  <trNameCapitalized>ResultSetExtractor
+{
+    private String m__strFieldName;
+
+    /**
+     * Constructs a new \<code><nameCapitalized><table.voName>ResultSetExtractor\</code>.
+     * @param daoListener the dao listener.
+     */
+    public <nameCapitalized><table.voName>ResultSetExtractor(
+        final String fieldName,
+        final <trNameCapitalized>DAOListener daoListener)
+    {
+        super(daoListener);
+        immutableSetFieldName(fieldName);
+    }
+
+    /**
+     * Specifies the field name.
+     * @param fieldName the field name.
+     */
+    protected final void immutableSetFieldName(final String fieldName)
+    {
+        m__strFieldName = fieldName;
+    }
+
+    /**
+     * Specifies the field name.
+     * @param fieldName the field name.
+     */
+    protected void setFieldName(final String fieldName)
+    {
+        immutableSetFieldName(fieldName);
+    }
+
+    /**
+     * Retrieves the field name.
+     * @return such information.
+     */
+    public String getFieldName()
+    {
+        return m__strFieldName;
+    }
+
+    // \<extract data>
+    /**
+     * Extracts \<i><table.voName>.<nameCapitalized>\</i> information from given result set.
+     * @param resultSet the result set.
+     * @param daoListener the \<code><trNameCapitalized>DAOListener\</code> instance.
+     * @return the \<code><table.voName>\</code> or \<code>null\</code>
+     * if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     <precondition_notnull("resultSet")>
+     */
+    protected Object extractData(
+        final ResultSet resultSet,
+        final <trNameCapitalized>DAOListener daoListener)
+    throws  SQLException,
+            DataAccessException
+    {
+        return
+            extractData(
+                resultSet,
+                getFieldName(),
+                daoListener);
+    }
+
+    /**
+     * Extracts \<i><table.voName>\</i> information from given result set.
+     * @param resultSet the result set.
+     * @param fieldName the field name.
+     * @param daoListener the \<code><trNameCapitalized>DAOListener\</code> instance.
+     * @return the \<code><table.voName>\</code> or \<code>null\</code>
+     * if the operation returned no data.
+     * @throws SQLException intercepted by \<i>Spring\</i>.
+     * @throws DataAccessException with information about any
+     * custom exception.
+     <precondition_notnull("resultSet")>
+     <precondition_notnull("fieldName")>
+     */
+    protected Object extractData(
+        final ResultSet resultSet,
+        final String fieldName,
+        final <trNameCapitalized>DAOListener daoListener)
+    throws  SQLException,
+            DataAccessException
+    {
+        Map result = new HashMap();
+
+        if  (resultSet.next())
+        {
+            if  (daoListener != null)
+            {
+                daoListener.resultSetMovedForward(this);
+            }
+
+            int index = 1;
+
+            <resultset_extractor_parameter_retrieval(
+              getterMethod=getterMethod,
+              objectType=objectType,
+              isPrimitive=isPrimitive)>
+        }
+
+        if  (daoListener != null)
+        {
+            daoListener.resultSetClosed(this);
+        }
+
+        return result;
+    }
+    // \</extract data>
+}
 >>

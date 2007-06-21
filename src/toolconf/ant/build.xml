@@ -276,7 +276,7 @@
          ANTLR source folders.
       -->
       <property name="antlr.src.dir" value="${src.dir}/main/antlr"/>
-      <property name="antlr.java.src.dir" value="target/generated-sources"/>
+      <property name="antlr.java.src.dir" value="target/generated-sources/antlr"/>
 
       <!--
          ANTLR test folder.
@@ -2378,7 +2378,7 @@
         description="Builds ANTLR-based language parser.">
 
         <mkdir
-          dir="${basedir}/target/generated-sources/${antlr.base.package.folder}"/>
+          dir="${basedir}/target/generated-sources/antlr/${antlr.base.package.folder}"/>
 
         <java
           fork="true"
@@ -2386,7 +2386,7 @@
           classname="org.antlr.Tool"
           classpathref="java.development.class.path">
           <arg value="-o"/>
-          <arg value="${basedir}/target/generated-sources/${antlr.base.package.folder}"/>
+          <arg value="${basedir}/target/generated-sources/antlr/${antlr.base.package.folder}"/>
           <arg value="${antlr.grammar.name}.g"/>
         </java>
 
