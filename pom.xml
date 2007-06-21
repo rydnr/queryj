@@ -21,6 +21,53 @@
   <build>
     <finalName>queryj</finalName>
     <testSourceDirectory>src/test/java</testSourceDirectory>
+    <plugins>
+<!--
+       <plugin>
+        <groupId>uk.co.badgersinfoil.maven.plugins</groupId>
+        <artifactId>maven-antlr3-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>antlr</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+ -->
+       <plugin>
+         <artifactId>maven-antrun-plugin</artifactId>
+         <executions>
+           <execution>
+             <phase>generate-sources</phase>
+             <configuration>
+               <tasks>
+                 <java classname="org.antlr.Tool"
+                       classpathref="maven.plugin.classpath"
+                       fork="true"
+                       dir="src/main/antlr">
+                   <arg value="-o"/>
+                   <arg value="${project.build.directory}/generated-sources/antlr/org/acmsl/queryj/tools/antlr"/>
+                   <arg value="PerComment.g"/>
+                 </java>
+               </tasks>
+               <sourceRoot>${project.build.directory}/generated-sources/antlr</sourceRoot>
+             </configuration>
+             <goals>
+               <goal>run</goal>
+             </goals>
+           </execution>
+         </executions>
+         <dependencies>
+           <dependency>
+             <groupId>org.antlr</groupId>
+             <artifactId>antlr</artifactId>
+             <version>3.0</version>
+             <scope>compile</scope>
+           </dependency>
+         </dependencies>
+       </plugin>
+    </plugins>
   </build>
 
   <dependencies>
@@ -36,13 +83,23 @@
     </dependency>
     <dependency>
       <groupId>org.antlr</groupId>
+      <artifactId>antlr2</artifactId>
+      <version>2.7.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.antlr</groupId>
       <artifactId>stringtemplate</artifactId>
       <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.5.7b11</version>
+      <version>0.5.7b16-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>logging</artifactId>
+      <version>1.0.4</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
@@ -94,6 +151,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <id>bif-repository</id>
+      <url>http://maven.badgers-in-foil.co.uk/maven2/</url>
+    </pluginRepository>
+  </pluginRepositories>
 
   <distributionManagement>
     <repository>
