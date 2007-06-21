@@ -62,6 +62,12 @@
            <dependency>
              <groupId>org.antlr</groupId>
              <artifactId>antlr</artifactId>
+             <version>3.0b6</version>
+             <scope>compile</scope>
+           </dependency>
+           <dependency>
+             <groupId>org.antlr</groupId>
+             <artifactId>stringtemplate</artifactId>
              <version>3.0</version>
              <scope>compile</scope>
            </dependency>
