@@ -15,7 +15,10 @@
   </organization>
 
   <scm>
-    <developerConnection>scm:http://svn.acm-sl.org/queryj/br-0_6--ventura24-1_9-synchr/</developerConnection>
+    <connection>scm:svn:http://svn.acm-sl.org/queryj/br-0_6--ventura24-1_9-synchr/</connection>
+    <developerConnection>scm:svn:http://svn.acm-sl.org/queryj/br-0_6--ventura24-1_9-synchr/</developerConnection>
+    <tag>br-0_6--ventura24-1_9-synchr</tag>
+    <url>http://www.acm-sl.org/browser/queryj</url>
   </scm>
 
   <build>
