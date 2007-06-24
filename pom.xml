@@ -48,7 +48,7 @@
       <email>jose.juan@ventura24.es</email>
       <url>http://del.icio.us/pepejm</url>
       <organization>Ventura24</organization>
-      <organizationUrl>https://www.ventura24.es/<organizationUrl>
+      <organizationUrl>https://www.ventura24.es</organizationUrl>
       <roles>
         <role>Bug fixing</role>
       </roles>
@@ -94,7 +94,7 @@
   <scm>
     <connection>scm:svn:http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-1_9-synchr/</connection>
     <developerConnection>scm:svn:http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-1_9-synchr/</developerConnection>
-    <!--tag>br-0_6--ventura24-1_9-synchr</tag-->
+    <!--tag>br-0_6- -ventura24-1_9-synchr</tag-->
     <tag>HEAD</tag>
     <url>http://www.acm-sl.org/browser/queryj</url>
   </scm>
