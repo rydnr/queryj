@@ -9,15 +9,93 @@
   <version>v24-1.9-synchr-31-SNAPSHOT</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org</url>
+  <inceptionYear>2002</inceptionYear>
+  <licenses>
+    <license>
+      <name>GPL</name>
+      <url>http://www.fsf.org/licensing/licenses/gpl.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <organization>
     <name>ACM-SL</name>
     <url>http://www.acm-sl.org</url>
   </organization>
 
+  <developers>
+    <developer>
+      <id>chous</id>
+      <name>Jose</name>
+      <email>chous@acm-sl.org</email>
+      <url>http://www.acm-sl.org</url>
+      <organization>ACM-SL</organization>
+      <organizationUrl>http://www.acm-sl.org</organizationUrl>
+      <roles>
+        <role>Architect</role>
+        <role>Developer</role>
+      </roles>
+      <timezone>+1</timezone>
+      <properties>
+        <yahoo.id>chous@yahoo.com</yahoo.id>
+        <hotmail.id>jjkjjkjjkjjk@hotmail.com</hotmail.id>
+        <jabber.id>chous@jabber.acm-sl.org</jabber.id>
+      </properties>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Jose Juan</name>
+      <email>jose.juan@ventura24.es</email>
+      <url>http://del.icio.us/pepejm</url>
+      <organization>Ventura24</organization>
+      <organizationUrl>https://www.ventura24.es/<organizationUrl>
+      <roles>
+        <role>Bug fixing</role>
+      </roles>
+      <timezone>+1</timezone>
+    </contributor>
+  </contributors>
+
+  <issueManagement>
+    <system>Trac</system>
+    <url>http://www.acm-sl.org</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>continuum</system>
+    <url>http://maven.acm-sl.org/continuum</url>
+    <notifiers>
+      <notifier>
+        <type>mail</type>
+        <sendOnError>true</sendOnError>
+        <sendOnFailure>true</sendOnFailure>
+        <sendOnSuccess>true</sendOnSuccess>
+        <sendOnWarning>true</sendOnWarning>
+        <configuration>
+          <address>continuum@maven.acm-sl.org</address>
+        </configuration>
+      </notifier>
+    </notifiers>
+  </ciManagement>
+
+  <mailingLists>
+    <mailingList>
+      <name>User List</name>
+      <subscribe>queryj-user-subscribe@acm-sl.org</subscribe>
+      <unsubscribe>queryj-user-unsubscribe@acm-sl.org</unsubscribe>
+      <post>queryj-user@acm-sl.org</post>
+      <archive>http://mail.acm-sl.org/queryj-user/</archive>
+      <!--otherArchives>
+        <otherArchive>http://base.google.com/base/1/127.0.0.1</otherArchive>
+      </otherArchives-->
+    </mailingList>
+  </mailingLists>
+
   <scm>
-    <connection>scm:svn:http://svn.acm-sl.org/queryj/br-0_6--ventura24-1_9-synchr/</connection>
-    <developerConnection>scm:svn:http://svn.acm-sl.org/queryj/br-0_6--ventura24-1_9-synchr/</developerConnection>
-    <tag>br-0_6--ventura24-1_9-synchr</tag>
+    <connection>scm:svn:http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-1_9-synchr/</connection>
+    <developerConnection>scm:svn:http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-1_9-synchr/</developerConnection>
+    <!--tag>br-0_6--ventura24-1_9-synchr</tag-->
+    <tag>HEAD</tag>
     <url>http://www.acm-sl.org/browser/queryj</url>
   </scm>
 
