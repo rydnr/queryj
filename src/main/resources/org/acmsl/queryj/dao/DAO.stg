@@ -845,7 +845,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
 <if(parent)>
         parentDAO.update(
-            <parent.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+            <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
         Object t_Result =
