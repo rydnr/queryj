@@ -687,12 +687,16 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
             update(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
-<else>
-                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
-<endif>
 
                 auditSql(_UPDATE_SQL),
+                getDataSource(),
+                <input.tr_name_capitalized>DataAccessManager.getInstance());
+<else>
+                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                auditSql(_UPDATE_SQL),
                 getDataSource());
+<endif>
+
     }
 
     /**
@@ -705,31 +709,41 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
      * @param query the query used to perform the update operation.
      * @param dataSource the \<code>DataSource\<code> instance.
+<if(parent)>
+     * @param dataAccessManager the \<tt><input.tr_name_capitalized>DataAccessManager\</tt> instance.
+<endif>
+
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
      <precondition_notnull("dataSource")>
+     <precondition_notnull("dataAccessManager")>
      */
     protected int update(
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        final String query,
+        final DataSource dataSource,
+        final <input.tr_name_capitalized>DataAccessManager dataAccessManager)
 <else>
         <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
-<endif>
-
         final String query,
         final DataSource dataSource)
+<endif>
+
     {
         return
             update(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new DataSourceTransactionManager(dataSource),
+                dataAccessManager.get<parent.voName>DAO());
 <else>
                 <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
-<endif>
-
                 query,
                 new DataSourceTransactionManager(dataSource));
+<endif>
     }
 
     /**
@@ -743,20 +757,27 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
+<if(parent)>
+     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+<endif>
+
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
      <precondition_notnull("transactionManager")>
+     <precondition_notnull("parentDAO")>
      */
     protected int update(
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        final String query,
+        final PlatformTransactionManager transactionManager,
+        final <parent.voName>DAO parentDAO)
 <else>
         <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
-<endif>
-
         final String query,
         final PlatformTransactionManager transactionManager)
+<endif>
     {
         int result;
 
@@ -773,6 +794,10 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
                     query,
                     new TransactionTemplate(transactionManager),
+<if(parent)>
+                    parentDAO,
+<endif>
+
                     getDAOListener());
         }
 
@@ -790,11 +815,16 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      * @param query the query used to perform the update operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
+<if(parent)>
+     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+<endif>
+
      * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
      <precondition_notnull("transactionManager")>
+     <precondition_notnull("parentDAO")>
      */
     protected int update(
 <if(parent)>
@@ -805,9 +835,18 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
         final String query,
         final TransactionTemplate transactionTemplate,
+<if(parent)>
+        final <parent.voName>DAO parentDAO,
+<endif>
+
         final <input.tr_name_capitalized>DAOListener daoListener)
     {
         int result = -10;
+
+<if(parent)>
+        parentDAO.update(
+            <parent.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+<endif>
 
         Object t_Result =
             transactionTemplate.execute(
@@ -850,7 +889,13 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             auditSql(_DELETE_SQL),
+<if(parent)>
+            getDataSource(),
+            <input.tr_name_capitalized>DataAccessManager.getInstance());
+<else>
             getDataSource());
+<endif>
+
     }
 
     /**
@@ -858,18 +903,38 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param dataSource the \<code>DataSource\<code> instance.
+<if(parent)>
+     * @param dataAccessManager the \<tt><input.tr_name_capitalized>DataAccessManager\</tt> instance.
+<endif>
+
      <precondition_notnull("query")>
      <precondition_notnull("dataSource")>
+<if(parent)>
+     <precondition_notnull("dataAccessManager")>
+<endif>
+
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
+<if(parent)>
+        final DataSource dataSource,
+        final <input.tr_name_capitalized>DataAccessManager dataAccessManager)
+<else>
         final DataSource dataSource)
+<endif>
+
     {
         deleteNoFk(
             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
+<if(parent)>
+            new DataSourceTransactionManager(dataSource),
+            dataAccessManager.get<parent.voName>DAO());
+<else>
             new DataSourceTransactionManager(dataSource));
+<endif>
+
     }
 
     /**
@@ -878,13 +943,27 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      * @param query the query used to perform the delete operation.
      * @param transactionManager the \<code>PlatformTransactionManager\<code>
      * instance.
+<if(parent)>
+     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+<endif>
+
      <precondition_notnull("query")>
      <precondition_notnull("transactionManager")>
+<if(parent)>
+     <precondition_notnull("dataAccessManager")>
+<endif>
+
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
+<if(parent)>
+        final PlatformTransactionManager transactionManager,
+        final <parent.voName>DAO parentDAO)
+<else>
         final PlatformTransactionManager transactionManager)
+<endif>
+
     {
         // Enabling transactions temporarily.
         synchronized (DataSourceTransactionManager.class)
@@ -893,6 +972,10 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                 <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager),
+<if(parent)>
+                parentDAO,
+<endif>
+
                 getDAOListener());
         }
     }
@@ -903,14 +986,26 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the \<code>TransactionTemplate\<code>
      * instance.
+<if(parent)>
+     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+<endif>
+
      * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
      <precondition_notnull("query")>
      <precondition_notnull("transactionTemplate")>
+<if(parent)>
+     <precondition_notnull("parentDAO")>
+<endif>
+
      */
     protected void deleteNoFk(
         <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         final String query,
         final TransactionTemplate transactionTemplate,
+<if(parent)>
+        final <parent.voName>DAO parentDAO,
+<endif>
+
         final <input.tr_name_capitalized>DAOListener daoListener)
     {
         transactionTemplate.execute(
@@ -920,6 +1015,11 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                 new <input.vo_name>PkStatementSetter(
                     <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
                 this));
+<if(parent)>
+        parentDAO.delete(
+            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">);
+<endif>
+
     }
 
     /**

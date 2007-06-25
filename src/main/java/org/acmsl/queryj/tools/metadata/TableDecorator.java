@@ -143,6 +143,12 @@ public interface TableDecorator
     public List getNonParentAttributes();
 
     /**
+     * Retrieves the non-read-only attributes.
+     * @return such attributes.
+     */
+    public List getNonReadOnlyAttributes();
+
+    /**
      * Retrieves the list of non-parent, non-externally-managed
      * attributes.
      * @return such list.

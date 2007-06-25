@@ -105,6 +105,11 @@ public class CachingTableDecorator
     private String m__strCachedSingularNameCapitalized;
 
     /**
+     * The cached non-readonly attributes.
+     */
+    private List m__lCachedNonReadOnlyAttributes;
+
+    /**
      * The cached non-parent attributes.
      */
     private List m__lCachedNonParentAttributes;
@@ -447,6 +452,50 @@ public class CachingTableDecorator
         return result;
     }
 
+    /**
+     * Specifies the cached, non-parent attributes.
+     * @param attrs such attributes.
+     */
+    protected final void immutableSetCachedNonReadOnlyAttributes(final List attrs)
+    {
+        m__lCachedNonReadOnlyAttributes = attrs;
+    }
+
+    /**
+     * Specifies the cached, non-read-only attributes.
+     * @param attrs such attributes.
+     */
+    protected void setCachedNonReadOnlyAttributes(final List attrs)
+    {
+        immutableSetCachedNonReadOnlyAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the cached, non-read-only attributes.
+     * @return such information.
+     */
+    protected List getCachedNonReadOnlyAttributes()
+    {
+        return m__lCachedNonReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the non-read-only attributes.
+     * @return such attributes.
+     */
+    public List getNonReadOnlyAttributes()
+    {
+        List result = getCachedNonReadOnlyAttributes();
+
+        if  (   (result == null)
+             || (result.size() == 0))
+        {
+            result = super.getNonReadOnlyAttributes();
+            setCachedNonReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
 
     /**
      * Specifies the cached, non-parent attributes.

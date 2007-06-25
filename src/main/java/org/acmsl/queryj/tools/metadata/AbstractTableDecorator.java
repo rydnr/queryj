@@ -1074,6 +1074,62 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Retrieves the non-read-only attributes.
+     * @return such attributes.
+     */
+    public List getNonReadOnlyAttributes()
+    {
+        return
+            getNonReadOnlyAttributes(
+                getName(),
+                getAttributes(),
+                getParentTable(),
+                getMetadataManager(),
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the non-read-only attributes.
+     * @param name the table name.
+     * @param attributes the attributes.
+     * @param parentTable the parent table (or <code>null</code> otherwise).
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code>
+     * instance.
+     * @return such attributes.
+     * @precondition name != null
+     * @precondition attributes != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @precondition tableDecoratorHelper != null
+     */
+    protected List getNonReadOnlyAttributes(
+        final String name,
+        final List attributes,
+        final Table parentTable,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper tableDecoratorHelper)
+    {
+        List result = attributes;
+
+        if  (parentTable != null)
+        {
+            result =
+                tableDecoratorHelper.removeReadOnly(
+                    tableDecoratorHelper.sumUpParentAndChildAttributes(
+                        parentTable.getName(),
+                        decorateAttributes(),
+                        metadataManager,
+                        decoratorFactory));
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the non-parent attributes.
      * @return such attributes.
      */
