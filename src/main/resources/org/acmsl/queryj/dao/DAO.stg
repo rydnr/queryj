@@ -378,7 +378,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         + "FROM <parent.nameUppercased>, <input.table_name_uppercased> "
         + "WHERE "
 <input.pk_attributes:{pk |
-        +   "<pk.nameUppercased> = ? }; separator="AND \"\n">"
+        +   "<attr.tableNameUppercased>.<pk.nameUppercased> = ? }; separator="AND \"\n">"
 <find_by_pk_sql_join(parentForeignKey=table.parentForeignKey,parentPrimaryKey=parent.primaryKey)>
 <else>
 <input.attributes:{attr |
