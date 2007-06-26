@@ -646,7 +646,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                             query, daoListener),
                         new <input.vo_name>PkStatementSetter(
                             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-                        new <input.vo_name>PkResultSetExtractor(daoListener),
+                        new <input.vo_name>ResultSetExtractor(daoListener),
                         this));
     }
 
@@ -845,6 +845,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
 <if(parent)>
         parentDAO.update(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
