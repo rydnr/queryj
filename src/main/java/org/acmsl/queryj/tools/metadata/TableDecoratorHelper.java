@@ -120,15 +120,88 @@ public class TableDecoratorHelper
             {
                 t_strName = t_Attribute.getName();
                 
-                if  (   (   (metadataManager.isPartOfPrimaryKey(
-                                 t_Attribute.getTableName(), t_strName))
-                         && (!metadataManager.isPartOfPrimaryKey(
-                                 parentTableName, t_strName))
-                         && (!metadataManager.pointsToPrimaryKey(
-                                 t_Attribute.getTableName(),
-                                 new String[] { t_strName },
-                                 parentTableName)))
+                if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
                      || (!contains(firstAttributes, t_Attribute)))
+                {
+                    result.add(t_Attribute);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given attribute is considered overridden.
+     * @param attribute the attribute.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param parentTableName the parent table name.
+     * @return <tt>true</tt> in such case.
+     * @precondition attribute != null
+     * @precondition metadataManager != null
+     * @precondition parentTableName != null
+     */
+    protected boolean isOverridden(
+        final Attribute attribute,
+        final MetadataManager metadataManager,
+        final String parentTableName)
+    {
+        boolean result = false;
+
+        String t_strName = attribute.getName();
+        String t_strTableName = attribute.getTableName();
+
+        result =
+            (   (metadataManager.isPartOfPrimaryKey(
+                     t_strTableName, t_strName))
+             && (!metadataManager.isPartOfPrimaryKey(
+                     parentTableName, t_strName))
+             && (!metadataManager.pointsToPrimaryKey(
+                     t_strTableName,
+                     new String[] { t_strName },
+                     parentTableName)));
+
+        return result;
+    }
+
+    /**
+     * Removes the duplicated attributes from <code>secondAttributes</code>. plus the primary key.
+     * @param firstAttributes the first attributes.
+     * @param secondAttributes the second attributes.
+     * @param primaryKey the primary key to prevail.
+     * @param parentTableName the parent table name of the second attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the cleaned-up attributes.
+     * @precondition firstAttributes != null
+     * @preconditoin secondAttributes != null
+     * @precondition primaryKey != null
+     * @precondition metadataManager != null
+     */
+    public List removeOverriddenPlusPk(
+        final List firstAttributes,
+        final List secondAttributes,
+        final List primaryKey,
+        final String parentTableName,
+        final MetadataManager metadataManager)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (secondAttributes != null) ? secondAttributes.size() : 0;
+
+        Attribute t_Attribute;
+        String t_strName;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) secondAttributes.get(t_iIndex);
+
+            if  (t_Attribute != null)
+            {
+                t_strName = t_Attribute.getName();
+                
+                if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
+                     || (!contains(firstAttributes, t_Attribute))
+                     || (contains(primaryKey, t_Attribute)))
                 {
                     result.add(t_Attribute);
                 }

@@ -845,9 +845,12 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
 <if(parent)>
         parentDAO.update(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-            <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+//            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+<if(parent.stStuff)>
 <endif>
+            <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes:{<it.nameLowercased>}; separator=",\n">);
+<endif>
+
 
         Object t_Result =
             transactionTemplate.execute(

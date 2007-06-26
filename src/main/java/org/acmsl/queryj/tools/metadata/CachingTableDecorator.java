@@ -165,6 +165,27 @@ public class CachingTableDecorator
     private List m__lCachedAllParentAndNonParentReadOnlyAttributes;
 
     /**
+     * The cached non-parent non-managed-externally attributes, plus the primary key.
+     */
+    private List m__lCachedNonParentNonManagedExternallyPlusPkAttributes;
+
+    /**
+     * The cached all non-managed-externally attributes, plus the primary key.
+     */
+    private List m__lCachedAllNonManagedExternallyPlusPkAttributes;
+
+    /**
+     * The cached all parent and non-parent non-managed-externally, non-readonly attributes,
+     * plus the primary key.
+     */
+    private List m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes;
+
+    /**
+     * The cached non-parent attributes, plus the primary key.
+     */
+    private List m__lCachedNonParentPlusPkAttributes;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -1343,5 +1364,210 @@ public class CachingTableDecorator
         }
 
         return result;
+    }
+
+    /**
+     * Specifies the cached list of non-parent, non-externally-managed attributes,
+     * plus the primary key.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedNonParentNonManagedExternallyPlusPkAttributes(
+        final List list)
+    {
+        m__lCachedNonParentNonManagedExternallyPlusPkAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of non-parent, non-externally-managed attributes,
+     * plus the primary key.
+     * @param list such list.
+     */
+    protected void setCachedNonParentNonManagedExternallyPlusPkAttributes(final List list)
+    {
+        immutableSetCachedNonParentNonManagedExternallyPlusPkAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached list of non-parent, non-externally-managed attributes,
+     * plus the primary key.
+     * @return such list.
+     */
+    protected List getCachedNonParentNonManagedExternallyPlusPkAttributes()
+    {
+        return m__lCachedNonParentNonManagedExternallyPlusPkAttributes;
+    }
+
+    /**
+     * Retrieves the list of non-parent, non-externally-managed
+     * attributes, plus the primary key.
+     * @return such list.
+     */
+    public List getNonParentNonManagedExternallyPlusPkAttributes()
+    {
+        List result = getCachedNonParentNonManagedExternallyPlusPkAttributes();
+
+        if  (result == null)
+        {
+            result = super.getNonParentNonManagedExternallyPlusPkAttributes();
+            setCachedNonParentNonManagedExternallyPlusPkAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies all attributes, including the parent's, but not the externally-managed,
+     * plus the primary key.
+     * @param list the list.
+     */
+    protected final void immutableSetCachedAllNonManagedExternallyPlusPkAttributes(
+        final List list)
+    {
+        m__lCachedAllNonManagedExternallyPlusPkAttributes = list;
+    }
+
+    /**
+     * Specifies all attributes, including the parent's, but not the externally-managed,
+     * plus the primary key.
+     * @param list the list.
+     */
+    protected void setCachedAllNonManagedExternallyPlusPkAttributes(final List list)
+    {
+        immutableSetCachedAllNonManagedExternallyPlusPkAttributes(list);
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * plus the primary key.
+     * @return such attributes.
+     */
+    protected List getCachedAllNonManagedExternallyPlusPkAttributes()
+    {
+        return m__lCachedAllNonManagedExternallyPlusPkAttributes;
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * plus the primary key.
+     * @return such attributes.
+     */
+    public List getAllNonManagedExternallyPlusPkAttributes()
+    {
+        List result = getCachedAllNonManagedExternallyPlusPkAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllNonManagedExternallyPlusPkAttributes();
+            setCachedAllNonManagedExternallyPlusPkAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes, including the primary key.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+        final List list)
+    {
+        m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes, including the primary key.
+     * @param list such list.
+     */
+    protected void setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+        final List list)
+    {
+        immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+            list);
+    }
+
+    /**
+     * Retrieves the cached list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes, including the primary key.
+     * @return such list.
+     */
+    protected List getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    {
+        return m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes;
+    }
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes, including the primary key.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    {
+        List result =
+            getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
+
+        if  (result == null)
+        {
+            result =
+                super.getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
+            setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached, non-parent attributes, plus the primary key.
+     * @param attrs such attributes.
+     */
+    protected final void immutableSetCachedNonParentPlusPkAttributes(final List attrs)
+    {
+        m__lCachedNonParentPlusPkAttributes = attrs;
+    }
+
+    /**
+     * Specifies the cached, non-parent attributes, plus the primary key.
+     * @param attrs such attributes.
+     */
+    protected void setCachedNonParentPlusPkAttributes(final List attrs)
+    {
+        immutableSetCachedNonParentPlusPkAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the cached, non-parent attributes, plus the primary key.
+     * @return such information.
+     */
+    protected List getCachedNonParentPlusPkAttributes()
+    {
+        return m__lCachedNonParentPlusPkAttributes;
+    }
+
+    /**
+     * Retrieves the non-parent attributes, plus the primary key.
+     * @return such attributes.
+     */
+    public List getNonParentPlusPkAttributes()
+    {
+        List result = getCachedNonParentPlusPkAttributes();
+
+        if  (   (result == null)
+             || (result.size() == 0))
+        {
+            result = super.getNonParentPlusPkAttributes();
+            setCachedNonParentPlusPkAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Workaround for debugging templates.
+     * @return true.
+     */
+    public boolean getStStuff()
+    {
+        return true;
     }
 }
