@@ -98,9 +98,9 @@ public abstract class AbstractTableDecorator
     private List m__lChildAttributes;
 
     /**
-     * A flag indicating whether the attributes have been cleaned up.
+     * A flag indicating whether the attributes should be cleaned up.
      */
-    private boolean m__bAttributesCleanedUp = false;
+    private boolean m__bAttributesShouldBeCleanedUp = true;
 
     /**
      * Creates an <code>AbstractTableDecorator</code> with the
@@ -342,30 +342,30 @@ public abstract class AbstractTableDecorator
     }
     
     /**
-     * Specifies whether the attributes have been cleaned up.
+     * Specifies whether the attributes should be cleaned up.
      * @param flag such flag.
      */
-    protected final void immutableSetAttributesCleanedUp(final boolean flag)
+    protected final void immutableSetAttributesShouldBeCleanedUp(final boolean flag)
     {
-        m__bAttributesCleanedUp = flag;
+        m__bAttributesShouldBeCleanedUp = flag;
     }
     
     /**
      * Specifies whether the attributes have been cleaned up.
      * @param flag such flag.
      */
-    protected void setAttributesCleanedUp(final boolean flag)
+    protected void setAttributesShouldBeCleanedUp(final boolean flag)
     {
-        immutableSetAttributesCleanedUp(flag);
+        immutableSetAttributesShouldBeCleanedUp(flag);
     }
     
     /**
      * Retrieves whether the attributes have been cleaned up.
      * @return such flag.
      */
-    protected boolean getAttributesCleanedUp()
+    protected boolean getAttributesShouldBeCleanedUp()
     {
-        return m__bAttributesCleanedUp;
+        return m__bAttributesShouldBeCleanedUp;
     }
 
     /**
@@ -1196,7 +1196,7 @@ public abstract class AbstractTableDecorator
         return
             getNonParentPlusPkAttributes(
                 getName(),
-                getAttributes(),
+                getAllAttributes(),
                 getParentTable(),
                 getMetadataManager(),
                 getDecoratorFactory(),
@@ -1346,7 +1346,7 @@ public abstract class AbstractTableDecorator
                 getChildAttributes(),
                 getMetadataManager(),
                 getDecoratorFactory(),
-                getAttributesCleanedUp());
+                getAttributesShouldBeCleanedUp());
     }
 
     /**
@@ -1355,8 +1355,8 @@ public abstract class AbstractTableDecorator
      * @param childAttributes the child's attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param attributesCleanedUp whether the child attributes have been removed
-     * from the attribute list already.
+     * @param attributesShouldBeCleanedUp whether the child attributes should be removed
+     * from the attribute list.
      * @return such information.
      * @precondition table != null
      * @precondition childAttributes != null
@@ -1368,7 +1368,7 @@ public abstract class AbstractTableDecorator
         final List childAttributes,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final boolean attributesCleanedUp)
+        final boolean attributesShouldBeCleanedUp)
     {
         List result = super.getAttributes();
 
@@ -1378,21 +1378,20 @@ public abstract class AbstractTableDecorator
             result =
                 decorateAttributes(
                     table, metadataManager, decoratorFactory);
-        }
         
-        if  (   (result != null)
-             && (!attributesCleanedUp))
-        {
-            result =
-                removeOverridden(
-                    childAttributes,
-                    result,
-                    table,
-                    metadataManager,
-                    TableDecoratorHelper.getInstance());
-            
-            super.setAttributes(result);
-            setAttributesCleanedUp(true);
+            if  (   (result != null)
+                 && (attributesShouldBeCleanedUp))
+            {
+                result =
+                    removeOverridden(
+                        childAttributes,
+                        result,
+                        table,
+                        metadataManager,
+                        TableDecoratorHelper.getInstance());
+
+                super.setAttributes(result);
+            }
         }
 
         return result;
@@ -1861,6 +1860,48 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * plus the primary key.
+     * @return such attributes.
+     */
+    public List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    {
+        return getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(getAllAttributes(), getPrimaryKey());
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * or read-only, plus the primary key.
+     * @param allAttributes the attributes.
+     * @param primaryKey the primary key.
+     * @return such attributes.
+     */
+    protected List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(
+        final List allAttributes, final List primaryKey)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (allAttributes != null) ? allAttributes.size() : 0;
+
+        Attribute t_Attribute;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) allAttributes.get(t_iIndex);
+
+            if  (   (t_Attribute != null)
+                 && (   (   (!t_Attribute.getManagedExternally())
+                         && (!t_Attribute.isReadOnly()))
+                     || (isPartOf(primaryKey, t_Attribute))))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Checks whether given attribute belongs to a concrete attribute list.
      * @param list the list.
      * @param attribute the attribute.
@@ -1964,7 +2005,8 @@ public abstract class AbstractTableDecorator
                 getParentTable(),
                 getNonParentNonManagedExternallyPlusPkAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -1975,13 +2017,16 @@ public abstract class AbstractTableDecorator
      * own attributes, plus the primary key.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
      * @return such list.
+     * @precondition tableDecoratorHelper != null
      */
     protected List getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
         final Table parent,
         final List nonParentNonManagedExternallyPlusPkAttributes,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper tableDecoratorHelper)
     {
         List result = new ArrayList();
 
@@ -2000,12 +2045,15 @@ public abstract class AbstractTableDecorator
                         parent, metadataManager, decoratorFactory);
             }
             
-            result.addAll(t_ParentDecorator.getAllNonManagedExternallyPlusPkAttributes());
+            result.addAll(
+                t_ParentDecorator.getAllNonManagedExternallyNonReadOnlyPlusPkAttributes());
         }
 
         if  (nonParentNonManagedExternallyPlusPkAttributes != null)
         {
-            result.addAll(nonParentNonManagedExternallyPlusPkAttributes);
+            result.addAll(
+                tableDecoratorHelper.removeReadOnly(
+                    nonParentNonManagedExternallyPlusPkAttributes));
         }
 
         return result;

@@ -144,6 +144,13 @@ public interface TableDecorator
     public List getAllNonManagedExternallyPlusPkAttributes();
 
     /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * or read-only, plus primary key.
+     * @return such attributes.
+     */
+    public List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+
+    /**
      * Retrieves the non-parent attributes.
      * @return such attributes.
      */
@@ -174,6 +181,13 @@ public interface TableDecorator
      * @return such list.
      */
     public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+
+    /**
+     * Retrieves the list of parent's all attributes and the non-parent
+     * non-managed-externally, non-read-only own attributes, plus the primary key.
+     * @return such list.
+     */
+    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent,

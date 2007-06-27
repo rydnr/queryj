@@ -122,6 +122,12 @@ public abstract class AbstractAttribute
     private String m__strBooleanNull;
 
     /**
+     * The stack trace to know who created me.
+     */
+    private final StackTraceElement[] m__aStackTrace =
+        new RuntimeException("fake").getStackTrace();
+
+    /**
      * Creates an <code>AbstractAttribute</code> with minimal information,
      * allowing lazy-loading mechanisms for non-essential information.
      * @param tableName the table name.

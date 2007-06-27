@@ -175,6 +175,11 @@ public class CachingTableDecorator
     private List m__lCachedAllNonManagedExternallyPlusPkAttributes;
 
     /**
+     * The cached all non-managed-externally, non-readonly attributes, plus the primary key.
+     */
+    private List m__lCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes;
+
+    /**
      * The cached all parent and non-parent non-managed-externally, non-readonly attributes,
      * plus the primary key.
      */
@@ -1459,6 +1464,55 @@ public class CachingTableDecorator
         {
             result = super.getAllNonManagedExternallyPlusPkAttributes();
             setCachedAllNonManagedExternallyPlusPkAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies all attributes, including the parent's, but not the externally-managed,
+     * or read-only, plus the primary key.
+     * @param list the list.
+     */
+    protected final void immutableSetCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(
+        final List list)
+    {
+        m__lCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes = list;
+    }
+
+    /**
+     * Specifies all attributes, including the parent's, but not the externally-managed,
+     * or read-only, plus the primary key.
+     * @param list the list.
+     */
+    protected void setCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(final List list)
+    {
+        immutableSetCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(list);
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * or read-only, plus the primary key.
+     * @return such attributes.
+     */
+    protected List getCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    {
+        return m__lCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes;
+    }
+
+    /**
+     * Retrieves all attributes, including the parent's, but not the externally-managed,
+     * or read-only, plus the primary key.
+     * @return such attributes.
+     */
+    public List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    {
+        List result = getCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+
+        if  (result == null)
+        {
+            result = super.getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+            setCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(result);
         }
 
         return result;

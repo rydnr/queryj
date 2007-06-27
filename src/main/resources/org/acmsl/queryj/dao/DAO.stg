@@ -456,7 +456,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
        * The <sql.id> SQL.
        */
      public static final String <sql.idAsConstant>_SQL =
-         <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
+         <sql.splittedQuotedValue; separator=" +\n"><endif>;}; separator="\n\n">
                
       // custom updates or inserts
 <input.custom_updates_or_inserts:{sql|
@@ -845,9 +845,6 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
 <if(parent)>
         parentDAO.update(
-//            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-<if(parent.stStuff)>
-<endif>
             <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
