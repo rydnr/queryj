@@ -2373,17 +2373,22 @@ public abstract class AbstractJdbcMetadataManager
             {
                 Iterator t_itFieldIterator =
                     t_cExternallyManagedTableFields.iterator();
-
+                String t_strField;                
                 while  (   (t_itFieldIterator != null)
                         && (t_itFieldIterator.hasNext()))
                 {
-                    Object t_Field = t_itFieldIterator.next();
+                
+                    t_strField = "" + t_itFieldIterator.next();
 
-                    result =
-                          ""
-                        + t_mExternallyManagedFields.get(
-                              buildExternallyManagedFieldRetrievalQueryKey(
-                                  tableName, t_Field));
+                    if  (t_strField.equalsIgnoreCase(fieldName))
+                    {
+                        result =
+                            ""
+                            + t_mExternallyManagedFields.get(
+                                buildExternallyManagedFieldKey(
+                                    tableName, t_strField));
+                        break;
+                    }
                 }
             }
         }
