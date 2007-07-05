@@ -2367,7 +2367,7 @@ public abstract class AbstractJdbcMetadataManager
             Collection t_cExternallyManagedTableFields =
                 (Collection)
                     t_mExternallyManagedFields.get(
-                        buildExternallyManagedFieldKey(tableName));
+                        buildExternallyManagedFieldRetrievalQueryKey(tableName));
 
             if  (t_cExternallyManagedTableFields != null)
             {
@@ -2385,7 +2385,7 @@ public abstract class AbstractJdbcMetadataManager
                         result =
                             ""
                             + t_mExternallyManagedFields.get(
-                                buildExternallyManagedFieldKey(
+                                buildExternallyManagedFieldRetrievalQueryKey(
                                     tableName, t_strField));
                         break;
                     }
