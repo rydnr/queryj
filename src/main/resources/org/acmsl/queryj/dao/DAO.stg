@@ -386,7 +386,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         + "FROM <input.table_name_uppercased> "
         + "WHERE "
 <input.pk_attributes:{attr |
-        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+        +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <endif>
 
     /**
@@ -405,7 +405,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
         + "WHERE "
 <input.pk_attributes:{attr |
-        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+        +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 
      /**
       * The SQL to delete.
@@ -415,7 +415,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         + "FROM <input.table_name_uppercased> "
         + "WHERE "
 <input.pk_attributes:{attr |
-        +   "<attr.nameUppercased> = ?}; separator=" AND\"\n">";
+        +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 
       /**
        * The SQL to insert.
