@@ -1,7 +1,7 @@
 // Enhancements about theme contributed by Orange Soft over the original
 // S5 v1.2a1 code base from Eric Meyer.
 // 
-// $Id: slides.js,v 1.1 2006/08/24 18:38:07 luque Exp $
+// $Id$
 //
 // S5 v1.2a1 slides.js -- released into the Public Domain
 //

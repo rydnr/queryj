@@ -40,9 +40,9 @@
  * replacing *LogFactory.getLog(..)* with
  * using the *UniqueLogLogFactory.getLog(..)*.
  *
- * Version: $Revision: 689 $ ($Author: chous $ at $Date: 2006-07-13 11:43:34 +0200 (Thu, 13 Jul 2006) $)
+ * Version: $Revision$ ($Author$ at $Date$)
  *
- * $Id: QueryJAntLog.java 689 2006-07-13 09:43:34Z chous $
+ * $Id$
  *
  */
 package org.acmsl.queryj.tools.logging;
@@ -65,7 +65,7 @@ import java.io.PrintStream;
  * using the <code>UniqueLogFactory.getLog(..)</code>.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
- * @version $Revision: 689 $ ($Author: chous $ at $Date: 2006-07-13 11:43:34 +0200 (Thu, 13 Jul 2006) $)
+ * @version $Revision$ ($Author$ at $Date$)
  */
 public class QueryJCLILog
     implements  QueryJLog

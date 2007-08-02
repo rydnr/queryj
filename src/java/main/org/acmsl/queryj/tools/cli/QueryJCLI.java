@@ -70,7 +70,7 @@ import java.util.Properties;
  * @since Thu Jul 13 18:21:23 2006
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
- * @version $Revision: $
+ * @version $Revision$
  */
 public final class QueryJCLI
     implements  QueryJCLIOptions
@@ -367,6 +367,11 @@ public final class QueryJCLI
             {
                 t_strOption =
                     commandLine.getOptionValue(INFO_VERBOSITY_OPTION);
+
+                if  (t_strOption != null)
+                {
+                    result = Log.INFO;
+                }
             }
         }
 

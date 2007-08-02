@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.cli;
  * Defines the names of the command-line options.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
- * @version $Revision: $
+ * @version $Revision$
  */
 public interface QueryJCLIOptions
 {

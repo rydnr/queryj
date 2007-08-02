@@ -151,10 +151,9 @@ public class QueryJCLIHelper
                 .withArgName("file")
                 .hasArg()
                 .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
-//                .withLongOption(CUSTOM_SQL_LONG_OPTION)
+                .withLongOpt(CUSTOM_SQL_LONG_OPTION)
+                .isRequired(false)
                 .create(CUSTOM_SQL_OPTION);
-
-        result.setRequired(false);
 
         return result;
     }
@@ -170,9 +169,8 @@ public class QueryJCLIHelper
                 .withArgName("file")
                 .hasArg()
                 .withDescription(CUSTOM_SQL_OPTION_DESCRIPTION)
+                .isRequired(false)
                 .create(CUSTOM_SQL_LONG_OPTION);
-
-        result.setRequired(false);
 
         return result;
     }
@@ -189,24 +187,25 @@ public class QueryJCLIHelper
             OptionBuilder
                 .withArgName("v")
                 .withDescription(INFO_VERBOSITY_OPTION_DESCRIPTION)
+                .isRequired(false);
                 .create(INFO_VERBOSITY_OPTION);
-        t_Option.setRequired(false);
         t_cResult.add(t_Option);
 
         t_Option =
             OptionBuilder
                 .withArgName("vv")
                 .withDescription(DEBUG_VERBOSITY_OPTION_DESCRIPTION)
+                .isRequired(false);
                 .create(DEBUG_VERBOSITY_OPTION);
-        t_Option.setRequired(false);
+
         t_cResult.add(t_Option);
 
         t_Option =
             OptionBuilder
                 .withArgName("vvv")
                 .withDescription(TRACE_VERBOSITY_OPTION_DESCRIPTION)
+                .isRequired(false);
                 .create(TRACE_VERBOSITY_OPTION);
-        t_Option.setRequired(false);
         t_cResult.add(t_Option);
 
         return (Option[]) t_cResult.toArray(EMPTY_OPTION_ARRAY);
@@ -221,9 +220,8 @@ public class QueryJCLIHelper
         Option result =
             OptionBuilder
                 .withDescription(HELP_OPTION_DESCRIPTION)
+                .isRequired(false);
                 .create(HELP_OPTION);
-
-        result.setRequired(false);
 
         return result;
     }
@@ -237,9 +235,9 @@ public class QueryJCLIHelper
         Option result =
             OptionBuilder
                 .withDescription(HELP_OPTION_DESCRIPTION)
+                .withLongOpt(HELP_LONG_OPTION)
+                .isRequired(false);
                 .create(HELP_LONG_OPTION);
-
-        result.setRequired(false);
 
         return result;
     }
@@ -409,7 +407,7 @@ public class QueryJCLIHelper
                 File t_File = new File(configurationFile);
 
                 if  (   (t_File.exists())
-                        && (t_File.canRead()))
+                     && (t_File.canRead()))
                 {
                     stream = new FileInputStream(t_File);
                     result = readConfigurationSettings(stream, false);
