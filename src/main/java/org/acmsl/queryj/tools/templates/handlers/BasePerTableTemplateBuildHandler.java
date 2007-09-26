@@ -96,12 +96,31 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected boolean handle(final Map parameters)
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseProductName(parameters),
-                retrieveDatabaseProductVersion(parameters),
-                retrieveDatabaseIdentifierQuoteString(parameters));
+        boolean result = false;
+
+        if  (shouldHandle(parameters))
+        {
+            result =
+                handle(
+                    parameters,
+                    retrieveDatabaseProductName(parameters),
+                    retrieveDatabaseProductVersion(parameters),
+                    retrieveDatabaseIdentifierQuoteString(parameters));
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the handler should actually perform its logic
+     * or not.
+     * @param parameters the parameters.
+     * @return <code>true</code> in such case.
+     * @precondition parameters != null
+     */
+    protected boolean shouldHandle(final Map parameters)
+    {
+        return true;
     }
 
     /**

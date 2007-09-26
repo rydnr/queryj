@@ -73,8 +73,8 @@ import java.io.IOException;
            >Jose San Leandro</a>
  */
 public class DAOTestTemplateGenerator
-    implements  DAOTestTemplateFactory,
-                Singleton
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -103,67 +103,60 @@ public class DAOTestTemplateGenerator
     }
 
     /**
-     * Generates a DAO test template.
-     * @param tableTemplate the table template.
+     * Generates a DAO template.
+     * @param tableName the table name.
      * @param metadataManager the metadata manager.
+     * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
-     * @param daoPackageName the DAO's package name.
-     * @param valueObjectPackageName the value object's package name.
-     * @param jdbcDriver the JDBC driver.
-     * @param jdbcUrl the JDBC URL.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
+     * @param basePackageName the base package name.
+     * @param repositoryName the name of the repository.
+     * @param jmx whether to support JMX.
      * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
      * @return a template.
      * @throws QueryJException if the factory class is invalid.
-     * @precondition tableTemplate != null
+     * @precondition tableName != null
      * @precondition metadataManager != null
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition engineVersion != null
      * @precondition quote != null
-     * @precondition daoPackageName != null
-     * @precondition valueObjectPackageName != null
-     * @precondition jdbcDriver != null
-     * @precondition jdbcUrl != null
-     * @precondition jdbcUserName != null
-     * @precondition jdbcPassword != null
+     * @precondition basePackageName != null
+     * @precondition repositoryName != null
      */
-    public DAOTestTemplate createDAOTestTemplate(
-        final TableTemplate tableTemplate,
+    public BasePerTableTemplate createTemplate(
+        final String tableName,
         final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final String daoPackageName,
-        final String valueObjectPackageName,
-        final String jdbcDriver,
-        final String jdbcUrl,
-        final String jdbcUsername,
-        final String jdbcPassword,
-        final String header)
+        final String basePackageName,
+        final String repositoryName,
+        final boolean jmx,
+        final String header,
+        final String jndiLocation)
       throws  QueryJException
     {
         return
             new DAOTestTemplate(
-                tableTemplate,
+                tableName,
                 metadataManager,
+                customSqlProvider,
                 header,
                 getDecoratorFactory(),
                 packageName,
                 engineName,
                 engineVersion,
                 quote,
-                daoPackageName,
-                valueObjectPackageName,
-                jdbcDriver,
-                jdbcUrl,
-                jdbcUsername,
-                jdbcPassword);
+                basePackageName,
+                repositoryName,
+                jmx,
+                jndiLocation);
     }
 
     /**

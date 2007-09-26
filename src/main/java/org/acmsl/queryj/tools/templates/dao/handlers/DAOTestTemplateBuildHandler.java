@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,34 +42,17 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.AntCommand;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.TestTemplate;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -77,347 +61,105 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOTestTemplateBuildHandler
-    extends    AbstractAntCommandHandler
-    implements TemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * Creates a DAOTestTemplateBuildHandler.
-     */
-    public DAOTestTemplateBuildHandler() {};
-
-    /**
-     * Handles given command.
-     * @param command the command to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition command != null
-     */
-    public boolean handle(final AntCommand command)
-        throws  BuildException
-    {
-        return handle(command.getAttributeMap());
-    }
-    
-    /**
-     * Handles given parameters.
-     * @param parameters the parameters to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     */
-    protected boolean handle(final Map parameters)
-        throws  BuildException
-    {
-        return
-            handle(
-                parameters,
-                retrieveMetadataManager(parameters),
-                retrieveTableTemplates(parameters),
-                retrieveDatabaseProductName(parameters),
-                retrieveDatabaseProductVersion(parameters),
-                retrieveDatabaseIdentifierQuoteString(parameters),
-                retrieveDAOPackage(
-                    retrieveDatabaseProductName(parameters),
-                    parameters),
-                retrieveValueObjectPackage(parameters),
-                retrieveJdbcDriver(parameters),
-                retrieveJdbcUrl(parameters),
-                retrieveJdbcUsername(parameters),
-                retrieveJdbcPassword(parameters),
-                retrieveHeader(parameters),
-                DAOTestTemplateGenerator.getInstance());
-    }
-    
-    /**
-     * Builds the DAO test templates.
+     * Checks whether the handler should actually perform its logic
+     * or not.
      * @param parameters the parameters.
-     * @param metadataManager the database metadata manager.
-     * @param tableTemplates the table templates.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote.
-     * @param daoPackage the DAO package.
-     * @param voPackage the value-object package.
-     * @param jdbcDriver the JDBC driver.
-     * @param jdbcUrl the JDBC url.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
-     * @param header the header.
-     * @param templateFactory the template factory.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     * @precondition metadataManager != null
-     * @precondition tableTemplates != null
-     * @precondition templateFactory != null
-     */
-    protected boolean handle(
-        final Map parameters,
-        final MetadataManager metadataManager,
-        final TableTemplate[] tableTemplates,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String daoPackage,
-        final String voPackage,
-        final String jdbcDriver,
-        final String jdbcUrl,
-        final String jdbcUsername,
-        final String jdbcPassword,
-        final String header,
-        final DAOTestTemplateFactory factory)
-      throws  BuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            int t_iLength =
-                (tableTemplates != null) ? tableTemplates.length : 0;
-
-            String t_strPackage =
-                retrieveDAOTestPackage(
-                    engineName, parameters);
-
-            DAOTestTemplate[] t_aDAOTestTemplates =
-                new DAOTestTemplate[t_iLength];
-
-            for  (int t_iDAOTestIndex = 0;
-                      t_iDAOTestIndex < t_iLength;
-                      t_iDAOTestIndex++) 
-            {
-                t_aDAOTestTemplates[t_iDAOTestIndex] =
-                    factory.createDAOTestTemplate(
-                        tableTemplates[t_iDAOTestIndex],
-                        metadataManager,
-                        t_strPackage,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        daoPackage,
-                        voPackage,
-                        jdbcDriver,
-                        jdbcUrl,
-                        jdbcUsername,
-                        jdbcPassword,
-                        header);
-
-                storeTestTemplate(
-                    t_aDAOTestTemplates[t_iDAOTestIndex],
-                    parameters);
-            }
-
-            storeDAOTestTemplates(t_aDAOTestTemplates, parameters);
-        }
-        catch  (final QueryJException queryjException)
-        {
-            throw new BuildException(queryjException);
-        }
-        
-        return result;
-    }
-
-    /**
-     * Retrieves the DAO Test's package name from the attribute map.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition engineName != nul
+     * @return <code>true</code> in such case.
      * @precondition parameters != null
      */
-    protected String retrieveDAOTestPackage(
-        final String engineName, final Map parameters)
-      throws  BuildException
+    protected boolean shouldHandle(final Map parameters)
     {
         return
-            retrieveDAOTestPackage(
-                engineName, parameters, PackageUtils.getInstance());
+            Boolean.TRUE.equals(
+                parameters.get(ParameterValidationHandler.GENERATE_TESTS));
     }
 
     /**
-     * Retrieves the DAO Test's package name from the attribute map.
+     * Retrieves the template factory.
+     * @return such instance.
+     */
+    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    {
+        return DAOTestTemplateGenerator.getInstance();
+    }
+
+    /**
+     * Retrieves the package name.
+     * @param tableName the table name.
      * @param engineName the engine name.
-     * @param parameters the parameter map.
+     * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition engineName != nul
-     * @precondition parameters != null
+     * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
-    protected String retrieveDAOTestPackage(
+    protected String retrievePackage(
+        final String tableName,
         final String engineName,
-        final Map parameters,
+        final String projectPackage,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
-        return
-            packageUtils.retrieveDAOTestPackage(
-                retrieveProjectPackage(parameters),
-                engineName,
-                retrieveUseSubfoldersFlag(parameters));
+        throw
+            new IllegalArgumentException(
+                "Descendant classes should override this. "
+                + "retrievePackage logic follows a different approach "
+                + "in BasePerTableTemplateBuildHandler than "
+                + DAOTestTemplateBuildHandler.class);
     }
 
     /**
-     * Retrieves the DAO's package name from the attribute map.
+     * Retrieves the package name from the attribute map.
+     * @param tableName the table name.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition engineName != nul
      * @precondition parameters != null
      */
-    protected String retrieveDAOPackage(
-        final String engineName, final Map parameters)
-      throws  BuildException
+    protected String retrievePackage(
+        final String tableName, final String engineName, final Map parameters)
     {
         return
-            retrieveDAOPackage(
+            retrievePackage(
+                retrieveProjectPackage(parameters),
                 engineName,
-                parameters,
+                retrieveUseSubfoldersFlag(parameters),
                 PackageUtils.getInstance());
     }
 
     /**
-     * Retrieves the DAO's package name from the attribute map.
+     * Retrieves the package name.
+     * @param projectPackage the project package.
      * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param useSubfoldersFlag whether to use src/main/java or not.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
-     * @precondition engineName != nul
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
-    protected String retrieveDAOPackage(
+    protected String retrievePackage(
+        final String projectPackage,
         final String engineName,
-        final Map parameters,
+        final boolean useSubfoldersFlag,
         final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
-            packageUtils.retrieveDAOPackage(
-                retrieveProjectPackage(parameters),
-                engineName);
+            packageUtils.retrieveDAOTestPackage(
+                projectPackage, engineName, useSubfoldersFlag);
     }
 
     /**
-     * Retrieves the value object's package name from the attribute map.
+     * Stores the template collection in given attribute map.
+     * @param templates the templates.
      * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrieveValueObjectPackage(final Map parameters)
-        throws  BuildException
-    {
-        return
-            retrieveValueObjectPackage(
-                parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the value object's package name from the attribute map.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     * @precondition packageUtils != null
-     */
-    protected String retrieveValueObjectPackage(
-        final Map parameters, final PackageUtils packageUtils)
-      throws  BuildException
-    {
-        return
-            packageUtils.retrieveValueObjectPackage(
-                retrieveProjectPackage(parameters));
-    }
-
-    /**
-     * Retrieves the test template collection.
-     * @param parameters the parameter map.
-     * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected Collection retrieveTestTemplates(final Map parameters)
-        throws  BuildException
-    {
-        return
-            (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
-    }
-
-    /**
-     * Stores the DAO template collection in given attribute map.
-     * @param daoTestTemplates the DAO templates.
-     * @param parameters the parameter map.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition daoTestTemplates != null
-     * @precondition parameters != null
-     */
-    protected void storeDAOTestTemplates(
-        final DAOTestTemplate[] daoTestTemplates,
-        final Map parameters)
-      throws  BuildException
-    {
-        parameters.put(TemplateMappingManager.DAO_TEST_TEMPLATES, daoTestTemplates);
-    }
-
-    /**
-     * Retrieves the table templates.
-     * @param parameters the parameter map.
-     * @return such templates.
-     * @throws BuildException if the templates cannot be stored for any reason.
-     * @precondition parameters != null
-     */
-    protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
-      throws  BuildException
-    {
-        return
-            (TableTemplate[])
-                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-    }
-
-    /**
-     * Stores the test template collection.
-     * @param templates the test templates.
-     * @param parameters the parameter map.
-     * @return the test templates.
-     * @throws BuildException if the test template retrieval process if faulty.
      * @precondition templates != null
      * @precondition parameters != null
      */
-    protected void storeTestTemplates(
-        final Collection templates, final Map parameters)
-      throws  BuildException
+    protected void storeTemplates(
+        final BasePerTableTemplate[] templates, final Map parameters)
     {
-        parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
-    }
-
-    /**
-     * Stores a new test template.
-     * @param testTemplate the test template.
-     * @param parameters the parameter map.
-     * @throws BuildException if the test template retrieval process if faulty.
-     * @precondition template != null
-     * @precondition parameters != null
-     */
-    protected void storeTestTemplate(
-        final TestTemplate template, final Map parameters)
-      throws  BuildException
-    {
-        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
-
-        if  (t_cTestTemplates == null) 
-        {
-            t_cTestTemplates = new ArrayList();
-            storeTestTemplates(t_cTestTemplates, parameters);
-        }
-
-        t_cTestTemplates.add(template);
+        parameters.put(TemplateMappingManager.DAO_TEST_TEMPLATES, templates);
     }
 }

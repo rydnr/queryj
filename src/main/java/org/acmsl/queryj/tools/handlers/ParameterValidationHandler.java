@@ -217,14 +217,19 @@ public class ParameterValidationHandler
     public static final String EXTRACT_TABLES = "extract.tables";
 
     /**
+     * The extract-procedures attribute name.
+     */
+    public static final String EXTRACT_PROCEDURES = "extract.procedures";
+
+    /**
      * The extract-functions attribute name.
      */
     public static final String EXTRACT_FUNCTIONS = "extract.functions";
 
     /**
-     * The extract-procedures attribute name.
+     * The extract-functions attribute name.
      */
-    public static final String EXTRACT_PROCEDURES = "extract.procedures";
+    public static final String GENERATE_TESTS = "generate.tests";
 
     /**
      * The JNDI location for data sources  attribute name.

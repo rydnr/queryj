@@ -98,7 +98,7 @@ public class DAOBundle
                 new DAOChooserTemplateHandlerBundle(),
                 new DAOFactoryTemplateHandlerBundle(),
                 new DAOTemplateHandlerBundle(),
-//                new DAOTestTemplateHandlerBundle(),
+                new DAOTestTemplateHandlerBundle(),
                 new DataAccessManagerTemplateHandlerBundle(),
                 new DataAccessContextLocalTemplateHandlerBundle(),
                 new FkStatementSetterTemplateHandlerBundle(),

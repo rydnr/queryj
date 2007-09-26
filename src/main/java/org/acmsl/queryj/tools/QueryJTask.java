@@ -205,6 +205,16 @@ public class QueryJTask
     private boolean m__bExtractFunctions = true;
 
     /**
+     * The "generate-tests" value.
+     */
+    private String m__strGenerateTests;
+
+    /**
+     * The "generate-tests" flag.
+     */
+    private boolean m__bGenerateTests = true;
+
+    /**
      * The JNDI location for the data sources.
      */
     private String m__strJNDIDataSources;
@@ -913,6 +923,56 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to generate the tests.
+     * @param generateTests the function generateion setting.
+     */
+    protected final void immutableSetGenerateTests(final String generateTests)
+    {
+        m__strGenerateTests = generateTests;
+    }
+
+    /**
+     * Specifies whether to generate the tests.
+     * @param generateTests the function generateion setting.
+     */
+    public void setGenerateTests(final String generateTests)
+    {
+        immutableSetGenerateTests(generateTests);
+
+        setGenerateTestsFlag(
+            (   (generateTests == null)
+             || (   (generateTests.trim().toLowerCase().equals("yes"))
+                 || (generateTests.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to generate the tests.
+     * @return such setting.
+     */
+    public String getGenerateTests()
+    {
+        return m__strGenerateTests;
+    }
+
+    /**
+     * Specifies the "generate-tests" flag.
+     * @param flag such flag.
+     */
+    protected void setGenerateTestsFlag(final boolean flag)
+    {
+        m__bGenerateTests = flag;
+    }
+
+    /**
+     * Retrieves the "generate-tests" flag.
+     * @return such flag.
+     */
+    protected boolean getGenerateTestsFlag()
+    {
+        return m__bGenerateTests;
+    }
+
+    /**
      * Specifices the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      */
@@ -1296,6 +1356,7 @@ public class QueryJTask
             boolean t_bExtractTables = getExtractTablesFlag();
             boolean t_bExtractProcedures = getExtractProceduresFlag();
             boolean t_bExtractFunctions = getExtractFunctionsFlag();
+            boolean t_bGenerateTests = getGenerateTestsFlag();
             String t_strJNDIDataSources = getJndiDataSource();
 
             boolean t_bGenerateMockDAOImplementation =
@@ -1423,6 +1484,12 @@ public class QueryJTask
                 t_mAttributes.put(
                     ParameterValidationHandler.EXTRACT_FUNCTIONS,
                     (t_bExtractFunctions
+                     ?  Boolean.TRUE
+                     :  Boolean.FALSE));
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.GENERATE_TESTS,
+                    (t_bGenerateTests
                      ?  Boolean.TRUE
                      :  Boolean.FALSE));
 
