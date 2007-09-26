@@ -149,7 +149,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 quote,
                 retrieveMetadataManager(parameters),
                 retrieveCustomSqlProvider(parameters),
-                retrieveTemplateFactory(),
+                retrieveTemplateFactory(parameters),
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveJmx(parameters),
@@ -160,9 +160,11 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Retrieves the template factory.
+     * @param parameters the parameters.
      * @return such instance.
      */
-    protected abstract BasePerTableTemplateFactory retrieveTemplateFactory();
+    protected abstract BasePerTableTemplateFactory retrieveTemplateFactory(
+        final Map parameters);
 
     /**
      * Handles given information.
@@ -216,20 +218,25 @@ public abstract class BasePerTableTemplateBuildHandler
         {
             String t_strTableName = null;
 
+            String t_strPackage =
+                retrievePackage(
+                    t_strTableName, engineName, parameters);
+
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
                 t_strTableName = tableTemplates[t_iIndex].getTableName();
 
                 t_aTemplates[t_iIndex] =
-                    templateFactory.createTemplate(
+                    createTemplate(
+                        parameters,
                         t_strTableName,
-                        metadataManager,
-                        customSqlProvider,
-                        retrievePackage(
-                            t_strTableName, engineName, parameters),
                         engineName,
                         engineVersion,
                         quote,
+                        metadataManager,
+                        customSqlProvider,
+                        t_strPackage,
+                        templateFactory,
                         projectPackage,
                         repository,
                         jmx,
@@ -245,6 +252,65 @@ public abstract class BasePerTableTemplateBuildHandler
         }
         
         return result;
+    }
+
+    /**
+     * Creates a template with given information.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the quote character.
+     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the custom sql provider.
+     * @param packageName the package name.
+     * @param templateFactory the template factory.
+     * @param projectPackage the project package.
+     * @param repository the repository.
+     * @param jmx whether to support JMX.
+     * @param header the header.
+     * @param jndiLocation the location of the datasource in JNDI.
+     * @return the new template.
+     * @throws QueryJException in case the template cannot be created.
+     * @precondition parameters != null
+     * @precondition engineName != null
+     * @precondition metadataManager != null
+     * @precondition customSqlProvider != null
+     * @precondition packageName != null
+     * @precondition templateFactory != null
+     * @precondition projectPackage != null
+     * @precondition repository != null
+     */
+    protected BasePerTableTemplate createTemplate(
+        final Map parameters,
+        final String tableName,
+        final String engineName,
+        final String engineVersion,
+        final String quote,
+        final MetadataManager metadataManager,
+        final CustomSqlProvider customSqlProvider,
+        final String packageName,
+        final BasePerTableTemplateFactory templateFactory,
+        final String projectPackage,
+        final String repository,
+        final boolean jmx,
+        final String header,
+        final String jndiLocation)
+      throws QueryJException
+    {
+        return
+            templateFactory.createTemplate(
+                tableName,
+                metadataManager,
+                customSqlProvider,
+                packageName,
+                engineName,
+                engineVersion,
+                quote,
+                projectPackage,
+                repository,
+                jmx,
+                header,
+                jndiLocation);
     }
 
     /**

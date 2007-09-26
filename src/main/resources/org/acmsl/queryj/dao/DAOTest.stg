@@ -198,7 +198,7 @@ public class <input.tr_name_capitalized>DAOTest
      * The database connection's username.
      */
     public static final String USER_NAME =
-        "<input.jdbc_username>";
+        "<input.jdbc_user>";
 
     /**
      * The database connection's password.

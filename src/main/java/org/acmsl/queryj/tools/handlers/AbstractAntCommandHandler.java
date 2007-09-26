@@ -198,7 +198,7 @@ public abstract class AbstractAntCommandHandler
      * @throws BuildException if the driver retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcDriver(final Map parameters)
+    public static String retrieveJdbcDriver(final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
@@ -211,7 +211,7 @@ public abstract class AbstractAntCommandHandler
      * @throws BuildException if the url retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcUrl(final Map parameters)
+    public static String retrieveJdbcUrl(final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_URL);
@@ -224,7 +224,7 @@ public abstract class AbstractAntCommandHandler
      * @throws BuildException if the username retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcUsername(final Map parameters)
+    public static String retrieveJdbcUser(final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
@@ -237,7 +237,7 @@ public abstract class AbstractAntCommandHandler
      * @throws BuildException if the password retrieval process if faulty.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcPassword(final Map parameters)
+    public static String retrieveJdbcPassword(final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);

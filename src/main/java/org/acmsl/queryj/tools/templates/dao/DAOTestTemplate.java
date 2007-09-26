@@ -50,6 +50,11 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Map;
+
 /**
  * Template for creating JUnit tests to ensure generated DAOs
  * are working fine and the connection correctly managed.
@@ -59,6 +64,26 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 public class DAOTestTemplate
     extends  BasePerTableTemplate
 {
+    /**
+     * The jdbc driver class name.
+     */
+    private String m__strJdbcDriver;
+
+    /**
+     * The JDBC url.
+     */
+    private String m__strJdbcUrl;
+
+    /**
+     * The JDBC username.
+     */
+    private String m__strJdbcUser;
+
+    /**
+     * The JDBC password.
+     */
+    private String m__strJdbcPassword;
+
     /**
      * Builds a <code>DAOTestTemplate</code> using given information.
      * @param tableName the table name.
@@ -74,6 +99,10 @@ public class DAOTestTemplate
      * @param repositoryName the repository name.
      * @param jmx whether to support JMX.
      * @param jndiLocation the location of the datasource in JNDI.
+     * @param jdbcDriver the JDBC driver.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUser the JDBC username.
+     * @param jdbcPassword the JDBC password.
      */
     public DAOTestTemplate(
         final String tableName,
@@ -88,7 +117,11 @@ public class DAOTestTemplate
         final String basePackageName,
         final String repositoryName,
         final boolean jmx,
-        final String jndiLocation)
+        final String jndiLocation,
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUser,
+        final String jdbcPassword)
     {
         super(
             tableName,
@@ -104,6 +137,119 @@ public class DAOTestTemplate
             repositoryName,
             jmx,
             jndiLocation);
+
+        immutableSetJdbcDriver(jdbcDriver);
+        immutableSetJdbcUrl(jdbcUrl);
+        immutableSetJdbcUser(jdbcUser);
+        immutableSetJdbcPassword(jdbcPassword);
+    }
+
+    /**
+     * Specifies the JDBC driver.
+     * @param driver such information.
+     */
+    protected final void immutableSetJdbcDriver(final String driver)
+    {
+        m__strJdbcDriver = driver;
+    }
+
+    /**
+     * Specifies the JDBC driver.
+     * @param driver such information.
+     */
+    protected void setJdbcDriver(final String driver)
+    {
+        immutableSetJdbcDriver(driver);
+    }
+
+    /**
+     * Retrieves the JDBC driver.
+     * @return such information.
+     */
+    public String getJdbcDriver()
+    {
+        return m__strJdbcDriver;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param url such information.
+     */
+    protected final void immutableSetJdbcUrl(final String url)
+    {
+        m__strJdbcUrl = url;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param url such information.
+     */
+    protected void setJdbcUrl(final String url)
+    {
+        immutableSetJdbcUrl(url);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return such information.
+     */
+    public String getJdbcUrl()
+    {
+        return m__strJdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC user.
+     * @param user such information.
+     */
+    protected final void immutableSetJdbcUser(final String user)
+    {
+        m__strJdbcUser = user;
+    }
+
+    /**
+     * Specifies the JDBC user.
+     * @param user such information.
+     */
+    protected void setJdbcUser(final String user)
+    {
+        immutableSetJdbcUser(user);
+    }
+
+    /**
+     * Retrieves the JDBC user.
+     * @return such information.
+     */
+    public String getJdbcUser()
+    {
+        return m__strJdbcUser;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param password such information.
+     */
+    protected final void immutableSetJdbcPassword(final String password)
+    {
+        m__strJdbcPassword = password;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param password such information.
+     */
+    protected void setJdbcPassword(final String password)
+    {
+        immutableSetJdbcPassword(password);
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @return such information.
+     */
+    public String getJdbcPassword()
+    {
+        return m__strJdbcPassword;
     }
 
     /**
@@ -131,5 +277,92 @@ public class DAOTestTemplate
     public String getTemplateName()
     {
         return "DAOTest";
+    }
+
+    /**
+     * Fills the common parameters.
+     * @param input the input.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param jmx whether to support JMX.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition input != null
+     * @precondition tableName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected void fillCommonParameters(
+        final Map input,
+        final String tableName,
+        final String engineName,
+        final String engineVersion,
+        final boolean jmx,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        fillCommonParameters(
+            input,
+            tableName,
+            engineName,
+            engineVersion,
+            jmx,
+            metadataManager,
+            decoratorFactory,
+            getJdbcDriver(),
+            getJdbcUrl(),
+            getJdbcUser(),
+            getJdbcPassword());
+    }
+
+    /**
+     * Fills the common parameters.
+     * @param input the input.
+     * @param tableName the table name.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param jmx whether to support JMX.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param jdbcDriver the JDBC driver.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUser the JDBC user.
+     * @param jdbcPassword the JDBC password.
+     * @precondition input != null
+     * @precondition tableName != null
+     * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected void fillCommonParameters(
+        final Map input,
+        final String tableName,
+        final String engineName,
+        final String engineVersion,
+        final boolean jmx,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory,
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUser,
+        final String jdbcPassword)
+    {
+        super.fillCommonParameters(
+            input,
+            tableName,
+            engineName,
+            engineVersion,
+            jmx,
+            metadataManager,
+            decoratorFactory);
+
+        input.put("jdbc_driver", jdbcDriver);
+        input.put("jdbc_url", jdbcUrl);
+        input.put("jdbc_user", jdbcUser);
+        input.put("jdbc_password", jdbcPassword);
     }
 }

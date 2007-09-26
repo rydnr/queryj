@@ -42,7 +42,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
@@ -79,11 +81,29 @@ public class DAOTestTemplateBuildHandler
 
     /**
      * Retrieves the template factory.
+     * @param map the map.
      * @return such instance.
      */
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected BasePerTableTemplateFactory retrieveTemplateFactory(
+        final Map map)
     {
-        return DAOTestTemplateGenerator.getInstance();
+        return createTemplateGenerator(map);
+    }
+
+    /**
+     * Creates the template generator.
+     * @param map the map.
+     * @return such instance.
+     */
+    public static DAOTestTemplateGenerator createTemplateGenerator(
+        final Map map)
+    {
+        return
+            new DAOTestTemplateGenerator(
+                retrieveJdbcDriver(map),
+                retrieveJdbcUrl(map),
+                retrieveJdbcUser(map),
+                retrieveJdbcPassword(map));
     }
 
     /**

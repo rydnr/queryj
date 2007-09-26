@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -74,9 +75,10 @@ public class PkStatementSetterTemplateBuildHandler
 
     /**
      * Retrieves the template factory.
+     * @param map the map.
      * @return such instance.
      */
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected BasePerTableTemplateFactory retrieveTemplateFactory(final Map map)
     {
         return PkStatementSetterTemplateGenerator.getInstance();
     }

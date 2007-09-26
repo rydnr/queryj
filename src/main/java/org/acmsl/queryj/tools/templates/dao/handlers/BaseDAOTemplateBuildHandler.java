@@ -73,9 +73,10 @@ public class BaseDAOTemplateBuildHandler
 
     /**
      * Retrieves the template factory.
+     * @param map the map.
      * @return such instance.
      */
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected BasePerTableTemplateFactory retrieveTemplateFactory(final Map map)
     {
         return BaseDAOTemplateGenerator.getInstance();
     }

@@ -79,29 +79,151 @@ public class DAOTestTemplateGenerator
                 BasePerTableTemplateGenerator
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * The jdbc driver class name.
      */
-    private static class DAOTestTemplateGeneratorSingletonContainer
+    private String m__strJdbcDriver;
+
+    /**
+     * The JDBC url.
+     */
+    private String m__strJdbcUrl;
+
+    /**
+     * The JDBC username.
+     */
+    private String m__strJdbcUser;
+
+    /**
+     * The JDBC password.
+     */
+    private String m__strJdbcPassword;
+
+    /**
+     * Creates a <code>DAOTestTemplateGenerator</code> with given information.
+     * @param jdbcDriver the JDBC driver.
+     * @param jdbcUrl the JDBC url.
+     * @param jdbcUser the JDBC user.
+     * @param jdbcPassword the JDBC password.
+
+     */
+    public DAOTestTemplateGenerator(
+        final String jdbcDriver,
+        final String jdbcUrl,
+        final String jdbcUser,
+        final String jdbcPassword)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final DAOTestTemplateGenerator SINGLETON =
-            new DAOTestTemplateGenerator();
+        immutableSetJdbcDriver(jdbcDriver);
+        immutableSetJdbcUrl(jdbcUrl);
+        immutableSetJdbcUser(jdbcUser);
+        immutableSetJdbcPassword(jdbcPassword);
     }
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Specifies the JDBC driver.
+     * @param driver such information.
      */
-    protected DAOTestTemplateGenerator() {};
+    protected final void immutableSetJdbcDriver(final String driver)
+    {
+        m__strJdbcDriver = driver;
+    }
 
     /**
-     * Retrieves a <code>DAOTestTemplateGenerator</code> instance.
-     * @return such instance.
+     * Specifies the JDBC driver.
+     * @param driver such information.
      */
-    public static DAOTestTemplateGenerator getInstance()
+    protected void setJdbcDriver(final String driver)
     {
-        return DAOTestTemplateGeneratorSingletonContainer.SINGLETON;
+        immutableSetJdbcDriver(driver);
+    }
+
+    /**
+     * Retrieves the JDBC driver.
+     * @return such information.
+     */
+    public String getJdbcDriver()
+    {
+        return m__strJdbcDriver;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param url such information.
+     */
+    protected final void immutableSetJdbcUrl(final String url)
+    {
+        m__strJdbcUrl = url;
+    }
+
+    /**
+     * Specifies the JDBC url.
+     * @param url such information.
+     */
+    protected void setJdbcUrl(final String url)
+    {
+        immutableSetJdbcUrl(url);
+    }
+
+    /**
+     * Retrieves the JDBC url.
+     * @return such information.
+     */
+    public String getJdbcUrl()
+    {
+        return m__strJdbcUrl;
+    }
+
+    /**
+     * Specifies the JDBC user.
+     * @param user such information.
+     */
+    protected final void immutableSetJdbcUser(final String user)
+    {
+        m__strJdbcUser = user;
+    }
+
+    /**
+     * Specifies the JDBC user.
+     * @param user such information.
+     */
+    protected void setJdbcUser(final String user)
+    {
+        immutableSetJdbcUser(user);
+    }
+
+    /**
+     * Retrieves the JDBC user.
+     * @return such information.
+     */
+    public String getJdbcUser()
+    {
+        return m__strJdbcUser;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param password such information.
+     */
+    protected final void immutableSetJdbcPassword(final String password)
+    {
+        m__strJdbcPassword = password;
+    }
+
+    /**
+     * Specifies the JDBC password.
+     * @param password such information.
+     */
+    protected void setJdbcPassword(final String password)
+    {
+        immutableSetJdbcPassword(password);
+    }
+
+    /**
+     * Retrieves the JDBC password.
+     * @return such information.
+     */
+    public String getJdbcPassword()
+    {
+        return m__strJdbcPassword;
     }
 
     /**
@@ -158,7 +280,11 @@ public class DAOTestTemplateGenerator
                 basePackageName,
                 repositoryName,
                 jmx,
-                jndiLocation);
+                jndiLocation,
+                getJdbcDriver(),
+                getJdbcUrl(),
+                getJdbcUser(),
+                getJdbcPassword());
     }
 
     /**

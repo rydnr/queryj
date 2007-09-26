@@ -212,7 +212,7 @@ public class QueryJTask
     /**
      * The "generate-tests" flag.
      */
-    private boolean m__bGenerateTests = true;
+    private boolean m__bGenerateTests = false;
 
     /**
      * The JNDI location for the data sources.

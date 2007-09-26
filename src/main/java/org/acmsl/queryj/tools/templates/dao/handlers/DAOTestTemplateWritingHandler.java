@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -115,7 +116,8 @@ public class DAOTestTemplateWritingHandler
                 retrieveOutputDir(
                     retrieveDatabaseProductName(parameters),
                     parameters),
-                DAOTestTemplateGenerator.getInstance());
+                DAOTestTemplateBuildHandler.createTemplateGenerator(
+                    parameters));
     }
                 
     /**
