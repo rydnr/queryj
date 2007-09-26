@@ -44,13 +44,15 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.dao.DAODecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTestTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOTestTemplateFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -177,7 +179,7 @@ public class DAOTestTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final DAOTestTemplate daoTestTemplate,
+        final BasePerTableTemplate daoTestTemplate,
         final File outputDir)
       throws  IOException
     {
@@ -205,7 +207,7 @@ public class DAOTestTemplateGenerator
      * @precondition singularPluralFormConverter != null
      */
     protected void write(
-        final DAOTestTemplate daoTestTemplate,
+        final BasePerTableTemplate daoTestTemplate,
         final File outputDir,
         final FileUtils fileUtils,
         final StringUtils stringUtils,
@@ -220,8 +222,7 @@ public class DAOTestTemplateGenerator
             + daoTestTemplate.getEngineName()
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    daoTestTemplate
-                        .getTableTemplate().getTableName().toLowerCase()),
+                    daoTestTemplate.getTableName().toLowerCase()),
                 '_')
             + "DAOTest.java",
             daoTestTemplate.generate());
