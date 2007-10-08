@@ -191,6 +191,11 @@ public class CachingTableDecorator
     private List m__lCachedNonParentPlusPkAttributes;
 
     /**
+     * The cached all parent tables.
+     */
+    private List m__lCachedAllParentTables;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -1611,6 +1616,50 @@ public class CachingTableDecorator
         {
             result = super.getNonParentPlusPkAttributes();
             setCachedNonParentPlusPkAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached all parent tables.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllParentTables(final List list)
+    {
+        m__lCachedAllParentTables = list;
+    }
+
+    /**
+     * Specifies the cached all parent tables.
+     * @param list such list.
+     */
+    protected void setCachedAllParentTables(final List list)
+    {
+        immutableSetCachedAllParentTables(list);
+    }
+
+    /**
+     * Retrieves the cached all parent tables.
+     * @return such list.
+     */
+    protected List getCachedAllParentTables()
+    {
+        return m__lCachedAllParentTables;
+    }
+
+    /**
+     * Retrieves all parent tables.
+     * @return such information.
+     */
+    public List getAllParentTables()
+    {
+        List result = getCachedAllParentTables();
+
+        if  (result == null)
+        {
+            result = super.getAllParentTables();
+            setCachedAllParentTables(result);
         }
 
         return result;

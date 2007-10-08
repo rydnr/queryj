@@ -131,6 +131,12 @@ public interface TableDecorator
     public List getAllAttributes();
 
     /**
+     * Retrieves all parent tables.
+     * @return such tables.
+     */
+    public List getAllParentTables();
+
+    /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.
      * @return such attributes.
      */

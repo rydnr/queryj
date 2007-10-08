@@ -375,7 +375,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <if(parent)>
 <table.allParentAndNonParentAttributes:{ attr |
         +   "<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
-        + "FROM <parent.nameUppercased>, <input.table_name_uppercased> "
+        + "FROM <input.table_name_uppercased>, <table.allParentTables:{ table | <table.nameUppercased>}; separator=", "> "
         + "WHERE "
 <input.pk_attributes:{pk |
         +   "<attr.tableNameUppercased>.<pk.nameUppercased> = ? }; separator=" AND \"\n">"

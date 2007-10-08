@@ -2058,4 +2058,47 @@ public abstract class AbstractTableDecorator
 
         return result;
     }
+
+    /**
+     * Retrieves all parent tables.
+     * @return such tables.
+     */
+    public List getAllParentTables()
+    {
+        return
+            getAllParentTables(
+                getName(), getMetadataManager(), getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves all parent tables.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the decorator factory.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     * @return such tables.
+     */
+    protected List getAllParentTables(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        List result = new ArrayList();
+
+        String parentName;
+
+        String currentName = metadataManager.getParentTable(tableName);
+
+        while  (currentName != null)
+        {
+            result.add(
+                decoratorFactory.createTableDecorator(currentName, metadataManager));
+
+            currentName = metadataManager.getParentTable(currentName);
+        }
+
+        return result;
+    }
 }

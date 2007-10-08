@@ -155,7 +155,8 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveJmx(parameters),
                 retrieveHeader(parameters),
                 retrieveJndiLocation(parameters),
-                retrieveTableTemplates(parameters));
+                retrieveTableTemplates(parameters),
+                PackageUtils.getInstance());
     }
 
     /**
@@ -181,6 +182,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param header the header.
      * @param jndiLocation the location of the datasource in JNDI.
      * @param tableTemplates the table templates.
+     * @param packageUtils the <code>PackageUtils</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -191,6 +193,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition repository != null
      * @precondition tableTemplates != null
+     * @precondition packageUtils != null
      */
     protected boolean handle(
         final Map parameters,
@@ -205,7 +208,8 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean jmx,
         final String header,
         final String jndiLocation,
-        final TableTemplate[] tableTemplates)
+        final TableTemplate[] tableTemplates,
+        final PackageUtils packageUtils)
     {
         boolean result = false;
 
@@ -217,14 +221,18 @@ public abstract class BasePerTableTemplateBuildHandler
         try
         {
             String t_strTableName = null;
-
-            String t_strPackage =
-                retrievePackage(
-                    t_strTableName, engineName, parameters);
+            String t_strPackage = null;
 
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
             {
                 t_strTableName = tableTemplates[t_iIndex].getTableName();
+
+                t_strPackage =
+                    retrievePackage(
+                        t_strTableName,
+                        engineName,
+                        projectPackage,
+                        packageUtils);
 
                 t_aTemplates[t_iIndex] =
                     createTemplate(
@@ -311,26 +319,6 @@ public abstract class BasePerTableTemplateBuildHandler
                 jmx,
                 header,
                 jndiLocation);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param tableName the table name.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
-     */
-    protected String retrievePackage(
-        final String tableName, final String engineName, final Map parameters)
-    {
-        return
-            retrievePackage(
-                tableName,
-                engineName,
-                retrieveProjectPackage(parameters),
-                PackageUtils.getInstance());
     }
 
     /**

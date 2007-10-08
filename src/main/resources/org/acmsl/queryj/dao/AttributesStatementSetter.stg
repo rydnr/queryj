@@ -275,6 +275,11 @@ public class <input.vo_name>AttributesStatementSetter
         final boolean updateOperation,
         final boolean insertOperation)
     {
+<if(parent)>
+        <table.allParentAndNonParentNonReadOnlyAttributes:
+          { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
+          separator="\n">
+<else>
         <input.pk_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
@@ -282,6 +287,8 @@ public class <input.vo_name>AttributesStatementSetter
         <input.nonpk_non_readonly_attributes:
           { attr | immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);};
           separator="\n">
+<endif>
+
 
         immutableSetUpdateOperation(updateOperation);
         immutableSetInsertOperation(insertOperation);
