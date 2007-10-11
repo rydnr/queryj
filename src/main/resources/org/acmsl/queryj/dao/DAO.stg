@@ -380,7 +380,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <input.pk_attributes:{pk |
         +   "<attr.tableNameUppercased>.<pk.nameUppercased> = ? }; separator=" AND \"\n">"
         <find_by_pk_sql_join(table=table, parent=table.parentTable)>
-        <table.allParentTables:{ table | <if(table.parentTable)><find_by_pk_sql_join(table=table, parent=table.parentTable)><endif>}>
+        <table.allParentTables:{ table | <if(table.parentTable)><find_by_pk_sql_join(table=table, parent=table.parentTable)><endif>}>;
 <else>
 <input.attributes:{attr |
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
@@ -2219,7 +2219,7 @@ find_by_pk_sql_join_fk(parentForeignKey, parentPrimaryKey) ::= <<
  @param parentPrimaryKey the parent's primary key.
 !>
 <parentForeignKey.attributes,parentPrimaryKey:{ pk, parentPk |
-+   " AND <pk.tableNameUppercased>.<pk.nameUppercased> = <parentPk.tableNameUppercased>.<parentPk.nameUppercased> "}; separator="\n">;
++   " AND <pk.tableNameUppercased>.<pk.nameUppercased> = <parentPk.tableNameUppercased>.<parentPk.nameUppercased> "}; separator="\n">
 >>
 
 attribute_resultset_extractor_class(
