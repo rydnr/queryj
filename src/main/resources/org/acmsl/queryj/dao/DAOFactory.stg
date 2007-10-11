@@ -304,7 +304,7 @@ public class <input.engine_name><input.vo_name>DAOFactory
             try
             {
 //                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
-                result = new TransactionAwareDataSourceWrapper(result);
+                result = new TransactionAwareDataSourceProxy(result);
             }
             catch  (final CannotGetJdbcConnectionException exception)
             {
