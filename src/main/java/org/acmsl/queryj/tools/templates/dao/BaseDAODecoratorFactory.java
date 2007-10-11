@@ -41,11 +41,13 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
+import org.acmsl.queryj.tools.metadata.ParameterDecorator;
 import org.acmsl.queryj.tools.metadata.PropertyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
@@ -99,5 +101,18 @@ public class BaseDAODecoratorFactory
         final Attribute attribute, final MetadataManager metadataManager)
     {
         return new BaseDAOAttributeDecorator(attribute, metadataManager);
+    }
+
+    /**
+     * Creates an <code>ParameterDecorator</code> for given
+     * parameter instance.
+     * @param parameter the parameter.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated parameter for the concrete template.
+     */
+    public ParameterDecorator createDecorator(
+        final Parameter parameter, final MetadataManager metadataManager)
+    {
+        return new BaseDAOParameterDecorator(parameter, metadataManager);
     }
 }

@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
@@ -110,6 +111,23 @@ public class CachingDecoratorFactory
         final Attribute attribute, final MetadataManager metadataManager)
     {
         return new CachingAttributeDecorator(attribute, metadataManager);
+    }
+
+    /**
+     * Creates an <code>ParameterDecorator</code> for given
+     * parameter instance.
+     * @param parameter the parameter.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated parameter for the concrete template.
+     * @precondition parameter != null
+     * @precondition metadataManager != null
+     */
+    public ParameterDecorator createDecorator(
+        final Parameter parameter, final MetadataManager metadataManager)
+    {
+        return
+            new CachingParameterDecorator(
+                parameter, metadataManager);
     }
 
     /**

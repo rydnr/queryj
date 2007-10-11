@@ -398,7 +398,8 @@ public abstract class AbstractSqlDecorator
             getParameters(
                 getParameterRefs(),
                 getCustomSqlProvider(),
-                getMetadataTypeManager());
+                getMetadataManager(),
+                getDecoratorFactory());
     }
 
     /**
@@ -406,15 +407,19 @@ public abstract class AbstractSqlDecorator
      * @todo fix reference to customSqlProvider.
      * @param parameterRefs the parameter references.
      * @param customSqlProvider the <code>CustomSqlProvider</code>.
-     * @param metadataTypeManager the metadata type manager.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code>
+     * nstance.
      * @return such information.
      * @precondition customSqlProvider != null
-     * @precondition metadataTypeManager != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
      */
     protected Collection getParameters(
         final Collection parameterRefs,
         final CustomSqlProvider customSqlProvider,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
     {
         Collection result = new ArrayList();
 
@@ -441,8 +446,9 @@ public abstract class AbstractSqlDecorator
                         if  (t_Parameter != null)
                         {
                             result.add(
-                                new CachingParameterDecorator(
-                                    t_Parameter, metadataTypeManager));
+                                decoratorFactory.createDecorator(
+                                    t_Parameter,
+                                    metadataManager));
                         }
                         else
                         {

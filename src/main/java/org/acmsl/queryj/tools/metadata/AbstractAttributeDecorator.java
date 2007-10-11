@@ -883,7 +883,7 @@ public abstract class AbstractAttributeDecorator
 
     /**
      * Retrieves the attribute name.
-     * @param attribute attribute.
+     * @param attribute the attribute.
      * @return such information.
      * @precondition attribute != null
      */

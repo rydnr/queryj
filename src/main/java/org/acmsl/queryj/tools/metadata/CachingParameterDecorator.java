@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -42,7 +43,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.Parameter;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ParameterDecorator;
 
 /**
@@ -52,7 +53,7 @@ import org.acmsl.queryj.tools.metadata.ParameterDecorator;
  *         >Jose San Leandro</a>
  */
 public class CachingParameterDecorator
-    extends  ParameterDecorator
+    extends  AbstractParameterDecorator
 {
     /**
      * The cached SQL type.
@@ -75,6 +76,11 @@ public class CachingParameterDecorator
     private String m__strCachedFieldType;
 
     /**
+     * The cached Java type.
+     */
+    private String m__strCachedJavaType;
+
+    /**
      * The cached lowercased name.
      */
     private String m__strCachedNameLowercased;
@@ -87,15 +93,15 @@ public class CachingParameterDecorator
     /**
      * Creates a <code>CachingParameterDecorator</code> with given parameter.
      * @param parameter the parameter to decorate.
-     * @param metadataTypeManager the metadata type manager.
+     * @param metadataManager the metadata manager.
      * @precondition parameter != null
-     * @precondition metadataTypeManager != null
+     * @precondition metadataManager != null
      */
     public CachingParameterDecorator(
         final Parameter parameter,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataManager metadataManager)
     {
-        super(parameter, metadataTypeManager);
+        super(parameter, metadataManager);
     }
 
     /**
@@ -273,6 +279,51 @@ public class CachingParameterDecorator
         {
             result = super.getFieldType();
             setCachedFieldType(result);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Specifies the cached java type.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedJavaType(
+        final String value)
+    {
+        m__strCachedJavaType = value;
+    }
+    
+    /**
+     * Specifies the cached java type.
+     * @param value the value to cache.
+     */
+    protected void setCachedJavaType(final String value)
+    {
+        immutableSetCachedJavaType(value);
+    }
+
+    /**
+     * Retrieves the cached java type.
+     * @return such value.
+     */
+    public String getCachedJavaType()
+    {
+        return m__strCachedJavaType;
+    }
+
+    /**
+     * Retrieves the java type of the parameter.
+     * @return such information.
+     */
+    public String getJavaType()
+    {
+        String result = getCachedJavaType();
+        
+        if  (result == null)
+        {
+            result = super.getJavaType();
+            setCachedJavaType(result);
         }
         
         return result;

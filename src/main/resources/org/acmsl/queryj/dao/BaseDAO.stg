@@ -290,13 +290,13 @@ public <input.vo_name> findByPrimaryKey(
       foreignKey=it, input=input); separator="\n">
 
     <input.custom_selects:custom_select(
-      cs=it, table=input.table, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n\n">
 
     <input.custom_updates_or_inserts:custom_update_or_insert(
-      cs=it, input=input); separator="\n">
+      cs=it, input=input); separator="\n\n">
 
     <input.custom_selects_for_update:custom_select_for_update(
-      cs=it, table=input.table, input=input); separator="\n">
+      cs=it, table=input.table, input=input); separator="\n\n">
 }
 >>
 
@@ -414,7 +414,7 @@ custom_select(cs, table, input) ::= <<
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
 <if(cs.parameters)>
- <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <cs.parameters:attribute_javadoc(name=it.name); separator="\n">
 <else>
 <if(cs.dynamic)>
  * @param params the query parameters.
@@ -438,7 +438,7 @@ public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
 
 <if(cs.parameters)>
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">
+    <cs.parameters:attribute_declaration_impl(attr=it); separator=",\n">
 <else>
 <if(cs.dynamic)>
     final Object[] parameters

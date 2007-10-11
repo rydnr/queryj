@@ -363,6 +363,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
     return result;
 }
 <endif>
+<endif>
 >>
 
 custom_select_parameter_type_specification(type) ::= <<
