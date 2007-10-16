@@ -115,8 +115,9 @@ class(input) ::= <<
  * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
+ * @deprecated
  */
-public class <input.tr_name_capitalized>ThreadAwareDataSourceWrapper
+class <input.tr_name_capitalized>ThreadAwareDataSourceWrapper
     extends  TransactionAwareDataSourceProxy
 //    implements  SmartDataSource
 {
@@ -135,7 +136,7 @@ public class <input.tr_name_capitalized>ThreadAwareDataSourceWrapper
      * given data source.
      * @param dataSource the data source to wrap.
      */
-    public <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(final DataSource dataSource)
+    private <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(final DataSource dataSource)
     {
         super(dataSource);
     }
@@ -143,7 +144,7 @@ public class <input.tr_name_capitalized>ThreadAwareDataSourceWrapper
     /**
      * Creates a \<code><input.tr_name_capitalized>ThreadAwareDataSourceWrapper\</code>.
      */
-    public <input.tr_name_capitalized>ThreadAwareDataSourceWrapper() {};
+    private <input.tr_name_capitalized>ThreadAwareDataSourceWrapper() {};
 
     /**
      * Specifies the JDBC connection.

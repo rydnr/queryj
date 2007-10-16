@@ -118,7 +118,7 @@ public class <input.tr_name_capitalized>DataSourceTransactionToken
     /**
      * DataSource reference.
      */
-    private _DataSourceWrapper m__DataSource;
+    private DataSource m__DataSource;
 
     /**
      * The wrapped transaction status.
@@ -180,12 +180,11 @@ public class <input.tr_name_capitalized>DataSourceTransactionToken
      */
     protected final void immutableSetDataSource(final DataSource dataSource)
     {
-        DataSource t_DataSource = immutableGetDataSource();
-
-        if  (t_DataSource != dataSource)
-        {
-            m__DataSource = new _DataSourceWrapper(dataSource);
-        }
+        m__DataSource = dataSource;
+//        DataSource t_DataSource = immutableGetDataSource();
+//        if  (t_DataSource != dataSource) {
+//            m__DataSource = new _DataSourceWrapper(dataSource);
+//        }
     }
 
     /**
@@ -277,398 +276,398 @@ public class <input.tr_name_capitalized>DataSourceTransactionToken
     }
     */
 
-    /**
-     * Private \<code>DataSource\</code> wrapper.
-     * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
-     */
-    private static class _DataSourceWrapper
-        implements  DataSource
-    {
-        /**
-         * Concrete wrapped data source.
-         */
-        private DataSource m__DataSource;
-
-        /**
-         * The connection used in the transaction.
-         */
-        private Connection m__Connection;
-
-        /**
-         * Creates a _DataSourceWrapper using given data source.
-         * @param dataSource the data source to wrap.
-         */
-        public _DataSourceWrapper(final DataSource dataSource)
-        {
-            immutableSetDataSource(dataSource);
-        }
-
-        /**
-         * Specifies the data source.
-         * @param dataSource the data source.
-         */
-        private void immutableSetDataSource(final DataSource dataSource)
-        {
-            m__DataSource = dataSource;
-        }
-
-        /**
-         * Specifies the data source.
-         * @param dataSource the data source.
-         */
-        protected void setDataSource(final DataSource dataSource)
-        {
-            immutableSetDataSource(dataSource);
-        }
-
-        /**
-         * Retrieves the data source.
-         * @return the data source.
-         */
-        public DataSource getDataSource()
-        {
-            return m__DataSource;
-        }
-
-        /**
-         * Specifies the JDBC connection.
-         * @param connection the connection.
-         */
-        protected final void immutableSetConnection(final Connection connection)
-        {
-            m__Connection = connection;
-        }
-
-        /**
-         * Specifies the JDBC connection.
-         * @param connection the connection.
-         */
-        protected void setConnection(final Connection connection)
-        {
-            immutableSetConnection(connection);
-        }
-
-        /**
-         * Retrieves the JDBC connection.
-         * @return such connection.
-         */
-        protected Connection getInternalConnection()
-        {
-            return m__Connection;
-        }
-
-        /**
-         * Attempts to establish a database connection.
-         * @return the connection.
-         */
-        public Connection getConnection()
-            throws  SQLException
-        {
-            return
-                getConnection(
-                    getInternalConnection(),
-                    getDataSource());
-        }
-
-        /**
-         * Attempts to establish a database connection.
-         * @param internalConnection the internal connection.
-         * @param dataSource the data source.
-         * @return the connection.
-         */
-        protected Connection getConnection(
-            final Connection internalConnection,
-            final DataSource dataSource)
-          throws  SQLException
-        {
-            Connection result = internalConnection;
-
-            if  (   (result == null)
-                 && (dataSource != null))
-            {
-                result = dataSource.getConnection();
-                setConnection(result);
-                result.setAutoCommit(false);
-            }
-
-            return m__Connection;
-        }
-
-        /**
-         * Attempts to establish a database connection.
-         * @param userName the user name connection settings.
-         * @param password the user password connection settings.
-         * @return the connection.
-         */
-        public Connection getConnection(
-            final String userName, final String password)
-            throws  SQLException
-        {
-            return
-                getConnection(
-                    userName, password, getConnection(), getDataSource());
-        }
-
-        /**
-         * Attempts to establish a database connection.
-         * @param userName the user name connection settings.
-         * @param password the user password connection settings.
-         * @param connection the connection.
-         * @param dataSource the data source.
-         * @return the connection.
-         */
-        public Connection getConnection(
-            final String userName,
-            final String password,
-            final Connection connection,
-            final DataSource dataSource)
-          throws  SQLException
-        {
-            Connection result = connection;
-
-            if  (   (result == null)
-                 && (dataSource != null) )
-            {
-                result = dataSource.getConnection(userName, password);
-                setConnection(result);
-                result.setAutoCommit(false);
-            }
-
-            return result;
-        }
-
-        /**
-         * Retrieves the maximum time in seconds that this data source can
-         * wait while attempting to connect to a database.
-         * @return such timeout.
-         */
-        public int getLoginTimeout()
-            throws  SQLException
-        {
-            return getLoginTimeout(getDataSource());
-        }
-
-        /**
-         * Retrieves the maximum time in seconds that this data source can
-         * wait while attempting to connect to a database.
-         * @param dataSource the data source.
-         * @return such timeout.
-         */
-        protected int getLoginTimeout(final DataSource dataSource)
-            throws  SQLException
-        {
-            int result = 0;
-
-            if  (dataSource != null) 
-            {
-                result = dataSource.getLoginTimeout();
-            }
-            
-            return result;
-        }
-
-        /**
-         * Retrieves the log writer for this data source.
-         * @return such log writer.
-         */
-        public PrintWriter getLogWriter()
-            throws  SQLException
-        {
-            return getLogWriter(getDataSource());
-        }
-
-        /**
-         * Retrieves the log writer for this data source.
-         * @return such log writer.
-         */
-        protected PrintWriter getLogWriter(final DataSource dataSource)
-            throws  SQLException
-        {
-            PrintWriter result = null;
-
-            if  (dataSource != null) 
-            {
-                result = dataSource.getLogWriter();
-            }
-
-            return result;
-        }
-
-        /**
-         * Specifies the maximum time in seconds that this data source will
-         * wait while attempting to connect to a database.
-         * @param seconds the timeout.
-         */
-        public void setLoginTimeout(final int seconds)
-            throws  SQLException
-        {
-            setLoginTimeout(seconds, getDataSource());
-        }
-
-        /**
-         * Specifies the maximum time in seconds that this data source will
-         * wait while attempting to connect to a database.
-         * @param seconds the timeout.
-         * @param dataSource the data source.
-         */
-        protected void setLoginTimeout(
-            final int seconds, final DataSource dataSource)
-          throws  SQLException
-        {
-            if  (dataSource != null) 
-            {
-                dataSource.setLoginTimeout(seconds);
-            }
-        }
-
-        /**
-         * Specifies the log writer for this data source.
-         * @param out the log writer.
-         */
-        public void setLogWriter(final PrintWriter out)
-            throws  SQLException
-        {
-            setLogWriter(out, getDataSource());
-        }
-
-        /**
-         * Specifies the log writer for this data source.
-         * @param out the log writer.
-         * @param dataSource the data source.
-         */
-        protected void setLogWriter(
-            final PrintWriter out, final DataSource dataSource)
-          throws  SQLException
-        {
-            if  (dataSource != null) 
-            {
-                dataSource.setLogWriter(out);
-            }
-        }
-
-        /**
-         * Checks whether this instance is wrapper for given class.
-         * @param clazz the class to check.
-         * @return \<tt>true\</tt> in such case.
-         */
-        public boolean isWrapperFor(final Class clazz)
-        {
-            return (   (clazz != null)
-                    && (   (DataSource.class.equals(clazz))
-                        || (clazz.isAssignableFrom(DataSource.class))));
-        }
-
-        /**
-         * Checks whether this instance is a wrapper for given class.
-         * @param classInstance the class instance.
-         * @return \<tt>true\</tt> in such case.
-         */
-        public Object unwrap(final Class classInstance)
-        {
-            Object result = null;
-
-            if  (   (classInstance != null)
-                 && (DataSource.class.isAssignableFrom(classInstance)))
-            {
-                result = this;
-            }
-
-            return result;
-        }
-        
-        /**
-         * Checks if the data source is equal logically to given object.
-         * @param object the object to compare to.
-         * @return true if both data sources represents the same entity.
-         */
-        public boolean equals(final Object object)
-        {
-            return equals(object, getDataSource());
-        }
-
-        /**
-         * Checks if the data source is equal logically to given object.
-         * @param object the object to compare to.
-         * @param dataSource the data source.
-         * @return true if both data sources represents the same entity.
-         */
-        protected boolean equals(
-            final Object object, final DataSource dataSource)
-        {
-            boolean result = false;
-
-            if  (   (object != null)
-                 && (object instanceof DataSource))
-            {
-                DataSource t_GivenDataSource = (DataSource) object;
-
-                result =
-                    (   (t_GivenDataSource == dataSource)
-                     || (t_GivenDataSource.equals(dataSource)));
-            }
-
-            return result;
-        }
-
-        /**
-         * Retrieves the hash code.
-         * @return such value.
-         */
-        public int hashCode()
-        {
-            return hashCode(getDataSource());
-        }
-
-        /**
-         * Retrieves the hash code.
-         * @param dataSource the data source.
-         * @return such value.
-         */
-        protected int hashCode(final DataSource dataSource)
-        {
-            int result = 0;
-
-            if  (dataSource != null)
-            {
-                result = dataSource.hashCode();
-            }
-            else
-            {
-                result = super.hashCode();
-            }
-
-            return result;
-        }
-
-        /**
-         * Retrieves the textual version of this instance.
-         * @return such information.
-         */
-        public String toString()
-        {
-            return toString(getDataSource());
-        }
-
-        /**
-         * Retrieves the textual version of this instance.
-         * @param dataSource the wrapped data source.
-         * @return such information.
-         */
-        protected String toString(final DataSource dataSource)
-        {
-            String result = null;
-
-            if  (dataSource == null)
-            {
-                result = super.toString();
-            }
-            else
-            {
-                result = dataSource.toString();
-            }
-
-            return result;
-        }
-    }
+//    /**
+//     * Private \<code>DataSource\</code> wrapper.
+//     * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
+//     */
+//    private static class _DataSourceWrapper
+//        implements  DataSource
+//    {
+//        /**
+//         * Concrete wrapped data source.
+//         */
+//        private DataSource m__DataSource;
+//
+//        /**
+//         * The connection used in the transaction.
+//         */
+//        private Connection m__Connection;
+//
+//        /**
+//         * Creates a _DataSourceWrapper using given data source.
+//         * @param dataSource the data source to wrap.
+//         */
+//        public _DataSourceWrapper(final DataSource dataSource)
+//        {
+//            immutableSetDataSource(dataSource);
+//        }
+//
+//        /**
+//         * Specifies the data source.
+//         * @param dataSource the data source.
+//         */
+//        private void immutableSetDataSource(final DataSource dataSource)
+//        {
+//            m__DataSource = dataSource;
+//        }
+//
+//        /**
+//         * Specifies the data source.
+//         * @param dataSource the data source.
+//         */
+//        protected void setDataSource(final DataSource dataSource)
+//        {
+//            immutableSetDataSource(dataSource);
+//        }
+//
+//        /**
+//         * Retrieves the data source.
+//         * @return the data source.
+//         */
+//        public DataSource getDataSource()
+//        {
+//            return m__DataSource;
+//        }
+//
+//        /**
+//         * Specifies the JDBC connection.
+//         * @param connection the connection.
+//         */
+//        protected final void immutableSetConnection(final Connection connection)
+//        {
+//            m__Connection = connection;
+//        }
+//
+//        /**
+//         * Specifies the JDBC connection.
+//         * @param connection the connection.
+//         */
+//        protected void setConnection(final Connection connection)
+//        {
+//            immutableSetConnection(connection);
+//        }
+//
+//        /**
+//         * Retrieves the JDBC connection.
+//         * @return such connection.
+//         */
+//        protected Connection getInternalConnection()
+//        {
+//            return m__Connection;
+//        }
+//
+//        /**
+//         * Attempts to establish a database connection.
+//         * @return the connection.
+//         */
+//        public Connection getConnection()
+//            throws  SQLException
+//        {
+//            return
+//                getConnection(
+//                    getInternalConnection(),
+//                    getDataSource());
+//        }
+//
+//        /**
+//         * Attempts to establish a database connection.
+//         * @param internalConnection the internal connection.
+//         * @param dataSource the data source.
+//         * @return the connection.
+//         */
+//        protected Connection getConnection(
+//            final Connection internalConnection,
+//            final DataSource dataSource)
+//          throws  SQLException
+//        {
+//            Connection result = internalConnection;
+//
+//            if  (   (result == null)
+//                 && (dataSource != null))
+//            {
+//                result = dataSource.getConnection();
+//                setConnection(result);
+//                result.setAutoCommit(false);
+//            }
+//
+//            return m__Connection;
+//        }
+//
+//        /**
+//         * Attempts to establish a database connection.
+//         * @param userName the user name connection settings.
+//         * @param password the user password connection settings.
+//         * @return the connection.
+//         */
+//        public Connection getConnection(
+//            final String userName, final String password)
+//            throws  SQLException
+//        {
+//            return
+//                getConnection(
+//                    userName, password, getConnection(), getDataSource());
+//        }
+//
+//        /**
+//         * Attempts to establish a database connection.
+//         * @param userName the user name connection settings.
+//         * @param password the user password connection settings.
+//         * @param connection the connection.
+//         * @param dataSource the data source.
+//         * @return the connection.
+//         */
+//        public Connection getConnection(
+//            final String userName,
+//            final String password,
+//            final Connection connection,
+//            final DataSource dataSource)
+//          throws  SQLException
+//        {
+//            Connection result = connection;
+//
+//            if  (   (result == null)
+//                 && (dataSource != null) )
+//            {
+//                result = dataSource.getConnection(userName, password);
+//                setConnection(result);
+//                result.setAutoCommit(false);
+//            }
+//
+//            return result;
+//        }
+//
+//        /**
+//         * Retrieves the maximum time in seconds that this data source can
+//         * wait while attempting to connect to a database.
+//         * @return such timeout.
+//         */
+//        public int getLoginTimeout()
+//            throws  SQLException
+//        {
+//            return getLoginTimeout(getDataSource());
+//        }
+//
+//        /**
+//         * Retrieves the maximum time in seconds that this data source can
+//         * wait while attempting to connect to a database.
+//         * @param dataSource the data source.
+//         * @return such timeout.
+//         */
+//        protected int getLoginTimeout(final DataSource dataSource)
+//            throws  SQLException
+//        {
+//            int result = 0;
+//
+//            if  (dataSource != null) 
+//            {
+//                result = dataSource.getLoginTimeout();
+//            }
+//            
+//            return result;
+//        }
+//
+//        /**
+//         * Retrieves the log writer for this data source.
+//         * @return such log writer.
+//         */
+//        public PrintWriter getLogWriter()
+//            throws  SQLException
+//        {
+//            return getLogWriter(getDataSource());
+//        }
+//
+//        /**
+//         * Retrieves the log writer for this data source.
+//         * @return such log writer.
+//         */
+//        protected PrintWriter getLogWriter(final DataSource dataSource)
+//            throws  SQLException
+//        {
+//            PrintWriter result = null;
+//
+//            if  (dataSource != null) 
+//            {
+//                result = dataSource.getLogWriter();
+//            }
+//
+//            return result;
+//        }
+//
+//        /**
+//         * Specifies the maximum time in seconds that this data source will
+//         * wait while attempting to connect to a database.
+//         * @param seconds the timeout.
+//         */
+//        public void setLoginTimeout(final int seconds)
+//            throws  SQLException
+//        {
+//            setLoginTimeout(seconds, getDataSource());
+//        }
+//
+//        /**
+//         * Specifies the maximum time in seconds that this data source will
+//         * wait while attempting to connect to a database.
+//         * @param seconds the timeout.
+//         * @param dataSource the data source.
+//         */
+//        protected void setLoginTimeout(
+//            final int seconds, final DataSource dataSource)
+//          throws  SQLException
+//        {
+//            if  (dataSource != null) 
+//            {
+//                dataSource.setLoginTimeout(seconds);
+//            }
+//        }
+//
+//        /**
+//         * Specifies the log writer for this data source.
+//         * @param out the log writer.
+//         */
+//        public void setLogWriter(final PrintWriter out)
+//            throws  SQLException
+//        {
+//            setLogWriter(out, getDataSource());
+//        }
+//
+//        /**
+//         * Specifies the log writer for this data source.
+//         * @param out the log writer.
+//         * @param dataSource the data source.
+//         */
+//        protected void setLogWriter(
+//            final PrintWriter out, final DataSource dataSource)
+//          throws  SQLException
+//        {
+//            if  (dataSource != null) 
+//            {
+//                dataSource.setLogWriter(out);
+//            }
+//        }
+//
+//        /**
+//         * Checks whether this instance is wrapper for given class.
+//         * @param clazz the class to check.
+//         * @return \<tt>true\</tt> in such case.
+//         */
+//        public boolean isWrapperFor(final Class clazz)
+//        {
+//            return (   (clazz != null)
+//                    && (   (DataSource.class.equals(clazz))
+//                        || (clazz.isAssignableFrom(DataSource.class))));
+//        }
+//
+//        /**
+//         * Checks whether this instance is a wrapper for given class.
+//         * @param classInstance the class instance.
+//         * @return \<tt>true\</tt> in such case.
+//         */
+//        public Object unwrap(final Class classInstance)
+//        {
+//            Object result = null;
+//
+//            if  (   (classInstance != null)
+//                 && (DataSource.class.isAssignableFrom(classInstance)))
+//            {
+//                result = this;
+//            }
+//
+//            return result;
+//        }
+//        
+//        /**
+//         * Checks if the data source is equal logically to given object.
+//         * @param object the object to compare to.
+//         * @return true if both data sources represents the same entity.
+//         */
+//        public boolean equals(final Object object)
+//        {
+//            return equals(object, getDataSource());
+//        }
+//
+//        /**
+//         * Checks if the data source is equal logically to given object.
+//         * @param object the object to compare to.
+//         * @param dataSource the data source.
+//         * @return true if both data sources represents the same entity.
+//         */
+//        protected boolean equals(
+//            final Object object, final DataSource dataSource)
+//        {
+//            boolean result = false;
+//
+//            if  (   (object != null)
+//                 && (object instanceof DataSource))
+//            {
+//                DataSource t_GivenDataSource = (DataSource) object;
+//
+//                result =
+//                    (   (t_GivenDataSource == dataSource)
+//                     || (t_GivenDataSource.equals(dataSource)));
+//            }
+//
+//            return result;
+//        }
+//
+//        /**
+//         * Retrieves the hash code.
+//         * @return such value.
+//         */
+//        public int hashCode()
+//        {
+//            return hashCode(getDataSource());
+//        }
+//
+//        /**
+//         * Retrieves the hash code.
+//         * @param dataSource the data source.
+//         * @return such value.
+//         */
+//        protected int hashCode(final DataSource dataSource)
+//        {
+//            int result = 0;
+//
+//            if  (dataSource != null)
+//            {
+//                result = dataSource.hashCode();
+//            }
+//            else
+//            {
+//                result = super.hashCode();
+//            }
+//
+//            return result;
+//        }
+//
+//        /**
+//         * Retrieves the textual version of this instance.
+//         * @return such information.
+//         */
+//        public String toString()
+//        {
+//            return toString(getDataSource());
+//        }
+//
+//        /**
+//         * Retrieves the textual version of this instance.
+//         * @param dataSource the wrapped data source.
+//         * @return such information.
+//         */
+//        protected String toString(final DataSource dataSource)
+//        {
+//            String result = null;
+//
+//            if  (dataSource == null)
+//            {
+//                result = super.toString();
+//            }
+//            else
+//            {
+//                result = dataSource.toString();
+//            }
+//
+//            return result;
+//        }
+//    }
 }
 >>
