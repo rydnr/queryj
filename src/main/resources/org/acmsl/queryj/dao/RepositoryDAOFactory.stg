@@ -127,7 +127,7 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository
 import <basePackageName>.<baseDAOSubpackageName>.<repository>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<repository>DAOFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>JndiUtils;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>ThreadAwareDataSourceWrapper;
+//import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<repository>ThreadAwareDataSourceWrapper;
 >>
 
 class(input) ::= <<
@@ -269,7 +269,7 @@ public class <input.engine_name><input.tr_name_capitalized>DAOFactory
 //        {
 //            try
 //            {
-//                result = new <input.tr_name_capitalized><!--ThreadAwareDataSourceWrapper(result);
+//                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
 //            }
 //           catch  (final CannotGetJdbcConnectionException exception)
 //            {
