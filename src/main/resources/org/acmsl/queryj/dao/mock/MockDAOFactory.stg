@@ -87,7 +87,7 @@ source(input) ::= <<
  * Importing some Spring classes.
  */
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+//import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 /*
  * Importing some extension classes.

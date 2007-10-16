@@ -104,7 +104,7 @@ import org.springframework.jdbc.core.StatementCallback;
 import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+//import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.jdbc.object.SqlQuery;
 import org.springframework.jdbc.SQLWarningException;
 import org.springframework.jdbc.support.JdbcUtils;
@@ -309,8 +309,8 @@ public class <input.tr_name_capitalized>JdbcTemplate
     {
         Object result = null;
 
-        synchronized (<input.tr_name_capitalized>JdbcTemplate.class)
-        {
+//        synchronized (<input.tr_name_capitalized>JdbcTemplate.class)
+//        {
             result =
                 execute(
                     action,
@@ -318,7 +318,7 @@ public class <input.tr_name_capitalized>JdbcTemplate
                     getDAOListener(),
                     getNativeJdbcExtractor(),
                     getExceptionTranslator());
-        }
+//        }
 
         return result;
     }
@@ -352,10 +352,10 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(dataSource instanceof TransactionAwareDataSourceProxy))
-        {
-            t_DataSource = new TransactionAwareDataSourceProxy(dataSource);
-        }
+//        if  (!(dataSource instanceof TransactionAwareDataSourceProxy))
+//        {
+//            t_DataSource = new TransactionAwareDataSourceProxy(dataSource);
+//        }
 
         try
         {
@@ -486,10 +486,10 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(dataSource instanceof TransactionAwareDataSourceProxy))
-        {
-            t_DataSource = new TransactionAwareDataSourceProxy(dataSource);
-        }
+//        if  (!(dataSource instanceof TransactionAwareDataSourceProxy))
+//        {
+//            t_DataSource = new TransactionAwareDataSourceProxy(dataSource);
+//        }
 
         try
         {
@@ -648,10 +648,10 @@ public class <input.tr_name_capitalized>JdbcTemplate
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(dataSource instanceof TransactionAwareDataSourceProxy))
-        {
-            t_DataSource = new TransactionAwareDataSourceProxy(dataSource);
-        }
+//        if  (!(dataSource instanceof TransactionAwareDataSourceProxy))
+//        {
+//            t_DataSource = new TransactionAwareDataSourceProxy(dataSource);
+//        }
 
         try
         {

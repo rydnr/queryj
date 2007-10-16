@@ -76,7 +76,6 @@ source(input) ::= <<
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionStatus;

@@ -92,7 +92,7 @@ source(input) ::= <<
  * Importing some Spring classes.
  */
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
-import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+//import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 /*
  * Importing some extension classes.
@@ -152,7 +152,7 @@ import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAOFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<engineName><voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JndiUtils;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
+//import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
 
 >>
 
@@ -295,42 +295,42 @@ public class <input.engine_name><input.vo_name>DAOFactory
             }
         }
 
-        if  (result == null)
-        {
-            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
-        }
-        else
-        {
-            try
-            {
-//                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
-                result = new TransactionAwareDataSourceProxy(result);
-            }
-            catch  (final CannotGetJdbcConnectionException exception)
-            {
-                try
-                {
-                    LogFactory.getLog(<input.class_name>.class).error(
-                        "Cannot retrieve connection", exception);
-                }
-                catch  (final Throwable throwable)
-                {
-                    // class-loading problem.
-                }
-            }
-            catch  (final Throwable throwable)
-            {
-                try
-                {
-                    LogFactory.getLog(<input.class_name>.class).error(
-                        "Cannot retrieve data source", throwable);
-                }
-                catch  (final Throwable anotherThrowable)
-                {
-                    // class-loading problem.
-                }
-            }
-        }
+//        if  (result == null)
+//        {
+////            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
+//        }
+//        else
+//        {
+//            try
+//            {
+////                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
+//                result = new TransactionAwareDataSourceProxy(result);
+//            }
+//            catch  (final CannotGetJdbcConnectionException exception)
+//            {
+//                try
+//                {
+//                    LogFactory.getLog(<input.class_name>.class).error(
+//                        "Cannot retrieve connection", exception);
+//                }
+//                catch  (final Throwable throwable)
+//                {
+//                    // class-loading problem.
+//                }
+//            }
+//            catch  (final Throwable throwable)
+//            {
+//                try
+//                {
+//                    LogFactory.getLog(<input.class_name>.class).error(
+//                        "Cannot retrieve data source", throwable);
+//                }
+//                catch  (final Throwable anotherThrowable)
+//                {
+//                    // class-loading problem.
+//                }
+//            }
+//        }
 
         return result;
     }

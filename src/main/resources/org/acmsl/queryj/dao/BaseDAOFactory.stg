@@ -137,6 +137,15 @@ class(input) ::= <<
   @param input.jndi_location the JNDI location.
   @param input.table_name the table name.
 !>
+<class_impl(input=input, table=input.table)>
+>>
+
+class_impl(input, table) ::= <<
+<!
+  Generates the class body.
+  @param input the input parameters.
+  @param table the table.
+!>
 /**
  * <[
       first_line_description(voName=input.vo_name),
@@ -163,13 +172,13 @@ public abstract class <input.vo_name>DAOFactory
      * @return such instance.
      <precondition_notnull("daoChooser")>
      */
-    protected static <input.vo_name>DAOFactory getInstance(
+    protected static <table.singularNameCapitalized>DAOFactory getInstance(
         final <input.tr_name_capitalized>DAOChooser daoChooser)
     {
         <input.vo_name>DAOFactory result = null;
 
         String t_str<input.vo_name>DAOFactoryClassName =
-            daoChooser.get<input.vo_name>DAOFactoryClassName();
+            daoChooser.get<table.singularNameCapitalized>DAOFactoryClassName();
 
         if  (t_str<input.vo_name>DAOFactoryClassName != null)
         {

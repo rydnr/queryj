@@ -590,16 +590,12 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
 
-        // Enabling transactions temporarily.
-        synchronized (DataSourceTransactionManager.class)
-        {
-            result =
-                findByPrimaryKey(
-                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-                    query,
-                    new TransactionTemplate(transactionManager),
-                    getDAOListener());
-        }
+        result =
+            findByPrimaryKey(
+                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                query,
+                new TransactionTemplate(transactionManager),
+                getDAOListener());
 
         return result;
     }
@@ -745,6 +741,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                 query,
                 new DataSourceTransactionManager(dataSource));
 <endif>
+
     }
 
     /**
@@ -779,28 +776,25 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         final String query,
         final PlatformTransactionManager transactionManager)
 <endif>
+
     {
         int result;
 
-        // Enabling transactions temporarily.
-        synchronized (DataSourceTransactionManager.class)
-        {
-            result =
-                update(
+        result =
+            update(
 <if(parent)>
-                    <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                    <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-                    query,
-                    new TransactionTemplate(transactionManager),
+                query,
+                new TransactionTemplate(transactionManager),
 <if(parent)>
-                    parentDAO,
+                parentDAO,
 <endif>
 
-                    getDAOListener());
-        }
+                getDAOListener());
 
         return result;
     }
@@ -967,19 +961,15 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
     {
-        // Enabling transactions temporarily.
-        synchronized (DataSourceTransactionManager.class)
-        {
-            deleteNoFk(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
-                query,
-                new TransactionTemplate(transactionManager),
+        deleteNoFk(
+            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            query,
+            new TransactionTemplate(transactionManager),
 <if(parent)>
-                parentDAO,
+            parentDAO,
 <endif>
 
-                getDAOListener());
-        }
+            getDAOListener());
     }
 
     /**
@@ -1534,23 +1524,20 @@ protected void insert(
 
     final PlatformTransactionManager transactionManager)
 {
-    // Enabling transactions temporarily.
-    synchronized (DataSourceTransactionManager.class)
-    {
-        insert(
+    insert(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+        <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-            query,
-            new TransactionTemplate(transactionManager),
+        query,
+        new TransactionTemplate(transactionManager),
 <if(parent)>
-            dataAccessManager.get<parent.voName>DAO(),
+        dataAccessManager.get<parent.voName>DAO(),
 <endif>
-            getDAOListener());
-    }
+
+        getDAOListener());
 }
 
 /**
@@ -2041,22 +2028,16 @@ protected <input.vo_name> create(
 
     final PlatformTransactionManager transactionManager)
 {
-    <input.vo_name> result = null;
-
-    // Enabling transactions temporarily.
-    synchronized (DataSourceTransactionManager.class)
-    {
-        result =
-            create(
+    <input.vo_name> result =
+        create(
 <if(parent)>
-                <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-                <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
-                new TransactionTemplate(transactionManager),
-                getDAOListener());
-    }
+            new TransactionTemplate(transactionManager),
+            getDAOListener());
 
     return result;
 }

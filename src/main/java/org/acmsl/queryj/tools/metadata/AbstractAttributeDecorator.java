@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -49,6 +50,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /**
@@ -388,7 +390,34 @@ public abstract class AbstractAttributeDecorator
      */
     public String getVoName()
     {
-        return capitalize(getTableName(), DecorationUtils.getInstance());
+        return capitalize(getSingular(getTableName()), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @return the singular.
+     * @precondition word != null
+     */
+    protected String getSingular(final String word)
+    {
+        return getSingular(word, SingularPluralFormConverter.getInstance());
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @param singularPluralFormConverter the
+     * <code>SingularPluralFormConverter</code> instance.
+     * @return the singular.
+     * @precondition word != null
+     * @precondition singularPluralFormConverter != null
+     */
+    protected String getSingular(
+        final String word,
+        final EnglishGrammarUtils singularPluralFormConverter)
+    {
+        return singularPluralFormConverter.getSingular(word);
     }
 
     /**
