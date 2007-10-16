@@ -216,12 +216,6 @@ public class <input.tr_name_capitalized>TransactionManager
 
         DataSource t_DataSource = dataSource;
 
-        if  (!(t_DataSource instanceof <input.tr_name_capitalized>ThreadAwareDataSourceWrapper))
-        {
-            t_DataSource =
-                new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(t_DataSource);
-        }
-
         PlatformTransactionManager t_<input.tr_name_capitalized>TransactionManager =
             createTransactionManager(t_DataSource, true);
 
