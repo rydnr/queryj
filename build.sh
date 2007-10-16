@@ -1,7 +1,7 @@
 #!/bin/sh -f
 
 usage () {
-  echo "Usage $0 [-d] <ant target>"
+  echo "Usage $0 [-D] <ant target>"
   echo "Calls given Ant target, managing the directory structure."
   echo "Options: -D Execute Maven to manage the dependencies."
   exit 1;
