@@ -261,43 +261,44 @@ public class <input.engine_name><input.tr_name_capitalized>DAOFactory
             }
         }
 
-        if  (result == null)
-        {
-            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
-        }
-        else
-        {
-            try
-            {
-                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
-            }
-            catch  (final CannotGetJdbcConnectionException exception)
-            {
-                try
-                {
-                    LogFactory.getLog(<input.engine_name><input.tr_name_capitalized>DAOFactory.class).error(
-                        "Cannot retrieve connection", exception);
-                }
-                catch  (final Throwable throwable)
-                {
-                    // class-loading problem.
-                }
-            }
-            catch  (final Throwable throwable)
-            {
-                try
-                {
-                    LogFactory.getLog(<input.engine_name><input.tr_name_capitalized>DAOFactory.class).error(
-                        "Cannot retrieve data source", throwable);
-                }
-                catch  (final Throwable anotherThrowable)
-                {
-                    // class-loading problem.
-                }
-            }
-        }
+//        if  (result == null)
+//        {
+//            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
+//        }
+//        else
+//        {
+//            try
+//            {
+//                result = new <input.tr_name_capitalized><!--ThreadAwareDataSourceWrapper(result);
+//            }
+//           catch  (final CannotGetJdbcConnectionException exception)
+//            {
+//                try
+//                {
+//                    LogFactory.getLog(<input.engine_name><input.tr_name_capitalized>DAOFactory.class).error(
+//                        "Cannot retrieve connection", exception);
+//                }
+//                catch  (final Throwable throwable)
+//                {
+//                    // class-loading problem.
+//                }
+//            }
+//           catch  (final Throwable throwable)
+//            {
+//                try
+//                {
+//                    LogFactory.getLog(<input.engine_name><input.tr_name_capitalized>DAOFactory.class).error(
+//                        "Cannot retrieve data source", throwable);
+//                }
+//                catch  (final Throwable anotherThrowable)
+//                {
+//                    // class-loading problem.
+//                }
+//            }
+//        }
 
         return result;
     }
 }
 >>
+-->
