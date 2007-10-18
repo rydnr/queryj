@@ -394,7 +394,7 @@ boolean t_<attr.columnNameNormalizedCapitalized>AsBoolean = false;
         resultSet.get<attr.actualObjectType>(
             "<attr.columnName>"));
 
-if  (!resultSet.wasNull())
+if  (resultSet.wasNull())
 {
     t_<attr.nameLowercased> = null;
 }
