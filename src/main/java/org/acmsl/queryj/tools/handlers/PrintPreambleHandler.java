@@ -44,12 +44,8 @@ package org.acmsl.queryj.tools.handlers;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Ant classes.
@@ -118,7 +114,7 @@ public class PrintPreambleHandler
 
         if  (command != null) 
         {
-            printPreamble(command.getAttributeMap());
+            printPreamble(command.getAttributeMap(), command.getLog());
         }
         
         return result;
@@ -127,18 +123,16 @@ public class PrintPreambleHandler
     /**
      * Prints the preamble.
      * @param parameters the parameter map.
+     * @param log the log.
      * @return <code>false</code> if the chain should be stopped because
      * of invalid parameters.
+     * @precondition log != null
      */
-    public void printPreamble(final Map parameters)
+    public void printPreamble(final Map parameters, final QueryJLog log)
     {
         if  (parameters != null) 
         {
-            Log t_Log =
-                UniqueLogFactory.getLog(
-                    PrintPreambleHandler.class);
-                
-            if  (t_Log != null)
+            if  (log != null)
             {
                 StringBuffer t_sbPreamble = new StringBuffer();
 
@@ -157,7 +151,8 @@ public class PrintPreambleHandler
 
                 t_sbPreamble.append(PREAMBLE);
 
-                t_Log.info(t_sbPreamble.toString());
+                log.setEnabled(true);
+                log.info(t_sbPreamble.toString());
             }
         }
     }
@@ -181,5 +176,16 @@ public class PrintPreambleHandler
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return MIN_WEIGHT;
     }
 }

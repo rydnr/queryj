@@ -55,6 +55,11 @@ import org.acmsl.commons.patterns.CommandHandler;
  */
 import org.apache.tools.ant.BuildException;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Map;
+
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
@@ -64,6 +69,22 @@ public interface AntCommandHandler
     extends  CommandHandler
 {
     /**
+     * The maximum weight.
+     */
+    public static final double MAX_WEIGHT = 1.0d;
+
+    /**
+     * The minimum weight.
+     */
+    public static final double MIN_WEIGHT = 0.0d;
+
+    /**
+     * The default weight.
+     */
+    public static final double DEFAULT_WEIGHT =
+        (MAX_WEIGHT + MIN_WEIGHT) / 2.0d;
+
+    /**
      * Handles given command.
      * @param command the command.
      * @return <code>true</code> to avoid further processing of such command
@@ -72,4 +93,14 @@ public interface AntCommandHandler
      */
     public boolean handle(final AntCommand command)
         throws  BuildException;
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param command the command.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     * @return a value between <code>MIN_WEIGHT</code> and
+     * <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final AntCommand command);
 }

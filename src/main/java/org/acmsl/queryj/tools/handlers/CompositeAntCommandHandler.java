@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -56,6 +57,7 @@ import org.apache.tools.ant.BuildException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * General-purpose AntCommandHandler composed of an arbitrary number
@@ -159,27 +161,26 @@ public class CompositeAntCommandHandler
     {
         boolean result = false;
 
-        if  (handlerCollection != null)
+        Iterator t_itHandlerIterator =
+            (handlerCollection != null)
+            ? handlerCollection.iterator() : null;
+
+        if  (t_itHandlerIterator != null)
         {
-            Iterator t_itHandlerIterator = handlerCollection.iterator();
+            Object t_Handler;
 
-            if  (t_itHandlerIterator != null)
+            while  (t_itHandlerIterator.hasNext())
             {
-                while  (t_itHandlerIterator.hasNext())
+                t_Handler = t_itHandlerIterator.next();
+
+                if  (t_Handler instanceof AntCommandHandler)
                 {
-                    Object t_Handler = t_itHandlerIterator.next();
+                    result = handle(command, (AntCommandHandler) t_Handler);
+                }
 
-                    if  (   (t_Handler != null)
-                         && (t_Handler instanceof AntCommandHandler))
-                    {
-                        result =
-                            handle(command, (AntCommandHandler) t_Handler);
-                    }
-
-                    if  (result)
-                    {
-                        break;
-                    }
+                if  (result)
+                {
+                    break;
                 }
             }
         }
@@ -201,5 +202,53 @@ public class CompositeAntCommandHandler
       throws  BuildException
     {
         return handler.handle(command);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param command the command.
+     */
+    public double getRelativeWeight(final AntCommand command)
+    {
+        return getRelativeWeight(command, getHandlerCollection());
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     */
+    protected double getRelativeWeight(
+        final AntCommand command, final Collection handlerCollection)
+    {
+        double result = MIN_WEIGHT;
+
+        Iterator t_itHandlerIterator =
+            (handlerCollection != null)
+            ? handlerCollection.iterator() : null;
+
+        if  (t_itHandlerIterator != null)
+        {
+            Object t_Handler;
+
+            while  (t_itHandlerIterator.hasNext())
+            {
+                t_Handler = t_itHandlerIterator.next();
+
+                if  (t_Handler instanceof AntCommandHandler)
+                {
+                    result +=
+                        ((AntCommandHandler) t_Handler)
+                            .getRelativeWeight(command);
+                }
+            }
+
+            result /= 
+                (handlerCollection != null)
+                ? (double) handlerCollection.size() : 1.0d;
+        }
+
+        result = Math.min(MAX_WEIGHT, result);
+
+        return result;
     }
 }

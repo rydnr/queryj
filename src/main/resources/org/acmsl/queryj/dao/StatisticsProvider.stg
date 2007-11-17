@@ -163,23 +163,27 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public void annotateConnectionRetrieved(final String sql)
     {
-        THREAD_MAP.put(
-            buildConnectionKey(Thread.currentThread()), sql);
-
-        Object connectionCountKey = buildConnectionCountKey();
-
-        Integer connectionCount = (Integer) THREAD_MAP.get(connectionCountKey);
-
-        if  (connectionCount == null)
+        synchronized(THREAD_MAP)
         {
-            connectionCount = new Integer(1);
-        }
-        else
-        {
-            connectionCount = new Integer(connectionCount.intValue() + 1);
-        }
+            THREAD_MAP.put(
+                buildConnectionKey(Thread.currentThread()), sql);
 
-        THREAD_MAP.put(connectionCountKey, connectionCount);
+            Object connectionCountKey = buildConnectionCountKey();
+
+            Integer connectionCount =
+                (Integer) THREAD_MAP.get(connectionCountKey);
+
+            if  (connectionCount == null)
+            {
+                connectionCount = new Integer(1);
+            }
+            else
+            {
+                connectionCount = new Integer(connectionCount.intValue() + 1);
+            }
+
+            THREAD_MAP.put(connectionCountKey, connectionCount);
+        }
     }
 
     /**
@@ -197,13 +201,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public String getLastConnectionSql()
     {
-        String result =
-            (String) THREAD_MAP.get(buildConnectionKey(Thread.currentThread()));
+        String result = null;
 
-        if  (result == null)
+        synchronized (THREAD_MAP)
         {
             result =
-                (String) THREAD_MAP.get(buildLastConnectionSqlKey());
+                (String)
+                    THREAD_MAP.get(
+                        buildConnectionKey(Thread.currentThread()));
+
+            if  (result == null)
+            {
+                result =
+                    (String)
+                        THREAD_MAP.get(buildLastConnectionSqlKey());
+            }
         }
 
         return result;
@@ -215,7 +227,12 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public int getConnectionCount()
     {
-        Integer result = (Integer) THREAD_MAP.get(buildConnectionCountKey());
+        Integer result = null;
+
+        synchronized (THREAD_MAP)
+        {
+            result = (Integer) THREAD_MAP.get(buildConnectionCountKey());
+        }
 
         return (result == null) ? 0 : result.intValue();
     }
@@ -226,30 +243,35 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public void annotateConnectionReleased(final String sql)
     {
-       String lastConnectionSql =
-           (String) THREAD_MAP.remove(buildConnectionKey(Thread.currentThread()));
-
-       if  (lastConnectionSql != null)
-       {
-           THREAD_MAP.put(
-                buildLastConnectionSqlKey(),
-                lastConnectionSql);
-        }
-
-        Object connectionCountKey = buildConnectionCountKey();
-
-        Integer connectionCount = (Integer) THREAD_MAP.get(connectionCountKey);
-
-        if  (connectionCount == null)
+        synchronized (THREAD_MAP)
         {
-            connectionCount = new Integer(0);
-        }
-        else
-        {
-            connectionCount = new Integer(connectionCount.intValue() - 1);
-        }
+            String lastConnectionSql =
+                (String) THREAD_MAP.remove(buildConnectionKey(Thread.currentThread()));
 
-        THREAD_MAP.put(connectionCountKey, connectionCount);
+            if  (lastConnectionSql != null)
+            {
+                THREAD_MAP.put(
+                    buildLastConnectionSqlKey(),
+                    lastConnectionSql);
+            }
+
+            Object connectionCountKey = buildConnectionCountKey();
+
+            Integer connectionCount =
+                (Integer) THREAD_MAP.get(connectionCountKey);
+
+            if  (connectionCount == null)
+            {
+                connectionCount = new Integer(0);
+            }
+            else
+            {
+                connectionCount =
+                    new Integer(connectionCount.intValue() - 1);
+            }
+
+            THREAD_MAP.put(connectionCountKey, connectionCount);
+        }
     }
 
     /**
@@ -280,28 +302,34 @@ public class <input.tr_name_capitalized>StatisticsProvider
     public void annotatePreparedStatementExecuted(
         final String sql, final Object[] parameters)
     {
-        Map values = new HashMap();
-
-        values.put(SQL_KEY, sql);
-        values.put(SQL_PARAMETERS_KEY, parameters);
-
-        THREAD_MAP.put(
-            buildPreparedStatementKey(Thread.currentThread()), values);
-
-        Object statementCountKey = buildStatementCountKey();
-
-        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
-
-        if  (statementCount == null)
+        synchronized (THREAD_MAP)
         {
-            statementCount = new Integer(1);
-        }
-        else
-        {
-            statementCount = new Integer(statementCount.intValue() + 1);
-        }
+            Map values = new HashMap();
 
-        THREAD_MAP.put(statementCountKey, statementCount);
+            values.put(SQL_KEY, sql);
+            values.put(SQL_PARAMETERS_KEY, parameters);
+
+            THREAD_MAP.put(
+                buildPreparedStatementKey(
+                    Thread.currentThread()), values);
+
+            Object statementCountKey = buildStatementCountKey();
+
+            Integer statementCount =
+                (Integer) THREAD_MAP.get(statementCountKey);
+
+            if  (statementCount == null)
+            {
+                statementCount = new Integer(1);
+            }
+            else
+            {
+                statementCount =
+                    new Integer(statementCount.intValue() + 1);
+            }
+
+            THREAD_MAP.put(statementCountKey, statementCount);
+        }
     }
 
     /**
@@ -310,7 +338,18 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public Map getLastPreparedStatementData()
     {
-        return (Map) THREAD_MAP.get(buildPreparedStatementKey(Thread.currentThread()));
+        Map result = null;
+
+        synchronized (THREAD_MAP)
+        {
+            result =
+                (Map)
+                    THREAD_MAP.get(
+                        buildPreparedStatementKey(
+                            Thread.currentThread()));
+        }
+
+        return result;
     }
 
     /**
@@ -348,11 +387,21 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public String getLastStatementSql()
     {
-        String result = (String) THREAD_MAP.get(buildStatementKey(Thread.currentThread()));
+        String result = null;
 
-        if  (result == null)
+        synchronized (THREAD_MAP)
         {
-            result = (String) THREAD_MAP.get(buildLastStatementSqlKey());
+            result =
+                (String)
+                    THREAD_MAP.get(
+                        buildStatementKey(Thread.currentThread()));
+
+            if  (result == null)
+            {
+                result =
+                    (String)
+                        THREAD_MAP.get(buildLastStatementSqlKey());
+            }
         }
 
         return result;
@@ -373,7 +422,13 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public int getStatementCount()
     {
-        Integer result = (Integer) THREAD_MAP.get(buildStatementCountKey());
+        Integer result = null;
+
+        synchronized  (THREAD_MAP)
+        {
+            result =
+                (Integer) THREAD_MAP.get(buildStatementCountKey());
+        }
 
         return (result == null) ? 0 : result.intValue();
     }
@@ -387,23 +442,28 @@ public class <input.tr_name_capitalized>StatisticsProvider
         final String sql,
         final PreparedStatementCreator preparedStatementCreator)
     {
-        THREAD_MAP.put(
-            buildStatementKey(Thread.currentThread()), sql);
-
-        Object statementCountKey = buildStatementCountKey();
-
-        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
-
-        if  (statementCount == null)
+        synchronized (THREAD_MAP)
         {
-            statementCount = new Integer(1);
-        }
-        else
-        {
-            statementCount = new Integer(statementCount.intValue() + 1);
-        }
+            THREAD_MAP.put(
+                buildStatementKey(Thread.currentThread()), sql);
 
-        THREAD_MAP.put(statementCountKey, statementCount);
+            Object statementCountKey = buildStatementCountKey();
+
+            Integer statementCount =
+                (Integer) THREAD_MAP.get(statementCountKey);
+
+            if  (statementCount == null)
+            {
+                statementCount = new Integer(1);
+            }
+            else
+            {
+                statementCount =
+                    new Integer(statementCount.intValue() + 1);
+            }
+
+            THREAD_MAP.put(statementCountKey, statementCount);
+        }
     }
 
     /**
@@ -412,23 +472,28 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public void annotateStatementPrepared(final String sql)
     {
-        THREAD_MAP.put(
-            buildStatementKey(Thread.currentThread()), sql);
-
-        Object statementCountKey = buildStatementCountKey();
-
-        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
-
-        if  (statementCount == null)
+        synchronized  (THREAD_MAP)
         {
-            statementCount = new Integer(1);
-        }
-        else
-        {
-            statementCount = new Integer(statementCount.intValue() + 1);
-        }
+            THREAD_MAP.put(
+                buildStatementKey(Thread.currentThread()), sql);
 
-        THREAD_MAP.put(statementCountKey, statementCount);
+            Object statementCountKey = buildStatementCountKey();
+
+            Integer statementCount =
+                (Integer) THREAD_MAP.get(statementCountKey);
+
+            if  (statementCount == null)
+            {
+                statementCount = new Integer(1);
+            }
+            else
+            {
+                statementCount =
+                    new Integer(statementCount.intValue() + 1);
+            }
+
+            THREAD_MAP.put(statementCountKey, statementCount);
+        }
     }
 
     /**
@@ -440,30 +505,35 @@ public class <input.tr_name_capitalized>StatisticsProvider
         final String sql,
         final PreparedStatementCreator preparedStatementCreator)
     {
-       String lastStatementSql =
-           (String) THREAD_MAP.remove(buildStatementKey(Thread.currentThread()));
-
-       if  (lastStatementSql != null)
-       {
-           THREAD_MAP.put(
-                buildLastStatementSqlKey(), lastStatementSql);
-        }
-
-
-        Object statementCountKey = buildStatementCountKey();
-
-        Integer statementCount = (Integer) THREAD_MAP.get(statementCountKey);
-
-        if  (statementCount == null)
+        synchronized  (THREAD_MAP)
         {
-            statementCount = new Integer(0);
-        }
-        else
-        {
-            statementCount = new Integer(statementCount.intValue() - 1);
-        }
+            String lastStatementSql =
+                (String)
+                    THREAD_MAP.remove(
+                        buildStatementKey(Thread.currentThread()));
 
-        THREAD_MAP.put(statementCountKey, statementCount);
+            if  (lastStatementSql != null)
+            {
+                THREAD_MAP.put(
+                    buildLastStatementSqlKey(), lastStatementSql);
+            }
+
+            Object statementCountKey = buildStatementCountKey();
+
+            Integer statementCount =
+                (Integer) THREAD_MAP.get(statementCountKey);
+
+            if  (statementCount == null)
+            {
+                statementCount = new Integer(0);
+            }
+            else
+            {
+                statementCount = new Integer(statementCount.intValue() - 1);
+            }
+
+            THREAD_MAP.put(statementCountKey, statementCount);
+        }
     }
 
     /**
@@ -473,31 +543,37 @@ public class <input.tr_name_capitalized>StatisticsProvider
     public void annotateResultSetMovedForward(
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
     {
-        Object key = buildResultSetKey(Thread.currentThread());
-
-        Integer rowsRetrieved = (Integer) THREAD_MAP.get(key);
-
-        if  (rowsRetrieved == null)
+        synchronized  (THREAD_MAP)
         {
-            rowsRetrieved = new Integer(0);
+            Object key = buildResultSetKey(Thread.currentThread());
 
-            Object resultSetCountKey = buildResultSetCountKey();
+            Integer rowsRetrieved = (Integer) THREAD_MAP.get(key);
 
-            Integer resultSetCount = (Integer) THREAD_MAP.get(resultSetCountKey);
-
-            if  (resultSetCount == null)
+            if  (rowsRetrieved == null)
             {
-                resultSetCount = new Integer(1);
-            }
-            else
-            {
-                resultSetCount = new Integer(resultSetCount.intValue() + 1);
+                rowsRetrieved = new Integer(0);
+
+                Object resultSetCountKey = buildResultSetCountKey();
+
+                Integer resultSetCount =
+                    (Integer) THREAD_MAP.get(resultSetCountKey);
+
+                if  (resultSetCount == null)
+                {
+                    resultSetCount = new Integer(1);
+                }
+                else
+                {
+                    resultSetCount =
+                        new Integer(resultSetCount.intValue() + 1);
+                }
+
+                THREAD_MAP.put(resultSetCountKey, resultSetCount);
             }
 
-            THREAD_MAP.put(resultSetCountKey, resultSetCount);
+            THREAD_MAP.put(
+                key, new Integer(rowsRetrieved.intValue() + 1));
         }
-
-        THREAD_MAP.put(key, new Integer(rowsRetrieved.intValue() + 1));
     }
 
     /**
@@ -507,23 +583,25 @@ public class <input.tr_name_capitalized>StatisticsProvider
     public void annotateResultSetClosed(
         final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
     {
-//        THREAD_MAP.remove(
-//            buildResultSetKey(Thread.currentThread()));
-
-        Object resultSetCountKey = buildResultSetCountKey();
-
-        Integer resultSetCount = (Integer) THREAD_MAP.get(resultSetCountKey);
-
-        if  (resultSetCount == null)
+        synchronized  (THREAD_MAP)
         {
-            resultSetCount = new Integer(1);
-        }
-        else
-        {
-            resultSetCount = new Integer(resultSetCount.intValue() + 1);
-        }
+            Object resultSetCountKey = buildResultSetCountKey();
 
-        THREAD_MAP.put(resultSetCountKey, resultSetCount);
+            Integer resultSetCount =
+                (Integer) THREAD_MAP.get(resultSetCountKey);
+
+            if  (resultSetCount == null)
+            {
+                resultSetCount = new Integer(1);
+            }
+            else
+            {
+                resultSetCount =
+                    new Integer(resultSetCount.intValue() + 1);
+            }
+
+            THREAD_MAP.put(resultSetCountKey, resultSetCount);
+        }
     }
 
     /**
@@ -542,7 +620,16 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public int getLastResultSetRetrievedRows()
     {
-        Integer result = (Integer) THREAD_MAP.get(buildResultSetKey(Thread.currentThread()));
+        Integer result = null;
+
+        synchronized  (THREAD_MAP)
+        {
+            result =
+                (Integer)
+                    THREAD_MAP.get(
+                        buildResultSetKey(
+                            Thread.currentThread()));
+        }
 
         return (result == null) ? 0 : result.intValue();
     }
@@ -562,7 +649,14 @@ public class <input.tr_name_capitalized>StatisticsProvider
      */
     public int getResultSetCount()
     {
-        Integer result = (Integer) THREAD_MAP.get(buildResultSetCountKey());
+        Integer result = null;
+
+        synchronized  (THREAD_MAP)
+        {
+            result =
+                (Integer)
+                    THREAD_MAP.get(buildResultSetCountKey());
+        }
 
         return (result == null) ? 0 : result.intValue();
     }

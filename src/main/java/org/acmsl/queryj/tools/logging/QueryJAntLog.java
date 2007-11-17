@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -77,6 +78,11 @@ public class QueryJAntLog
     private Project m__Project;
 
     /**
+     * Whether the log is enabled.
+     */
+    private boolean m__bEnabled;
+
+    /**
      * Creates a <code>QueryJAntLog</code> instance
      * from given <code>Project</code>.
      * @param project the Ant project.
@@ -85,6 +91,7 @@ public class QueryJAntLog
     public QueryJAntLog(final Project project)
     {
         immutableSetProject(project);
+        immutableSetEnabled(false);
         immutableInitialize();
     }
 
@@ -114,6 +121,33 @@ public class QueryJAntLog
     public Project getProject()
     {
         return m__Project;
+    }
+
+    /**
+     * Specifies whether logging is enabled.
+     * @param flag such information.
+     */
+    protected final void immutableSetEnabled(final boolean flag)
+    {
+        m__bEnabled = flag;
+    }
+
+    /**
+     * Specifies whether logging is enabled.
+     * @param flag such information.
+     */
+    public void setEnabled(final boolean flag)
+    {
+        immutableSetEnabled(flag);
+    }
+
+    /**
+     * Retrieves whether logging is enabled.
+     * @return such information.
+     */
+    public boolean isEnabled()
+    {
+        return m__bEnabled;
     }
 
     /**
@@ -466,4 +500,14 @@ public class QueryJAntLog
             message + "(" + throwable.getMessage() + ")",
             Project.MSG_ERR);
     }
+
+    /**
+     * Specifies the foreground color.
+     * @param String color.
+     */
+    public void setForegroundColor(final String color)
+    {
+        info(color + "Test message" + "\u001B[0m");
+    }
+
 }

@@ -160,6 +160,11 @@ private String tableIsaType;
 private boolean tableDecorator;
 
 /**
+ * The table relationship attribute.
+ */
+private String[][] tableRelationship;
+
+/**
  * The column comment.
  */
 private String columnComment;
@@ -288,6 +293,24 @@ protected void setTableDecorator(final boolean flag)
 public boolean getTableDecorator()
 {
     return tableDecorator;
+}
+
+/**
+ * Specifies the relationship this table models.
+ * @param relationship such content.
+ */
+protected void setTableRelationship(final String[][] relationship)
+{
+    tableRelationship = relationship;
+}
+
+/**
+ * Retrieves whether the table models a relationship.
+ * @return such information.
+ */
+public String[][] getTableRelationship()
+{
+    return tableRelationship;
 }
 
 /**
@@ -464,23 +487,28 @@ protected void mismatch(
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-tableComment : WS? t=text ( tab_annotation )* { setTableComment(t); };
+tableComment : (t=text)? ( tab_annotation )* { setTableComment(t); };
         
-columnComment : WS? t=text ( col_annotation )* { setColumnComment(t); };
+columnComment : (t=text)? ( col_annotation )* { setColumnComment(t); };
 
 fragment text returns [String result]
 @init { result = null; StringBuffer aux = new StringBuffer(); }
   : (  t=text_or_id  { aux.append($t.text); }
-     | c=COMMA { aux.append($c.text); })+
+     | c=COMMA { aux.append($c.text); }
+     | WS
+     | OPEN_PAREN
+     | CLOSE_PAREN
+     | QUOTE )+
     { result = aux.toString(); }
   ;
         
 fragment tab_annotation
   : (
-        s=tab_static    { setTableStatic(s); }
-      | i=tab_isa       { setTableIsa(i); }
-      | t=tab_isatype   { setTableIsaType(t); }
-      |   tab_decorator { setTableDecorator(true); }
+        s=tab_static       { setTableStatic(s); }
+      | i=tab_isa          { setTableIsa(i); }
+      | t=tab_isatype      { setTableIsaType(t); }
+      |   tab_decorator    { setTableDecorator(true); }
+      |   tab_relationship
     )
   ;
 
@@ -500,6 +528,34 @@ fragment tab_isatype returns [String result]
   ;
 
 fragment tab_decorator :  DECORATOR WS?;
+
+fragment tab_relationship
+@init
+{
+    List contents = new ArrayList();
+    String first = null;
+    String second = null;
+}
+  :  RELATIONSHIP
+     WS
+     (
+       OPEN_PAREN WS?
+       (  (SQUOTE a=text_or_id SQUOTE) { first = $a.text; }
+        | (DQUOTE b=text_or_id DQUOTE) { first = $b.text; }
+        | (c=text_or_id) { first = $c.text; })
+       WS? COMMA WS?
+       (  (SQUOTE d=ID SQUOTE) { second = $d.text; }
+        | (DQUOTE e=ID DQUOTE) { second = $e.text; }
+        | (f=ID) { second = $f.text; })
+       WS? CLOSE_PAREN WS? COMMA?
+       {
+         contents.add(new String[] { trim(first), trim(second) });
+       }
+     )+
+     {
+       setTableRelationship((String[][]) contents.toArray(new String[0][0]));
+     }
+  ;
 
 fragment col_annotation
   : (
@@ -523,16 +579,16 @@ fragment col_bool
   ;
 
 fragment text_or_id 
-	:	ID
-	| 	TEXT
-	;
+    :    ID
+    |     TEXT
+    ;
 
 fragment ident returns [String text]
 @init {text = null;}
-	:   (SQUOTE i=ID SQUOTE) {text = ($i.text);}
-	|   (DQUOTE j=ID DQUOTE) {text = ($j.text);}
-	| k=ID {text = $k.text;}
-	;
+    :   (SQUOTE i=ID SQUOTE) {text = ($i.text);}
+    |   (DQUOTE j=ID DQUOTE) {text = ($j.text);}
+    | k=ID {text = $k.text;}
+    ;
 
 fragment col_isarefs
 @init
@@ -580,6 +636,7 @@ AT
         | ('@readonly')  => READONLY  {$type = READONLY;}
         | ('@bool')      => BOOL      {$type = BOOL;}
         | ('@oraseq')    => ORASEQ    {$type = ORASEQ;}
+        | ('@relationship')  => RELATIONSHIP  {$type = RELATIONSHIP;}
         | '@')
     ;
 
@@ -599,6 +656,7 @@ fragment ISATYPE : '@isatype';
 fragment DECORATOR : '@decorator';
 fragment ISAREFS : '@isarefs';
 fragment READONLY : '@readonly';
+fragment RELATIONSHIP : '@relationship';
 fragment BOOL : '@bool';
 fragment ORASEQ : '@oraseq';
 

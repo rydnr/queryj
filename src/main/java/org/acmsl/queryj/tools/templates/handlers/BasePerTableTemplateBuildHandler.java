@@ -76,6 +76,12 @@ public abstract class BasePerTableTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
+     * The relative weight per item.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT =
+        (MAX_WEIGHT - MIN_WEIGHT) * 0.03d;
+
+    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -355,10 +361,40 @@ public abstract class BasePerTableTemplateBuildHandler
      * @throws BuildException if the templates cannot be stored for any reason.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    public static TableTemplate[] retrieveTableTemplates(final Map parameters)
     {
         return
             (TableTemplate[])
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return
+            getRelativeWeight(
+                retrieveTableTemplates(parameters),
+                RELATIVE_SIZE_WEIGHT);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param templates the templates.
+     * @param ratio the ratio per table.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public static double getRelativeWeight(
+        final TableTemplate[] templates, final double ratio)
+    {
+        return
+            (MAX_WEIGHT - MIN_WEIGHT)
+            * ((templates != null) ?  (double) templates.length : 0)
+            * ratio;
     }
 }

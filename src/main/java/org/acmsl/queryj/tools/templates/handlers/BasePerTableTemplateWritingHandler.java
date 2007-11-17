@@ -1,4 +1,4 @@
-//;-*- mode: java -*-
+//;-*- mode: jde -*-
 /*
                         QueryJ
 
@@ -44,16 +44,28 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.tools.AntCommand;
 import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JDK classes.
@@ -74,6 +86,12 @@ public abstract class BasePerTableTemplateWritingHandler
     implements TemplateWritingHandler
 {
     /**
+     * The relative weight per item.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT =
+        BasePerTableTemplateBuildHandler.RELATIVE_SIZE_WEIGHT * 2.0d;
+
+    /**
      * Creates a <code>BasePerTableTemplateWritingHandler</code> instance.
      */
     public BasePerTableTemplateWritingHandler() {};
@@ -88,22 +106,21 @@ public abstract class BasePerTableTemplateWritingHandler
     public boolean handle(final AntCommand command)
         throws  BuildException
     {
-        return handle(command.getAttributeMap());
+        handle(command.getAttributeMap());
+
+        return false;
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected void handle(final Map parameters)
       throws  BuildException
     {
         handle(parameters, retrieveDatabaseProductName(parameters));
-
-        return false;
     }
 
     /**
@@ -144,14 +161,34 @@ public abstract class BasePerTableTemplateWritingHandler
     {
         try 
         {
+            BasePerTableTemplate t_Template;
+
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    BasePerTableTemplateWritingHandler.class);
+        
             for  (int t_iIndex = 0; t_iIndex < templates.length; t_iIndex++)
             {
-                templateGenerator.write(
-                    templates[t_iIndex],
-                    retrieveOutputDir(
-                        templates[t_iIndex].getTableName(),
-                        engineName,
-                        parameters));
+                t_Template = templates[t_iIndex];
+
+                if  (shouldWrite(t_Template))
+                {
+                    templateGenerator.write(
+                        t_Template,
+                        retrieveOutputDir(
+                            t_Template.getTableName(),
+                            engineName,
+                            parameters));
+                }
+                else
+                {
+                    if  (t_Log != null)
+                    {
+                        t_Log.trace(
+                              "(Skipping template " + t_Template.getClass().getName()
+                            + " for " + t_Template.getTableName() + ")");
+                    }
+                }
             }
         }
         catch  (final IOException ioException)
@@ -225,4 +262,70 @@ public abstract class BasePerTableTemplateWritingHandler
         final Map parameters,
         final PackageUtils packageUtils)
       throws  BuildException;
+
+    /**
+     * Checks whether given template should be generated.
+     * @param template such template.
+     * @return <tt>true</tt> in such case.
+     */
+    protected boolean shouldWrite(final BasePerTableTemplate template)
+    {
+        boolean result = (template != null);
+
+        if  (result)
+        {
+            result =
+                shouldWrite(
+                    template,
+                    template.getMetadataManager(),
+                    MetaLanguageUtils.getInstance());
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given template should be generated.
+     * @param template such template.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <tt>true</tt> in such case.
+     * @precondition metadataManager != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean shouldWrite(
+        final BasePerTableTemplate template,
+        final MetadataManager metadataManager,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        boolean result = (template != null);
+
+        String t_strComment =
+            metadataManager.getTableComment(template.getTableName());
+
+        String[][] t_aastrRelationship =
+            metaLanguageUtils.retrieveTableRelationship(t_strComment);
+
+        result =
+            (   (t_aastrRelationship == null)
+             || (t_aastrRelationship.length == 0));
+
+        return result;
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return
+            BasePerTableTemplateBuildHandler.getRelativeWeight(
+                BasePerTableTemplateBuildHandler.retrieveTableTemplates(
+                    parameters),
+                RELATIVE_SIZE_WEIGHT);
+    }
+
 }

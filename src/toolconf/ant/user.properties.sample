@@ -50,5 +50,5 @@
 junit.runner.classname=junit.textui.TestRunner
 #junit.runner.classname=junit.swingui.TestRunner
 
-# Deploy path
-deploy.path=/tmp
+# the default maven home
+default.maven.home=

@@ -1,4 +1,4 @@
-//;-*- mode: java -*-
+//;-*- mode: jde -*-
 /*
                         QueryJ
 
@@ -47,9 +47,10 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorDecoratorFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
-import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -71,7 +72,8 @@ import java.io.IOException;
  *         >Jose San Leandro</a>
  */
 public class ResultSetExtractorTemplateGenerator
-    implements  ResultSetExtractorTemplateFactory,
+    implements  BasePerTableTemplateFactory,
+                BasePerTableTemplateGenerator,
                 Singleton
 {
     /**
@@ -100,30 +102,31 @@ public class ResultSetExtractorTemplateGenerator
     }
 
     /**
-     * Creates a <code>ResultSetExtractorTemplate</code> using given
-     * information.
+     * Generates a DAO template.
      * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
+     * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
+     * @param repositoryName the name of the repository.
      * @param jmx whether to support JMX.
      * @param header the header.
      * @param jndiLocation the location of the datasource in JNDI.
-     * @return such template.
+     * @return a template.
+     * @throws QueryJException if the factory class is invalid.
      * @precondition tableName != null
      * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
      * @precondition packageName != null
      * @precondition engineName != null
+     * @precondition engineVersion != null
+     * @precondition quote != null
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
-    public ResultSetExtractorTemplate createResultSetExtractorTemplate(
+    public BasePerTableTemplate createTemplate(
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
@@ -173,7 +176,7 @@ public class ResultSetExtractorTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final ResultSetExtractorTemplate template,
+        final BasePerTableTemplate template,
         final File outputDir)
       throws  IOException
     {
@@ -201,7 +204,7 @@ public class ResultSetExtractorTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final ResultSetExtractorTemplate template,
+        final BasePerTableTemplate template,
         final File outputDir,
         final StringUtils stringUtils,
         final EnglishGrammarUtils singularPluralFormConverter,

@@ -1770,6 +1770,14 @@
 
         <antcall target="jrat"/>
 
+        <condition property="maven.home" value="${default.maven.home}">
+          <not><isset property="${env.MAVEN_HOME}"/></not>
+        </condition>
+
+        <condition property="maven.home" value="${env.MAVEN_HOME}">
+          <isset property="${env.MAVEN_HOME}"/>
+        </condition>
+
         <!--
          Copy all configuration files.
         -->
@@ -1826,7 +1834,7 @@
 
                 <attribute
                     name="Specification-Version"
-                    value="${project.version}"/>
+                    value="${project.version}/${project.tag.name}"/>
 
                 <attribute
                     name="Specification-Vendor"
@@ -1897,7 +1905,7 @@
           tofile="${basedir}/${build.dir}/${project.name}.jar"/>
 
         <condition property="maven.available.locally">
-          <available type="dir" file="${env.MAVEN_HOME}/repository"/>
+          <available file="${maven.home}/repository"/>
         </condition>
 
         <antcall target="_jar.copy.to.maven"/>
@@ -1919,7 +1927,7 @@
 
         <copy
           file="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          tofile="${env.MAVEN_HOME}/repository/${project.name}/jars/${project.name}-${project.version}${project.status}.jar"/>
+          tofile="${maven.home}/repository/${project.name}/jars/${project.name}-${project.version}${project.status}.jar"/>
 
     </target>
 
@@ -1931,7 +1939,6 @@
     -->
     <target
       name="_jar.symlink"
-      depends="init"
       description="Creates symbolic links for project's latest jar file."
       if="isUnix">
 
@@ -1953,10 +1960,10 @@
           link="${basedir}/${build.dir}/${project.name}.jar"/-->
 
         <condition property="maven.available.locally">
-          <available type="dir" file="${env.MAVEN_HOME}/repository"/>
+          <available type="dir" file="${maven.home}/repository"/>
         </condition>
 
-        <antcall target="_jar.symlink.to.maven"/>
+        <antcall target="_jar.symlink.to.maven" inheritRefs="true" inheritAll="true"/>
 
     </target>
 
@@ -1969,18 +1976,19 @@
     -->
     <target
       name="_jar.symlink.to.maven"
-      depends="init"
-      description="Creates symlinks to the latest jar file in the local Maven repository, if it's installed."
-      if="maven.available.locally">
+      description="Creates symlinks to the latest jar file in the local Maven repository, if it's installed.">
+      <!--if="maven.available.locally"-->
+
+      <property environment="env"/>
 
       <delete
-        file="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
+        file="${maven.home}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
 
         <symlink
           action="single"
           overwrite="true"
           resource="${basedir}/${build.dir}/${project.name}-${project.version}${project.status}-${build.number}.jar"
-          link="${env.MAVEN_HOME}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
+          link="${maven.home}/repository/${project.group}/jars/${project.name}-${project.version}${project.status}.jar"/>
 
     </target>
 

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -69,6 +70,7 @@ import org.apache.commons.logging.Log;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -79,6 +81,11 @@ import java.util.Map;
 public class CustomSqlProviderRetrievalHandler
     extends  AbstractAntCommandHandler
 {
+    /**
+     * The weight ratio depending on the sql size.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT = 0.005d;
+
     /**
      * The custom-sql provider key.
      */
@@ -271,5 +278,42 @@ public class CustomSqlProviderRetrievalHandler
       throws  BuildException
     {
         parameters.put(CUSTOM_SQL_PROVIDER, provider);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return getRelativeWeight(retrieveCustomSqlProvider(parameters));
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    protected double getRelativeWeight(
+        final CustomSqlProvider customSqlProvider)
+    {
+        double result = MIN_WEIGHT;
+
+        Collection t_cElements =
+            (customSqlProvider != null)
+            ? customSqlProvider.getCollection() : null;
+
+        result =
+            MIN_WEIGHT
+            + (   (MAX_WEIGHT - MIN_WEIGHT)
+               * ((t_cElements != null) ? t_cElements.size() : 0)
+               * RELATIVE_SIZE_WEIGHT);
+
+        result = Math.min(MAX_WEIGHT, result);
+
+        return result;
     }
 }

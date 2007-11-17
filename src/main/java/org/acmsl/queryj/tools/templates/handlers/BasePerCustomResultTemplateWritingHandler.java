@@ -77,6 +77,12 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     implements TemplateWritingHandler
 {
     /**
+     * The relative weight per custom result.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT =
+        BasePerCustomResultTemplateBuildHandler.RELATIVE_SIZE_WEIGHT * 2.0d;
+
+    /**
      * Creates a <code>BasePerCustomResultTemplateWritingHandler</code> instance.
      */
     public BasePerCustomResultTemplateWritingHandler() {};
@@ -256,4 +262,20 @@ public abstract class BasePerCustomResultTemplateWritingHandler
         final Map parameters,
         final PackageUtils packageUtils)
       throws  BuildException;
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return
+            BasePerCustomResultTemplateBuildHandler.getRelativeWeight(
+                BasePerCustomResultTemplateBuildHandler.retrieveCustomResults(
+                    parameters,
+                    retrieveCustomSqlProvider(parameters)),
+                RELATIVE_SIZE_WEIGHT);
+    }
 }

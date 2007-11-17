@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -73,6 +74,17 @@ import org.apache.commons.logging.Log;
 public interface QueryJLog
     extends  Log
 {
+    /**
+     * Checks whether logging is enabled.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isEnabled();
+
+    /**
+     * Specifies if logging is enabled.
+     * @param flag such flag.
+     */
+    public void setEnabled(final boolean flag);
 }
 /*
  * Copyright 2001-2004 The Apache Software Foundation.

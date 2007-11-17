@@ -86,6 +86,12 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
+     * The relative weight per custom result.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT =
+        (MAX_WEIGHT - MIN_WEIGHT) / 100.0d;
+
+    /**
      * A cached empty Sql array.
      */
     public static final SqlElement[] EMPTY_SQL_ARRAY = new SqlElement[0];
@@ -196,7 +202,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                 retrieveProjectPackage(parameters),
                 retrieveTableRepositoryName(parameters),
                 retrieveCustomSql(
-                    parameters, customSqlProvider, metadataManager));
+                    parameters, customSqlProvider));
     }
     
     /**
@@ -326,19 +332,13 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     /**
      * Retrieves the foreign keys.
      * @param parameters the parameter map.
-     * @param customSqlProvider the custom SQL provider.
-     * @param metadataManager the database metadata manager.
      * @return such templates.
      * @throws BuildException if the templates cannot be retrieved for any
      * reason.
      * @precondition parameters != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
-    protected SqlElement[] retrieveCustomSql(
-        final Map parameters,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+    public static SqlElement[] retrieveCustomSql(
+        final Map parameters, final CustomSqlProvider customSqlProvider)
     {
         SqlElement[] result = (SqlElement[]) parameters.get(CUSTOM_SQL);
 
@@ -347,7 +347,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
             Collection t_cCustomSql = new ArrayList();
             
             SqlElement[] t_aSqlElements =
-                retrieveCustomSqlElements(customSqlProvider, metadataManager);
+                retrieveCustomSqlElements(customSqlProvider);
 
             int t_iLength = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
             
@@ -366,18 +366,16 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     /**
      * Retrieves the custom SQL elements.
      * @param customSqlProvider the custom SQL provider.
-     * @param metadataManager the database metadata manager.
      * @return such foreign keys.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
-    protected SqlElement[] retrieveCustomSqlElements(
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+    protected static SqlElement[] retrieveCustomSqlElements(
+        final CustomSqlProvider customSqlProvider)
     {
         Collection t_cResult = new ArrayList();
         
-        Collection t_cCollection = customSqlProvider.getCollection();
+        Collection t_cCollection =
+            (customSqlProvider != null)
+            ? customSqlProvider.getCollection() : null;
 
         if  (t_cCollection != null)
         {
@@ -400,5 +398,36 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
         }
         
         return (SqlElement[]) t_cResult.toArray(EMPTY_SQL_ARRAY);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return
+            getRelativeWeight(
+                retrieveCustomSqlElements(
+                    retrieveCustomSqlProvider(parameters)),
+                RELATIVE_SIZE_WEIGHT);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param sql the custom sql.
+     * @param ratio the ratio per custom result.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public static double getRelativeWeight(
+        final SqlElement[] sql, final double ratio)
+    {
+        return
+            (MAX_WEIGHT - MIN_WEIGHT)
+            * ((sql != null) ?  (double) sql.length : 0)
+            * ratio;
     }
 }

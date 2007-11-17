@@ -86,6 +86,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
+     * The relative weight per custom result.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT =
+        (MAX_WEIGHT - MIN_WEIGHT) / 100.0d;
+
+    /**
      * A cached empty Result array.
      */
     public static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
@@ -204,7 +210,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 retrieveTableRepositoryName(parameters),
                 retrieveHeader(parameters),
                 retrieveCustomResults(
-                    parameters, customSqlProvider, metadataManager));
+                    parameters, customSqlProvider));
     }
 
     /**
@@ -382,19 +388,14 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Retrieves the custom results.
      * @param parameters the parameter map.
-     * @param customSqlProvider the custom RESULT provider.
-     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the custom sql provider.
      * @return such list.
      * @throws BuildException if the templates cannot be retrieved for any
      * reason.
      * @precondition parameters != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
-    protected Result[] retrieveCustomResults(
-        final Map parameters,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+    public static Result[] retrieveCustomResults(
+        final Map parameters, final CustomSqlProvider customSqlProvider)
       throws  BuildException
     {
         Result[] result = (Result[]) parameters.get(CUSTOM_RESULT);
@@ -402,8 +403,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         if  (result == null)
         {
             result = 
-                retrieveCustomResultElements(
-                    customSqlProvider, metadataManager);
+                retrieveCustomResultElements(customSqlProvider);
         }
 
         return result;
@@ -412,18 +412,16 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Retrieves the custom RESULT elements.
      * @param customSqlProvider the custom RESULT provider.
-     * @param metadataManager the database metadata manager.
-     * @return such foreign keys.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
+     * @return such custom results.
      */
-    protected Result[] retrieveCustomResultElements(
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+    protected static Result[] retrieveCustomResultElements(
+        final CustomSqlProvider customSqlProvider)
     {
         Collection t_cResult = new ArrayList();
 
-        Collection t_cCollection = customSqlProvider.getCollection();
+        Collection t_cCollection =
+            (customSqlProvider != null)
+            ? customSqlProvider.getCollection() : null;
 
         if  (t_cCollection != null)
         {
@@ -483,5 +481,37 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         }
             
         return result;
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return
+            getRelativeWeight(
+                retrieveCustomResults(
+                    parameters,
+                    retrieveCustomSqlProvider(parameters)),
+                RELATIVE_SIZE_WEIGHT);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param results the custom results.
+     * @param ratio the ratio per custom result.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public static double getRelativeWeight(
+        final Result[] results, final double ratio)
+    {
+        return
+            (MAX_WEIGHT - MIN_WEIGHT)
+            * ((results != null) ?  (double) results.length : 0)
+            * ratio;
     }
 }

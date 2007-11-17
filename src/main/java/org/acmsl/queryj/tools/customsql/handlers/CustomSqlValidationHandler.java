@@ -90,8 +90,10 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -103,6 +105,11 @@ import java.util.Map;
 public class CustomSqlValidationHandler
     extends  AbstractAntCommandHandler
 {
+    /**
+     * The relative weight per sql to validate.
+     */
+    public static final double RELATIVE_WEIGHT_PER_SQL = 0.2d;
+
     /**
      * A cached empty class array.
      */
@@ -124,6 +131,17 @@ public class CustomSqlValidationHandler
      * The date format.
      */
     public final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/DD/yyyy");
+
+    /**
+     * A method cache.
+     */
+    private static final Map METHOD_CACHE = new HashMap();
+
+    /**
+     * A type cache (we use only one backend for all caching by
+     * resolving key conflicts. Remember HashMaps are heavy-weight!!!
+     */
+    private static final Map TYPE_CACHE = METHOD_CACHE;
 
     /**
      * Handles given command.
@@ -184,8 +202,7 @@ public class CustomSqlValidationHandler
      * @precondition parameters != null
      */
     protected void handle(
-        final Map parameters,
-        final QueryJLog log)
+        final Map parameters, final QueryJLog log)
     {
         handle(
             retrieveCustomSqlProvider(parameters),
@@ -222,48 +239,82 @@ public class CustomSqlValidationHandler
     {
         if  (!disableSqlValidation)
         {
-            Collection t_cElements = null;
+            Collection t_cSqlToValidate =
+                retrieveSqlToValidate(customSqlProvider);
 
-            if  (customSqlProvider != null)
+            Iterator t_itSqlToValidate =
+                (t_cSqlToValidate != null)
+                ? t_cSqlToValidate.iterator() : null;
+
+            if  (t_itSqlToValidate != null)
             {
-                t_cElements = customSqlProvider.getCollection();
-            }
+                Sql t_Sql;
 
-            if  (t_cElements != null)
-            {
-                Iterator t_itElements = t_cElements.iterator();
+                MetadataTypeManager t_TypeManager = 
+                    metadataManager.getMetadataTypeManager();
 
-                if  (t_itElements != null)
+                while  (t_itSqlToValidate.hasNext())
                 {
-                    Object t_CurrentItem = null;
+                    t_Sql = (Sql) t_itSqlToValidate.next();
 
-                    Sql t_Sql = null;
+                    validate(
+                        t_Sql,
+                        customSqlProvider,
+                        connection,
+                        metadataManager,
+                        t_TypeManager,
+                        customResultUtils,
+                        conversionUtils,
+                        log);
+                }
+            }
+        }
+    }
 
-                    while  (t_itElements.hasNext())
+    /**
+     * Retrieves the SQL elements to validate.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @return such elements.
+     * @precondition customSqlProvider != null
+     */
+    protected Collection retrieveSqlToValidate(
+        final CustomSqlProvider customSqlProvider)
+    {
+        Collection result = new ArrayList();
+
+        Collection t_cElements = null;
+
+        if  (customSqlProvider != null)
+        {
+            t_cElements = customSqlProvider.getCollection();
+        }
+
+        Iterator t_itElements =
+            (t_cElements != null) ? t_cElements.iterator() : null;
+
+        if  (t_itElements != null)
+        {
+            Object t_CurrentItem = null;
+
+            Sql t_Sql = null;
+
+            while  (t_itElements.hasNext())
+            {
+                t_CurrentItem = t_itElements.next();
+
+                if  (t_CurrentItem instanceof Sql)
+                {
+                    t_Sql = (Sql) t_CurrentItem;
+
+                    if  (t_Sql.isValidate())
                     {
-                        t_CurrentItem = t_itElements.next();
-
-                        if  (t_CurrentItem instanceof Sql)
-                        {
-                            t_Sql = (Sql) t_CurrentItem;
-
-                            if  (t_Sql.isValidate())
-                            {
-                                validate(
-                                    t_Sql,
-                                    customSqlProvider,
-                                    connection,
-                                    metadataManager,
-                                    metadataManager.getMetadataTypeManager(),
-                                    customResultUtils,
-                                    conversionUtils,
-                                    log);
-                            }
-                        }
+                        result.add(t_Sql);
                     }
                 }
             }
         }
+
+        return result;
     }
 
     /**
@@ -559,7 +610,8 @@ public class CustomSqlValidationHandler
                         metadataTypeManager.getJavaType(
                             t_Parameter.getType()), false);
 
-                t_Type = retrieveType(t_strType, t_Parameter.getType(), log);
+                t_Type =
+                    retrieveType(t_strType, t_Parameter.getType(), log);
             }
 
             if  (t_Type != null)
@@ -959,6 +1011,13 @@ public class CustomSqlValidationHandler
         }
         else
         {
+            boolean t_bQueryRetrievesChildren =
+                queryRetrievesChildren(
+                    sqlResult,
+                    customSqlProvider,
+                    metadataManager,
+                    customResultUtils);
+
             if  (resultSet.next())
             {
                 Iterator t_Iterator =
@@ -1004,7 +1063,8 @@ public class CustomSqlValidationHandler
                     }
                 }
             }
-            else if  (t_cProperties != null)
+            else if  (   (t_cProperties != null)
+                      && (!t_bQueryRetrievesChildren))
             {
                 ResultSetMetaData t_Metadata = resultSet.getMetaData();
 
@@ -1031,13 +1091,21 @@ public class CustomSqlValidationHandler
                              t_iColumnType,
                              t_iIndex,
                              t_cProperties,
-                             metadataTypeManager))
+                             metadataTypeManager,
+                             log))
                     {
                         log.warn(
-                              "Column not mapped ("
-                            + t_iIndex + ", "
-                            + t_strColumnName
-                            + ", " + t_iColumnType + ")");
+                              "Column not properly mapped "
+                            + "(index, column name, numeric column type, "
+                            + "resolved column type)=("
+                            + t_iIndex
+                            + ", " + t_strColumnName
+                            + ", " + t_iColumnType 
+                            + ", " + metadataTypeManager.getNativeType(
+                                         t_iColumnType)
+                            + ") to any "
+                            + "defined property for "
+                            + "result '" + sqlResult.getId() + "'.");
                     }
                 }
             }
@@ -1231,7 +1299,8 @@ public class CustomSqlValidationHandler
             else
             {
                 String t_strErrorMessage =
-                    "Cannot retrieve table associated to SQL result " + sqlResult.getId();
+                      "Cannot retrieve table associated to SQL result "
+                    + sqlResult.getId();
 
                 if  (log != null)
                 {
@@ -1317,6 +1386,51 @@ public class CustomSqlValidationHandler
     protected Class retrieveType(
         final String type, final String parameterType, final QueryJLog log)
     {
+        Class result;
+
+        Object t_Key = buildTypeCacheKey(type, parameterType);
+
+        result = (Class) TYPE_CACHE.get(t_Key);
+
+        if  (result == null)
+        {
+            result = analyzeType(type, parameterType, log);
+
+            if  (result != null)
+            {
+                TYPE_CACHE.put(t_Key, result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds a key to store a type into the cache.
+     * @param type the type name.
+     * @param parameterType the parameter type.
+     * @return such key.
+     * @precondition type != null
+     * @precondition parameterType != null
+     */
+    protected Object buildTypeCacheKey(
+        final String type, final String parameterType)
+    {
+        return "::type-cache-key::" + type + "," + parameterType;
+    }
+
+    /**
+     * Retrieves the object type.
+     * @param type the type name.
+     * @param parameterType the parameter type.
+     * @param log the log.
+     * @return such class.
+     * @precondition type != null
+     * @precondition parameterType != null
+     */
+    protected Class analyzeType(
+        final String type, final String parameterType, final QueryJLog log)
+    {
         Class result = null;
 
         try
@@ -1395,10 +1509,51 @@ public class CustomSqlValidationHandler
      * @precondition methodName != null
      */
     protected Method retrieveMethod(
-        final Class instanceClass, final String methodName, final Class[] parameterClasses)
+        final Class instanceClass,
+        final String methodName,
+        final Class[] parameterClasses)
       throws  NoSuchMethodException
-    {       
-        return instanceClass.getDeclaredMethod(methodName, parameterClasses);
+    {
+        Method result;
+
+        Object t_Key =
+            buildMethodCacheKey(instanceClass, methodName, parameterClasses);
+
+        result = (Method) METHOD_CACHE.get(t_Key);
+
+        if  (result == null)
+        {
+            result = 
+                instanceClass.getDeclaredMethod(methodName, parameterClasses);
+
+            if  (result != null)
+            {
+                METHOD_CACHE.put(t_Key, result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds a key to store a method reference.
+     * @param instanceClass the instance class.
+     * @param methodName the method name.
+     * @param parameterClasses the parameter classes.
+     * @return such key.
+     * @precondition instanceClass != null
+     * @precondition methodName != null
+     * @precondition parameterClasses != null
+     */
+    protected Object buildMethodCacheKey(
+        final Class instanceClass,
+        final String methodName,
+        final Class[] parameterClasses)
+    {
+        return
+              "::method-cache-key::"
+            + instanceClass.getName() + "." + methodName
+            + "(" + Arrays.asList(parameterClasses) + ")";
     }
 
     /**
@@ -1409,6 +1564,7 @@ public class CustomSqlValidationHandler
      * @param index the column index.
      * @param properties the properties.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param log the log.
      * @return <code>true</code> in such case.
      * @precondition properties != null
      * @precondition metadataTypeManager != null
@@ -1418,7 +1574,8 @@ public class CustomSqlValidationHandler
         final int type,
         final int index,
         final Collection properties,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final QueryJLog log)
     {
         boolean result = false;
 
@@ -1442,7 +1599,8 @@ public class CustomSqlValidationHandler
                              index,
                              (Property) t_Item,
                              t_iPropertyIndex,
-                             metadataTypeManager))
+                             metadataTypeManager,
+                             log))
                     {
                         result = true;
                         break;
@@ -1464,6 +1622,7 @@ public class CustomSqlValidationHandler
      * @param property the property.
      * @param propertyIndex the property index.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
+     * @param log the log.
      * @return <code>true</code> in such case.
      * @precondition property != null
      * @precondition metadataTypeManager != null
@@ -1474,15 +1633,38 @@ public class CustomSqlValidationHandler
         final int index,
         final Property property,
         final int propertyIndex,
-        final MetadataTypeManager metadataTypeManager)
+        final MetadataTypeManager metadataTypeManager,
+        final QueryJLog log)
     {
         boolean result = true;
 
-        if  (   (name != null)
-             && (!name.equalsIgnoreCase(property.getName()))
-             && (!name.equalsIgnoreCase(property.getColumnName())))
+        if  (name != null)
         {
-            result = false;
+            String t_strPropertyName = property.getName();
+            String t_strPropertyColumnName = property.getColumnName();
+
+            if  (   (   (t_strPropertyName != null)
+                     && (t_strPropertyColumnName != null))
+                 && (   (   (name.equalsIgnoreCase(t_strPropertyName))
+                         && (!name.equalsIgnoreCase(t_strPropertyColumnName)))
+                     || (   (!name.equalsIgnoreCase(t_strPropertyName))
+                         && (name.equalsIgnoreCase(t_strPropertyColumnName)))))
+            {
+                log.warn(
+                      "Name mismatch ("
+                    + name
+                    + ", " + t_strPropertyName
+                    + ", " + t_strPropertyColumnName
+                    + ")");
+
+                result = false;
+            }
+            else if  (   (!name.equalsIgnoreCase(t_strPropertyName))
+                      && (!name.equalsIgnoreCase(t_strPropertyColumnName)))
+            {
+                // no warn, it's fine.
+                result = false;
+            }
         }
 
         // This doesn't seem to work well for Oracle (2 != -5)
@@ -1495,8 +1677,72 @@ public class CustomSqlValidationHandler
         if  (   (result)
              && (index != propertyIndex))
         {
-            result = false;
+            // Probably because of ISA relationships. Skipping
+            log.debug(
+                   "Indexes don't match (" + index + ", " + propertyIndex + "). "
+                 + "It might be ok in case of ISA relationships.");
+            //            result = false;
         }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the query retrieves children in a ISA relationship.
+     * In such case most checks are disabled.
+     * @param sqlResult the sql result.
+     * @param customSqlProvider the custom sql provider.
+     * @param metadataManager the metadata manager.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return <tt>true</tt> in such case.
+     * @precondition sqlResult != null
+     * @precondition customSqlProvider != null
+     * @precondition metadataManager != null
+     * @precondition customResultUtils != null
+     */
+    protected boolean queryRetrievesChildren(
+        final Result sqlResult,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager,
+        final CustomResultUtils customResultUtils)
+    {
+        boolean result = false;
+
+        String t_strTable =
+            customResultUtils.retrieveTable(
+                sqlResult, customSqlProvider, metadataManager);
+
+        if  (t_strTable != null)
+        {
+            result = (metadataManager.getParentTable(t_strTable) != null);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between 0 and 1.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        double result = MIN_WEIGHT;
+
+        if  (!retrieveDisableSqlValidationFlag(parameters))
+        {
+            Collection t_cSqlToValidate =
+                retrieveSqlToValidate(
+                    retrieveCustomSqlProvider(parameters));
+
+            result =
+                  DEFAULT_WEIGHT
+                + (  (t_cSqlToValidate != null) ?  t_cSqlToValidate.size() : 0
+                   * (  (MAX_WEIGHT - DEFAULT_WEIGHT)
+                      * RELATIVE_WEIGHT_PER_SQL));
+        }
+
+        result = Math.min(MAX_WEIGHT, result);
 
         return result;
     }

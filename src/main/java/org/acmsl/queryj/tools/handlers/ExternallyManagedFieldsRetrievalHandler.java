@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -224,5 +225,16 @@ public class ExternallyManagedFieldsRetrievalHandler
             (AntExternallyManagedFieldsElement)
                 parameters.get(
                     ParameterValidationHandler.EXTERNALLY_MANAGED_FIELDS);
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return MIN_WEIGHT;
     }
 }

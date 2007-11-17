@@ -64,6 +64,12 @@ import org.antlr.runtime.RecognitionException;
  */
 import org.apache.commons.logging.Log;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Provides insight about the meta-language used in model descriptions.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -73,6 +79,17 @@ public class MetaLanguageUtils
     implements  Singleton,
                 Utils
 {
+    /**
+     * The cache of parsers.
+     */
+    private final Map PARSER_CACHE = new HashMap();
+
+    /**
+     * An empty String array array.
+     */
+    protected static final String[][] EMPTY_STRING_ARRAY_ARRAY =
+        new String[0][0];
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
@@ -378,6 +395,42 @@ public class MetaLanguageUtils
     }
 
     /**
+     * Retrieves whether the table is modelling a relationship.
+     * @param tableComment the table comment.
+     * @return such condition.
+     * @precondition tableComment != null
+     */
+    public String[][] retrieveTableRelationship(final String tableComment)
+    {
+        String[][] result = EMPTY_STRING_ARRAY_ARRAY;
+
+        if  (!isEmpty(tableComment))
+        {
+            try
+            {
+                PerCommentParser t_Parser = setUpParser(tableComment);
+
+                t_Parser.tableComment();
+
+                result = t_Parser.getTableRelationship();
+            }
+            catch  (final RecognitionException recognitionException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Invalid table comment: " + tableComment,
+                        recognitionException);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Sets up the comment parser.
      * @param comment the comment to parse.
      * @return the <code>PerCommentParser</code> instance.
@@ -398,16 +451,25 @@ public class MetaLanguageUtils
             t_Log.debug("Parsing '" + comment + "'");
         }
 
-        PerCommentLexer t_Lexer =
-            new PerCommentLexer(
-                new ANTLRStringStream(comment));
+        if  (comment != null)
+        {
+            result = (PerCommentParser) PARSER_CACHE.get(comment);
+
+            if  (result == null)
+            {
+                PerCommentLexer t_Lexer =
+                    new PerCommentLexer(
+                        new ANTLRStringStream(comment));
             
-        CommonTokenStream t_Tokens =
-            new CommonTokenStream(t_Lexer);
+                CommonTokenStream t_Tokens =
+                    new CommonTokenStream(t_Lexer);
 
-        result = new PerCommentParser(t_Tokens);
+                result = new PerCommentParser(t_Tokens);
 
-        
+                PARSER_CACHE.put(comment, result);
+            }
+        }
+
         return result;
     }
 

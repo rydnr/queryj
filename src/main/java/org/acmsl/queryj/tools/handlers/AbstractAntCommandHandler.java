@@ -392,4 +392,25 @@ public abstract class AbstractAntCommandHandler
                 parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
     }
     
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final AntCommand command)
+    {
+        return getRelativeWeight(command.getAttributeMap());
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return DEFAULT_WEIGHT;
+    }
 }

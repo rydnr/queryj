@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -192,5 +193,16 @@ public class JdbcConnectionClosingHandler
         throws  BuildException
     {
         parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);
+    }
+    
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return MIN_WEIGHT;
     }
 }

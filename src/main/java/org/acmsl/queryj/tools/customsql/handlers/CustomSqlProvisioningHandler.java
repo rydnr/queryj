@@ -87,6 +87,12 @@ public class CustomSqlProvisioningHandler
     extends  AbstractAntCommandHandler
 {
     /**
+     * The relative weight depending on the number of tables.
+     */
+    public static final double RELATIVE_SIZE_WEIGHT =
+        (MAX_WEIGHT - MIN_WEIGHT) / 100.0d;
+
+    /**
      * Creates a <code>CustomSqlProvisioningHandler</code> instance.
      */
     public CustomSqlProvisioningHandler() {};
@@ -239,5 +245,45 @@ public class CustomSqlProvisioningHandler
     {
         // TODO
         return name;
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param parameters the parameters.
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     */
+    public double getRelativeWeight(final Map parameters)
+    {
+        return getRelativeWeight(retrieveMetadataManager(parameters));
+    }
+
+    /**
+     * Retrieves the relative weight of this handler.
+     * @param metadataManager the metadata manager..
+     * @return a value between <code>MIN_WEIGHT</code>
+     * and <code>MAX_WEIGHT</code>.
+     * @precondition metadataManager != null
+     */
+    public double getRelativeWeight(final MetadataManager metadataManager)
+    {
+        double result = MIN_WEIGHT;
+
+        String[] t_astrTableNames =
+            (metadataManager != null)
+            ? metadataManager.getTableNames() : null;
+
+        int t_iTableCount =
+            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+
+        result +=
+              (MAX_WEIGHT - MIN_WEIGHT)
+            * (  (t_astrTableNames != null)
+               ? (double) t_astrTableNames.length : 0.0d)
+            * RELATIVE_SIZE_WEIGHT;
+
+        result = Math.min(MAX_WEIGHT, result);
+
+        return result;
     }
 }
