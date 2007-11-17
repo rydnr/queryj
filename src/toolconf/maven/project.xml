@@ -30,7 +30,7 @@
 
  @header
   
-   Filename: $RCSfile$
+   Filename: project.xml
 
    Author: Jose San Leandro Armendariz
 
@@ -42,7 +42,7 @@
   <name>QueryJ</name>
   <id>queryj</id>
   <groupId>org.acmsl.queryj</groupId>
-  <currentVersion>v24-2.0-0</currentVersion>
+  <currentVersion>v24-2.0-1-SNAPSHOT</currentVersion>
   <organization>
     <name>ACM S.L.</name>
     <url>http://www.acm-sl.org/</url>
