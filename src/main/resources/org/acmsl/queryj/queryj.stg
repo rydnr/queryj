@@ -297,16 +297,12 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
 
-    // Enabling transactions temporarily.
-    synchronized (DataSourceTransactionManager.class)
-    {
-        result =
-            <cs.nameUncapitalized>(
-                <cs.parameters:{<it.nameLowercased>,}; separator="\n">
-                preparedStatementCreatorFactory,
-                params,
-                new TransactionTemplate(transactionManager));
-    }
+    result =
+        <cs.nameUncapitalized>(
+            <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            preparedStatementCreatorFactory,
+            params,
+            new TransactionTemplate(transactionManager));
 
     return result;
 }
@@ -433,38 +429,34 @@ public int <cs.nameUncapitalized>(
              object=it.object); separator=",\n">
         };
 
-    // Enabling transactions temporarily.
-    synchronized (DataSourceTransactionManager.class)
+     DataSourceTransactionManager transactionManager =
+        new DataSourceTransactionManager(getDataSource());
+    TransactionTemplate transactionTemplate =
+        new TransactionTemplate(transactionManager);
+
+    Object t_Result =
+        transactionTemplate.execute(
+            new UpdateTransactionCallback(
+                preparedStatementCreatorFactory
+                    .newPreparedStatementCreator(params),
+                preparedStatementCreatorFactory
+                    .newPreparedStatementSetter(params),
+                this));
+
+
+    if  (t_Result instanceof Integer)
     {
-        DataSourceTransactionManager transactionManager =
-            new DataSourceTransactionManager(getDataSource());
-        TransactionTemplate transactionTemplate =
-            new TransactionTemplate(transactionManager);
-
-        Object t_Result =
-            transactionTemplate.execute(
-                new UpdateTransactionCallback(
-                    preparedStatementCreatorFactory
-                        .newPreparedStatementCreator(params),
-                    preparedStatementCreatorFactory
-                        .newPreparedStatementSetter(params),
-                    this));
-
-
-        if  (t_Result instanceof Integer)
-        {
-            result = ((Integer) t_Result).intValue();
-        }
-
-        /*
-        result =
-            update(
-                t_PreparedStatementCreatorFactory
-                   .newPreparedStatementCreator(params),
-                t_PreparedStatementCreatorFactory
-                   .newPreparedStatementSetter(params));
-         */
+        result = ((Integer) t_Result).intValue();
     }
+
+    /*
+    result =
+        update(
+            t_PreparedStatementCreatorFactory
+               .newPreparedStatementCreator(params),
+            t_PreparedStatementCreatorFactory
+               .newPreparedStatementSetter(params));
+     */
 
     return result;
 }
