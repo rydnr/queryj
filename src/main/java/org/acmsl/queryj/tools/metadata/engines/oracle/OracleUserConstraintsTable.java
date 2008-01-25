@@ -42,12 +42,8 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.BigDecimalField;
-import org.acmsl.queryj.CalendarField;
-import org.acmsl.queryj.DoubleField;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.IntField;
-import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
@@ -105,6 +101,12 @@ public class OracleUserConstraintsTable
      */
     public StringField COLUMN_NAME =
         new StringField("COLUMN_NAME", this);
+    
+    /**
+     * The user_constraints table owner field.
+     */
+    public StringField OWNER =
+        new StringField("OWNER", this);
 
     /**
      * The user_constraints table position field.

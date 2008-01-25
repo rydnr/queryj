@@ -43,13 +43,14 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
  */
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
-import org.acmsl.queryj.Query;
 import org.acmsl.queryj.QueryFactory;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.QueryResultSet;
 import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.oracle.OracleTableRepository;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleUserConsColumnsTable;
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleUserConstraintsTable;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.SqlTypeResolver;
@@ -75,9 +76,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 /**
  * Manages the information metadata stored in an Oracle database.
@@ -265,42 +265,35 @@ public class OracleMetadataManager
                         USER_CONS_COLUMNS.CONSTRAINT_NAME.equals(
                             USER_CONSTRAINTS.CONSTRAINT_NAME);
 
-                    // USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME
-
                     t_Condition =
                         t_Condition.and(
                             oracleTextFunctions.upper(USER_CONS_COLUMNS.TABLE_NAME).equals(
                                 oracleTextFunctions.upper()));
 
-                    //(USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
-                    // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)
-
                     t_Condition =
                         t_Condition.and(
                             USER_CONSTRAINTS.CONSTRAINT_TYPE.equals("P"));
-
-                    //((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
-                    // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
 
                     t_Query.where(t_Condition);
 
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
-                    t_Query.setString(
-                        oracleTextFunctions.upper(USER_CONS_COLUMNS.TABLE_NAME).equals(
-                            oracleTextFunctions.upper()),
-                        t_strTableName.toUpperCase());
+                    if  (   (t_Log != null)
+                         && (t_Log.isInfoEnabled()))
+                    {
+                        t_Log.info("  Extracting PK for "
+                            + t_strTableName.toUpperCase() + "...");
+                    }
 
-                    //SELECT USER_CONS_COLUMNS.COLUMN_NAME
-                    //FROM USER_CONS_COLUMNS, USER_CONSTRAINTS
-                    //WHERE ((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
-                    // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
+                    t_Query.setString(
+                        oracleTextFunctions.upper(USER_CONS_COLUMNS.TABLE_NAME)
+                            .equals(oracleTextFunctions.upper()),
+                        t_strTableName.toUpperCase());
 
                     if  (   (t_Log != null)
                          && (t_Log.isDebugEnabled()))
                     {
-                        t_Log.debug(
-                            "query:" + t_Query);
+                        t_Log.debug("query:" + t_Query);
                     }
                     
                     t_rsResults = t_Query.executeQuery();
@@ -309,11 +302,20 @@ public class OracleMetadataManager
                     {
                         while  (t_rsResults.next())
                         {
+
+                            final String t_rsResult_PK = 
+                                t_rsResults.getString(
+                                    USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString());
+
+                            if  (   (t_Log != null)
+                                 && (t_Log.isInfoEnabled()))
+                            {
+                                t_Log.info("    PK="+t_rsResult_PK);
+                            }
+
                             addPrimaryKey(
                                 t_strTableName,
-                                t_rsResults.getString(
-                                    USER_CONS_COLUMNS.COLUMN_NAME
-                                        .toSimplifiedString()));
+                                t_rsResult_PK);
                         }
 
                         if  (metadataExtractionListener != null)
@@ -323,6 +325,13 @@ public class OracleMetadataManager
                                 getPrimaryKey(t_strTableName));
                         }
                     }
+
+                    if  (   (t_Log != null)
+                         && (t_Log.isInfoEnabled()))
+                    {
+                        t_Log.info("  Done.");
+                    }
+
                 }
                 catch  (final SQLException sqlException)
                 {
@@ -457,99 +466,144 @@ public class OracleMetadataManager
 
                     SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                    OracleUserConstraintsTable CON =
-                        OracleUserConstraintsTable.getInstance("con");
-                    OracleUserConsColumnsTable COL =
-                        OracleUserConsColumnsTable.getInstance("col");
-                    OracleUserConstraintsTable RCON =
-                        OracleUserConstraintsTable.getInstance("rcon");
-                    OracleUserConsColumnsTable RCOL =
-                        OracleUserConsColumnsTable.getInstance("rcol");
+                    OracleUserConstraintsTable tableConstraints =
+                        OracleUserConstraintsTable.getInstance("tableConstraints");
+                    OracleUserConsColumnsTable tableConstraintColumns =
+                        OracleUserConsColumnsTable.getInstance("tableConstraintColumns");
+                    OracleUserConstraintsTable foreignTableConstraints =
+                        OracleUserConstraintsTable.getInstance("foreignTableConstraints");
+                    OracleUserConsColumnsTable foreignTableConstraintColumns =
+                        OracleUserConsColumnsTable.getInstance("foreignTableConstraintColumns");
 
-                    t_Query.select(CON.CONSTRAINT_NAME);
-                    t_Query.select(RCOL.TABLE_NAME);
-                    t_Query.select(RCOL.COLUMN_NAME);
-                    t_Query.select(CON.TABLE_NAME);
-                    t_Query.select(COL.COLUMN_NAME);
+                    t_Query.select(tableConstraints.CONSTRAINT_NAME);
+                    t_Query.select(tableConstraintColumns.COLUMN_NAME);
+                    t_Query.select(foreignTableConstraints.TABLE_NAME);
+                    t_Query.select(foreignTableConstraintColumns.COLUMN_NAME);
 
-                    t_Query.from(CON);
-                    t_Query.from(COL);
-                    t_Query.from(RCON);
-                    t_Query.from(RCOL);
+                    t_Query.from(tableConstraints);
+                    t_Query.from(tableConstraintColumns);
+                    t_Query.from(foreignTableConstraints);
+                    t_Query.from(foreignTableConstraintColumns);
 
                     t_Query.where(
-                             RCON.CONSTRAINT_TYPE.equals("R")
-                        .and(RCON.R_CONSTRAINT_NAME.equals(CON.CONSTRAINT_NAME))
-                        .and(COL.TABLE_NAME.equals(CON.TABLE_NAME))
-                        .and(COL.CONSTRAINT_NAME.equals(CON.CONSTRAINT_NAME))
-                        .and(RCOL.TABLE_NAME.equals(RCON.TABLE_NAME))
-                        .and(RCOL.CONSTRAINT_NAME.equals(RCON.CONSTRAINT_NAME))
-                        .and(RCOL.POSITION.equals(COL.POSITION))
-                        .and(oracleTextFunctions.upper(COL.TABLE_NAME).equals(
-                                 oracleTextFunctions.upper())));
+                        tableConstraints.CONSTRAINT_TYPE
+                            .equals("P")
+                        .and(foreignTableConstraints.R_CONSTRAINT_NAME
+                            .equals(tableConstraints.CONSTRAINT_NAME))
+                        .and(foreignTableConstraints.OWNER
+                            .equals(tableConstraints.OWNER))
+                        .and(tableConstraints.OWNER
+                            .equals(tableConstraintColumns.OWNER))
+                        .and(tableConstraints.CONSTRAINT_NAME
+                            .equals(tableConstraintColumns.CONSTRAINT_NAME))
+                        .and(tableConstraints.TABLE_NAME
+                            .equals(tableConstraintColumns.TABLE_NAME))
+                        .and(foreignTableConstraints.OWNER
+                            .equals(foreignTableConstraintColumns.OWNER))
+                        .and(foreignTableConstraints.CONSTRAINT_NAME
+                            .equals(foreignTableConstraintColumns.CONSTRAINT_NAME))
+                        .and(foreignTableConstraints.TABLE_NAME
+                            .equals(foreignTableConstraintColumns.TABLE_NAME))
+                        .and(foreignTableConstraintColumns.POSITION
+                            .equals(tableConstraintColumns.POSITION))
+                        .and(oracleTextFunctions.upper(tableConstraints.TABLE_NAME)
+                            .equals(oracleTextFunctions.upper())));
+
+                    t_Query.groupBy(tableConstraints.CONSTRAINT_NAME);
+                    t_Query.groupBy(tableConstraintColumns.COLUMN_NAME);
+                    t_Query.groupBy(foreignTableConstraints.TABLE_NAME);
+                    t_Query.groupBy(foreignTableConstraintColumns.COLUMN_NAME);
 
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
+                    if  (   (t_Log != null)
+                         && (t_Log.isInfoEnabled()))
+                    {
+                        t_Log.info("  Extracting FK for " 
+                            + t_strTableName.toUpperCase() + "...");
+                    }
+
                     t_Query.setString(
-                        oracleTextFunctions.upper(COL.TABLE_NAME).equals(
-                            oracleTextFunctions.upper()),
+                        oracleTextFunctions.upper(tableConstraints.TABLE_NAME)
+                            .equals(oracleTextFunctions.upper()),
                         t_strTableName.toUpperCase());
+
+                    if  (   (t_Log != null)
+                         && (t_Log.isDebugEnabled()))
+                    {
+                        t_Log.debug("query:" + t_Query);
+                    }
 
                     t_Results = (QueryResultSet) t_Query.executeQuery();
 
                     if  (t_Results != null)
                     {
-                        String t_strPreviousRcol = null;
-                        String t_strRcol;
-                        Collection t_cFks = null;
-                        String t_strRcolColumnName;
+
+                        String t_strForeignKeyName;
+                        String t_strTableColumnName;
+                        String t_strForeignTableName;
+                        String t_strForeignColumnName;
+
+                        String t_strPreviousForeignTableName = null;
+                        Collection t_cFks = new ArrayList();
 
                         while  (t_Results.next())
                         {
-                            t_strRcol = t_Results.getString(RCOL.TABLE_NAME);
 
-                            if  (   (metadataExtractionListener != null)
-                                 && (t_cFks == null))
-                            {
-                                t_cFks = new ArrayList();
-                            }
-
-                            t_strRcolColumnName =
-                                t_Results.getString(RCOL.COLUMN_NAME);
+                            t_strForeignKeyName = t_Results.getString(
+                                tableConstraints.CONSTRAINT_NAME);
+                            
+                            t_strTableColumnName = t_Results.getString(
+                                tableConstraintColumns.COLUMN_NAME);
+                            
+                            t_strForeignTableName = t_Results.getString(
+                                foreignTableConstraints.TABLE_NAME);
+                            
+                            t_strForeignColumnName = t_Results.getString(
+                                foreignTableConstraintColumns.COLUMN_NAME);
 
                             if  (metadataExtractionListener != null)
                             {
-                                t_cFks.add(t_strRcolColumnName);
+                                t_cFks.add(t_strForeignColumnName);
+                            }
+
+                            if  (   (t_Log != null)
+                                 && (t_Log.isInfoEnabled()))
+                            {
+                                t_Log.info("    FK=["
+                                    +t_strForeignKeyName+", "
+                                    +t_strTableColumnName+", "
+                                    +t_strForeignTableName+", "
+                                    +t_strForeignColumnName+"]");
                             }
 
                             addForeignKey(
-                                t_strRcol,
-                                new String[]
-                                {
-                                    t_strRcolColumnName,
-                                },
+                                t_strForeignTableName,
+                                new String[] {t_strForeignColumnName},
                                 t_strTableName,
-                                new String[]
-                                {
-                                    t_Results.getString(COL.COLUMN_NAME)
-                                });
+                                new String[] {t_strTableColumnName});
 
                             if  (   (metadataExtractionListener != null)
-                                 && (t_strPreviousRcol != null)
-                                 && (!t_strPreviousRcol.equals(t_strRcol)))
+                                 && (t_strPreviousForeignTableName != null)
+                                 && (!t_strPreviousForeignTableName.equals(t_strForeignTableName)))
                             {
                                 metadataExtractionListener.foreignKeyExtracted(
                                     t_strTableName,
-                                    t_strPreviousRcol,
-                                    (String[])
-                                        t_cFks.toArray(EMPTY_STRING_ARRAY));
+                                    t_strPreviousForeignTableName,
+                                    (String[]) t_cFks.toArray(EMPTY_STRING_ARRAY));
 
                                 t_cFks = new ArrayList();
                             }
 
-                            t_strPreviousRcol = t_strRcol;
+                            t_strPreviousForeignTableName = t_strForeignTableName;
                         }
 
+                    }
+
+                    if  (   (t_Log != null)
+                         && (t_Log.isInfoEnabled()))
+                    {
+                        t_Log.info("  Done.");
                     }
                 }
                 catch  (final SQLException sqlException)
@@ -633,7 +687,7 @@ public class OracleMetadataManager
                 QueryFactory.getInstance(),
                 metadataExtractionListener);
     }
-                
+
     /**
      * Retrieves the table names.
      * @param connection the connection.
