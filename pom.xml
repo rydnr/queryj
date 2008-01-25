@@ -6,7 +6,7 @@
   <groupId>org.acmsl</groupId>
   <artifactId>queryj</artifactId>
   <packaging>jar</packaging>
-  <version>v24-1.9-synchr-32</version>
+  <version>v24-2.0-2</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org</url>
   <inceptionYear>2002</inceptionYear>
