@@ -2430,4 +2430,74 @@
 
 <!--         END AUTOCONF SECTION                                           -->
 
+  <target name="latex" depends="init">
+    <javadoc
+      access="public"
+      defaultexcludes="no"
+      overview="${javadoc.src.dir}/overview.html"
+      packagenames="*"
+      classpathref="java.compile.class.path"
+      encoding="ISO-8859-1">
+
+      <sourcepath>
+
+        <!-- ORDER MATTERS -->
+        <pathelement location="${javadoc.src.dir}"/>
+
+        <path refid="java.source.and.javadoc.path"/>
+
+      </sourcepath>
+
+      <doclet
+        name="org.wonderly.doclets.TexDoclet"
+        path="/home/chous/texdoclet.jar">
+        <param name="-docdir" value="${javadoc.src.dir}"/>
+      </doclet>
+
+    </javadoc>
+
+  </target>
+
+  <target name="uml" depends="init">
+
+    <property name="uml.dir" value="${basedir}/target/docs"/>
+
+    <mkdir dir="${uml.dir}"/>
+
+    <javadoc
+      access="public"
+      defaultexcludes="no"
+      overview="${javadoc.src.dir}/overview.html"
+      packagenames="org.acmsl.queryj.tools.logging"
+      classpathref="java.compile.class.path"
+      encoding="ISO-8859-1">
+
+      <sourcepath>
+
+        <!-- ORDER MATTERS -->
+        <pathelement location="${javadoc.src.dir}"/>
+
+        <path refid="java.source.and.javadoc.path"/>
+
+      </sourcepath>
+
+      <doclet
+        name="org.umlgraph.doclet.UmlGraph"
+        path="/usr/local/src/UMLGraph-5.0/lib/UmlGraph.jar">
+        <param name="-d" value="${uml.dir}"/>
+      </doclet>
+
+    </javadoc>
+
+    <apply executable="dot" dest="${uml.dir}" parallel="false">
+      <arg value="-Tpng"/>
+      <arg value="-o"/>
+      <targetfile/>
+      <srcfile/>
+      <fileset dir="${uml.dir}" includes="*.dot"/>
+      <mapper type="glob" from="*.dot" to="*.png"/>
+    </apply>
+
+  </target>
+
 </project>
