@@ -1,0 +1,20 @@
+.PS
+define triangle { line from $1 down $2*sqrt(3)*0.5 left $2*0.5 then right $2*0.5 ; B: line right $2*0.5; line to $1 };
+box "User"; line ; line ;
+box "Billing" "Operation" ;
+TRI: triangle( bottom of last box, 0.2 );
+#move down 1 left 0.5;
+DESCENDANTS:
+ [ CC: box "Credit" "Card" ;
+   move right 0.5;
+   BA: box "Bank" "Account" ;
+ ] with .n at last box.s - (0, 0.5);
+L1: line left 1 - DESCENDANTS.CC.wid/2 from 1/2 of the way between TRI.s and last [].n;
+move to DESCENDANTS.CC.n;
+line up L1.e.y - DESCENDANTS.CC.n.y;
+L2: line right 1 - DESCENDANTS.BA.wid/2 from 1/2 of the way between TRI.s and last [].n ;
+move to DESCENDANTS.BA.n;
+line up L1.w.y - DESCENDANTS.BA.n.y;
+move to L1.s;
+line up TRI.s.y - L1.s.y;
+.PE
