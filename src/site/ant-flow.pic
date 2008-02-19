@@ -1,28 +1,50 @@
-%!PS-Adobe-3.0
-%%Creator: GNU libplot drawing library 4.1
-%%Title: PostScript plot
-%%CreationDate: Mon Feb 18 20:43:14 2008
-%%DocumentData: Clean7Bit
-%%LanguageLevel: 1
-%%Pages: 0
-%%PageOrder: Ascend
-%%Orientation: Portrait
-%%BoundingBox: 0 0 0 0
-%%DocumentNeededResources: 
-%%EndComments
+.PS
 
-%%BeginDefaults
-%%PageResources: 
-%%EndDefaults
+copy "sequence.pic";
 
-%%BeginProlog
-%%EndProlog
+# Define the objects
+actor(U,"User");
+placeholder_object(Nothing1);
+object(A,"a:Ant");
+placeholder_object(Q);
+inactive(U);
+step();
 
-%%BeginSetup
-/DrawDict 50 dict def
-DrawDict begin
-%%EndSetup
+# Message sequences
+active(U);
+message(U,A,"\"run QueryJ\"");
+active(A);
+step();
 
-%%Trailer
-end
-%%EOF
+step();
+message(A,A,"instantiateQueryJTask()");
+create_message(A,Q,"q:QueryJ");
+active(A);
+message(A,Q,"q.setProperty(X)");
+active(Q);
+step();
+inactive(A);
+inactive(Q);
+#comment(A,Q,down 1 left, wid 1 ht 0.7 "Sets each" "configuration" "settings");
+
+step();
+
+# QueryJ flow
+begin_frame(A,F, "QueryJ flow");
+message(A,Q,"execute()");
+active(Q);
+step();
+return_message(Q,A,"");
+inactive(Q);
+step();
+
+end_frame(Q,F);
+inactive(Q);
+destroy_message(A,Q);
+inactive(A);
+
+# Complete the lifelines
+step();
+complete(A);
+complete(U);
+.PE
