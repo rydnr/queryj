@@ -1,0 +1,51 @@
+.PS
+START: circle filled rad 0.02;
+arrow right;
+  HANDLER1: box wid 2 ht 0.5 "Handler 1";
+  move to HANDLER1.s;
+  move down 0;
+  HANDLE1: box wid 2 dotted "handle(command)";
+  move to HANDLE1.s;
+  move left 0;
+  move down 1;
+  COMMAND1: box wid 2 ht 0.5 "Command";
+  move to COMMAND1.w;
+  move up; move right 0;
+  SETX1: box wid 1 dotted "getX";
+  move to SETX1.e;
+  move right 0;
+  SETY1: box wid 1 dotted "setY";
+
+  arrow from SETX1.n to 1/2 of the way between HANDLE1.sw and HANDLE1.s;
+  arrow from 1/2 of the way between HANDLE1.s and HANDLE1.se to SETY1.n;
+
+move to HANDLER1.e;
+arrow right;
+
+box invis "...";
+
+arrow right;
+
+  HANDLER2: box wid 2 ht 0.5 "Handler N";
+  move to HANDLER2.s;
+  move down 0;
+  HANDLE2: box wid 2 dotted "handle(command)";
+  move to HANDLE2.s;
+  move left 0;
+  move down 1;
+  COMMAND2: box wid 2 ht 0.5 "Command";
+  move to COMMAND2.w;
+  move up; move right 0;
+  SETX2: box wid 1 dotted "getX";
+  move to SETX2.e;
+  move right 0;
+  SETY2: box wid 1 dotted "setY";
+
+  arrow from SETX2.n to 1/2 of the way between HANDLE2.sw and HANDLE2.s;
+  arrow from 1/2 of the way between HANDLE2.s and HANDLE2.se to SETY2.n;
+
+move to HANDLER2.e;
+arrow right;
+END: [ INNER: circle rad 0.05; move left 0.03; circle filled rad 0.02; ];
+
+.PE

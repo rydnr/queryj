@@ -1,0 +1,28 @@
+.PS
+
+copy "sequence.pic";
+
+# Define the objects
+object(Q,"q:QueryJ");
+step();
+step();
+
+active(Q);
+
+# Message sequences
+
+message(Q,Q,"buildChain()");
+step();
+
+message(Q,Q,"buildCommand()");
+
+step();
+message(Q,Q,"parent:execute(chain,command)");
+
+step();
+inactive(Q);
+
+# Complete the lifelines
+step();
+complete(Q);
+.PE
