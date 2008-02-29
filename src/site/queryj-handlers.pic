@@ -1,5 +1,6 @@
 .PS
 define triangle { line from $1 down $2*sqrt(3)*0.5 left $2*0.5 then right $2*0.5 ; B: line right $2*0.5; line to $1 };
+define diamond { line from $1 down $2*sqrt(2)*0.5 left $2*sqrt(2)*0.5 then right $2*sqrt(2)*0.5 down $2*sqrt(2)*0.5; B: line right $2*sqrt(2)*0.5 up $2*sqrt(2)*0.5; line to $1 };
 ANT_COMMAND_HANDLER: box wid 2 "AntCommandHandler";
 TRI_1: triangle( bottom of last box, 0.2 );
 ABSTRACT_ANT_COMMAND_HANDLER:
@@ -33,4 +34,5 @@ move down 1;
 INVIS4: [ box invis wid 0 "" ];
 L3: line from TRI_C.s down TRI_C.s.y - INVIS4.n.y;
 COMPOSITE: box wid 2.5 "CompositeAntCommandHandler";
+DIAMOND: diamond( COMPOSITE.s, 0.2 );
 .PE
