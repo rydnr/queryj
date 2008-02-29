@@ -1,0 +1,36 @@
+.PS
+define triangle { line from $1 down $2*sqrt(3)*0.5 left $2*0.5 then right $2*0.5 ; B: line right $2*0.5; line to $1 };
+ANT_COMMAND_HANDLER: box wid 2 "AntCommandHandler";
+TRI_1: triangle( bottom of last box, 0.2 );
+ABSTRACT_ANT_COMMAND_HANDLER:
+[  box wid 2 "AbstractAntCommandHandler"
+] with .n at last box.s - (0, 0.5);
+move to TRI_1.s;
+line down TRI_1.s.y - ABSTRACT_ANT_COMMAND_HANDLER.n.y;
+move to ABSTRACT_ANT_COMMAND_HANDLER.s;
+move left from 1/4 of the way between ABSTRACT_ANT_COMMAND_HANDLER.w and ABSTRACT_ANT_COMMAND_HANDLER.e;
+move right 0.1;
+move down 0.75;
+#line down 0.5;
+L1: line right 0.3;
+line up 0;
+INVIS1: [ box invis wid 0 "" ];# with .s at ABSTRACT_ANT_COMMAND_HANDLER.s;
+TRI_B: triangle( INVIS1.n, 0.2 );
+move down 0.5;
+INVIS2: [ box invis wid 0 "" ];
+line from TRI_B.s down TRI_B.s.y - INVIS2.n.y;
+L2: line right 0.3;
+move to L1.w;
+line down 0.2;
+move to L2.e;
+line down 0.2;
+move to L2.w;
+box invis "...";
+move to (3/4 of the way between ABSTRACT_ANT_COMMAND_HANDLER.w and ABSTRACT_ANT_COMMAND_HANDLER.e, ABSTRACT_ANT_COMMAND_HANDLER.s);
+INVIS3: [ box invis wid 0 "" ];
+TRI_C: triangle( INVIS3.n, 0.2 );
+move down 1;
+INVIS4: [ box invis wid 0 "" ];
+L3: line from TRI_C.s down TRI_C.s.y - INVIS4.n.y;
+COMPOSITE: box wid 2.5 "CompositeAntCommandHandler";
+.PE
