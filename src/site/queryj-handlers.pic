@@ -62,13 +62,14 @@ TEMPLATE_HANDLER_BUNDLE: box wid 2.0 "TemplateHandlerBundle";
 move to (TEMPLATE_HANDLER_BUNDLE.s.x, TEMPLATE_HANDLER_BUNDLE.s.y - 0.1*sqrt(3));
 move down 0.5 - 0.1*sqrt(3);
 INVIS7: [ box invis wid 0 "" ];
-TRI8: triangle( COMPOSITE.s, 0.2 );
-line from TRI8.s down TRI8.s.y - INVIS6.n.y;
-L8: line right (TEMPLATE_HANDLER_BUNDLE.wid / 4);
+TRI8: triangle( TEMPLATE_HANDLER_BUNDLE.s, 0.2 );
+line from TRI8.s down TRI8.s.y - INVIS7.n.y;
+L8: line right 0.4;
 line down 0.2;
-move to L8.e;
+move to L8.w;
+line left 0.4;
 line down 0.2;
-box invis ". . ." at ( L8.w.x + TEMPLATE_HANDLER_BUNDLE.wid / 8, L8.s.y - 0.2);
+box invis ". . ." at ( L8.w.x, L8.s.y - 0.2);
 
 
 .PE
