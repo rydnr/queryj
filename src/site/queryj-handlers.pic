@@ -1,10 +1,10 @@
 .PS
 define triangle { line from $1 down $2*sqrt(3)*0.5 left $2*0.5 then right $2*0.5; B: line right $2*0.5; line to $1 };
 define diamond { [ A: line from $1 down $2*sqrt(2)*0.5 left $2*sqrt(2)*0.5; B: line right $2*sqrt(2)*0.5 down $2*sqrt(2)*0.5; C: line right $2*sqrt(2)*0.5 up $2*sqrt(2)*0.5; D: line to $1 ] };
-ANT_COMMAND_HANDLER: box wid 2 "AntCommandHandler";
+ANT_COMMAND_HANDLER: box wid 1.8 "AntCommandHandler";
 TRI1: triangle( bottom of last box, 0.2 );
 ABSTRACT_ANT_COMMAND_HANDLER:
-[  box wid 2 "AbstractAntCommandHandler"
+[  box wid 2.2 "AbstractAntCommandHandler"
 ] with .n at last box.s - (0, 0.5);
 move to TRI1.s;
 line down TRI1.s.y - ABSTRACT_ANT_COMMAND_HANDLER.n.y;
@@ -26,7 +26,7 @@ line down 0.2;
 move to L2.e;
 line down 0.2;
 move to L2.w;
-box invis "...";
+box invis ". . .";
 move to (3/4 of the way between ABSTRACT_ANT_COMMAND_HANDLER.w and ABSTRACT_ANT_COMMAND_HANDLER.e, ABSTRACT_ANT_COMMAND_HANDLER.s);
 INVIS3: [ box invis wid 0 "" ];
 TRI3: triangle( INVIS3.n, 0.2 );
@@ -48,10 +48,16 @@ move down 0.5 - 0.1*sqrt(3);
 INVIS6: [ box invis wid 0 "" ];# with .s at ABSTRACT_ANT_COMMAND_HANDLER.s;
 TRI4: triangle( COMPOSITE.s, 0.2 );
 line from TRI4.s down TRI4.s.y - INVIS6.n.y;
-L7: line right 1.0;
+L7: line right (COMPOSITE.wid / 4);
 line down 0.2;
 move to L7.e;
 line down 0.2;
-box invis "..." at ( L7.w.x + 0.5, L7.s.y - 0.2);
+box invis ". . ." at ( L7.w.x + COMPOSITE.wid / 8, L7.s.y - 0.2);
+
+move to L7.w;
+line left (COMPOSITE.wid / 4);
+line down 0.4;
+
+TEMPLATE_HANDLER_BUNDLE: box wid 2.0 "TemplateHandlerBundle";
 
 .PE
