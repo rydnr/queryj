@@ -45,7 +45,7 @@ line up (L5.e.y - L4.e.y);
 
 move to (COMPOSITE.s.x, COMPOSITE.s.y - 0.1*sqrt(3));
 move down 0.5 - 0.1*sqrt(3);
-INVIS6: [ box invis wid 0 "" ];# with .s at ABSTRACT_ANT_COMMAND_HANDLER.s;
+INVIS6: [ box invis wid 0 "" ];
 TRI4: triangle( COMPOSITE.s, 0.2 );
 line from TRI4.s down TRI4.s.y - INVIS6.n.y;
 L7: line right (COMPOSITE.wid / 4);
@@ -59,5 +59,16 @@ line left (COMPOSITE.wid / 4);
 line down 0.4;
 
 TEMPLATE_HANDLER_BUNDLE: box wid 2.0 "TemplateHandlerBundle";
+move to (TEMPLATE_HANDLER_BUNDLE.s.x, TEMPLATE_HANDLER_BUNDLE.s.y - 0.1*sqrt(3));
+move down 0.5 - 0.1*sqrt(3);
+INVIS7: [ box invis wid 0 "" ];
+TRI8: triangle( COMPOSITE.s, 0.2 );
+line from TRI8.s down TRI8.s.y - INVIS6.n.y;
+L8: line right (TEMPLATE_HANDLER_BUNDLE.wid / 4);
+line down 0.2;
+move to L8.e;
+line down 0.2;
+box invis ". . ." at ( L8.w.x + TEMPLATE_HANDLER_BUNDLE.wid / 8, L8.s.y - 0.2);
+
 
 .PE
