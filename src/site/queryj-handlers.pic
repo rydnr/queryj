@@ -2,12 +2,12 @@
 define triangle { line from $1 down $2*sqrt(3)*0.5 left $2*0.5 then right $2*0.5; B: line right $2*0.5; line to $1 };
 define diamond { [ A: line from $1 down $2*sqrt(2)*0.5 left $2*sqrt(2)*0.5; B: line right $2*sqrt(2)*0.5 down $2*sqrt(2)*0.5; C: line right $2*sqrt(2)*0.5 up $2*sqrt(2)*0.5; D: line to $1 ] };
 ANT_COMMAND_HANDLER: box wid 2 "AntCommandHandler";
-TRI_1: triangle( bottom of last box, 0.2 );
+TRI1: triangle( bottom of last box, 0.2 );
 ABSTRACT_ANT_COMMAND_HANDLER:
 [  box wid 2 "AbstractAntCommandHandler"
 ] with .n at last box.s - (0, 0.5);
-move to TRI_1.s;
-line down TRI_1.s.y - ABSTRACT_ANT_COMMAND_HANDLER.n.y;
+move to TRI1.s;
+line down TRI1.s.y - ABSTRACT_ANT_COMMAND_HANDLER.n.y;
 move to ABSTRACT_ANT_COMMAND_HANDLER.s;
 move left from 1/4 of the way between ABSTRACT_ANT_COMMAND_HANDLER.w and ABSTRACT_ANT_COMMAND_HANDLER.e;
 move right 0.1;
@@ -16,10 +16,10 @@ move down 0.75;
 L1: line right 0.3;
 line up 0;
 INVIS1: [ box invis wid 0 "" ];# with .s at ABSTRACT_ANT_COMMAND_HANDLER.s;
-TRI_B: triangle( INVIS1.n, 0.2 );
+TRI2: triangle( INVIS1.n, 0.2 );
 move down 0.5;
 INVIS2: [ box invis wid 0 "" ];
-line from TRI_B.s down TRI_B.s.y - INVIS2.n.y;
+line from TRI2.s down TRI2.s.y - INVIS2.n.y;
 L2: line right 0.3;
 move to L1.w;
 line down 0.2;
@@ -29,10 +29,10 @@ move to L2.w;
 box invis "...";
 move to (3/4 of the way between ABSTRACT_ANT_COMMAND_HANDLER.w and ABSTRACT_ANT_COMMAND_HANDLER.e, ABSTRACT_ANT_COMMAND_HANDLER.s);
 INVIS3: [ box invis wid 0 "" ];
-TRI_C: triangle( INVIS3.n, 0.2 );
+TRI3: triangle( INVIS3.n, 0.2 );
 move down 1;
 INVIS4: [ box invis wid 0 "" ];
-L3: line from TRI_C.s down TRI_C.s.y - INVIS4.n.y;
+L3: line from TRI3.s down TRI3.s.y - INVIS4.n.y;
 COMPOSITE: box wid 2.5 "CompositeAntCommandHandler";
 #move to (COMPOSITE.e.x + 0.1*sqrt(2), 1/4 of the way between COMPOSITE.se and COMPOSITE.ne);
 INVIS5: [ box invis wid 0 "" ] at (COMPOSITE.e.x + 0.1*sqrt(2), COMPOSITE.n.y);#;
@@ -42,5 +42,16 @@ L4: line right (0.5 + 0.1*sqrt(2));
 L5: line right 0.5 + 0.3*sqrt(2) at (COMPOSITE.e.x, COMPOSITE.n.y - (COMPOSITE.n.y - COMPOSITE.s.y)*0.25);
 move to L4.e;
 line up (L5.e.y - L4.e.y);
-#line left to 3/4 of the way between COMPOSITE.se and COMPOSITE.ne;
+
+move to (COMPOSITE.s.x, COMPOSITE.s.y - 0.1*sqrt(3));
+move down 0.5 - 0.1*sqrt(3);
+INVIS6: [ box invis wid 0 "" ];# with .s at ABSTRACT_ANT_COMMAND_HANDLER.s;
+TRI4: triangle( COMPOSITE.s, 0.2 );
+line from TRI4.s down TRI4.s.y - INVIS6.n.y;
+L7: line right 1.0;
+line down 0.2;
+move to L7.e;
+line down 0.2;
+box invis "..." at ( L7.w.x + 0.5, L7.s.y - 0.2);
+
 .PE
