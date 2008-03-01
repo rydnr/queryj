@@ -35,13 +35,12 @@ INVIS4: [ box invis wid 0 "" ];
 L3: line from TRI3.s down TRI3.s.y - INVIS4.n.y;
 COMPOSITE: box wid 2.5 "CompositeAntCommandHandler";
 #move to (COMPOSITE.e.x + 0.1*sqrt(2), 1/4 of the way between COMPOSITE.se and COMPOSITE.ne);
-INVIS5: [ box invis wid 0 "" ] at (COMPOSITE.e.x + 0.1*sqrt(2), COMPOSITE.n.y);#;
-DIAMOND: diamond( INVIS5.ne, 0.2 );
-move to DIAMOND.D.e;
-L4: line right (0.5 + 0.1*sqrt(2));
-L5: line right 0.5 + 0.3*sqrt(2) at (COMPOSITE.e.x, COMPOSITE.n.y - (COMPOSITE.n.y - COMPOSITE.s.y)*0.25);
-move to L4.e;
-line up (L5.e.y - L4.e.y);
+
+INVIS5: [ box invis wid 0 ht 0 "" ] at (COMPOSITE.e.x + 0.1*sqrt(2), COMPOSITE.e.y + 0.1*sqrt(3));
+DIAMOND: diamond( INVIS5.e, 0.2 );
+L5: line right 1 + 0.3*sqrt(2) at (ANT_COMMAND_HANDLER.e.x, ANT_COMMAND_HANDLER.e.y);
+line from (DIAMOND.D.x, DIAMOND.D.y) to (L5.e.x, DIAMOND.D.y);
+line from (L5.e.x, DIAMOND.D.y) to (L5.e.x, L5.e.y);
 
 move to (COMPOSITE.s.x, COMPOSITE.s.y - 0.1*sqrt(3));
 move down 0.5 - 0.1*sqrt(3);
