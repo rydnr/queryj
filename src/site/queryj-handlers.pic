@@ -38,7 +38,7 @@ COMPOSITE: box wid 2.5 "CompositeAntCommandHandler";
 
 INVIS5: [ box invis wid 0 ht 0 "" ] at (COMPOSITE.e.x + 0.1*sqrt(2), COMPOSITE.e.y + 0.1*sqrt(3));
 DIAMOND: diamond( INVIS5.e, 0.2 );
-L5: line right 1 + 0.3*sqrt(2) at (ANT_COMMAND_HANDLER.e.x, ANT_COMMAND_HANDLER.e.y);
+L5: arrow left 1 + 0.3*sqrt(2) at (ANT_COMMAND_HANDLER.e.x + 1 + 0.3*sqrt(2), ANT_COMMAND_HANDLER.e.y);
 line from (DIAMOND.D.x, DIAMOND.D.y) to (L5.e.x, DIAMOND.D.y);
 line from (L5.e.x, DIAMOND.D.y) to (L5.e.x, L5.e.y);
 
