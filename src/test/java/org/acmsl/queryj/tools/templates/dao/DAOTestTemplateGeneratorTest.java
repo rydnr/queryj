@@ -89,6 +89,26 @@ extends TestCase
   // JUnitDoclet end class
   
   /**
+   * The tested jdbc driver.
+   */
+  private static final String JDBC_DRIVER = "test.driver";
+
+  /**
+   * The tested jdbc url.
+   */
+  private static final String JDBC_URL = "jdbc:url:ad.dr.es.s:port:sid";
+
+  /**
+   * The tested jdbc username.
+   */
+  private static final String JDBC_USERNAME = "username";
+
+  /**
+   * The tested jdbc password.
+   */
+  private static final String JDBC_PASSWORD = "password";
+
+  /**
   * Creates a DAOTestTemplateGeneratorTest with given name.
   * @param name such name.
   */
@@ -108,7 +128,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator.getInstance();
+    return new org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator(JDBC_DRIVER, JDBC_URL, JDBC_USERNAME, JDBC_PASSWORD);
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -139,54 +159,56 @@ extends TestCase
   }
   
   /**
-  * Tests DAOTestTemplateGeneratorTestgetInstance()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#getInstance()
-  */
-  public void testGetInstance()
-  throws Exception
+   * Tests DAOTestTemplateGeneratorTestgetJdbcDriver()
+   * @throws Exception if an unexpected situation occurs.
+   * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#getJdbcDriver()
+   */
+  public void testGetJdbcDriver()
+      throws Exception
   {
-    // JUnitDoclet begin method getInstance
-    // JUnitDoclet end method getInstance
+    // JUnitDoclet begin method getJdbcDriver
+    assertEquals(daotesttemplategenerator.getJdbcDriver(), JDBC_DRIVER);
+    // JUnitDoclet end method getJdbcDriver
   }
   
   /**
-  * Tests DAOTestTemplateGeneratorTestaddTemplateFactoryClass()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#addTemplateFactoryClass(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-  */
-  public void testAddTemplateFactoryClass()
-  throws Exception
+   * Tests DAOTestTemplateGeneratorTestgetJdbcUrl()
+   * @throws Exception if an unexpected situation occurs.
+   * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#getJdbcUrl()
+   */
+  public void testGetJdbcUrl()
+      throws Exception
   {
-    // JUnitDoclet begin method addTemplateFactoryClass
-    // JUnitDoclet end method addTemplateFactoryClass
+    // JUnitDoclet begin method getJdbcUrl
+    assertEquals(daotesttemplategenerator.getJdbcUrl(), JDBC_URL);
+    // JUnitDoclet end method getJdbcUrl
   }
   
   /**
-  * Tests DAOTestTemplateGeneratorTestcreateDAOTestTemplate()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#createDAOTestTemplate(org.acmsl.queryj.tools.templates.TableTemplate, org.acmsl.queryj.tools.DatabaseMetaDataManager, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.String)
-  */
-  public void testCreateDAOTestTemplate()
-  throws Exception
+   * Tests DAOTestTemplateGeneratorTestgetJdbcUser()
+   * @throws Exception if an unexpected situation occurs.
+   * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#getJdbcUser()
+   */
+  public void testGetJdbcUser()
+      throws Exception
   {
-    // JUnitDoclet begin method createDAOTestTemplate
-    // JUnitDoclet end method createDAOTestTemplate
+    // JUnitDoclet begin method getJdbcUser
+    assertEquals(daotesttemplategenerator.getJdbcUser(), JDBC_USERNAME);
+    // JUnitDoclet end method getJdbcUser
   }
   
   /**
-  * Tests DAOTestTemplateGeneratorTestwrite()
-  * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#write(org.acmsl.queryj.tools.templates.dao.DAOTestTemplate, java.io.File)
-  */
-  public void testWrite()
-  throws Exception
+   * Tests DAOTestTemplateGeneratorTestgetJdbcPassword()
+   * @throws Exception if an unexpected situation occurs.
+   * @see org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGenerator#getJdbcPassword()
+   */
+  public void testGetJdbcPassword()
+      throws Exception
   {
-    // JUnitDoclet begin method write
-    // JUnitDoclet end method write
+    // JUnitDoclet begin method getJdbcPassword
+    assertEquals(daotesttemplategenerator.getJdbcPassword(), JDBC_PASSWORD);
+    // JUnitDoclet end method getJdbcPassword
   }
-  
-  
   
   /**
   * JUnitDoclet moves marker to this method, if there is not match

@@ -1,7 +1,7 @@
 .PS
 define triangle { line from $1 down $2*sqrt(3)*0.5 left $2*0.5 then right $2*0.5; B: line right $2*0.5; line to $1 };
 define diamond { [ A: line from $1 down $2*sqrt(2)*0.5 left $2*sqrt(2)*0.5; B: line right $2*sqrt(2)*0.5 down $2*sqrt(2)*0.5; C: line right $2*sqrt(2)*0.5 up $2*sqrt(2)*0.5; D: line to $1 ] };
-ANT_COMMAND_HANDLER: box wid 1.8 "AntCommandHandler";
+ANT_COMMAND_HANDLER: box wid 1.8 dashed "AntCommandHandler";
 TRI1: triangle( bottom of last box, 0.2 );
 ABSTRACT_ANT_COMMAND_HANDLER:
 [  box wid 2.2 "AbstractAntCommandHandler"
@@ -72,16 +72,16 @@ box invis ". . ." at ( L8.w.x, L8.s.y - 0.2);
 
 move to TEMPLATE_HANDLER_BUNDLE.w;
 move left 2;
-TEMPLATE_BUILD_HANDLER: box wid 1.8 "TemplateBuildHandler";
+TEMPLATE_BUILD_HANDLER: box wid 1.8 dashed "TemplateBuildHandler";
 arrow from TEMPLATE_HANDLER_BUNDLE.w to TEMPLATE_BUILD_HANDLER.e;
 
 move to TEMPLATE_HANDLER_BUNDLE.w;
 move left 1.1;
 move down 1;
-TEMPLATE_WRITING_HANDLER: box wid 1.8 "TemplateWritingHandler";
+TEMPLATE_WRITING_HANDLER: box wid 1.8 dashed "TemplateWritingHandler";
 arrow from TEMPLATE_HANDLER_BUNDLE.w to TEMPLATE_WRITING_HANDLER.n;
 
-TEMPLATE_HANDLER: box wid 1.5 "TemplateHandler" at (TEMPLATE_BUILD_HANDLER.e.x, ABSTRACT_ANT_COMMAND_HANDLER.e.y);
+TEMPLATE_HANDLER: box wid 1.5 dashed "TemplateHandler" at (TEMPLATE_BUILD_HANDLER.e.x, ABSTRACT_ANT_COMMAND_HANDLER.e.y);
 L9: line from TEMPLATE_HANDLER.n to (TEMPLATE_HANDLER.n.x, TRI1.y - 0.1*sqrt(3) - (TRI1.y - 0.1*sqrt(3) - ABSTRACT_ANT_COMMAND_HANDLER.n.y)/2);
 line from L9.n to (ANT_COMMAND_HANDLER.s.x, TRI1.y - 0.1*sqrt(3) - (TRI1.y - 0.1*sqrt(3) - ABSTRACT_ANT_COMMAND_HANDLER.n.y)/2);
 

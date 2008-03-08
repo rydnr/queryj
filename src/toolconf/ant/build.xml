@@ -2135,7 +2135,7 @@
 
         <classpath refid="unit.test.class.path"/>
 
-        <formatter type="plain"/>
+        <formatter type="xml"/>
 
         <batchtest todir="${basedir}/target/testreports">
 
@@ -2143,13 +2143,22 @@
             <include name="**/*Test.java"/>
           </fileset>
 
-          <!--fileset dir="${basedir}/src/test/java">
+          <fileset dir="${basedir}/src/test/java">
             <include name="**/*Test.java"/>
-          </fileset-->
+          </fileset>
 
         </batchtest>
 
       </junit>
+
+      <mkdir dir="${basedir}/target/testreports/html"/>
+
+      <junitreport todir="${basedir}/target/testreports">
+        <fileset dir="${basedir}/target/testreports">
+          <include name="TEST-*.xml"/>
+        </fileset>
+        <report format="noframes" todir="${basedir}/target/testreports/html"/>
+      </junitreport>
 
       <!--
        If success, increase the test count.
