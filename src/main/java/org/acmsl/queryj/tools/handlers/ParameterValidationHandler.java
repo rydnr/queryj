@@ -324,6 +324,11 @@ public class ParameterValidationHandler
     public static final String QUERYJ_VERSION = "queryjVersion";
 
     /**
+     * Whether to launch a shell.
+     */
+    public static final String SHELL = "shell";
+
+    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -378,6 +383,7 @@ public class ParameterValidationHandler
                 (File) parameters.get(GRAMMAR_BUNDLE_NAME),
                 (Boolean) parameters.get(JMX),
                 (Boolean) parameters.get(DISABLE_SQL_VALIDATION),
+                (Boolean) parameters.get(SHELL),
                 parameters);
         }
     }
@@ -407,7 +413,8 @@ public class ParameterValidationHandler
      * @param sqlXmlFile the sql.xml file.
      * @param grammarBundleName the grammar bundle name.
      * @param jmx whether to support JMX.
-     * @param disableJmxValidation whether to disable SQL validation.
+     * @param disableSqlValidation whether to disable SQL validation.
+     * @param shell whether to provide a BeanShell.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
      * @throws BuildException whenever the required
@@ -437,6 +444,7 @@ public class ParameterValidationHandler
         final File grammarBundleName,
         final Boolean jmx,
         final Boolean disableSqlValidation,
+        final Boolean shell,
         final Map parameters)
     {
         Log t_Log =

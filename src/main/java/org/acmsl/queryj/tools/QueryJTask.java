@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProvisioningHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.tools.handlers.BeanShellHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
@@ -283,6 +284,16 @@ public class QueryJTask
      * The externally-managed fields.
      */
     private AntExternallyManagedFieldsElement m__ExternallyManagedFields;
+
+    /**
+     * The "shell" value.
+     */
+    private String m__strShell;
+
+    /**
+     * Whether to provide a BeanShell just before the actual generation phase.
+     */
+    private boolean m__bShell = false;
 
     /**
      * Creates a QueryJTask.
@@ -1222,6 +1233,60 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to launch a BeanShell just before the generation
+     * phase.
+     * @param shell such flag.
+     */
+    protected final void immutableSetShell(
+        final String shell)
+    {
+        m__strShell = shell;
+    }
+
+    /**
+     * Specifies whether to launch a BeanShell just before the generation
+     * phase.
+     * @param shell such flag.
+     */
+    public void setShell(final String shell)
+    {
+        immutableSetShell(shell);
+
+        setShellFlag(
+            (   (shell == null)
+             || (shell.trim().toLowerCase().equals("yes")
+             || (shell.trim().toLowerCase().equals("true")))));
+    }
+
+    /**
+     * Retrieves whether to launch a BeanShell just before the generation
+     * phase.
+     * @return such setting.
+     */
+    public String getShell()
+    {
+        return m__strShell;
+    }
+
+    /**
+     * Specifies the "shell" flag.
+     * @param flag such flag.
+     */
+    protected void setShellFlag(final boolean flag)
+    {
+        m__bShell = flag;
+    }
+
+    /**
+     * Retrieves the "shell" flag.
+     * @return such flag.
+     */
+    protected boolean getShellFlag()
+    {
+        return m__bShell;
+    }
+
+    /**
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
@@ -1251,11 +1316,14 @@ public class QueryJTask
 
         if  (result != null)
         {
+            //set-up phase
             result.add(new ParameterValidationHandler());
             result.add(new SetupContextHandler());
             result.add(new PrintPreambleHandler());
 
             result.add(new JdbcConnectionOpeningHandler());
+
+            // provisioning-phase
             result.add(new CustomSqlProviderRetrievalHandler());
 
             result.add(new MySQL4xMetaDataRetrievalHandler());
@@ -1269,6 +1337,9 @@ public class QueryJTask
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
 
+            result.add(new BeanShellHandler());
+
+            // generation phase
             result.add(new TableTemplateHandlerBundle());
 
             //result.add(new FunctionsBundle());
@@ -1371,6 +1442,8 @@ public class QueryJTask
 
             AntExternallyManagedFieldsElement t_ExternallyManagedFields =
                 getExternallyManagedFields();
+
+            boolean t_bShell = getShellFlag();
 
             if  (t_mAttributes != null)
             {
@@ -1540,6 +1613,10 @@ public class QueryJTask
                         ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
                         t_GrammarBundle);
                 }
+
+                t_mAttributes.put(
+                    ParameterValidationHandler.SHELL,
+                    (t_bShell ?  Boolean.TRUE :  Boolean.FALSE));
             }
         }
 

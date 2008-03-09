@@ -55,7 +55,6 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
 
 /*
  * Importing some Commons-Logging classes.
