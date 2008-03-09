@@ -207,10 +207,17 @@ public class BeanShellHandler
 
                 t_Log.info(t_sbInitialMessage.toString());
 
-                InputRequest t_Request =
-                    new BshInputRequest(PROMPT, t_Interpreter);
+                boolean t_bFinished = false;
 
-                new DefaultInputHandler().handleInput(t_Request);
+                while (!t_bFinished)
+                {
+                    InputRequest t_Request =
+                        new BshInputRequest(PROMPT, t_Interpreter);
+
+                    new DefaultInputHandler().handleInput(t_Request);
+
+                    t_bFinished = !t_Request.isInputValid();
+                }
             }
             catch  (final EvalError evalError)
             {
@@ -247,7 +254,7 @@ public class BeanShellHandler
 
         result.set("bsh.prompt", "(queryj) %");
         result.set("bsh.interactive", false);
-        result.set("bsh.eval", true);
+        result.set("bsh.eval", false);
 
         int t_iCount =
             AVAILABLE_PACKAGES != null ? AVAILABLE_PACKAGES.length : 0;
@@ -353,7 +360,12 @@ public class BeanShellHandler
 
                 if  (isInputValid())
                 {
-                    log("" + interpreter.eval(input), log);
+                    Object t_Result = interpreter.eval(input);
+
+                    if  (t_Result != null)
+                    {
+                        log("" + t_Result, log);
+                    }
                 }
             }
             catch  (final EvalError evalError)
