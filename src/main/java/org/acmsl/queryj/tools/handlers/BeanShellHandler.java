@@ -42,8 +42,10 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some BeanShell classes.
  */
-import bsh.Interpreter;
+import bsh.BshClassManager;
 import bsh.EvalError;
+import bsh.Interpreter;
+import bsh.NameSpace;
 
 /*
  * Importing some project classes.
@@ -56,6 +58,7 @@ import org.acmsl.queryj.tools.handlers.AbstractAntCommandHandler;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Command;
+import org.acmsl.commons.utils.ClassLoaderUtils;
 
 /*
  * Importing some Ant classes.
@@ -72,6 +75,9 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some JDK classes.
  */
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -228,6 +234,24 @@ public class BeanShellHandler
                         evalError);
                 }
             }
+            catch  (final MalformedURLException malformedUrlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot launch BeanShell.",
+                        malformedUrlException);
+                }
+            }
+            catch  (final IOException ioException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot launch BeanShell.",
+                        ioException);
+                }
+            }
             catch  (final BuildException buildException)
             {
                 if  (t_Log != null)
@@ -245,24 +269,52 @@ public class BeanShellHandler
     /**
      * Sets up a new interpreter.
      * @return the configured Interpreter instance.
-     * @throws  EvalError if the interpreter cannot be configured.
+     * @throws EvalError if the interpreter cannot be configured.
+     * @throws MalformedURLException if the classpath cannot be configured.
+     * @throws IOException if the Interpreter cannot be configured.
      */
     protected Interpreter setUpInterpreter()
-        throws  EvalError
+        throws  EvalError,
+                MalformedURLException,
+                IOException
     {
         Interpreter result = new Interpreter();
 
+        result.setClassLoader(BeanShellHandler.class.getClassLoader());
+
         result.set("bsh.prompt", "(queryj) %");
-        result.set("bsh.interactive", false);
-        result.set("bsh.eval", false);
+        result.set("bsh.interactive", true);
+        result.set("bsh.eval", true);
+
+        BshClassManager t_ClassManager = result.getClassManager();
+
+        ClassLoaderUtils t_ClassLoaderUtils = ClassLoaderUtils.getInstance();
+
+        String t_strLocation =
+            t_ClassLoaderUtils.findLocation(BeanShellHandler.class);
+
+        if  (   (t_strLocation != null)
+             && (t_strLocation.trim().length() > 0))
+        {
+            t_ClassManager.addClassPath(new URL(t_strLocation));
+        }
+
+        NameSpace t_Namespace = new NameSpace(t_ClassManager, "queryj");
+
+        result.setNameSpace(t_Namespace);
 
         int t_iCount =
             AVAILABLE_PACKAGES != null ? AVAILABLE_PACKAGES.length : 0;
 
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        int t_iIndex = 0;
+
+        for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            result.eval("import " + AVAILABLE_PACKAGES[t_iIndex]);
+            result.eval("import " + AVAILABLE_PACKAGES[t_iIndex] + ".*;");
         }
+
+        result.eval(
+            "print (\"" + (t_iIndex+1) + " QueryJ packages loaded.\");\n");
 
         return result;
     }
@@ -356,11 +408,18 @@ public class BeanShellHandler
         {
             try
             {
-                super.setInput(input);
+                String t_strInput = input;
 
-                if  (isInputValid())
+                super.setInput(t_strInput);
+
+                if  (!isInputValid())
                 {
-                    Object t_Result = interpreter.eval(input);
+                    if  (t_strInput == null)
+                    {
+                        t_strInput = "int index; print(\"\" + index++);\n";
+                    }
+
+                    Object t_Result = interpreter.eval(t_strInput);
 
                     if  (t_Result != null)
                     {
@@ -397,15 +456,19 @@ public class BeanShellHandler
          */
         public boolean isInputValid()
         {
-            boolean result = true;
+            boolean result = false;
 
             String t_strInput = getInput();
 
             if  (   (t_strInput == null)
-                 || (t_strInput.trim().length() == 0)
-                 || (t_strInput.equalsIgnoreCase("quit")))
+                 || (t_strInput.trim().length() == 0))
             {
                 result = false;
+            }
+            else if  (   (t_strInput.trim().equalsIgnoreCase("quit"))
+                      || (t_strInput.trim().equalsIgnoreCase("continue")))
+            {
+                result = true;
             }
 
             return result;
