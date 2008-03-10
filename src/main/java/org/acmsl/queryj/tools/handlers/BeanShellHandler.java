@@ -66,6 +66,7 @@ import org.acmsl.commons.utils.ClassLoaderUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.input.DefaultInputHandler;
 import org.apache.tools.ant.input.InputRequest;
+import org.apache.tools.ant.types.Path;
 
 /*
  * Importing some Commons-Logging classes.
@@ -201,7 +202,7 @@ public class BeanShellHandler
         {
             try
             {
-                Interpreter t_Interpreter = setUpInterpreter();
+                Interpreter t_Interpreter = setUpInterpreter(parameters);
 
                 int t_iCount =
                     INITIAL_MESSAGES != null ? INITIAL_MESSAGES.length : 0;
@@ -224,7 +225,7 @@ public class BeanShellHandler
 
                     new DefaultInputHandler().handleInput(t_Request);
 
-                    t_bFinished = !t_Request.isInputValid();
+                    t_bFinished = t_Request.isInputValid();
                 }
             }
             catch  (final EvalError evalError)
@@ -270,12 +271,13 @@ public class BeanShellHandler
 
     /**
      * Sets up a new interpreter.
+     * @param parameters the command parameters.
      * @return the configured Interpreter instance.
      * @throws EvalError if the interpreter cannot be configured.
      * @throws MalformedURLException if the classpath cannot be configured.
      * @throws IOException if the Interpreter cannot be configured.
      */
-    protected Interpreter setUpInterpreter()
+    protected Interpreter setUpInterpreter(final Map parameters)
         throws  EvalError,
                 MalformedURLException,
                 IOException
@@ -287,45 +289,55 @@ public class BeanShellHandler
         result.set("bsh.prompt", "(queryj) %");
         result.set("bsh.interactive", true);
         result.set("bsh.eval", true);
+        NameSpace t_NameSpace = result.getNameSpace();
+        BshClassManager t_ClassManager = result.getClassManager();
 
-        try
+        if  (t_NameSpace == null)
         {
-            sanityCheck(result);
-        }
-        catch  (final EvalError evalError)
-        {
-            ClassLoaderUtils t_ClassLoaderUtils =
-                ClassLoaderUtils.getInstance();
-
-            String t_strLocation =
-                t_ClassLoaderUtils.findLocation(BeanShellHandler.class);
-
-            if  (   (t_strLocation != null)
-                 && (t_strLocation.trim().length() > 0))
-            {
-                BshClassManager t_ClassManager = result.getClassManager();
-                t_ClassManager.addClassPath(new URL(t_strLocation));
-                NameSpace t_Namespace = new NameSpace(t_ClassManager, "queryj");
-
-                result.setNameSpace(t_Namespace);
-
-                // Second chance.
-                sanityCheck(result);
-            }
+            t_NameSpace = new NameSpace(t_ClassManager, "queryj");
+            result.setNameSpace(t_NameSpace);
         }
 
-        int t_iCount =
-            AVAILABLE_PACKAGES != null ? AVAILABLE_PACKAGES.length : 0;
+        result.set("bsh.ns", t_NameSpace);
+        result.set("queryj.parameters", parameters);
+        result.set("queryj.metadata", retrieveMetadataManager(parameters));
+        Path t_Path =
+            (Path) parameters.get(ParameterValidationHandler.CLASSPATH);
+
+        int t_iCount = 0;
 
         int t_iIndex = 0;
 
-        for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        if  (t_Path != null)
         {
-            result.eval("import " + AVAILABLE_PACKAGES[t_iIndex] + ".*;");
+            String[] t_astrPaths = t_Path.list();
+
+            String t_strPath;
+
+            t_iCount = (t_astrPaths != null) ? t_astrPaths.length : 0;
+
+            for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            {
+                t_strPath = t_astrPaths[t_iIndex];
+
+                if  (   (t_strPath != null)
+                     && (t_strPath.trim().length() > 0))
+                {
+                    t_ClassManager.addClassPath(
+                        new URL("file://" + t_strPath));
+                }
+            }
         }
 
-        result.eval(
-            "print (\"" + (t_iIndex+1) + " QueryJ packages loaded.\");\n");
+        t_iCount =
+            AVAILABLE_PACKAGES != null ? AVAILABLE_PACKAGES.length : 0;
+
+        for  (t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_NameSpace.importPackage(AVAILABLE_PACKAGES[t_iIndex]);
+        }
+
+//        sanityCheck();
 
         return result;
     }
