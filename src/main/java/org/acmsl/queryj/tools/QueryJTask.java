@@ -1320,6 +1320,7 @@ public class QueryJTask
             result.add(new ParameterValidationHandler());
             result.add(new SetupContextHandler());
             result.add(new PrintPreambleHandler());
+            result.add(new BeanShellHandler());
 
             result.add(new JdbcConnectionOpeningHandler());
 
@@ -1336,8 +1337,6 @@ public class QueryJTask
             result.add(new DatabaseMetaDataLoggingHandler());
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
-
-            result.add(new BeanShellHandler());
 
             // generation phase
             result.add(new TableTemplateHandlerBundle());

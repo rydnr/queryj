@@ -76,6 +76,8 @@ import org.apache.commons.logging.Log;
  * Importing some JDK classes.
  */
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -286,22 +288,31 @@ public class BeanShellHandler
         result.set("bsh.interactive", true);
         result.set("bsh.eval", true);
 
-        BshClassManager t_ClassManager = result.getClassManager();
-
-        ClassLoaderUtils t_ClassLoaderUtils = ClassLoaderUtils.getInstance();
-
-        String t_strLocation =
-            t_ClassLoaderUtils.findLocation(BeanShellHandler.class);
-
-        if  (   (t_strLocation != null)
-             && (t_strLocation.trim().length() > 0))
+        try
         {
-            t_ClassManager.addClassPath(new URL(t_strLocation));
+            sanityCheck(result);
         }
+        catch  (final EvalError evalError)
+        {
+            ClassLoaderUtils t_ClassLoaderUtils =
+                ClassLoaderUtils.getInstance();
 
-        NameSpace t_Namespace = new NameSpace(t_ClassManager, "queryj");
+            String t_strLocation =
+                t_ClassLoaderUtils.findLocation(BeanShellHandler.class);
 
-        result.setNameSpace(t_Namespace);
+            if  (   (t_strLocation != null)
+                 && (t_strLocation.trim().length() > 0))
+            {
+                BshClassManager t_ClassManager = result.getClassManager();
+                t_ClassManager.addClassPath(new URL(t_strLocation));
+                NameSpace t_Namespace = new NameSpace(t_ClassManager, "queryj");
+
+                result.setNameSpace(t_Namespace);
+
+                // Second chance.
+                sanityCheck(result);
+            }
+        }
 
         int t_iCount =
             AVAILABLE_PACKAGES != null ? AVAILABLE_PACKAGES.length : 0;
@@ -317,6 +328,39 @@ public class BeanShellHandler
             "print (\"" + (t_iIndex+1) + " QueryJ packages loaded.\");\n");
 
         return result;
+    }
+
+    /**
+     * Performs a sanity check.
+     * @param interpreter the interpreter.
+     * @throws  EvalError if the interpreter does not see QueryJ classes.
+     * @precondition interpreter != null
+     */
+    protected void sanityCheck(final Interpreter interpreter)
+        throws  EvalError
+    {
+        PrintStream t_psPreviousOut = interpreter.getOut();
+        PrintStream t_psPreviousErr = interpreter.getErr();
+        PrintStream t_psOut = new PrintStream(new ByteArrayOutputStream());
+
+        try
+        {
+            PrintStream t_psErr = t_psOut;
+
+            interpreter.setOut(t_psOut);
+            interpreter.setErr(t_psErr);
+
+            // do stuff
+            interpreter.set("beanShellHandler", this);
+            interpreter.eval("javap(beanShellHandler.getClass());\n");
+        }
+        finally
+        {
+            interpreter.setOut(t_psPreviousOut);
+            interpreter.setErr(t_psPreviousErr);
+
+            t_psOut.close();
+        }
     }
 
     /**
