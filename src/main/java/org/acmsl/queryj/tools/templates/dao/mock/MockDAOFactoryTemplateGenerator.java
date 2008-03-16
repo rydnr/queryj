@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate Mock DAO factories.
@@ -217,7 +218,7 @@ public class MockDAOFactoryTemplateGenerator
             + "Mock"
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    template.getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase(Locale.getDefault())),
                 '_')
             + "DAOFactory.java",
             template.generate());

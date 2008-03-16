@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -55,6 +56,11 @@ import org.acmsl.queryj.tools.templates.TemplateCache;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Locale;
 
 /**
  * Contains the subtemplates for creating JUnit tests to ensure
@@ -1501,7 +1507,8 @@ public abstract class AbstractDAOTestTemplate
               getEngineName()
             + stringUtils.capitalize(
                   singularPluralFormConverter.getSingular(
-                      getTableTemplate().getTableName().toLowerCase()),
+                      getTableTemplate().getTableName().toLowerCase(
+                          Locale.getDefault())),
                   '_')
             + "DAOTest";
     }

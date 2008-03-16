@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate Xml DAO factories.
@@ -216,9 +217,9 @@ public class XmlDAOFactoryTemplateGenerator
             + File.separator
             + "Xml"
             + stringUtils.capitalize(
-                singularPluralFormConverter.getSingular(
-                    template.getTableName().toLowerCase()),
-                '_')
+                  singularPluralFormConverter.getSingular(
+                      template.getTableName().toLowerCase(Locale.getDefault())),
+                      '_')
             + "DAOFactory.java",
             template.generate());
     }

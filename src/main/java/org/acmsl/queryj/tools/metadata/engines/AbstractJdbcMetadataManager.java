@@ -72,6 +72,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -1943,7 +1944,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     public String[][] getForeignKeys(final String tableName)
     {
-        String[][] result = null;
+        String[][] result;
         
         Collection t_cResult = new ArrayList();
 
@@ -3763,7 +3764,6 @@ public abstract class AbstractJdbcMetadataManager
                 // TODO metadataExtractionListener);
 
         int[] t_iFlags = toIntArray(t_astrExtractedValues[0]);
-        String[] t_astrNames = t_astrExtractedValues[1];
 
         int t_iLength = (t_iFlags != null) ? t_iFlags.length : 0;
 
@@ -5257,11 +5257,13 @@ public abstract class AbstractJdbcMetadataManager
         final String columnName,
         final boolean isCaseSensitive)
     {
+        Locale t_Locale = Locale.getDefault();
+
         return
               "[[column-bools]]"
-            + tableName.toLowerCase()
+            + tableName.toLowerCase(t_Locale)
             + "-"
-            + columnName.toLowerCase()
+            + columnName.toLowerCase(t_Locale)
             + "]";
     }
 
@@ -5336,7 +5338,9 @@ public abstract class AbstractJdbcMetadataManager
     protected Object buildTableStaticKey(
         final String table)
     {
-        return "[[table-static]]" + table.toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return "[[table-static]]" + table.toLowerCase(t_Locale);
     }
 
     /**
@@ -5410,7 +5414,9 @@ public abstract class AbstractJdbcMetadataManager
     protected Object buildTableDecoratedKey(
         final String table)
     {
-        return "[[table-decorated]]" + table.toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return "[[table-decorated]]" + table.toLowerCase(t_Locale);
     }
 
     /**

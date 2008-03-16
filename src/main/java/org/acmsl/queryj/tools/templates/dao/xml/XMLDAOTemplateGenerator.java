@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate XML DAO implementations according to database
@@ -198,8 +199,8 @@ public class XMLDAOTemplateGenerator
                 singularPluralFormConverter.getSingular(
                     xmlDAOTemplate
                         .getTableTemplate()
-                            .getTableName().toLowerCase()),
-                '_')
+                            .getTableName().toLowerCase(Locale.getDefault())),
+                    '_')
             + "DAO.java",
             xmlDAOTemplate.generate());
     }

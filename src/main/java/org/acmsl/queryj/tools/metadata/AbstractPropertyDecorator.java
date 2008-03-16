@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -45,6 +46,11 @@ import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Locale;
 
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
@@ -94,7 +100,8 @@ public abstract class AbstractPropertyDecorator
 
         immutableSetProperty(property);
         immutableSetMetadataManager(metadataManager);
-        immutableSetMetadataTypeManager(metadataManager.getMetadataTypeManager());
+        immutableSetMetadataTypeManager(
+            metadataManager.getMetadataTypeManager());
     }
 
     /**
@@ -345,7 +352,9 @@ public abstract class AbstractPropertyDecorator
      */
     protected String lowercase(final String value)
     {
-        return value.toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return value.toLowerCase(t_Locale);
     }
 
     /**
@@ -356,7 +365,9 @@ public abstract class AbstractPropertyDecorator
      */
     protected String uppercase(final String value)
     {
-        return value.toUpperCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return value.toUpperCase(t_Locale);
     }
 
     /**

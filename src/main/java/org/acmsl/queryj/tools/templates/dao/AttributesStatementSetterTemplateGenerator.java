@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate AttributesStatementSetter templates.
@@ -218,7 +219,7 @@ public class AttributesStatementSetterTemplateGenerator
             + File.separator
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    template.getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase(Locale.getDefault())),
                 '_')
             + "AttributesStatementSetter.java",
             template.generate());

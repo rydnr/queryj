@@ -127,6 +127,7 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JDK classes.
  */
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -894,7 +895,7 @@ public class TemplateMappingManager
         if  (   (type       != null)
              && (engineName != null))
         {
-            result = type + "." + engineName.toLowerCase();
+            result = type + "." + engineName.toLowerCase(Locale.getDefault());
         }
 
         return result;
@@ -914,7 +915,7 @@ public class TemplateMappingManager
 
         if  (engineVersion != null)
         {
-            result += "-" + engineVersion.toLowerCase();
+            result += "-" + engineVersion.toLowerCase(Locale.getDefault());
         }
 
         return result;

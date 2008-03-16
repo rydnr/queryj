@@ -50,6 +50,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Provides some useful decoration methods.
@@ -109,7 +110,9 @@ public class DecorationUtils
      */
     public String lowerCase(final String value)
     {
-        return value.toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return value.toLowerCase(t_Locale);
     }
 
     /**
@@ -159,7 +162,9 @@ public class DecorationUtils
     protected String capitalize(
         final String value, final StringUtils stringUtils)
     {
-        return stringUtils.capitalize(value.toLowerCase());
+        Locale t_Locale = Locale.getDefault();
+
+        return stringUtils.capitalize(value.toLowerCase(t_Locale));
     }
 
     /**
@@ -170,7 +175,9 @@ public class DecorationUtils
      */
     public String normalizeLowercase(final String value)
     {
-        return normalize(value).toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return normalize(value).toLowerCase(t_Locale);
     }
     
     /**
@@ -181,7 +188,9 @@ public class DecorationUtils
      */
     public String normalizeUppercase(final String value)
     {
-        return normalize(value).toUpperCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return normalize(value).toUpperCase(t_Locale);
     }
     
     /**
@@ -192,7 +201,9 @@ public class DecorationUtils
      */
     public String softNormalizeUppercase(final String value)
     {
-        return softNormalize(value).toUpperCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return softNormalize(value).toUpperCase(t_Locale);
     }
     
     /**

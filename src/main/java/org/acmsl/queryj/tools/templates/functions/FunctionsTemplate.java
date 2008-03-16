@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -63,6 +64,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -1170,6 +1172,8 @@ public abstract class FunctionsTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        Locale t_Locale = Locale.getDefault();
+
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         if  (t_StringUtils != null) 
@@ -1300,7 +1304,7 @@ public abstract class FunctionsTemplate
                                     t_strFunction,
                                     t_strMapping,
                                     t_StringUtils.toJavaMethod(
-                                        t_strFunction.toLowerCase(),
+                                        t_strFunction.toLowerCase(t_Locale),
                                         '_',
                                         getCapitalizedWords()),
                                     t_strFunction

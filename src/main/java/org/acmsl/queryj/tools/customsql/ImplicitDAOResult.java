@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.customsql.PropertyRefElement;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Models pre-defined per-DAO &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -145,7 +146,7 @@ public class ImplicitDAOResult
     {
         return
             (id + "@#" + matches + "#@" + daoRef + "@#" + propertyRefs)
-            .toLowerCase().hashCode();
+            .toLowerCase(Locale.getDefault()).hashCode();
     }
 
     /**

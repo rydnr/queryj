@@ -92,6 +92,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -1010,12 +1011,14 @@ public abstract class BasePerTableTemplate
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
+        Locale t_Locale = Locale.getDefault();
+
         input.put("vo_name", voName);
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
         input.put("timestamp", timestamp);
-        input.put("vo_name_uppercased", voName.toUpperCase());
-        input.put("vo_name_lowercased", voName.toLowerCase());
+        input.put("vo_name_uppercased", voName.toUpperCase(t_Locale));
+        input.put("vo_name_lowercased", voName.toLowerCase(t_Locale));
 
         if  (staticTable)
         {
@@ -1031,7 +1034,7 @@ public abstract class BasePerTableTemplate
         input.put("tr_name_normalized", normalize(tableRepositoryName));
 
         input.put("table_name", tableName);
-        input.put("table_name_uppercased", tableName.toUpperCase());
+        input.put("table_name_uppercased", tableName.toUpperCase(t_Locale));
         input.put(
             "table_name_normalized_lowercased",
             normalizeLowercase(tableName, DecorationUtils.getInstance()));
@@ -1526,7 +1529,7 @@ public abstract class BasePerTableTemplate
             result =
                 stringUtils.capitalize(
                     singularPluralFormConverter.getSingular(
-                        tableName.toLowerCase()),
+                        tableName.toLowerCase(Locale.getDefault())),
                 '_');
 
             putInCache(t_Key, result);
@@ -1641,7 +1644,7 @@ public abstract class BasePerTableTemplate
         {
             result =
                 singularPluralFormConverter.getSingular(
-                    tableName.toLowerCase());
+                    tableName.toLowerCase(Locale.getDefault()));
 
             putInCache(t_Key, result);
         }

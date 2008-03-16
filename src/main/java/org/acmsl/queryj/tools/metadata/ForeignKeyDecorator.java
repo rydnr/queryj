@@ -56,6 +56,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
  * Importing some JDK classes.
  */
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Decorates <code>ForeignKey</code> instances to provide required alternate
@@ -154,9 +155,12 @@ public class ForeignKeyDecorator
         final EnglishGrammarUtils singularPluralFormConverter,
         final DecorationUtils decorationUtils)
     {
+        Locale t_Locale = Locale.getDefault();
+
         return
             capitalize(
-                singularPluralFormConverter.getSingular(tableName.toLowerCase()),
+                singularPluralFormConverter.getSingular(
+                    tableName.toLowerCase(t_Locale)),
                 decorationUtils);
     }
 
@@ -171,7 +175,10 @@ public class ForeignKeyDecorator
     protected String uncapitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.uncapitalize(value.toLowerCase());
+        Locale t_Locale = Locale.getDefault();
+
+        return
+            decorationUtils.uncapitalize(value.toLowerCase(t_Locale));
     }
 
     /**

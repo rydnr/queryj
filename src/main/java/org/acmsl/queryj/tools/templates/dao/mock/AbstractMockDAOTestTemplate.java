@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -66,6 +67,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -1163,7 +1165,8 @@ public abstract class AbstractMockDAOTestTemplate
               "Mock"
             + stringUtils.capitalize(
                   singularPluralFormConverter.getSingular(
-                      getTableTemplate().getTableName().toLowerCase()),
+                      getTableTemplate().getTableName().toLowerCase(
+                          Locale.getDefault())),
                   '_')
             + "DAOTest";
     }

@@ -66,6 +66,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate XML value object factories according to database
@@ -195,9 +196,10 @@ public class XMLValueObjectFactoryTemplateGenerator
             + File.separator
             + "XML"
             + stringUtils.capitalize(
-                singularPluralFormConverter.getSingular(
-                    template.getTableTemplate().getTableName().toLowerCase()),
-                '_')
+                  singularPluralFormConverter.getSingular(
+                      template.getTableTemplate().getTableName().toLowerCase(
+                          Locale.getDefault())),
+                      '_')
             + "ValueObjectFactory.java",
             template.generate());
     }

@@ -46,6 +46,11 @@ import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Locale;
+
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -234,7 +239,9 @@ public abstract class AbstractParameterDecorator
     protected String capitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.capitalize(value.toLowerCase());
+        Locale t_Locale = Locale.getDefault();
+
+        return decorationUtils.capitalize(value.toLowerCase(t_Locale));
     }
 
     /**
@@ -257,7 +264,9 @@ public abstract class AbstractParameterDecorator
     protected String uncapitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.uncapitalize(value.toLowerCase());
+        Locale t_Locale = Locale.getDefault();
+
+        return decorationUtils.uncapitalize(value.toLowerCase(t_Locale));
     }
 
     /**

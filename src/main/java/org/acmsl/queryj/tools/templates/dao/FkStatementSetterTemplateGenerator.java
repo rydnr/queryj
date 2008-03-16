@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate FkStatementSetter templates.
@@ -230,17 +231,19 @@ public class FkStatementSetterTemplateGenerator
     {
         outputDir.mkdirs();
 
+        Locale t_Locale = Locale.getDefault();
+
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    sourceTableName.toLowerCase()),
+                    sourceTableName.toLowerCase(t_Locale)),
                 '_')
             + "By"
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    targetTableName.toLowerCase()),
+                    targetTableName.toLowerCase(t_Locale)),
                 '_')
             + "StatementSetter.java",
             template.generate());

@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.customsql.PropertyRefElement;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Models &lt;result&gt; elements in <i>custom-sql</i> models, which
@@ -141,7 +142,7 @@ public class ResultElement
     {
         return
             (id + "@#" + classValue + "#@" + matches + "@#" + propertyRefs)
-            .toLowerCase().hashCode();
+            .toLowerCase(Locale.getDefault()).hashCode();
     }
 
     /**

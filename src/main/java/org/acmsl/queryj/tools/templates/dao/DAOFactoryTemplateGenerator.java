@@ -67,6 +67,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate DAOFactory implementations according to database
@@ -221,7 +222,7 @@ public class DAOFactoryTemplateGenerator
             + template.getEngineName()
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    template.getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase(Locale.getDefault())),
                 '_')
             + "DAOFactory.java",
             template.generate());

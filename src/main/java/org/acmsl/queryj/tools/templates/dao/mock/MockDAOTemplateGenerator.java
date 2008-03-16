@@ -66,6 +66,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate mock DAO implementations.
@@ -220,7 +221,7 @@ public class MockDAOTemplateGenerator
             + "Mock"
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    template.getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase(Locale.getDefault())),
                 '_')
             + "DAO.java",
             template.generate());

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -60,6 +61,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -171,6 +173,8 @@ public class XMLValueObjectFactoryTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        Locale t_Locale = Locale.getDefault();
+
         MessageFormat t_Formatter = new MessageFormat(header);
 
         t_sbResult.append(
@@ -198,7 +202,7 @@ public class XMLValueObjectFactoryTemplate
                     getValueObjectPackageName(),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
+                            tableTemplate.getTableName().toLowerCase(t_Locale)),
                         '_')
                 }));
 
@@ -223,7 +227,7 @@ public class XMLValueObjectFactoryTemplate
                 {
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
+                            tableTemplate.getTableName().toLowerCase(t_Locale)),
                         '_')
                 }));
 
@@ -238,7 +242,7 @@ public class XMLValueObjectFactoryTemplate
                 {
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            tableTemplate.getTableName().toLowerCase()),
+                            tableTemplate.getTableName().toLowerCase(t_Locale)),
                         '_')
                 }));
 
@@ -311,14 +315,14 @@ public class XMLValueObjectFactoryTemplate
                         new Object[]
                         {
                             t_strFieldType,
-                            t_strField.toLowerCase(),
+                            t_strField.toLowerCase(t_Locale),
                             stringUtils.capitalize(
-                                t_strFieldType.toLowerCase(), '_'),
+                                t_strFieldType.toLowerCase(t_Locale), '_'),
                             (t_bAllowsNull)
                             ?  t_strConversionMethodSuffixForNullableValues
                             :  "",
                             stringUtils.unCapitalize(
-                                t_strField.toLowerCase(), "-")
+                                t_strField.toLowerCase(t_Locale), "-")
                         }));
 
                 t_sbFactoryMethodValueObjectBuild.append(
@@ -326,9 +330,9 @@ public class XMLValueObjectFactoryTemplate
                         new Object[]
                         {
                             stringUtils.capitalize(
-                                t_strField.toLowerCase(),
+                                t_strField.toLowerCase(t_Locale),
                                 '_'),
-                            t_strField.toLowerCase()
+                            t_strField.toLowerCase(t_Locale)
                         }));
 
                 if  (t_itFields.hasNext())
@@ -344,7 +348,7 @@ public class XMLValueObjectFactoryTemplate
                         stringUtils.capitalize(
                             singularPluralFormConverter.getSingular(
                                 tableTemplate.getTableName()
-                                .toLowerCase()),
+                                .toLowerCase(t_Locale)),
                             '_'),
                         t_sbFactoryMethodAttributeBuild.toString(),
                         t_sbFactoryMethodValueObjectBuild.toString()

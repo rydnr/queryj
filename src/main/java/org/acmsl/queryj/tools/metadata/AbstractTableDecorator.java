@@ -61,6 +61,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Decorates <code>Table</code> instances to provide required alternate
@@ -1052,7 +1053,9 @@ public abstract class AbstractTableDecorator
      */
     protected String lowercase(final String value)
     {
-        return value.toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return value.toLowerCase(t_Locale);
     }
 
     /**

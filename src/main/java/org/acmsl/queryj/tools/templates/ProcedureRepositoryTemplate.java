@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -59,6 +60,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -224,6 +226,8 @@ public class ProcedureRepositoryTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        Locale t_Locale = Locale.getDefault();
+
         Object[] t_aRepository =
             new Object[]
             {
@@ -337,7 +341,8 @@ public class ProcedureRepositoryTemplate
                                                 t_iIndex].getDataType(),
                                             t_iInParameterIndex,
                                             t_aProcedureParametersMetadata[
-                                                t_iIndex].getName().toLowerCase())
+                                                t_iIndex].getName().toLowerCase(
+                                                    t_Locale))
                                     }));
                         }
 
@@ -367,8 +372,8 @@ public class ProcedureRepositoryTemplate
                                     new Object[]
                                     {
                                         t_aProcedureParametersMetadata[
-                                            t_iIndex]
-                                                .getName().toLowerCase(),
+                                            t_iIndex].getName().toLowerCase(
+                                                t_Locale),
                                         t_strComment
                                     }));                                        
                         }
@@ -437,7 +442,8 @@ public class ProcedureRepositoryTemplate
                                             t_aProcedureParametersMetadata[
                                                 t_iIndex].getDataType(), false),
                                         t_aProcedureParametersMetadata[
-                                            t_iIndex].getName().toLowerCase(),
+                                            t_iIndex].getName().toLowerCase(
+                                                t_Locale),
                                         stringUtils.capitalize(
                                             metadataTypeManager.getObjectType(
                                                 t_aProcedureParametersMetadata[
@@ -488,8 +494,8 @@ public class ProcedureRepositoryTemplate
                                             t_aProcedureParametersMetadata[
                                                 t_iIndex].getDataType()),
                                         t_aProcedureParametersMetadata[
-                                            t_iIndex]
-                                        .getName().toLowerCase()
+                                            t_iIndex].getName().toLowerCase(
+                                                t_Locale)
                                         + (  (  t_iInParameterIndex
                                                 + t_iOutParameterCount
                                                 < t_aProcedureParametersMetadata
@@ -529,7 +535,7 @@ public class ProcedureRepositoryTemplate
                         new Object[]
                         {
                             t_strReturnType,
-                            t_ProcedureMetadata.getName().toLowerCase(),
+                            t_ProcedureMetadata.getName().toLowerCase(t_Locale),
                             t_sbParametersDeclaration.toString(),
                             metadataTypeManager.getProcedureDefaultValue(
                                 t_iReturnType, false),

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -64,6 +65,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -145,6 +147,8 @@ public class MockDAOTestTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        Locale t_Locale = Locale.getDefault();
+
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         EnglishGrammarUtils t_SingularPluralFormConverter =
@@ -160,7 +164,7 @@ public class MockDAOTestTemplate
         String t_strCapitalizedTableName =
             t_StringUtils.capitalize(
                 t_SingularPluralFormConverter.getSingular(
-                    t_TableTemplate.getTableName().toLowerCase()),
+                    t_TableTemplate.getTableName().toLowerCase(t_Locale)),
                 '_');
         /*
         try 
@@ -244,7 +248,7 @@ public class MockDAOTestTemplate
                     {
                         t_strCapitalizedTableName,
                           t_strCapitalizedTableName.substring(0, 1)
-                              .toLowerCase()
+                              .toLowerCase(t_Locale)
                         + t_strCapitalizedTableName.substring(1)
                     }));
 
@@ -309,7 +313,7 @@ public class MockDAOTestTemplate
                                 t_strCapitalizedTableName,
                                 t_StringUtils.capitalize(
                                     t_astrPrimaryKeys[t_iPkIndex]
-                                        .toLowerCase(),
+                                        .toLowerCase(t_Locale),
                                     '_')
                             }));
 
@@ -320,7 +324,7 @@ public class MockDAOTestTemplate
                                 t_strCapitalizedTableName,
                                 t_StringUtils.capitalize(
                                     t_astrPrimaryKeys[t_iPkIndex]
-                                        .toLowerCase(),
+                                        .toLowerCase(t_Locale),
                                     '_')
                             }));
 

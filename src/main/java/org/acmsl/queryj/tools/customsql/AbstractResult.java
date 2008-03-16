@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.customsql.PropertyRefElement;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Commons logic for all &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -214,7 +215,7 @@ public abstract class AbstractResult
     {
         return
             (id + "@#" + matches + "@#" + propertyRefs)
-                .toLowerCase().hashCode();
+                .toLowerCase(Locale.getDefault()).hashCode();
     }
 
     /**

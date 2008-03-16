@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -59,6 +60,7 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
  * Is able to create xml DAO implementations for each
@@ -345,6 +347,8 @@ public class XMLDAOTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        Locale t_Locale = Locale.getDefault();
+
         String t_strTableName = tableTemplate.getTableName();
 
         MessageFormat t_HeaderFormatter = new MessageFormat(header);
@@ -481,7 +485,7 @@ public class XMLDAOTemplate
 
         String t_strValueObjectName =
             singularPluralFormConverter.getSingular(
-                tableTemplate.getTableName().toLowerCase());
+                tableTemplate.getTableName().toLowerCase(t_Locale));
 
         String t_strCapitalizedValueObjectName =
             stringUtils.capitalize(t_strValueObjectName, '_');
@@ -503,7 +507,8 @@ public class XMLDAOTemplate
                 String t_strReferredTableName =
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_astrReferredTables[t_iRefTableIndex].toLowerCase()),
+                            t_astrReferredTables[t_iRefTableIndex].toLowerCase(
+                                t_Locale)),
                         '_');
 
                 String[] t_astrFkNames =
@@ -529,17 +534,18 @@ public class XMLDAOTemplate
                             new Object[]
                             {
                                 t_strReferredTableName,
-                                t_strTableName.toLowerCase(),
+                                t_strTableName.toLowerCase(t_Locale),
                                 stringUtils.capitalize(
                                     t_astrFkNames[t_iColumnIndex],
-                                    '_').toLowerCase()
+                                    '_').toLowerCase(t_Locale)
                         }));
 
                     t_sbFkJavadoc.append(
                         t_DeleteWithFkPkJavadocFormatter.format(
                             new Object[]
                             {
-                                t_astrFkNames[t_iColumnIndex].toLowerCase(),
+                                t_astrFkNames[t_iColumnIndex].toLowerCase(
+                                    t_Locale),
                                 t_astrFkNames[t_iColumnIndex]
                             }));
 
@@ -551,7 +557,8 @@ public class XMLDAOTemplate
                                     metadataManager.getColumnType(
                                         tableTemplate.getTableName(),
                                         t_astrFkNames[t_iColumnIndex])),
-                                t_astrFkNames[t_iColumnIndex].toLowerCase()
+                                t_astrFkNames[t_iColumnIndex].toLowerCase(
+                                    t_Locale)
                             }));
 
                     if  (t_iColumnIndex < t_astrFkNames.length - 1)
@@ -571,11 +578,11 @@ public class XMLDAOTemplate
                             t_sbPkDeclaration,
                             stringUtils.capitalize(
                                 singularPluralFormConverter.getSingular(
-                                    t_strTableName.toLowerCase()),
+                                    t_strTableName.toLowerCase(t_Locale)),
                                 '_'),
                             t_sbPkFilterValues,
                             t_sbDeleteWithFkPkValues,
-                            t_strTableName.toLowerCase(),
+                            t_strTableName.toLowerCase(t_Locale),
                             t_sbDeleteWithFkDAODeleteRequest,
                             t_sbDeleteWithFkPkValuesDeleteRequest,
                             t_sbFkJavadoc,
@@ -615,7 +622,7 @@ public class XMLDAOTemplate
                         basePackageName),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     packageUtils.retrieveValueObjectFactoryPackage(
                         basePackageName),
@@ -643,7 +650,7 @@ public class XMLDAOTemplate
                 {
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_')
                 }));
 
@@ -651,10 +658,10 @@ public class XMLDAOTemplate
             t_ClassStartFormatter.format(
                 new Object[]
                 {
-                    t_strTableName.toLowerCase(),
+                    t_strTableName.toLowerCase(t_Locale),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_')
                 }));
 
@@ -665,7 +672,7 @@ public class XMLDAOTemplate
                 {
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_')
                 }));
 
@@ -682,7 +689,7 @@ public class XMLDAOTemplate
                     t_FindByPrimaryKeyPkJavadocFormatter.format(
                         new Object[]
                         {
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(t_Locale),
                             t_astrPrimaryKeys[t_iPkIndex]
                         }));
 
@@ -694,7 +701,7 @@ public class XMLDAOTemplate
                                 metadataManager.getColumnType(
                                     t_strTableName,
                                     t_astrPrimaryKeys[t_iPkIndex])),
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(t_Locale)
                         }));
 
                 t_sbBuildKeyPkDeclaration.append(
@@ -705,14 +712,14 @@ public class XMLDAOTemplate
                                 metadataManager.getColumnType(
                                     t_strTableName,
                                     t_astrPrimaryKeys[t_iPkIndex])),
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(t_Locale)
                         }));
 
                 String t_strPks =
                     t_FindByPrimaryKeyPkFilterValuesFormatter.format(
                         new Object[]
                         {
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(t_Locale)
                         });
 
                 t_sbPkFilterValues.append(t_strPks);
@@ -723,7 +730,8 @@ public class XMLDAOTemplate
                         new Object[]
                         {
                             stringUtils.capitalize(
-                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                                t_astrPrimaryKeys[t_iPkIndex].toLowerCase(
+                                    t_Locale),
                                 '_')
                         }));
 
@@ -731,7 +739,7 @@ public class XMLDAOTemplate
                     t_DeleteWithFkPkValuesFormatter.format(
                         new Object[]
                         {
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase()
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(t_Locale)
                         }));
 
                 if  (t_iPkIndex < t_astrPrimaryKeys.length - 1)
@@ -746,7 +754,7 @@ public class XMLDAOTemplate
 
                 t_sbDeleteWithFkPkValuesDeleteRequest.append(
                     stringUtils.capitalize(
-                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                        t_astrPrimaryKeys[t_iPkIndex].toLowerCase(t_Locale),
                         '_'));
             }
         }
@@ -778,7 +786,7 @@ public class XMLDAOTemplate
                     t_FindByStaticFieldJavadocFormatter.format(
                         new Object[]
                         {
-                            t_strDescriptionColumn.toLowerCase(),
+                            t_strDescriptionColumn.toLowerCase(t_Locale),
                             t_strDescriptionColumn
                         });
 
@@ -790,7 +798,7 @@ public class XMLDAOTemplate
                                 metadataManager.getColumnType(
                                     tableTemplate.getTableName(),
                                     t_strDescriptionColumn)),
-                            t_strDescriptionColumn.toLowerCase()
+                            t_strDescriptionColumn.toLowerCase(t_Locale)
                         });
 
                 t_sbResult.append(
@@ -798,11 +806,12 @@ public class XMLDAOTemplate
                         new Object[]
                         {
                             tableTemplate.getTableName(),
-                            t_strDescriptionColumn.toLowerCase(),
+                            t_strDescriptionColumn.toLowerCase(t_Locale),
                             t_strFindByStaticFieldJavadoc,
                             t_strCapitalizedValueObjectName,
                             stringUtils.capitalize(
-                                t_strDescriptionColumn.toLowerCase(), '_'),
+                                t_strDescriptionColumn.toLowerCase(t_Locale),
+                                '_'),
                             t_strFindByStaticFieldDeclaration
                         }));
             }
@@ -900,7 +909,7 @@ public class XMLDAOTemplate
                 t_BuildValueObjectValueRetrieval.format(
                     new Object[]
                     {
-                        t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                        t_astrColumnNames[t_iColumnIndex].toLowerCase(t_Locale)
                     }));
 
             t_sbUndigesterPropertyRules.append(
@@ -909,11 +918,12 @@ public class XMLDAOTemplate
                     {
                         stringUtils.capitalize(
                             singularPluralFormConverter.getSingular(
-                                t_strTableName.toLowerCase()),
+                                t_strTableName.toLowerCase(t_Locale)),
                             '_'),
                         stringUtils.unCapitalizeStart(
                             stringUtils.capitalize(
-                                t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                                t_astrColumnNames[t_iColumnIndex].toLowerCase(
+                                    t_Locale),
                                 '_')),
                     }));
 
@@ -922,7 +932,8 @@ public class XMLDAOTemplate
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metadataTypeManager.getSmartObjectType(t_iColumnType, false);
+                        metadataTypeManager.getSmartObjectType(
+                            t_iColumnType, false);
                 }
 
                 String t_strParameterDeclaration =
@@ -930,7 +941,8 @@ public class XMLDAOTemplate
                         new Object[]
                         {
                             t_strFieldType,
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(
+                                t_Locale)
                         });
 
                 t_sbBuildValueObjectParametersDeclaration.append(
@@ -955,7 +967,7 @@ public class XMLDAOTemplate
                 if  (stringValidator.isEmpty(t_strValue))
                 {
                     t_strValue =
-                        t_astrColumnNames[t_iColumnIndex].toLowerCase();
+                        t_astrColumnNames[t_iColumnIndex].toLowerCase(t_Locale);
                 }
                 else 
                 {
@@ -969,7 +981,8 @@ public class XMLDAOTemplate
                     t_InsertParametersJavadocFormatter.format(
                         new Object[]
                         {
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(
+                                t_Locale),
                             t_astrColumnNames[t_iColumnIndex]
                         }));
 
@@ -977,7 +990,8 @@ public class XMLDAOTemplate
                     t_UpdateParametersJavadocFormatter.format(
                         new Object[]
                         {
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase(),
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(
+                                t_Locale),
                             t_astrColumnNames[t_iColumnIndex]
                         }));
 
@@ -993,7 +1007,8 @@ public class XMLDAOTemplate
                         new Object[]
                         {
                             t_strFieldType,
-                            t_astrColumnNames[t_iColumnIndex].toLowerCase()
+                            t_astrColumnNames[t_iColumnIndex].toLowerCase(
+                                t_Locale)
                         }));
 
                 if  (!t_bLastColumn)
@@ -1013,7 +1028,7 @@ public class XMLDAOTemplate
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    t_strTableName.toLowerCase()),
+                    t_strTableName.toLowerCase(t_Locale)),
                 '_');
 
         t_sbResult.append(
@@ -1039,7 +1054,7 @@ public class XMLDAOTemplate
                     t_sbPkJavadoc,
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     t_sbPkDeclaration,
                     t_sbPkFilterValues
@@ -1052,7 +1067,7 @@ public class XMLDAOTemplate
                     t_strTableName.toUpperCase(),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     t_sbPkJavadoc,
                     t_sbInsertParametersJavadoc,
@@ -1067,7 +1082,7 @@ public class XMLDAOTemplate
                     t_strTableName.toUpperCase(),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     t_sbPkJavadoc,
                     t_sbInsertParametersJavadoc,
@@ -1082,7 +1097,7 @@ public class XMLDAOTemplate
                 {
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     t_sbPkJavadoc.toString(),
                     t_sbUpdateParametersJavadoc,
@@ -1110,11 +1125,11 @@ public class XMLDAOTemplate
                     t_sbPkDeclaration,
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     t_sbPkFilterValues,
                     t_sbDeleteWithFkPkValues,
-                    t_strTableName.toLowerCase()
+                    t_strTableName.toLowerCase(t_Locale)
                 }));
 
         t_sbResult.append(t_sbDeleteNoFkMethod);
@@ -1130,11 +1145,11 @@ public class XMLDAOTemplate
                     t_sbPkDeclaration,
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     t_sbPkFilterValues,
                     t_sbDeleteWithFkPkValues,
-                    t_strTableName.toLowerCase()
+                    t_strTableName.toLowerCase(t_Locale)
                 }));
 
         t_sbResult.append(t_sbDeleteMethod);
@@ -1150,10 +1165,10 @@ public class XMLDAOTemplate
                 {
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
-                            t_strTableName.toLowerCase()),
+                            t_strTableName.toLowerCase(t_Locale)),
                         '_'),
                     singularPluralFormConverter.getSingular(
-                        t_strTableName.toLowerCase()),
+                        t_strTableName.toLowerCase(t_Locale)),
                     t_sbUndigesterPropertyRules
                 }));
 

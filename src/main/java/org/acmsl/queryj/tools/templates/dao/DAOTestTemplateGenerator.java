@@ -67,6 +67,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate DAO test implementations according to database
@@ -348,7 +349,8 @@ public class DAOTestTemplateGenerator
             + daoTestTemplate.getEngineName()
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    daoTestTemplate.getTableName().toLowerCase()),
+                    daoTestTemplate.getTableName().toLowerCase(
+                        Locale.getDefault())),
                 '_')
             + "DAOTest.java",
             daoTestTemplate.generate());

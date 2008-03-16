@@ -44,6 +44,11 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Locale;
+
 /**
  * Provides some useful methods when generating DAOChooser class.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -88,6 +93,8 @@ public class DAOChooserTemplateUtils
      */
     public String retrievePropertiesFileName(final String repository)
     {
-        return repository.toLowerCase() + "-queryj.properties";
+        return
+              repository.toLowerCase(Locale.getDefault())
+            + "-queryj.properties";
     }
 }

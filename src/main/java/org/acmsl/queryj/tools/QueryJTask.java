@@ -90,6 +90,7 @@ import org.acmsl.commons.patterns.Chain;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 /*
@@ -647,10 +648,17 @@ public class QueryJTask
     {
         immutableSetOutputdirsubfolders(outputDirSubFolders);
 
+        String t_strLowerCase = null;
+
+        if  (outputDirSubFolders == null)
+        {
+            t_strLowerCase =
+                outputDirSubFolders.trim().toLowerCase(Locale.getDefault());
+        }
+
         setOutputdirsubfoldersFlag(
-            (   (outputDirSubFolders == null)
-             || (outputDirSubFolders.trim().toLowerCase().equals("yes")
-             || (outputDirSubFolders.trim().toLowerCase().equals("true")))));
+            (   (t_strLowerCase == null)
+             || (t_strLowerCase.equals("yes"))));
     }
 
     /**
@@ -698,10 +706,17 @@ public class QueryJTask
     {
         immutableSetJmx(jmx);
 
+        String t_strJmx = null;
+
+        if  (jmx != null)
+        {
+            t_strJmx = jmx.trim().toLowerCase(Locale.getDefault());
+        }
+
         setJmxFlag(
-            (   (jmx == null)
-             || (jmx.trim().toLowerCase().equals("yes")
-             || (jmx.trim().toLowerCase().equals("true")))));
+            (   (t_strJmx == null)
+             || (t_strJmx.equals("yes")
+             || (t_strJmx.equals("true")))));
     }
 
     /**
@@ -749,10 +764,17 @@ public class QueryJTask
     {
         immutableSetDisableSqlValidation(flag);
 
+        String t_strFlag = null;
+
+        if  (flag != null)
+        {
+            t_strFlag = flag.trim().toLowerCase(Locale.getDefault());
+        }
+
         setDisableSqlValidationFlag(
-            (   (flag == null)
-             || (flag.trim().toLowerCase().equals("yes")
-             || (flag.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes")
+             || (t_strFlag.equals("true")))));
     }
 
     /**
@@ -799,10 +821,17 @@ public class QueryJTask
     {
         immutableSetExtractTables(extractTables);
 
+        String t_strFlag = null;
+
+        if  (extractTables != null)
+        {
+            t_strFlag = extractTables.trim().toLowerCase(Locale.getDefault());
+        }
+
         setExtractTablesFlag(
-            (   (extractTables == null)
-             || (extractTables.trim().toLowerCase().equals("yes")
-             || (extractTables.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes")
+             || (t_strFlag.equals("true")))));
     }
 
     /**
@@ -850,10 +879,18 @@ public class QueryJTask
     {
         immutableSetExtractProcedures(extractProcedures);
 
+        String t_strFlag = null;
+
+        if  (extractProcedures != null)
+        {
+            t_strFlag =
+                extractProcedures.trim().toLowerCase(Locale.getDefault());
+        }
+
         setExtractProceduresFlag(
-            (   (extractProcedures == null)
-             || (   (extractProcedures.trim().toLowerCase().equals("yes"))
-                 || (extractProcedures.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes"))
+             || (t_strFlag.equals("true"))));
     }
 
     /**
@@ -900,10 +937,18 @@ public class QueryJTask
     {
         immutableSetExtractFunctions(extractFunctions);
 
+        String t_strFlag = null;
+
+        if  (extractFunctions != null)
+        {
+            t_strFlag =
+                extractFunctions.trim().toLowerCase(Locale.getDefault());
+        }
+
         setExtractFunctionsFlag(
-            (   (extractFunctions == null)
-             || (   (extractFunctions.trim().toLowerCase().equals("yes"))
-                 || (extractFunctions.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes"))
+             || (t_strFlag.equals("true"))));
     }
 
     /**
@@ -950,10 +995,17 @@ public class QueryJTask
     {
         immutableSetGenerateTests(generateTests);
 
+        String t_strFlag = null;
+
+        if  (generateTests != null)
+        {
+            t_strFlag = generateTests.trim().toLowerCase(Locale.getDefault());
+        }
+
         setGenerateTestsFlag(
-            (   (generateTests == null)
-             || (   (generateTests.trim().toLowerCase().equals("yes"))
-                 || (generateTests.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes"))
+             || (t_strFlag.equals("true"))));
     }
 
     /**
@@ -1028,10 +1080,17 @@ public class QueryJTask
     {
         immutableSetGenerateMockDAOImplementation(generate);
 
+        String t_strFlag = null;
+
+        if  (generate != null)
+        {
+            t_strFlag = generate.trim().toLowerCase(Locale.getDefault());
+        }
+
         setGenerateMockDAOImplementationFlag(
-            (   (generate == null)
-             || (   (generate.trim().toLowerCase().equals("yes"))
-                 || (generate.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes"))
+             || (t_strFlag.equals("true"))));
     }
 
     /**
@@ -1079,10 +1138,17 @@ public class QueryJTask
     {
         immutableSetGenerateXMLDAOImplementation(generate);
 
+        String t_strFlag = null;
+
+        if  (generate != null)
+        {
+            t_strFlag = generate.trim().toLowerCase(Locale.getDefault());
+        }
+
         setGenerateXMLDAOImplementationFlag(
-            (   (generate == null)
-             || (   (generate.trim().toLowerCase().equals("yes"))
-                 || (generate.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes"))
+             || (t_strFlag.equals("true"))));
     }
 
     /**
@@ -1252,10 +1318,17 @@ public class QueryJTask
     {
         immutableSetShell(shell);
 
+        String t_strFlag = null;
+
+        if  (shell != null)
+        {
+            t_strFlag = shell.trim().toLowerCase(Locale.getDefault());
+        }
+
         setShellFlag(
-            (   (shell == null)
-             || (shell.trim().toLowerCase().equals("yes")
-             || (shell.trim().toLowerCase().equals("true")))));
+            (   (t_strFlag == null)
+             || (t_strFlag.equals("yes"))
+             || (t_strFlag.equals("true"))));
     }
 
     /**

@@ -68,6 +68,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -190,8 +191,12 @@ public class ConfigurationPropertiesTemplate
             stringUtils);
 
         input.put("engine_name", engineName);
-        input.put("engine_name_lowercased", engineName.toLowerCase());
+        input.put(
+            "engine_name_lowercased",
+            engineName.toLowerCase(Locale.getDefault()));
+
         String t_strProcessedHeader = getProcessedHeader(input);
+
         if  (t_strProcessedHeader != null)
         {
             input.put("splitted_header", split(t_strProcessedHeader));

@@ -50,6 +50,7 @@ import org.apache.tools.ant.DynamicConfigurator;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Contains all information inside a "field" XML element in Ant scripts,
@@ -142,12 +143,21 @@ public class AntFieldElement
      */
     public void setPk(final String pk)
     {
+        Locale t_Locale = Locale.getDefault();
+
         m__strPk = pk;
+
+        String t_strPk = null;
+
+        if  (pk != null)
+        {
+            t_strPk = pk.trim().toLowerCase(Locale.getDefault());
+        }
 
         setIsPk(
             (   (pk != null)
-             && (   (pk.trim().toLowerCase().equals("yes")
-                 || (pk.trim().toLowerCase().equals("true"))))));
+             && (   (t_strPk.equals("yes")
+                 || (t_strPk.equals("true"))))));
     }
 
     /**

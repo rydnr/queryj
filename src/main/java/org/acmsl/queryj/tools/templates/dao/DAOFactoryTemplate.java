@@ -57,6 +57,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  */
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -307,10 +308,12 @@ public class DAOFactoryTemplate
 
         String t_strTableName = tableTemplate.getTableName();
 
+        Locale t_Locale = Locale.getDefault();
+
         String t_strSingularName =
             stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    t_strTableName.toLowerCase()),
+                    t_strTableName.toLowerCase(t_Locale)),
                 '_');
 
         String t_strCapitalizedRepositoryName =

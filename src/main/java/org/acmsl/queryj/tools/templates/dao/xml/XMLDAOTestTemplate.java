@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -65,6 +66,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -285,7 +287,8 @@ public class XMLDAOTestTemplate
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    tableTemplate.getTableName().toLowerCase()),
+                    tableTemplate.getTableName().toLowerCase(
+                        Locale.getDefault())),
                 '_');
 
         MessageFormat t_HeaderFormatter = new MessageFormat(header);
@@ -368,7 +371,8 @@ public class XMLDAOTestTemplate
                 new Object[]
                 {
                     t_strCapitalizedTableName,
-                    t_strCapitalizedTableName.substring(0,1).toLowerCase()
+                    t_strCapitalizedTableName.substring(0,1).toLowerCase(
+                        Locale.getDefault())
                     + t_strCapitalizedTableName.substring(1)
                 }));
 
@@ -441,7 +445,8 @@ public class XMLDAOTestTemplate
                     {
                         t_strCapitalizedTableName,
                         stringUtils.capitalize(
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(
+                                Locale.getDefault()),
                             '_')
                     }));
 
@@ -451,7 +456,8 @@ public class XMLDAOTestTemplate
                     {
                         t_strCapitalizedTableName,
                         stringUtils.capitalize(
-                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(),
+                            t_astrPrimaryKeys[t_iPkIndex].toLowerCase(
+                                Locale.getDefault()),
                             '_')
                     }));
 

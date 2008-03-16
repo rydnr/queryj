@@ -51,6 +51,7 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Provides some useful methods for retrieving package information about
@@ -768,7 +769,9 @@ public class PackageUtils
      */
     public String retrieveDAOSubpackage(final String engineName)
     {
-        return engineName.toLowerCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return engineName.toLowerCase(t_Locale);
     }
 
     /**
@@ -806,11 +809,13 @@ public class PackageUtils
         final String engineName,
         final boolean useSubfolders)
     {
+        Locale t_Locale = Locale.getDefault();
+
         return
             retrieveFolder(
                 retrieveRdbFolder(
                     parentFolder, packageName, useSubfolders),
-                engineName.toLowerCase());
+                engineName.toLowerCase(t_Locale));
     }
 
     /**
@@ -1381,13 +1386,14 @@ public class PackageUtils
         final String tableName,
         final StringUtils stringUtils)
     {
+        Locale t_Locale = Locale.getDefault();
+
         return
             retrievePackage(
-                retrieveDAOPackage(
-                    packageName, engineName),
+                retrieveDAOPackage(packageName, engineName),
                 stringUtils.capitalize(
-                    tableName.toLowerCase(),
-                    '_').toLowerCase());
+                    tableName.toLowerCase(t_Locale), '_')
+                    .toLowerCase(t_Locale));
     }
 
     /**
@@ -1443,13 +1449,15 @@ public class PackageUtils
         final boolean useSubfolders,
         final StringUtils stringUtils)
     {
+        Locale t_Locale = Locale.getDefault();
+
         return
             retrieveFolder(
                 retrieveDAOFolder(
                     parentFolder, packageName, engineName, useSubfolders),
                 stringUtils.capitalize(
-                    tableName.toLowerCase(),
-                    '_').toLowerCase());
+                    tableName.toLowerCase(t_Locale), '_')
+                .toLowerCase(t_Locale));
     }
 
     /**

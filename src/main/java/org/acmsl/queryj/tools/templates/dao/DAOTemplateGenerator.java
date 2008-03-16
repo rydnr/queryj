@@ -67,6 +67,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate DAO implementations according to database
@@ -221,7 +222,7 @@ public class DAOTemplateGenerator
             + template.getEngineName()
             + stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    template.getTableName().toLowerCase()),
+                    template.getTableName().toLowerCase(Locale.getDefault())),
                 '_')
             + "DAO.java",
             template.generate());

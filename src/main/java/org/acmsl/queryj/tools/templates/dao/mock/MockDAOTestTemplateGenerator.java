@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate Mock DAO test implementations according to database
@@ -204,7 +205,7 @@ public class MockDAOTestTemplateGenerator
                   singularPluralFormConverter.getSingular(
                       mockDAOTestTemplate
                           .getTableTemplate()
-                              .getTableName().toLowerCase()),
+                              .getTableName().toLowerCase(Locale.getDefault())),
                 '_')
               + "DAOTest.java",
               mockDAOTestTemplate.generate());

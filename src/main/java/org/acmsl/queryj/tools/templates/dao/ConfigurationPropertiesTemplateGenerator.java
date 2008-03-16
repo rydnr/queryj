@@ -67,6 +67,7 @@ import org.acmsl.commons.utils.StringUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Is able to generate ConfigurationProperties implementations according
@@ -213,7 +214,7 @@ public class ConfigurationPropertiesTemplateGenerator
             outputDir.getAbsolutePath()
             + File.separator
             + daoChooserTemplateUtils.retrievePropertiesFileName(
-                  repository.toLowerCase()),
+                  repository.toLowerCase(Locale.getDefault())),
             template.generate());
     }
 }

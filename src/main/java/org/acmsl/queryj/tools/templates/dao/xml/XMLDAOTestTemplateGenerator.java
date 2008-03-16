@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate XML DAO test implementations according to database
@@ -204,8 +205,8 @@ public class XMLDAOTestTemplateGenerator
                 singularPluralFormConverter.getSingular(
                     xmlDAOTestTemplate
                         .getTableTemplate()
-                            .getTableName().toLowerCase()),
-                      '_')
+                            .getTableName().toLowerCase(Locale.getDefault())),
+                    '_')
             + "DAOTest.java",
             xmlDAOTestTemplate.generate());
     }

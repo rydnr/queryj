@@ -66,6 +66,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Is able to generate base DAO factories.
@@ -200,7 +201,8 @@ public class ValueObjectTemplateGenerator
     {
         return
             stringUtils.capitalize(
-                singularPluralFormConverter.getSingular(tableName.toLowerCase()),
+                singularPluralFormConverter.getSingular(
+                    tableName.toLowerCase(Locale.getDefault())),
                 '_');
     }
 

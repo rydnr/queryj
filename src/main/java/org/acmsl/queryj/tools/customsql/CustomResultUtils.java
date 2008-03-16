@@ -65,6 +65,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 import java.math.BigDecimal;
 
 /**
@@ -247,7 +248,8 @@ public class CustomResultUtils
     {
         boolean result = false;
 
-        String t_strTableInLowerCase = tableName.trim().toLowerCase();
+        String t_strTableInLowerCase =
+            tableName.trim().toLowerCase(Locale.getDefault());
 
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
