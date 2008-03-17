@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -57,11 +58,6 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
 //TODO  extends  BaserPerTableTemplate
     extends  AbstractTemplate
 {
-    /**
-     * The header.
-     */
-    private String m__strHeader;
-
     /**
      * The package declaration.
      */

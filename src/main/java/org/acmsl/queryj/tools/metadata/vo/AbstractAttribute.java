@@ -575,6 +575,15 @@ public abstract class AbstractAttribute
     }
 
     /**
+     * Retrieves the stack trace when the attribute was created.
+     * @return such information.
+     */
+    protected StackTraceElement[] getStackTrace()
+    {
+        return m__aStackTrace;
+    }
+
+    /**
      * Retrieves the attribute name.
      * @return such information.
      */

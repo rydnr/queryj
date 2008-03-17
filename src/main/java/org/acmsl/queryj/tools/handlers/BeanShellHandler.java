@@ -95,7 +95,7 @@ public class BeanShellHandler
     /**
      * The initial messages.
      */
-    public static final String[] INITIAL_MESSAGES =
+    static final String[] INITIAL_MESSAGES =
         {
             "Important notice:",
             "-All QueryJ packages are automatically imported.",
@@ -105,7 +105,7 @@ public class BeanShellHandler
     /**
      * The available packages.
      */
-    public static final String[] AVAILABLE_PACKAGES =
+    static final String[] AVAILABLE_PACKAGES =
         {
             "org.acmsl.queryj",
             "org.acmsl.queryj.dao",

@@ -87,7 +87,7 @@ public class MetaLanguageUtils
     /**
      * An empty String array array.
      */
-    protected static final String[][] EMPTY_STRING_ARRAY_ARRAY =
+    static final String[][] EMPTY_STRING_ARRAY_ARRAY =
         new String[0][0];
 
     /**

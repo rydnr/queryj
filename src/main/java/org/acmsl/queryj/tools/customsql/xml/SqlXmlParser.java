@@ -41,10 +41,10 @@ package org.acmsl.queryj.tools.customsql.xml;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.ConnectionFlags;
 import org.acmsl.queryj.tools.customsql.ConnectionFlagsRef;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.IdentifiableElement;
 import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.ParameterRef;
 import org.acmsl.queryj.tools.customsql.Property;
@@ -456,42 +456,42 @@ public class SqlXmlParser
                     {
                         map.put(
                             buildParameterKey(
-                                (AbstractIdElement) t_Object),
+                                (IdentifiableElement) t_Object),
                             t_Object);
                     }
                     else if  (t_Object instanceof Result)
                     {
                         map.put(
                             buildResultKey(
-                                (AbstractIdElement) t_Object),
+                                (IdentifiableElement) t_Object),
                             t_Object);
                     }
                     else if  (t_Object instanceof Property)
                     {
                         map.put(
                             buildPropertyKey(
-                                (AbstractIdElement) t_Object),
+                                (IdentifiableElement) t_Object),
                             t_Object);
                     }
                     else if  (t_Object instanceof ConnectionFlags)
                     {
                         map.put(
                             buildConnectionFlagsKey(
-                                (AbstractIdElement) t_Object),
+                                (IdentifiableElement) t_Object),
                             t_Object);
                     }
                     else if  (t_Object instanceof StatementFlags)
                     {
                         map.put(
                             buildStatementFlagsKey(
-                                (AbstractIdElement) t_Object),
+                                (IdentifiableElement) t_Object),
                             t_Object);
                     }
                     else if  (t_Object instanceof ResultSetFlags)
                     {
                         map.put(
                             buildResultSetFlagsKey(
-                                (AbstractIdElement) t_Object),
+                                (IdentifiableElement) t_Object),
                             t_Object);
                     }
                 }
@@ -530,7 +530,8 @@ public class SqlXmlParser
      * @param parameterElement such element.
      * @return the key.
      */
-    protected Object buildParameterKey(final AbstractIdElement parameterElement)
+    protected Object buildParameterKey(
+        final IdentifiableElement parameterElement)
     {
         return buildParameterKey(parameterElement.getId());
     }
@@ -550,7 +551,7 @@ public class SqlXmlParser
      * @param resultElement such element.
      * @return the key.
      */
-    protected Object buildResultKey(final AbstractIdElement resultElement)
+    protected Object buildResultKey(final IdentifiableElement resultElement)
     {
         return buildResultKey(resultElement.getId());
     }
@@ -570,7 +571,7 @@ public class SqlXmlParser
      * @param propertyElement such element.
      * @return the key.
      */
-    protected Object buildPropertyKey(final AbstractIdElement propertyElement)
+    protected Object buildPropertyKey(final IdentifiableElement propertyElement)
     {
         return buildPropertyKey(propertyElement.getId());
     }
@@ -591,7 +592,7 @@ public class SqlXmlParser
      * @return the key.
      */
     protected Object buildConnectionFlagsKey(
-        final AbstractIdElement connectionFlagsElement)
+        final IdentifiableElement connectionFlagsElement)
     {
         return buildConnectionFlagsKey(connectionFlagsElement.getId());
     }
@@ -601,7 +602,8 @@ public class SqlXmlParser
      * @param connectionFlagsElementId such element id.
      * @return the key.
      */
-    protected Object buildConnectionFlagsKey(final String connectionFlagsElementId)
+    protected Object buildConnectionFlagsKey(
+        final String connectionFlagsElementId)
     {
         return "\\/connection|flags\\::" + connectionFlagsElementId;
     }
@@ -612,7 +614,7 @@ public class SqlXmlParser
      * @return the key.
      */
     protected Object buildStatementFlagsKey(
-        final AbstractIdElement statementFlagsElement)
+        final IdentifiableElement statementFlagsElement)
     {
         return buildStatementFlagsKey(statementFlagsElement.getId());
     }
@@ -633,7 +635,7 @@ public class SqlXmlParser
      * @return the key.
      */
     protected Object buildResultSetFlagsKey(
-        final AbstractIdElement resultSetFlagsElement)
+        final IdentifiableElement resultSetFlagsElement)
     {
         return buildResultSetFlagsKey(resultSetFlagsElement.getId());
     }
