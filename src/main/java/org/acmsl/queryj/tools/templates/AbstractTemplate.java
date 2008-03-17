@@ -568,7 +568,7 @@ public abstract class AbstractTemplate
     protected String lowercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.lowerCase(value);
+        return decorationUtils.lowercase(value);
     }
 
     /**

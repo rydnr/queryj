@@ -97,7 +97,7 @@ public class DecorationUtils
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    public String upperCase(final String value)
+    public String uppercase(final String value)
     {
         Locale t_Locale = Locale.getDefault();
 
@@ -110,7 +110,7 @@ public class DecorationUtils
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    public String lowerCase(final String value)
+    public String lowercase(final String value)
     {
         Locale t_Locale = Locale.getDefault();
 

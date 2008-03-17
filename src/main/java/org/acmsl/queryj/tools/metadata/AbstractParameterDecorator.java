@@ -216,7 +216,7 @@ public abstract class AbstractParameterDecorator
      */
     public String getNameUppercased()
     {
-        return upperCase(getName(), DecorationUtils.getInstance());
+        return uppercase(getName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -277,10 +277,10 @@ public abstract class AbstractParameterDecorator
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String upperCase(
+    protected String uppercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.upperCase(value);
+        return decorationUtils.uppercase(value);
     }
 
     /**
@@ -303,7 +303,7 @@ public abstract class AbstractParameterDecorator
      */
     public String getNameLowercased()
     {
-        return lowerCase(getName(), DecorationUtils.getInstance());
+        return lowercase(getName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -314,10 +314,10 @@ public abstract class AbstractParameterDecorator
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String lowerCase(
+    protected String lowercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.lowerCase(value);
+        return decorationUtils.lowercase(value);
     }
 
     /**
@@ -326,7 +326,7 @@ public abstract class AbstractParameterDecorator
      */
     public String getJavaName()
     {
-        return upperCase(getName(), DecorationUtils.getInstance());
+        return uppercase(getName(), DecorationUtils.getInstance());
     }
 
     /**

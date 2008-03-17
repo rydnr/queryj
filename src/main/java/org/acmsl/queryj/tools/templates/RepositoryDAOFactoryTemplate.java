@@ -121,7 +121,7 @@ public class RepositoryDAOFactoryTemplate
             engineName,
             tables);
 
-        immutableSetJNDIDataSource(jndiDataSource);
+        immutableSetJndiDataSource(jndiDataSource);
     }
 
 
@@ -129,7 +129,7 @@ public class RepositoryDAOFactoryTemplate
      * Specifies the JNDI data source.
      * @param jndiDataSource the new JNDI data source.
      */
-    private void immutableSetJNDIDataSource(final String jndiDataSource)
+    private void immutableSetJndiDataSource(final String jndiDataSource)
     {
         m__strJNDIDataSource = jndiDataSource;
     }
@@ -138,16 +138,16 @@ public class RepositoryDAOFactoryTemplate
      * Specifies the JNDI data source.
      * @param jndiDataSource the new JNDI data source.
      */
-    protected void setJNDIDataSource(final String jndiDataSource)
+    protected void setJndiDataSource(final String jndiDataSource)
     {
-        immutableSetJNDIDataSource(jndiDataSource);
+        immutableSetJndiDataSource(jndiDataSource);
     }
 
     /**
      * Retrieves the JNDI data source.
      * @return such information.
      */
-    public String getJNDIDataSource() 
+    public String getJndiDataSource() 
     {
         return m__strJNDIDataSource;
     }
@@ -218,7 +218,7 @@ public class RepositoryDAOFactoryTemplate
             copyrightYears,
             stringUtils);
 
-        input.put("jndi_location", getJNDIDataSource());
+        input.put("jndi_location", getJndiDataSource());
     }
     /**
      * Retrieves the string template group.

@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -145,7 +146,7 @@ public class MockDataSource
         final String password)
     {
         immutableSetDriverClassName(driverClassName);
-        immutableSetURL(url);
+        immutableSetUrl(url);
         immutableSetUserName(username);
         immutableSetPassword(password);
         setAutoCommit(false);
@@ -182,7 +183,7 @@ public class MockDataSource
      * Sets the URL connection.
      * @param url the URL connection.
      */
-    private void immutableSetURL(final String url)
+    private void immutableSetUrl(final String url)
     {
         m__strURL = url;
     }
@@ -191,16 +192,16 @@ public class MockDataSource
      * Sets the URL connection.
      * @param url the URL connection.
      */
-    protected void setURL(final String url)
+    protected void setUrl(final String url)
     {
-        immutableSetURL(url);
+        immutableSetUrl(url);
     }
 
     /**
      * Retrieves the URL connection.
      * @return the URL connection.
      */
-    public String getURL()
+    public String getUrl()
     {
         return m__strURL;
     }
@@ -227,7 +228,7 @@ public class MockDataSource
      * Retrieves the user name.
      * @return the user name.
      */
-    public String getUserName()
+    public String getUsername()
     {
         return m__strUserName;
     }
@@ -378,7 +379,7 @@ public class MockDataSource
 
         try 
         {
-            t_Driver = DriverManager.getDriver(getURL());
+            t_Driver = DriverManager.getDriver(getUrl());
         }
         catch  (final SQLException sqlException)
         {
@@ -477,8 +478,8 @@ public class MockDataSource
                 result =
                     new MockConnection(
                         DriverManager.getConnection(
-                            getURL(),
-                            getUserName(),
+                            getUrl(),
+                            getUsername(),
                             getPassword()),
                         this);
             }
@@ -487,8 +488,8 @@ public class MockDataSource
                 result =
                     new AutoCommitDisabledMockConnection(
                         DriverManager.getConnection(
-                            getURL(),
-                            getUserName(),
+                            getUrl(),
+                            getUsername(),
                             getPassword()),
                         this);
             }
@@ -527,7 +528,7 @@ public class MockDataSource
                 result =
                     new MockConnection(
                         DriverManager.getConnection(
-                            getURL(),
+                            getUrl(),
                             username,
                             password),
                         this);
@@ -537,7 +538,7 @@ public class MockDataSource
                 result =
                     new AutoCommitDisabledMockConnection(
                         DriverManager.getConnection(
-                            getURL(),
+                            getUrl(),
                             username,
                             password),
                         this);

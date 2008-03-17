@@ -280,7 +280,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getNameUppercased()
     {
-        return upperCase(getName(), DecorationUtils.getInstance());
+        return uppercase(getName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -341,10 +341,10 @@ public abstract class AbstractAttributeDecorator
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String upperCase(
+    protected String uppercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.upperCase(value);
+        return decorationUtils.uppercase(value);
     }
 
     /**
@@ -367,7 +367,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getNameLowercased()
     {
-        return lowerCase(getName(), DecorationUtils.getInstance());
+        return lowercase(getName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -378,10 +378,10 @@ public abstract class AbstractAttributeDecorator
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String lowerCase(
+    protected String lowercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.lowerCase(value);
+        return decorationUtils.lowercase(value);
     }
 
     /**
@@ -435,7 +435,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getJavaName()
     {
-        return upperCase(getName(), DecorationUtils.getInstance());
+        return uppercase(getName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -720,7 +720,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getTableNameUppercased()
     {
-        return upperCase(getTableName(), DecorationUtils.getInstance());
+        return uppercase(getTableName(), DecorationUtils.getInstance());
     }
 
     /**

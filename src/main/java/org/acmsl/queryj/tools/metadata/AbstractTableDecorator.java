@@ -792,7 +792,7 @@ public abstract class AbstractTableDecorator
      */
     public String getNameUppercased()
     {
-        return upperCase(getName());
+        return uppercase(getName());
     }
     
     /**
@@ -827,7 +827,7 @@ public abstract class AbstractTableDecorator
     protected String capitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.capitalize(lowerCase(value));
+        return decorationUtils.capitalize(lowercase(value));
     }
     
     /**
@@ -836,9 +836,9 @@ public abstract class AbstractTableDecorator
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    protected String upperCase(final String value)
+    protected String uppercase(final String value)
     {
-        return upperCase(value, DecorationUtils.getInstance());
+        return uppercase(value, DecorationUtils.getInstance());
     }
     
     /**
@@ -849,10 +849,10 @@ public abstract class AbstractTableDecorator
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String upperCase(
+    protected String uppercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.upperCase(value);
+        return decorationUtils.uppercase(value);
     }
     
     /**
@@ -911,7 +911,7 @@ public abstract class AbstractTableDecorator
      */
     public String getNameLowercased()
     {
-        return lowerCase(getName());
+        return lowercase(getName());
     }
     
     /**
@@ -920,9 +920,9 @@ public abstract class AbstractTableDecorator
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    protected String lowerCase(final String value)
+    protected String lowercase(final String value)
     {
-        return lowerCase(value, DecorationUtils.getInstance());
+        return lowercase(value, DecorationUtils.getInstance());
     }
 
     /**
@@ -933,10 +933,10 @@ public abstract class AbstractTableDecorator
      * @precondition value != null
      * @precondition decorationUtils != null
      */
-    protected String lowerCase(
+    protected String lowercase(
         final String value, final DecorationUtils decorationUtils)
     {
-        return decorationUtils.lowerCase(value);
+        return decorationUtils.lowercase(value);
     }
 
     /**
@@ -1046,25 +1046,12 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Converts given value to lower case.
-     * @param value the value.
-     * @return the lower-cased value.
-     * @precondition value != null
-     */
-    protected String lowercase(final String value)
-    {
-        Locale t_Locale = Locale.getDefault();
-
-        return value.toLowerCase(t_Locale);
-    }
-
-    /**
      * Retrieves the singular table's name, upper-cased.
      * @return such information.
      */
     public String getSingularNameUppercased()
     {
-        return upperCase(getSingular(lowerCase(getName())));
+        return uppercase(getSingular(lowercase(getName())));
     }
 
     /**
@@ -1073,7 +1060,7 @@ public abstract class AbstractTableDecorator
      */
     public String getSingularNameLowercased()
     {
-        return lowerCase(getSingularNameUppercased());
+        return lowercase(getSingularNameUppercased());
     }
 
     /**
