@@ -60,6 +60,7 @@ import org.apache.commons.logging.Log;
  * Importing some JDK classes.
  */
 import java.sql.Types;
+import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -287,7 +288,8 @@ public class JdbcMetadataTypeManager
                      || !(t_Result instanceof Integer))
                 {
                     t_Result =
-                        t_mNative2JavaTypesMap.get(dataType.toUpperCase());
+                        t_mNative2JavaTypesMap.get(
+                            dataType.toUpperCase(Locale.getDefault()));
                 }
 
                 if  (   (t_Result != null)

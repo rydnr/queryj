@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.metadata.ParameterDecorator;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Locale;
 
 /*
  * Importing Apache Commons-Logging classes.
@@ -348,7 +349,9 @@ public abstract class AbstractSqlDecorator
      */
     protected String uppercase(final String value)
     {
-        return value.toUpperCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return value.toUpperCase(t_Locale);
     }
 
     /**

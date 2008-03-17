@@ -284,11 +284,12 @@ public class XMLDAOTestTemplate
     {
         StringBuffer t_sbResult = new StringBuffer();
 
+        Locale t_Locale = Locale.getDefault();
+
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
                 singularPluralFormConverter.getSingular(
-                    tableTemplate.getTableName().toLowerCase(
-                        Locale.getDefault())),
+                    tableTemplate.getTableName().toLowerCase(t_Locale)),
                 '_');
 
         MessageFormat t_HeaderFormatter = new MessageFormat(header);
@@ -372,7 +373,7 @@ public class XMLDAOTestTemplate
                 {
                     t_strCapitalizedTableName,
                     t_strCapitalizedTableName.substring(0,1).toLowerCase(
-                        Locale.getDefault())
+                        t_Locale)
                     + t_strCapitalizedTableName.substring(1)
                 }));
 
@@ -436,7 +437,8 @@ public class XMLDAOTestTemplate
                 t_TestParametersValuesFormatter.format(
                     new Object[]
                     {
-                        metadataTypeManager.getNativeType(t_iColumnType).toUpperCase()
+                        metadataTypeManager.getNativeType(t_iColumnType)
+                            .toUpperCase(t_Locale)
                     }));
 
             t_sbUpdateFilterValues.append(
@@ -446,7 +448,7 @@ public class XMLDAOTestTemplate
                         t_strCapitalizedTableName,
                         stringUtils.capitalize(
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase(
-                                Locale.getDefault()),
+                                t_Locale),
                             '_')
                     }));
 
@@ -457,7 +459,7 @@ public class XMLDAOTestTemplate
                         t_strCapitalizedTableName,
                         stringUtils.capitalize(
                             t_astrPrimaryKeys[t_iPkIndex].toLowerCase(
-                                Locale.getDefault()),
+                                t_Locale),
                             '_')
                     }));
 
@@ -522,7 +524,7 @@ public class XMLDAOTestTemplate
                     metadataTypeManager.getNativeType(t_iColumnType);
 
                 Object[] t_aParams =
-                    new Object[] { t_strTestValue.toUpperCase() };
+                    new Object[] { t_strTestValue.toUpperCase(t_Locale) };
 
                 MessageFormat t_Formatter = t_TestParametersValuesFormatter;
 
@@ -535,8 +537,9 @@ public class XMLDAOTestTemplate
                     t_aParams =
                         new Object[]
                         {
-                            metadataTypeManager.getSmartObjectType(t_iColumnType, false),
-                            t_strTestValue.toUpperCase()
+                            metadataTypeManager.getSmartObjectType(
+                                t_iColumnType, false),
+                            t_strTestValue.toUpperCase(t_Locale)
                         };
                 }
 
@@ -568,7 +571,7 @@ public class XMLDAOTestTemplate
                             t_TestParametersUpdatedValuesFormatter.format(
                                 new Object[]
                                 {
-                                    t_strTestValue.toUpperCase()
+                                    t_strTestValue.toUpperCase(t_Locale)
                                 }));
                     }
 

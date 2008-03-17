@@ -77,7 +77,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.Locale;
 
 /**
  * Manages the information metadata stored in an Oracle database.
@@ -236,6 +236,8 @@ public class OracleMetadataManager
     {
         ResultSet t_rsResults = null;
 
+        Locale t_Locale = Locale.getDefault();
+
         PreparedStatement t_PreparedStatement = null;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -282,13 +284,13 @@ public class OracleMetadataManager
                          && (t_Log.isInfoEnabled()))
                     {
                         t_Log.info("  Extracting PK for "
-                            + t_strTableName.toUpperCase() + "...");
+                            + t_strTableName.toUpperCase(t_Locale) + "...");
                     }
 
                     t_Query.setString(
                         oracleTextFunctions.upper(USER_CONS_COLUMNS.TABLE_NAME)
                             .equals(oracleTextFunctions.upper()),
-                        t_strTableName.toUpperCase());
+                        t_strTableName.toUpperCase(t_Locale));
 
                     if  (   (t_Log != null)
                          && (t_Log.isDebugEnabled()))
@@ -448,6 +450,8 @@ public class OracleMetadataManager
 
         PreparedStatement t_PreparedStatement = null;
 
+        Locale t_Locale = Locale.getDefault();
+
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
@@ -519,14 +523,15 @@ public class OracleMetadataManager
                     if  (   (t_Log != null)
                          && (t_Log.isInfoEnabled()))
                     {
-                        t_Log.info("  Extracting FK for " 
-                            + t_strTableName.toUpperCase() + "...");
+                        t_Log.info(
+                           "  Extracting FK for " 
+                            + t_strTableName.toUpperCase(t_Locale) + "...");
                     }
 
                     t_Query.setString(
                         oracleTextFunctions.upper(tableConstraints.TABLE_NAME)
                             .equals(oracleTextFunctions.upper()),
-                        t_strTableName.toUpperCase());
+                        t_strTableName.toUpperCase(t_Locale));
 
                     if  (   (t_Log != null)
                          && (t_Log.isDebugEnabled()))
@@ -900,6 +905,8 @@ public class OracleMetadataManager
     {
         Collection result = new ArrayList();
 
+        Locale t_Locale = Locale.getDefault();
+
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -931,7 +938,7 @@ public class OracleMetadataManager
                 t_Query.setString(
                     oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
                         oracleTextFunctions.upper()),
-                    tableName.toUpperCase());
+                    tableName.toUpperCase(t_Locale));
 
                 /*
                 t_PreparedStatement = t_Connection.prepareStatement(t_Query.toString());
@@ -1127,6 +1134,8 @@ public class OracleMetadataManager
     {
         Collection result = new ArrayList();
         
+        Locale t_Locale = Locale.getDefault();
+
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -1156,7 +1165,7 @@ public class OracleMetadataManager
                 t_Query.setString(
                     oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
                         oracleTextFunctions.upper()),
-                    tableName.toUpperCase());
+                    tableName.toUpperCase(t_Locale));
 
                 t_rsResults = t_Query.executeQuery();
             }
@@ -1434,6 +1443,8 @@ public class OracleMetadataManager
     {
         Collection result = new ArrayList();
 
+        Locale t_Locale = Locale.getDefault();
+
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -1462,7 +1473,7 @@ public class OracleMetadataManager
                 t_Query.setString(
                     oracleTextFunctions.upper(USER_TAB_COLUMNS.TABLE_NAME).equals(
                         oracleTextFunctions.upper()),
-                    tableName.toUpperCase());
+                    tableName.toUpperCase(t_Locale));
 
                 t_rsResults = t_Query.executeQuery();
             }
@@ -1669,6 +1680,8 @@ public class OracleMetadataManager
     {
         String result = "";
 
+        Locale t_Locale = Locale.getDefault();
+
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -1694,7 +1707,7 @@ public class OracleMetadataManager
                 t_Query.setString(
                     oracleTextFunctions.upper(USER_TAB_COMMENTS.TABLE_NAME).equals(
                         oracleTextFunctions.upper()),
-                    tableName.toUpperCase());
+                    tableName.toUpperCase(t_Locale));
 
                 if  (t_Log != null)
                 {
@@ -1853,6 +1866,8 @@ public class OracleMetadataManager
 
         result = (t_iCount == 0) ? EMPTY_STRING_ARRAY : new String[t_iCount];
 
+        Locale t_Locale = Locale.getDefault();
+
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
         ResultSet t_rsResults = null;
@@ -1889,12 +1904,12 @@ public class OracleMetadataManager
                     t_Query.setString(
                         oracleTextFunctions.upper(USER_COL_COMMENTS.TABLE_NAME).equals(
                             oracleTextFunctions.upper()),
-                        tableName.toUpperCase());
+                        tableName.toUpperCase(t_Locale));
 
                     t_Query.setString(
                         oracleTextFunctions.upper(USER_COL_COMMENTS.COLUMN_NAME).equals(
                             oracleTextFunctions.upper()),
-                        t_strColumnName.toUpperCase());
+                        t_strColumnName.toUpperCase(t_Locale));
 
                     String t_strQuery = t_Query.toString();
 

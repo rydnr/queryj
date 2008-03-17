@@ -1064,7 +1064,7 @@ public class XMLDAOTemplate
             t_BuildValueObjectMethodFormatter.format(
                 new Object[]
                 {
-                    t_strTableName.toUpperCase(),
+                    t_strTableName.toUpperCase(t_Locale),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase(t_Locale)),
@@ -1079,7 +1079,7 @@ public class XMLDAOTemplate
             t_InsertMethodFormatter.format(
                 new Object[]
                 {
-                    t_strTableName.toUpperCase(),
+                    t_strTableName.toUpperCase(t_Locale),
                     stringUtils.capitalize(
                         singularPluralFormConverter.getSingular(
                             t_strTableName.toLowerCase(t_Locale)),

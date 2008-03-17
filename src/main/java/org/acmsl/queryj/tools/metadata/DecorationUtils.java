@@ -99,7 +99,9 @@ public class DecorationUtils
      */
     public String upperCase(final String value)
     {
-        return value.toUpperCase();
+        Locale t_Locale = Locale.getDefault();
+
+        return value.toUpperCase(t_Locale);
     }
     
     /**

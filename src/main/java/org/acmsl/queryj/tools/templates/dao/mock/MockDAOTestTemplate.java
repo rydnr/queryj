@@ -303,7 +303,7 @@ public class MockDAOTestTemplate
                                     t_MetadataManager.getColumnType(
                                         t_TableTemplate.getTableName(),
                                         t_astrPrimaryKeys[t_iPkIndex]))
-                                .toUpperCase()
+                                .toUpperCase(t_Locale)
                             }));
 
                     t_sbUpdateFilterValues.append(
@@ -384,7 +384,7 @@ public class MockDAOTestTemplate
                                             t_TableTemplate.getTableName(),
                                             t_astrColumnNames[
                                                 t_iColumnIndex]))
-                                    .toUpperCase()
+                                    .toUpperCase(t_Locale)
                                 }));
 
                         t_sbInsertParametersTypes.append(
@@ -406,7 +406,7 @@ public class MockDAOTestTemplate
                                                 t_TableTemplate.getTableName(),
                                                 t_astrColumnNames[
                                                     t_iColumnIndex]))
-                                        .toUpperCase()
+                                        .toUpperCase(t_Locale)
                                     }));
 
                             t_sbUpdateParametersTypes.append(
