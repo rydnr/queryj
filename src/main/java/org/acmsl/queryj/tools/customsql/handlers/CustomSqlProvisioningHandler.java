@@ -184,7 +184,6 @@ public class CustomSqlProvisioningHandler
                   t_iTableIndex++)
         {
             t_strTableName = t_astrTableNames[t_iTableIndex];
-            t_strResultName = buildResultName(t_strTableName);
 
             t_astrAttributeNames =
                 metadataManager.getAllColumnNames(t_strTableName);

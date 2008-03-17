@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -131,20 +132,15 @@ public class ConditionOperator
         {
             ConditionOperator t_Candidate = (ConditionOperator) candidate;
 
-            result = (t_Candidate.getSymbol() == symbol);
+            result = (t_Candidate.getSymbol() != null);
 
-            if  (!result)
+            if  (result) 
             {
-                result = (t_Candidate.getSymbol() != null);
-
-                if  (result) 
-                {
-                    result = (t_Candidate.getSymbol().equals(symbol));
-                }
-                else
-                {
-                    result = (symbol == null);
-                }
+                result = (t_Candidate.getSymbol().equals(symbol));
+            }
+            else
+            {
+                result = (symbol == null);
             }
         }
 

@@ -128,14 +128,14 @@ public class DataAccessContextLocalTemplate
             repositoryName,
             engineName,
             tables);
-        immutableSetJNDILocation(jndiLocation);
+        immutableSetJndiLocation(jndiLocation);
     }
 
     /**
      * Specifies the JNDI location.
      * @param location such value.
      */
-    private void immutableSetJNDILocation(final String location)
+    private void immutableSetJndiLocation(final String location)
     {
         m__strJNDILocation = location;
     }
@@ -144,16 +144,16 @@ public class DataAccessContextLocalTemplate
      * Specifies the JNDI location.
      * @param location such value.
      */
-    protected void setJNDILocation(final String location)
+    protected void setJndiLocation(final String location)
     {
-        immutableSetJNDILocation(location);
+        immutableSetJndiLocation(location);
     }
 
     /**
      * Retrieves the JNDI location.
      * @return such value.
      */
-    public String getJNDILocation()
+    public String getJndiLocation()
     {
         return m__strJNDILocation;
     }
@@ -236,7 +236,7 @@ public class DataAccessContextLocalTemplate
         {
             input.put("splitted_header", split(t_strProcessedHeader));
         }
-        fillJndiLocation(input, getJNDILocation());
+        fillJndiLocation(input, getJndiLocation());
     }
 
     /**

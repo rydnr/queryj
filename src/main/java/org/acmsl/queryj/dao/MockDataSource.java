@@ -147,7 +147,7 @@ public class MockDataSource
     {
         immutableSetDriverClassName(driverClassName);
         immutableSetUrl(url);
-        immutableSetUserName(username);
+        immutableSetUsername(username);
         immutableSetPassword(password);
         setAutoCommit(false);
     }
@@ -210,7 +210,7 @@ public class MockDataSource
      * Sets the user name.
      * @param username the user name.
      */
-    private void immutableSetUserName(final String username)
+    private void immutableSetUsername(final String username)
     {
         m__strUserName = username;
     }
@@ -219,9 +219,9 @@ public class MockDataSource
      * Sets the user name.
      * @param username the user name.
      */
-    protected void setUserName(final String username)
+    protected void setUsername(final String username)
     {
-        immutableSetUserName(username);
+        immutableSetUsername(username);
     }
 
     /**

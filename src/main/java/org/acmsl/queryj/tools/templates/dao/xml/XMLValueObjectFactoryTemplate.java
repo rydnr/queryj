@@ -206,7 +206,7 @@ public class XMLValueObjectFactoryTemplate
                         '_')
                 }));
 
-        t_sbResult.append(getAcmSlImports());
+        t_sbResult.append(getAcmslImports());
         t_sbResult.append(getJdkImports());
         t_sbResult.append(getExtraImports());
 

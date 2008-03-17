@@ -143,8 +143,6 @@ public class AntFieldElement
      */
     public void setPk(final String pk)
     {
-        Locale t_Locale = Locale.getDefault();
-
         m__strPk = pk;
 
         String t_strPk = null;

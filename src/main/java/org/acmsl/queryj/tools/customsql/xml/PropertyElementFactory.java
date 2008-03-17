@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -189,7 +190,6 @@ public class PropertyElementFactory
             if  (t_iFirstComma > 0)
             {
                 result[2] = t_strAux.substring(t_iLastComma, t_iFirstComma - 1);
-                t_strAux = t_strAux.substring(t_iFirstComma);
             }
         }
         

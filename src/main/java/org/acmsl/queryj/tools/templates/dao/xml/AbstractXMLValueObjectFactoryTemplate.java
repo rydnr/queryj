@@ -209,7 +209,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         immutableSetTableTemplate(tableTemplate);
         immutableSetMetadataManager(metadataManager);
         immutableSetProjectImports(projectImports);
-        immutableSetAcmSlImports(acmSlImports);
+        immutableSetAcmslImports(acmSlImports);
         immutableSetJdkImports(jdkImports);
         immutableSetExtraImports(extraImports);
         immutableSetJavadoc(javadoc);
@@ -452,7 +452,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    private void immutableSetAcmSlImports(final String acmslImports)
+    private void immutableSetAcmslImports(final String acmslImports)
     {
         m__strAcmSlImports = acmslImports;
     }
@@ -461,16 +461,16 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * Specifies the ACM-SL imports.
      * @param acmslImports the new ACM-SL imports.
      */
-    protected void setAcmSlImports(final String acmslImports)
+    protected void setAcmslImports(final String acmslImports)
     {
-        immutableSetAcmSlImports(acmslImports);
+        immutableSetAcmslImports(acmslImports);
     }
 
     /**
      * Retrieves the ACM-SL imports.
      * @return such information.
      */
-    public String getAcmSlImports() 
+    public String getAcmslImports() 
     {
         return m__strAcmSlImports;
     }

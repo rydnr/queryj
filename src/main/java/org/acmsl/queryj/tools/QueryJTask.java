@@ -650,7 +650,7 @@ public class QueryJTask
 
         String t_strLowerCase = null;
 
-        if  (outputDirSubFolders == null)
+        if  (outputDirSubFolders != null)
         {
             t_strLowerCase =
                 outputDirSubFolders.trim().toLowerCase(Locale.getDefault());

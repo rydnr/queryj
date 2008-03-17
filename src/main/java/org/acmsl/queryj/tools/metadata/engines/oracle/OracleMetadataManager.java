@@ -1593,7 +1593,6 @@ public class OracleMetadataManager
                 // TODO metadataExtractionListener);
 
         String[] t_astrTypes = t_astrExtractedValues[0];
-        String[] t_astrNames = t_astrExtractedValues[1];
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 

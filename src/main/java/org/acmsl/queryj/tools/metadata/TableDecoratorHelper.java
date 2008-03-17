@@ -118,8 +118,6 @@ public class TableDecoratorHelper
 
             if  (t_Attribute != null)
             {
-                t_strName = t_Attribute.getName();
-                
                 if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
                      || (!contains(firstAttributes, t_Attribute)))
                 {
@@ -197,8 +195,6 @@ public class TableDecoratorHelper
 
             if  (t_Attribute != null)
             {
-                t_strName = t_Attribute.getName();
-                
                 if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
                      || (!contains(firstAttributes, t_Attribute))
                      || (contains(primaryKey, t_Attribute)))

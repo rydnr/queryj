@@ -148,7 +148,7 @@ public class DataAccessContextLocalTemplateBuildHandler
                         projectPackage,
                         repository,
                         engineName,
-                        retrieveJNDILocation(parameters),
+                        retrieveJndiLocation(parameters),
                         tableNames,
                         header,
                         jmx);
@@ -203,7 +203,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @return the location.
      * @precondition parameters != null
      */
-    protected String retrieveJNDILocation(final Map parameters)
+    protected String retrieveJnsiLocation(final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);

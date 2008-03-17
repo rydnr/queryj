@@ -1020,8 +1020,7 @@ public class CustomSqlValidationHandler
 
             if  (resultSet.next())
             {
-                Iterator t_Iterator =
-                    (t_cProperties != null) ? t_cProperties.iterator() : null;
+                Iterator t_Iterator = t_cProperties.iterator();
 
                 if  (t_Iterator != null)
                 {
@@ -1063,8 +1062,7 @@ public class CustomSqlValidationHandler
                     }
                 }
             }
-            else if  (   (t_cProperties != null)
-                      && (!t_bQueryRetrievesChildren))
+            else if  (!t_bQueryRetrievesChildren)
             {
                 ResultSetMetaData t_Metadata = resultSet.getMetaData();
 
