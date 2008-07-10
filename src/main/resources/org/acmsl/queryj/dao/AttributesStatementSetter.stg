@@ -469,16 +469,16 @@ public class <input.vo_name>AttributesStatementSetter
 <if(input.clobHandling)>
         if  (insertOperation)
         {
-            <input.externally_managed_attributes:
+            <input.pk_attributes:
               attribute_preparedstatement_specification(attr=it);
               separator="\n">
 
         }
 <else>
-<if(input.externally_managed_attributes)>
+<if(input.pk_attributes)>
         if  (insertOperation)
         {
-            <input.externally_managed_attributes:
+            <input.pk_attributes:
               attribute_preparedstatement_specification(attr=it);
               separator="\n">
         }
@@ -494,12 +494,12 @@ public class <input.vo_name>AttributesStatementSetter
         }
         else
         {
-           <input.all_non_readonly_but_externally_managed_attributes:
+           <input.nonpk_non_readonly_attributes:
              attribute_preparedstatement_specification(attr=it);
              separator="\n">
         }
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:
+        <input.nonpk_non_readonly_attributes:
           attribute_preparedstatement_specification(attr=it);
           separator="\n">
 
@@ -508,16 +508,16 @@ public class <input.vo_name>AttributesStatementSetter
 <if(input.clobHandling)>
         if  (updateOperation)
         {
-            <input.externally_managed_attributes:
+            <input.pk_attributes:
               attribute_preparedstatement_specification(attr=it);
               separator="\n">
 
         }
 <else>
-<if(input.externally_managed_attributes)>
+<if(input.pk_attributes)>
         if  (updateOperation)
         {
-            <input.externally_managed_attributes:
+            <input.pk_attributes:
               attribute_preparedstatement_specification(attr=it);
               separator="\n">
         }
