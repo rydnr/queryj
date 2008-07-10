@@ -1209,13 +1209,15 @@ primitive_to_Integer(input) ::= <<
 <!
  Generates the method call to convert the primitive into an Integer.
  @param input the attribute.
-!>new Integer(<input.nameLowercased>)>>
+!><if(input.valueNull)>null<else>new Integer(<input.nameLowercased>)<endif>
+>>
 
 primitive_to_Integer_value(input) ::= <<
 <!
  Generates the method call to convert the primitive into an Integer.
  @param input the attribute.
-!>new Integer(<input.value>)>>
+!><if(input.valueNull)>null<else>new Integer(<input.value>)<endif>
+>>
 
 Long_to_primitive(input) ::= <<
 <!
@@ -1227,13 +1229,15 @@ primitive_to_Long(input) ::= <<
 <!
  Generates the method call to convert the primitive into a Long.
  @param input the attribute.
-!>new Long(<input.nameLowercased>)>>
+!><if(input.valueNull)>null<else>new Long(<input.nameLowercased>)<endif>
+>>
 
 primitive_to_Long_value(input) ::= <<
 <!
  Generates the method call to convert the primitive into a Long.
  @param input the attribute.
-!>new Long(<input.value>)>>
+!><if(input.valueNull)>null<else>new Long(<input.value>)<endif>
+>>
 
 Float_to_primitive(input) ::= <<
 <!
@@ -1245,13 +1249,15 @@ primitive_to_Float(input) ::= <<
 <!
  Generates the method call to convert the primitive into a Float.
  @param input the attribute.
-!>new Float(<input.nameLowercased>)>>
+!><if(input.valueNull)>null<else>new Float(<input.nameLowercased>)<endif>
+>>
 
 primitive_to_Float_value(input) ::= <<
 <!
  Generates the method call to convert the primitive into a Float.
  @param input the attribute.
-!>new Float(<input.value>)>>
+!><if(input.valueNull)>null<else>new Float(<input.value>)<endif>
+>>
 
 Double_to_primitive(input) ::= <<
 <!
@@ -1263,13 +1269,15 @@ primitive_to_Double(input) ::= <<
 <!
  Generates the method call to convert the primitive into a Double.
  @param input the attribute.
-!>new Double(<input.nameLowercased>)>>
+!><if(input.valueNull)>null<else>new Double(<input.nameLowercased>)<endif>
+>>
 
 primitive_to_Double_value(input) ::= <<
 <!
  Generates the method call to convert the primitive into a Double.
  @param input the attribute.
-!>new Double(<input.value>)>>
+!><if(input.valueNull)>null<else>new Double(<input.value>)<endif>
+>>
 
 String_to_primitive(input) ::= <<
 <!
@@ -1303,14 +1311,14 @@ primitive_to_BigDecimal(input) ::= <<
 <!
  Don't try to convert the primitive to anything.
  @param input the attribute.
-!><primitive_to_Object(input=input)>
+!><if(input.valueNull)>null<else>new BigDecimal("<input.nameLowerCased>")<endif>
 >>
 
 primitive_to_BigDecimal_value(input) ::= <<
 <!
  Don't try to convert the primitive to anything.
  @param input the attribute.
-!><primitive_to_Object_value(input=input)>
+!><if(input.valueNull)>null<else>new BigDecimal("<input.value>")<endif>
 >>
 
 Timestamp_to_primitive(input) ::= <<

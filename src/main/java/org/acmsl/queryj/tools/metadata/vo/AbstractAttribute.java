@@ -591,4 +591,13 @@ public abstract class AbstractAttribute
     {
         return getName();
     }
+    
+    /**
+     * Indicates if the value is null
+     * @return true in such case
+     */
+    public boolean isValueNull()
+    {
+        return (getValue() == null);
+    }
 }
