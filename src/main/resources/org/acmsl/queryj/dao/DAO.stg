@@ -1584,7 +1584,7 @@ protected void insert(
 <if(parent)>
     <parent.voName> <parent.nameLowercased> =
         <parent.nameLowercased>DAO.create(
-            <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+            <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 
 <table.primaryKey:{attr |
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
@@ -1834,7 +1834,7 @@ protected <input.vo_name> create(
 <if(parent)>
     <parent.voName> <parent.nameLowercased> =
         <parent.nameLowercased>DAO.create(
-            <parent.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+            <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 
 <table.primaryKey:{attr |
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">

@@ -121,7 +121,10 @@ public class TableDecoratorHelper
                 if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
                      || (!contains(firstAttributes, t_Attribute)))
                 {
-                    result.add(t_Attribute);
+                    if(!contains(result, t_Attribute))
+                    {
+                        result.add(t_Attribute);
+                    }
                 }
             }
         }
@@ -199,7 +202,10 @@ public class TableDecoratorHelper
                      || (!contains(firstAttributes, t_Attribute))
                      || (contains(primaryKey, t_Attribute)))
                 {
-                    result.add(t_Attribute);
+                    if(!contains(result, t_Attribute))
+                    {
+                        result.add(t_Attribute);
+                    }
                 }
             }
         }
@@ -344,4 +350,30 @@ public class TableDecoratorHelper
         return result;
     }
 
+    /**
+     * Removes the duplicated attributes
+     * @param attributes the original attributes
+     * @return the attributes without duplicates
+     */
+    public List removedDuplicatedAttributes(final List attributes)
+    {
+        List result = new ArrayList();
+
+        int t_iCount = (attributes != null) ? attributes.size() : 0;
+
+        Attribute t_Attribute;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_Attribute = (Attribute) attributes.get(t_iIndex);
+
+            if  (   (t_Attribute != null)
+                 && (!contains(result, t_Attribute)))
+            {
+                result.add(t_Attribute);
+            }
+        }
+        
+        return result;
+    }
 }

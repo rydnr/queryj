@@ -1275,7 +1275,10 @@ public abstract class AbstractTableDecorator
     {
         return
             getAllAttributes(
-                getName(), getMetadataManager(), getDecoratorFactory());
+                getName(), 
+                getMetadataManager(), 
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -1283,6 +1286,7 @@ public abstract class AbstractTableDecorator
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param helper the<code>TableDecoratorHelper</code> instance.
      * @return such information.
      * @precondition table != null
      * @precondition metadataManager != null
@@ -1291,7 +1295,8 @@ public abstract class AbstractTableDecorator
     protected List getAllAttributes(
         final String table,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper helper)
     {
         List result = new ArrayList();
 
@@ -1321,6 +1326,9 @@ public abstract class AbstractTableDecorator
                 metadataManager,
                 decoratorFactory));
 
+        result = 
+            helper.removedDuplicatedAttributes(result);
+        
         return result;
     }
 
@@ -1620,7 +1628,8 @@ public abstract class AbstractTableDecorator
         return
             getNonParentNonManagedExternallyPlusPkAttributes(
                 getNonParentPlusPkAttributes(),
-                getPrimaryKey());
+                getPrimaryKey(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -1628,11 +1637,13 @@ public abstract class AbstractTableDecorator
      * attributes.
      * @param nonParentAttributes the non-parent attributes.
      * @param primaryKey the primary key.
+     * @param helper the <code>TableDecoratorHelper</code> instance.
      * @return such list.
      */
     protected List getNonParentNonManagedExternallyPlusPkAttributes(
         final List nonParentAttributes,
-        final List primaryKey)
+        final List primaryKey,
+        final TableDecoratorHelper helper)
     {
         List result = new ArrayList();
 
@@ -1648,7 +1659,10 @@ public abstract class AbstractTableDecorator
                  && (   (!t_Attribute.getManagedExternally())
                      || (isPartOf(primaryKey, t_Attribute))))
             {
-                result.add(t_Attribute);
+                if(!helper.contains(result, t_Attribute))
+                {
+                    result.add(t_Attribute);
+                }
             }
         }
 
@@ -1666,7 +1680,8 @@ public abstract class AbstractTableDecorator
                 getParentTable(),
                 getNonParentAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -1675,6 +1690,7 @@ public abstract class AbstractTableDecorator
      * @param nonParentAttributes the non-parent attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param helper the <code>TableDecoratorHelper</code> instance.
      * @return such list.
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
@@ -1683,7 +1699,8 @@ public abstract class AbstractTableDecorator
         final Table parent,
         final List nonParentAttributes,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper helper)
     {
         List result = new ArrayList();
 
@@ -1710,6 +1727,17 @@ public abstract class AbstractTableDecorator
             result.addAll(nonParentAttributes);
         }
 
+        if(parent!=null)
+        {
+            result = 
+                helper.removeOverriddenPlusPk(
+                        parent.getPrimaryKey(), 
+                        result,
+                        getPrimaryKey(), 
+                        parent.getName(), 
+                        metadataManager);
+        }
+        
         return result;
     }
 
@@ -1725,7 +1753,8 @@ public abstract class AbstractTableDecorator
                 getParentTable(),
                 getNonParentNonManagedExternallyAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -1736,13 +1765,15 @@ public abstract class AbstractTableDecorator
      * own attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param helper the <code>TableDecoratorHelper</code> instance.
      * @return such list.
      */
     protected List getAllParentAndNonParentNonManagedExternallyAttributes(
         final Table parent,
         final List nonParentNonManagedExternallyAttributes,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        final DecoratorFactory decoratorFactory,
+        final TableDecoratorHelper helper)
     {
         List result = new ArrayList();
 
@@ -1769,6 +1800,17 @@ public abstract class AbstractTableDecorator
             result.addAll(nonParentNonManagedExternallyAttributes);
         }
 
+        if(parent!=null)
+        {
+            result = 
+                helper.removeOverriddenPlusPk(
+                        parent.getPrimaryKey(), 
+                        result,
+                        getPrimaryKey(), 
+                        parent.getName(), 
+                        metadataManager);
+        }
+
         return result;
     }
 
@@ -1778,22 +1820,27 @@ public abstract class AbstractTableDecorator
      */
     public List getAllNonManagedExternallyAttributes()
     {
-        return getAllNonManagedExternallyAttributes(getAllAttributes());
+        return getAllNonManagedExternallyAttributes(
+                getAllAttributes(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.
      * @param allAttributes the attributes.
+     * @param helper the <code>TableDecoratorHelper</code> instance.
      * @return such attributes.
      */
-    protected List getAllNonManagedExternallyAttributes(final List allAttributes)
+    protected List getAllNonManagedExternallyAttributes(
+            final List allAttributes,
+            final TableDecoratorHelper helper)
     {
         List result = new ArrayList();
 
         int t_iCount = (allAttributes != null) ? allAttributes.size() : 0;
 
         Attribute t_Attribute;
-
+        
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
             t_Attribute = (Attribute) allAttributes.get(t_iIndex);
@@ -1801,7 +1848,10 @@ public abstract class AbstractTableDecorator
             if  (   (t_Attribute != null)
                  && (!t_Attribute.getManagedExternally()))
             {
-                result.add(t_Attribute);
+                if(!helper.contains(result, t_Attribute))
+                {
+                    result.add(t_Attribute);
+                }
             }
         }
 
@@ -1856,7 +1906,10 @@ public abstract class AbstractTableDecorator
      */
     public List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
     {
-        return getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(getAllAttributes(), getPrimaryKey());
+        return getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(
+                getAllAttributes(), 
+                getPrimaryKey(),
+                TableDecoratorHelper.getInstance());
     }
 
     /**
@@ -1864,17 +1917,20 @@ public abstract class AbstractTableDecorator
      * or read-only, plus the primary key.
      * @param allAttributes the attributes.
      * @param primaryKey the primary key.
+     * @param helper the <code>TableDecoratorHelper</code> instance.
      * @return such attributes.
      */
     protected List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(
-        final List allAttributes, final List primaryKey)
+        final List allAttributes, 
+        final List primaryKey,
+        final TableDecoratorHelper helper)
     {
         List result = new ArrayList();
 
         int t_iCount = (allAttributes != null) ? allAttributes.size() : 0;
 
         Attribute t_Attribute;
-
+        
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
             t_Attribute = (Attribute) allAttributes.get(t_iIndex);
@@ -1884,7 +1940,10 @@ public abstract class AbstractTableDecorator
                          && (!t_Attribute.isReadOnly()))
                      || (isPartOf(primaryKey, t_Attribute))))
             {
-                result.add(t_Attribute);
+                if(!helper.contains(result, t_Attribute))
+                {
+                    result.add(t_Attribute);
+                }
             }
         }
 
@@ -2046,6 +2105,9 @@ public abstract class AbstractTableDecorator
                     nonParentNonManagedExternallyPlusPkAttributes));
         }
 
+        result = 
+            tableDecoratorHelper.removedDuplicatedAttributes(result);
+        
         return result;
     }
 
