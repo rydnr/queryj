@@ -2028,7 +2028,12 @@ protected <input.vo_name> create(
 
     final PlatformTransactionManager transactionManager)
 {
+<if(table.voDecorated)>
+    <input.vo_name>Decorator result =
+<else>
     <input.vo_name> result =
+<endif>
+
         create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
@@ -2072,7 +2077,11 @@ protected <input.vo_name> create(
     final TransactionTemplate transactionTemplate,
     final <input.tr_name_capitalized>DAOListener daoListener)
 {
+<if(table.voDecorated)>
+    <input.vo_name>Decorator result = null;
+<else>
     <input.vo_name> result = null;
+<endif>
 
     Map t_mMap = null;
 
@@ -2148,7 +2157,11 @@ protected <input.vo_name> create(
                 daoListener),
             this);
 
+<if(table.voDecorated)>
+    result = (<input.vo_name>Decorator) transactionTemplate.execute(t_Callback);
+<else>
     result = (<input.vo_name>) transactionTemplate.execute(t_Callback);
+<endif>
 
     //result = t_Callback.getResult();
 
