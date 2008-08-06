@@ -149,7 +149,7 @@ public class AntFieldElement
 
         if  (pk != null)
         {
-            t_strPk = pk.trim().toLowerCase();
+            t_strPk = pk.trim().toLowerCase(Locale.getDefault());
         }
 
         setIsPk(

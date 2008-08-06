@@ -298,28 +298,17 @@ public abstract class BasePerTableTemplateWritingHandler
         final MetadataManager metadataManager,
         final MetaLanguageUtils metaLanguageUtils)
     {
-        boolean result = false;
+        boolean result = (template != null);
 
-        String t_strComment = null;
+        String t_strComment =
+            metadataManager.getTableComment(template.getTableName());
 
-        if  (   (metadataManager != null)
-             && (template != null))
-        {
-            t_strComment =
-                metadataManager.getTableComment(template.getTableName());
+        String[][] t_aastrRelationship =
+            metaLanguageUtils.retrieveTableRelationship(t_strComment);
 
-            if  (   (t_strComment != null)
-                 && (metaLanguageUtils != null))
-            {
-                String[][] t_aastrRelationship =
-                    metaLanguageUtils.retrieveTableRelationship(
-                        t_strComment);
-
-                result =
-                    (   (t_aastrRelationship == null)
-                     || (t_aastrRelationship.length == 0));
-            }
-        }
+        result =
+            (   (t_aastrRelationship == null)
+             || (t_aastrRelationship.length == 0));
 
         return result;
     }
