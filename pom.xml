@@ -6,7 +6,7 @@
   <groupId>org.acmsl</groupId>
   <artifactId>queryj</artifactId>
   <packaging>jar</packaging>
-  <version>v24-2.0-3-SNAPSHOT</version>
+  <version>v24-2.0-3</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org</url>
   <inceptionYear>2002</inceptionYear>
@@ -204,7 +204,7 @@
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.5.7b16-SNAPSHOT</version>
+      <version>0.5.7b18</version>
     </dependency>
     <dependency>
       <groupId>org.apache.commons</groupId>
