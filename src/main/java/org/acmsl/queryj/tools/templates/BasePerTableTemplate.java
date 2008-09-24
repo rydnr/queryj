@@ -99,6 +99,7 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Base logic for all per-table templates.
@@ -463,6 +464,14 @@ public abstract class BasePerTableTemplate
                 decoratorFactory,
                 metadataUtils);
 
+        List t_cAllNonPkButLobAttributes =
+            getAllNonPkButLobAttributes(
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                decoratorFactory,
+                metadataUtils);
+
         Collection t_cForeignKeys =
             getForeignKeys(
                 tableName,
@@ -555,6 +564,7 @@ public abstract class BasePerTableTemplate
             t_lAllButExternallyManagedAttributes,
             t_cLobAttributes,
             t_cAllButLobAttributes,
+            t_cAllNonPkButLobAttributes,
             t_cForeignKeys,
             t_cCustomSelects,
             t_cCustomUpdatesOrInserts,
@@ -608,6 +618,8 @@ public abstract class BasePerTableTemplate
      * are managed externally.
      * @param allButLobAttributes all but the attributes whose type is
      * Clob or Blob.
+     * @param allNonPkButLobAttributes all non pk but the attributes whose type is
+     * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param customSelects the custom selects.
      * @param customUpdatesOrInserts the custom updates or inserts.
@@ -647,6 +659,7 @@ public abstract class BasePerTableTemplate
      * @precondition externallyManagedAttributes != null
      * @precondition allButExternallyManagedAttributes != null
      * @precondition allButLobAttributes != null
+     * @precondition allNonPkButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
      * @precondition customUpdatesOrInserts != null
@@ -682,6 +695,7 @@ public abstract class BasePerTableTemplate
         final List allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final List allButLobAttributes,
+        final List allNonPkButLobAttributes,
         final Collection foreignKeys,
         final Collection customSelects,
         final Collection customUpdatesOrInserts,
@@ -745,6 +759,7 @@ public abstract class BasePerTableTemplate
             allButExternallyManagedAttributes,
             lobAttributes,
             allButLobAttributes,
+            allNonPkButLobAttributes,
             foreignKeys,
             staticAttributeName,
             staticAttributeType,
@@ -946,6 +961,8 @@ public abstract class BasePerTableTemplate
      * @param lobAttributes all attributes whose type is Clob or Blob.
      * @param allButLobAttributes all but the attributes whose type is
      * Clob or Blob.
+     * @param allNonPkButLobAttributes all non pk but the attributes whose type is
+     * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param staticAttributeName the name of the static attribute, or
      * <code>null</code> for non-static tables.
@@ -974,6 +991,7 @@ public abstract class BasePerTableTemplate
      * @precondition allButExternallyManagedAttributes != null
      * @precondition lobAttributes != null
      * @precondition allButLobAttributes != null
+     * @precondition allNonPkButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
      * @precondition customUpdatesOrInserts != null
@@ -1000,6 +1018,7 @@ public abstract class BasePerTableTemplate
         final List allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final List allButLobAttributes,
+        final List allNonPkButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
@@ -1063,6 +1082,9 @@ public abstract class BasePerTableTemplate
         input.put(
             "all_non_readonly_but_lob_attributes",
             removeReadOnly(allButLobAttributes));
+        input.put(
+            "all_non_readonly_non_pk_but_lob_attributes", 
+            removeReadOnly(allNonPkButLobAttributes));
         input.put("foreign_keys", foreignKeys);
         input.put("foreign_keys_by_table", referingKeys);
         input.put("custom_selects", customSelects);
@@ -2445,6 +2467,49 @@ public abstract class BasePerTableTemplate
     }
 
     /**
+     * Retrieves all non primary key but the lob attributes.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param metadataUtils the <code>MetadataUtils</code> instance.
+     * @return such attributes.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
+     * @precondition metadataUtils != null
+     */
+    protected List getAllNonPkButLobAttributes(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory,
+        final MetadataUtils metadataUtils)
+    {
+        List result = null;
+
+        Object t_Key = buildAllNonPkButLobAttributesKey(tableName);
+
+        result = (List) getFromCache(t_Key);
+
+        if  (result == null)
+        {
+            result =
+                metadataUtils.retrieveAllNonPkButLobAttributes(
+                    tableName,
+                    metadataManager,
+                    metadataTypeManager,
+                    decoratorFactory);
+
+            putInCache(t_Key, result);
+        }
+
+        return result;
+    }
+
+    /**
      * Builds the key for all but the lob attributes.
      * @param tableName the table name.
      * @return such key.
@@ -2453,6 +2518,17 @@ public abstract class BasePerTableTemplate
     protected Object buildAllButLobAttributesKey(final String tableName)
     {
         return "//BasePerTableTemplate//allButLobAttributes--" + tableName + "--" + getClass();
+    }
+
+    /**
+     * Builds the key for all non pk but the lob attributes.
+     * @param tableName the table name.
+     * @return such key.
+     * @precondition tableName != null
+     */
+    protected Object buildAllNonPkButLobAttributesKey(final String tableName)
+    {
+        return "//BasePerTableTemplate//allNonPkButLobAttributes--" + tableName + "--" + getClass();
     }
 
     /**

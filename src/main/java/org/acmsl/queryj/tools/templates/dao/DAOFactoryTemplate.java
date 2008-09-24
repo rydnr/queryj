@@ -169,6 +169,8 @@ public class DAOFactoryTemplate
      * @param lobAttributes all attributes whose type is Clob or Blob.
      * @param allButLobAttributes all but the attributes whose type is
      * Clob or Blob.
+     * @param allNonPkButLobAttributes all but the attributes whose type is
+     * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param staticAttributeName the name of the static attribute, or
      * <code>null</code> for non-static tables.
@@ -197,6 +199,7 @@ public class DAOFactoryTemplate
      * @precondition allButExternallyManagedAttributes != null
      * @precondition lobAttributes != null
      * @precondition allButLobAttributes != null
+     * @precondition allNonPkButLobAttributes != null
      * @precondition foreignKeys != null
      * @precondition customSelects != null
      * @precondition customUpdatesOrInserts != null
@@ -223,6 +226,7 @@ public class DAOFactoryTemplate
         final List allButExternallyManagedAttributes,
         final Collection lobAttributes,
         final List allButLobAttributes,
+        final List allNonPkButLobAttributes,
         final Collection foreignKeys,
         final String staticAttributeName,
         final String staticAttributeType,
@@ -252,6 +256,7 @@ public class DAOFactoryTemplate
             allButExternallyManagedAttributes,
             lobAttributes,
             allButLobAttributes,
+            allNonPkButLobAttributes,
             foreignKeys,
             staticAttributeName,
             staticAttributeType,

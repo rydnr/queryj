@@ -57,6 +57,7 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.apache.commons.logging.LogFactory;
 
 /*
  * Importing some JDK classes.
@@ -984,6 +985,7 @@ public class MetadataUtils
                 metadataManager,
                 metadataTypeManager,
                 true,
+                true,
                 decoratorFactory);
     }
 
@@ -1011,6 +1013,35 @@ public class MetadataUtils
                 metadataManager,
                 metadataTypeManager,
                 false,
+                true,
+                decoratorFactory);
+    }
+
+    /**
+     * Retrieves all but the LOB attributes.
+     * @param tableName the table name.
+     * @param metadataManager the metadata manager.
+     * @param metadataTypeManager the metadata type manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return such attributes.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metadataTypeManager != null
+     * @precondition decoratorFactory != null
+     */
+    public List retrieveAllNonPkButLobAttributes(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetadataTypeManager metadataTypeManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        return
+            retrieveLobAttributes(
+                tableName,
+                metadataManager,
+                metadataTypeManager,
+                false,
+                false,
                 decoratorFactory);
     }
 
@@ -1020,6 +1051,7 @@ public class MetadataUtils
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param includeLob whether to include or exclude the LOB attributes.
+     * @param includePks whether to include or exclude the Primary Key attributes.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such attributes.
      * @precondition tableName != null
@@ -1032,6 +1064,7 @@ public class MetadataUtils
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final boolean includeLob,
+        final boolean includePks,
         final DecoratorFactory decoratorFactory)
     {
         List t_lLobAttributeNames = new ArrayList();
@@ -1055,8 +1088,21 @@ public class MetadataUtils
 
             if  (t_bCheck)
             {
-                t_lLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
+                if(includePks)
+                {
+                    t_lLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
+                }
+                else
+                {
+                    
+                    if(!metadataManager.isPartOfPrimaryKey(
+                            tableName, t_astrColumnNames[t_iIndex]))
+                    {
+                        t_lLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
+                    }
+                }
             }
+            
         }
 
         return

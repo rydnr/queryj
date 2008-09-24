@@ -488,7 +488,7 @@ public class <input.vo_name>AttributesStatementSetter
 <if(input.clobHandling)>
         if  (selectForUpdateOperation)
         {
-           <input.all_non_readonly_but_lob_attributes:
+           <input.all_non_readonly_non_pk_but_lob_attributes:
              attribute_preparedstatement_specification(attr=it);
              separator="\n">
         }
