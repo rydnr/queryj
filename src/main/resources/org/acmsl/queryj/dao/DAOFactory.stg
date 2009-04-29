@@ -249,7 +249,8 @@ public class <input.engine_name><input.vo_name>DAOFactory
 <endif>
 
                     dataSource,
-                    new <input.tr_name_capitalized>DAOListenerImpl());
+                    null);
+                    //new <input.tr_name_capitalized>DAOListenerImpl());
         }
 
         return result;
