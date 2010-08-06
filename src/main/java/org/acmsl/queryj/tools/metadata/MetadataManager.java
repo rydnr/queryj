@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2001-2006  Jose San Leandro Armendariz
+    Copyright (C) 2001-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -396,8 +396,14 @@ public interface MetadataManager
     public MetadataTypeManager getMetadataTypeManager();
 
     /**
-     * Checks whether the engine requires specific LOB handling.
+     * Checks whether the engine requires specific CLOB handling.
      * @return <code>true</code> in such case.
      */
-    public boolean requiresCustomLobHandling();
+    public boolean requiresCustomClobHandling();
+
+    /**
+     * Checks whether the engine requires specific BLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomBlobHandling();
 }

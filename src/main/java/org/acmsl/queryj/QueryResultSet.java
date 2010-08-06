@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -54,11 +54,14 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -6026,5 +6029,1204 @@ public class QueryResultSet
                 t_ResultSet.updateArray(t_iFieldIndex, value);
             }
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNClob(final String name, final Reader reader)
+        throws SQLException
+    {
+        updateNClob(name, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNClob(String, java.io.Reader)
+     * @param name the parameter name.
+     * @param reader the Clob reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNClob(
+        final String name, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNClob(name, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNClob(final String name, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateNClob(name, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNClob(String, java.io.Reader, long)
+     * @param name the parameter name.
+     * @param reader the Clob reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNClob(
+        final String name, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNClob(name, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNClob(final int index, final Reader reader)
+        throws SQLException
+    {
+        updateNClob(index, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNClob(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNClob(
+        final int index, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNClob(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNClob(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateNClob(index, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNClob(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNClob(
+        final int index, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNClob(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateClob(final String name, final Reader reader)
+        throws SQLException
+    {
+        updateClob(name, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateClob(String, java.io.Reader)
+     * @param name the parameter name.
+     * @param reader the Clob reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateClob(
+        final String name, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateClob(name, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateClob(final String name, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateClob(name, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateClob(String, java.io.Reader, long)
+     * @param name the parameter name.
+     * @param reader the Clob reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateClob(
+        final String name, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateClob(name, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateClob(final int index, final Reader reader)
+        throws SQLException
+    {
+        updateClob(index, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateClob(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateClob(
+        final int index, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateClob(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateClob(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateClob(index, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateClob(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateClob(
+        final int index, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateClob(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBlob(final String name, final InputStream stream)
+        throws SQLException
+    {
+        updateBlob(name, stream, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBlob(String, java.io.InputStream)
+     * @param name the parameter name.
+     * @param stream the Blob stream.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final String name, final InputStream stream, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBlob(name, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBlob(final String name, final InputStream stream, final long length)
+        throws SQLException
+    {
+        updateBlob(name, stream, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBlob(String, java.io.InputStream, long)
+     * @param name the parameter name.
+     * @param stream the Blob stream.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final String name, final InputStream stream, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBlob(name, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBlob(final int index, final InputStream stream)
+        throws SQLException
+    {
+        updateBlob(index, stream, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBlob(int, java.io.InputStream)
+     * @param index the parameter index.
+     * @param stream the Blob stream.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final int index, final InputStream stream, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBlob(index, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBlob(final int index, final InputStream stream, final long length)
+        throws SQLException
+    {
+        updateBlob(index, stream, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBlob(int, java.io.InputStream, long)
+     * @param index the parameter index.
+     * @param stream the Blob stream.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBlob(
+        final int index, final InputStream stream, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBlob(index, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateCharacterStream(final String name, final Reader reader)
+        throws SQLException
+    {
+        updateCharacterStream(name, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateCharacterStream(String, java.io.Reader)
+     * @param name the parameter name.
+     * @param reader the CharacterStream reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateCharacterStream(
+        final String name, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateCharacterStream(name, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateCharacterStream(final String name, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateCharacterStream(name, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateCharacterStream(String, java.io.Reader, long)
+     * @param name the parameter name.
+     * @param reader the CharacterStream reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateCharacterStream(
+        final String name, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateCharacterStream(name, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateCharacterStream(final int index, final Reader reader)
+        throws SQLException
+    {
+        updateCharacterStream(index, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateCharacterStream(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the CharacterStream reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateCharacterStream(
+        final int index, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateCharacterStream(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateCharacterStream(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateCharacterStream(index, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateCharacterStream(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the CharacterStream reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateCharacterStream(
+        final int index, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateCharacterStream(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNCharacterStream(final String name, final Reader reader)
+        throws SQLException
+    {
+        updateNCharacterStream(name, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNCharacterStream(String, java.io.Reader)
+     * @param name the parameter name.
+     * @param reader the NCharacterStream reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNCharacterStream(
+        final String name, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNCharacterStream(name, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNCharacterStream(final String name, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateNCharacterStream(name, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNCharacterStream(String, java.io.Reader, long)
+     * @param name the parameter name.
+     * @param reader the NCharacterStream reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNCharacterStream(
+        final String name, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNCharacterStream(name, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNCharacterStream(final int index, final Reader reader)
+        throws SQLException
+    {
+        updateNCharacterStream(index, reader, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNCharacterStream(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the NCharacterStream reader.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNCharacterStream(
+        final int index, final Reader reader, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNCharacterStream(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNCharacterStream(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        updateNCharacterStream(index, reader, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNCharacterStream(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the NCharacterStream reader.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNCharacterStream(
+        final int index, final Reader reader, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNCharacterStream(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBinaryStream(final String name, final InputStream stream)
+        throws SQLException
+    {
+        updateBinaryStream(name, stream, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBinaryStream(String, java.io.InputStream)
+     * @param name the parameter name.
+     * @param stream the BinaryStream stream.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBinaryStream(
+        final String name, final InputStream stream, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBinaryStream(name, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBinaryStream(final String name, final InputStream stream, final long length)
+        throws SQLException
+    {
+        updateBinaryStream(name, stream, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBinaryStream(String, java.io.InputStream, long)
+     * @param name the parameter name.
+     * @param stream the BinaryStream stream.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBinaryStream(
+        final String name, final InputStream stream, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBinaryStream(name, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBinaryStream(final int index, final InputStream stream)
+        throws SQLException
+    {
+        updateBinaryStream(index, stream, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBinaryStream(int, java.io.InputStream)
+     * @param index the parameter index.
+     * @param stream the BinaryStream stream.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBinaryStream(
+        final int index, final InputStream stream, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBinaryStream(index, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateBinaryStream(final int index, final InputStream stream, final long length)
+        throws SQLException
+    {
+        updateBinaryStream(index, stream, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateBinaryStream(int, java.io.InputStream, long)
+     * @param index the parameter index.
+     * @param stream the BinaryStream stream.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateBinaryStream(
+        final int index, final InputStream stream, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateBinaryStream(index, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateAsciiStream(final String name, final InputStream stream)
+        throws SQLException
+    {
+        updateAsciiStream(name, stream, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateAsciiStream(String, java.io.InputStream)
+     * @param name the parameter name.
+     * @param stream the AsciiStream stream.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateAsciiStream(
+        final String name, final InputStream stream, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateAsciiStream(name, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateAsciiStream(final String name, final InputStream stream, final long length)
+        throws SQLException
+    {
+        updateAsciiStream(name, stream, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateAsciiStream(String, java.io.InputStream, long)
+     * @param name the parameter name.
+     * @param stream the AsciiStream stream.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateAsciiStream(
+        final String name, final InputStream stream, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateAsciiStream(name, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateAsciiStream(final int index, final InputStream stream)
+        throws SQLException
+    {
+        updateAsciiStream(index, stream, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateAsciiStream(int, java.io.InputStream)
+     * @param index the parameter index.
+     * @param stream the AsciiStream stream.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateAsciiStream(
+        final int index, final InputStream stream, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateAsciiStream(index, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateAsciiStream(final int index, final InputStream stream, final long length)
+        throws SQLException
+    {
+        updateAsciiStream(index, stream, length, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateAsciiStream(int, java.io.InputStream, long)
+     * @param index the parameter index.
+     * @param stream the AsciiStream stream.
+     * @param length the length.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateAsciiStream(
+        final int index, final InputStream stream, final long length, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateAsciiStream(index, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Reader getNCharacterStream(final String name)
+        throws SQLException
+    {
+        return getNCharacterStream(name, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getNCharacterStream(String).
+     * @param name the parameter name.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected Reader getNCharacterStream(final String name, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getNCharacterStream(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Reader getNCharacterStream(final int index)
+        throws SQLException
+    {
+        return getNCharacterStream(index, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getNCharacterStream(int).
+     * @param index the parameter index.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected Reader getNCharacterStream(final int index, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getNCharacterStream(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getNString(final String name)
+        throws SQLException
+    {
+        return getNString(name, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getNString(String).
+     * @param name the parameter name.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected String getNString(final String name, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getNString(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getNString(final int index)
+        throws SQLException
+    {
+        return getNString(index, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getNString(int).
+     * @param index the parameter index.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected String getNString(final int index, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getNString(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateSQLXML(final String name, final SQLXML sqlXml)
+        throws SQLException
+    {
+        updateSQLXML(name, sqlXml, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateSQLXML(String, java.sql.SQLXML)
+     * @param name the parameter name.
+     * @param sqlXml the SQLXML value.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateSQLXML(
+        final String name, final SQLXML sqlXml , final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateSQLXML(name, sqlXml);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateSQLXML(final int index, final SQLXML sqlXml)
+        throws SQLException
+    {
+        updateSQLXML(index, sqlXml, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateSQLXML(int, java.sql.SQLXML)
+     * @param index the parameter index.
+     * @param sqlXml the SQLXML value.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateSQLXML(
+        final int index, final SQLXML sqlXml , final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateSQLXML(index, sqlXml);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SQLXML getSQLXML(final String name)
+        throws SQLException
+    {
+        return getSQLXML(name, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getSQLXML(String).
+     * @param name the parameter name.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected SQLXML getSQLXML(final String name, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getSQLXML(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public SQLXML getSQLXML(final int index)
+        throws SQLException
+    {
+        return getSQLXML(index, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getSQLXML(int).
+     * @param index the parameter index.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected SQLXML getSQLXML(final int index, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getSQLXML(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NClob getNClob(final String name)
+        throws SQLException
+    {
+        return getNClob(name, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getNClob(String).
+     * @param name the parameter name.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected NClob getNClob(final String name, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getNClob(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public NClob getNClob(final int index)
+        throws SQLException
+    {
+        return getNClob(index, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getNClob(int).
+     * @param index the parameter index.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected NClob getNClob(final int index, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getNClob(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNClob(final String name, final NClob nclob)
+        throws SQLException
+    {
+        updateNClob(name, nclob, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNClob(String, java.sql.NClob)
+     * @param name the parameter name.
+     * @param nclob the NClob value.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNClob(
+        final String name, final NClob nclob , final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNClob(name, nclob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNClob(final int index, final NClob nclob)
+        throws SQLException
+    {
+        updateNClob(index, nclob, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNClob(int, java.sql.NClob)
+     * @param index the parameter index.
+     * @param nclob the NClob value.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNClob(
+        final int index, final NClob nclob , final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNClob(index, nclob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNString(final String name, final String nstring)
+        throws SQLException
+    {
+        updateNString(name, nstring, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNString(String, String)
+     * @param name the parameter name.
+     * @param nstring the String value.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNString(
+        final String name, final String nstring, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNString(name, nstring);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateNString(final int index, final String nstring)
+        throws SQLException
+    {
+        updateNString(index, nstring, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateNString(int, String)
+     * @param index the parameter index.
+     * @param nstring the String value.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateNString(
+        final int index, final String nstring, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateNString(index, nstring);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public RowId getRowId(final String name)
+        throws SQLException
+    {
+        return getRowId(name, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getRowId(String).
+     * @param name the parameter name.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected RowId getRowId(final String name, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getRowId(name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public RowId getRowId(final int index)
+        throws SQLException
+    {
+        return getRowId(index, getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getRowId(int).
+     * @param index the parameter index.
+     * @param resultSet the result set.
+     * @return the value.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected RowId getRowId(final int index, final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getRowId(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateRowId(final String name, final RowId rowId)
+        throws SQLException
+    {
+        updateRowId(name, rowId, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateRowId(String, java.sql.RowId)
+     * @param name the parameter name.
+     * @param rowId the row id.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateRowId(
+        final String name, final RowId rowId, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateRowId(name, rowId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void updateRowId(final int index, final RowId rowId)
+        throws SQLException
+    {
+        updateRowId(index, rowId, getResultSet());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#updateRowId(int, java.sql.RowId)
+     * @param index the parameter index.
+     * @param rowId the row id.
+     * @param resultSet the actual result set.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected void updateRowId(
+        final int index, final RowId rowId, final ResultSet resultSet)
+      throws SQLException
+    {
+        resultSet.updateRowId(index, rowId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isClosed()
+        throws SQLException
+    {
+        return isClosed(getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#isClosed()
+     * @param resultSet the result set.
+     * @return such information.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected boolean isClosed(final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.isClosed();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public int getHoldability()
+        throws SQLException
+    {
+        return getHoldability(getResultSet());
+    }
+
+    /**
+     * @see java.sql.ResultSet#getHoldability()
+     * @param resultSet the result set.
+     * @return such information.
+     * @throws SQLException if the operation fails.
+     * @precondition resultSet != null
+     */
+    protected int getHoldability(final ResultSet resultSet)
+        throws SQLException
+    {
+        return resultSet.getHoldability();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(final Class wrapperClass)
+    {
+        return isWrapperFor(wrapperClass, getResultSet());
+    }
+
+    /**
+     * Checks whether the wrapped result set is compatible with given class.
+     * @param wrapperClass the wrapper class.
+     * @param wrappedResultSet the wrapped result set.
+     * @return <code>true</code> if the wrapped statement is compatible with given class.
+     */
+    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedResultSet)
+    {
+        return
+            (   (wrappedResultSet != null)
+             && (wrappedResultSet.getClass().isAssignableFrom(wrapperClass)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object unwrap(final Class wrapperClass)
+    {
+        return unwrap(wrapperClass, getResultSet());
+    }
+
+    /**
+     * Unwraps the wrapped result set if it's compatible with given class.
+     * @param wrapperClass the wrapper class.
+     * @param wrappedResultSet the wrapped result set.
+     * @return the wrapped statement if it's compatible.
+     */
+    protected Object unwrap(final Class wrapperClass, final Object wrappedResultSet)
+    {
+        Object result = null;
+
+        if  (isWrapperFor(wrapperClass, wrappedResultSet))
+        {
+            result = wrappedResultSet;
+        }
+
+        return result;
     }
 }

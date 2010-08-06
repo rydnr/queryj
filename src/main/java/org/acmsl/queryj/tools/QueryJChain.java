@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -231,6 +231,16 @@ public class QueryJChain
     private boolean m__bGenerateXMLDAOImplementation = true;
 
     /**
+     * The "generate-tests" value.
+     */
+    private String m__strGenerateTests;
+
+    /**
+     * The "generate-tests" flag.
+     */
+    private boolean m__bGenerateTests = false;
+
+    /**
      * The "custom-sql-model" type.
      */
     private String m__strCustomSqlModel = null;
@@ -311,6 +321,7 @@ public class QueryJChain
      * <code>DataSource</code>.
      * @param generateMockDAOImplementation whether to generate Mock DAOs.
      * @param generateXmlDAOImplementation whether to generate XML DAOs.
+     * @param generateTests whether to generate test cases or not.
      * @param allowEmptyRepositoryDAO whether to generate a repository
      * DAO even tough it'll contain no custom queries..
      * @param implementMarkerInterfaces whether to make some generated 
@@ -341,6 +352,7 @@ public class QueryJChain
         final String jndiDataSource,
         final boolean generateMockDAOImplementation,
         final boolean generateXmlDAOImplementation,
+        final boolean generateTests,
         final boolean allowEmptyRepositoryDAO,
         final boolean implementMarkerInterfaces,
         final String customSqlModel,
@@ -368,6 +380,7 @@ public class QueryJChain
             generateMockDAOImplementation);
         immutableSetGenerateXMLDAOImplementationFlag(
             generateXmlDAOImplementation);
+        immutableSetGenerateTestsFlag(generateTests);
         immutableSetAllowEmptyRepositoryDAOFlag(allowEmptyRepositoryDAO);
         immutableSetImplementMarkerInterfacesFlag(implementMarkerInterfaces);
         immutableSetCustomSqlModel(customSqlModel);
@@ -1414,6 +1427,86 @@ public class QueryJChain
     }
 
     /**
+     * Specifies whether to generate test cases.
+     * @param generate such setting.
+     */
+    protected final void immutableSetGenerateTests(
+        final String generate)
+    {
+        m__strGenerateTests = generate;
+    }
+
+    /**
+     * Specifies whether to generate test cases.
+     * @param generate such setting.
+     */
+    public void setGenerateTests(final String generate)
+    {
+        immutableSetGenerateTests(generate);
+
+        setGenerateTestsFlag(toBoolean(generate));
+    }
+
+    /**
+     * Retrieves whether to generate test cases.
+     * @return such setting.
+     */
+    public String getGenerateTests()
+    {
+        return m__strGenerateTests;
+    }
+
+    /**
+     * Specifies the "generate-tests" flag.
+     * @param flag such flag.
+     */
+    protected final void immutableSetGenerateTestsFlag(
+        final boolean flag)
+    {
+        m__bGenerateTests = flag;
+    }
+
+    /**
+     * Specifies the "generate-tests" flag.
+     * @param flag such flag.
+     */
+    protected void setGenerateTestsFlag(final boolean flag)
+    {
+        immutableSetGenerateTestsFlag(flag);
+    }
+
+    /**
+     * Retrieves the "generate-tests" flag.
+     * @return such flag.
+     */
+    protected boolean getGenerateTestsFlag()
+    {
+        return m__bGenerateTests;
+    }
+
+    /**
+     * Retrieves the generate-tests flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getGenerateTestsFlag(
+        final Properties properties)
+    {
+        String t_strResult = getGenerateTests();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult =
+                properties.getProperty(GENERATE_TESTS);
+            setGenerateTests(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
      * Specifies whether to allow empty repository DAO.
      * @param allow such setting.
      */
@@ -1976,6 +2069,7 @@ public class QueryJChain
                 getJndiDataSource(settings),
                 getGenerateMockDAOImplementationFlag(settings),
                 getGenerateXMLDAOImplementationFlag(settings),
+                getGenerateTestsFlag(settings),
                 getAllowEmptyRepositoryDAOFlag(settings),
                 getImplementMarkerInterfacesFlag(settings),
                 getCustomSqlModel(settings),
@@ -2009,6 +2103,7 @@ public class QueryJChain
      * <code>DataSource</code>.
      * @param generateMockDAOImplementation whether to generate Mock DAOs.
      * @param generateXmlDAOImplementation whether to generate XML DAOs.
+     * @param generateTests whether to generate test cases.
      * @param allowEmptyRepositoryDAO whether to generate a repository
      * DAO even tough it'll contain no custom queries..
      * @param implementMarkerInterfaces whether to make some generated 
@@ -2041,6 +2136,7 @@ public class QueryJChain
         final String jndiDataSource,
         final boolean generateMockDAOImplementation,
         final boolean generateXmlDAOImplementation,
+        final boolean generateTests,
         final boolean allowEmptyRepositoryDAO,
         final boolean implementMarkerInterfaces,
         final String customSqlModel,
@@ -2160,6 +2256,12 @@ public class QueryJChain
             attributes.put(
                 ParameterValidationHandler.GENERATE_XML_DAO,
                 (generateXmlDAOImplementation
+                 ?  Boolean.TRUE
+                 :  Boolean.FALSE));
+
+            attributes.put(
+                ParameterValidationHandler.GENERATE_TESTS,
+                (generateTests
                  ?  Boolean.TRUE
                  :  Boolean.FALSE));
 

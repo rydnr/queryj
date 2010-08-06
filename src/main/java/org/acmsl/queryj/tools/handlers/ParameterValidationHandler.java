@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -252,6 +252,11 @@ public class ParameterValidationHandler
      * The generate-xml-dao attribute name.
      */
     public static final String GENERATE_XML_DAO = "generate.xml.dao";
+
+    /**
+     * The generate-tests attribute name.
+     */
+    public static final String GENERATE_TESTS = "generate.tests";
 
     /**
      * The allow-empty-repository-dao attribute name.

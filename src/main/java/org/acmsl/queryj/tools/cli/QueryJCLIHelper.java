@@ -187,7 +187,7 @@ public class QueryJCLIHelper
             OptionBuilder
                 .withArgName("v")
                 .withDescription(INFO_VERBOSITY_OPTION_DESCRIPTION)
-                .isRequired(false);
+                .isRequired(false)
                 .create(INFO_VERBOSITY_OPTION);
         t_cResult.add(t_Option);
 
@@ -195,7 +195,7 @@ public class QueryJCLIHelper
             OptionBuilder
                 .withArgName("vv")
                 .withDescription(DEBUG_VERBOSITY_OPTION_DESCRIPTION)
-                .isRequired(false);
+                .isRequired(false)
                 .create(DEBUG_VERBOSITY_OPTION);
 
         t_cResult.add(t_Option);
@@ -204,7 +204,7 @@ public class QueryJCLIHelper
             OptionBuilder
                 .withArgName("vvv")
                 .withDescription(TRACE_VERBOSITY_OPTION_DESCRIPTION)
-                .isRequired(false);
+                .isRequired(false)
                 .create(TRACE_VERBOSITY_OPTION);
         t_cResult.add(t_Option);
 
@@ -220,7 +220,7 @@ public class QueryJCLIHelper
         Option result =
             OptionBuilder
                 .withDescription(HELP_OPTION_DESCRIPTION)
-                .isRequired(false);
+                .isRequired(false)
                 .create(HELP_OPTION);
 
         return result;
@@ -236,7 +236,7 @@ public class QueryJCLIHelper
             OptionBuilder
                 .withDescription(HELP_OPTION_DESCRIPTION)
                 .withLongOpt(HELP_LONG_OPTION)
-                .isRequired(false);
+                .isRequired(false)
                 .create(HELP_LONG_OPTION);
 
         return result;

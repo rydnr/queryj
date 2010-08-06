@@ -1,9 +1,8 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
     Copyright (C) 2002-2010  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -13,7 +12,7 @@
     This library is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
+    General Public License for more details.
 
     You should have received a copy of the GNU General Public
     License along with this library; if not, write to the Free Software
@@ -29,48 +28,69 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: Table.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose Juan
  *
- * Description: Mock connections with auto commit disabled.
- *
+ * Description: Models a table.
  */
-package org.acmsl.queryj.dao;
-
-/*
- * Importing some project classes.
- */
-import org.acmsl.queryj.dao.MockConnection;
-import org.acmsl.queryj.dao.MockDataSource;
+package org.acsml.queryj.tools.maven;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
-import java.sql.SQLException;
+import java.util.List;
 
 /**
- * A Mock connection with auto commit disabled.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro Armendariz</a>
+ * Models a table.
+ * @author <a href="jose.juan@ventura24.es">Jose Juan</a>,
+ * @author <a href="chous@acm-sl.org">chous</a> (minor style changes).
  */
-public class AutoCommitDisabledMockConnection
-    extends MockConnection
+public class Table
 {
     /**
-     * Constructs a MockConnection using both objects.
-     * @param connection the actual connection to wrap.
-     * @param mockDataSource the data source to be notified of events.
-     * @precondition connection != null
+     * The name.
      */
-    public AutoCommitDisabledMockConnection(
-        final Connection connection,
-        final MockDataSource mockDataSource)
-      throws  SQLException
+    private String m__strName;
+    
+    /**
+     * The list of fields.
+     */
+    private List m__aFields;
+    
+    /**
+     * Returns the name.
+     * @return such value.
+     */
+    protected final String immutableGetName()
     {
-        super(connection, mockDataSource);
-        connection.setAutoCommit(false);
+        return m__strName;
+    }
+
+    /**
+     * Returns the name.
+     * @return such value.
+     */
+    protected String getName()
+    {
+        return immutableGetName();
+    }
+
+    /**
+     * Returns the fields.
+     * @return such values.
+     */
+    protected final List immutableGetFields()
+    {
+        return m__aFields;
+    }
+
+    /**
+     * Returns the fields.
+     * @return such values.
+     */
+    protected List getFields()
+    {
+        return immutableGetFields();
     }
 }
-

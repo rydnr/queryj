@@ -1,8 +1,9 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2004  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -353,5 +354,52 @@ public class   SingleConnectionDataSource
     protected String toString(final Object object)
     {
         return "connection wrapped: " + object;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(final Class wrapperClass)
+    {
+        return isWrapperFor(wrapperClass, getWrappedConnection());
+    }
+
+    /**
+     * Checks whether the wrapped connection is compatible with given class.
+     * @param wrapperClass the wrapper class.
+     * @param wrappedConnection the wrapped connection.
+     * @return <code>true</code> if the wrapped connection is compatible with given class.
+     */
+    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedConnection)
+    {
+        return
+            (   (wrappedConnection != null)
+             && (wrappedConnection.getClass().isAssignableFrom(wrapperClass)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object unwrap(final Class wrapperClass)
+    {
+        return unwrap(wrapperClass, getWrappedConnection());
+    }
+
+    /**
+     * Unwraps the wrapped connection if it's compatible with given class.
+     * @param wrapperClass the wrapper class.
+     * @param wrappedConnection the wrapped connection.
+     * @return the wrapped connection if it's compatible.
+     */
+    protected Object unwrap(final Class wrapperClass, final Object wrappedConnection)
+    {
+        Object result = null;
+
+        if  (isWrapperFor(wrapperClass, wrappedConnection))
+        {
+            result = wrappedConnection;
+        }
+
+        return result;
     }
 }

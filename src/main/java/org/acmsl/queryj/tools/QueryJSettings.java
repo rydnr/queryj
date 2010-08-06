@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -138,6 +138,12 @@ public interface QueryJSettings
      */
     public static final String GENERATE_XML_DAO_IMPLEMENTATION =
         PREFIX + "generateXmlImplementation";
+
+    /**
+     * Whether to generate test cases.
+     */
+    public static final String GENERATE_TESTS =
+        PREFIX + "generateTests";
 
     /**
      * Whether to allow empty repository DAO or not.

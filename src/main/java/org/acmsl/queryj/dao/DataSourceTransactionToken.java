@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -499,6 +499,53 @@ public class DataSourceTransactionToken
             {
                 dataSource.setLogWriter(out);
             }
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean isWrapperFor(final Class wrapperClass)
+        {
+            return isWrapperFor(wrapperClass, getDataSource());
+        }
+
+        /**
+         * Checks whether the wrapped data source is compatible with given class.
+         * @param wrapperClass the wrapper class.
+         * @param wrappedDataSource the wrapped data source.
+         * @return <code>true</code> if the wrapped data source is compatible with given class.
+         */
+        protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedDataSource)
+        {
+            return
+                (   (wrappedDataSource != null)
+                 && (wrappedDataSource.getClass().isAssignableFrom(wrapperClass)));
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public Object unwrap(final Class wrapperClass)
+        {
+            return unwrap(wrapperClass, getDataSource());
+        }
+
+        /**
+         * Unwraps the wrapped data source if it's compatible with given class.
+         * @param wrapperClass the wrapper class.
+         * @param wrappedDataSource the wrapped data source.
+         * @return the wrapped data source if it's compatible.
+         */
+        protected Object unwrap(final Class wrapperClass, final Object wrappedDataSource)
+        {
+            Object result = null;
+
+            if  (isWrapperFor(wrapperClass, wrappedDataSource))
+            {
+                result = wrappedDataSource;
+            }
+
+            return result;
         }
 
         /**

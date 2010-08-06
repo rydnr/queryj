@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -625,5 +625,21 @@ public class MockDataSource
         throws SQLException
     {
         return m__iLoginTimeout;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(final Class wrapperClass)
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object unwrap(final Class wrapperClass)
+    {
+        return null;
     }
 }

@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -897,6 +897,48 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to generate test cases.
+     * @param generate such setting.
+     */
+    public void setGenerateTests(final String generate)
+    {
+        setGenerateTests(generate, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to generate test cases.
+     * @param generate such setting.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setGenerateTests(
+        final String generate, final QueryJChain delegee)
+    {
+        delegee.setGenerateTests(generate);
+    }
+
+    /**
+     * Retrieves whether to generate test cases.
+     * @return such setting.
+     */
+    public String getGenerateTests()
+    {
+        return getGenerateTests(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to generate test cases.
+     * @param delegee the delegee.
+     * @return such setting.
+     * @precondition delegee != null
+     */
+    protected String getGenerateTests(
+        final QueryJChain delegee)
+    {
+        return delegee.getGenerateTests();
+    }
+
+    /**
      * Specifies whether to allow empty repository DAO.
      * @param allow such setting.
      */
@@ -1316,6 +1358,7 @@ public class QueryJTask
          * <code>DataSource</code>.
          * @param generateMockDAOImplementation whether to generate Mock DAOs.
          * @param generateXmlDAOImplementation whether to generate XML DAOs.
+         * @param generateTests whether to generate tests.
          * @param allowEmptyRepositoryDAO whether to generate a repository
          * DAO even tough it'll contain no custom queries..
          * @param implementMarkerInterfaces whether to make some generated 
@@ -1351,6 +1394,7 @@ public class QueryJTask
             final String jndiDataSource,
             final boolean generateMockDAOImplementation,
             final boolean generateXmlDAOImplementation,
+            final boolean generateTests,
             final boolean allowEmptyRepositoryDAO,
             final boolean implementMarkerInterfaces,
             final String customSqlModel,
@@ -1377,6 +1421,7 @@ public class QueryJTask
                 jndiDataSource,
                 generateMockDAOImplementation,
                 generateXmlDAOImplementation,
+                generateTests,
                 allowEmptyRepositoryDAO,
                 implementMarkerInterfaces,
                 customSqlModel,

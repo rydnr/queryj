@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -56,13 +56,16 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -1655,6 +1658,7 @@ public abstract class Query
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
      * @param calendar (Taken from Sun's Javadoc) the Calendar object
      * the driver will use to construct the time.
+     * @param preparedStatement the actual prepared statement.
      * @throws SQLException if an error occurs.
      */
     protected void setTimestamp(
@@ -1676,6 +1680,18 @@ public abstract class Query
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public void setUnicodeStream(
+        final int index,
+        final InputStream inputStream,
+        final int length)
+      throws  SQLException
+    {
+        setUnicodeStream(index, inputStream, length, retrievePreparedStatement());
+    }
+
+    /**
      * See java.sql.PreparedStatement#setUnicodeStream(int,InputStream,int).
      * @see java.sql.PreparedStatement#setUnicodeStream(int,java.io.InputStream,int)
      * @param index (Taken from Sun's Javadoc) the first parameter
@@ -1684,17 +1700,19 @@ public abstract class Query
      * that contains the Unicode parameter value.
      * @param length (Taken from Sun's Javadoc) the number of bytes
      * in the stream.
+     * @param preparedStatement the actual prepared statement.
      * @throws SQLException if an error occurs.
      * @deprecated since it's deprecated in JDK 1.4 as well.
+     * @precondition preparedStatement != null
      */
-    public void setUnicodeStream(
+    protected void setUnicodeStream(
         final int index,
         final InputStream inputStream,
-        final int length)
+        final int length,
+        final PreparedStatement preparedStatement)
       throws  SQLException
     {
-        retrievePreparedStatement()
-            .setUnicodeStream(index, inputStream, length);
+        preparedStatement.setUnicodeStream(index, inputStream, length);
     }
 
     // End of java.sql.PreparedStatement //
@@ -3282,5 +3300,588 @@ public abstract class Query
         throws  SQLException
     {
         return retrievePreparedStatement().getParameterMetaData();
+    }
+
+    // New from JDK 6
+    /**
+     * {@inheritDoc}
+     */
+    public void setClob(final int index, final Reader reader)
+        throws SQLException
+    {
+        setClob(index, reader, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setClob(
+        final int index, final Reader reader, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setClob(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setClob(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        setClob(index, reader, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setClob(
+        final int index,
+        final Reader reader,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setClob(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNClob(final int index, final Reader reader)
+        throws SQLException
+    {
+        setNClob(index, reader, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setNClob(
+        final int index, final Reader reader, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setNClob(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNClob(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        setNClob(index, reader, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNClob(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the Clob reader.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setNClob(
+        final int index,
+        final Reader reader,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setClob(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNClob(final int index, final NClob nclob)
+        throws SQLException
+    {
+        setNClob(index, nclob, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNClob(int, java.sql.NClob)
+     * @param index the parameter index.
+     * @param nclob the Clob reader.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setNClob(
+        final int index,
+        final NClob nclob,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setNClob(index, nclob);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBlob(final int index, final InputStream stream)
+        throws SQLException
+    {
+        setBlob(index, stream, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream)
+     * @param index the parameter index.
+     * @param stream the input stream.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setBlob(
+        final int index, final InputStream stream, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setBlob(index, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBlob(final int index, final InputStream stream, final long length)
+        throws SQLException
+    {
+        setBlob(index, stream, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setBlob(int, java.io.InputStream, long)
+     * @param index the parameter index.
+     * @param stream the input stream.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setBlob(
+        final int index,
+        final InputStream stream,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setBlob(index, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNCharacterStream(final int index, final Reader reader)
+        throws SQLException
+    {
+        setNCharacterStream(index, reader, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the reader.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setNCharacterStream(
+        final int index, final Reader reader, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setNCharacterStream(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNCharacterStream(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        setNCharacterStream(index, reader, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNCharacterStream(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the reader.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setNCharacterStream(
+        final int index,
+        final Reader reader,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setNCharacterStream(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setCharacterStream(final int index, final Reader reader)
+        throws SQLException
+    {
+        setCharacterStream(index, reader, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader)
+     * @param index the parameter index.
+     * @param reader the reader.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setCharacterStream(
+        final int index, final Reader reader, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setCharacterStream(index, reader);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setCharacterStream(final int index, final Reader reader, final long length)
+        throws SQLException
+    {
+        setCharacterStream(index, reader, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setCharacterStream(int, java.io.Reader, long)
+     * @param index the parameter index.
+     * @param reader the reader.
+     * @param preparedStatement the actual prepared statement.
+     * @param length the length.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setCharacterStream(
+        final int index,
+        final Reader reader,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setCharacterStream(index, reader, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBinaryStream(final int index, final InputStream stream)
+        throws SQLException
+    {
+        setBinaryStream(index, stream, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream)
+     * @param index the parameter index.
+     * @param stream the input stream.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setBinaryStream(
+        final int index, final InputStream stream, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setBinaryStream(index, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setBinaryStream(final int index, final InputStream stream, final long length)
+        throws SQLException
+    {
+        setBinaryStream(index, stream, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setBinaryStream(int, java.io.InputStream, long)
+     * @param index the parameter index.
+     * @param stream the input stream.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setBinaryStream(
+        final int index,
+        final InputStream stream,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setBinaryStream(index, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setAsciiStream(final int index, final InputStream stream)
+        throws SQLException
+    {
+        setAsciiStream(index, stream, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream)
+     * @param index the parameter index.
+     * @param stream the input stream.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setAsciiStream(
+        final int index, final InputStream stream, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setAsciiStream(index, stream);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setAsciiStream(final int index, final InputStream stream, final long length)
+        throws SQLException
+    {
+        setAsciiStream(index, stream, length, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, length)
+     * @param index the parameter index.
+     * @param stream the input stream.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setAsciiStream(
+        final int index,
+        final InputStream stream,
+        final long length,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setAsciiStream(index, stream, length);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setSQLXML(final int index, final SQLXML sqlXml)
+        throws SQLException
+    {
+        setSQLXML(index, sqlXml, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setSQLXML(int, java.sql.SQLXML)
+     * @param index the parameter index.
+     * @param sqlXml the SQL XML value.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setSQLXML(
+        final int index, final SQLXML sqlXml, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setSQLXML(index, sqlXml);
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setNString(final int index, final String nstring)
+        throws SQLException
+    {
+        setNString(index, nstring, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setNString(int, String)
+     * @param index the parameter index.
+     * @param nstring the NString.
+     * @param length the length.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setNString(
+        final int index,
+        final String nstring,
+        final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setNString(index, nstring);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setRowId(final int index, final RowId rowId)
+        throws SQLException
+    {
+        setRowId(index, rowId, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.PreparedStatement#setRowId(int, java.sql.RowId)
+     * @param index the parameter index.
+     * @param rowId the row id.
+     * @param preparedStatement the actual prepared statement.
+     * @throws SQLException if the operation fails.
+     * @precondition preparedStatement != null
+     */
+    protected void setRowId(
+        final int index, final RowId rowId, final PreparedStatement preparedStatement)
+      throws SQLException
+    {
+        preparedStatement.setRowId(index, rowId);
+    }
+
+    // New from JDK 6 Statement
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isPoolable()
+        throws SQLException
+    {
+        return isPoolable(retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.Statement#isPoolable()
+     * @param statement the statement.
+     * @return such information.
+     * @throws SQLException if the check fails.
+     * @precondition statement != null
+     */
+    protected boolean isPoolable(final Statement statement)
+        throws SQLException
+    {
+        return statement.isPoolable();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void setPoolable(final boolean flag)
+        throws SQLException
+    {
+        setPoolable(flag, retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.Statement#setPoolable(boolean)
+     * @param flag the flag.
+     * @param statement the statement.
+     * @return such information.
+     * @throws SQLException if the check fails.
+     * @precondition statement != null
+     */
+    protected void setPoolable(final boolean flag, final Statement statement)
+        throws SQLException
+    {
+        statement.setPoolable(flag);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isClosed()
+        throws SQLException
+    {
+        return isClosed(retrievePreparedStatement());
+    }
+
+    /**
+     * @see java.sql.Statement#isClosed()
+     * @param statement the statement.
+     * @return such information.
+     * @throws SQLException if the check fails.
+     * @precondition statement != null
+     */
+    protected boolean isClosed(final Statement statement)
+        throws SQLException
+    {
+        return statement.isClosed();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isWrapperFor(final Class wrapperClass)
+    {
+        return isWrapperFor(wrapperClass, getPreparedStatement());
+    }
+
+    /**
+     * Checks whether the wrapped statement is compatible with given class.
+     * @param wrapperClass the wrapper class.
+     * @param wrappedStatement the wrapped statement.
+     * @return <code>true</code> if the wrapped statement is compatible with given class.
+     */
+    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedStatement)
+    {
+        return
+            (   (wrappedStatement != null)
+             && (wrappedStatement.getClass().isAssignableFrom(wrapperClass)));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object unwrap(final Class wrapperClass)
+    {
+        return unwrap(wrapperClass, getPreparedStatement());
+    }
+
+    /**
+     * Unwraps the wrapped statement if it's compatible with given class.
+     * @param wrapperClass the wrapper class.
+     * @param wrappedStatement the wrapped statement.
+     * @return the wrapped statement if it's compatible.
+     */
+    protected Object unwrap(final Class wrapperClass, final Object wrappedStatement)
+    {
+        Object result = null;
+
+        if  (isWrapperFor(wrapperClass, wrappedStatement))
+        {
+            result = wrappedStatement;
+        }
+
+        return result;
     }
 }

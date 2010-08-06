@@ -370,7 +370,7 @@ public final class QueryJCLI
 
                 if  (t_strOption != null)
                 {
-                    result = Log.INFO;
+                    result = QueryJLog.INFO;
                 }
             }
         }

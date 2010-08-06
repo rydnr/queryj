@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+    Copyright (C) 2002-2010  Jose San Leandro Armendariz
                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -89,7 +89,7 @@ public class SelectQuery
      * Specifies new ordering field collection.
      * @param list the new list.
      */
-    private void immutableSetOrderingFields(List list)
+    private void immutableSetOrderingFields(final List list)
     {
         m__lOrderingFields = list;
     }
@@ -98,7 +98,7 @@ public class SelectQuery
      * Specifies new ordering field collection.
      * @param list the new list.
      */
-    protected void setOrderingFields(List list)
+    protected void setOrderingFields(final List list)
     {
         immutableSetOrderingFields(list);
     }
