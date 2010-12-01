@@ -26,10 +26,10 @@
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>commons</artifactId>
-      <version>0.6</version>
+      <version>0.7-SNAPSHOT</version>
     </dependency>
     <dependency>
-      <groupId>ant</groupId>
+      <groupId>org.apache</groupId>
       <artifactId>ant</artifactId>
       <version>1.6.5</version>
     </dependency>
@@ -39,24 +39,24 @@
       <version>2.0.9</version>
     </dependency>
     <dependency>
-      <groupId>commons-logging</groupId>
+      <groupId>org.apache.commons</groupId>
       <artifactId>commons-logging</artifactId>
       <version>1.1</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>oracle-driver</groupId>
+      <groupId>com.oracle</groupId>
       <artifactId>oracle-driver</artifactId>
       <version>1.4</version>
     </dependency>
     <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>antlr-3</artifactId>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr</artifactId>
       <version>3.0b6</version>
     </dependency>
     <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>antlr</artifactId>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr-2</artifactId>
       <version>2.7.7</version>
     </dependency>
     <dependency>
@@ -65,17 +65,17 @@
       <version>1.8</version>
     </dependency>
     <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>stringtemplate</artifactId>
+      <groupId>org.antlr</groupId>
+      <artifactId>stringtemplate-2</artifactId>
       <version>2.2</version>
     </dependency>
     <dependency>
-      <groupId>antlr</groupId>
-      <artifactId>stringtemplate-3</artifactId>
+      <groupId>org.antlr</groupId>
+      <artifactId>stringtemplate</artifactId>
       <version>3.0</version>
     </dependency>
     <dependency>
-      <groupId>bsh</groupId>
+      <groupId>org.beanshell</groupId>
       <artifactId>bsh</artifactId>
       <version>1.3.0</version>
     </dependency>
@@ -107,10 +107,15 @@
   </dependencies>
   <distributionManagement>
     <repository>
-        <id>acmsl-plugins</id>
-        <name>plugin-releases</name>
-        <url>http://maven.acm-sl.org/artifactory/plugins-releases-local</url>
+      <id>acmsl-plugins-releases</id>
+      <name>acmsl-plugin-releases</name>
+      <url>http://maven.acm-sl.org/artifactory/plugins-releases-local</url>
     </repository>
+    <snapshotRepository>
+      <id>acmsl-plugins-snapshots</id>
+      <name>acmsl-plugin-snapshots</name>
+      <url>http://maven.acm-sl.org/artifactory/plugins-snapshots-local</url>
+    </snapshotRepository>
   </distributionManagement>
 
 </project>

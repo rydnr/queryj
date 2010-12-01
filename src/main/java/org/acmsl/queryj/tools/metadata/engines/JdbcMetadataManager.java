@@ -218,4 +218,13 @@ public class JdbcMetadataManager
     {
         return false;
     }
+
+    /**
+     * Checks whether the engine requires specific LOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomLobHandling()
+    {
+        return requiresCustomClobHandling() || requiresCustomBlobHandling();
+    }
 }

@@ -406,4 +406,10 @@ public interface MetadataManager
      * @return <code>true</code> in such case.
      */
     public boolean requiresCustomBlobHandling();
+
+    /**
+     * Checks whether the engine requires specific CLOB handling.
+     * @return <code>true</code> in such case.
+     */
+    public boolean requiresCustomLobHandling();
 }
