@@ -25,7 +25,7 @@
   <dependencies>
     <dependency>
       <groupId>org.acmsl</groupId>
-      <artifactId>commons</artifactId>
+      <artifactId>acmsl-commons</artifactId>
       <version>0.7-SNAPSHOT</version>
     </dependency>
     <dependency>
