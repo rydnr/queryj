@@ -23,6 +23,7 @@
   </organization>
 
   <properties>
+    <!-- to ensure encoding is not platform-dependent -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
