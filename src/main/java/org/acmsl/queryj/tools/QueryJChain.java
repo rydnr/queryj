@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2010  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: QueryJChain.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -97,9 +92,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 
 /**
- * Generates QueryJ classes using Ant.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * Defines the steps performed by QueryJ.
  */
 public class QueryJChain
     extends     AbstractQueryJChain
@@ -286,6 +279,11 @@ public class QueryJChain
     private String m__strDisableCustomSqlValidation;
 
     /**
+     * The <i>encoding</i> property.
+     */
+    private String m__strEncoding;
+
+    /**
      * Creates a <code>QueryJChain</code> instance.
      */
     public QueryJChain() {};
@@ -332,6 +330,7 @@ public class QueryJChain
      * @param sqlXmlFile the file containing the custom SQL.
      * @param grammarBundle the grammar with irregular singular and plural
      * forms of the table names.
+     * @param encoding the file encoding.
      */
     public QueryJChain(
         final File settings,
@@ -358,7 +357,8 @@ public class QueryJChain
         final String customSqlModel,
         final boolean disableCustomSqlValidation,
         final File sqlXmlFile,
-        final String grammarBundle)
+        final String grammarBundle,
+        final String encoding)
     {
         immutableSetSettingsFile(settings);
         immutableSetDriver(driver);
@@ -387,6 +387,7 @@ public class QueryJChain
         immutableSetDisableCustomSqlValidationFlag(disableCustomSqlValidation);
         immutableSetSqlXmlFile(sqlXmlFile);
         immutableSetGrammarbundle(grammarBundle);
+        immutableSetEncoding(encoding);
     }
 
     /**
@@ -1892,6 +1893,53 @@ public class QueryJChain
     }
 
     /**
+     * Specifies the file encoding.
+     * @param encoding the encoding.
+     */
+    protected final void immutableSetEncoding(final String encoding)
+    {
+        m__strEncoding = encoding;
+    }
+
+    /**
+     * Specifies the file encoding.
+     * @param encoding the encoding.
+     */
+    public void setEncoding(final String encoding)
+    {
+        immutableSetEncoding(encoding);
+    }
+
+    /**
+     * Retrieves the file encoding.
+     * @return such encoding.
+     */
+    public String getEncoding()
+    {
+        return m__strEncoding;
+    }
+
+    /**
+     * Retrieves the encoding, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such information.
+     */
+    protected String getEncoding(final Properties properties)
+    {
+        String result = getEncoding();
+
+        if  (   (result == null)
+             && (properties != null))
+        {
+            result = properties.getProperty(ENCODING);
+            setEncoding(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
@@ -2075,7 +2123,8 @@ public class QueryJChain
                 getCustomSqlModel(settings),
                 getDisableCustomSqlValidationFlag(settings),
                 getSqlXmlFile(settings),
-                getGrammarbundle(settings));
+                getGrammarbundle(settings),
+                getEncoding(settings));
         }
 
         return result;
@@ -2115,6 +2164,7 @@ public class QueryJChain
      * @param sqlXmlFile the file containing the custom SQL.
      * @param grammarBundle the grammar with irregular singular and plural
      * forms of the table names.
+     * @param encoding the encoding.
      * @precondition attributes != null
      */
     protected void mapAttributes(
@@ -2142,7 +2192,8 @@ public class QueryJChain
         final String customSqlModel,
         final boolean disableCustomSqlValidation,
         final File sqlXmlFile,
-        final String grammarBundle)
+        final String grammarBundle,
+        final String encoding)
     {
         if  (attributes != null)
         {
@@ -2302,6 +2353,13 @@ public class QueryJChain
                 attributes.put(
                     ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
                     grammarBundle);
+            }
+
+            if  (encoding != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.ENCODING,
+                    encoding);
             }
         }
     }

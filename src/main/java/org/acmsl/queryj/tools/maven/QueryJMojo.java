@@ -1,3 +1,4 @@
+//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -198,7 +199,13 @@ public class QueryJMojo
      * @parameter
      */
     private Table[] m__aTables;
-    
+
+    /**
+     * The file encoding.
+     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
+     */
+    private String m__strEncoding;
+
     /**
      * Returns the driver.
      * @return such value.
@@ -590,7 +597,34 @@ public class QueryJMojo
     {
         return immutableGetTables();
     }
-    
+
+    /**
+     * Specifies the encoding.
+     * @param encoding the new encoding.
+     */
+    protected final void immutableSetEncoding(final String encoding)
+    {
+        m__strEncoding = encoding;
+    }
+
+    /**
+     * Specifies the encoding.
+     * @param encoding the new encoding.
+     */
+    public void setEncoding(final String encoding)
+    {
+        immutableSetEncoding(encoding);
+    }
+
+    /**
+     * Retrieves the encoding.
+     * @return such information.
+     */
+    public String getEncoding()
+    {
+        return m__strEncoding;
+    }
+
     /**
      * Executes QueryJ via Maven2.
      * @throws MojoExecutionException if something goes wrong.
@@ -667,6 +701,8 @@ public class QueryJMojo
         
         buildExternallyManagedFields(result);
         buildTables(result);
+
+        result.setEncoding(getEncoding());
 
         return result;
     }

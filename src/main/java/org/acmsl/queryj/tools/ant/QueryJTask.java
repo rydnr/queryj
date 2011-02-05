@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2010  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: QueryJTask.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -79,8 +74,7 @@ import org.apache.commons.logging.Log;
 
 /**
  * Generates QueryJ classes using Ant.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class QueryJTask
     extends     Task
@@ -1261,6 +1255,47 @@ public class QueryJTask
     }
 
     /**
+     * Specifies the encoding.
+     * @param encoding the new encoding.
+     */
+    public void setEncoding(final String encoding)
+    {
+        setEncoding(encoding, getQueryJChain());
+    }
+
+    /**
+     * Specifies the encoding.
+     * @param encoding the new encoding.
+     * @param delegee the delegee.
+     * @precondition delegee != null
+     */
+    protected void setEncoding(
+        final String encoding, final QueryJChain delegee)
+    {
+        delegee.setEncoding(encoding);
+    }
+
+    /**
+     * Retrieves the encoding.
+     * @return such information.
+     */
+    public String getEncoding()
+    {
+        return getEncoding(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the encoding.
+     * @param delegee the delegee.
+     * @return such information.
+     * @precondition delegee != null
+     */
+    protected String getEncoding(final QueryJChain delegee)
+    {
+        return delegee.getEncoding();
+    }
+
+    /**
      * Requests the chained logic to be performed.
      * @throws BuildException whenever the required
      * parameters are not present or valid.
@@ -1370,9 +1405,7 @@ public class QueryJTask
          * @param sqlXmlFile the file containing the custom SQL.
          * @param grammarBundle the grammar with irregular singular and plural
          * forms of the table names.
-         * @param tables the custom tables.
-         * @param externallyManagedFields the externally-managed fields.
-         * @param classpath the classpath.
+         * @param encoding the file encoding.
          * @precondition attributes != null
          */
         protected void mapAttributes(
@@ -1400,7 +1433,8 @@ public class QueryJTask
             final String customSqlModel,
             final boolean disableCustomSqlValidation,
             final File sqlXmlFile,
-            final String grammarBundle)
+            final String grammarBundle,
+            final String encoding)
         {
             super.mapAttributes(
                 attributes,
@@ -1427,7 +1461,8 @@ public class QueryJTask
                 customSqlModel,
                 disableCustomSqlValidation,
                 sqlXmlFile,
-                grammarBundle);
+                grammarBundle,
+                encoding);
 
             mapAttributes(
                 attributes,

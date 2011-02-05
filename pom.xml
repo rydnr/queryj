@@ -31,7 +31,7 @@
     <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>acmsl-commons</artifactId>
-      <version>0.7-SNAPSHOT</version>
+      <version>0.7.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache</groupId>

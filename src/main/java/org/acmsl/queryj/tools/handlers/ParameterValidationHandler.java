@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2010  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -21,15 +21,10 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ParameterValidationHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -77,8 +72,7 @@ import java.util.ResourceBundle;
 
 /**
  * Validates the parameters of an Ant task.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ParameterValidationHandler
     extends  AbstractQueryJCommandHandler
@@ -330,6 +324,11 @@ public class ParameterValidationHandler
      */
     public static final String GRAMMAR_BUNDLE_NOT_FOUND =
         "Specified grammar bundle cannot be found";
+    
+    /**
+     * The file encoding.
+     */
+    public static final String ENCODING = "encoding";
     
     /**
      * Creates a <code>ParameterValidationHandler</code> instance.
@@ -691,7 +690,7 @@ public class ParameterValidationHandler
     /**
      * Reads the contents of given file.
      * @param file the file.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @return the file contents.
      * @throws FileNotFoundException if the file is not found.
      * @throws SecurityException if the environment prevents
