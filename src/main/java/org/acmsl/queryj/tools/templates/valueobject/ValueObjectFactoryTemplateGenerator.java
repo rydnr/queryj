@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ValueObjectFactoryTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -64,11 +59,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Is able to generate base DAO factories.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectFactoryTemplateGenerator
     implements  BasePerTableTemplateFactory,
@@ -167,17 +162,21 @@ public class ValueObjectFactoryTemplateGenerator
      * Writes a <code>ValueObject</code> template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
      * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerTableTemplate template, final File outputDir)
+        final BasePerTableTemplate template,
+        final File outputDir,
+        final Charset charset)
       throws  IOException
     {
         write(
             template,
-            outputDir, 
+            outputDir,
+            charset,
             ValueObjectTemplateGenerator.getInstance(),
             StringUtils.getInstance(),
             EnglishGrammarUtils.getInstance(),
@@ -189,6 +188,7 @@ public class ValueObjectFactoryTemplateGenerator
      * @param valueObjectFactoryTemplate the value object factoryementation template
      * to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @param valueObjectTemplateGenerator the
      * <code>ValueObjectTemplateGenerator</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
@@ -205,6 +205,7 @@ public class ValueObjectFactoryTemplateGenerator
     protected void write(
         final BasePerTableTemplate valueObjectFactoryTemplate,
         final File outputDir,
+        final Charset charset,
         final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
@@ -221,6 +222,7 @@ public class ValueObjectFactoryTemplateGenerator
                   englishGrammarUtils,
                   stringUtils)
             + "ValueObjectFactory.java",
-            valueObjectFactoryTemplate.generate());
+            valueObjectFactoryTemplate.generate(),
+            charset);
     }
 }

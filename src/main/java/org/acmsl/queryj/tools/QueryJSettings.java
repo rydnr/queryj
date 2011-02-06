@@ -21,11 +21,6 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
-
- ******************************************************************************
- *
- * Filename: QueryJSettings.java
- *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Defines QueryJ settings.

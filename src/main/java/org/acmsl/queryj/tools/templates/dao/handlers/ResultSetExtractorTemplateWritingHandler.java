@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ResultSetExtractorTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -57,14 +52,14 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
 /**
  * Writes ResultSetExtractor templates.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ResultSetExtractorTemplateWritingHandler
     extends    AbstractQueryJCommandHandler
@@ -83,6 +78,7 @@ public class ResultSetExtractorTemplateWritingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(final Map parameters)
       throws  QueryJBuildException
     {
@@ -112,6 +108,7 @@ public class ResultSetExtractorTemplateWritingHandler
             writeTemplates(
                 parameters,
                 metaData.getDatabaseProductName(),
+                retrieveCharset(parameters),
                 retrieveTemplates(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance());
         }
@@ -131,6 +128,7 @@ public class ResultSetExtractorTemplateWritingHandler
      * Writes the <code>ResultSetExtractor</code> templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param charset the file encoding.
      * @param templates the templates.
      * @param templateGenerator the template generator.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -142,6 +140,7 @@ public class ResultSetExtractorTemplateWritingHandler
     protected void writeTemplates(
         final Map parameters,
         final String engineName,
+        final Charset charset,
         final ResultSetExtractorTemplate[] templates,
         final ResultSetExtractorTemplateGenerator templateGenerator)
       throws  QueryJBuildException
@@ -163,7 +162,8 @@ public class ResultSetExtractorTemplateWritingHandler
                         retrieveOutputDir(
                             engineName,
                             t_Template.getTableName(),
-                            parameters));
+                            parameters),
+                        charset);
                 }
             }
         }

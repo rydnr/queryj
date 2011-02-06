@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: FkStatementSetterTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -63,11 +58,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Is able to generate FkStatementSetter templates.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class FkStatementSetterTemplateGenerator
     implements  FkStatementSetterTemplateFactory,
@@ -154,18 +149,21 @@ public class FkStatementSetterTemplateGenerator
      * Writes a FkStatementSetter template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
      */
     public void write(
         final FkStatementSetterTemplate template,
-        final File outputDir)
+        final File outputDir,
+        final Charset charset)
       throws  IOException
     {
         write(
             template,
             outputDir,
+            charset,
             template.getForeignKey());
     }
 
@@ -173,6 +171,7 @@ public class FkStatementSetterTemplateGenerator
      * Writes a FkStatementSetter template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @param foreignKey the foreign key.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
@@ -182,12 +181,14 @@ public class FkStatementSetterTemplateGenerator
     public void write(
         final FkStatementSetterTemplate template,
         final File outputDir,
+        final Charset charset,
         final ForeignKey foreignKey)
       throws  IOException
     {
         write(
             template,
             outputDir,
+            charset,
             foreignKey.getSourceTableName(),
             foreignKey.getTargetTableName(),
             StringUtils.getInstance(),
@@ -198,9 +199,10 @@ public class FkStatementSetterTemplateGenerator
     /**
      * Writes a FkStatementSetterCreator template to disk.
      * @param template the template to write.
+     * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @param sourceTableName the source table name.
      * @param targetTableName the target table name.
-     * @param outputDir the output folder.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
@@ -217,6 +219,7 @@ public class FkStatementSetterTemplateGenerator
     protected void write(
         final FkStatementSetterTemplate template,
         final File outputDir,
+        final Charset charset,
         final String sourceTableName,
         final String targetTableName,
         final StringUtils stringUtils,
@@ -239,6 +242,7 @@ public class FkStatementSetterTemplateGenerator
                     targetTableName.toLowerCase()),
                 '_')
             + "StatementSetter.java",
-            template.generate());
+            template.generate(),
+            charset);
     }
 }

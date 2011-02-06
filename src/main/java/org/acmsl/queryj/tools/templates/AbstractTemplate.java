@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: AbstractTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -82,8 +77,7 @@ import java.util.Map;
 
 /**
  * Represents generic templates.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractTemplate
     implements  Template,
@@ -185,14 +179,15 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Builds a <code>AbstractTemplate</code> with given
+     * Builds a {@link AbstractTemplate} with given
      * decorator factory.
      * @param header the optional header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @precondition decoratorFactory != null
      */
     protected AbstractTemplate(
-        final String header, final DecoratorFactory decoratorFactory)
+        final String header,
+        final DecoratorFactory decoratorFactory)
     {
         immutableSetHeader(header);
         immutableSetDecoratorFactory(decoratorFactory);
@@ -288,7 +283,7 @@ public abstract class AbstractTemplate
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     protected final void immutableSetDecoratorFactory(
         final DecoratorFactory factory)
@@ -298,7 +293,7 @@ public abstract class AbstractTemplate
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     protected void setDecoratorFactory(
         final DecoratorFactory factory)
@@ -307,7 +302,7 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Retrieves the <code>DecoratorFactory</code> instance.
+     * Retrieves the {@link DecoratorFactory} instance.
      * @return such instance.
      */
     public DecoratorFactory getDecoratorFactory()
@@ -413,9 +408,9 @@ public abstract class AbstractTemplate
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
-     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * @param errorListener the {@link StringTemplateErrorListener}
      * instance.
-     * @param stUtils the <code>STUtils</code> instance.
+     * @param stUtils the {@link STUtils} instance.
      * @return such instance.
      * @precondition path != null
      * @precondition theme != null
@@ -431,7 +426,7 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Configures given <code>StringTemplate</code> instance.
+     * Configures given {@link StringTemplate} instance.
      * @param stringTemplate such template.
      * @precondition stringTemplate != null
      */
@@ -730,7 +725,7 @@ public abstract class AbstractTemplate
     /**
      * Converts given value to lower-case.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      * @precondition value != null
      * @precondition decorationUtils != null
@@ -755,7 +750,7 @@ public abstract class AbstractTemplate
     /**
      * Normalizes given value.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      * @precondition value != null
      * @precondition decorationUtils != null
@@ -769,7 +764,7 @@ public abstract class AbstractTemplate
     /**
      * Normalizes given value, in lower-case.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      * @precondition value != null
      * @precondition decorationUtils != null
@@ -783,7 +778,7 @@ public abstract class AbstractTemplate
     /**
      * Normalizes given value, in upper-case.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      * @precondition value != null
      * @precondition decorationUtils != null
@@ -808,7 +803,7 @@ public abstract class AbstractTemplate
     /**
      * Capitalizes given value.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      * @precondition value != null
      * @precondition decorationUtils != null

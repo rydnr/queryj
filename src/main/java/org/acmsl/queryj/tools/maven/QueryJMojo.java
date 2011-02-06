@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2010  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,12 +20,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
@@ -57,6 +52,7 @@ import org.acmsl.queryj.tools.ant.QueryJTask;
  * Importing some Maven classes.
  */
 import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
 
 /*
@@ -67,12 +63,11 @@ import org.apache.tools.ant.types.Path;
 
 /**
  * Executes QueryJ.
- * @author <a href="jose.juan@ventura24.es">Jose Juan</a>,
- * @author <a href="chous@acm-sl.org">chous</a> (minor style changes).
- * @goal queryj
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class QueryJMojo
     extends AbstractMojo
+    implements Mojo
 {
     /**
      * The driver.

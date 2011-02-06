@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ValueObjectImplTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -62,8 +57,7 @@ import java.util.Map;
 
 /**
  * Writes <code>ValueObjectImplTemplate</code> instances.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectImplTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
@@ -77,6 +71,7 @@ public class ValueObjectImplTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @Override
     protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
         return ValueObjectImplTemplateGenerator.getInstance();
@@ -88,6 +83,7 @@ public class ValueObjectImplTemplateWritingHandler
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
+    @Override
     protected BasePerTableTemplate[] retrieveTemplates(
         final Map parameters)
       throws  BuildException
@@ -115,6 +111,7 @@ public class ValueObjectImplTemplateWritingHandler
      * @precondition engineName != null
      * @precondition packageUtils != null
      */
+    @Override
     protected File retrieveOutputDir(
         final File projectFolder,
         final String projectPackage,

@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: BasePerCustomResultTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -59,14 +54,14 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
 /**
  * Writes <i>per-custom-result</i> templates.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerCustomResultTemplateWritingHandler
     extends    AbstractQueryJCommandHandler
@@ -85,6 +80,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(final Map parameters)
       throws  QueryJBuildException
     {
@@ -135,6 +131,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
             retrieveCustomSqlProvider(parameters),
             retrieveMetadataManager(parameters),
             engineName,
+            retrieveCharset(parameters),
             parameters);
     }
 
@@ -145,6 +142,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.
      * @param engineName the engine name.
+     * @param charset the file encoding.
      * @param parameters the parameter map.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition template != null
@@ -158,6 +156,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
+        final Charset charset,
         final Map parameters)
       throws  QueryJBuildException
     {
@@ -180,7 +179,8 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                             customSqlProvider,
                             metadataManager,
                             engineName,
-                            parameters));
+                            parameters),
+                        charset);
                 }
             }
         }

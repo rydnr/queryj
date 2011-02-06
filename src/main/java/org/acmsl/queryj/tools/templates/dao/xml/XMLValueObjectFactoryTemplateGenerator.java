@@ -24,8 +24,6 @@
 
  ******************************************************************************
  *
- * Filename: XMLValueObjectFactoryTemplateGenerator.java
- *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Is able to generate XML value object factories according to
@@ -59,6 +57,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Is able to generate XML value object factories according to database
@@ -138,18 +137,21 @@ public class XMLValueObjectFactoryTemplateGenerator
      * Writes a value object factory template to disk.
      * @param template the value object factory template to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
      */
     public void write(
         final XMLValueObjectFactoryTemplate template,
-        final File outputDir)
+        final File outputDir,
+        final Charset charset)
       throws  IOException
     {
         write(
             template,
             outputDir,
+            charset,
             EnglishGrammarUtils.getInstance(),
             StringUtils.getInstance(),
             FileUtils.getInstance());
@@ -159,9 +161,10 @@ public class XMLValueObjectFactoryTemplateGenerator
      * Writes a value object factory template to disk.
      * @param template the value object factory template to write.
      * @param outputDir the output folder.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param charset the file encoding.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -172,6 +175,7 @@ public class XMLValueObjectFactoryTemplateGenerator
     protected void write(
         final XMLValueObjectFactoryTemplate template,
         final File outputDir,
+        final Charset charset,
         final EnglishGrammarUtils englishGrammarUtils,
         final StringUtils stringUtils,
         final FileUtils fileUtils)
@@ -188,6 +192,7 @@ public class XMLValueObjectFactoryTemplateGenerator
                     template.getTableTemplate().getTableName().toLowerCase()),
                 '_')
             + "ValueObjectFactory.java",
-            template.generate());
+            template.generate(),
+            charset);
     }
 }

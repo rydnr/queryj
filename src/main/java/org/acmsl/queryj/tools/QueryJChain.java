@@ -93,6 +93,7 @@ import org.apache.commons.logging.Log;
 
 /**
  * Defines the steps performed by QueryJ.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class QueryJChain
     extends     AbstractQueryJChain

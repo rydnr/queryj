@@ -21,11 +21,6 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
-
- ******************************************************************************
- *
- * Filename: ParameterValidationHandler.java
- *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Validates the parameters of an Ant task.
@@ -66,6 +61,9 @@ import org.apache.commons.logging.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -329,6 +327,21 @@ public class ParameterValidationHandler
      * The file encoding.
      */
     public static final String ENCODING = "encoding";
+
+    /**
+     * Unsupported encoding error message.
+     */
+    public static final String UNSUPPORTED_ENCODING = "Unsupported encoding";
+
+    /**
+     * Illegal encoding error message.
+     */
+    public static final String ILLEGAL_ENCODING = "Illegal encoding";
+
+    /**
+     * The charset associated to given encoding.
+     */
+    public static final String CHARSET = "charset";
     
     /**
      * Creates a <code>ParameterValidationHandler</code> instance.
@@ -412,6 +425,7 @@ public class ParameterValidationHandler
             (String) parameters.get(CUSTOM_SQL_MODEL),
             (File) parameters.get(SQL_XML_FILE),
             (String) parameters.get(GRAMMAR_BUNDLE_NAME),
+            (String) parameters.get(ENCODING),
             parameters,
             usingAnt);
 
@@ -446,6 +460,7 @@ public class ParameterValidationHandler
      * @param customSqlModel the model for custom-sql information.
      * @param sqlXmlFile the sql.xml file.
      * @param grammarBundleName the grammar bundle name.
+     * @param encoding the file encoding.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
      * @param usingAnt whether QueryJ is executed within Ant.
@@ -471,6 +486,7 @@ public class ParameterValidationHandler
         final String customSqlModel,
         final File sqlXmlFile,
         final String grammarBundleName,
+        final String encoding,
         final Map parameters,
         final boolean usingAnt)
       throws  QueryJBuildException
@@ -626,6 +642,35 @@ public class ParameterValidationHandler
             catch  (final MissingResourceException missingResourceException)
             {
                 throw new QueryJBuildException(GRAMMAR_BUNDLE_NOT_FOUND);
+            }
+        }
+
+        if (encoding != null)
+        {
+            if (!Charset.isSupported(encoding))
+            {
+                throw new QueryJBuildException(UNSUPPORTED_ENCODING);
+            }
+            else
+            {
+                try
+                {
+                    Charset t_Charset = Charset.forName(encoding);
+                }
+                catch (final IllegalCharsetNameException illegalCharset)
+                {
+                    throw new QueryJBuildException(ILLEGAL_ENCODING);
+                }
+                catch (final IllegalArgumentException nullCharset)
+                {
+                    // should not happen since encoding is optional anyway.
+                    throw new QueryJBuildException("encoding is null");
+                }
+                // catch (final UnsupportedCharsetException unsupportedCharset)
+                // {
+                //     // Should not happen since this has been checked beforehand.
+                //     throw new QueryJBuildException(UNSUPPORTED_ENCODING);
+                // }
             }
         }
     }

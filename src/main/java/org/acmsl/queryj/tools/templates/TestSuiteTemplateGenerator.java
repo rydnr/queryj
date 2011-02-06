@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TestSuiteTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -59,11 +54,11 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Is able to generate the JUnit suite to execute the generated test cases.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TestSuiteTemplateGenerator
     implements  TestSuiteTemplateFactory,
@@ -162,18 +157,21 @@ public class TestSuiteTemplateGenerator
      * Writes a test suite template to disk.
      * @param testSuiteTemplate the suite template to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
      * @precondition testSuiteTemplate != null
      * @precondition outputDir != null
      */
     public void write(
         final TestSuiteTemplate testSuiteTemplate,
-        final File outputDir)
+        final File outputDir,
+        final Charset charset)
       throws  IOException
     {
         write(
             testSuiteTemplate,
             outputDir,
+            charset,
             StringUtils.getInstance(),
             FileUtils.getInstance());
     }
@@ -182,6 +180,7 @@ public class TestSuiteTemplateGenerator
      * Writes a test suite template to disk.
      * @param testSuiteTemplate the suite template to write.
      * @param outputDir the output folder.
+     * @param charset the file encoding.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param fileUtils the <code>FileUtils</code> instance.
      * @throws IOException if the file cannot be created.
@@ -193,6 +192,7 @@ public class TestSuiteTemplateGenerator
     protected void write(
         final TestSuiteTemplate testSuiteTemplate,
         final File outputDir,
+        final Charset charset,
         final StringUtils stringUtils,
         final FileUtils fileUtils)
       throws  IOException
@@ -204,6 +204,7 @@ public class TestSuiteTemplateGenerator
             + File.separator
             + testSuiteTemplate.getSuiteName()
             + "Suite.java",
-            testSuiteTemplate.generate());
+            testSuiteTemplate.generate(),
+            charset);
     }
 }

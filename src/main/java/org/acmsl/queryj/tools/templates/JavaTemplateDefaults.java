@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: JavaTemplateDefaults.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -45,8 +40,7 @@ import java.util.Calendar;
 
 /**
  * Contains default subtemplates for all templates.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface JavaTemplateDefaults
 {
@@ -57,11 +51,9 @@ public interface JavaTemplateDefaults
           "/*\n"
         + "                        QueryJ\n"
         + "\n"
-        + "    Copyright (C) "
-        + Calendar.getInstance().get(Calendar.YEAR)
-        + " Jose San Leandro Armendariz\n"
-        + "                        chous@acm-sl.org\n"
-        + "                        chousz@yahoo.com\n"
+        + "    Copyright (C) 2002-today "
+        + " - Jose San Leandro Armendariz\n"
+        + "                         chous@acm-sl.org\n"
         + "\n"
         + "    This library is free software; you can redistribute it and/or\n"
         + "    modify it under the terms of the GNU General Public\n"
@@ -85,12 +77,7 @@ public interface JavaTemplateDefaults
         + "\n"
         + "    Thanks to ACM S.L. for distributing this library under the GPL "
         + "license.\n"
-        + "    Contact info: chous@acm-sl.org\n"
-        + "    Postal Address: c/Playa de Lagoa, 1\n"
-        + "                    Urb. Valdecabanas\n"
-        + "                    Boadilla del monte\n"
-        + "                    28660 Madrid\n"
-        + "                    Spain\n"
+        + "    Contact info: jose.sanleandro@acm-sl.com\n"
         + "\n";
 
     /**

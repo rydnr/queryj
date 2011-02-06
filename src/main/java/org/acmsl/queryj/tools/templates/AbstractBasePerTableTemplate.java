@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,17 +20,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
-
- ******************************************************************************
- *
- * Filename: $RCSfile: $
- *
+    Contact info: jose.sanleandro@acm-sl.com
  * Author: Jose San Leandro Armendariz
  *
  * Description: Contains the elements required to create any template
@@ -50,9 +40,7 @@ import org.acmsl.queryj.tools.templates.AbstractTemplate;
 /**
  * Contains the elements required to create any template of any type,
  * associated to each table.
- * @author <a href="mailto:chous@acm-sl.org"
- * >Jose San Leandro</a>
- * @version $Revision$ at $Date$ by $Author$
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractBasePerTableTemplate
     extends  AbstractTemplate

@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: AbstractQueryJCommandHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -62,6 +57,9 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing JDK classes.
  */
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.IllegalCharsetNameException;
+import java.nio.charset.UnsupportedCharsetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.Map;
@@ -74,7 +72,7 @@ import org.apache.commons.logging.Log;
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
  * This means they perform specific actions when receiving the command.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractQueryJCommandHandler
     implements  QueryJCommandHandler
@@ -391,5 +389,79 @@ public abstract class AbstractQueryJCommandHandler
             (Connection)
                 parameters.get(
                     JdbcConnectionOpeningHandler.JDBC_CONNECTION);
+    }
+
+    /**
+     * Retrieves the {@link charset} instance.
+     * @param parameters the parameter map.
+     * @return such instance.
+     * @throws QueryJBuildException if the charset is not valid.
+     * @precondition parameters != null
+     */
+    protected Charset retrieveCharset(final Map parameters)
+      throws  QueryJBuildException
+    {
+        Charset result =
+            (Charset) parameters.get(ParameterValidationHandler.CHARSET);
+
+        QueryJBuildException exceptionToThrow = null;
+
+        if (result == null)
+        {
+            String encoding =
+                (String) parameters.get(ParameterValidationHandler.ENCODING);
+
+            if (encoding == null)
+            {
+                result = Charset.defaultCharset();
+                parameters.put(ParameterValidationHandler.CHARSET, result);
+            }
+            else
+            {
+                if (Charset.isSupported(encoding))
+                {
+                    try
+                    {
+                        result = Charset.forName(encoding);
+                        parameters.put(ParameterValidationHandler.CHARSET, result);
+                    }
+                    catch (final IllegalArgumentException nullCharset)
+                    {
+                        // should not happen since encoding is optional anyway.
+                        exceptionToThrow =
+                            new QueryJBuildException(
+                                "encoding is null", nullCharset);
+                    }
+                    // catch (final UnsupportedCharsetException unsupportedCharset)
+                    // {
+                    //     // Should not happen since this has been checked beforehand.
+                    //     exceptionToThrow =
+                    //         new QueryJBuildException(
+                    //             ParameterValidationHandler.UNSUPPORTED_ENCODING,
+                    //             unsupportedCharset);
+                    // }
+                    // catch (final IllegalCharsetNameException illegalCharset)
+                    // {
+                    //     exceptionToThrow =
+                    //         new QueryJBuildException(
+                    //             ParameterValidationHandler.ILLEGAL_ENCODING,
+                    //             illegalCharset);
+                    // }
+                }
+                else
+                {
+                    exceptionToThrow =
+                        new QueryJBuildException(
+                            ParameterValidationHandler.UNSUPPORTED_ENCODING);
+                }
+            }
+        }
+
+        if (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
     }
 }

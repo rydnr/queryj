@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: NumericFunctionsTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -54,12 +49,12 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
  * Writes the numeric functions template.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class NumericFunctionsTemplateWritingHandler
     extends    AbstractQueryJCommandHandler
@@ -77,12 +72,14 @@ public class NumericFunctionsTemplateWritingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplate(
             retrieveNumericFunctionsTemplate(parameters),
             retrieveOutputDir(parameters),
+            retrieveCharset(parameters),
             NumericFunctionsTemplateGenerator.getInstance());
 
         return false;
@@ -92,6 +89,7 @@ public class NumericFunctionsTemplateWritingHandler
      * Handles given parameters.
      * @param template the template to write.
      * @param outputDir the output dir.
+     * @param charset the file encoding.
      * @param generator the <code>NumericFunctionsTemplateGenerator</code>
      * instance.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -101,6 +99,7 @@ public class NumericFunctionsTemplateWritingHandler
     protected void writeTemplate(
         final NumericFunctionsTemplate template,
         final File outputDir,
+        final Charset charset,
         final NumericFunctionsTemplateGenerator generator)
       throws  QueryJBuildException
     {
@@ -108,7 +107,7 @@ public class NumericFunctionsTemplateWritingHandler
         {
             try 
             {
-                generator.write(template, outputDir);
+                generator.write(template, outputDir, charset);
             }
             catch  (final IOException ioException)
             {

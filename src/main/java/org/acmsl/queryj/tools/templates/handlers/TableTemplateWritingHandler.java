@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TableTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -55,12 +50,12 @@ import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
  * Writes the table templates.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableTemplateWritingHandler
     extends    AbstractQueryJCommandHandler
@@ -78,6 +73,7 @@ public class TableTemplateWritingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(final Map parameters)
         throws  QueryJBuildException
     {
@@ -85,6 +81,7 @@ public class TableTemplateWritingHandler
             handle(
                 retrieveTableTemplates(parameters),
                 retrieveOutputDir(parameters),
+                retrieveCharset(parameters),
                 TableTemplateGenerator.getInstance());
     }
 
@@ -92,6 +89,7 @@ public class TableTemplateWritingHandler
      * Writes the Table templates.
      * @param templates the templates to write.
      * @param outputDir the output dir.
+     * @param charset the file encoding.
      * @param generator the <code>TableTemplateGenerator</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -102,6 +100,7 @@ public class TableTemplateWritingHandler
     protected boolean handle(
         final TableTemplate[] templates,
         final File outputDir,
+        final Charset charset,
         final TableTemplateGenerator generator)
       throws  QueryJBuildException
     {
@@ -116,7 +115,7 @@ public class TableTemplateWritingHandler
                       t_iTableIndex++) 
             {
                 generator.write(
-                    templates[t_iTableIndex], outputDir);
+                    templates[t_iTableIndex], outputDir, charset);
             }
         }
         catch  (final IOException ioException)

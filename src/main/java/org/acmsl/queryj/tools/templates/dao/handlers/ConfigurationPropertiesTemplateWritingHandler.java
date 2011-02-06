@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: ConfigurationPropertiesTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -56,8 +51,7 @@ import java.util.Map;
 
 /**
  * Writes ConfigurationProperties templates.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ConfigurationPropertiesTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
@@ -72,6 +66,7 @@ public class ConfigurationPropertiesTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @Override
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
         return ConfigurationPropertiesTemplateGenerator.getInstance();
@@ -82,6 +77,7 @@ public class ConfigurationPropertiesTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @Override
     protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
     {
         return
@@ -105,6 +101,7 @@ public class ConfigurationPropertiesTemplateWritingHandler
      * @precondition engineName != null
      * @precondition packageUtils != null
      */
+    @Override
     protected File retrieveOutputDir(
         final File projectFolder,
         final String projectPackage,

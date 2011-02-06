@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: DAOTestTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -58,14 +53,14 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.Map;
 
 /**
  * Writes DAO test templates.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOTestTemplateWritingHandler
     extends    AbstractQueryJCommandHandler
@@ -89,6 +84,7 @@ public class DAOTestTemplateWritingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(final Map parameters)
         throws  QueryJBuildException
     {
@@ -116,6 +112,7 @@ public class DAOTestTemplateWritingHandler
                 retrieveOutputDir(
                     metadata.getDatabaseProductName(),
                     parameters),
+                retrieveCharset(parameters),
                 DAOTestTemplateGenerator.getInstance());
         }
         catch  (final SQLException sqlException)
@@ -130,6 +127,7 @@ public class DAOTestTemplateWritingHandler
      * Writes the <code>DAOTest</code> templates.
      * @param templates the templates.
      * @param outputDir the output dir.
+     * @param charset the file encoding.
      * @param generator the <code>DAOTestTemplateGenerator</code> instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition templates != null
@@ -139,6 +137,7 @@ public class DAOTestTemplateWritingHandler
     protected void writeTemplates(
         final DAOTestTemplate[] templates,
         final File outputDir,
+        final Charset charset,
         final DAOTestTemplateGenerator generator)
       throws  QueryJBuildException
     {
@@ -150,7 +149,7 @@ public class DAOTestTemplateWritingHandler
                       t_iDAOTestIndex < t_iLength;
                       t_iDAOTestIndex++)
             {
-                generator.write(templates[t_iDAOTestIndex], outputDir);
+                generator.write(templates[t_iDAOTestIndex], outputDir, charset);
             }
         }
         catch  (final IOException ioException)

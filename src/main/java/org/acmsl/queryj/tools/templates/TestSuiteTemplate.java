@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2006  Jose San Leandro Armendariz
-                             chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,16 +20,11 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: chous@acm-sl.org
-    Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabanas
-                    Boadilla del monte
-                    28660 Madrid
-                    Spain
+    Contact info: jose.sanleandro@acm-sl.com
 
  ******************************************************************************
  *
- * Filename: $RCSfile: $
+ * Filename: TestSuiteTemplate.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -56,8 +51,7 @@ import java.util.Collection;
 
 /**
  * Is able to generate a JUnit suite for the generated test cases.
- * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro</a>
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TestSuiteTemplate
     extends  AbstractTestSuiteTemplate
@@ -79,7 +73,8 @@ public class TestSuiteTemplate
         final String suiteName)
     {
         super(
-            (header != null) ? header : ACMSL_HEADER,
+              //            (header != null) ? header : DEFAULT_HEADER,
+            header,
             decoratorFactory,
             packageName,
             testPackageName,
