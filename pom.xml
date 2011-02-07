@@ -6,7 +6,7 @@
   <groupId>org.acmsl</groupId>
   <artifactId>queryj</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>v24-2.0.6-SNAPSHOT</version>
+  <version>v24-2.0.6</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org</url>
   <inceptionYear>2002</inceptionYear>
