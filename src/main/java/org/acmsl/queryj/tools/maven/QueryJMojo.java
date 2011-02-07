@@ -64,6 +64,8 @@ import org.apache.tools.ant.types.Path;
 /**
  * Executes QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @goal queryj
+ * @execute phase="generate-sources"
  */
 public class QueryJMojo
     extends AbstractMojo
