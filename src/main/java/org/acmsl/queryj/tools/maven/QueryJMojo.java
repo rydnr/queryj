@@ -36,8 +36,11 @@ package org.acsml.queryj.tools.maven;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.io.InputStream;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 /*
  * Importing some ACM-SL classes.
@@ -54,6 +57,7 @@ import org.acmsl.queryj.tools.ant.QueryJTask;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.logging.Log;
 
 /*
  * Importing some Ant classes.
@@ -71,6 +75,12 @@ public class QueryJMojo
     extends AbstractMojo
     implements Mojo
 {
+    /**
+     * The location of pom.properties within the jar file.
+     */
+    protected static final String POM_PROPERTIES_LOCATION =
+        "META-INF/maven/org.acmsl/queryj/pom.properties";
+
     /**
      * The driver.
      * @parameter
@@ -629,7 +639,50 @@ public class QueryJMojo
     public void execute()
         throws MojoExecutionException
     {
-        getLog().info("Generating QueryJ...");
+        execute(getLog());
+    }
+
+    /**
+     * Executes QueryJ via Maven2.
+     * @param log the Maven log.
+     * @throws MojoExecutionException if something goes wrong.
+     * @precondition log != null
+     */
+    protected void execute(final Log log)
+        throws MojoExecutionException
+    {
+        execute(log, retrieveVersion(retrievePomProperties(log)));
+    }
+
+    /**
+     * Retrieves the version of QueryJ currently running.
+     * @param properties the pom.properties information.
+     * @return the version entry.
+     */
+    protected String retrieveVersion(final Properties properties)
+    {
+        String result = "(unknown)";
+
+        if (   (properties != null)
+            && (properties.containsKey("version")))
+        {
+            result = properties.getProperty("version");
+        }
+
+        return result;
+    }
+
+    /**
+     * Executes QueryJ via Maven2.
+     * @param log the Maven log.
+     * @param version the QueryJ version.
+     * @throws MojoExecutionException if something goes wrong.
+     * @precondition log != null
+     */
+    protected void execute(final Log log, final String version)
+        throws MojoExecutionException
+    {
+        log.info("Running QueryJ " + version);
         
         File outputDirPath = getOutputDir();
         QueryJTask task = null;
@@ -641,7 +694,7 @@ public class QueryJMojo
             outputDir.mkdirs();
         
             //execute task  
-            task = buildTask();
+            task = buildTask(log);
 
             if  (task != null)
             {
@@ -649,56 +702,119 @@ public class QueryJMojo
             }
         }
     }
-    
+
+    /**
+     * Retrieves the pom.properties bundled within the QueryJ jar.
+     * @param log the Maven log.
+     * @return such information.
+     * @precondition log != null
+     */
+    protected Properties retrievePomProperties(final Log log)
+    {
+        Properties result = null;
+
+        try
+        {
+            InputStream pomProperties =
+                getClass().getClassLoader().getResourceAsStream(POM_PROPERTIES_LOCATION);
+
+            result = new Properties();
+
+            result.load(pomProperties);
+        }
+        catch (final IOException ioException)
+        {
+            log.warn(
+                "Strange... Cannot read my own " + POM_PROPERTIES_LOCATION,
+                ioException);
+        }
+
+        return result;
+    }
+
     /**
      * Builds the QueryJ task.
-     * @return such info
+     * @param log the Maven log.
+     * @return such info.
+     * @precondition log != null
      */
-    protected QueryJTask buildTask()
+    protected QueryJTask buildTask(final Log log)
     {
         QueryJTask result = new QueryJTask();
 
         Project project = new Project();
 
         result.setProject(project);
-        
+
         Path path = new Path(project);
         result.setClasspath(path);
         
+        log.debug("Catalog: " + getCatalog());
         result.setCatalog(getCatalog());
+
+        log.debug("Driver: " + getDriver());
         result.setDriver(getDriver());
+
+        log.debug("JNDI DataSource: " + getJndiDataSource());
         result.setJndiDataSource(getJndiDataSource());
+
+        log.debug("Output dir: " + getOutputDir());
         result.setOutputdir(getOutputDir());
+
+        log.debug("Package name: " + getPackageName());
         result.setPackage(getPackageName());
-        result.setPassword(getPassword());
+
+        log.debug("Repository: " + getRepository());
         result.setRepository(getRepository());
+
+        log.debug("Schema: " + getSchema());
         result.setSchema(getSchema());
-        result.setUsername(getUsername());
+
+        log.debug("Url: " + getUrl());
         result.setUrl(getUrl());
 
+        log.debug("Username: " + getUsername());
+        result.setUsername(getUsername());
+
+        log.debug("Password: " + getPassword());
+        result.setPassword(getPassword());
+
+        log.debug("Generate Mock DAO implementation? " + getGenerateMockDAOImplementation());
         result.setGenerateMockDAOImplementation(
             "" + getGenerateMockDAOImplementation());
+
+        log.debug("Generate XML DAO implementation? " + getGenerateXmlDAOImplementation());
         result.setGenerateXMLDAOImplementation(
             "" + getGenerateXmlDAOImplementation());
+
+        log.debug("Generate tests? " + getGenerateTests());
         result.setGenerateTests(
             "" + getGenerateTests());
         
+        log.debug("Custom SQL model: " + getCustomSqlModel());
         result.setCustomSqlModel(getCustomSqlModel());
+
+        log.debug("SQL XML file: " + getSqlXmlFile());
         result.setSqlXmlFile(getSqlXmlFile());
+
+        log.debug("Header file: " + getHeaderFile());
         result.setHeaderfile(getHeaderFile());
         
+        log.debug("Extract functions? " + getExtractFunctions());
         result.setExtractFunctions(
             "" + getExtractFunctions());
+
+        log.debug("Extract procedures? " + getExtractProcedures());
         result.setExtractProcedures(
             "" + getExtractProcedures());
         
-        getLog().info("grammar bundle is..." + getGrammarbundle());
-
+        log.debug("Grammar bundle: " + getGrammarbundle());
         result.setGrammarbundle(getGrammarbundle());
         
         buildExternallyManagedFields(result);
         buildTables(result);
 
+        log.debug("Encoding: " + getEncoding());
         result.setEncoding(getEncoding());
 
         return result;
