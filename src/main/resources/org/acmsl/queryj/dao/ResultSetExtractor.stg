@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
+//  Copyright (C) 2002-today  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -21,23 +21,14 @@
 //
 //  Thanks to ACM S.L. for distributing this library under the GPL license.
 //  Contact info: jose.sanleandro@acm-sl.com
-//  Postal Address: c/Playa de Lagoa, 1
-//                  Urb. Valdecabanas
-//                  Boadilla del monte
-//                  28660 Madrid
-//                  Spain
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: ResultSetExtractor.stg
 //
 // Author: Jose San Leandro Armendariz
 //
 // Description: Defines the rules to generate ResultSetExtractors.
-//
-// Version: $Revision$ ($Author$ at $Date$)
-//
-// $Id$
 //
 group ResultSetExtractor;
 

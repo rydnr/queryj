@@ -2,8 +2,8 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2006  ACM-SL
-//                           chous@acm-sl.org
+//  Copyright (C) 2002-today  ACM-SL
+//                            chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public
@@ -21,23 +21,14 @@
 //
 //  Thanks to ACM S.L. for distributing this library under the GPL license.
 //  Contact info: jose.sanleandro@acm-sl.com
-//  Postal Address: c/Playa de Lagoa, 1
-//                  Urb. Valdecabanas
-//                  Boadilla del monte
-//                  28660 Madrid
-//                  Spain
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: Table.stg
 //
 // Author: Jose San Leandro Armendariz
 //
 // Description: Defines the rules to generate Table classes.
-//
-// Version: $Revision$ ($Author$ at $Date$)
-//
-// $Id$
 //
 group Table;
 

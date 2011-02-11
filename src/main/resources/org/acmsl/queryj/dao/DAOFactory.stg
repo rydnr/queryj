@@ -2,8 +2,8 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2005  ACM-SL
-//                           chous@acm-sl.org
+//  Copyright (C) 2002-today  ACM-SL
+//                            chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU General Public
@@ -21,23 +21,14 @@
 //
 //  Thanks to ACM S.L. for distributing this library under the GPL license.
 //  Contact info: jose.sanleandro@acm-sl.com
-//  Postal Address: c/Playa de Lagoa, 1
-//                  Urb. Valdecabanas
-//                  Boadilla del monte
-//                  28660 Madrid
-//                  Spain
 //
 //***************************************************************************
 //
-// Filename: $RCSfile$
+// Filename: DAOFactory.stg
 //
 // Author: Jose San Leandro Armendariz
 //
 // Description: Defines the rules to generate DAO factories.
-//
-// Version: $Revision$ ($Author$ at $Date$)
-//
-// $Id$
 //
 group DAOFactory;
 
@@ -175,12 +166,16 @@ class(input) ::= <<
         className=input.dao_implementation_class_name,
         engineName=input.engine_name)
     ]:{ line |<line>}; separator="\n * ">
- * @author \<a href="http://maven.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public class <input.class_name>
+<if (input.implement_markers)>
+    extends  <input.dao_factory_class_name>,
+             org.acmsl.commons.patterns.Factory
+<else>
     extends  <input.dao_factory_class_name>
+<endif>
 {
     /**
      * The data source JNDI location.
