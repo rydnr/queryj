@@ -814,8 +814,17 @@ public class QueryJMojo
         buildExternallyManagedFields(result);
         buildTables(result);
 
-        log.debug("Encoding: " + getEncoding());
-        result.setEncoding(getEncoding());
+        String encoding = getEncoding();
+
+        if (encoding == null)
+        {
+            log.warn("Using default (platform-dependent) encoding to generate QueryJ sources");
+        }
+        else
+        {
+            log.info("Using encoding: '" + encoding + "' to generate QueryJ sources");
+        }
+        result.setEncoding(encoding);
 
         return result;
     }

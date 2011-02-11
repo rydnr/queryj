@@ -8,7 +8,7 @@
   <packaging>maven-plugin</packaging>
   <version>v24-2.0.8-SNAPSHOT</version>
   <name>QueryJ</name>
-  <url>http://www.acm-sl.org</url>
+  <url>http://www.acm-sl.org/projects/queryj</url>
   <inceptionYear>2002</inceptionYear>
   <licenses>
     <license>
