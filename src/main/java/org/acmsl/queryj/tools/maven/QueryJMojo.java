@@ -69,7 +69,6 @@ import org.apache.tools.ant.types.Path;
  * Executes QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @goal queryj
- * @execute phase="generate-sources"
  */
 public class QueryJMojo
     extends AbstractMojo
@@ -83,135 +82,153 @@ public class QueryJMojo
 
     /**
      * The driver.
-     * @parameter
+     * @parameter property="driver"
      */
     private String m__strDriver;
     
     /**
      * The url.
-     * @parameter
+     * @parameter property="url"
      */
     private String m__strUrl;
     
     /**
      * The user name.
-     * @parameter
+     * @parameter property="username"
      */
     private String m__strUsername;
     
     /**
      * The password.
-     * @parameter
+     * @parameter property="password"
      */
     private String m__strPassword;
     
     /**
      * The catalog.
-     * @parameter
+     * @parameter property="catalog"
      */
     private String m__strCatalog;
     
     /**
      * The schema.
-     * @parameter
+     * @parameter property="schema"
      */
     private String m__strSchema;
     
     /**
      * The repository.
-     * @parameter
+     * @parameter property="repository"
      */
     private String m__strRepository;
     
     /**
      * The package name.
-     * @parameter
+     * @parameter property="packageName"
      */
     private String m__strPackageName;
     
     /**
      * The output directory.
-     * @parameter
+     * @parameter property="outputDir"
      */
     private File m__OutputDir;
     
     /**
      * The data source.
-     * @parameter
+     * @parameter property="jndiDataSource"
      */
     private String m__strJndiDataSource;
     
     /**
      * The sql xml file.
-     * @parameter
+     * @parameter property="sqlXmlFile"
      */
     private File m__SqlXmlFile;
     
     /**
      * The customized sql model.
-     * @parameter
+     * @parameter property="customSqlModel"
      */
     private String m__strCustomSqlModel;
     
     /**
      * The xml dao implementation flag.
-     * @parameter
+     * @parameter property="generateXmlDAOImplementation"
      */
     private Boolean m__bGenerateXmlDAOImplementation = Boolean.TRUE;
     
     /**
      * The mock dao implementation flag.
-     * @parameter
+     * @parameter property="generateMockDAOImplementation"
      */
     private Boolean m__bGenerateMockDAOImplementation = Boolean.TRUE;
     
     /**
      * The test generation flag.
-     * @parameter
+     * @parameter property="generateTests"
      */
     private Boolean m__bGenerateTests = Boolean.FALSE;
     
     /**
-     * The header file
-     * @parameter
+     * The header file.
+     * @parameter property="headerFile"
      */
     private File m__HeaderFile;
     
     /**
      * The extract functions flag.
-     * @parameter
+     * @parameter property="extractFunctions"
      */
     private Boolean m__bExtractFunctions = Boolean.TRUE;
     
     /**
      * The extract procedures flag.
-     * @parameter
+     * @parameter property="extractProcedures"
      */
     private Boolean m__bExtractProcedures = Boolean.TRUE;
     
     /**
      * The list of external managed fields
-     * @parameter
+     * @parameter property="externallyManagedFields"
      */
     private ExternallyManagedField[] m__aExternallyManagedFields;
     
     /**
      * The grammar bundle file.
-     * @parameter
+     * @parameter property="grammarbundle"
      */
     private String m__strGrammarbundle;
     
     /**
      * The list of tables.
-     * @parameter
+     * @parameter property="tables"
      */
     private Table[] m__aTables;
 
     /**
      * The file encoding.
-     * @parameter expression="${encoding}" default-value="${project.build.sourceEncoding}"
+     * @parameter property="encoding" expression="${file.encoding}" default-value="${project.build.sourceEncoding}"
      */
     private String m__strEncoding;
+
+    /**
+     * Specifies the driver.
+     * @param driver such value.
+     */
+    protected final void immutableSetDriver(final String driver)
+    {
+        m__strDriver = driver;
+    }
+
+    /**
+     * Specifies the driver.
+     * @param driver such value.
+     */
+    public void setDriver(final String driver)
+    {
+        immutableSetDriver(driver);
+    }
 
     /**
      * Returns the driver.
@@ -507,6 +524,24 @@ public class QueryJMojo
     }
     
     /**
+     * Specifies the header file.
+     * @param file such file.
+     */
+    protected final void immutableSetHeaderFile(final File file)
+    {
+        m__HeaderFile = file;
+    }
+    
+    /**
+     * Specifies the header file.
+     * @param file such file.
+     */
+    public void setHeaderFile(final File file)
+    {
+        immutableSetHeaderFile(file);
+    }
+    
+    /**
      * Returns the header file.
      * @return such file.
      */
@@ -606,24 +641,6 @@ public class QueryJMojo
     }
 
     /**
-     * Specifies the encoding.
-     * @param encoding the new encoding.
-     */
-    protected final void immutableSetEncoding(final String encoding)
-    {
-        m__strEncoding = encoding;
-    }
-
-    /**
-     * Specifies the encoding.
-     * @param encoding the new encoding.
-     */
-    public void setEncoding(final String encoding)
-    {
-        immutableSetEncoding(encoding);
-    }
-
-    /**
      * Retrieves the encoding.
      * @return such information.
      */
@@ -682,9 +699,10 @@ public class QueryJMojo
     protected void execute(final Log log, final String version)
         throws MojoExecutionException
     {
-        log.info("Running QueryJ " + version);
-        
+        boolean running = false;
+
         File outputDirPath = getOutputDir();
+
         QueryJTask task = null;
 
         if  (outputDirPath != null)
@@ -698,8 +716,26 @@ public class QueryJMojo
 
             if  (task != null)
             {
+                log.info("Running QueryJ " + version);
+        
                 task.execute();
+
+                running = true;
             }
+            else
+            {
+                log.warn("task is null");
+            }
+        }
+        else
+        {
+            log.error("outputDir is null");
+        }
+
+        if (!running)
+        {
+            log.error("NOT running QueryJ " + version);
+            throw new MojoExecutionException("QueryJ could not start");
         }
     }
 

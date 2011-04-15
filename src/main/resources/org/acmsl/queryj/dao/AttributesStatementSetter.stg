@@ -170,11 +170,6 @@ public class <input.vo_name>AttributesStatementSetter
 {
     <input.attributes:attribute_member_declaration(attr=it); separator="\n\n">
 
-    /**
-     * The \<i>update\</i> operation.
-     */
-    private boolean m__bUpdateOperation;
-
 <if(input.clobHandling)>
     /**
      * The \<i>select for update\</i> operation.
@@ -246,34 +241,6 @@ public class <input.vo_name>AttributesStatementSetter
     }
 
 <endif>
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected final void immutableSetUpdateOperation(
-        final boolean updateOperation)
-    {
-        m__bUpdateOperation = updateOperation;
-    }
-
-    /**
-     * Specifies whether the operation is an update or not.
-     * @param updateOperation such information.
-     */
-    protected void setUpdateOperation(final boolean updateOperation)
-    {
-        immutableSetUpdateOperation(updateOperation);
-    }
-
-    /**
-     * Retrieves whether the operation is an update or not.
-     * @return such information.
-     */
-    public boolean isUpdateOperation()
-    {
-        return m__bUpdateOperation;
-    }
 
 <if(input.clobHandling)>
     /**
