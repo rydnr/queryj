@@ -68,6 +68,7 @@ source(input) ::= <<
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -103,8 +104,10 @@ public interface <input.vo_name>
 <if(input.implement_markers)>
     extends Serializable,
             ValueObject
+
 <else>
     extends Serializable
+
 <endif>
 {
     <result.properties:property_getter(attribute=it);
