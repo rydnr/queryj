@@ -199,7 +199,14 @@ public class QueryJMojo
      * @parameter property="grammarbundle"
      */
     private String m__strGrammarbundle;
-    
+
+    /**
+     * Whether to use <code>main</code> and <code>test</code> subfolders
+     * within <code>outputDir</code>.
+     * @parameter property="useOutputSubfolders"
+     */
+    private Boolean m__bOutputDirSubfolders = Boolean.FALSE;
+
     /**
      * The list of tables.
      * @parameter property="tables"
@@ -948,6 +955,46 @@ public class QueryJMojo
     }
 
     /**
+     * Specifies whether to create <code>main</code> and <code>test</code>
+     * subfolders withing <code>outputDir</code>. Defaults to false.
+     * @param flag such condition.
+     */
+    protected final void immutableSetUseOutputDirSubfolders(final Boolean flag)
+    {
+        m__bOutputDirSubfolders = flag;
+    }
+
+    /**
+     * Specifies whether to create <code>main</code> and <code>test</code>
+     * subfolders withing <code>outputDir</code>. Defaults to false.
+     * @param flag such condition.
+     */
+    public void setUseOutputDirSubfolders(final Boolean flag)
+    {
+        immutableSetUseOutputDirSubfolders(flag);
+    }
+
+    /**
+     * Retrieves whether to create <code>main</code> and <code>test</code>
+     * subfolders withing <code>outputDir</code>. Defaults to false.
+     * @param flag such condition.
+     */
+    protected final Boolean immutableGetUseOutputDirSubfolders()
+    {
+        return m__bOutputDirSubfolders;
+    }
+
+    /**
+     * Retrieves whether to create <code>main</code> and <code>test</code>
+     * subfolders withing <code>outputDir</code>. Defaults to false.
+     * @param flag such condition.
+     */
+    public Boolean getUseOutputDirSubfolders()
+    {
+        return immutableGetUseOutputDirSubfolders();
+    }
+
+    /**
      * Specifies the tables.
      * @param tables such information.
      */
@@ -1207,7 +1254,10 @@ public class QueryJMojo
         
         log.debug("Grammar bundle: " + getGrammarbundle());
         result.setGrammarbundle(getGrammarbundle());
-        
+
+        log.debug("OutputDir subfolders: " + getUseOutputDirSubfolders());
+        result.setOutputdirsubfolders("" + getUseOutputDirSubfolders());
+
         buildExternallyManagedFields(result);
         buildTables(result);
 

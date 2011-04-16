@@ -2115,7 +2115,7 @@ public class QueryJChain
                 getExtractTablesFlag(settings),
                 getExtractProceduresFlag(settings),
                 getExtractFunctionsFlag(settings),
-                getJndiDataSource(settings),
+ getJndiDataSource(settings),
                 getGenerateMockDAOImplementationFlag(settings),
                 getGenerateXMLDAOImplementationFlag(settings),
                 getGenerateTestsFlag(settings),
