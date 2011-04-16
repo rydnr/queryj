@@ -112,7 +112,10 @@ extends TestCase
     return
         new org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate(
             null, // metadata manager
-            CachingDecoratorFactory.getInstance(),
+            null, // metadata type manager
+            null, // custom sql provider
+            null, // header
+            CachingDecoratorFactory.getInstance(), // decorator factory
             "dao", // the subpackage
             "com.foo.bar", // base package name
             "queryj", // repository

@@ -249,6 +249,24 @@ public class QueryJMojo
     }
 
     /**
+     * Specifies the url.
+     * @param url the url.
+     */
+    protected final void immutableSetUrl(final String url)
+    {
+        m__strUrl = url;
+    }
+
+    /**
+     * Specifies the url.
+     * @param newUrl the url.
+     */
+    public void setUrl(final String url)
+    {
+        immutableSetUrl(url);
+    }
+
+    /**
      * Returns the url.
      * @return such value.
      */
@@ -265,7 +283,25 @@ public class QueryJMojo
     {
         return immutableGetUrl();
     }
-    
+
+    /**
+     * Specifies the username.
+     * @param username the new value.
+     */
+    protected final void immutableSetUsername(final String username)
+    {
+        m__strUsername = username;
+    }
+
+    /**
+     * Specifies the username.
+     * @param username the new value.
+     */
+    public void setUsername(final String username)
+    {
+        immutableSetUsername(username);
+    }
+
     /**
      * Returns the user name.
      * @return such value.
@@ -283,7 +319,25 @@ public class QueryJMojo
     {
         return immutableGetUsername();
     }
-    
+
+    /**
+     * Specifies the password.
+     * @param password the password.
+     */
+    protected final void immutableSetPassword(final String password)
+    {
+        m__strPassword = password;
+    }
+
+    /**
+     * Specifies the password.
+     * @param password the password.
+     */
+    public void setPassword(final String password)
+    {
+        immutableSetPassword(password);
+    }
+
     /**
      * Returns the password.
      * @return such value.
@@ -301,7 +355,25 @@ public class QueryJMojo
     {
         return immutableGetPassword();
     }
-    
+
+    /**
+     * Specifies the catalog.
+     * @param catalog the catalog.
+     */
+    protected final void immutableSetCatalog(final String catalog)
+    {
+        m__strCatalog = catalog;
+    }
+
+    /**
+     * Specifies the catalog.
+     * @param catalog the catalog.
+     */
+    public void setCatalog(final String catalog)
+    {
+        immutableSetCatalog(catalog);
+    }
+
     /**
      * Returns the catalog.
      * @return such value.
@@ -319,7 +391,25 @@ public class QueryJMojo
     {
         return immutableGetCatalog();
     }
-    
+
+    /**
+     * Specifies the schema.
+     * @param schema the schema.
+     */
+    protected final void immutableSetSchema(final String schema)
+    {
+        m__strSchema = schema;
+    }
+
+    /**
+     * Specifies the schema.
+     * @param schema the schema.
+     */
+    public void setSchema(final String schema)
+    {
+        immutableSetSchema(schema);
+    }
+
     /**
      * Returns the schema.
      * @return such value.
@@ -344,7 +434,25 @@ public class QueryJMojo
 
         return result;
     }
-    
+
+    /**
+     * Specifies the repository.
+     * @param repository the repository.
+     */
+    protected final void immutableSetRepository(final String repository)
+    {
+        m__strRepository = repository;
+    }
+
+    /**
+     * Specifies the repository.
+     * @param repository the repository.
+     */
+    public void setRepository(final String repository)
+    {
+        immutableSetRepository(repository);
+    }
+
     /**
      * Returns the repository.
      * @return such value.
@@ -369,7 +477,25 @@ public class QueryJMojo
 
         return result;
     }
-    
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    protected final void immutableSetPackageName(final String packageName)
+    {
+        m__strPackageName = packageName;
+    }
+
+    /**
+     * Specifies the package name.
+     * @param packageName the package name.
+     */
+    public void setPackageName(final String packageName)
+    {
+        immutableSetPackageName(packageName);
+    }
+
     /**
      * Returns the package name.
      * @return such value.
@@ -387,7 +513,25 @@ public class QueryJMojo
     {
         return immutableGetPackageName();
     }
-    
+
+    /**
+     * Specifies the output directory.
+     * @param outputDir such directory.
+     */
+    protected final void immutableSetOutputDir(final File outputDir)
+    {
+        m__OutputDir = outputDir;
+    }
+
+    /**
+     * Specifies the output directory.
+     * @param outputDir such directory.
+     */
+    public void setOutputDir(final File outputDir)
+    {
+        immutableSetOutputDir(outputDir);
+    }
+
     /**
      * Returns the output directory.
      * @return such directory.
@@ -405,7 +549,25 @@ public class QueryJMojo
     {
         return immutableGetOutputDir();
     }
-    
+
+    /**
+     * Specifies the JNDI path to the data source.
+     * @param jndiPath such path.
+     */
+    protected final void immutableSetJndiDataSource(final String jndiPath)
+    {
+        m__strJndiDataSource = jndiPath;
+    }
+
+    /**
+     * Specifies the JNDI path to the data source.
+     * @param jndiPath such path.
+     */
+    public void setJndiDataSource(final String jndiPath)
+    {
+        immutableSetJndiDataSource(jndiPath);
+    }
+
     /**
      * Returns the JNDI location of the data source.
      * @return such value.
@@ -423,7 +585,25 @@ public class QueryJMojo
     {
         return immutableGetJndiDataSource();
     }
-    
+
+    /**
+     * Specifies the XML file where the SQL queries are defined.
+     * @param sqlFile such file.
+     */
+    protected final void immutableSetSqlXmlFile(final File sqlFile)
+    {
+        m__SqlXmlFile = sqlFile;
+    }
+
+    /**
+     * Specifies the XML file where the SQL queries are defined.
+     * @param sqlFile such file.
+     */
+    public void setSqlXmlFile(final File sqlFile)
+    {
+        immutableSetSqlXmlFile(sqlFile);
+    }
+
     /**
      * Return the sql xml file.
      * @return such file.
@@ -441,7 +621,25 @@ public class QueryJMojo
     {
         return immutableGetSqlXmlFile();
     }
-    
+
+    /**
+     * Specifies the custom SQL model.
+     * @param model the model.
+     */
+    protected final void immutableSetCustomSqlModel(final String model)
+    {
+        m__strCustomSqlModel = model;
+    }
+
+    /**
+     * Specifies the custom SQL model.
+     * @param model the model.
+     */
+    public final void setCustomSqlModel(final String model)
+    {
+        immutableSetCustomSqlModel(model);
+    }
+
     /**
      * Returns the custom sql model.
      * @return such value.
@@ -459,7 +657,25 @@ public class QueryJMojo
     {
         return immutableGetCustomSqlModel();
     }
-    
+
+    /**
+     * Specifies whether to generate a XML-based DAO implementation.
+     * @param flag such condition.
+     */
+    protected final void immutableSetGenerateXmlDAOImplementation(final Boolean flag)
+    {
+        m__bGenerateXmlDAOImplementation = flag;
+    }
+
+    /**
+     * Specifies whether to generate a XML-based DAO implementation.
+     * @param flag such condition.
+     */
+    public void setGenerateXmlDAOImplementation(final Boolean flag)
+    {
+        immutableSetGenerateXmlDAOImplementation(flag);
+    }
+
     /**
      * Indicates if xml dao must be generated.
      * @return such condition.
@@ -479,6 +695,24 @@ public class QueryJMojo
     }
     
     /**
+     * Specifies whether to generate a Mock-based DAO implementation.
+     * @param flag such condition.
+     */
+    protected final void immutableSetGenerateMockDAOImplementation(final Boolean flag)
+    {
+        m__bGenerateMockDAOImplementation = flag;
+    }
+
+    /**
+     * Specifies whether to generate a Mock-based DAO implementation.
+     * @param flag such condition.
+     */
+    public void setGenerateMockDAOImplementation(final Boolean flag)
+    {
+        immutableSetGenerateMockDAOImplementation(flag);
+    }
+
+    /**
      * Indicates if mock dao must be generated.
      * @return such condition.
      */
@@ -495,7 +729,25 @@ public class QueryJMojo
     {
         return immutableGetGenerateMockDAOImplementation();
     }
-    
+
+    /**
+     * Specifies whether the tests should be generated.
+     * @param flag such condition.
+     */
+    protected final void immutableSetGenerateTests(final Boolean flag)
+    {
+        m__bGenerateTests = flag;
+    }
+
+    /**
+     * Specifies whether the tests should be generated.
+     * @param flag such condition.
+     */
+    public void setGenerateTests(final Boolean flag)
+    {
+        immutableSetGenerateTests(flag);
+    }
+
     /**
      * Indicates if tests must be generated.
      * @return such condition.
@@ -513,7 +765,25 @@ public class QueryJMojo
     {
         return immutableGetGenerateTests();
     }
-    
+
+    /**
+     * Specifies the header file.
+     * @param file such file.
+     */
+    protected final void immutableSetHeaderFile(final File file)
+    {
+        m__HeaderFile = file;
+    }
+
+    /**
+     * Specifies the header file.
+     * @param file such file.
+     */
+    public void setHeaderFile(final File file)
+    {
+        immutableSetHeaderFile(file);
+    }
+
     /**
      * Returns the header file.
      * @return such file.
@@ -524,24 +794,6 @@ public class QueryJMojo
     }
     
     /**
-     * Specifies the header file.
-     * @param file such file.
-     */
-    protected final void immutableSetHeaderFile(final File file)
-    {
-        m__HeaderFile = file;
-    }
-    
-    /**
-     * Specifies the header file.
-     * @param file such file.
-     */
-    public void setHeaderFile(final File file)
-    {
-        immutableSetHeaderFile(file);
-    }
-    
-    /**
      * Returns the header file.
      * @return such file.
      */
@@ -549,7 +801,25 @@ public class QueryJMojo
     {
         return immutableGetHeaderFile();
     }
-    
+
+    /**
+     * Specifies whether database functions must be generated.
+     * @param flag such condition.
+     */
+    protected final void immutableSetExtractFunctions(final Boolean flag)
+    {
+        m__bExtractFunctions = flag;
+    }
+
+    /**
+     * Specifies whether database functions must be generated.
+     * @param flag such condition.
+     */
+    public void setExtractFunctions(final Boolean flag)
+    {
+        immutableSetExtractFunctions(flag);
+    }
+
     /**
      * Indicates if functions must be extracted.
      * @return such condition.
@@ -569,6 +839,24 @@ public class QueryJMojo
     }
     
     /**
+     * Specifies whether database procedures must be generated.
+     * @param flag such condition.
+     */
+    protected final void immutableSetExtractProcedures(final Boolean flag)
+    {
+        m__bExtractProcedures = flag;
+    }
+
+    /**
+     * Specifies whether database procedures must be generated.
+     * @param flag such condition.
+     */
+    public void setExtractProcedures(final Boolean flag)
+    {
+        immutableSetExtractProcedures(flag);
+    }
+
+    /**
      * Indicates if procedures must be extracted.
      * @return such condition.
      */
@@ -585,7 +873,26 @@ public class QueryJMojo
     {
         return immutableGetExtractProcedures();
     }
-    
+
+    /**
+     * Specifies the externally managed fields.
+     * @param fields such fields.
+     */
+    protected final void immutableSetExternallyManagedFields(
+        final ExternallyManagedField[] fields)
+    {
+        m__aExternallyManagedFields = fields;
+    }
+
+    /**
+     * Specifies the externally managed fields.
+     * @param fields such fields.
+     */
+    public void setExternallyManagedFields(final ExternallyManagedField[] fields)
+    {
+        immutableSetExternallyManagedFields(fields);
+    }
+
     /**
      * Returns the externally managed fields.
      * @return such fields.
@@ -603,7 +910,25 @@ public class QueryJMojo
     {
         return immutableGetExternallyManagedFields();
     }
-    
+
+    /**
+     * Specifies the grammar bundle.
+     * @param bundle such bundle.
+     */
+    protected final void immutableSetGrammarbundle(final String bundle)
+    {
+        m__strGrammarbundle = bundle;
+    }
+
+    /**
+     * Specifies the grammar bundle.
+     * @param bundle such bundle.
+     */
+    public void setGrammarbundle(final String bundle)
+    {
+        immutableSetGrammarbundle(bundle);
+    }
+
     /**
      * Returns the grammar bundle.
      * @return such resource.
@@ -621,7 +946,25 @@ public class QueryJMojo
     {
         return immutableGetGrammarbundle();
     }
-    
+
+    /**
+     * Specifies the tables.
+     * @param tables such information.
+     */
+    protected final void immutableSetTables(final Table[] tables)
+    {
+        m__aTables = tables;
+    }
+
+    /**
+     * Specifies the tables.
+     * @param tables such information.
+     */
+    public void setTables(final Table[] tables)
+    {
+        immutableSetTables(tables);
+    }
+
     /**
      * Returns the tables.
      * @return such information.
@@ -638,6 +981,24 @@ public class QueryJMojo
     protected Table[] getTables()
     {
         return immutableGetTables();
+    }
+
+    /**
+     * Specifies the encoding.
+     * @param encoding the encoding.
+     */
+    protected final void immutableSetEncoding(final String encoding)
+    {
+        m__strEncoding = encoding;
+    }
+
+    /**
+     * Specifies the encoding.
+     * @param encoding the encoding.
+     */
+    public void setEncoding(final String encoding)
+    {
+        immutableSetEncoding(encoding);
     }
 
     /**

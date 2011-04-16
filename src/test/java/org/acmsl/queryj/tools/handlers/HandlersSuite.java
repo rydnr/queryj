@@ -100,7 +100,7 @@ public class HandlersSuite
     
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.MetaDataBasedTableRepositoryBuildHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.handlers.CompositeAntCommandHandlerTest.class);
+    suite.addTestSuite(org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandlerTest.class);

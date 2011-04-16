@@ -111,10 +111,18 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate(
-            "com.foo.bar", // package name
-            null, // table template
-            null, // database metadata manager
-            CachingDecoratorFactory.getInstance());
+            "User", // tableName,
+            null, // metadataManager,
+            null, //customSqlProvider,
+            null, // header,
+            CachingDecoratorFactory.getInstance(), // decoratorFactory
+            "stuff", // packageName,
+            "mysql", // engineName,
+            "*", // engineVersion,
+            "'", // quote,
+            "com.foo.bar", // base package name
+            "repo", // repositoryName,
+            false); //implementMarkerInterfaces)
     // JUnitDoclet end method testcase.createInstance
   }
   

@@ -33,16 +33,16 @@ Spain
 * Author: Jose San Leandro Armend?riz
 *
 * Description: Executes all tests defined for package
-*              org.acmsl.queryj.tools.templates.dao.xml.handlers.
+*              org.acmsl.queryj.tools.handlers.
 *
 */
-package org.acmsl.queryj.tools.templates.dao.xml.handlers;
+package org.acmsl.queryj.tools.handlers;
 
 /*
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle;
+import org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler;
 // JUnitDoclet end import
 
 /*
@@ -76,27 +76,27 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Tests XMLDAOTestTemplateHandlerBundleTest class.
-* @see org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle
+* Tests CompositeAntCommandHandlerTest class.
+* @see org.acmsl.queryj.tools.handlers.CompositeAntCommandHandler
 */
-public class XMLDAOTestTemplateHandlerBundleTest
+public class CompositeQueryJCommandHandlerTest
 // JUnitDoclet begin extends_implements
 extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle xmldaotesttemplatehandlerbundle = null;
+  org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler compositequeryjcommandhandler = null;
   // JUnitDoclet end class
   
   /**
-  * Creates a XMLDAOTestTemplateHandlerBundleTest with given name.
+  * Creates a CompositeQueryJCommandHandlerTest with given name.
   * @param name such name.
   */
-  public XMLDAOTestTemplateHandlerBundleTest(String name)
+  public CompositeQueryJCommandHandlerTest(String name)
   {
-    // JUnitDoclet begin method XMLDAOTestTemplateHandlerBundleTest
+    // JUnitDoclet begin method CompositeQueryJCommandHandlerTest
     super(name);
-    // JUnitDoclet end method XMLDAOTestTemplateHandlerBundleTest
+    // JUnitDoclet end method CompositeQueryJCommandHandlerTest
   }
   
   /**
@@ -104,11 +104,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle createInstance()
+  public org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateHandlerBundle();
+    return new org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler();
     // JUnitDoclet end method testcase.createInstance
   }
   
@@ -121,7 +121,7 @@ extends TestCase
   {
     // JUnitDoclet begin method testcase.setUp
     super.setUp();
-    xmldaotesttemplatehandlerbundle = createInstance();
+    compositequeryjcommandhandler = createInstance();
     // JUnitDoclet end method testcase.setUp
   }
   
@@ -133,9 +133,21 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.tearDown
-    xmldaotesttemplatehandlerbundle = null;
+    compositequeryjcommandhandler = null;
     super.tearDown();
     // JUnitDoclet end method testcase.tearDown
+  }
+  
+  /**
+  * Tests CompositeQueryJCommandHandlerTesthandle()
+  * @throws Exception if an unexpected situation occurs.
+  * @see org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler#handle(org.acmsl.queryj.tools.QueryJCommand)
+  */
+  public void testHandle()
+  throws Exception
+  {
+    // JUnitDoclet begin method handle
+    // JUnitDoclet end method handle
   }
   
   
@@ -157,7 +169,7 @@ extends TestCase
   public static void main(String[] args)
   {
     // JUnitDoclet begin method testcase.main
-    junit.textui.TestRunner.run(XMLDAOTestTemplateHandlerBundleTest.class);
+    junit.textui.TestRunner.run(CompositeQueryJCommandHandlerTest.class);
     // JUnitDoclet end method testcase.main
   }
 }

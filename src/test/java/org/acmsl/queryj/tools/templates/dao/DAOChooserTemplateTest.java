@@ -111,9 +111,26 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate(
+            // metadataManager,
+            // metadataTypeManager,
+            // customSqlProvider,
+            // header,
+            // decoratorFactory,
+            // packageName,
+            // basePackageName,
+            // repositoryName,
+            // engineName,
+            // tables);
+            null, // metadata manager
+            null, // metadata type manager
+            null, // custom sql provider
+            null, // header
             CachingDecoratorFactory.getInstance(),
-            "com.foo.bar", // package name
-            "queryj"); // repository
+            "stuff", // package name
+            "com.foo.bar", // base package name
+            "queryj", // repository
+            "mysql", // engine name
+            new java.util.ArrayList()); // tables
     // JUnitDoclet end method testcase.createInstance
   }
   

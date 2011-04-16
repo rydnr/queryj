@@ -45,7 +45,6 @@ package org.acmsl.queryj.tools.templates.dao;
 
 import org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite;
 import org.acmsl.queryj.tools.templates.dao.mock.MockSuite;
-import org.acmsl.queryj.tools.templates.dao.xml.XmlSuite;
 
 
 /*
@@ -120,7 +119,6 @@ public class DaoSuite
     
     suite.addTest(org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.dao.mock.MockSuite.suite());
-    suite.addTest(org.acmsl.queryj.tools.templates.dao.xml.XmlSuite.suite());
     
     
     // JUnitDoclet begin method suite

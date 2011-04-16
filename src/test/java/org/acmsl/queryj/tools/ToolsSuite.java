@@ -99,14 +99,7 @@ public class ToolsSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.QueryJTaskTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.AntFieldFkElementTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.AntTableElementTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.AntFieldElementTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.PackageUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.AntTablesElementTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.AntExternallyManagedFieldsElementTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.AntCommandTest.class);
     
     suite.addTest(org.acmsl.queryj.tools.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.TemplatesSuite.suite());

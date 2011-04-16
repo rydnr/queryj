@@ -112,7 +112,8 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate(
-            CachingDecoratorFactory.getInstance(),
+            null, // header
+            CachingDecoratorFactory.getInstance(), // decorator factory
             "com.foo.bar", // package name
             "queryj", // repository
             JdbcMetadataTypeManager.getInstance());

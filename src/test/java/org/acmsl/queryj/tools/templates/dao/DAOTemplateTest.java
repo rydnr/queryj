@@ -114,13 +114,15 @@ extends TestCase
             "test", // table name
             null, // database metadata manager
             null, // custom sql provider
-            CachingDecoratorFactory.getInstance(),
+            null, // header
+            CachingDecoratorFactory.getInstance(), // decorator factory
             "com.foo.bar.rdb.mysql", // package name
             "mysql", // engine name
             "4.0.1", // engine version
             "'", // quote
             "com.foo.bar", // base package name
-            "bar"); // repository name
+            "bar", // repository name
+            false); // implement marker
     // JUnitDoclet end method testcase.createInstance
   }
   

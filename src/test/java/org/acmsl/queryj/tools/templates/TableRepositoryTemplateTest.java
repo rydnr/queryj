@@ -111,9 +111,16 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.TableRepositoryTemplate(
+            null, // metadataManager
+            null, // metadataTypeManager
+            null, // customSqlProvider
+            null, // header
             CachingDecoratorFactory.getInstance(),
-            "com.foo.bar", // package name
-            "query"); // repository
+            "stuff", //packageName
+            "com.foo.bar", // base package name
+            "repo", // repository
+            "mysql", // engineName,
+            new java.util.ArrayList()); // tables
     // JUnitDoclet end method testcase.createInstance
   }
   

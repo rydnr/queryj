@@ -111,16 +111,18 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate(
-            "test", // table template
+            "test", // table name
             null, // metadata manager
             null, // custom sql provider
+            null, // header
             CachingDecoratorFactory.getInstance(),
             "dao", // package name
             "test", // engine name
             "X.y", // engine version
             "'", // quote
             "com.foo.bar",
-            "foo"); // repository
+            "foo", // repository
+            false); // implement marker interfaces
     // JUnitDoclet end method testcase.createInstance
   }
   

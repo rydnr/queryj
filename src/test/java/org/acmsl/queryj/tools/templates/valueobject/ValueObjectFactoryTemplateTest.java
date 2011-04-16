@@ -111,10 +111,30 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate(
+            // tableName,
+            // metadataManager,
+            // customSqlProvider,
+            // header,
+            // decoratorFactory,
+            // packageName,
+            // engineName,
+            // engineVersion,
+            // quote,
+            // basePackageName,
+            // repositoryName,
+            // implementMarkerInterfaces);
             "com.foo.bar", // package name
-            null, // table template
             null, // database metadata manager
-            CachingDecoratorFactory.getInstance());
+            null, // custom sql provider
+            null, // header
+            CachingDecoratorFactory.getInstance(), // decorator factory
+            "stuff", // package name
+            "mysql", // engine name
+            "5.x", // engine version
+            "'", // quote
+            "org.foo.bar", // base package name
+            "repo", // repository
+            false); // implement markers
     // JUnitDoclet end method testcase.createInstance
   }
   
