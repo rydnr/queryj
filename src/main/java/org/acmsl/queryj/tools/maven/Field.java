@@ -29,7 +29,7 @@
  *
  * Description: Models a field.
  */
-package org.acsml.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven;
 
 /**
  * Models a field
@@ -39,19 +39,40 @@ public class Field
 {
     /**
      * The name.
+     * @parameter property="name"
      */
     private String m__strName;
     
     /**
      * The type.
+     * @parameter property="type"
      */
     private String m__strType;
     
     /**
      * The primary key.
+     * @parameter property="pk"
      */
     private String m__strPk;
-    
+
+    /**
+     * Specifies the name.
+     * @param name such name.
+     */
+    protected final void immutableSetName(final String name)
+    {
+        m__strName = name;
+    }
+
+    /**
+     * Specifies the name.
+     * @param name such name.
+     */
+    public void setName(final String name)
+    {
+        immutableSetName(name);
+    }
+
     /**
      * Returns the name.
      * @return such value.
@@ -68,6 +89,24 @@ public class Field
     protected String getName()
     {
         return immutableGetName();
+    }
+
+    /**
+     * Specifies the type.
+     * @param type such type.
+     */
+    protected final void immutableSetType(final String type)
+    {
+        m__strType = type;
+    }
+
+    /**
+     * Specifies the type.
+     * @param type such type.
+     */
+    public void setType(final String type)
+    {
+        immutableSetType(type);
     }
 
     /**
@@ -88,6 +127,24 @@ public class Field
         return immutableGetType();
     }
     
+    /**
+     * Specifies the pk.
+     * @param pk such pk.
+     */
+    protected final void immutableSetPk(final String pk)
+    {
+        m__strPk = pk;
+    }
+
+    /**
+     * Specifies the pk.
+     * @param pk such pk.
+     */
+    public void setPk(final String pk)
+    {
+        immutableSetPk(pk);
+    }
+
     /**
      * Returns the primary key.
      * @return such value.

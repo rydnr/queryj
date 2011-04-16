@@ -21,6 +21,10 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
+ ******************************************************************************
+ *
+ * Filename: QueryJTask.java
+ *
  * Author: Jose San Leandro Armendariz
  *
  * Description: Generates QueryJ classes using Ant.

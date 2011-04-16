@@ -29,7 +29,7 @@
  *
  * Description: Models a field managed outside QueryJ.
  */
-package org.acsml.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven;
 
 /**
  * Models an externally-managed field.
@@ -39,24 +39,46 @@ public class ExternallyManagedField
 {
     /**
      * The name.
+     * @parameter property="name"
      */
     private String m__strName;
     
     /**
      * The table name.
+     * @parameter property="tableName"
      */
     private String m__strTableName;
     
     /**
      * The keyword.
+     * @parameter property="keyword"
      */
     private String m__strKeyword;
     
     /**
      * The retrieval query.
+     * @parameter property="retrievalQuery"
      */
     private String m__strRetrievalQuery;
-    
+
+    /**
+     * Specifies the name.
+     * @param name such name.
+     */
+    protected final void immutableSetName(final String name)
+    {
+        m__strName = name;
+    }
+
+    /**
+     * Specifies the name.
+     * @param name such name.
+     */
+    public void setName(final String name)
+    {
+        immutableSetName(name);
+    }
+
     /**
      * Returns the name.
      * @return such value.
@@ -76,6 +98,24 @@ public class ExternallyManagedField
     }
 
     /**
+     * Specifies the table name.
+     * @param tableName such name.
+     */
+    protected final void immutableSetTableName(final String tableName)
+    {
+        m__strTableName = tableName;
+    }
+
+    /**
+     * Specifies the table name.
+     * @param tableName such name.
+     */
+    public void setTableName(final String tableName)
+    {
+        immutableSetTableName(tableName);
+    }
+
+    /**
      * Returns the table name.
      * @return such value.
      */
@@ -92,7 +132,25 @@ public class ExternallyManagedField
     {
         return immutableGetTableName();
     }
-    
+
+    /**
+     * Specifies the keyword.
+     * @param keyword such value.
+     */
+    protected final void immutableSetKeyword(final String keyword)
+    {
+        m__strKeyword = keyword;
+    }
+
+    /**
+     * Specifies the keyword.
+     * @param keyword such value.
+     */
+    public void setKeyword(final String keyword)
+    {
+        immutableSetKeyword(keyword);
+    }
+
     /**
      * Returns the keyword.
      * @return such value.
@@ -110,7 +168,25 @@ public class ExternallyManagedField
     {
         return immutableGetKeyword();
     }
-    
+
+    /**
+     * Specifies the retrieval query.
+     * @param query such query.
+     */
+    protected final void immutableSetRetrievalQuery(final String query)
+    {
+        m__strRetrievalQuery = query;
+    }
+
+    /**
+     * Specifies the retrieval query.
+     * @param query such query.
+     */
+    public void setRetrievalQuery(final String query)
+    {
+        immutableSetRetrievalQuery(query);
+    }
+
     /**
      * Returns the retrieval query.
      * @return such value.

@@ -29,7 +29,7 @@
  *
  * Description: Models a table.
  */
-package org.acsml.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven;
 
 /*
  * Importing some JDK classes.
@@ -44,14 +44,34 @@ public class Table
 {
     /**
      * The name.
+     * @parameter property="name"
      */
     private String m__strName;
     
     /**
      * The list of fields.
+     * @parameter property="fields"
      */
-    private List m__aFields;
+    private List<Field> m__aFields;
     
+    /**
+     * Specifies the name.
+     * @param name the table name.
+     */
+    protected final void immutableSetName(final String name)
+    {
+        m__strName = name;
+    }
+
+    /**
+     * Specifies the name.
+     * @param name the table name.
+     */
+    public void setName(final String name)
+    {
+        immutableSetName(name);
+    }
+
     /**
      * Returns the name.
      * @return such value.
@@ -71,10 +91,28 @@ public class Table
     }
 
     /**
+     * Specifies the fields.
+     * @param fields the fields.
+     */
+    protected final void immutableSetFields(final List<Field> fields)
+    {
+        m__aFields = fields;
+    }
+
+    /**
+     * Specifies the fields.
+     * @param fields the fields.
+     */
+    public void setFields(final List<Field> fields)
+    {
+        immutableSetFields(fields);
+    }
+
+    /**
      * Returns the fields.
      * @return such values.
      */
-    protected final List immutableGetFields()
+    protected final List<Field> immutableGetFields()
     {
         return m__aFields;
     }
@@ -83,7 +121,7 @@ public class Table
      * Returns the fields.
      * @return such values.
      */
-    protected List getFields()
+    protected List<Field> getFields()
     {
         return immutableGetFields();
     }

@@ -30,7 +30,7 @@
  *
  * Description: Executes QueryJ.
  */
-package org.acsml.queryj.tools.maven;
+package org.acmsl.queryj.tools.maven;
 
 /*
  * Importing some JDK classes.
@@ -45,11 +45,11 @@ import java.util.Properties;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.queryj.tools.ant.QueryJTask;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.ant.QueryJTask;
 
 /*
  * Importing some Maven classes.
@@ -1227,8 +1227,8 @@ public class QueryJMojo
     }
     
     /**
-     * Builds the external managed fields list
-     * @param task the task
+     * Builds the external managed fields list.
+     * @param task the task.
      */
     protected void buildExternallyManagedFields(
         final QueryJTask task)
@@ -1244,7 +1244,7 @@ public class QueryJMojo
         {
             element = 
                 (AntExternallyManagedFieldsElement) task.createDynamicElement(
-                        "externally-managed-fields");
+                    "externally-managed-fields");
             
             for (int index = 0; index < count; index++)
             {

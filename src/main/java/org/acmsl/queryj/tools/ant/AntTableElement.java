@@ -61,11 +61,13 @@ public class AntTableElement
 {
     /**
      * The table name.
+     * @parameter property="name"
      */
     private String m__strTableName;
 
     /**
      * The field collection.
+     * @parameter property="fields"
      */
     private Collection m__cFields;
 
@@ -73,9 +75,18 @@ public class AntTableElement
      * Specifies the table name.
      * @param name the table name.
      */
-    protected void setName(String name)
+    protected final void immutableSetName(final String name)
     {
         m__strTableName = name;
+    }
+
+    /**
+     * Specifies the table name.
+     * @param name the table name.
+     */
+    public void setName(final String name)
+    {
+        immutableSetName(name);
     }
 
     /**
@@ -91,7 +102,7 @@ public class AntTableElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    private void inmutableSetFields(Collection fields)
+    protected final void immutableSetFields(final Collection fields)
     {
         m__cFields = fields;
     }
@@ -100,9 +111,9 @@ public class AntTableElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    private void setFields(Collection fields)
+    public void setFields(final Collection fields)
     {
-        inmutableSetFields(fields);
+        immutableSetFields(fields);
     }
 
     /**
@@ -119,7 +130,7 @@ public class AntTableElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(String name, String value)
+    public void setDynamicAttribute(final String name, final String value)
     {
         if  ("name".equals(name))
         {
@@ -137,7 +148,7 @@ public class AntTableElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
-    public Object createDynamicElement(String name)
+    public Object createDynamicElement(final String name)
     {
         AntFieldElement result = null;
 
