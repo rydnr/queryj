@@ -190,15 +190,22 @@ public class TableTemplateGenerator
         final TableTemplateUtils tableTemplateUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + tableTemplateUtils.retrieveTableClassName(
-                  tableTemplate.getTableName())
-            + ".java",
-            tableTemplate.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + tableTemplateUtils.retrieveTableClassName(
+                    tableTemplate.getTableName())
+                + ".java",
+                tableTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

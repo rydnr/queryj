@@ -1101,7 +1101,7 @@ public class MockConnection
      * pre-compiled SQL statement.
      * @exception SQLException if a database access error occurs.
      */
-    public PreparedStatement prepareStatement(String sql)
+    public PreparedStatement prepareStatement(final String sql)
         throws  SQLException
     {
         PreparedStatement result = null;
@@ -1116,11 +1116,19 @@ public class MockConnection
             }
             else 
             {
-                LogFactory.getLog(MockConnection.class).fatal(
-                    "Wrapped connection null");
+                try
+                {
+                    LogFactory.getLog(MockConnection.class).fatal(
+                        "Wrapped connection null");
+                }
+                catch (final Throwable throwable)
+                {
+                    // Class loading problem.
+                    System.err.println("Wrapped connection null");
+                }
             }
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -1135,6 +1143,11 @@ public class MockConnection
             }
 
             throw sqlException;
+        }
+
+        if (result == null)
+        {
+            throw new SQLException("Cannot prepare statement: " + sql);
         }
 
         return result;

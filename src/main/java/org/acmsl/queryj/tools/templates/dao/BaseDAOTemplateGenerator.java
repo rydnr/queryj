@@ -268,17 +268,24 @@ public class BaseDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    template.getTableName().toLowerCase()),
-                '_')
-            + "DAO.java",
-            template.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        template.getTableName().toLowerCase()),
+                    '_')
+                + "DAO.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

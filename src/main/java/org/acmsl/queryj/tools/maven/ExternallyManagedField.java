@@ -238,8 +238,9 @@ public class ExternallyManagedField
     {
         StringBuilder result = new StringBuilder();
 
+        result.append("{ class-name : \"");
         result.append(className);
-        result.append(":{ table : \"");
+        result.append("\", table : \"");
         result.append(tableName);
         result.append("\", column : \"");
         result.append(name);

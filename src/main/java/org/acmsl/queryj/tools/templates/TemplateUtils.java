@@ -528,6 +528,9 @@ public class TemplateUtils
                                     catch  (final Throwable throwable)
                                     {
                                         // class-loading problem.
+                                        System.err.println(
+                                              "Referenced result not found:"
+                                            + t_ResultRefElement.getId());
                                     }
                                 }
                             }
@@ -537,12 +540,15 @@ public class TemplateUtils
                                 {
                                     // todo throw something.
                                     LogFactory.getLog(TemplateUtils.class).warn(
-                                          "Referenced result not found:"
-                                        + t_ResultRefElement.getId());
+                                          "Referenced result not found for sql:"
+                                        + t_Sql.getId());
                                 }
                                 catch  (final Throwable throwable)
                                 {
                                     // class-loading problem.
+                                    System.err.println(
+                                          "Referenced result not found for sql:"
+                                        + t_Sql.getId());
                                 }
                             }
                         }

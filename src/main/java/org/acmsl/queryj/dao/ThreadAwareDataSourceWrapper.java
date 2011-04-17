@@ -311,7 +311,7 @@ public class ThreadAwareDataSourceWrapper
 
         if  (   (threadBasedHashCode != 0) // data source not used yet
                                            // -> we'll take the thread's
-             && (result != currentThreadBasedHashCode))
+             && (result != threadBasedHashCode))
         {
             // Different threads -> wrapper behaviour
             result = dataSource.hashCode();

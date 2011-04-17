@@ -349,13 +349,20 @@ public class TimeFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "TimeFunctions.java",
-            timeFunctionsTemplate.generate(),
-            charset);
-    }
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "TimeFunctions.java",
+                timeFunctionsTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
+  }
 }

@@ -182,15 +182,22 @@ public class RepositoryDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + template.getEngineName()
-            + decorationUtils.capitalize(template.getRepositoryName())
-            + "DAO.java",
-            template.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                outputDir.getAbsolutePath()
+                + File.separator
+                + template.getEngineName()
+                + decorationUtils.capitalize(template.getRepositoryName())
+                + "DAO.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

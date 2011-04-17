@@ -269,24 +269,49 @@ public class TextFunctionsTestTemplateGenerator
         final Charset charset)
       throws  IOException
     {
-        if  (   (textFunctionsTestTemplate != null)
-             && (outputDir                 != null))
+        write(
+            textFunctionsTestTemplate,
+            outputDir,
+            charset,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
+
+    /**
+     * Writes a text functions test template to disk.
+     * @param textFunctionsTestTemplate the text functions template to write.
+     * @param outputDir the output folder.
+     * @param charset the file encoding.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition textFunctionsTestTemplate != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final TextFunctionsTestTemplate textFunctionsTestTemplate,
+        final File outputDir,
+        final Charset charset,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        if (outputDir.mkdirs())
         {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
-
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
-
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "TextFunctionsTest.java",
-                    textFunctionsTestTemplate.generate(),
-                    charset);
-            }
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "TextFunctionsTest.java",
+                textFunctionsTestTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
         }
     }
 }

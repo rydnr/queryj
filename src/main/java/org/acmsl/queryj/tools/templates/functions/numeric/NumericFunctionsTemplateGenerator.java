@@ -266,13 +266,21 @@ public class NumericFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "NumericFunctions.java",
+                numericFunctionsTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
 
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "NumericFunctions.java",
-            numericFunctionsTemplate.generate(),
-            charset);
     }
 }

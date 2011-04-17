@@ -184,20 +184,27 @@ public class XMLDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "XML"
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    xmlDAOTemplate
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "XML"
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        xmlDAOTemplate
                         .getTableTemplate()
-                            .getTableName().toLowerCase()),
-                '_')
-            + "DAO.java",
-            xmlDAOTemplate.generate(),
-            charset);
+                        .getTableName().toLowerCase()),
+                    '_')
+                + "DAO.java",
+                xmlDAOTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

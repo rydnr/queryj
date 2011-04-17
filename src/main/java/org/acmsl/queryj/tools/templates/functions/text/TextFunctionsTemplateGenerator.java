@@ -352,13 +352,21 @@ public class TextFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "TextFunctions.java",
+                textFunctionsTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
 
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "TextFunctions.java",
-            textFunctionsTemplate.generate(),
-            charset);
     }
 }

@@ -268,24 +268,47 @@ public class SystemFunctionsTestTemplateGenerator
         final Charset charset)
       throws  IOException
     {
-        if  (   (systemFunctionsTestTemplate != null)
-             && (outputDir                 != null))
+        write(
+            systemFunctionsTestTemplate,
+            outputDir,
+            charset,
+            StringUtils.getInstance(),
+            FileUtils.getInstance());
+    }
+
+    /**
+     * Writes a system functions test template to disk.
+     * @param systemFunctionsTestTemplate the system functions template to write.
+     * @param outputDir the output folder.
+     * @param charset the file encoding.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition stringUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
+        final File outputDir,
+        final Charset charset,
+        final StringUtils stringUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        if (outputDir.mkdirs())
         {
-            StringUtils t_StringUtils = StringUtils.getInstance();
-            FileUtils t_FileUtils = FileUtils.getInstance();
-
-            if  (   (t_StringUtils != null)
-                 && (t_FileUtils   != null))
-            {
-                outputDir.mkdirs();
-
-                t_FileUtils.writeFile(
-                      outputDir.getAbsolutePath()
-                    + File.separator
-                    + "SystemFunctionsTest.java",
-                    systemFunctionsTestTemplate.generate(),
-                    charset);
-            }
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "SystemFunctionsTest.java",
+                systemFunctionsTestTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
         }
     }
 }

@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.maven;
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -190,32 +189,37 @@ public class QueryJMojo
     
     /**
      * The list of external managed fields
-     * @parameter property="externallyManagedFields"
      */
     private ExternallyManagedField[] m__aExternallyManagedFields;
+    // @&& parameter property="externallyManagedFields"
     
     /**
+     * @parameter
+     */
+    private ExternallyManagedField[] externallyManagedFields;
+
+    /**
      * The grammar bundle file.
-     * @parameter property="grammarbundle"
      */
     private String m__strGrammarbundle;
+    //* @&& parameter property="grammarbundle"
 
     /**
      * Whether to use <code>main</code> and <code>test</code> subfolders
      * within <code>outputDir</code>.
-     * @parameter property="useOutputSubfolders"
      */
     private Boolean m__bOutputSubfolders = Boolean.FALSE;
+//     * @parameter property="useOutputSubfolders"
 
     /**
      * The list of tables.
-     * @parameter property="tables"
      */
     private Table[] m__aTables;
+    // @*** parameter property="tables"
 
     /**
      * The file encoding.
-     * @parameter property="encoding" expression="${file.encoding}" default-value="${project.build.sourceEncoding}"
+     * @parameter property="encoding" default-value="${project.build.sourceEncoding}"
      */
     private String m__strEncoding;
 
@@ -889,6 +893,7 @@ public class QueryJMojo
         final ExternallyManagedField[] fields)
     {
         m__aExternallyManagedFields = fields;
+        externallyManagedFields = fields;
     }
 
     /**
@@ -906,7 +911,8 @@ public class QueryJMojo
      */
     protected final ExternallyManagedField[] immutableGetExternallyManagedFields()
     {
-        return m__aExternallyManagedFields;
+//        return m__aExternallyManagedFields;
+        return externallyManagedFields;
     }
     
     /**
@@ -1052,9 +1058,18 @@ public class QueryJMojo
      * Retrieves the encoding.
      * @return such information.
      */
-    public String getEncoding()
+    protected final String immutableGetEncoding()
     {
         return m__strEncoding;
+    }
+
+    /**
+     * Retrieves the encoding.
+     * @return such information.
+     */
+    public String getEncoding()
+    {
+        return immutableGetEncoding();
     }
 
     /**
@@ -1117,7 +1132,10 @@ public class QueryJMojo
         {
             //initialize directories
             File outputDir = outputDirPath.getAbsoluteFile();
-            outputDir.mkdirs();
+            if (!outputDir.mkdirs())
+            {
+                log.warn("Cannot create output folder: " + outputDir);
+            }
         
             //execute task  
             task = buildTask(log);
@@ -1330,7 +1348,7 @@ public class QueryJMojo
         Table table;
         AntTablesElement element;
         AntTableElement tableElement;
-        List fields;
+        List<Field> fields;
         int fieldCount;
         Field field;
         AntFieldElement fieldElement;
@@ -1349,8 +1367,7 @@ public class QueryJMojo
                 tableElement = 
                     (AntTableElement) element.createDynamicElement("table");
                 
-                tableElement.setDynamicAttribute(
-                        "name", table.getName());
+                tableElement.setDynamicAttribute("name", table.getName());
                 
                 fields = table.getFields();
 
@@ -1358,7 +1375,7 @@ public class QueryJMojo
 
                 for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++)
                 {
-                    field = (Field) fields.get(fieldIndex);
+                    field = fields.get(fieldIndex);
 
                     if  (field != null)
                     {

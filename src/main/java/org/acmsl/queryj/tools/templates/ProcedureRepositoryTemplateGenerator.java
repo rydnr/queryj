@@ -170,16 +170,23 @@ public class ProcedureRepositoryTemplateGenerator
                     + fileUtils.packageToPath(
                           procedureRepositoryTemplate.getPackageName()));
 
-            t_FinalOutputDir.mkdirs();
-
-            fileUtils.writeFile(
-                  t_FinalOutputDir.getAbsolutePath()
-                + File.separator
-                + procedureRepositoryTemplateUtils
-                      .retrieveProcedureRepositoryClassName(
-                          procedureRepositoryTemplate.getRepository()),
-                procedureRepositoryTemplate.generate(),
-                charset);
+            if (t_FinalOutputDir.mkdirs())
+            {
+                fileUtils.writeFile(
+                      t_FinalOutputDir.getAbsolutePath()
+                    + File.separator
+                    + procedureRepositoryTemplateUtils
+                    .retrieveProcedureRepositoryClassName(
+                        procedureRepositoryTemplate.getRepository()),
+                    procedureRepositoryTemplate.generate(),
+                    charset);
+            }
+            else
+            {
+                throw
+                    new IOException(
+                        "Cannot create output dir: " + outputDir);
+            }
         }
     }
 }

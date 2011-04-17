@@ -181,18 +181,25 @@ public class XMLValueObjectFactoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "XML"
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    template.getTableTemplate().getTableName().toLowerCase()),
-                '_')
-            + "ValueObjectFactory.java",
-            template.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "XML"
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        template.getTableTemplate().getTableName().toLowerCase()),
+                    '_')
+                + "ValueObjectFactory.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

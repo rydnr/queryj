@@ -193,8 +193,9 @@ public class Field
     {
         StringBuilder result = new StringBuilder();
 
+        result.append(" { class-name : \"");
         result.append(className);
-        result.append(" : { name : \"");
+        result.append("\", name : \"");
         result.append(name);
         result.append("\", type : \"");
         result.append(type);

@@ -182,15 +182,22 @@ public class KeywordRepositoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + decorationUtils.capitalize(
-                  template.getRepositoryName())
-            + "KeywordRepository.java",
-            template.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + decorationUtils.capitalize(
+                    template.getRepositoryName())
+                + "KeywordRepository.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

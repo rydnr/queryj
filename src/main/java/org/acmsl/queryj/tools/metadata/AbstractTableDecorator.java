@@ -479,7 +479,7 @@ public abstract class AbstractTableDecorator
      */
     protected int hashCode(final Table table)
     {
-        return hashCode(getTable());
+        return table.hashCode();
     }
 
     /**

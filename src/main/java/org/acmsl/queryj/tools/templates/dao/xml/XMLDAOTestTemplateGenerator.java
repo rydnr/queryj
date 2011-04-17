@@ -190,20 +190,27 @@ public class XMLDAOTestTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "XML"
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    xmlDAOTestTemplate
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "XML"
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        xmlDAOTestTemplate
                         .getTableTemplate()
-                            .getTableName().toLowerCase()),
-                      '_')
-            + "DAOTest.java",
-            xmlDAOTestTemplate.generate(),
-            charset);
+                        .getTableName().toLowerCase()),
+                    '_')
+                + "DAOTest.java",
+                xmlDAOTestTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }
