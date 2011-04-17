@@ -230,7 +230,7 @@ public class ExternallyManagedField
      * @return the formatted text.
      */
     protected String toString(
-        final String className.
+        final String className,
         final String tableName,
         final String name,
         final String keyword,
