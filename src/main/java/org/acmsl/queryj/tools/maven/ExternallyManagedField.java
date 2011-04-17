@@ -204,4 +204,61 @@ public class ExternallyManagedField
     {
         return immutableGetRetrievalQuery();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String toString()
+    {
+        return
+            toString(
+                getClass().getName(),
+                getTableName(),
+                getName(),
+                getKeyword(),
+                getRetrievalQuery());
+    }
+
+    /**
+     * Builds a text representation of given externally-managed field
+     * information.
+     * @param className the class name.
+     * @param tableName the table name.
+     * @param name the field name.
+     * @param keyword the keyword.
+     * @param retrievalQuery the retrieval query.
+     * @return the formatted text.
+     */
+    protected String toString(
+        final String className.
+        final String tableName,
+        final String name,
+        final String keyword,
+        final String retrievalQuery)
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.append(className);
+        result.append(":{ table : \"");
+        result.append(tableName);
+        result.append("\", column : \"");
+        result.append(name);
+
+        if (keyword != null)
+        {
+            result.append("\", keyword : \"");
+
+            result.append(keyword);
+        }
+
+        if (retrievalQuery != null)
+        {
+            result.append("\", retrieval-query : \"");
+            result.append(retrievalQuery);
+        }
+
+        result.append("\" }");
+
+        return result.toString();
+    }
 }

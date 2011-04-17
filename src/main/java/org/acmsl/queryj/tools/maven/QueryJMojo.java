@@ -156,13 +156,13 @@ public class QueryJMojo
      * The xml dao implementation flag.
      * @parameter property="generateXmlDAOImplementation"
      */
-    private Boolean m__bGenerateXmlDAOImplementation = Boolean.TRUE;
+    private Boolean m__bGenerateXmlDAOImplementation = Boolean.FALSE;
     
     /**
      * The mock dao implementation flag.
      * @parameter property="generateMockDAOImplementation"
      */
-    private Boolean m__bGenerateMockDAOImplementation = Boolean.TRUE;
+    private Boolean m__bGenerateMockDAOImplementation = Boolean.FALSE;
     
     /**
      * The test generation flag.
@@ -180,13 +180,13 @@ public class QueryJMojo
      * The extract functions flag.
      * @parameter property="extractFunctions"
      */
-    private Boolean m__bExtractFunctions = Boolean.TRUE;
+    private Boolean m__bExtractFunctions = Boolean.FALSE;
     
     /**
      * The extract procedures flag.
      * @parameter property="extractProcedures"
      */
-    private Boolean m__bExtractProcedures = Boolean.TRUE;
+    private Boolean m__bExtractProcedures = Boolean.FALSE;
     
     /**
      * The list of external managed fields
@@ -205,7 +205,7 @@ public class QueryJMojo
      * within <code>outputDir</code>.
      * @parameter property="useOutputSubfolders"
      */
-    private Boolean m__bOutputDirSubfolders = Boolean.FALSE;
+    private Boolean m__bOutputSubfolders = Boolean.FALSE;
 
     /**
      * The list of tables.
@@ -959,9 +959,9 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @param flag such condition.
      */
-    protected final void immutableSetUseOutputDirSubfolders(final Boolean flag)
+    protected final void immutableSetUseOutputSubfolders(final Boolean flag)
     {
-        m__bOutputDirSubfolders = flag;
+        m__bOutputSubfolders = flag;
     }
 
     /**
@@ -969,9 +969,9 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @param flag such condition.
      */
-    public void setUseOutputDirSubfolders(final Boolean flag)
+    public void setUseOutputSubfolders(final Boolean flag)
     {
-        immutableSetUseOutputDirSubfolders(flag);
+        immutableSetUseOutputSubfolders(flag);
     }
 
     /**
@@ -979,9 +979,9 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @param flag such condition.
      */
-    protected final Boolean immutableGetUseOutputDirSubfolders()
+    protected final Boolean immutableGetUseOutputSubfolders()
     {
-        return m__bOutputDirSubfolders;
+        return m__bOutputSubfolders;
     }
 
     /**
@@ -989,9 +989,9 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @param flag such condition.
      */
-    public Boolean getUseOutputDirSubfolders()
+    public Boolean getUseOutputSubfolders()
     {
-        return immutableGetUseOutputDirSubfolders();
+        return immutableGetUseOutputSubfolders();
     }
 
     /**
@@ -1255,8 +1255,8 @@ public class QueryJMojo
         log.debug("Grammar bundle: " + getGrammarbundle());
         result.setGrammarbundle(getGrammarbundle());
 
-        log.debug("OutputDir subfolders: " + getUseOutputDirSubfolders());
-        result.setOutputdirsubfolders("" + getUseOutputDirSubfolders());
+        log.debug("Output subfolders: " + getUseOutputSubfolders());
+        result.setOutputdirsubfolders("" + getUseOutputSubfolders());
 
         buildExternallyManagedFields(result);
         buildTables(result);

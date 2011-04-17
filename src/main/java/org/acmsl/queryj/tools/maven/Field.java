@@ -33,6 +33,7 @@ package org.acmsl.queryj.tools.maven;
 
 /**
  * Models a field
+ * @author <a href="mailto:jose.juan@ventura24.es">Jose Juan</a>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class Field
@@ -86,7 +87,7 @@ public class Field
      * Returns the name.
      * @return such value.
      */
-    protected String getName()
+    public String getName()
     {
         return immutableGetName();
     }
@@ -122,7 +123,7 @@ public class Field
      * Returns the type.
      * @return such value.
      */
-    protected String getType()
+    public String getType()
     {
         return immutableGetType();
     }
@@ -158,8 +159,49 @@ public class Field
      * Returns the primary key.
      * @return such value.
      */
-    protected String getPk() 
+    public String getPk() 
     {
         return immutableGetPk();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public String toString()
+    {
+        return
+            toString(
+                getClass().getName(),
+                getName(),
+                getType(),
+                getPk());
+    }
+
+    /**
+     * Builds a formatted string with the field information.
+     * @param className the class name.
+     * @param name the field name.
+     * @param type the field type.
+     * @param pk whether it's part of the primary key or not.
+     * @return the formatted text.
+     */
+    protected String toString(
+        final String className,
+        final String name,
+        final String type,
+        final String pk)
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.append(className);
+        result.append(" : { name : \"");
+        result.append(name);
+        result.append("\", type : \"");
+        result.append(type);
+        result.append("\", pk : \"");
+        result.append(pk);
+        result.append("\" }");
+
+        return result;
     }
 }

@@ -38,6 +38,7 @@ import java.util.List;
 
 /**
  * Models a table.
+ * @author <a href="mailto:jose.juan@ventura24.es">Jose Juan</a>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class Table
@@ -85,7 +86,7 @@ public class Table
      * Returns the name.
      * @return such value.
      */
-    protected String getName()
+    public String getName()
     {
         return immutableGetName();
     }
@@ -121,8 +122,62 @@ public class Table
      * Returns the fields.
      * @return such values.
      */
-    protected List<Field> getFields()
+    public List<Field> getFields()
     {
         return immutableGetFields();
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    public String toString()
+    {
+        return
+            toString(
+                getClass().getName(),
+                getName(),
+                getFields());
+    }
+
+    /**
+     * Builds a formatted string with the information about
+     * a table.
+     * @param className the class name.
+     * @param name the table name.
+     * @param fields the table fields.
+     * @return the formatted text.
+     */
+    protected String toString(
+        final String className,
+        final String name,
+        final List<Field> fields)
+    {
+        StringBuilder result = new StringBuilder();
+
+        result.append(className);
+        result.append(":{ name : \"");
+        result.append(name);
+        result.append("\"");
+
+        if (fields != null)
+        {
+            result.append(", {");
+            boolean firstTime = true;
+
+            for (Field field : fields)
+            {
+                if (!firstTime)
+                {
+                    result.append(", ");
+                }
+                firstTime = false;
+                result.append(field);
+            }
+            result.append("}");
+        }
+
+        result.append(" }");
+
+        return result.toString();
     }
 }
