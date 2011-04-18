@@ -184,20 +184,27 @@ public class DAOFactoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + template.getEngineName()
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    template
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + template.getEngineName()
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        template
                         .getTableTemplate().getTableName()
-                            .toLowerCase()),
-                '_')
-            + "DAOFactory.java",
-            template.generate(),
-            charset);
+                        .toLowerCase()),
+                    '_')
+                + "DAOFactory.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

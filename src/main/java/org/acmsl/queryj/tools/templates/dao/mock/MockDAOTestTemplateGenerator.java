@@ -190,20 +190,27 @@ public class MockDAOTestTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "Mock"
-            + stringUtils.capitalize(
-                  englishGrammarUtils.getSingular(
-                      mockDAOTestTemplate
-                          .getTableTemplate()
-                              .getTableName().toLowerCase()),
-                '_')
-            + "DAOTest.java",
-            mockDAOTestTemplate.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "Mock"
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        mockDAOTestTemplate
+                        .getTableTemplate()
+                        .getTableName().toLowerCase()),
+                    '_')
+                + "DAOTest.java",
+                mockDAOTestTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

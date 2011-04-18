@@ -212,17 +212,24 @@ public class ValueObjectImplTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + valueObjectTemplateGenerator.getVoClassName(
-                  valueObjectImplTemplate.getTableName(),
-                  englishGrammarUtils,
-                  stringUtils)
-            + "ValueObject.java",
-            valueObjectImplTemplate.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + valueObjectTemplateGenerator.getVoClassName(
+                    valueObjectImplTemplate.getTableName(),
+                    englishGrammarUtils,
+                    stringUtils)
+                + "ValueObject.java",
+                valueObjectImplTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

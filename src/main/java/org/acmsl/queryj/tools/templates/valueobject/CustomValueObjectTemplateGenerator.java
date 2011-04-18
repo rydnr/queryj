@@ -159,64 +159,6 @@ public class CustomValueObjectTemplateGenerator
     }
 
     /**
-     * Writes a custom resultset extractor template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            EnglishGrammarUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a ValueObjectCreator template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
-      throws  IOException
-    {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + extractClassName(template.getResult().getClassValue())
-            + ".java",
-            template.generate(),
-            charset);
-    }
-
-    /**
      * Checks whether the given class name corresponds to
      * a standard value object or not.
      * @param className the class name.
@@ -311,5 +253,70 @@ public class CustomValueObjectTemplateGenerator
         final String fqdn, final PackageUtils packageUtils)
     {
         return packageUtils.extractClassName(fqdn);
+    }
+
+    /**
+     * Writes a custom resultset extractor template to disk.
+     * @param template the template to write.
+     * @param outputDir the output folder.
+     * @param charset the file encoding.
+     * @throws IOException if the file cannot be created.
+     */
+    public void write(
+        final BasePerCustomResultTemplate template,
+        final File outputDir,
+        final Charset charset)
+      throws  IOException
+    {
+        write(
+            template,
+            outputDir,
+            charset,
+            StringUtils.getInstance(),
+            EnglishGrammarUtils.getInstance(),
+            FileUtils.getInstance());
+    }
+
+    /**
+     * Writes a ValueObjectCreator template to disk.
+     * @param template the template to write.
+     * @param outputDir the output folder.
+     * @param charset the file encoding.
+     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @param fileUtils the <code>FileUtils</code> instance.
+     * @throws IOException if the file cannot be created.
+     * @precondition template != null
+     * @precondition outputDir != null
+     * @precondition stringUtils != null
+     * @precondition englishGrammarUtils != null
+     * @precondition fileUtils != null
+     */
+    protected void write(
+        final BasePerCustomResultTemplate template,
+        final File outputDir,
+        final Charset charset,
+        final StringUtils stringUtils,
+        final EnglishGrammarUtils englishGrammarUtils,
+        final FileUtils fileUtils)
+      throws  IOException
+    {
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + extractClassName(template.getResult().getClassValue())
+                + ".java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

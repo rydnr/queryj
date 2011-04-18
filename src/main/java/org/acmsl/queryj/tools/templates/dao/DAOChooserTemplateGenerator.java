@@ -152,6 +152,31 @@ public class DAOChooserTemplateGenerator
     }
 
     /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @return the capitalized value.
+     * @precondition value != null
+     */
+    protected String capitalize(final String value)
+    {
+        return capitalize(value, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return the capitalized value.
+     * @precondition value != null
+     * @precondition decorationUtils != null
+     */
+    protected String capitalize(
+        final String value, final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
+    }
+
+    /**
      * Writes a DAOChooser to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
@@ -195,39 +220,21 @@ public class DAOChooserTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + capitalize(template.getRepositoryName())
-            + "DAOChooser.java",
-            template.generate(),
-            charset);
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @return the capitalized value.
-     * @precondition value != null
-     */
-    protected String capitalize(final String value)
-    {
-        return capitalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the capitalized value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
-     */
-    protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + capitalize(template.getRepositoryName())
+                + "DAOChooser.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

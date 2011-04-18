@@ -173,7 +173,7 @@ public class ProcedureRepositoryTemplateGenerator
             if (t_FinalOutputDir.mkdirs())
             {
                 fileUtils.writeFile(
-                      t_FinalOutputDir.getAbsolutePath()
+                        t_FinalOutputDir.getAbsolutePath()
                     + File.separator
                     + procedureRepositoryTemplateUtils
                     .retrieveProcedureRepositoryClassName(

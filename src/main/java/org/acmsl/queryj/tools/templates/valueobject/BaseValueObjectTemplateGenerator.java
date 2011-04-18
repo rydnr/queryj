@@ -212,18 +212,25 @@ public class BaseValueObjectTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "Abstract"
-            + valueObjectTemplateGenerator.getVoClassName(
-                  baseValueObjectTemplate.getTableName(),
-                  englishGrammarUtils,
-                  stringUtils)
-            + "ValueObject.java",
-            baseValueObjectTemplate.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "Abstract"
+                + valueObjectTemplateGenerator.getVoClassName(
+                    baseValueObjectTemplate.getTableName(),
+                    englishGrammarUtils,
+                    stringUtils)
+                + "ValueObject.java",
+                baseValueObjectTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

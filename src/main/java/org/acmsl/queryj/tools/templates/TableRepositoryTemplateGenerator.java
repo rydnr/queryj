@@ -184,15 +184,22 @@ public class TableRepositoryTemplateGenerator
         final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
-                  template.getRepositoryName())
-            + ".java",
-            template.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
+                    template.getRepositoryName())
+                + ".java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

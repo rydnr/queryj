@@ -250,6 +250,43 @@ public class BaseAbstractDAOTemplateGenerator
         return BaseDAODecoratorFactory.getInstance();
     }
 
+
+    /**
+     * Checks whether the table contains static values or not.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    protected boolean isStaticTable(
+        final String tableName, final MetadataManager metadataManager)
+    {
+        return
+            isStaticTable(
+                tableName, metadataManager, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Checks whether the table contains static values or not.
+     * @param tableName the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return such information.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isStaticTable(
+        final String tableName,
+        final MetadataManager metadataManager,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+         return
+            metaLanguageUtils.containsStaticValues(
+                tableName, metadataManager);
+    }
+
     /**
      * Writes a <code>BaseAbstractDAOTemplate</code> to disk.
      * @param template the template to write.
@@ -299,54 +336,25 @@ public class BaseAbstractDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + "Abstract"
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    template.getTableName().toLowerCase()),
-                '_')
-            + "DAO.java",
-            template.generate(),
-            charset);
-    }
-
-    /**
-     * Checks whether the table contains static values or not.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return such information.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     */
-    protected boolean isStaticTable(
-        final String tableName, final MetadataManager metadataManager)
-    {
-        return
-            isStaticTable(
-                tableName, metadataManager, MetaLanguageUtils.getInstance());
-    }
-
-    /**
-     * Checks whether the table contains static values or not.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
-     * @return such information.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metaLanguageUtils != null
-     */
-    protected boolean isStaticTable(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetaLanguageUtils metaLanguageUtils)
-    {
-        return
-            metaLanguageUtils.containsStaticValues(
-                tableName, metadataManager);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + "Abstract"
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        template.getTableName().toLowerCase()),
+                    '_')
+                + "DAO.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

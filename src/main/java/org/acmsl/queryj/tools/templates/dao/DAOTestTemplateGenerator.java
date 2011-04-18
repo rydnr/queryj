@@ -215,19 +215,26 @@ public class DAOTestTemplateGenerator
         final EnglishGrammarUtils englishGrammarUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + daoTestTemplate.getEngineName()
-            + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    daoTestTemplate
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + daoTestTemplate.getEngineName()
+                + stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        daoTestTemplate
                         .getTableTemplate().getTableName().toLowerCase()),
-                '_')
-            + "DAOTest.java",
-            daoTestTemplate.generate(),
-            charset);
+                    '_')
+                + "DAOTest.java",
+                daoTestTemplate.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

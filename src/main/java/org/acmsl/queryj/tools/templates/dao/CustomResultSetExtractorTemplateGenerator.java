@@ -197,20 +197,27 @@ public class CustomResultSetExtractorTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + stringUtils.capitalize(
-                stringUtils.capitalize(
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + stringUtils.capitalize(
                     stringUtils.capitalize(
-                        template.getResult().getId(),
-                        '.'),
-                    '_'),
-                '-')
-            + "Extractor.java",
-            template.generate(),
-            charset);
+                        stringUtils.capitalize(
+                            template.getResult().getId(),
+                            '.'),
+                        '_'),
+                    '-')
+                + "Extractor.java",
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }

@@ -202,14 +202,21 @@ public class ConfigurationPropertiesTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        outputDir.mkdirs();
-
-        fileUtils.writeFile(
-              outputDir.getAbsolutePath()
-            + File.separator
-            + daoChooserTemplateUtils.retrievePropertiesFileName(
-                  repository.toLowerCase()),
-            template.generate(),
-            charset);
+        if (outputDir.mkdirs())
+        {
+            fileUtils.writeFile(
+                  outputDir.getAbsolutePath()
+                + File.separator
+                + daoChooserTemplateUtils.retrievePropertiesFileName(
+                    repository.toLowerCase()),
+                template.generate(),
+                charset);
+        }
+        else
+        {
+            throw
+                new IOException(
+                    "Cannot create output dir: " + outputDir);
+        }
     }
 }
