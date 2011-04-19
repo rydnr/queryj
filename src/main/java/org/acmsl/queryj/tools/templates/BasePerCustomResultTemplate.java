@@ -238,7 +238,7 @@ public abstract class BasePerCustomResultTemplate
             new Integer[]
             {
                 STARTING_YEAR,
-                new Integer(retrieveCurrentYear())
+                Integer.valueOf(retrieveCurrentYear())
             },
             customResult,
             header,

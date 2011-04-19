@@ -98,7 +98,7 @@ public class StatementFlagsElementFactory
         if  (t_strFetchSize != null)
         {
             t_iFetchSize =
-                new Integer(conversionUtils.toInt(t_strFetchSize));
+                Integer.valueOf(conversionUtils.toInt(t_strFetchSize));
         }
 
         Integer t_iMaxFieldSize = null;
@@ -109,7 +109,7 @@ public class StatementFlagsElementFactory
         if  (t_strMaxFieldSize != null)
         {
             t_iMaxFieldSize =
-                new Integer(conversionUtils.toInt(t_strMaxFieldSize));
+                Integer.valueOf(conversionUtils.toInt(t_strMaxFieldSize));
         }
 
         Integer t_iMaxRows = null;
@@ -120,7 +120,7 @@ public class StatementFlagsElementFactory
         if  (t_strMaxRows != null)
         {
             t_iMaxRows =
-                new Integer(conversionUtils.toInt(t_strMaxRows));
+                Integer.valueOf(conversionUtils.toInt(t_strMaxRows));
         }
 
         Integer t_iQueryTimeout = null;
@@ -131,7 +131,7 @@ public class StatementFlagsElementFactory
         if  (t_strQueryTimeout != null)
         {
             t_iQueryTimeout =
-                new Integer(conversionUtils.toInt(t_strQueryTimeout));
+                Integer.valueOf(conversionUtils.toInt(t_strQueryTimeout));
         }
 
         String t_strFetchDirection = 

@@ -230,7 +230,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value)'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value)'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -273,7 +273,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'calendar, new Integer(value)'}');\n"
+        + "                    new Object[]'{'calendar, Integer.valueOf(value)'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n";
@@ -473,7 +473,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Long(value), field'}');\n"
+        + "                    new Object[]'{'Long.valueOf(value), field'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -494,7 +494,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Long(value), text'}');\n"
+        + "                    new Object[]'{'Long.valueOf(value), text'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n";
@@ -675,7 +675,7 @@ public interface FunctionsTemplateDefaults
         + "        '{'\n"
         + "            result =\n"
         + "                new _{2}FieldWrapper(\n"
-        + "                    field, \"{4}\", new Object[]'{'new Integer(value)'}');\n"
+        + "                    field, \"{4}\", new Object[]'{'Integer.valueOf(value)'}');\n"
          // return type - quote
         + "        '}'\n\n"
         + "        return result;\n"
@@ -696,7 +696,7 @@ public interface FunctionsTemplateDefaults
         + "        '{'\n"
         + "            result =\n"
         + "                new _{2}FieldWrapper(\n"
-        + "                    null, \"{4}\", new Object[]'{'new Integer(value), field'}');\n"
+        + "                    null, \"{4}\", new Object[]'{'Integer.valueOf(value), field'}');\n"
          // return type - quote
         + "        '}'\n\n"
         + "        return result;\n"
@@ -717,8 +717,8 @@ public interface FunctionsTemplateDefaults
         + "                \"{4}\",\n"
         + "                new Object[]\n"
         + "                '{'\n"
-        + "                    new Integer(firstValue),\n"
-        + "                    new Integer(secondValue)\n"
+        + "                    Integer.valueOf(firstValue),\n"
+        + "                    Integer.valueOf(secondValue)\n"
         + "                '}');\n"
          // return type - quote
         + "    '}'\n\n";
@@ -772,7 +772,7 @@ public interface FunctionsTemplateDefaults
         + "        '{'\n"
         + "            result =\n"
         + "                new _{2}FieldWrapper(\n"
-        + "                    field, \"{4}\", new Object[]'{'new Long(value)'}');\n"
+        + "                    field, \"{4}\", new Object[]'{'Long.valueOf(value)'}');\n"
          // return type - quote
         + "        '}'\n\n"
         + "        return result;\n"
@@ -793,7 +793,7 @@ public interface FunctionsTemplateDefaults
         + "        '{'\n"
         + "            result =\n"
         + "                new _{2}FieldWrapper(\n"
-        + "                    null, \"{4}\", new Object[]'{'new Long(value), field'}');\n"
+        + "                    null, \"{4}\", new Object[]'{'Long.valueOf(value), field'}');\n"
          // return type - quote
         + "        '}'\n\n"
         + "        return result;\n"
@@ -814,8 +814,8 @@ public interface FunctionsTemplateDefaults
         + "                \"{4}\",\n"
         + "                new Object[]\n"
         + "                '{'\n"
-        + "                    new Long(firstValue),\n"
-        + "                    new Long(secondValue)\n"
+        + "                    Long.valueOf(firstValue),\n"
+        + "                    Long.valueOf(secondValue)\n"
         + "                '}');\n"
          // return type - quote
         + "    '}'\n\n";
@@ -1056,7 +1056,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value)'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1099,7 +1099,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'text, new Integer(value)'}');\n"
+        + "                    new Object[]'{'text, Integer.valueOf(value)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n";
@@ -1662,7 +1662,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value), field1, field2'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value), field1, field2'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1686,7 +1686,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value1), field, value2'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value1), field, value2'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1710,7 +1710,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value1), value2, field'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value1), value2, field'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1734,7 +1734,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value1), value2, value3'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value1), value2, value3'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n";
@@ -1821,7 +1821,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field1,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value), field2'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value), field2'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1845,7 +1845,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value1), value2'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value1), value2'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1919,7 +1919,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, new Integer(value2), field'}');\n"
+        + "                    new Object[]'{'value1, Integer.valueOf(value2), field'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -1943,7 +1943,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, new Integer(value2), value3'}');\n"
+        + "                    new Object[]'{'value1, Integer.valueOf(value2), value3'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n";
@@ -2005,7 +2005,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field1,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'field2, new Integer(value)'}');\n"
+        + "                    new Object[]'{'field2, Integer.valueOf(value)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2054,7 +2054,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, new Integer(value2)'}');\n"
+        + "                    new Object[]'{'value1, Integer.valueOf(value2)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2103,7 +2103,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, field, new Integer(value2)'}');\n"
+        + "                    new Object[]'{'value1, field, Integer.valueOf(value2)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2152,7 +2152,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, value2, new Integer(value3)'}');\n"
+        + "                    new Object[]'{'value1, value2, Integer.valueOf(value3)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n";
@@ -2215,7 +2215,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field1,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'field2, new Integer(value)'}');\n"
+        + "                    new Object[]'{'field2, Integer.valueOf(value)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2239,7 +2239,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field1,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value), field2'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value), field2'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2262,7 +2262,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value1), new Integer(value2)'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value1), Integer.valueOf(value2)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2311,7 +2311,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, field, new Integer(value2)'}');\n"
+        + "                    new Object[]'{'value1, field, Integer.valueOf(value2)'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2335,7 +2335,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'value1, new Integer(value2), field'}');\n"
+        + "                    new Object[]'{'value1, Integer.valueOf(value2), field'}');\n"
         + "        '}'\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2361,8 +2361,8 @@ public interface FunctionsTemplateDefaults
         + "                    new Object[]\n"
         + "                    '{'\n"
         + "                         value1,\n"
-        + "                         new Integer(value2),\n"
-        + "                         new Integer(value3)\n"
+        + "                         Integer.valueOf(value2),\n"
+        + "                         Integer.valueOf(value3)\n"
         + "                    '}');\n"
         + "        '}'\n"
         + "        return result;\n"
@@ -2429,7 +2429,7 @@ public interface FunctionsTemplateDefaults
         + "            new _{2}FieldWrapper(\n" // field type
         + "                null,\n"
         + "                \"{4}\",\n" // function
-        + "                new Object[]'{'new Double(value)'}');\n"
+        + "                new Object[]'{'Double.valueOf(value)'}');\n"
         + "    '}'\n\n";
 
     /**
@@ -2479,7 +2479,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Integer(value)'}');\n"
+        + "                    new Object[]'{'Integer.valueOf(value)'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2500,7 +2500,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Double(value), field'}');\n"
+        + "                    new Object[]'{'Double.valueOf(value), field'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2520,8 +2520,8 @@ public interface FunctionsTemplateDefaults
         + "                \"{4}\",\n" // function
         + "                new Object[]\n"
         + "                '{'\n"
-        + "                    new Double(arg1),\n"
-        + "                    new Integer(value)\n"
+        + "                    Double.valueOf(arg1),\n"
+        + "                    Integer.valueOf(value)\n"
         + "                '}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
@@ -2574,7 +2574,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Double(value)'}');\n"
+        + "                    new Object[]'{'Double.valueOf(value)'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n"
@@ -2595,7 +2595,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Double(value), field'}');\n"
+        + "                    new Object[]'{'Double.valueOf(value), field'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2613,7 +2613,7 @@ public interface FunctionsTemplateDefaults
         + "            new _{2}FieldWrapper(\n"
         + "                null,\n"
         + "                \"{4}\",\n" // function
-        + "                new Object[]'{'new Double(arg1), new Double(arg2)'}');\n"
+        + "                new Object[]'{'Double.valueOf(arg1), Double.valueOf(arg2)'}');\n"
         + "    '}'\n\n";
 
     /**
@@ -2663,7 +2663,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    field,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Long(value)'}');\n"
+        + "                    new Object[]'{'Long.valueOf(value)'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n"
@@ -2684,7 +2684,7 @@ public interface FunctionsTemplateDefaults
         + "                new _{2}FieldWrapper(\n"
         + "                    null,\n"
         + "                    \"{4}\",\n" // function
-        + "                    new Object[]'{'new Double(value), field'}');\n"
+        + "                    new Object[]'{'Double.valueOf(value), field'}');\n"
         + "        '}'\n\n"
         + "        return result;\n"
         + "    '}'\n\n"
@@ -2702,7 +2702,7 @@ public interface FunctionsTemplateDefaults
         + "            new _{2}FieldWrapper(\n"
         + "                null,\n"
         + "                \"{4}\",\n" // function
-        + "                new Object[]'{'new Double(arg1), new Long(arg2)'}');\n"
+        + "                new Object[]'{'Double.valueOf(arg1), Long.valueOf(arg2)'}');\n"
         + "    '}'\n\n";
 
 
@@ -2796,7 +2796,7 @@ public interface FunctionsTemplateDefaults
         + "        private _{0}FieldWrapper(final long value, final String function)\n"
         + "        '{'\n"
         + "            this((Field) null, function);\n"
-        + "            inmutableSetParameters(new Object[]'{'new Long(value)'}');\n"
+        + "            inmutableSetParameters(new Object[]'{'Long.valueOf(value)'}');\n"
         + "        '}'\n\n"
         + "        /**\n"
         + "         * Builds a FieldWrapper for given value.\n"

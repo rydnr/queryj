@@ -836,7 +836,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         columnTypes.put(
             buildKey(tableName, columnName),
-            new Integer(columnType));
+            Integer.valueOf(columnType));
     }
 
     /**
@@ -3459,7 +3459,7 @@ public abstract class AbstractJdbcMetadataManager
 
         boolean t_bBounded = (size > 0);
 
-        Collection t_cResult = null;
+        Collection<Integer> t_cResult = null;
 
         if  (t_bBounded)
         {
@@ -3467,7 +3467,7 @@ public abstract class AbstractJdbcMetadataManager
         }
         else
         {
-            t_cResult = new ArrayList();
+            t_cResult = new ArrayList<Integer>();
         }
             
         int t_iCounter = 0;
@@ -3491,7 +3491,7 @@ public abstract class AbstractJdbcMetadataManager
             }
             else
             {
-                t_cResult.add(new Integer(t_iCurrentRecord));
+                t_cResult.add(Integer.valueOf(t_iCurrentRecord));
             }
         }
 
@@ -3501,13 +3501,14 @@ public abstract class AbstractJdbcMetadataManager
 
             t_iCounter = 0;
 
-            Iterator t_itResults = t_cResult.iterator();
+            Iterator<Integer> t_itResults = t_cResult.iterator();
 
-            while  (   (t_itResults != null)
-                    && (t_itResults.hasNext()))
+            if  (t_itResults != null)
             {
-                result[t_iCounter++] =
-                    ((Integer) t_itResults.next()).intValue();
+                while  (t_itResults.hasNext())
+                {
+                    result[t_iCounter++] = t_itResults.next().intValue();
+                }
             }
         }
 

@@ -239,7 +239,7 @@ public abstract class BasePerCustomSqlTemplate
             new Integer[]
             {
                 STARTING_YEAR,
-                new Integer(retrieveCurrentYear())
+                Integer.valueOf(retrieveCurrentYear())
             },
             sql,
             customSqlProvider,

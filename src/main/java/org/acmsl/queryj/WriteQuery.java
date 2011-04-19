@@ -72,7 +72,7 @@ public abstract class WriteQuery
     /**
      * The values.
      */
-    private Map m__mValues;
+    private Map<Field,Object> m__mValues;
 
     /**
      * The table.
@@ -82,7 +82,7 @@ public abstract class WriteQuery
     /**
      * The escaping flags.
      */
-    private Map m__mEscapingFlags;
+    private Map<String,Boolean> m__mEscapingFlags;
 
     /**
      * Constructs a query.
@@ -136,7 +136,7 @@ public abstract class WriteQuery
      * Specifies new value collection.
      * @param map the new map.
      */
-    protected void setValues(final Map map)
+    protected void setValues(final Map<Field,Object> map)
     {
         immutableSetValues(map);
     }
@@ -145,9 +145,36 @@ public abstract class WriteQuery
      * Retrieves the value collection.
      * @return such map.
      */
-    protected Map getValues()
+    protected Map<Field,Object> getValues()
     {
         return m__mValues;
+    }
+
+    /**
+     * Specifies the escaping flags.
+     * @param map such map.
+     */
+    protected final void immutableSetEscapingFlags(final Map map)
+    {
+        m__mEscapingFlags = map;
+    }
+
+    /**
+     * Specifies the escaping flags.
+     * @param map such map.
+     */
+    protected void setEscapingFlags(final Map<String,Boolean> map)
+    {
+        immutableSetEscapingFlags(map);
+    }
+
+    /**
+     * Retrieves the escaping flags.
+     * @return such map.
+     */
+    protected Map<String,Boolean> getEscapingFlags()
+    {
+        return m__mEscapingFlags;
     }
 
     /**
@@ -189,8 +216,8 @@ public abstract class WriteQuery
         final StringField field,
         final String value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        final Map<Field,Object> values,
+        final Map<String,Boolean> escapingFlags)
     {
         String t_strValue = value;
 
@@ -229,7 +256,7 @@ public abstract class WriteQuery
     protected void putValue(
         final IntField field, final int value, final Map values)
     {
-        values.put(field, new Integer(value));
+        values.put(field, Integer.valueOf(value));
     }
 
     /**
@@ -302,7 +329,7 @@ public abstract class WriteQuery
     protected void putValue(
         final LongField field, final long value, final Map values)
     {
-        values.put(field, new Long(value));
+        values.put(field, Long.valueOf(value));
     }
 
     /**
@@ -373,7 +400,7 @@ public abstract class WriteQuery
     protected void putValue(
         final DoubleField field, final double value, final Map values)
     {
-        values.put(field, new Double(value));
+        values.put(field, Double.valueOf(value));
     }
 
     /**
@@ -1149,33 +1176,6 @@ public abstract class WriteQuery
     }
 
     /**
-     * Specifies the escaping flags.
-     * @param map such map.
-     */
-    protected final void immutableSetEscapingFlags(final Map map)
-    {
-        m__mEscapingFlags = map;
-    }
-
-    /**
-     * Specifies the escaping flags.
-     * @param map such map.
-     */
-    protected void setEscapingFlags(final Map map)
-    {
-        immutableSetEscapingFlags(map);
-    }
-
-    /**
-     * Retrieves the escaping flags.
-     * @return such map.
-     */
-    protected Map getEscapingFlags()
-    {
-        return m__mEscapingFlags;
-    }
-
-    /**
      * Checks whether given value should be escaped or not.
      * @param value the value to check.
      * @return <code>true</code> if given value should be escaped.
@@ -1225,7 +1225,7 @@ public abstract class WriteQuery
      * @return the escaping flag key.
      * @precondition value != null
      */
-    protected Object buildEscapingFlagKey(final Object value)
+    protected String buildEscapingFlagKey(final Object value)
     {
         return "||queryj||escaping-flag||" + value;
     }

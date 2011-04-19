@@ -175,7 +175,7 @@ public class DAOFactoryTemplate
             new Integer[]
             {
                 STARTING_YEAR,
-                new Integer(retrieveCurrentYear())
+                Integer.valueOf(retrieveCurrentYear())
             },
             header,
             t_strTableName,

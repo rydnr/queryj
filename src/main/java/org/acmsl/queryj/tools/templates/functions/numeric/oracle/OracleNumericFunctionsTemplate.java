@@ -65,48 +65,40 @@ public class OracleNumericFunctionsTemplate
      * The capitalized words.
      */
     static final String[] CAPITALIZED_WORDS =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "abs",
-                        "acos",
-                        "asin",
-                        "atan",
-                        "bit",
-                        "count",
-                        "ceiling",
-                        "degrees",
-                        "floor",
-                        "log",
-                        "max",
-                        "min",
-                        "mod",
-                        "pi",
-                        "pow",
-                        "radians",
-                        "rand",
-                        "round",
-                        "sqrt",
-                        "truncate"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "abs",
+            "acos",
+            "asin",
+            "atan",
+            "bit",
+            "count",
+            "ceiling",
+            "degrees",
+            "floor",
+            "log",
+            "max",
+            "min",
+            "mod",
+            "pi",
+            "pow",
+            "radians",
+            "rand",
+            "round",
+            "sqrt",
+            "truncate"
+        };
 
     /**
      * The field types.
      */
     static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "Double",
-                        "Int",
-                        "Long"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "Double",
+            "Int",
+            "Long"
+        };
 
     /**
      * Builds a <code>OracleNumericFunctionsTemplate</code>

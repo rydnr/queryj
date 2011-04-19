@@ -438,7 +438,7 @@ public abstract class BasePerTableTemplate
             new Integer[]
             {
                 STARTING_YEAR,
-                new Integer(retrieveCurrentYear())
+                Integer.valueOf(retrieveCurrentYear())
             },
             tableName,
             t_strCapitalizedValueObjectName,

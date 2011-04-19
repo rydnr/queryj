@@ -64,16 +64,7 @@ public class OracleSystemFunctionsTemplate
     /**
      * The field types.
      */
-    static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "String",
-                        "Long"
-                    }))
-            .toArray();
+    static final String[] FIELD_TYPES = new String[] { "String", "Long" };
 
     /**
      * Builds a OracleSystemFunctionsTemplate using given information.

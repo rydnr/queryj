@@ -59,33 +59,20 @@ public class OracleTextFunctionsTemplate
      * The capitalized words.
      */
     static final String[] CAPITALIZED_WORDS =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "ascii",
-                        "char",
-                        "length",
+        new String[]
+        {
+            "ascii",
+            "char",
+            "length",
 //            "in",
-                        "insert",
-                        "index"
-                    }))
-            .toArray();
+            "insert",
+            "index"
+        };
 
     /**
      * The field types.
      */
-    static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "String",
-                        "Int"
-                    }))
-            .toArray();
+    static final String[] FIELD_TYPES = new String[] { "String", "Int" };
 
     /**
      * Builds a OracleTextFunctionsTemplate using given information.

@@ -59,33 +59,21 @@ public class MySQLTextFunctionsTemplate
      * The capitalized words.
      */
     static final String[] CAPITALIZED_WORDS =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "ascii",
-                        "char",
-                        "length",
-                     // "in",
-                        "insert",
-                        "index"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "ascii",
+            "char",
+            "length",
+            // "in",
+            "insert",
+            "index"
+        };
 
     /**
      * The field types.
      */
     static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "String",
-                        "Int"
-                    }))
-            .toArray();
+        new String[] { "String", "Int" };
 
     /**
      * Builds a <code>MySQLTextFunctionsTemplate</code> using given

@@ -417,7 +417,7 @@ public class ConditionFactory
          * Retrieves the variable conditions.
          * @return such collection.
          */
-        public Collection getVariableConditions()
+        public Collection<VariableCondition> getVariableConditions()
         {
             return
                 getVariableConditions(
@@ -429,15 +429,15 @@ public class ConditionFactory
          * Retrieves the variable conditions.
          * @return such collection.
          */
-        protected Collection getVariableConditions(
-            final Collection parentVariableConditions,
+        protected Collection<VariableCondition> getVariableConditions(
+            final Collection<VariableCondition> parentVariableConditions,
             final Condition condition)
         {
-            Collection result = parentVariableConditions;
+            Collection<VariableCondition> result = parentVariableConditions;
 
             if  (condition != null) 
             {
-                Collection t_cVariableConditions =
+                Collection<VariableCondition> t_cVariableConditions =
                     condition.getVariableConditions();
 
                 if  (   (t_cVariableConditions != null)
@@ -445,7 +445,7 @@ public class ConditionFactory
                 {
                     if  (result == null)
                     {
-                        result = new ArrayList();
+                        result = new ArrayList<VariableCondition>();
                     }
 
                     result.addAll(t_cVariableConditions);
@@ -753,7 +753,7 @@ public class ConditionFactory
          * Retrieves the variable conditions.
          * @return such collection.
          */
-        public Collection getVariableConditions()
+        public Collection<VariableCondition> getVariableConditions()
         {
             return
                 getVariableConditions(
@@ -767,15 +767,15 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such collection.
          */
-        public Collection getVariableConditions(
-            final Collection parentVariableConditions,
+        public Collection<VariableCondition> getVariableConditions(
+            final Collection<VariableCondition> parentVariableConditions,
             final Condition condition)
         {
-            Collection result = parentVariableConditions;
+            Collection<VariableCondition> result = parentVariableConditions;
 
             if  (condition != null) 
             {
-                Collection t_cVariableConditions =
+                Collection<VariableCondition> t_cVariableConditions =
                     condition.getVariableConditions();
 
                 if  (   (t_cVariableConditions != null)
@@ -783,7 +783,7 @@ public class ConditionFactory
                 {
                     if  (result == null)
                     {
-                        result = new ArrayList();
+                        result = new ArrayList<VariableCondition>();
                     }
 
                     result.addAll(t_cVariableConditions);
@@ -851,8 +851,23 @@ public class ConditionFactory
         {
             return prefix + condition + suffix;
         }
-    }
 
+        /**
+         * {@inheritDoc}
+         */
+        public boolean equals(final Object object)
+        {
+            return super.equals(object);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int hashCode()
+        {
+            return super.hashCode();
+        }
+    }
 
     /**
      * Envelopes a variable condition surrounding it with appropiate
@@ -1147,6 +1162,22 @@ public class ConditionFactory
             final String suffix)
         {
             return prefix + condition + suffix;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public boolean equals(final Object object)
+        {
+            return super.equals(object);
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        public int hashCode()
+        {
+            return super.hashCode();
         }
     }
 }

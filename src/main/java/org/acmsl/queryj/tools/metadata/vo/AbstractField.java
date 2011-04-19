@@ -48,11 +48,6 @@ public abstract class AbstractField
     implements  Field
 {
     /**
-     * The field type.
-     */
-    private String m__strType;
-
-    /**
      * The field pk nature.
      */
     private boolean m__bPk = false;

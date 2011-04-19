@@ -58,7 +58,7 @@ public abstract class Condition
     /**
      * The possible list of variable conditions.
      */
-    private Collection m__cVariableConditions;
+    private Collection<VariableCondition> m__cVariableConditions;
 
     /**
      * Creates a condition.
@@ -87,34 +87,44 @@ public abstract class Condition
      * Specifies the variable conditions.
      * @param collection the variable conditions.
      */
-    protected void setVariableConditionCollection(final Collection collection)
+    protected void setVariableConditionCollection(final Collection<VariableCondition> collection)
     {
         m__cVariableConditions = collection;
+    }
+
+    /**
+     * Retrieves the variable conditions.
+     * @return such collection.
+     */
+    protected final Collection<VariableCondition> immutableGetVariableConditions()
+    {
+        return m__cVariableConditions;
     }
 
     /**
      * Retrieves the variable condition colleciton.
      * @return such collection.
      */
-    protected Collection getVariableConditionCollection()
+    protected Collection<VariableCondition> getVariableConditionCollection()
     {
-        return m__cVariableConditions;
+        return immutableGetVariableConditions();
     }
 
     /**
      * Adds new variable conditions.
      * @param conditions the new conditions.
      */
-    protected void addVariableConditions(final Collection conditions)
+    protected void addVariableConditions(final Collection<VariableCondition> conditions)
     {
         if  (   (conditions != null)
              && (conditions.size() > 0))
         {
-            Collection t_cVariableConditions = getVariableConditionCollection();
+            Collection<VariableCondition> t_cVariableConditions =
+                getVariableConditionCollection();
 
             if  (t_cVariableConditions == null)
             {
-                t_cVariableConditions = new ArrayList();
+                t_cVariableConditions = new ArrayList<VariableCondition>();
                 setVariableConditionCollection(t_cVariableConditions);
             }
 
@@ -126,15 +136,27 @@ public abstract class Condition
      * Retrieves the variable conditions.
      * @return such collection.
      */
-    public Collection getVariableConditions()
+    public Collection<VariableCondition> getVariableConditions()
     {
-        Collection result = new ArrayList();
+        return getVariableConditions(immutableGetVariableConditions());
+    }
+
+    /**
+     * Retrieves the variable conditions.
+     * @param explicitConditions the explicit/non-wrapped conditions.
+     * @return such collection.
+     */
+    protected Collection<VariableCondition> getVariableConditions(
+        final Collection<VariableCondition> explicitConditions)
+    {
+        Collection<VariableCondition> result = new ArrayList<VariableCondition>();
 
         Condition t_InnerCondition = getInnerCondition();
 
         if  (t_InnerCondition != null)
         {
-            Collection t_cInnerVariableConditions = t_InnerCondition.getVariableConditions();
+            Collection<VariableCondition> t_cInnerVariableConditions =
+                t_InnerCondition.getVariableConditions();
 
             if  (   (t_cInnerVariableConditions != null)
                  && (t_cInnerVariableConditions.size() > 0))
@@ -143,9 +165,9 @@ public abstract class Condition
             }
         }
 
-        if  (m__cVariableConditions != null)
+        if  (explicitConditions != null)
         {
-            result.addAll(m__cVariableConditions);
+            result.addAll(explicitConditions);
         }
 
         return result;

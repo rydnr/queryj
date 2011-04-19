@@ -69,47 +69,39 @@ public class MySQLTimeFunctionsTemplate
      * The capitalized words.
      */
     static final String[] CAPITALIZED_WORDS =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "week",
-                        "day",
-                        "month",
-                        "year",
-                        "name",
-                        "hour",
-                        "minute",
-                        "sec",
-                        "second",
-                        "format",
-                        "date",
-                        "time",
-                        "cur",
-                        "current",
-                        "timestamp",
-                        "unix",
-                        "of",
-                        "from"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "week",
+            "day",
+            "month",
+            "year",
+            "name",
+            "hour",
+            "minute",
+            "sec",
+            "second",
+            "format",
+            "date",
+            "time",
+            "cur",
+            "current",
+            "timestamp",
+            "unix",
+            "of",
+            "from"
+        };
 
     /**
      * The field types.
      */
     static final String[] FIELD_TYPES =
-        (String[])
-            Collections.unmodifiableList(
-                Arrays.asList(
-                    new String[]
-                    {
-                        "Int",
-                        "String",
-                        "Long",
-                        "Calendar"
-                    }))
-            .toArray();
+        new String[]
+        {
+            "Int",
+            "String",
+            "Long",
+            "Calendar"
+        };
 
     /**
      * Builds a MySQLTimeFunctionsTemplate using given information.

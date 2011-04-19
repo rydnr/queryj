@@ -210,7 +210,7 @@ public abstract class BasePerRepositoryTemplate
             new Integer[]
             {
                 STARTING_YEAR,
-                new Integer(retrieveCurrentYear())
+                Integer.valueOf(retrieveCurrentYear())
             },
             stringUtils);
 

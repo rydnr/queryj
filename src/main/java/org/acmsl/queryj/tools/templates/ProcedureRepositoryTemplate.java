@@ -408,7 +408,7 @@ public class ProcedureRepositoryTemplate
                                 t_OutParameterRegistrationFormatter.format(
                                     new Object[]
                                     {
-                                        new Integer(t_iIndex + 1),
+                                        Integer.valueOf(t_iIndex + 1),
                                         metadataTypeManager.getConstantName(
                                             t_aProcedureParametersMetadata[
                                                 t_iIndex].getType())
@@ -428,7 +428,7 @@ public class ProcedureRepositoryTemplate
                                                 t_aProcedureParametersMetadata[
                                                     t_iIndex].getDataType()),
                                             '_'),
-                                        new Integer(t_iIndex + 1)
+                                        Integer.valueOf(t_iIndex + 1)
                                     }));
 
                             t_iParameterIndex++;

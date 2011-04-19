@@ -655,7 +655,7 @@ public class ParameterValidationHandler
             {
                 try
                 {
-                    Charset t_Charset = Charset.forName(encoding);
+                    Charset.forName(encoding);
                 }
                 catch (final IllegalCharsetNameException illegalCharset)
                 {

@@ -239,7 +239,7 @@ public abstract class BasePerForeignKeyTemplate
             new Integer[]
             {
                 STARTING_YEAR,
-                new Integer(retrieveCurrentYear())
+                Integer.valueOf(retrieveCurrentYear())
             },
             foreignKey,
             engineName,

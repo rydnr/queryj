@@ -432,9 +432,9 @@ public class CustomSqlValidationHandler
 
         Method t_Method = null;
 
-        Collection t_cSetterParams = null;
+        Collection<Class> t_cSetterParams = null;
 
-        Class t_Type = null;
+        Class<?> t_Type = null;
 
         String t_strType = null;
 
@@ -448,7 +448,7 @@ public class CustomSqlValidationHandler
 
             t_Parameter = t_aParameters[t_iParameterIndex];
 
-            t_cSetterParams = new ArrayList();
+            t_cSetterParams = new ArrayList<Class>();
 
             t_cSetterParams.add(Integer.TYPE);
 
@@ -484,7 +484,7 @@ public class CustomSqlValidationHandler
                         retrieveMethod(
                             statement.getClass(),
                             getSetterMethod(t_strType, metadataTypeManager),
-                            (Class[]) t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
+                            t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
                 }
                 catch  (final NoSuchMethodException noSuchMethodException)
                 {
@@ -649,7 +649,7 @@ public class CustomSqlValidationHandler
                             statement,
                             new Object[]
                             {
-                                new Integer(t_iParameterIndex + 1),
+                                Integer.valueOf(t_iParameterIndex + 1),
                                 t_ParameterValue
                             });
                         
@@ -713,7 +713,7 @@ public class CustomSqlValidationHandler
     protected ParameterElement[] retrieveParameterElements(
         final Sql sql, final CustomSqlProvider customSqlProvider)
     {
-        Collection t_cResult = new ArrayList();
+        Collection<ParameterElement> t_cResult = new ArrayList<ParameterElement>();
 
         Collection t_cParameterRefs = sql.getParameterRefs();
 
@@ -732,9 +732,7 @@ public class CustomSqlValidationHandler
             }
         }
 
-        return
-            (ParameterElement[])
-                t_cResult.toArray(EMPTY_PARAMETERELEMENT_ARRAY);
+        return t_cResult.toArray(EMPTY_PARAMETERELEMENT_ARRAY);
     }
 
     /**
@@ -852,8 +850,7 @@ public class CustomSqlValidationHandler
         {
             if  (resultSet.next())
             {
-                Iterator t_Iterator =
-                    (t_cProperties != null) ? t_cProperties.iterator() : null;
+                Iterator t_Iterator = t_cProperties.iterator();
 
                 if  (t_Iterator != null)
                 {
@@ -956,7 +953,7 @@ public class CustomSqlValidationHandler
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
-    protected Collection retrieveProperties(
+    protected Collection<Property> retrieveProperties(
         final Sql sql,
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
@@ -964,9 +961,9 @@ public class CustomSqlValidationHandler
         final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        Collection result = new ArrayList();
+        Collection<Property> result = new ArrayList<Property>();
         
-        Collection t_cPropertyRefs =
+        Collection<PropertyRefElement> t_cPropertyRefs =
             (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
 
         if  (t_cPropertyRefs == null)
@@ -980,7 +977,7 @@ public class CustomSqlValidationHandler
         }
         else
         {
-            Iterator t_Iterator = t_cPropertyRefs.iterator();
+            Iterator<PropertyRefElement> t_Iterator = t_cPropertyRefs.iterator();
 
             Object t_Item;
             Property t_Property;
@@ -989,18 +986,12 @@ public class CustomSqlValidationHandler
             {
                 while  (t_Iterator.hasNext())
                 {
-                    t_Item = t_Iterator.next();
+                    t_Property =
+                        customSqlProvider.resolveReference(t_Iterator.next());
 
-                    if  (t_Item instanceof PropertyRefElement)
+                    if  (t_Property != null)
                     {
-                        t_Property =
-                            customSqlProvider.resolveReference(
-                                (PropertyRefElement) t_Item);
-
-                        if  (t_Property != null)
-                        {
-                            result.add(t_Property);
-                        }
+                        result.add(t_Property);
                     }
                 }
             }
@@ -1023,7 +1014,7 @@ public class CustomSqlValidationHandler
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
-    protected Collection retrieveImplicitProperties(
+    protected Collection<Property> retrieveImplicitProperties(
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
@@ -1055,7 +1046,7 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager != null
      * @precondition customResultUtils != null
      */
-    protected Collection retrieveImplicitProperties(
+    protected Collection<Property> retrieveImplicitProperties(
         final Result sqlResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
@@ -1063,7 +1054,7 @@ public class CustomSqlValidationHandler
         final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        Collection result = new ArrayList();
+        Collection<Property> result = new ArrayList<Property>();
 
         String t_strTable =
             customResultUtils.retrieveTable(
@@ -1158,12 +1149,11 @@ public class CustomSqlValidationHandler
             if  (property.getIndex() > 0)
             {
                 t_aParameters[0] =
-                    new Integer(property.getIndex());
+                    Integer.valueOf(property.getIndex());
             }
             else
             {
-                t_aParameters[0] =
-                    property.getColumnName();
+                t_aParameters[0] = property.getColumnName();
             }
 
             method.invoke(resultSet, t_aParameters);
@@ -1314,7 +1304,7 @@ public class CustomSqlValidationHandler
      * @precondition methodName != null
      */
     protected Method retrieveMethod(
-        final Class instanceClass, final String methodName, final Class[] parameterClasses)
+        final Class<?> instanceClass, final String methodName, final Class[] parameterClasses)
       throws  NoSuchMethodException
     {       
         return instanceClass.getDeclaredMethod(methodName, parameterClasses);

@@ -481,7 +481,7 @@ public abstract class AbstractTemplate
      */
     protected String createTimestamp()
     {
-        return createTimestamp(new Date(), TIMESTAMP_FORMATTER);
+        return createTimestamp(new Date(), TIMESTAMP_FORMAT);
     }
     
     /**
@@ -493,9 +493,9 @@ public abstract class AbstractTemplate
      * @precondition formatter != null
      */
     protected String createTimestamp(
-        final Date date, final DateFormat formatter)
+        final Date date, final String format)
     {
-        return formatter.format(date);
+        return new SimpleDateFormat(format).format(date);
     }
 
     /**

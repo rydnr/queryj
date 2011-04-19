@@ -45,11 +45,6 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
     extends  AbstractTemplate
 {
     /**
-     * The header.
-     */
-    private String m__strHeader;
-
-    /**
      * The package declaration.
      */
     private String m__strPackageDeclaration;

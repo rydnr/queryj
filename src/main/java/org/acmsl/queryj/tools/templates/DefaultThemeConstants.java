@@ -33,12 +33,6 @@
  */
 package org.acmsl.queryj.tools.templates;
 
-/*
- * Importing JDK classes.
- */
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
 /**
  * Defines some constants for the default theme.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -48,13 +42,12 @@ public interface DefaultThemeConstants
     /**
      * The starting year.
      */
-    public static final Integer STARTING_YEAR = new Integer(2002);
+    public static final Integer STARTING_YEAR = Integer.valueOf(2002);
 
     /**
      * The timestamp formatter.
      */
-    public static final DateFormat TIMESTAMP_FORMATTER =
-        new SimpleDateFormat("HH:mm:ss.SSS yyyy/MM/dd");
+    public static final String TIMESTAMP_FORMAT = "HH:mm:ss.SSS yyyy/MM/dd";
 
     /**
      * The template name.

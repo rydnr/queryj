@@ -241,13 +241,13 @@ public class JdbcMetadataTypeManager
     {
         Map result = new HashMap();
 
-        Integer t_Numeric = new Integer(Types.NUMERIC);
-        Integer t_Integer = new Integer(Types.INTEGER);
-        Integer t_Long = new Integer(Types.BIGINT);
-        Integer t_Double = new Integer(Types.REAL);
-        Integer t_Time = new Integer(Types.TIME);
-        Integer t_TimeStamp = new Integer(Types.TIMESTAMP);
-        Integer t_Text = new Integer(Types.VARCHAR);
+        Integer t_Numeric = Integer.valueOf(Types.NUMERIC);
+        Integer t_Integer = Integer.valueOf(Types.INTEGER);
+        Integer t_Long = Integer.valueOf(Types.BIGINT);
+        Integer t_Double = Integer.valueOf(Types.REAL);
+        Integer t_Time = Integer.valueOf(Types.TIME);
+        Integer t_TimeStamp = Integer.valueOf(Types.TIMESTAMP);
+        Integer t_Text = Integer.valueOf(Types.VARCHAR);
 
         result.put("DECIMAL"    , t_Numeric);
         result.put("BigDecimal" , t_Numeric);

@@ -83,7 +83,7 @@ public interface Result
      * Retrieves the &lt;property-ref&gt; elements.
      * @return such elements.
      */
-    public Collection getPropertyRefs();
+    public Collection<PropertyRefElement> getPropertyRefs();
 
     /**
      * Adds a new &lt;property-ref&gt; element.
