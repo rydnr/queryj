@@ -600,7 +600,7 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
-    public Collection<Attribute> buildAttributes1(
+    public Collection<Attribute> buildAttributes(
         final String[] columnNames,
         final String tableName,
         final Boolean allowsNullAsAWhole,
