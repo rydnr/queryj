@@ -182,7 +182,7 @@ public class BaseRepositoryDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        if (!outputDir.mkdirs())
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
