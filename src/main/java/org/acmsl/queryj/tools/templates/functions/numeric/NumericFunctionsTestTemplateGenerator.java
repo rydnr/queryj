@@ -92,7 +92,7 @@ public class NumericFunctionsTestTemplateGenerator
     protected NumericFunctionsTestTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>NumericFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link NumericFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     public static NumericFunctionsTestTemplateGenerator getInstance()
@@ -413,7 +413,15 @@ public class NumericFunctionsTestTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -421,12 +429,6 @@ public class NumericFunctionsTestTemplateGenerator
                 + "NumericFunctionsTest.java",
                 numericFunctionsTestTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

@@ -91,7 +91,7 @@ public class TextFunctionsTestTemplateGenerator
     protected TextFunctionsTestTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>TextFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link TextFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     public static TextFunctionsTestTemplateGenerator getInstance()
@@ -298,7 +298,15 @@ public class TextFunctionsTestTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -306,12 +314,6 @@ public class TextFunctionsTestTemplateGenerator
                 + "TextFunctionsTest.java",
                 textFunctionsTestTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

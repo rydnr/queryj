@@ -88,7 +88,7 @@ public class ValueObjectTemplateGenerator
     protected ValueObjectTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>ValueObjectTemplateGenerator</code> instance.
+     * Retrieves a {@link ValueObjectTemplateGenerator} instance.
      * @return such instance.
      */
     public static ValueObjectTemplateGenerator getInstance()
@@ -97,7 +97,7 @@ public class ValueObjectTemplateGenerator
     }
 
     /**
-     * Creates a <code>ValueObjectTemplate</code> using given
+     * Creates a {@link ValueObjectTemplate} using given
      * information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
@@ -177,9 +177,9 @@ public class ValueObjectTemplateGenerator
      * Retrieves the class name of the value object associated to
      * given table name.
      * @param tableName the table name.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return the class name.
      * @precondition englishGrammarUtils != null
      * @precondition stringUtils != null
@@ -196,7 +196,7 @@ public class ValueObjectTemplateGenerator
     }
 
     /**
-     * Writes a <code>ValueObject</code> template to disk.
+     * Writes a {@link ValueObject} template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
@@ -224,10 +224,10 @@ public class ValueObjectTemplateGenerator
      * @param valueObjectTemplate the value object template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition valueObjectTemplate != null
      * @precondition outputDir != null
@@ -244,7 +244,15 @@ public class ValueObjectTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -256,12 +264,6 @@ public class ValueObjectTemplateGenerator
                 + ".java",
                 valueObjectTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

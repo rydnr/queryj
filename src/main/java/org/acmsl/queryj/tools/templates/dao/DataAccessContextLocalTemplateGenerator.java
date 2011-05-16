@@ -98,10 +98,10 @@ public class DataAccessContextLocalTemplateGenerator
     }
 
     /**
-     * Generates a <code>DataAccessContextLocal</code> template.
+     * Generates a {@link DataAccessContextLocal} template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -181,7 +181,7 @@ public class DataAccessContextLocalTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -194,7 +194,15 @@ public class DataAccessContextLocalTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -202,12 +210,6 @@ public class DataAccessContextLocalTemplateGenerator
                 + "dataAccessContext-local.xml.sample",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

@@ -87,7 +87,7 @@ public class CustomValueObjectImplTemplateGenerator
     protected CustomValueObjectImplTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>CustomValueObjectTemplateGenerator</code> instance.
+     * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
      * @return such instance.
      */
     public static CustomValueObjectTemplateGenerator getInstance()
@@ -153,10 +153,10 @@ public class CustomValueObjectImplTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -174,7 +174,15 @@ public class CustomValueObjectImplTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -183,12 +191,6 @@ public class CustomValueObjectImplTemplateGenerator
                 + "ValueObject.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

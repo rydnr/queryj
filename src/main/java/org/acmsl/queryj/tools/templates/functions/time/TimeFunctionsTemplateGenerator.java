@@ -101,7 +101,7 @@ public class TimeFunctionsTemplateGenerator
     }
 
     /**
-     * Retrieves a <code>TimeFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link TimeFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     public static TimeFunctionsTemplateGenerator getInstance()
@@ -134,7 +134,7 @@ public class TimeFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @precondition engineName != null
      * @precondition templateFactoryClass != null
@@ -174,7 +174,7 @@ public class TimeFunctionsTemplateGenerator
      * Retrieves the template factory class.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @precondition engineName != null
@@ -214,7 +214,7 @@ public class TimeFunctionsTemplateGenerator
      * Retrieves the template factory instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
@@ -333,8 +333,8 @@ public class TimeFunctionsTemplateGenerator
      * @param timeFunctionsTemplate the time functions template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition timeFunctionsTemplate != null
      * @precondition outputDir != null
@@ -349,7 +349,15 @@ public class TimeFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -358,11 +366,5 @@ public class TimeFunctionsTemplateGenerator
                 timeFunctionsTemplate.generate(),
                 charset);
         }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
-        }
-  }
+    }
 }

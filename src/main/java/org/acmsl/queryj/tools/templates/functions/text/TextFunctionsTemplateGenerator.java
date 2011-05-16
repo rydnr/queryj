@@ -137,7 +137,7 @@ public class TextFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @precondition engineName != null
      * @precondition templateFactoryClass != null
@@ -177,7 +177,7 @@ public class TextFunctionsTemplateGenerator
      * Retrieves the template factory class.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @precondition engineName != null
@@ -217,7 +217,7 @@ public class TextFunctionsTemplateGenerator
      * Retrieves the template factory instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
@@ -336,8 +336,8 @@ public class TextFunctionsTemplateGenerator
      * @param textFunctionsTemplate the text functions template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition textFunctionsTemplate != null
      * @precondition outputDir != null
@@ -352,7 +352,15 @@ public class TextFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -361,12 +369,5 @@ public class TextFunctionsTemplateGenerator
                 textFunctionsTemplate.generate(),
                 charset);
         }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
-        }
-
     }
 }

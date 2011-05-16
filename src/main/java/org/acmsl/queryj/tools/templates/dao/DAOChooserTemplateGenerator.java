@@ -90,7 +90,7 @@ public class DAOChooserTemplateGenerator
     protected DAOChooserTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>DAOChooserTemplateGenerator</code> instance.
+     * Retrieves a {@link DAOChooserTemplateGenerator} instance.
      * @return such instance.
      */
     public static DAOChooserTemplateGenerator getInstance()
@@ -99,10 +99,10 @@ public class DAOChooserTemplateGenerator
     }
 
     /**
-     * Generates a <code>DAOChooserTemplate</code>.
+     * Generates a {@link DAOChooserTemplate}.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -165,7 +165,7 @@ public class DAOChooserTemplateGenerator
     /**
      * Capitalizes given value.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return the capitalized value.
      * @precondition value != null
      * @precondition decorationUtils != null
@@ -204,8 +204,8 @@ public class DAOChooserTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -220,7 +220,15 @@ public class DAOChooserTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -229,12 +237,6 @@ public class DAOChooserTemplateGenerator
                 + "DAOChooser.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

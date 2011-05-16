@@ -84,7 +84,7 @@ public class TableTemplateGenerator
     protected TableTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>TableTemplateGenerator</code> instance.
+     * Retrieves a {@link TableTemplateGenerator} instance.
      * @return such instance.
      */
     public static TableTemplateGenerator getInstance()
@@ -174,8 +174,8 @@ public class TableTemplateGenerator
      * @param tableTemplate the table template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param fileUtils the <code>FileUtils</code> instance.
-     * @param tableTemplateUtils the <code>TableTemplateUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @param tableTemplateUtils the {@link TableTemplateUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition tableTemplate != null
      * @precondition outputDir != null
@@ -190,7 +190,15 @@ public class TableTemplateGenerator
         final TableTemplateUtils tableTemplateUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -200,12 +208,6 @@ public class TableTemplateGenerator
                 + ".java",
                 tableTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

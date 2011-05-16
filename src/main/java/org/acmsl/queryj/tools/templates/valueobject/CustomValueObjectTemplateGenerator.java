@@ -88,7 +88,7 @@ public class CustomValueObjectTemplateGenerator
     protected CustomValueObjectTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>CustomValueObjectTemplateGenerator</code> instance.
+     * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
      * @return such instance.
      */
     public static CustomValueObjectTemplateGenerator getInstance()
@@ -162,7 +162,7 @@ public class CustomValueObjectTemplateGenerator
      * Checks whether the given class name corresponds to
      * a standard value object or not.
      * @param className the class name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return <code>true</code> in such case.
      * @precondition className != null
      * @precondition metadataManager != null
@@ -181,9 +181,9 @@ public class CustomValueObjectTemplateGenerator
      * Checks whether the given class name corresponds to
      * a standard value object or not.
      * @param className the class name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param valueObjectTemplateGenerator the
-     * <code>ValueObjectTemplateGenerator</code> instance.
+     * {@link ValueObjectTemplateGenerator} instance.
      * @return <code>true</code> in such case.
      * @precondition className != null
      * @precondition metadataManager != null
@@ -244,7 +244,7 @@ public class CustomValueObjectTemplateGenerator
     /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the class name.
      * @precondition fqcn != null
      * @precondition packageUtils != null
@@ -282,10 +282,10 @@ public class CustomValueObjectTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -302,7 +302,15 @@ public class CustomValueObjectTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -311,12 +319,6 @@ public class CustomValueObjectTemplateGenerator
                 + ".java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

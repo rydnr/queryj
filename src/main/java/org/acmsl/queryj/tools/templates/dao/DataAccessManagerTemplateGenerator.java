@@ -91,7 +91,7 @@ public class DataAccessManagerTemplateGenerator
     protected DataAccessManagerTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>DataAccessManagerTemplateGenerator</code>
+     * Retrieves a {@link DataAccessManagerTemplateGenerator}
      * instance.
      * @return such instance.
      */
@@ -104,7 +104,7 @@ public class DataAccessManagerTemplateGenerator
      * Generates a DataAccessManager template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -166,7 +166,7 @@ public class DataAccessManagerTemplateGenerator
     /**
      * Capitalizes given value.
      * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return the capitalized value.
      * @precondition value != null
      * @precondition decorationUtils != null
@@ -207,8 +207,8 @@ public class DataAccessManagerTemplateGenerator
      * @param repository the repository.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template instanceof DataAccessManagerTemplate
      * @precondition repository != null
@@ -225,7 +225,15 @@ public class DataAccessManagerTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -234,12 +242,6 @@ public class DataAccessManagerTemplateGenerator
                 + "DataAccessManager.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

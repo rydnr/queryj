@@ -92,7 +92,7 @@ public class BaseAbstractDAOTemplateGenerator
     protected BaseAbstractDAOTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>BaseAbstractDAOTemplateGenerator</code> instance.
+     * Retrieves a {@link BaseAbstractDAOTemplateGenerator} instance.
      * @return such instance.
      */
     public static BaseAbstractDAOTemplateGenerator getInstance()
@@ -101,7 +101,7 @@ public class BaseAbstractDAOTemplateGenerator
     }
 
     /**
-     * Generates a <code>BaseAbstractDAOTemplate</code> instance.
+     * Generates a {@link BaseAbstractDAOTemplate} instance.
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
@@ -161,7 +161,7 @@ public class BaseAbstractDAOTemplateGenerator
     }
 
     /**
-     * Generates a <code>BaseAbstractDAOTemplate</code> instance.
+     * Generates a {@link BaseAbstractDAOTemplate} instance.
      * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
@@ -254,7 +254,7 @@ public class BaseAbstractDAOTemplateGenerator
     /**
      * Checks whether the table contains static values or not.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -270,8 +270,8 @@ public class BaseAbstractDAOTemplateGenerator
     /**
      * Checks whether the table contains static values or not.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @return such information.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -288,7 +288,7 @@ public class BaseAbstractDAOTemplateGenerator
     }
 
     /**
-     * Writes a <code>BaseAbstractDAOTemplate</code> to disk.
+     * Writes a {@link BaseAbstractDAOTemplate} to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
@@ -316,10 +316,10 @@ public class BaseAbstractDAOTemplateGenerator
      * @param template template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template instanceof BaseDAOTemplate
      * @precondition outputDir != null
@@ -336,7 +336,15 @@ public class BaseAbstractDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -349,12 +357,6 @@ public class BaseAbstractDAOTemplateGenerator
                 + "DAO.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

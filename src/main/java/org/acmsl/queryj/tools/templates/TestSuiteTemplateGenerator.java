@@ -82,7 +82,7 @@ public class TestSuiteTemplateGenerator
     protected TestSuiteTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>TestSuiteTemplateGenerator</code> instance.
+     * Retrieves a {@link TestSuiteTemplateGenerator} instance.
      * @return such instance.
      */
     public static TestSuiteTemplateGenerator getInstance()
@@ -121,7 +121,7 @@ public class TestSuiteTemplateGenerator
      * @param suiteName the suite name.
      * @param header the header.
      * @param useSubfolders whether to use subfolders.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return a template.
      * @precondition packageName != null
      * @precondition suiteName != null
@@ -181,8 +181,8 @@ public class TestSuiteTemplateGenerator
      * @param testSuiteTemplate the suite template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition testSuiteTemplate != null
      * @precondition outputDir != null
@@ -197,7 +197,15 @@ public class TestSuiteTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -206,12 +214,6 @@ public class TestSuiteTemplateGenerator
                 + "Suite.java",
                 testSuiteTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

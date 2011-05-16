@@ -92,7 +92,7 @@ public class SystemFunctionsTestTemplateGenerator
     protected SystemFunctionsTestTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>SystemFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link SystemFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     public static SystemFunctionsTestTemplateGenerator getInstance()
@@ -295,7 +295,15 @@ public class SystemFunctionsTestTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -303,12 +311,6 @@ public class SystemFunctionsTestTemplateGenerator
                 + "SystemFunctionsTest.java",
                 systemFunctionsTestTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

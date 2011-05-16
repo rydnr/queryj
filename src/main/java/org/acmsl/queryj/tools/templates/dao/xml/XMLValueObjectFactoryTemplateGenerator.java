@@ -86,7 +86,7 @@ public class XMLValueObjectFactoryTemplateGenerator
     protected XMLValueObjectFactoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>XMLValueObjectFactoryTemplateGenerator</code> instance.
+     * Retrieves a {@link XMLValueObjectFactoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static XMLValueObjectFactoryTemplateGenerator getInstance()
@@ -181,7 +181,15 @@ public class XMLValueObjectFactoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -194,12 +202,6 @@ public class XMLValueObjectFactoryTemplateGenerator
                 + "ValueObjectFactory.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

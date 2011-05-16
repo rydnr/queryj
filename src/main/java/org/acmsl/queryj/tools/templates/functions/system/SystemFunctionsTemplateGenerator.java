@@ -104,7 +104,7 @@ public class SystemFunctionsTemplateGenerator
     }
 
     /**
-     * Retrieves a <code>SystemFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link SystemFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     public static SystemFunctionsTemplateGenerator getInstance()
@@ -137,7 +137,7 @@ public class SystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @precondition engineName != null
      * @preocndition templateFactoryClass != null
@@ -178,7 +178,7 @@ public class SystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @preocndition engineName != null
@@ -219,7 +219,7 @@ public class SystemFunctionsTemplateGenerator
      * Retrieves the template factory instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
@@ -340,8 +340,8 @@ public class SystemFunctionsTemplateGenerator
      * @param systemFunctionsTemplate the system functions template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtls</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtls} instance.
      * @throws IOException if the file cannot be created.
      * @precondition systemFunctionsTemplate != null
      * @precondition outputDir != null
@@ -356,7 +356,15 @@ public class SystemFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -364,12 +372,6 @@ public class SystemFunctionsTemplateGenerator
                 + "SystemFunctions.java",
                 systemFunctionsTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

@@ -87,7 +87,7 @@ public class RepositoryDAOFactoryTemplateGenerator
     protected RepositoryDAOFactoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>RepositoryDAOFactoryTemplateGenerator</code> instance.
+     * Retrieves a {@link RepositoryDAOFactoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static RepositoryDAOFactoryTemplateGenerator getInstance()
@@ -99,7 +99,7 @@ public class RepositoryDAOFactoryTemplateGenerator
      * Generates a <i>per-repository</i> template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -171,8 +171,8 @@ public class RepositoryDAOFactoryTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -187,7 +187,15 @@ public class RepositoryDAOFactoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -197,12 +205,6 @@ public class RepositoryDAOFactoryTemplateGenerator
                 + "DAOFactory.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

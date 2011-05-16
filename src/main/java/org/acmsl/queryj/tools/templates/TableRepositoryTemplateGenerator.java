@@ -86,7 +86,7 @@ public class TableRepositoryTemplateGenerator
     protected TableRepositoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>TableRepositoryTemplateGenerator</code> instance.
+     * Retrieves a {@link TableRepositoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static TableRepositoryTemplateGenerator getInstance()
@@ -98,7 +98,7 @@ public class TableRepositoryTemplateGenerator
      * Generates a <i>per-repository</i> template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param engineName the engine name.
@@ -167,9 +167,9 @@ public class TableRepositoryTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @param tableRepositoryTemplateUtils the
-     * <code>TableRepositoryTemplateUtils</code> instance.
+     * {@link TableRepositoryTemplateUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -184,7 +184,15 @@ public class TableRepositoryTemplateGenerator
         final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -194,12 +202,6 @@ public class TableRepositoryTemplateGenerator
                 + ".java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

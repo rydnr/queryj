@@ -91,7 +91,7 @@ public class ConfigurationPropertiesTemplateGenerator
     protected ConfigurationPropertiesTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>ConfigurationPropertiesTemplateGenerator</code>
+     * Retrieves a {@link ConfigurationPropertiesTemplateGenerator}
      * instance.
      * @return such instance.
      */
@@ -104,7 +104,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * Generates a ConfigurationProperties template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -183,9 +183,9 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param repository the repository.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param daoChooserTemplateUtils the <code>DAOChooserTemplateUtils</code>
+     * @param daoChooserTemplateUtils the {@link DAOChooserTemplateUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template instanceof ConfigurationPropertiesTemplate
      * @precondition repository != null
@@ -202,7 +202,15 @@ public class ConfigurationPropertiesTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -211,12 +219,6 @@ public class ConfigurationPropertiesTemplateGenerator
                     repository.toLowerCase()),
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

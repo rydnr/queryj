@@ -88,7 +88,7 @@ public class ValueObjectFactoryTemplateGenerator
     protected ValueObjectFactoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>ValueObjectFactoryTemplateGenerator</code> instance.
+     * Retrieves a {@link ValueObjectFactoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static ValueObjectFactoryTemplateGenerator getInstance()
@@ -97,7 +97,7 @@ public class ValueObjectFactoryTemplateGenerator
     }
 
     /**
-     * Creates a <code>ValueObjectFactoryTemplate</code> using given
+     * Creates a {@link ValueObjectFactoryTemplate} using given
      * information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
@@ -159,7 +159,7 @@ public class ValueObjectFactoryTemplateGenerator
     }
 
     /**
-     * Writes a <code>ValueObject</code> template to disk.
+     * Writes a {@link ValueObject} template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
@@ -190,11 +190,11 @@ public class ValueObjectFactoryTemplateGenerator
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @param valueObjectTemplateGenerator the
-     * <code>ValueObjectTemplateGenerator</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * {@link ValueObjectTemplateGenerator} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition valueObjectFactoryTemplate != null
      * @precondition outputDir != null
@@ -212,7 +212,15 @@ public class ValueObjectFactoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -224,12 +232,6 @@ public class ValueObjectFactoryTemplateGenerator
                 + "ValueObjectFactory.java",
                 valueObjectFactoryTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

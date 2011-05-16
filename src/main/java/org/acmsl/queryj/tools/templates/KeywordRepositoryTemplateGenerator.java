@@ -87,7 +87,7 @@ public class KeywordRepositoryTemplateGenerator
     protected KeywordRepositoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>KeywordRepositoryTemplateGenerator</code> instance.
+     * Retrieves a {@link KeywordRepositoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static KeywordRepositoryTemplateGenerator getInstance()
@@ -99,7 +99,7 @@ public class KeywordRepositoryTemplateGenerator
      * Generates a <i>per-repository</i> template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the database metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param engineName the engine name.
@@ -166,8 +166,8 @@ public class KeywordRepositoryTemplateGenerator
      * @param template the keyword repository to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @param fileutils the <code>FileUtils</code> instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @param fileutils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -182,7 +182,15 @@ public class KeywordRepositoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -192,12 +200,6 @@ public class KeywordRepositoryTemplateGenerator
                 + "KeywordRepository.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

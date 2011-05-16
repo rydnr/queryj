@@ -84,7 +84,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     protected QueryPreparedStatementCreatorTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>QueryPreparedStatementCreatorTemplateGenerator</code>
+     * Retrieves a {@link QueryPreparedStatementCreatorTemplateGenerator}
      * instance.
      * @return such instance.
      */
@@ -144,7 +144,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template != null
      * @precondition outputDir != null
@@ -157,7 +157,15 @@ public class QueryPreparedStatementCreatorTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -165,12 +173,6 @@ public class QueryPreparedStatementCreatorTemplateGenerator
                 + "QueryPreparedStatementCreator.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

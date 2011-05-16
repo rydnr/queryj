@@ -88,7 +88,7 @@ public class XmlDAOFactoryTemplateGenerator
     protected XmlDAOFactoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>XmlDAOFactoryTemplateGenerator</code> instance.
+     * Retrieves a {@link XmlDAOFactoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static XmlDAOFactoryTemplateGenerator getInstance()
@@ -97,7 +97,7 @@ public class XmlDAOFactoryTemplateGenerator
     }
 
     /**
-     * Creates a <code>XmlDAOFactoryTemplate</code> using given
+     * Creates a {@link XmlDAOFactoryTemplate} using given
      * information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
@@ -187,10 +187,10 @@ public class XmlDAOFactoryTemplateGenerator
      * @param template template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition template instanceof BaseDAOFactoryTemplate
      * @precondition outputDir != null
@@ -207,7 +207,15 @@ public class XmlDAOFactoryTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                 outputDir.getAbsolutePath()
@@ -220,12 +228,6 @@ public class XmlDAOFactoryTemplateGenerator
                 + "DAOFactory.java",
                 template.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

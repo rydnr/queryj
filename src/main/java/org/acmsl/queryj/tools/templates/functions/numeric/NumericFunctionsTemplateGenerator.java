@@ -100,7 +100,7 @@ public class NumericFunctionsTemplateGenerator
     }
 
     /**
-     * Retrieves a <code>NumericFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link NumericFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     public static NumericFunctionsTemplateGenerator getInstance()
@@ -130,7 +130,7 @@ public class NumericFunctionsTemplateGenerator
      * Retrieves the template factory instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param templateMappingManager the <code>TemplateMappingManager</code>
+     * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
@@ -250,8 +250,8 @@ public class NumericFunctionsTemplateGenerator
      * @param numericFunctionsTemplate the numeric functions template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition numericFunctionsTemplate != null
      * @precondition outputDir != null
@@ -266,7 +266,15 @@ public class NumericFunctionsTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -275,12 +283,5 @@ public class NumericFunctionsTemplateGenerator
                 numericFunctionsTemplate.generate(),
                 charset);
         }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
-        }
-
     }
 }

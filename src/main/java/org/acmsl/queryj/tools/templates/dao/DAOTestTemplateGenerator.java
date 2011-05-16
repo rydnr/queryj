@@ -87,7 +87,7 @@ public class DAOTestTemplateGenerator
     protected DAOTestTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>DAOTestTemplateGenerator</code> instance.
+     * Retrieves a {@link DAOTestTemplateGenerator} instance.
      * @return such instance.
      */
     public static DAOTestTemplateGenerator getInstance()
@@ -195,9 +195,9 @@ public class DAOTestTemplateGenerator
      * @param daoTestTemplate the DAO test template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param fileUtils the <code>FileUtils</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * @param fileUtils the {@link FileUtils} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
      * @throws IOException if the file cannot be created.
      * @precondition daoTestTemplate != null
@@ -215,7 +215,15 @@ public class DAOTestTemplateGenerator
         final EnglishGrammarUtils englishGrammarUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -229,12 +237,6 @@ public class DAOTestTemplateGenerator
                 + "DAOTest.java",
                 daoTestTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

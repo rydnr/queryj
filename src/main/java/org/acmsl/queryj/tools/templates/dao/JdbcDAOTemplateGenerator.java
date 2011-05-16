@@ -81,7 +81,7 @@ public class JdbcDAOTemplateGenerator
     protected JdbcDAOTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>JdbcDAOTemplateGenerator</code> instance.
+     * Retrieves a {@link JdbcDAOTemplateGenerator} instance.
      * @return such instance.
      */
     public static JdbcDAOTemplateGenerator getInstance()
@@ -139,8 +139,8 @@ public class JdbcDAOTemplateGenerator
      * @param jdbcDAOTemplate the JDBC DAO template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition jdbcDAOTemplate != null
      * @precondition outputDir != null
@@ -155,7 +155,15 @@ public class JdbcDAOTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -163,12 +171,6 @@ public class JdbcDAOTemplateGenerator
                 + "JdbcDAO.java",
                 jdbcDAOTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }

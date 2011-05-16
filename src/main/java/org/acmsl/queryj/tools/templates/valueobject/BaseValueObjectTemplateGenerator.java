@@ -88,7 +88,7 @@ public class BaseValueObjectTemplateGenerator
     protected BaseValueObjectTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>BaseValueObjectTemplateGenerator</code> instance.
+     * Retrieves a {@link BaseValueObjectTemplateGenerator} instance.
      * @return such instance.
      */
     public static BaseValueObjectTemplateGenerator getInstance()
@@ -97,7 +97,7 @@ public class BaseValueObjectTemplateGenerator
     }
 
     /**
-     * Creates a <code>BaseValueObjectTemplate</code> using given
+     * Creates a {@link BaseValueObjectTemplate} using given
      * information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
@@ -159,7 +159,7 @@ public class BaseValueObjectTemplateGenerator
     }
 
     /**
-     * Writes a <code>BaseValueObject</code> template to disk.
+     * Writes a {@link BaseValueObject} template to disk.
      * @param template the template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
@@ -190,11 +190,11 @@ public class BaseValueObjectTemplateGenerator
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @param valueObjectTemplateGenerator the
-     * <code>ValueObjectTemplateGenerator</code> instance.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * {@link ValueObjectTemplateGenerator} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
      * instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
      * @precondition baseValueObjectTemplate != null
      * @precondition outputDir != null
@@ -212,7 +212,15 @@ public class BaseValueObjectTemplateGenerator
         final FileUtils fileUtils)
       throws  IOException
     {
-        if (outputDir.mkdirs())
+        boolean folderCreated = outputDir.mkdirs();
+
+        if (   (!folderCreated)
+            && (!outputDir.exists()))
+        {
+            throw
+                new IOException("Cannot create output dir: " + outputDir);
+        }
+        else
         {
             fileUtils.writeFile(
                   outputDir.getAbsolutePath()
@@ -225,12 +233,6 @@ public class BaseValueObjectTemplateGenerator
                 + "ValueObject.java",
                 baseValueObjectTemplate.generate(),
                 charset);
-        }
-        else
-        {
-            throw
-                new IOException(
-                    "Cannot create output dir: " + outputDir);
         }
     }
 }
