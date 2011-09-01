@@ -75,7 +75,7 @@ public abstract class AbstractQueryJChain
     private Chain m__Chain;
 
     /**
-     * Constructs an <code>AbstractQueryJChain</code> instance.
+     * Constructs an {@link AbstractQueryJChain} instance.
      */
     public AbstractQueryJChain()
     {
@@ -202,6 +202,7 @@ public abstract class AbstractQueryJChain
                 t_CurrentCommandHandler =
                     getNextChainLink(chain, t_CurrentCommandHandler);
 
+                System.out.println("Next handler: " + t_CurrentCommandHandler);
                 if  (t_CurrentCommandHandler != null)
                 {
                     result = t_CurrentCommandHandler.handle(command);
@@ -210,7 +211,7 @@ public abstract class AbstractQueryJChain
             while  (   (!result)
                     && (t_CurrentCommandHandler != null));
         }
-        catch  (QueryJBuildException buildException)
+        catch  (final QueryJBuildException buildException)
         {
             cleanUpOnError(buildException, command);
 

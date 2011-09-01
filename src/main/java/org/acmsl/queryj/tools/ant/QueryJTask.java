@@ -101,7 +101,7 @@ public class QueryJTask
     private AntExternallyManagedFieldsElement m__ExternallyManagedFields;
 
     /**
-     * Creates a <code>QueryJTask</code> instance.
+     * Creates a {@link QueryJTask} instance.
      */
     public QueryJTask()
     {
@@ -110,7 +110,7 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the <code>QueryJChain</code> to delegate.
+     * Specifies the {@link QueryJChain} to delegate.
      * @param delegee such instance.
      */
     protected final void immutableSetQueryJChain(final QueryJChain delegee)
@@ -119,7 +119,7 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the <code>QueryJChain</code> to delegate.
+     * Specifies the {@link QueryJChain} to delegate.
      * @param delegee such instance.
      */
     protected void setQueryJChain(final QueryJChain delegee)
@@ -128,7 +128,7 @@ public class QueryJTask
     }
 
     /**
-     * Retrieves the delegating <code>QueryJChain</code> instance.
+     * Retrieves the delegating {@link QueryJChain} instance.
      * @return such instance.
      */
     protected QueryJChain getQueryJChain()
@@ -1355,7 +1355,7 @@ public class QueryJTask
         extends  QueryJChain
     {
         /**
-         * Creates an <code>AntQueryJChain</code> instance.
+         * Creates an {@link AntQueryJChain} instance.
          */
         public AntQueryJChain() {};
                 

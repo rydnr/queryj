@@ -91,6 +91,15 @@ public abstract class AbstractQueryJCommandHandler
         {
             QueryJCommand t_Command = (QueryJCommand) command;
             
+            Log t_OtherLog =
+                UniqueLogFactory.getLog(
+                    AbstractQueryJCommandHandler.class);
+
+            if  (t_OtherLog != null)
+            {
+                t_OtherLog.info("Executing handler: " + this);
+            }
+
             try 
             {
                 result = handle(t_Command);

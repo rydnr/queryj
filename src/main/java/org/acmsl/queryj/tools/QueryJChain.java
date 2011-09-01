@@ -285,12 +285,12 @@ public class QueryJChain
     private String m__strEncoding;
 
     /**
-     * Creates a <code>QueryJChain</code> instance.
+     * Creates a {@link QueryJChain} instance.
      */
     public QueryJChain() {};
 
     /**
-     * Creates a <code>QueryJChain</code> with given information.
+     * Creates a {@link QueryJChain} with given information.
      * @param settings the configuration settings.
      */
     public QueryJChain(final Properties settings)
@@ -299,7 +299,7 @@ public class QueryJChain
     }
 
     /**
-     * Creates a <code>QueryJChain</code> with given information.
+     * Creates a {@link QueryJChain} with given information.
      * @param settings the configuration settings.
      * @param driver the JDBC driver.
      * @param url the JDBC url.
@@ -317,14 +317,14 @@ public class QueryJChain
      * @param extractProcedures whether to extract the procedures or not.
      * @param extractFunctions whether to extract the functions or not.
      * @param jndiDataSource the location in JNDI of the
-     * <code>DataSource</code>.
+     * {@link DataSource}.
      * @param generateMockDAOImplementation whether to generate Mock DAOs.
      * @param generateXmlDAOImplementation whether to generate XML DAOs.
      * @param generateTests whether to generate test cases or not.
      * @param allowEmptyRepositoryDAO whether to generate a repository
-     * DAO even tough it'll contain no custom queries..
+     * DAO even tough it'll contain no custom queries.
      * @param implementMarkerInterfaces whether to make some generated 
-     * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
+     * sources implement {@link org.acmsl.commons.patterns} Marker
      * interfaces.
      * @param customSqlModel the format of the custom SQL file.
      * @param disableCustomSqlValidation to disable validation of custom sql.
@@ -2115,7 +2115,7 @@ public class QueryJChain
                 getExtractTablesFlag(settings),
                 getExtractProceduresFlag(settings),
                 getExtractFunctionsFlag(settings),
- getJndiDataSource(settings),
+                getJndiDataSource(settings),
                 getGenerateMockDAOImplementationFlag(settings),
                 getGenerateXMLDAOImplementationFlag(settings),
                 getGenerateTestsFlag(settings),
@@ -2401,7 +2401,7 @@ public class QueryJChain
     /**
      * Reads the settings from given file.
      * @param file the file.
-     * @return the <code>Properties</code> instance, or <code>null</code>
+     * @return the {@link Properties} instance, or <code>null</code>
      * if the file doesn't exist.
      */
     protected Properties readSettings(final File file)
