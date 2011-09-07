@@ -1206,7 +1206,7 @@ public class QueryJMojo
     {
         QueryJTask result = new QueryJTask();
 
-        Project project = new Project();
+        Project project = new AntProjectAdapter(new Project(), log);
 
         result.setProject(project);
 

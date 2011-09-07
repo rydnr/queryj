@@ -76,13 +76,19 @@ public class AntProjectAdapter
     private Project m__Project;
 
     /**
+     * The actual logging mechanism to use.
+     */
+    private Log m__Log;
+
+    /**
      * Creates a {@link AntProjectAdapter} with given Ant {@link Project}
      * instance.
      * @param project the project.
      */
-    public AntProjectAdapter(final Project project)
+    public AntProjectAdapter(final Project project, final Log log)
     {
         immutableSetProject(project);
+        immutableSetLog(log);
     }
 
     /**
@@ -119,6 +125,42 @@ public class AntProjectAdapter
     protected Project getProject()
     {
         return immutableGetProject();
+    }
+
+    /**
+     * Specifies the {@link Log} instance.
+     * @param log such instance.
+     */
+    protected final void immutableSetLog(final Log log)
+    {
+        m__Log = log;
+    }
+
+    /**
+     * Specifies the {@link Log} instance.
+     * @param log such instance.
+     */
+    protected void setLog(final Log log)
+    {
+        immutableSetLog(log);
+    }
+
+    /**
+     * Retrieves the actual {@link Log} instance.
+     * @return such instance.
+     */
+    protected final Log immutableGetLog()
+    {
+        return m__Log;
+    }
+
+    /**
+     * Retrieves the actual {@link Log} instance.
+     * @return such instance.
+     */
+    protected Log getLog()
+    {
+        return immutableGetLog();
     }
 
     /**
@@ -2117,13 +2159,289 @@ public class AntProjectAdapter
     @Override
     public void log(final String message)
     {
-        log(message, getProject());
+        log(message, getLog());
     }
 
     /**
      * Logs given message using Maven's mechanism.
      * @param message the message.
-     * @param project the {@link Project} instance.
+     * @param log the {@link Log} instance.
      */
-    protected void log(final String message, final Project project) {};
+    protected void log(final String message, final Log log)
+    {
+        log.info(message);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(final String message, final int msgLevel)
+    {
+        log(message, msgLevel, getLog());
+    }
+
+    /**
+     * @see {@link Project#log(String, int)}.
+     * @param message the message.
+     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
+     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param log the {@link Log} instance.
+     */
+    protected void log(final String message, final int msgLevel, final Log log)
+    {
+        switch (msgLevel)
+        {
+            case MSG_ERR:
+                log.error(message);
+                break;
+            case MSG_WARN:
+                log.warn(message);
+                break;
+            case MSG_INFO:
+                log.info(message);
+                break;
+            case MSG_VERBOSE:
+                log.debug(message);
+                break;
+            case MSG_DEBUG:
+                log.debug(message);
+                break;
+            default:
+                log.info(message);
+                break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(final String message, final Throwable throwable, final int msgLevel)
+    {
+        log(message, throwable, msgLevel, getLog());
+    }
+
+    /**
+     * @see {@link Project.log(String, Throwable, int)}.
+     * @param message the message.
+     * @param throwable the error.
+     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
+     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param log the {@link Log} instance.
+     */
+    protected void log(
+        final String message, final Throwable throwable, final int msgLevel, final Log log)
+    {
+        switch (msgLevel)
+        {
+            case MSG_ERR:
+                log.error(message, throwable);
+                break;
+            case MSG_WARN:
+                log.warn(message, throwable);
+                break;
+            case MSG_INFO:
+                log.info(message, throwable);
+                break;
+            case MSG_VERBOSE:
+                log.debug(message, throwable);
+                break;
+            case MSG_DEBUG:
+                log.debug(message, throwable);
+                break;
+            default:
+                log.info(message, throwable);
+                break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(final Task task, final String message, final int msgLevel)
+    {
+        log(task, message, msgLevel, getLog());
+    }
+
+    /**
+     * @see {@link Project#log(Task, String, int)}.
+     * @param task the task.
+     * @param message the message.
+     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
+     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param log the {@link Log} instance.
+     */
+    protected void log(final Task task, final String message, final int msgLevel, final Log log)
+    {
+        String t_strMessage = "[" + task.getTaskName() + "] " + message;
+
+        switch (msgLevel)
+        {
+            case MSG_ERR:
+                log.error(t_strMessage);
+                break;
+            case MSG_WARN:
+                log.warn(t_strMessage);
+                break;
+            case MSG_INFO:
+                log.info(t_strMessage);
+                break;
+            case MSG_VERBOSE:
+                log.debug(t_strMessage);
+                break;
+            case MSG_DEBUG:
+                log.debug(t_strMessage);
+                break;
+            default:
+                log.info(t_strMessage);
+                break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(
+        final Task task, final String message, final Throwable throwable, final int msgLevel)
+    {
+        log(task, message, throwable, msgLevel, getLog());
+    }
+
+    /**
+     * @see {@link Project#log(Task, String, int)}.
+     * @param task the task.
+     * @param message the message.
+     * @param throwable the error.
+     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
+     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param log the {@link Log} instance.
+     */
+    protected void log(
+        final Task task,
+        final String message,
+        final Throwable throwable,
+        final int msgLevel, final Log log)
+    {
+        String t_strMessage = "[" + task.getTaskName() + "] " + message;
+
+        switch (msgLevel)
+        {
+            case MSG_ERR:
+                log.error(t_strMessage, throwable);
+                break;
+            case MSG_WARN:
+                log.warn(t_strMessage, throwable);
+                break;
+            case MSG_INFO:
+                log.info(t_strMessage, throwable);
+                break;
+            case MSG_VERBOSE:
+                log.debug(t_strMessage, throwable);
+                break;
+            case MSG_DEBUG:
+                log.debug(t_strMessage, throwable);
+                break;
+            default:
+                log.info(t_strMessage, throwable);
+                break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(final Target target, final String message, final int msgLevel)
+    {
+        log(target, message, msgLevel, getLog());
+    }
+
+    /**
+     * @see {@link Project#log(Target, String, int)}.
+     * @param target the target.
+     * @param message the message.
+     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
+     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param log the {@link Log} instance.
+     */
+    protected void log(
+        final Target target, final String message, final int msgLevel, final Log log)
+    {
+        String t_strMessage = "[" + target.getName() + "] " + message;
+
+        switch (msgLevel)
+        {
+            case MSG_ERR:
+                log.error(t_strMessage);
+                break;
+            case MSG_WARN:
+                log.warn(t_strMessage);
+                break;
+            case MSG_INFO:
+                log.info(t_strMessage);
+                break;
+            case MSG_VERBOSE:
+                log.debug(t_strMessage);
+                break;
+            case MSG_DEBUG:
+                log.debug(t_strMessage);
+                break;
+            default:
+                log.info(t_strMessage);
+                break;
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void log(
+        final Target target, final String message, final Throwable throwable, final int msgLevel)
+    {
+        log(target, message, throwable, msgLevel, getLog());
+    }
+
+    /**
+     * @see {@link Project#log(Target, String, int)}.
+     * @param target the target.
+     * @param message the message.
+     * @param throwable the error.
+     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
+     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param log the {@link Log} instance.
+     */
+    protected void log(
+        final Target target,
+        final String message,
+        final Throwable throwable,
+        final int msgLevel, final Log log)
+    {
+        String t_strMessage = "[" + target.getName() + "] " + message;
+
+        switch (msgLevel)
+        {
+            case MSG_ERR:
+                log.error(t_strMessage, throwable);
+                break;
+            case MSG_WARN:
+                log.warn(t_strMessage, throwable);
+                break;
+            case MSG_INFO:
+                log.info(t_strMessage, throwable);
+                break;
+            case MSG_VERBOSE:
+                log.debug(t_strMessage, throwable);
+                break;
+            case MSG_DEBUG:
+                log.debug(t_strMessage, throwable);
+                break;
+            default:
+                log.info(t_strMessage, throwable);
+                break;
+        }
+    }
 }
