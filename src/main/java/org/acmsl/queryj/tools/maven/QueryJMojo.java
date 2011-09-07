@@ -81,25 +81,25 @@ public class QueryJMojo
 
     /**
      * The driver.
-     * @parameter property="driver"
+     * @parameter property="driver" @required
      */
     private String m__strDriver;
     
     /**
      * The url.
-     * @parameter property="url"
+     * @parameter property="url" @required
      */
     private String m__strUrl;
     
     /**
      * The user name.
-     * @parameter property="username"
+     * @parameter property="username" @required
      */
     private String m__strUsername;
     
     /**
      * The password.
-     * @parameter property="password"
+     * @parameter property="password" @required
      */
     private String m__strPassword;
     
@@ -107,29 +107,29 @@ public class QueryJMojo
      * The catalog.
      * @parameter property="catalog"
      */
-    private String m__strCatalog;
+    private String catalog;
     
     /**
      * The schema.
-     * @parameter property="schema"
+     * @parameter property="schema" @required
      */
-    private String m__strSchema;
+    private String schema;
     
     /**
      * The repository.
-     * @parameter property="repository"
+     * @parameter property="repository" @required
      */
     private String m__strRepository;
     
     /**
      * The package name.
-     * @parameter property="packageName"
+     * @parameter property="packageName" @required
      */
     private String m__strPackageName;
     
     /**
      * The output directory.
-     * @parameter property="outputDir"
+     * @parameter property="outputDir" 
      */
     private File m__OutputDir;
     
@@ -373,7 +373,7 @@ public class QueryJMojo
      */
     protected final void immutableSetCatalog(final String catalog)
     {
-        m__strCatalog = catalog;
+        this.catalog = catalog;
     }
 
     /**
@@ -391,7 +391,7 @@ public class QueryJMojo
      */
     protected final String immutableGetCatalog()
     {
-        return m__strCatalog;
+        return catalog;
     }
     
     /**
@@ -409,7 +409,7 @@ public class QueryJMojo
      */
     protected final void immutableSetSchema(final String schema)
     {
-        m__strSchema = schema;
+        this.schema = schema;
     }
 
     /**
@@ -427,7 +427,7 @@ public class QueryJMojo
      */
     protected final String immutableGetSchema()
     {
-        return m__strSchema;
+        return schema;
     }
     
     /**
@@ -1132,7 +1132,9 @@ public class QueryJMojo
         {
             //initialize directories
             File outputDir = outputDirPath.getAbsoluteFile();
-            if (!outputDir.mkdirs())
+
+	    if (   (!outputDir.exists())
+		&& (!outputDir.mkdirs()))
             {
                 log.warn("Cannot create output folder: " + outputDir);
             }

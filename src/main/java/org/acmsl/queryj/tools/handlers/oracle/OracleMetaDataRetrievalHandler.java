@@ -80,16 +80,16 @@ public class OracleMetaDataRetrievalHandler
      */
     protected boolean checkVendor(
         final String productName,
-        final String productVersion,
+        final String productVfersion,
         final int majorVersion,
         final int minorVersion)
     {
         boolean result = (productName.indexOf("Oracle") > -1);
 
-        if  (result)
-        {
-            result = checkVersion(productVersion, VersionUtils.getInstance());
-        }
+//        if  (result)
+//        {
+//            result = checkVersion(productVersion, VersionUtils.getInstance());
+//        }
 
         return result;
     }

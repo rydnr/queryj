@@ -39,7 +39,7 @@ package org.acmsl.queryj.tools;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
-import org.acmsl.queryj.tools.logging.QueryJAntLog;
+import org.acmsl.queryj.tools.logging.QueryJLog;
 
 /*
  * Importing some ACM-SL classes.
@@ -193,6 +193,10 @@ public abstract class AbstractQueryJChain
     {
         boolean result = false;
 
+        final QueryJLog t_Log = command.getLog();
+
+        boolean t_bLoggingEnabled = (t_Log != null);
+
         try 
         {
             QueryJCommandHandler t_CurrentCommandHandler = null;
@@ -202,10 +206,21 @@ public abstract class AbstractQueryJChain
                 t_CurrentCommandHandler =
                     getNextChainLink(chain, t_CurrentCommandHandler);
 
-                System.out.println("Next handler: " + t_CurrentCommandHandler);
+                if (t_bLoggingEnabled)
+                {
+                    t_Log.debug("Next handler: " + t_CurrentCommandHandler);
+                }
+
                 if  (t_CurrentCommandHandler != null)
                 {
                     result = t_CurrentCommandHandler.handle(command);
+
+                    if (t_bLoggingEnabled)
+                    {
+                        t_Log.debug(
+                              t_CurrentCommandHandler + "#handle(QueryJCommand) returned "
+                            + result);
+                    }
                 }
             }
             while  (   (!result)
@@ -214,6 +229,13 @@ public abstract class AbstractQueryJChain
         catch  (final QueryJBuildException buildException)
         {
             cleanUpOnError(buildException, command);
+
+	    if (t_bLoggingEnabled)
+	    {
+		t_Log.error(
+		    "QueryJ could not generate sources correctly.",
+		    buildException);
+	    }
 
             throw buildException;
         }
