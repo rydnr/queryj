@@ -1240,7 +1240,7 @@ public class QueryJMojo
         log.debug("Username: " + getUsername());
         result.setUsername(getUsername());
 
-        log.debug("Password: " + getPassword());
+        log.debug("Password specified: " + (getPassword() != null));
         result.setPassword(getPassword());
 
         log.debug("Generate Mock DAO implementation? " + getGenerateMockDAOImplementation());

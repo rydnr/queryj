@@ -210,6 +210,13 @@ public class MetadataUtils
         int t_iLength =
             (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
 
+	t_iLength =
+	    Math.min(
+		(t_astrReferredTables != null)
+		? t_astrReferredTables.length
+		: 0,
+		t_iLength);
+
         Collection<Attribute> t_cAttributes = null;
         ForeignKey t_CurrentFk = null;
         Attribute t_FirstAttribute = null;
