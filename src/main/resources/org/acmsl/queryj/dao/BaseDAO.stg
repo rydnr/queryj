@@ -234,7 +234,9 @@ cached_constants(row, voName) ::= <<
 !>
 /**
  * The <row.name> constant.
- */
+Attributes:
+<row.attributes:attribute_debug(attr=it); separator=",\n">
+*/
 public static final <voName> <row.nameNormalizedUppercased> =
     new <voName>ValueObject(
         <row.attributes:attribute_specification(attr=it); separator=",\n">);
@@ -245,7 +247,11 @@ attribute_specification(attr) ::= <<
  Prints the value of the attribute, optionally escaping it.
  @param attr the attribute.
 !>
-<if(attr.string)>"<attr.value>"<else><attr.value><endif>
+<if(attr.valueNull)>null<else><if(attr.string)>"<attr.value>"<else><attr.value><endif><endif>
+>>
+
+attribute_debug(attr) ::= <<
+name: <attr.name>, value: <attr.value>, type <attr.type>, native type: <attr.nativeType>, field type: <attr.fieldType>
 >>
 
 find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<

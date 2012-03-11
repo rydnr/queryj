@@ -89,5 +89,12 @@ public interface Attribute
      * @return such information.
      */
     public String getValue();
+
+    /**
+     * Retrieves whether the attribute's value is null
+     * or not.
+     * @return <code>true</code> if the value is null.
+     */
+    public boolean isValueNull();
 }
 

@@ -352,14 +352,25 @@ public abstract class AbstractAttribute
     }
 
     /**
-     * Retrieves the optional attribute's value, meaning
-     * it doesn't just describe the metadata, but also
-     * contains data.
-     * @return such information.
+     * {@inheritDoc}
      */
     public String getValue()
     {
         return m__strValue;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public boolean isValueNull()
+    {
+        boolean result = false;
+
+        String t_strValue = getValue();
+
+        result = (t_strValue == null);
+
+        return result;
     }
 
     /**

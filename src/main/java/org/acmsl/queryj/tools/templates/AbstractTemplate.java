@@ -66,9 +66,6 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 /*
  * Importing some JDK classes.
  */
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -688,22 +685,34 @@ public abstract class AbstractTemplate
                 + "instantiation fails. Check your classpath or the way "
                 + "it's defined by Ant or any other tool you might be "
                 + "using. ");
+            boolean t_bAntlrLocationFound =
+                (   (t_strAntlrLocation != null)
+                 && (t_strAntlrLocation.trim().length() > 0));
+            boolean t_bStringTemplateLocationFound =
+                (   (t_strStringTemplateLocation != null)
+                 && (t_strStringTemplateLocation.trim().length() > 0));
 
-            if  (   (t_strAntlrLocation != null)
-                 || (t_strStringTemplateLocation != null))
+            if  (   (t_bAntlrLocationFound)
+                 || (t_bStringTemplateLocationFound))
             {
                 t_sbMessage.append("Hint: ");
 
-                if  (t_strAntlrLocation != null)
+                if  (   (t_strAntlrLocation != null)
+                     && (t_strAntlrLocation.trim().length() > 0))
                 {
                     t_sbMessage.append("ANTLR is loaded from ");
                     t_sbMessage.append(t_strAntlrLocation);
                 }
 
-                if  (t_strStringTemplateLocation != null)
+                if  (t_bStringTemplateLocationFound)
                 {
+                    if (t_bAntlrLocationFound)
+                    {
+                        t_sbMessage.append(
+                            " whereas ");
+                    }
                     t_sbMessage.append(
-                        " whereas StringTemplate is loaded from ");
+                        "StringTemplate is loaded from ");
                     t_sbMessage.append(
                         t_strStringTemplateLocation);
                 }
