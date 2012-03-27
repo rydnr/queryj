@@ -145,6 +145,26 @@ public class ConditionOperatorRepository
     }
 
     /**
+     * Retrieves the belongs-to operator.
+     * @param count the number of parameters within the clause.
+     * @return such operator.
+     */
+    public ConditionOperator getIn(final int count)
+    {
+        return new MultipleConditionOperator("in", count);
+    }
+
+    /**
+     * Retrieves the not-belongs-to operator.
+     * @param count the number of parameters within the clause.
+     * @return such operator.
+     */
+    public ConditionOperator getNotIn(final int count)
+    {
+        return new MultipleConditionOperator("not in", count);
+    }
+
+    /**
      * Retrieves the <code>like</code> operator.
      * @return such operator.
      */

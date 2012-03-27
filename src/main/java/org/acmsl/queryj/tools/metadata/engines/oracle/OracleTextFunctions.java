@@ -100,7 +100,7 @@ public class OracleTextFunctions
 
     /**
      * Wraps a field to call a function.
-     * @author <a href="http://maven.acm-sl.org/queryj">QueryJ</a>
+     * @author <a href="http://www.acm-sl.org/projects/queryj">QueryJ</a>
      */
     private static final class _StringFieldWrapper
         extends  StringField

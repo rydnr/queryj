@@ -473,6 +473,25 @@ public abstract class Query
     }
 
     /**
+     * Retrieves the position of given item on the query, if such item is an array.
+     * @param list the concrete list (fields, tables, conditions, etc.).
+     * @param object the object to find.
+     * @param index the index within the array.
+     * @return its position, or -1 if such item doesn't belong to
+     * this query.
+     * @precondition list != null
+     * @precondition object != null
+     */
+    protected final int getIndex(final List list, final Object object, final int index)
+    {
+        int result = getIndex(list, object);
+
+        result += index;
+
+        return result;
+    }
+
+    /**
      * Retrieves the position of given item on the query.
      * @param list the concrete list (fields, tables, conditions, etc.).
      * @param object the object to find.
@@ -486,6 +505,30 @@ public abstract class Query
         throws  SQLException
     {
         int result = getIndex(list, object);
+
+        if  (result < 1)
+        {
+            throw new SQLException("Field or Condition not found!");
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the position of given item on the query.
+     * @param list the concrete list (fields, tables, conditions, etc.).
+     * @param object the object to find.
+     * @param index the concrete index, if the object refers to an array.
+     * @return its position, or -1 if such item doesn't belong to
+     * this query.
+     * @throws SQLException if the element is not found.
+     * @precondition list != null
+     * @precondition object != null
+     */
+    protected int retrieveIndex(final List list, final Object object, final int index)
+        throws  SQLException
+    {
+        int result = getIndex(list, object, index);
 
         if  (result < 1)
         {
@@ -513,7 +556,7 @@ public abstract class Query
     /**
      * Converts a clob to a string.
      * @param clob the clob to convert.
-     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @param queryUtils the {@link QueryUtils} instance.
      * @return the clob contents.
      * @throws SQLException if the clob cannot be processed.
      * @precondition clob != null
@@ -2342,6 +2385,27 @@ public abstract class Query
       throws  SQLException
     {
         setString(retrieveIndex(getVariableConditions(), condition), value);
+    }
+
+    /**
+     * Specifies the value of an array of String parameters,
+     * associated with a previously specified variable condition.
+     * @param condition the variable condition.
+     * @param values the String values.
+     * @throws SQLException if an error occurs.
+     * @precondition variableCondition != null
+     */
+    public void setStrings(
+        final VariableCondition condition, final String[] values)
+      throws  SQLException
+    {
+        int t_iCount = (values != null) ? values.length : 0;
+
+        for (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            setString(
+                retrieveIndex(getVariableConditions(), condition, t_iIndex), values[t_iIndex]);
+        }
     }
 
     /**

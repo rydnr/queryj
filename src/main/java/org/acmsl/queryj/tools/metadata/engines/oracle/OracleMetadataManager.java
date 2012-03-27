@@ -69,6 +69,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -347,13 +348,13 @@ public class OracleMetadataManager
       throws  SQLException,
               QueryJException
     {
-        extractForeignKeys(
-            metaData.getConnection(),
-            catalog,
-            schema,
-            getTableNames(metaData, catalog, schema),
-            QueryFactory.getInstance(),
-            OracleTextFunctions.getInstance());
+        // extractForeignKeys(
+        //     metaData.getConnection(),
+        //     catalog,
+        //     schema,
+        //     getTableNames(metaData, catalog, schema),
+        //     QueryFactory.getInstance(),
+        //     OracleTextFunctions.getInstance());
     }
 
     /**
@@ -363,7 +364,7 @@ public class OracleMetadataManager
      * @param schema the database schema.
      * @param tableNames the table names.
      * @param queryFactory the query factory.
-     * @param textFunctions the <code>OracleTextFunctions</code> instance.
+     * @param textFunctions the {@link OracleTextFunctions} instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
@@ -391,10 +392,6 @@ public class OracleMetadataManager
         
         try
         {
-            for  (int t_iTableIndex = 0;
-                      t_iTableIndex < t_iLength;
-                      t_iTableIndex++) 
-            {
                 try
                 {
                     // select con.constraint_name,
@@ -446,13 +443,13 @@ public class OracleMetadataManager
                         .and(RCOL.TABLE_NAME.equals(RCON.TABLE_NAME))
                         .and(RCOL.CONSTRAINT_NAME.equals(RCON.CONSTRAINT_NAME))
                         .and(RCOL.POSITION.equals(COL.POSITION))
-                        .and(textFunctions.upper(COL.TABLE_NAME).equals()));
+                        .and(textFunctions.upper(COL.TABLE_NAME).in(tableNames.length)));
 
                     t_PreparedStatement = t_Query.prepareStatement(connection);
 
-                    t_Query.setString(
-                        textFunctions.upper(COL.TABLE_NAME).equals(),
-                        tableNames[t_iTableIndex].toUpperCase());
+                    t_Query.setStrings(
+                        textFunctions.upper(COL.TABLE_NAME).in(tableNames.length),
+                        toUpperCase(tableNames));
 
                     t_Results = (QueryResultSet) t_Query.executeQuery();
 
@@ -463,9 +460,12 @@ public class OracleMetadataManager
                         boolean t_bNewFk = true;
                         String t_strLastTable = null;
                         String t_strCurrentTable = null;
+                        String t_strOriginTable = null;
 
                         while  (t_Results.next())
                         {
+                            t_strOriginTable = t_Results.getString(COL.TABLE_NAME);
+
                             t_strCurrentTable = 
                                 t_Results.getString(RCOL.TABLE_NAME);
 
@@ -484,7 +484,7 @@ public class OracleMetadataManager
                                     (String[])
                                         t_cOriginAttributes.toArray(
                                             EMPTY_STRING_ARRAY),
-                                    tableNames[t_iTableIndex],
+                                    t_strOriginTable,
                                     (String[])
                                         t_cDestinationAttributes.toArray(
                                             EMPTY_STRING_ARRAY));
@@ -507,7 +507,7 @@ public class OracleMetadataManager
                                 (String[])
                                     t_cOriginAttributes.toArray(
                                         EMPTY_STRING_ARRAY),
-                                tableNames[t_iTableIndex],
+                                t_strOriginTable,
                                 (String[])
                                     t_cDestinationAttributes.toArray(
                                         EMPTY_STRING_ARRAY));
@@ -521,7 +521,7 @@ public class OracleMetadataManager
                             "cannot.retrieve.foreign.keys",
                             sqlException);
                 }
-            }
+//            }
         }
         catch  (final QueryJException queryjException)
         {
@@ -1519,5 +1519,37 @@ public class OracleMetadataManager
     public boolean requiresCustomClobHandling()
     {
         return true;
+    }
+
+    /**
+     * Converts given values to upper case.
+     * @param values the values to convert.
+     * @return the upper-case version of given values.
+     * @precondition values != null
+     */
+    protected String[] toUpperCase(final String[] values)
+    {
+        final String[] result = new String[(values != null) ? values.length : 0];
+
+        int t_iCount = 0;
+
+        if (values != null)
+        {
+            t_iCount = values.length;
+        }
+
+        String value;
+
+        for (int t_iIndex = 0 ; t_iIndex < t_iCount; t_iIndex++)
+        {
+            value = values[t_iIndex];
+
+            if (value != null)
+            {
+                result[t_iIndex] = value.toUpperCase(Locale.ENGLISH);
+            }
+        }
+
+        return result;
     }
 }

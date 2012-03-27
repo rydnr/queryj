@@ -84,4 +84,13 @@ public class InvalidTemplateException
     {
         return "queryj-exceptions";
     }
+
+    /*
+     * Retrieves the exceptions system property.
+     * @return such bundle name.
+     */
+    protected String retrieveExceptionsBundleProperty()
+    {
+        return "org.acmsl.queryj.exceptions";
+    }
 }

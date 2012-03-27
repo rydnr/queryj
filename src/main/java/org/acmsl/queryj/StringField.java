@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,9 +33,14 @@
 package org.acmsl.queryj;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some project classes.
  */
 import org.acmsl.queryj.Field;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.StringUtils;
 
 /**
  * Represents text fields.
@@ -68,29 +72,33 @@ public class StringField
             equals(
                 value,
                 ConditionFactory.getInstance(),
-                ConditionOperatorRepository.getInstance());
+                ConditionOperatorRepository.getInstance(),
+                StringUtils.getInstance());
     }
 
     /**
      * Retrieves the condition to be able to filter for equality.
      * @param value the value.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionFactory the {@link ConditionFactory} instance.
      * @param conditionOperatorRepository the
-     * <code>ConditionOperatorRepository</code> instance.
+     * {@link ConditionOperatorRepository} instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return such kind of condition.
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
+     * @precondition stringUtils != null
      */
     protected Condition equals(
         final String value,
         final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        final ConditionOperatorRepository conditionOperatorRepository,
+        final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
                 this,
                 conditionOperatorRepository.getEquals(),
-                "'" + value + "'");
+                stringUtils.quote(value, '\''));
     }
 
     /**
@@ -104,29 +112,33 @@ public class StringField
             notEquals(
                 value,
                 ConditionFactory.getInstance(),
-                ConditionOperatorRepository.getInstance());
+                ConditionOperatorRepository.getInstance(),
+                StringUtils.getInstance());
     }
 
     /**
      * Retrieves the condition to be able to filter for non-equality.
      * @param value the value.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionFactory the {@link ConditionFactory} instance.
      * @param conditionOperatorRepository the
-     * <code>ConditionOperatorRepository</code> instance.
+     * {@link ConditionOperatorRepository} instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return such kind of condition.
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
+     * @precondition stringUtils != null
      */
     protected Condition notEquals(
         final String value,
         final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        final ConditionOperatorRepository conditionOperatorRepository,
+        final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
                 this,
                 conditionOperatorRepository.getNotEquals(),
-                "'" + value + "'");
+                stringUtils.quote(value, '\''));
     }
 
     /**
@@ -140,29 +152,33 @@ public class StringField
             like(
                 value,
                 ConditionFactory.getInstance(),
-                ConditionOperatorRepository.getInstance());
+                ConditionOperatorRepository.getInstance(),
+                StringUtils.getInstance());
     }
 
     /**
      * Retrieves the condition to be able to filter for text patterns.
      * @param value the value.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionFactory the {@link ConditionFactory} instance.
      * @param conditionOperatorRepository the
-     * <code>ConditionOperatorRepository</code> instance.
+     * {@link ConditionOperatorRepository} instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return such kind of condition.
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
+     * @precondition stringUtils != null
      */
     protected Condition like(
         final String value,
         final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        final ConditionOperatorRepository conditionOperatorRepository,
+        final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
                 this,
                 conditionOperatorRepository.getLike(),
-                "'" + value + "'");
+                stringUtils.quote(value, '\''));
     }
 
     /**
@@ -177,29 +193,225 @@ public class StringField
             like(
                 value,
                 ConditionFactory.getInstance(),
-                ConditionOperatorRepository.getInstance());
+                ConditionOperatorRepository.getInstance(),
+                StringUtils.getInstance());
     }
 
     /**
      * Retrieves the condition to be able to filter for not containing
      * text patterns.
      * @param value the value.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionFactory the {@link ConditionFactory} instance.
      * @param conditionOperatorRepository the
-     * <code>ConditionOperatorRepository</code> instance.
+     * {@link ConditionOperatorRepository} instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return such kind of condition.
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
+     * @precondition stringUtils != null
      */
     protected Condition notLike(
         final String value,
         final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        final ConditionOperatorRepository conditionOperatorRepository,
+        final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
                 this,
                 conditionOperatorRepository.getNotLike(),
-                "'" + value + "'");
+                stringUtils.quote(value, '\''));
+    }
+
+    /**
+     * Retrieves the condition to be able to filter within a list of
+     * predefined values.
+     * @param values the values.
+     * @return such kind of condition.
+     */
+    public Condition in(final String[] values)
+    {
+        return
+            in(
+                values,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance(),
+                StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the condition to be able to filter within a list of
+     * predefined values.
+     * @param values the values.
+     * @param conditionFactory the {@link ConditionFactory} instance.
+     * @param conditionOperatorRepository the
+     * {@link ConditionOperatorRepository} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     * @precondition stringUtils != null
+     */
+    protected Condition in(
+        final String[] values,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository,
+        final StringUtils stringUtils)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getIn((values != null) ? values.length : 0),
+                toQuotedCsv(values, stringUtils));
+    }
+
+    /**
+     * Creates a list of comma-separated, quoted values.
+     * @param values the values.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return such list.
+     * @precondition values != null
+     * @precondition stringUtils != null
+     */
+    protected String toQuotedCsv(final String[] values, final StringUtils stringUtils)
+    {
+        StringBuilder t_sbResult = new StringBuilder();
+
+        int t_iCount = (values != null) ? values.length : 0;
+
+        String t_strValue;
+
+        for (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            t_strValue = values[t_iIndex];
+
+            if (t_strValue != null)
+            {
+                t_sbResult.append(stringUtils.quote(values[t_iIndex], '\''));
+
+                if (t_iIndex < t_iCount - 1)
+                {
+                    t_sbResult.append(",");
+                }
+            }
+        }
+
+        return t_sbResult.toString();
+    }
+
+    /**
+     * Retrieves the condition to be able to filter excluding a list of
+     * predefined values.
+     * @param values the values.
+     * @return such kind of condition.
+     */
+    public Condition notIn(final String[] values)
+    {
+        return
+            notIn(
+                values,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance(),
+                StringUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the condition to be able to filter excluding a list of
+     * predefined values.
+     * @param values the values.
+     * @param conditionFactory the {@link ConditionFactory} instance.
+     * @param conditionOperatorRepository the
+     * {@link ConditionOperatorRepository} instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     * @precondition stringUtils != null
+     */
+    protected Condition notIn(
+        final String[] values,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository,
+        final StringUtils stringUtils)
+    {
+        return
+            conditionFactory.createCondition(
+                this,
+                conditionOperatorRepository.getNotIn((values != null) ? values.length : 0),
+                toQuotedCsv(values, stringUtils));
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter within a list of
+     * predefined values.
+     * @param count the parameter count.
+     * @return such kind of condition.
+     */
+    public VariableCondition in(final int count)
+    {
+        return
+            in(
+                count,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter within a list of
+     * predefined values.
+     * @param count the number of parameters.
+     * @param conditionFactory the {@link ConditionFactory} instance.
+     * @param conditionOperatorRepository the
+     * {@link ConditionOperatorRepository} instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition in(
+        final int count,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this,
+                conditionOperatorRepository.getIn(count));
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter excluding a list of
+     * predefined values.
+     * @param count the parameter count.
+     * @return such kind of condition.
+     */
+    public VariableCondition notIn(final int count)
+    {
+        return
+            notIn(
+                count,
+                ConditionFactory.getInstance(),
+                ConditionOperatorRepository.getInstance());
+    }
+
+    /**
+     * Retrieves the variable condition to be able to filter excluding a list of
+     * predefined values.
+     * @param count the number of parameters.
+     * @param conditionFactory the {@link ConditionFactory} instance.
+     * @param conditionOperatorRepository the
+     * {@link ConditionOperatorRepository} instance.
+     * @return such kind of condition.
+     * @precondition conditionFactory != null
+     * @precondition conditionOperatorRepository != null
+     */
+    protected VariableCondition notIn(
+        final int count,
+        final ConditionFactory conditionFactory,
+        final ConditionOperatorRepository conditionOperatorRepository)
+    {
+        return
+            conditionFactory.createVariableCondition(
+                this,
+                conditionOperatorRepository.getNotIn(count));
     }
 }
