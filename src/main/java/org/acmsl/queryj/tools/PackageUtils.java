@@ -1798,6 +1798,124 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for DAOListener templates.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @return the package for the associated DAOListener class.
+     */
+    public String retrieveDAOListenerPackage(
+        final String packageName, final String engineName)
+    {
+        return retrieveDAOPackage(packageName, engineName);
+    }
+
+    /**
+     * Retrieves the folder for DAOListener templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAOListener should be
+     * generated.
+     */
+    public File retrieveDAOListenerFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveDAOFolder(
+                parentFolder, packageName, engineName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for DAOListenerImpl templates.
+     * @param packageName the original package.
+     * @param engineName the engine.
+     * @return the package for the associated DAOListenerImpl class.
+     */
+    public String retrieveDAOListenerImplPackage(
+        final String packageName, final String engineName)
+    {
+        return retrieveDAOListenerPackage(packageName, engineName);
+    }
+
+    /**
+     * Retrieves the folder for DAOListenerImpl templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param engineName the engine.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated DAOListenerImpl should be
+     * generated.
+     */
+    public File retrieveDAOListenerImplFolder(
+        final File parentFolder,
+        final String packageName,
+        final String engineName,
+        final boolean useSubfolders)
+    {
+        return
+            retrieveDAOListenerFolder(
+                parentFolder, packageName, engineName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for StatisticsProvider class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveStatisticsProviderPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for StatisticsProvider class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveStatisticsProviderFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for BaseResultSetExtractor class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveBaseResultSetExtractorPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for BaseResultSetExtractor class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveBaseResultSetExtractorFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
      * @return the class name.

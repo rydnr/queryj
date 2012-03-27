@@ -1990,15 +1990,15 @@ public class QueryJChain
             result.add(new RepositoryDAOTemplateHandlerBundle());
             result.add(new RepositoryDAOFactoryTemplateHandlerBundle());
 
-            result.add(new TableTemplateHandlerBundle());
+            //result.add(new TableTemplateHandlerBundle());
 
-            result.add(new TableRepositoryTemplateHandlerBundle());
+            //result.add(new TableRepositoryTemplateHandlerBundle());
 
             //result.add(new FunctionsBundle());
 
-            result.add(new ProcedureRepositoryTemplateHandlerBundle());
+            //result.add(new ProcedureRepositoryTemplateHandlerBundle());
 
-            result.add(new KeywordRepositoryTemplateHandlerBundle());
+            //result.add(new KeywordRepositoryTemplateHandlerBundle());
 
             result.add(new DAOBundle(generateMock, generateXML));
 

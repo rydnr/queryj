@@ -276,6 +276,22 @@ public class TemplateMappingManager
         "resultset.extractor.templates";
 
     /**
+     * The BaseResultSetExtractor template type.
+     */
+    public static final String BASE_RESULTSET_EXTRACTOR_TEMPLATE =
+        "base.resultset.extractor.template";
+
+    /**
+     * The DAO listener template attribute name.
+     */
+    public static final String DAO_LISTENER_TEMPLATE = "dao.listener.template";
+
+    /**
+     * The DAO listener implementation template attribute name.
+     */
+    public static final String DAO_LISTENER_IMPL_TEMPLATE = "dao.listener.impl.template";
+
+    /**
      * The CustomResultSetExtractor template type.
      */
     public static final String CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES =
