@@ -6,7 +6,7 @@
   <groupId>org.acmsl</groupId>
   <artifactId>queryj</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>v24-2.0.6</version>
+  <version>v24-2.0.6.1-SNAPSHOT</version>
   <name>QueryJ</name>
   <url>http://www.acm-sl.org</url>
   <inceptionYear>2002</inceptionYear>
@@ -116,10 +116,14 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>2.0.2</version>
+        <version>2.3.2</version>
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+          <debug>true</debug>
+          <fork>true</fork>
+          <meminitial>128m</meminitial>
+          <maxmem>512m</maxmem>
         </configuration>
       </plugin>
       <plugin>

@@ -629,24 +629,33 @@ public class QueryJMojo
     public void execute()
         throws MojoExecutionException
     {
-        getLog().info("Generating QueryJ...");
+        getLog().info("Running QueryJ 2.0.6.1-SNAPSHOT ...");
         
-        File outputDirPath = getOutputDir();
-        QueryJTask task = null;
+        QueryJTask task = buildTask();
 
-        if  (outputDirPath != null)
+        if  (task != null)
         {
-            //initialize directories
-            File outputDir = outputDirPath.getAbsoluteFile();
-            outputDir.mkdirs();
-        
-            //execute task  
-            task = buildTask();
+            getLog().info("Running QueryJ...");
+            File outputDirPath = getOutputDir();
 
-            if  (task != null)
+            if  (outputDirPath != null)
             {
+                //initialize directories
+                File outputDir = outputDirPath.getAbsoluteFile();
+                outputDir.mkdirs();
+
                 task.execute();
+            }                
+            else
+            {
+                throw new MojoExecutionException(
+                    "Output dir not specified!");
             }
+        }
+        else
+        {
+            throw new MojoExecutionException(
+                "QueryJ misconfiguration. Aborting.");
         }
     }
     
