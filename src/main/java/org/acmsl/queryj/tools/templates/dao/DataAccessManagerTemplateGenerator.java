@@ -110,6 +110,8 @@ public class DataAccessManagerTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param engineName the engine name.
      * @param tables the table names.
+     * @param header the file preamble.
+     * @param jmx whether to support JMX.
      * @return a template.
      * @precondition metadataManager != null
      * @precondition packageName != null
@@ -127,7 +129,8 @@ public class DataAccessManagerTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
     {
         return
             new DataAccessManagerTemplate(

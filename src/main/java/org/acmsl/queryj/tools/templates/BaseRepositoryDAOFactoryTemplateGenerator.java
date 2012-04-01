@@ -86,7 +86,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
     protected BaseRepositoryDAOFactoryTemplateGenerator() {};
 
     /**
-     * Retrieves a <code>BaseRepositoryDAOFactoryTemplateGenerator</code> instance.
+     * Retrieves a {@link BaseRepositoryDAOFactoryTemplateGenerator} instance.
      * @return such instance.
      */
     public static BaseRepositoryDAOFactoryTemplateGenerator getInstance()
@@ -95,7 +95,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
     }
 
     /**
-     * Generates a <i>per-repository</i> template.
+     * Generates a {@link BaseRepositoryDAOFactoryTemplate} template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -105,6 +105,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX.
      * @return a template.
      */
     public BasePerRepositoryTemplate createTemplate(
@@ -116,7 +117,8 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
     {
         return
             new BaseRepositoryDAOFactoryTemplate(

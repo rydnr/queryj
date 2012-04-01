@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Sql;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
@@ -97,7 +97,7 @@ public class DAOListenerImplTemplateBuildHandler
      * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
@@ -108,7 +108,8 @@ public class DAOListenerImplTemplateBuildHandler
      * @precondition repository != null
      * @precondition tableTemplates != null
      */
-    protected boolean handle(
+    @Override
+    protected boolean createTemplate(
         final Map parameters,
         final String engineName,
         final String engineVersion,
@@ -120,12 +121,12 @@ public class DAOListenerImplTemplateBuildHandler
         final String packageName,
         final String repository,
         final String header,
-//        final boolean jmx,
+        final boolean jmx,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
-            super.handle(
+            super.createTemplate(
                 parameters,
                 engineName,
                 engineVersion,
@@ -137,7 +138,7 @@ public class DAOListenerImplTemplateBuildHandler
                 packageName,
                 repository,
                 header,
-//                jmx,
+                jmx,
                 tableTemplates);
     }
     
@@ -145,7 +146,7 @@ public class DAOListenerImplTemplateBuildHandler
      * Retrieves the package name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null

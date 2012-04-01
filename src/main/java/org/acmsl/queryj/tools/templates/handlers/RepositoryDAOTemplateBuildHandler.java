@@ -96,7 +96,8 @@ public class RepositoryDAOTemplateBuildHandler
      * @precondition repository != null
      * @precondition tableTemplates != null
      */
-    protected void buildTemplate(
+    @Override
+    protected boolean createTemplate(
         final Map parameters,
         final String engineName,
         final String engineVersion,
@@ -108,27 +109,34 @@ public class RepositoryDAOTemplateBuildHandler
         final String packageName,
         final String repository,
         final String header,
+        final boolean jmx,
         final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
+        boolean result = false;
+
         if  (definesRepositoryScopedSql(
                  customSqlProvider,
                  getAllowEmptyRepositoryDAOSetting(parameters)))
         {
-            super.buildTemplate(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
-                metadataManager,
-                customSqlProvider,
-                templateFactory,
-                projectPackage,
-                packageName,
-                repository,
-                header,
-                tableTemplates);
+            result =
+                super.createTemplate(
+                    parameters,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    metadataManager,
+                    customSqlProvider,
+                    templateFactory,
+                    projectPackage,
+                    packageName,
+                    repository,
+                    header,
+                    jmx,
+                    tableTemplates);
         }
+
+        return result;
     }
     
     /**

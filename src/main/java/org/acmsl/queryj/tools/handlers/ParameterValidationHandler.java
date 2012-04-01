@@ -33,7 +33,6 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.logging.QueryJAntLog;
@@ -63,7 +62,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -342,11 +340,16 @@ public class ParameterValidationHandler
      * The charset associated to given encoding.
      */
     public static final String CHARSET = "charset";
-    
+
     /**
-     * Creates a <code>ParameterValidationHandler</code> instance.
+     * Whether to generate JMX support or not.
      */
-    public ParameterValidationHandler() {};
+    public static final String JMX = "jmx";
+
+    /**
+     * Creates a {@link ParameterValidationHandler} instance.
+     */
+    public ParameterValidationHandler() {}
 
     /**
      * Handles given command.
@@ -380,7 +383,6 @@ public class ParameterValidationHandler
     /**
      * Handles given parameters.
      * @param parameters the parameters to handle.
-     * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -397,8 +399,6 @@ public class ParameterValidationHandler
      * Validates the parameters.
      * @param parameters the parameter map.
      * @param usingAnt whether QueryJ is executed within Ant.
-     * @return <code>false</code> if the chain should be stopped because
-     * of invalid parameters.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
@@ -450,9 +450,9 @@ public class ParameterValidationHandler
      * @param schema the schema.
      * @param repository the repository.
      * @param packageName the package name.
-     * @param outputdir the output folder.
+     * @param outputDir the output folder.
      * @param header the header.
-     * @param outputdirsubfolders whether to use subfolders.
+     * @param outputDirSubFolders whether to use subFolders.
      * @param extractProcedures the extract-procedures setting.
      * @param extractFunctions the extract-functions setting.
      * @param jndiDataSources the JNDI location for data sources.
@@ -476,9 +476,9 @@ public class ParameterValidationHandler
         final String schema,
         final String repository,
         final String packageName,
-        final File outputdir,
+        final File outputDir,
         final File header,
-        final Boolean outputdirsubfolders,
+        final Boolean outputDirSubFolders,
         final Boolean extractProcedures,
         final Boolean extractFunctions,
         final String jndiDataSources,
@@ -538,7 +538,7 @@ public class ParameterValidationHandler
             throw new QueryJBuildException(PACKAGE_MISSING);
         }
 
-        if  (outputdir == null) 
+        if  (outputDir == null)
         {
             throw new QueryJBuildException(OUTPUTDIR_MISSING);
         }
@@ -593,16 +593,13 @@ public class ParameterValidationHandler
                         ioException);
                 }
             }
-            finally
+            if  (t_bExceptionReadingHeader)
             {
-                if  (t_bExceptionReadingHeader)
-                {
-                    throw new QueryJBuildException(HEADER_NOT_READABLE);
-                }
+                throw new QueryJBuildException(HEADER_NOT_READABLE);
             }
         }
         
-        if  (!outputdir.isDirectory())
+        if  (!outputDir.isDirectory())
         {
             throw new QueryJBuildException(OUTPUTDIR_NOT_FOLDER);
         }
@@ -612,8 +609,8 @@ public class ParameterValidationHandler
             throw new QueryJBuildException(JNDI_DATASOURCES_MISSING);
         }
 
-        if  (   (jndiDataSources.indexOf("\"") != -1)
-             || (jndiDataSources.indexOf("\n") != -1))
+        if  (   (jndiDataSources.contains("\""))
+             || (jndiDataSources.contains("\n")))
         {
             throw new QueryJBuildException(JNDI_DATASOURCES_INVALID);
         }
@@ -725,8 +722,7 @@ public class ParameterValidationHandler
      * @precondition file != null
      */
     protected String readFile(final File file)
-        throws  FileNotFoundException,
-                SecurityException,
+        throws  SecurityException,
                 IOException
     {
         return readFile(file, FileUtils.getInstance());
@@ -746,8 +742,7 @@ public class ParameterValidationHandler
      * @precondition fileUtils != null
      */
     protected String readFile(final File file, final FileUtils fileUtils)
-        throws  FileNotFoundException,
-                SecurityException,
+        throws  SecurityException,
                 IOException
     {
         return fileUtils.readFile(file);

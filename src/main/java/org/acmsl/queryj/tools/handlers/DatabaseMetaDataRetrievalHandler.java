@@ -42,12 +42,9 @@ import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -111,9 +108,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
         "metadata.extraction.already.done";
 
     /**
-     * Creates a <code>DatabaseMetaDataRetrievalHandler</code> instance.
+     * Creates a {@link DatabaseMetaDataRetrievalHandler} instance.
      */
-    public DatabaseMetaDataRetrievalHandler() {};
+    public DatabaseMetaDataRetrievalHandler() {}
 
     /**
      * Handles given parameters.
@@ -183,7 +180,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         storeMetadata(retrieveMetadata(parameters), parameters);
 
-        MetadataManager t_MetadataManager = null;
+        MetadataManager t_MetadataManager;
 
         boolean t_bDisableTableExtraction =
             !retrieveExtractTables(parameters);
@@ -195,7 +192,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         Iterator t_itTableElements = null;
 
-        String[] t_astrTableNames = null;
+        String[] t_astrTableNames;
 
         Collection t_cFieldElements = null;
 
@@ -203,7 +200,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         Map t_mKeys = new HashMap();
 
-        Collection t_cTables = null;
+        Collection t_cTables;
 
         if  (!t_bDisableTableExtraction)
         {
@@ -239,10 +236,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
                     t_itTableElements = t_cTableElements.iterator();
 
-                    t_iTableIndex = 0;
-
                     while  (   (t_itTableElements != null)
-                               && (t_itTableElements.hasNext()))
+                            && (t_itTableElements.hasNext()))
                     {
                         AntTableElement t_Table =
                             (AntTableElement) t_itTableElements.next();
@@ -476,7 +471,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameters to handle.
      * @param metaData the database metadata.
      * @param enableTableExtraction whether to extract tables.
-     * @param enableProcedureExtractor whether to extract procedures.
+     * @param enableProcedureExtraction whether to extract procedures.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -539,7 +534,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the command parameters.
      * @param tablesElement the &lt;tables&gt; element.
      * @return such table names.
-     * @throws QueryJBuildException if the process fails.
      * @precondition parameters != null
      */
     protected String[] extractTableNames(
@@ -559,12 +553,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the fields of the user-defined tables.
      * @param tables the table definitions.
      * @return such fields.
-     * @throws QueryJBuildException if the process fails.
      * @precondition tables != null
      */
     protected String[] extractTableNames(final Collection tables)
     {
-        String[] result = null;
+        String[] result;
 
         int t_iLength = (tables != null) ? tables.size() : 0;
 
@@ -717,33 +710,31 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         String[] t_astrTableNames = null;
 
-        int t_iTableIndex = 0;
-
         Map t_mKeys = new HashMap();
 
         Collection t_cTables = null;
 
-        Collection t_cFields = null;
+        Collection t_cFields;
 
-        Object t_TableFieldsKey = null;
+        Object t_TableFieldsKey;
 
-        Object t_TablePkKey = null;
+        Object t_TablePkKey;
 
-        Collection t_cPks = null;
+        Collection t_cPks;
 
         int t_iLength = 0;
 
-        AntTableElement t_Table = null;
+        AntTableElement t_Table;
 
-        Collection t_cFieldElements = null;
+        Collection t_cFieldElements;
 
-        AntFieldElement t_Field = null;
+        AntFieldElement t_Field;
 
-        String[] t_astrTableFieldNames = null;
+        String[] t_astrTableFieldNames;
 
-        Collection t_cFieldFks = null;
+        Collection t_cFieldFks;
 
-        Iterator t_itFieldElements = null;
+        Iterator t_itFieldElements;
 
         int t_iFieldIndex = 0;
 
@@ -1064,7 +1055,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         if  (   (t_Flag != null)
              && (t_Flag instanceof Boolean))
         {
-            result = ((Boolean) t_Flag).booleanValue();
+            result = (Boolean) t_Flag;
         }
 
         return result;
@@ -1172,7 +1163,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final String schema)
       throws  QueryJBuildException
     {
-        MetadataManager result = null;
+        MetadataManager result;
 
         try 
         {
@@ -1251,7 +1242,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         if  (   (t_Flag  != null)
              && (t_Flag instanceof Boolean))
         {
-            result = ((Boolean) t_Flag).booleanValue();
+            result = (Boolean) t_Flag;
         }
 
         return result;
@@ -1450,10 +1441,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
     /**
      * Checks whether the database vendor matches this handler.
-     * @param product the product name.
-     * @param version the product version.
-     * @param major the major version number.
-     * @param minor the minor version number.
+     * @param productName the product name.
+     * @param productVersion the product version.
+     * @param majorVersion the major version number.
+     * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
      * @precondition product != null
      */

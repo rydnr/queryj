@@ -42,7 +42,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Sql;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
@@ -97,7 +97,7 @@ public class DAOListenerTemplateBuildHandler
 //     * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
      * @precondition metadataManager != null
@@ -108,7 +108,8 @@ public class DAOListenerTemplateBuildHandler
      * @precondition repository != null
      * @precondition tableTemplates != null
      */
-    protected boolean handle(
+    @Override
+    protected boolean createTemplate(
         final Map parameters,
         final String engineName,
         final String engineVersion,
@@ -120,25 +121,25 @@ public class DAOListenerTemplateBuildHandler
         final String packageName,
         final String repository,
         final String header,
-//        final boolean jmx,
+        final boolean jmx,
         final TableTemplate[] tableTemplates)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
-            super.handle(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
-                metadataManager,
-                customSqlProvider,
-                templateFactory,
-                projectPackage,
-                packageName,
-                repository,
-                header,
-//                jmx,
-                tableTemplates);
+            super.createTemplate(
+                    parameters,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    metadataManager,
+                    customSqlProvider,
+                    templateFactory,
+                    projectPackage,
+                    packageName,
+                    repository,
+                    header,
+                    jmx,
+                    tableTemplates);
     }
     
     /**

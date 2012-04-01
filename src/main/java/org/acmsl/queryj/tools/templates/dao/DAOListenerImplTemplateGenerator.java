@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -51,7 +50,6 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -92,7 +90,7 @@ public class DAOListenerImplTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOListenerImplTemplateGenerator() {};
+    protected DAOListenerImplTemplateGenerator() {}
 
     /**
      * Retrieves a DAOListenerTemplateGenerator instance.
@@ -127,8 +125,8 @@ public class DAOListenerImplTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
-//        final boolean jmx)
+        final String header,
+        final boolean jmx)
 //      throws  QueryJException
     {
         return
@@ -137,8 +135,7 @@ public class DAOListenerImplTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
-//                jmx,
-                false,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

@@ -270,7 +270,7 @@ public class QueryJMojo
 
     /**
      * Specifies the url.
-     * @param newUrl the url.
+     * @param url the url.
      */
     public void setUrl(final String url)
     {
@@ -983,7 +983,7 @@ public class QueryJMojo
     /**
      * Retrieves whether to create <code>main</code> and <code>test</code>
      * subfolders withing <code>outputDir</code>. Defaults to false.
-     * @param flag such condition.
+     * @return such condition.
      */
     protected final Boolean immutableGetUseOutputSubfolders()
     {
@@ -993,7 +993,7 @@ public class QueryJMojo
     /**
      * Retrieves whether to create <code>main</code> and <code>test</code>
      * subfolders withing <code>outputDir</code>. Defaults to false.
-     * @param flag such condition.
+     * @return such condition.
      */
     public Boolean getUseOutputSubfolders()
     {

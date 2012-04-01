@@ -101,7 +101,7 @@ public class ConfigurationPropertiesTemplateGenerator
     }
 
     /**
-     * Generates a ConfigurationProperties template.
+     * Generates a {@link ConfigurationPropertiesTemplate} template.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -111,6 +111,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * @param engineName the engine name.
      * @param tables the table names.
      * @param header the header.
+     * @param jmx whether to support JMX.
      * @return a template.
      * @precondition metadataManager != null
      * @precondition packageName != null
@@ -128,7 +129,8 @@ public class ConfigurationPropertiesTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
     {
         return
             new ConfigurationPropertiesTemplate(

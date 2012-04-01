@@ -109,6 +109,7 @@ public class DAOChooserTemplateGenerator
      * @param engineName the engine name.
      * @param tables the table names.
      * @param header the header.
+     * @param jmx whether to support JMX.
      * @return a template.
      * @precondition metadataManager != null
      * @precondition packageName != null
@@ -126,7 +127,8 @@ public class DAOChooserTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
     {
         return
             new DAOChooserTemplate(

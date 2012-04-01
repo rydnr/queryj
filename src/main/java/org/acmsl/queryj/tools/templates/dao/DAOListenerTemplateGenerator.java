@@ -40,7 +40,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -50,7 +49,6 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -91,7 +89,7 @@ public class DAOListenerTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOListenerTemplateGenerator() {};
+    protected DAOListenerTemplateGenerator() {}
 
     /**
      * Retrieves a DAOListenerTemplateGenerator instance.
@@ -115,7 +113,6 @@ public class DAOListenerTemplateGenerator
      * @param header the header.
      * @param jmx whether to support JMX or not.
      * @return a template.
-//     * @throws QueryJException if the input values are invalid.
      */
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
@@ -126,9 +123,8 @@ public class DAOListenerTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
-//        final boolean jmx)
-    //      throws  QueryJException
+        final String header,
+        final boolean jmx)
     {
         return
             new DAOListenerTemplate(
@@ -136,8 +132,7 @@ public class DAOListenerTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
-//                jmx,
-                false,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

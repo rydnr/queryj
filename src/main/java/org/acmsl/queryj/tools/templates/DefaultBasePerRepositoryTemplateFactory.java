@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
  * Importing some JDK classes.
@@ -63,6 +62,7 @@ public interface DefaultBasePerRepositoryTemplateFactory
      * @param repositoryName the name of the repository.
      * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX.
      * @return a template.
      */
     public BasePerRepositoryTemplate createTemplate(
@@ -74,5 +74,6 @@ public interface DefaultBasePerRepositoryTemplateFactory
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header);
+        final String header,
+        final boolean jmx);
 }

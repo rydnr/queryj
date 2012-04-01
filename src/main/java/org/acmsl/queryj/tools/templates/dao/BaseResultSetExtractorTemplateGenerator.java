@@ -127,8 +127,8 @@ public class BaseResultSetExtractorTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
-//        final boolean jmx)
+        final String header,
+        final boolean jmx)
     //      throws  QueryJException
     {
         return
@@ -137,8 +137,7 @@ public class BaseResultSetExtractorTemplateGenerator
                 metadataTypeManager,
                 customSqlProvider,
                 header,
-//                jmx,
-                false,
+                jmx,
                 getDecoratorFactory(),
                 packageName,
                 basePackageName,

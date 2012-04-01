@@ -42,15 +42,12 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.patterns.CommandHandler;
 import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
@@ -58,8 +55,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import java.io.File;
 import java.nio.charset.Charset;
-import java.nio.charset.IllegalCharsetNameException;
-import java.nio.charset.UnsupportedCharsetException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.util.Map;
@@ -81,6 +76,7 @@ public abstract class AbstractQueryJCommandHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the process fails unexpectedly.
      * @precondition command != null
      */
     public boolean handle(final Command command)
@@ -124,7 +120,7 @@ public abstract class AbstractQueryJCommandHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition command != null
      */
     public boolean handle(final QueryJCommand command)
@@ -212,7 +208,7 @@ public abstract class AbstractQueryJCommandHandler
         if  (   (t_Flag != null)
              && (t_Flag instanceof Boolean))
         {
-            result = ((Boolean) t_Flag).booleanValue();
+            result = (Boolean) t_Flag;
         }
 
         return result;
@@ -329,6 +325,17 @@ public abstract class AbstractQueryJCommandHandler
     }
 
     /**
+     * Retrieves whether to generate support for JMX or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     * @precondition parameters != null
+     */
+    protected boolean retrieveJmx(final Map parameters)
+    {
+        return (Boolean) parameters.get(ParameterValidationHandler.JMX);
+    }
+
+    /**
      * Retrieves whether to implement marker interfaces or not.
      * @param parameters the parameter map.
      * @return such condition.
@@ -347,7 +354,40 @@ public abstract class AbstractQueryJCommandHandler
             result = Boolean.FALSE;
         }
 
-        return result.booleanValue();
+        return result;
+    }
+
+    /**
+     * Retrieves the database product name.
+     * @param metadata the database metadata.
+     * @return such information, or null if the vendor complains.
+     * @precondition metadata != null
+     */
+    protected String retrieveDatabaseProductName(
+            final DatabaseMetaData metadata)
+    {
+        String result = null;
+
+        try
+        {
+            result = metadata.getDatabaseProductName();
+        }
+        catch  (final Throwable throwable)
+        {
+            Log t_Log =
+                    UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.info(
+                        "Database vendor complained when queried about "
+                      + "its version via "
+                      + "java.sql.DatabaseMetaData.getDatabaseProductName()",
+                      throwable);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -384,7 +424,40 @@ public abstract class AbstractQueryJCommandHandler
     }
 
     /**
-     * Retrieves the <code>Connection</code> instance.
+     * Retrieves the database identifier quote string.
+     * @param metadata the {@link DatabaseMetaData} instance.
+     * @return such information.
+     * @precondition parameters != null
+     */
+    protected String retrieveDatabaseIdentifierQuoteString(
+        final DatabaseMetaData metadata)
+    {
+        String result = null;
+
+        try
+        {
+            result = metadata.getIdentifierQuoteString();
+        }
+        catch  (final Throwable throwable)
+        {
+            Log t_Log =
+                    UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.info(
+                        "Database vendor complained when queried about "
+                      + "its version via "
+                      + "java.sql.DatabaseMetaData.getIdentifierQuoteString()",
+                      throwable);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the {@link Connection} instance.
      * @param parameters the parameter map.
      * @return such instance.
      * @throws QueryJBuildException if the provider cannot be stored for
@@ -401,7 +474,7 @@ public abstract class AbstractQueryJCommandHandler
     }
 
     /**
-     * Retrieves the {@link charset} instance.
+     * Retrieves the {@link Charset} instance.
      * @param parameters the parameter map.
      * @return such instance.
      * @throws QueryJBuildException if the charset is not valid.

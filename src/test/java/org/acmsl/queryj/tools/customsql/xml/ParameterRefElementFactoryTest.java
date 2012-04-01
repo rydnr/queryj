@@ -85,7 +85,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
-  org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory parameterrefelementfactory = null;
+  ParameterRefElementFactory parameterrefelementfactory = null;
   // JUnitDoclet end class
   
   /**
@@ -104,11 +104,11 @@ extends TestCase
   * @return such instance.
   
   */
-  public org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory createInstance()
+  public ParameterRefElementFactory createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory();
+    return new ParameterRefElementFactory();
     // JUnitDoclet end method testcase.createInstance
   }
   

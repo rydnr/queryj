@@ -95,7 +95,7 @@ public class BaseRepositoryDAOTemplateGenerator
     }
 
     /**
-     * Generates a <i>per-repository</i> template.
+     * Generates a {@link BaseRepositoryDAOTemplate} instance.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -105,6 +105,7 @@ public class BaseRepositoryDAOTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param tables the tables.
      * @param header the header.
+     * @param jmx whether to support JMX.
      * @return a template.
      */
     public BasePerRepositoryTemplate createTemplate(
@@ -116,7 +117,8 @@ public class BaseRepositoryDAOTemplateGenerator
         final String repositoryName,
         final String engineName,
         final Collection tables,
-        final String header)
+        final String header,
+        final boolean jmx)
     {
         return
             new BaseRepositoryDAOTemplate(
