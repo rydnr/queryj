@@ -36,7 +36,6 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -65,7 +64,7 @@ public class BaseDAOTemplateBuildHandler
     /**
      * Creates a <code>BaseDAOTemplateBuildHandler</code> instance.
      */
-    public BaseDAOTemplateBuildHandler() {};
+    public BaseDAOTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
@@ -104,6 +103,8 @@ public class BaseDAOTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
         final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {
@@ -155,7 +156,7 @@ public class BaseDAOTemplateBuildHandler
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {        
-        @Nullable BasePerTableTemplate result = null;
+        @Nullable BasePerTableTemplate result;
 
         if  (   (templateFactory instanceof BaseDAOTemplateGenerator)
              && (isStaticTable(tableName, metadataManager)))

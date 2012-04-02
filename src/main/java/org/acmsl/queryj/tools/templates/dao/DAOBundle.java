@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -55,7 +54,6 @@ import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessContextLocalTempl
 import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateHandlerBundle;
 //import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOBundle;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOBundle;
@@ -99,21 +97,17 @@ public class DAOBundle
 //                new QueryPreparedStatementCreatorTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
                 (includeMock ? new MockDAOBundle() : null),
-<<<<<<< HEAD
-                (includeXML ? new XMLDAOBundle() : null)
-=======
                 (includeXML ? new XMLDAOBundle() : null),
                 new DAOListenerTemplateHandlerBundle(),
                 new DAOListenerImplTemplateHandlerBundle(),
-                new JdbcTemplateTemplateHandlerBundle(),
-                new ThreadLocalBagTemplateHandlerBundle(),
-                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
-                new TransactionManagerTemplateHandlerBundle(),
-                new JndiUtilsTemplateHandlerBundle(),
-                new DataSourceTransactionTokenTemplateHandlerBundle(),
-                new StatisticsProviderTemplateHandlerBundle(),
-                new BaseResultSetExtractorTemplateHandlerBundle()
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
+//                new JdbcTemplateTemplateHandlerBundle(),
+// TODO                new ThreadLocalBagTemplateHandlerBundle(),
+//                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
+//                new TransactionManagerTemplateHandlerBundle(),
+//                new JndiUtilsTemplateHandlerBundle(),
+//                new DataSourceTransactionTokenTemplateHandlerBundle(),
+//                new StatisticsProviderTemplateHandlerBundle(),
+//                new BaseResultSetExtractorTemplateHandlerBundle()
             });
     }
 }

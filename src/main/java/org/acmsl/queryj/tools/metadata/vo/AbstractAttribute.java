@@ -90,7 +90,7 @@ public abstract class AbstractAttribute
     /**
      * Creates an empty <code>AbstractAttribute</code> instance.
      */
-    public AbstractAttribute() {};
+    public AbstractAttribute() {}
 
     /**
      * Creates an <code>AbstractAttribute</code> with the following
@@ -278,7 +278,7 @@ public abstract class AbstractAttribute
 
     /**
      * Specifies whether it's managed externally.
-     * @param such information.
+     * @param managedExternally such information.
      */
     protected final void immutableSetManagedExternally(
         final boolean managedExternally)
@@ -288,7 +288,7 @@ public abstract class AbstractAttribute
 
     /**
      * Specifies whether it's managed externally.
-     * @param such information.
+     * @param managedExternally such information.
      */
     protected void setManagedExternally(final boolean managedExternally)
     {

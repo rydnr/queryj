@@ -61,7 +61,7 @@ public class BaseDAOTemplateWritingHandler
     /**
      * Creates a <code>BaseDAOTemplateWritingHandler</code> instance.
      */
-    public BaseDAOTemplateWritingHandler() {};
+    public BaseDAOTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.

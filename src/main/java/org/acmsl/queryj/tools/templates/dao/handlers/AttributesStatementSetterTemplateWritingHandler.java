@@ -48,7 +48,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -61,7 +60,7 @@ public class AttributesStatementSetterTemplateWritingHandler
     /**
      * Creates a AttributesStatementSetterTemplateWritingHandler.
      */
-    public AttributesStatementSetterTemplateWritingHandler() {};
+    public AttributesStatementSetterTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.

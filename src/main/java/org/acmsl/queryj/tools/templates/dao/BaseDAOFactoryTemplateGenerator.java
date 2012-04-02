@@ -36,12 +36,10 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
@@ -86,7 +84,7 @@ public class BaseDAOFactoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected BaseDAOFactoryTemplateGenerator() {};
+    protected BaseDAOFactoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link BaseDAOFactoryTemplateGenerator} instance.

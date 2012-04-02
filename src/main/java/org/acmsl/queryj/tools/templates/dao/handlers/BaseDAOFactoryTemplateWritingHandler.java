@@ -49,7 +49,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -62,7 +61,7 @@ public class BaseDAOFactoryTemplateWritingHandler
     /**
      * Creates a <code>BaseDAOFactoryTemplateWritingHandler</code> instance.
      */
-    public BaseDAOFactoryTemplateWritingHandler() {};
+    public BaseDAOFactoryTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.

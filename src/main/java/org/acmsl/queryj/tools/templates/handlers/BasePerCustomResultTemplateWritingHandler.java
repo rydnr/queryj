@@ -37,7 +37,6 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
@@ -45,9 +44,10 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing Jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +73,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * Creates a <code>BasePerCustomResultTemplateWritingHandler</code>
      * instance.
      */
-    public BasePerCustomResultTemplateWritingHandler() {};
+    public BasePerCustomResultTemplateWritingHandler() {}
 
     /**
      * Handles given information.
@@ -139,7 +139,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
 
     /**
      * Writes the templates.
-     * @param template the template.
+     * @param templates the templates.
      * @param templateGenerator the template generator.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.
@@ -164,12 +164,13 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         int t_iCount = (templates != null) ? templates.length : 0;
 
-        @Nullable BasePerCustomResultTemplate t_Template = null;
+        @Nullable BasePerCustomResultTemplate t_Template;
 
         try
         {
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
+                assert templates != null;
                 t_Template = templates[t_iIndex];
 
                 if  (t_Template != null)
@@ -225,7 +226,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      */
     @Nullable
     protected File retrieveOutputDir(
-        final Result result,
+        final Result resultElement,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
@@ -234,7 +235,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         return
             retrieveOutputDir(
-                result,
+                resultElement,
                 customSqlProvider,
                 metadataManager,
                 retrieveProjectOutputDir(parameters),
@@ -252,7 +253,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @param metadataManager the metadata manager.
      * @param projectFolder the project folder.
      * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
+     * @param useSubFolders whether to use subFolders for tests, or
      * using a different package naming scheme.
      * @param engineName the engine name.
      * @param parameters the parameter map.
@@ -262,12 +263,12 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      */
     @Nullable
     protected abstract File retrieveOutputDir(
-        final Result result,
+        final Result resultElement,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final File projectFolder,
         final String projectPackage,
-        final boolean useSubfolders,
+        final boolean useSubFolders,
         final String engineName,
         final Map parameters,
         final PackageUtils packageUtils)

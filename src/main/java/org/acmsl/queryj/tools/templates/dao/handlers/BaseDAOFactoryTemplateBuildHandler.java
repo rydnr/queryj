@@ -59,7 +59,7 @@ public class BaseDAOFactoryTemplateBuildHandler
     /**
      * Creates a <code>BaseDAOFactoryTemplateBuildHandler</code> instance.
      */
-    public BaseDAOFactoryTemplateBuildHandler() {};
+    public BaseDAOFactoryTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
@@ -98,6 +98,7 @@ public class BaseDAOFactoryTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
         final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {

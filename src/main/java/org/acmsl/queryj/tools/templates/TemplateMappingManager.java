@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -276,12 +275,6 @@ public class TemplateMappingManager
      */
     public static final String RESULTSET_EXTRACTOR_TEMPLATES =
         "resultset.extractor.templates";
-
-    /**
-     * The BaseResultSetExtractor template type.
-     */
-    public static final String BASE_RESULTSET_EXTRACTOR_TEMPLATE =
-        "base.resultset.extractor.template";
 
     /**
      * The DAO listener template attribute name.
@@ -668,7 +661,7 @@ public class TemplateMappingManager
                 setMapping(t_mMapping);
             }
 
-            @NotNull Object t_Key =
+            @Nullable Object t_Key =
                 buildKey(type, engineName, engineVersion);
 
             if  (t_Key != null)

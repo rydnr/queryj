@@ -70,12 +70,12 @@ public abstract class AbstractField
     private Collection m__cFieldFks;
 
     /**
-     * Creates an empty <code>AbstractField</code> instance.
+     * Creates an empty {@link AbstractField} instance.
      */
-    public AbstractField() {};
+    public AbstractField() {}
 
     /**
-     * Creates an <code>AbstractField</code> with given information.
+     * Creates an {@link AbstractField} with given information.
      * @param name the field name.
      * @param type the field type.
      * @param pk whether it participates in the table's pk.

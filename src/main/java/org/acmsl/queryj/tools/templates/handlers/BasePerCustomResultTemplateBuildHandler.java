@@ -41,26 +41,21 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -96,7 +91,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
      */
-    public BasePerCustomResultTemplateBuildHandler() {};
+    public BasePerCustomResultTemplateBuildHandler() {}
 
     /**
      * Handles given information.

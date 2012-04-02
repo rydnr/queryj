@@ -60,7 +60,6 @@ java_header(years,description,timestamp) ::= <<
 <! @param years the copyright years. !>
 <! @param description the description. !>
 <! @param timestamp the timestamp. !>
-//;-*- mode: java-*-
 /*
                         QueryJ
 

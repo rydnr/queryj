@@ -36,12 +36,9 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
-import org.acmsl.queryj.tools.metadata.PropertyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
@@ -73,10 +70,10 @@ public class BaseDAODecoratorFactory
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected BaseDAODecoratorFactory() {};
+    protected BaseDAODecoratorFactory() {}
 
     /**
-     * Retrieves a <code>BaseDAODecoratorFactory</code> instance.
+     * Retrieves a {@link BaseDAODecoratorFactory} instance.
      * @return such instance.
      */
     @NotNull
@@ -86,7 +83,7 @@ public class BaseDAODecoratorFactory
     }
 
     /**
-     * Creates an <code>AttributeDecorator</code> for given
+     * Creates an {@link AttributeDecorator} for given
      * attribute instance.
      * @param attribute the attribute.
      * @param metadataManager the <code>MetadataManager</code> instance.

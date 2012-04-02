@@ -38,14 +38,11 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.BaseDAODecoratorFactory;
-import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 
 /*
@@ -91,7 +88,7 @@ public class BaseAbstractDAOTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected BaseAbstractDAOTemplateGenerator() {};
+    protected BaseAbstractDAOTemplateGenerator() {}
 
     /**
      * Retrieves a {@link BaseAbstractDAOTemplateGenerator} instance.
@@ -205,7 +202,7 @@ public class BaseAbstractDAOTemplateGenerator
         final boolean implementMarkerInterfaces,
         @Nullable final Collection staticValues)
     {
-        @Nullable BasePerTableTemplate result = null;
+        @Nullable BasePerTableTemplate result;
 
         if  (staticValues != null)
         {

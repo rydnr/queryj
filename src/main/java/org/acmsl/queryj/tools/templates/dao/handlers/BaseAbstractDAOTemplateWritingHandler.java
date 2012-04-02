@@ -58,9 +58,9 @@ public class BaseAbstractDAOTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
 {
     /**
-     * Creates a <code>BaseAbstractDAOTemplateWritingHandler</code> instance.
+     * Creates a {@link BaseAbstractDAOTemplateWritingHandler} instance.
      */
-    public BaseAbstractDAOTemplateWritingHandler() {};
+    public BaseAbstractDAOTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.

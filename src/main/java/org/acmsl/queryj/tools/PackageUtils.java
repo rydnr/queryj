@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -212,10 +211,10 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrievePackage(
-                    (subFolders) ? "" : UNITTESTS_PACKAGE_PREFIX,
-                    packageName),
-                subpackage);
+                    retrievePackage(
+                            (subFolders) ? "" : UNITTESTS_PACKAGE_PREFIX,
+                            packageName),
+                    subpackage);
     }
 
     /**
@@ -235,7 +234,6 @@ public class PackageUtils
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param subpackage the subpackage.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
@@ -252,7 +250,6 @@ public class PackageUtils
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param subpackage the subpackage.
      * @param useSubfolders whether to use subfolders.
      * @return the folder in which the associated class should be
      * generated.
@@ -430,18 +427,17 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                (useSubfolders ? "" : UNITTESTS_PACKAGE_PREFIX),
-                useSubfolders,
-                true);
+                    parentFolder,
+                    (useSubfolders ? "" : UNITTESTS_PACKAGE_PREFIX),
+                    useSubfolders,
+                    true);
     }
 
     /**
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param subpackage the subpackage.
-     * @param useSunfolders whether to use subfolders.
+     * @param useSubfolders whether to use subfolders.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
@@ -455,10 +451,10 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                useSubfolders,
-                true);
+                    parentFolder,
+                    packageName,
+                    useSubfolders,
+                    true);
     }
 
     /**
@@ -466,7 +462,7 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the original package.
      * @param subpackage the subpackage.
-     * @param useSunfolders whether to use subfolders.
+     * @param useSubfolders whether to use subfolders.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
@@ -481,11 +477,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                retrieveTestFolder(parentFolder, useSubfolders),
-                packageName,
-                subpackage,
-                useSubfolders,
-                true);
+                    retrieveTestFolder(parentFolder, useSubfolders),
+                    packageName,
+                    subpackage,
+                    useSubfolders,
+                    true);
     }
 
     /**
@@ -517,11 +513,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                BASE_DAO_SUBPACKAGE,
-                useSubfolders,
-                false);
+                    parentFolder,
+                    packageName,
+                    BASE_DAO_SUBPACKAGE,
+                    useSubfolders,
+                    false);
     }
 
     /**
@@ -583,11 +579,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                VALUE_OBJECT_SUBPACKAGE,
-                useSubfolders,
-                false);
+                    parentFolder,
+                    packageName,
+                    VALUE_OBJECT_SUBPACKAGE,
+                    useSubfolders,
+                    false);
     }
 
     /**
@@ -618,7 +614,7 @@ public class PackageUtils
     {
         return
             retrieveValueObjectFolder(
-                parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubfolders);
     }
 
     /**
@@ -648,11 +644,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                BASE_VALUE_OBJECT_SUBPACKAGE,
-                useSubfolders,
-                false);
+                    parentFolder,
+                    packageName,
+                    BASE_VALUE_OBJECT_SUBPACKAGE,
+                    useSubfolders,
+                    false);
     }
 
     /**
@@ -682,11 +678,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                VALUE_OBJECT_IMPL_SUBPACKAGE,
-                useSubfolders,
-                false);
+                    parentFolder,
+                    packageName,
+                    VALUE_OBJECT_IMPL_SUBPACKAGE,
+                    useSubfolders,
+                    false);
     }
 
     /**
@@ -726,7 +722,7 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrieveBaseDAOPackage(packageName), RDB_SUBPACKAGE);
+                    retrieveBaseDAOPackage(packageName), RDB_SUBPACKAGE);
     }
 
     /**
@@ -745,9 +741,9 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                retrieveBaseDAOFolder(
-                    parentFolder, packageName, useSubfolders),
-                RDB_SUBPACKAGE);
+                    retrieveBaseDAOFolder(
+                            parentFolder, packageName, useSubfolders),
+                    RDB_SUBPACKAGE);
     }
 
     /**
@@ -799,8 +795,8 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrieveRdbPackage(packageName),
-                retrieveDAOSubpackage(engineName));
+                    retrieveRdbPackage(packageName),
+                    retrieveDAOSubpackage(engineName));
     }
 
     /**
@@ -824,9 +820,9 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                retrieveRdbFolder(
-                    parentFolder, packageName, useSubfolders),
-                engineName.toLowerCase());
+                    retrieveRdbFolder(
+                            parentFolder, packageName, useSubfolders),
+                    engineName.toLowerCase());
     }
 
     /**
@@ -859,7 +855,7 @@ public class PackageUtils
     {
         return
             retrieveDAOFolder(
-                parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubfolders);
     }
 
     /**
@@ -889,11 +885,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                TABLE_REPOSITORY_SUBPACKAGE,
-                useSubfolders,
-                false);
+                    parentFolder,
+                    packageName,
+                    TABLE_REPOSITORY_SUBPACKAGE,
+                    useSubfolders,
+                    false);
     }
 
     /**
@@ -922,7 +918,7 @@ public class PackageUtils
     {
         return
             retrieveTableRepositoryFolder(
-                parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubfolders);
     }
 
     /**
@@ -939,7 +935,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                retrieveDAOPackage(packageName, engineName), subFolders);
+                    retrieveDAOPackage(packageName, engineName), subFolders);
     }
 
     /**
@@ -960,9 +956,9 @@ public class PackageUtils
     {
         return
             retrieveTestFolder(
-                parentFolder,
-                retrieveDAOTestPackage(packageName, engineName, useSubfolders),
-                useSubfolders);
+                    parentFolder,
+                    retrieveDAOTestPackage(packageName, engineName, useSubfolders),
+                    useSubfolders);
     }
 
     /**
@@ -993,8 +989,8 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                retrieveTestFolder(parentFolder, useSubfolders),
-                packageName);
+                    retrieveTestFolder(parentFolder, useSubfolders),
+                    packageName);
     }
 
     /**
@@ -1024,11 +1020,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                parentFolder,
-                packageName,
-                FUNCTIONS_SUBPACKAGE,
-                useSubfolders,
-                false);
+                    parentFolder,
+                    packageName,
+                    FUNCTIONS_SUBPACKAGE,
+                    useSubfolders,
+                    false);
     }
 
     /**
@@ -1042,7 +1038,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                retrieveFunctionsPackage(packageName), subFolders);
+                    retrieveFunctionsPackage(packageName), subFolders);
     }
 
     /**
@@ -1061,9 +1057,9 @@ public class PackageUtils
     {
         return
             retrieveTestFolder(
-                parentFolder,
-                retrieveTestFunctionsPackage(packageName, useSubfolders),
-                useSubfolders);
+                    parentFolder,
+                    retrieveTestFunctionsPackage(packageName, useSubfolders),
+                    useSubfolders);
     }
 
     /**
@@ -1150,7 +1146,7 @@ public class PackageUtils
     {
         return
             retrieveProcedureRepositoryFolder(
-                parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubfolders);
     }
 
     /**
@@ -1162,8 +1158,8 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrieveBaseDAOPackage(packageName),
-                MOCK_DAO_SUBPACKAGE);
+                    retrieveBaseDAOPackage(packageName),
+                    MOCK_DAO_SUBPACKAGE);
     }
 
     /**
@@ -1182,8 +1178,8 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders),
-                MOCK_DAO_SUBPACKAGE);
+                    retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders),
+                    MOCK_DAO_SUBPACKAGE);
     }
 
     /**
@@ -1224,7 +1220,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                retrieveMockDAOPackage(packageName), subFolders);
+                    retrieveMockDAOPackage(packageName), subFolders);
     }
 
     /**
@@ -1243,9 +1239,9 @@ public class PackageUtils
     {
         return
             retrieveMockDAOFolder(
-                retrieveTestFolder(parentFolder, useSubfolders),
-                packageName,
-                useSubfolders);
+                    retrieveTestFolder(parentFolder, useSubfolders),
+                    packageName,
+                    useSubfolders);
     }
 
     /**
@@ -1257,28 +1253,28 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrieveBaseDAOPackage(packageName),
-                XML_DAO_SUBPACKAGE);
+                    retrieveBaseDAOPackage(packageName),
+                    XML_DAO_SUBPACKAGE);
     }
 
     /**
      * Retrieves the folder for XML DAO templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
-     * @return the folder in which  the associated DAO class should be
+     * @param useSubFolders whether to use subFolders.
+     * @return the folder in which the associated DAO class should be
      * generated.
      */
     @NotNull
     public File retrieveXMLDAOFolder(
         @NotNull final File parentFolder,
         final String packageName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                 retrieveBaseDAOFolder(
-                    parentFolder, packageName, useSubfolders),
+                    parentFolder, packageName, useSubFolders),
                 XML_DAO_SUBPACKAGE);
     }
 
@@ -1320,7 +1316,7 @@ public class PackageUtils
     {
         return
             retrieveTestPackage(
-                retrieveXMLDAOPackage(packageName), subFolders);
+                    retrieveXMLDAOPackage(packageName), subFolders);
     }
 
     /**
@@ -1339,9 +1335,9 @@ public class PackageUtils
     {
         return
             retrieveXMLDAOFolder(
-                retrieveTestFolder(parentFolder, useSubfolders),
-                packageName,
-                useSubfolders);
+                    retrieveTestFolder(parentFolder, useSubfolders),
+                    packageName,
+                    useSubfolders);
     }
 
     /**
@@ -1370,7 +1366,7 @@ public class PackageUtils
     {
         return
             retrieveXMLDAOFolder(
-                parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubfolders);
     }
 
     /**
@@ -1390,10 +1386,10 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                packageName,
-                engineName,
-                tableName,
-                StringUtils.getInstance());
+                    packageName,
+                    engineName,
+                    tableName,
+                    StringUtils.getInstance());
     }
 
     /**
@@ -1416,11 +1412,11 @@ public class PackageUtils
     {
         return
             retrievePackage(
-                retrieveDAOPackage(
-                    packageName, engineName),
-                stringUtils.capitalize(
-                    tableName.toLowerCase(),
-                    '_').toLowerCase());
+                    retrieveDAOPackage(
+                            packageName, engineName),
+                    stringUtils.capitalize(
+                            tableName.toLowerCase(),
+                            '_').toLowerCase());
     }
 
     /**
@@ -1446,12 +1442,12 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                parentFolder,
-                packageName,
-                engineName,
-                tableName,
-                useSubfolders,
-                StringUtils.getInstance());
+                    parentFolder,
+                    packageName,
+                    engineName,
+                    tableName,
+                    useSubfolders,
+                    StringUtils.getInstance());
     }
 
     /**
@@ -1480,11 +1476,11 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubfolders),
-                stringUtils.capitalize(
-                    tableName.toLowerCase(),
-                    '_').toLowerCase());
+                    retrieveDAOFolder(
+                            parentFolder, packageName, engineName, useSubfolders),
+                    stringUtils.capitalize(
+                            tableName.toLowerCase(),
+                            '_').toLowerCase());
     }
 
     /**
@@ -1532,7 +1528,7 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                packageName, engineName, tableName);
+                    packageName, engineName, tableName);
     }
 
     /**
@@ -1558,11 +1554,11 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                parentFolder,
-                packageName,
-                engineName,
-                tableName,
-                useSubfolders);
+                    parentFolder,
+                    packageName,
+                    engineName,
+                    tableName,
+                    useSubfolders);
     }
 
     /**
@@ -1599,7 +1595,7 @@ public class PackageUtils
     {
         return
             retrieveDAOFolder(
-                parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubfolders);
     }
 
     /**
@@ -1619,7 +1615,7 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                packageName, engineName, tableName);
+                    packageName, engineName, tableName);
     }
 
     /**
@@ -1645,11 +1641,11 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                parentFolder,
-                packageName,
-                engineName,
-                tableName,
-                useSubfolders);
+                    parentFolder,
+                    packageName,
+                    engineName,
+                    tableName,
+                    useSubfolders);
     }
 
     /**
@@ -1669,7 +1665,7 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                packageName, engineName, tableName);
+                    packageName, engineName, tableName);
     }
 
     /**
@@ -1695,11 +1691,11 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                parentFolder,
-                packageName,
-                engineName,
-                tableName,
-                useSubfolders);
+                    parentFolder,
+                    packageName,
+                    engineName,
+                    tableName,
+                    useSubfolders);
     }
 
     /**
@@ -1719,7 +1715,7 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsPackage(
-                packageName, engineName, tableName);
+                    packageName, engineName, tableName);
     }
 
     /**
@@ -1745,11 +1741,11 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                parentFolder,
-                packageName,
-                engineName,
-                tableName,
-                useSubfolders);
+                    parentFolder,
+                    packageName,
+                    engineName,
+                    tableName,
+                    useSubfolders);
     }
 
     /**
@@ -1782,7 +1778,7 @@ public class PackageUtils
     {
         return
             retrieveDAOFolder(
-                parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubfolders);
     }
 
     /**
@@ -1842,9 +1838,9 @@ public class PackageUtils
     {
         return
             retrieveRdbFolder(
-                parentFolder,
-                packageName,
-                useSubfolders);
+                    parentFolder,
+                    packageName,
+                    useSubfolders);
     }
 
     /**
@@ -1877,7 +1873,7 @@ public class PackageUtils
     {
         return
             retrieveDAOFolder(
-                parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubfolders);
     }
 
     /**
@@ -1910,18 +1906,7 @@ public class PackageUtils
     {
         return
             retrieveDAOListenerFolder(
-                parentFolder, packageName, engineName, useSubfolders);
-    }
-
-    /**
-     * Retrieves the package name for StatisticsProvider class.
-     * @param packageName the original package.
-     * @return the package for such class.
-     */
-    public String retrieveStatisticsProviderPackage(
-        final String packageName)
-    {
-        return retrieveRdbPackage(packageName);
+                    parentFolder, packageName, engineName, useSubfolders);
     }
 
     /**
@@ -1942,21 +1927,10 @@ public class PackageUtils
     }
 
     /**
-     * Retrieves the package name for BaseResultSetExtractor class.
-     * @param packageName the original package.
-     * @return the package for such class.
-     */
-    public String retrieveBaseResultSetExtractorPackage(
-        final String packageName)
-    {
-        return retrieveRdbPackage(packageName);
-    }
-
-    /**
      * Retrieves the folder for BaseResultSetExtractor class.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use subFolders.
      * @return the folder in which the associated rdb classes should be
      * generated.
      */
@@ -1964,9 +1938,9 @@ public class PackageUtils
     public File retrieveBaseResultSetExtractorFolder(
         @NotNull final File parentFolder,
         final String packageName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
-        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+        return retrieveRdbFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1981,22 +1955,6 @@ public class PackageUtils
     }
 
     /**
-     * Retrieves the folder for StatisticsProvider class.
-     * @param parentFolder the parent folder.
-     * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
-     * @return the folder in which the associated rdb classes should be
-     * generated.
-     */
-    public File retrieveStatisticsProviderFolder(
-        final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
-    {
-        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
-    }
-
-    /**
      * Retrieves the package name for BaseResultSetExtractor class.
      * @param packageName the original package.
      * @return the package for such class.
@@ -2005,27 +1963,11 @@ public class PackageUtils
         final String packageName)
     {
         return retrieveRdbPackage(packageName);
-    }
-
-    /**
-     * Retrieves the folder for BaseResultSetExtractor class.
-     * @param parentFolder the parent folder.
-     * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
-     * @return the folder in which the associated rdb classes should be
-     * generated.
-     */
-    public File retrieveBaseResultSetExtractorFolder(
-        final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
-    {
-        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
     }
 
     /**
      * Extracts the class name of given fully-qualified class.
-     * @param fqcn such information.
+     * @param fqdn such information.
      * @return the class name.
      * @precondition fqcn != null
      */
@@ -2040,6 +1982,7 @@ public class PackageUtils
 
         if  (t_iCount > 0)
         {
+            assert t_astrPieces != null;
             result = t_astrPieces[t_iCount - 1];
         }
 

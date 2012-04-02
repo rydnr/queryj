@@ -41,7 +41,6 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -51,7 +50,6 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -93,7 +91,7 @@ public class BaseResultSetExtractorTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected BaseResultSetExtractorTemplateGenerator() {};
+    protected BaseResultSetExtractorTemplateGenerator() {}
 
     /**
      * Retrieves a {@link BaseResultSetExtractorTemplateGenerator} instance.
@@ -118,7 +116,6 @@ public class BaseResultSetExtractorTemplateGenerator
      * @param header the header.
      * @param jmx whether to support JMX or not.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
      */
     @NotNull
     public BasePerRepositoryTemplate createTemplate(
@@ -206,7 +203,7 @@ public class BaseResultSetExtractorTemplateGenerator
         fileUtils.writeFile(
               outputDir.getAbsolutePath()
             + File.separator
-            + template.getRepositoryName()
+            + decorationUtils.capitalize(template.getRepositoryName())
             + "ResultSetExtractor.java",
             template.generate(),
             charset);

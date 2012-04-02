@@ -38,12 +38,9 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
-import org.acmsl.queryj.tools.metadata.PropertyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
@@ -75,10 +72,10 @@ public class AttributeStatementSetterDecoratorFactory
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected AttributeStatementSetterDecoratorFactory() {};
+    protected AttributeStatementSetterDecoratorFactory() {}
 
     /**
-     * Retrieves a <code>AttributeStatementSetterDecoratorFactory</code> instance.
+     * Retrieves a {@link AttributeStatementSetterDecoratorFactory} instance.
      * @return such instance.
      */
     @NotNull

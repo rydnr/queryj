@@ -36,7 +36,6 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
@@ -58,10 +57,10 @@ public class AttributesStatementSetterTemplateBuildHandler
     extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * Creates a <code>AttributesStatementSetterTemplateBuildHandler</code>
+     * Creates a {@link AttributesStatementSetterTemplateBuildHandler}
      * instance.
      */
-    public AttributesStatementSetterTemplateBuildHandler() {};
+    public AttributesStatementSetterTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
@@ -104,6 +103,7 @@ public class AttributesStatementSetterTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
         final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {
