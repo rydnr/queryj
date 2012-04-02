@@ -99,7 +99,21 @@ public class DAOBundle
 //                new QueryPreparedStatementCreatorTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
                 (includeMock ? new MockDAOBundle() : null),
+<<<<<<< HEAD
                 (includeXML ? new XMLDAOBundle() : null)
+=======
+                (includeXML ? new XMLDAOBundle() : null),
+                new DAOListenerTemplateHandlerBundle(),
+                new DAOListenerImplTemplateHandlerBundle(),
+                new JdbcTemplateTemplateHandlerBundle(),
+                new ThreadLocalBagTemplateHandlerBundle(),
+                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
+                new TransactionManagerTemplateHandlerBundle(),
+                new JndiUtilsTemplateHandlerBundle(),
+                new DataSourceTransactionTokenTemplateHandlerBundle(),
+                new StatisticsProviderTemplateHandlerBundle(),
+                new BaseResultSetExtractorTemplateHandlerBundle()
+>>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
             });
     }
 }

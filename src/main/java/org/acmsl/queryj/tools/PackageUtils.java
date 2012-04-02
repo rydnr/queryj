@@ -1970,6 +1970,60 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for StatisticsProvider class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveStatisticsProviderPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for StatisticsProvider class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveStatisticsProviderFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
+     * Retrieves the package name for BaseResultSetExtractor class.
+     * @param packageName the original package.
+     * @return the package for such class.
+     */
+    public String retrieveBaseResultSetExtractorPackage(
+        final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for BaseResultSetExtractor class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubfolders whether to use subfolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    public File retrieveBaseResultSetExtractorFolder(
+        final File parentFolder,
+        final String packageName,
+        final boolean useSubfolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+    }
+
+    /**
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
      * @return the class name.
