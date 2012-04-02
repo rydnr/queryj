@@ -53,6 +53,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -91,6 +92,7 @@ public class ValueObjectFactoryTemplateGenerator
      * Retrieves a {@link ValueObjectFactoryTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static ValueObjectFactoryTemplateGenerator getInstance()
     {
         return ValueObjectFactoryTemplateGeneratorSingletonContainer.SINGLETON;
@@ -120,6 +122,7 @@ public class ValueObjectFactoryTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @NotNull
     public BasePerTableTemplate createTemplate(
         final String tableName,
         final MetadataManager metadataManager,
@@ -153,6 +156,7 @@ public class ValueObjectFactoryTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return VODecoratorFactory.getInstance();
@@ -168,8 +172,8 @@ public class ValueObjectFactoryTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerTableTemplate template,
-        final File outputDir,
+        @NotNull final BasePerTableTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -203,13 +207,13 @@ public class ValueObjectFactoryTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerTableTemplate valueObjectFactoryTemplate,
-        final File outputDir,
+        @NotNull final BasePerTableTemplate valueObjectFactoryTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

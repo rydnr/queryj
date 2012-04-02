@@ -43,6 +43,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides insight about the meta-language used in model descriptions.
@@ -73,6 +75,7 @@ public class MetaLanguageUtils
      * Retrieves a <code>MetaLanguageUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MetaLanguageUtils getInstance()
     {
         return MetaLanguageUtilsSingletonContainer.SINGLETON;
@@ -95,9 +98,10 @@ public class MetaLanguageUtils
      * @param tableComment the table's comment.
      * @return such attribute.
      */
-    public String retrieveStaticAttribute(final String tableComment)
+    @Nullable
+    public String retrieveStaticAttribute(@Nullable final String tableComment)
     {
-        String result = null;
+        @Nullable String result = null;
         
         int t_iKeyIndex = -1;
 
@@ -126,10 +130,11 @@ public class MetaLanguageUtils
      * @precondition metadataManager != null
      * @precondition metaLanguageUtils != null
      */
+    @Nullable
     public String retrieveStaticAttribute(
-        final String tableName, final MetadataManager metadataManager)
+        final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        String result = null;
+        @Nullable String result = null;
 
         String t_strTableComment =
             metadataManager.getTableComment(tableName);
@@ -151,7 +156,7 @@ public class MetaLanguageUtils
      * @precondition metadataManager != null
      */
     public boolean containsStaticValues(
-        final String tableName, final MetadataManager metadataManager)
+        final String tableName, @NotNull final MetadataManager metadataManager)
     {
         return
             retrieveStaticAttribute(tableName, metadataManager) != null;

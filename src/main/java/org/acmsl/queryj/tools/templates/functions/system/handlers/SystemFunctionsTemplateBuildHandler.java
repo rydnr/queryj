@@ -53,6 +53,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -89,7 +91,7 @@ public class SystemFunctionsTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         if  (retrieveExtractFunctions(parameters))
@@ -121,16 +123,16 @@ public class SystemFunctionsTemplateBuildHandler
      * @precondition stringUtils != null
      */
     protected void buildTemplate(
-        final DatabaseMetaData metadata,
+        @NotNull final DatabaseMetaData metadata,
         final String packageName,
-        final SystemFunctionsTemplateGenerator generator,
-        final Map parameters,
-        final StringUtils stringUtils)
+        @NotNull final SystemFunctionsTemplateGenerator generator,
+        @NotNull final Map parameters,
+        @NotNull final StringUtils stringUtils)
       throws  QueryJBuildException
     {
         try 
         {
-            SystemFunctionsTemplate t_Template =
+            @Nullable SystemFunctionsTemplate t_Template =
                 generator.createSystemFunctionsTemplate(
                     packageName,
                     metadata.getDatabaseProductName(),
@@ -140,7 +142,7 @@ public class SystemFunctionsTemplateBuildHandler
             Collection t_cFunctions =
                 stringUtils.tokenize(metadata.getSystemFunctions(), ",");
 
-            Iterator t_itFunctions =
+            @Nullable Iterator t_itFunctions =
                 (t_cFunctions != null) ? t_cFunctions.iterator() : null;
 
             if  (t_itFunctions != null)
@@ -156,7 +158,7 @@ public class SystemFunctionsTemplateBuildHandler
             }
             storeSystemFunctionsTemplate(t_Template, parameters);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -172,11 +174,11 @@ public class SystemFunctionsTemplateBuildHandler
      * @return such information.
      * @precondition parameters != null
      */
-    protected boolean retrieveExtractFunctions(final Map parameters)
+    protected boolean retrieveExtractFunctions(@NotNull final Map parameters)
     {
         boolean result = true;
 
-        Boolean t_bResult =
+        @NotNull Boolean t_bResult =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.EXTRACT_FUNCTIONS);
@@ -197,7 +199,7 @@ public class SystemFunctionsTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeSystemFunctionsTemplate(
-        final SystemFunctionsTemplate template, final Map parameters)
+        final SystemFunctionsTemplate template, @NotNull final Map parameters)
     {
         parameters.put(SYSTEM_FUNCTIONS_TEMPLATE, template);
     }
@@ -208,7 +210,7 @@ public class SystemFunctionsTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -225,7 +227,7 @@ public class SystemFunctionsTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveFunctionsPackage(projectPackage);
     }

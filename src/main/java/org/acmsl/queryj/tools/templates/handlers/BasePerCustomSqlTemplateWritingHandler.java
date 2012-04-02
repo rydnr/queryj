@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomSqlTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -77,7 +78,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         writeTemplate(parameters, retrieveDatabaseMetaData(parameters));
@@ -94,14 +95,14 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @precondition metaData != null
      */
     protected void writeTemplate(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
         {
             writeTemplate(parameters, metaData.getDatabaseProductName());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -120,7 +121,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @precondition engineName != null
      */
     protected void writeTemplate(
-        final Map parameters, final String engineName)
+        @NotNull final Map parameters, final String engineName)
       throws  QueryJBuildException
     {
         writeTemplate(
@@ -145,14 +146,14 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
         final BasePerCustomSqlTemplate template,
         final File outputDir,
         final Charset charset,
-        final BasePerCustomSqlTemplateGenerator templateGenerator)
+        @NotNull final BasePerCustomSqlTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
         try 
         {
             templateGenerator.write(template, outputDir, charset);
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -164,6 +165,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     protected abstract BasePerCustomSqlTemplateGenerator retrieveTemplateGenerator();
 
     /**
@@ -171,6 +173,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     protected abstract BasePerCustomSqlTemplate retrieveTemplate(
         final Map parameters);
 
@@ -181,8 +184,9 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -208,6 +212,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected abstract File retrieveOutputDir(
         final File projectFolder,
         final String projectPackage,

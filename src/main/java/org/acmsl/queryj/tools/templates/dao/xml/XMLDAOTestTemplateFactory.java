@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to create XML DAO test templates.
@@ -56,6 +57,7 @@ public interface XMLDAOTestTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @NotNull
     public XMLDAOTestTemplate createXMLDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,

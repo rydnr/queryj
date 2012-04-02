@@ -38,6 +38,8 @@ package org.acmsl.queryj.tools.customsql;
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -210,15 +212,15 @@ public abstract class AbstractResult
      */
     public boolean equals(
         final Object instance,
-        final String id,
-        final String matches,
+        @NotNull final String id,
+        @NotNull final String matches,
         final Collection propertyRefs)
     {
         boolean result = false;
 
         if  (instance instanceof Result)
         {
-            Result candidate = (Result) instance;
+            @NotNull Result candidate = (Result) instance;
 
             result =
                 (   (id.equalsIgnoreCase(candidate.getId())
@@ -250,6 +252,7 @@ public abstract class AbstractResult
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String matches,
@@ -274,11 +277,11 @@ public abstract class AbstractResult
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof Result)
         {
-                final Result t_OtherInstance = (Result) object;
+                @NotNull final Result t_OtherInstance = (Result) object;
 
                 result =
                     new org.apache.commons.lang.builder.CompareToBuilder()

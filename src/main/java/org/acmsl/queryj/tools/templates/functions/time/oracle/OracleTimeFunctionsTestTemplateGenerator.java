@@ -52,6 +52,8 @@ import org.acmsl.queryj.tools.templates.functions.time
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate the JUnit classes to test the Database's time functions.
@@ -82,6 +84,7 @@ public class OracleTimeFunctionsTestTemplateGenerator
      * Retrieves a <code>OracleTimeFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleTimeFunctionsTestTemplateGenerator getOracleInstance()
     {
         return OracleTimeFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -97,15 +100,16 @@ public class OracleTimeFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
-        final String packageName,
+        @Nullable final String packageName,
         final String testedPackageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        OracleTimeFunctionsTestTemplate result = null;
+        @Nullable OracleTimeFunctionsTestTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -130,6 +134,7 @@ public class OracleTimeFunctionsTestTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

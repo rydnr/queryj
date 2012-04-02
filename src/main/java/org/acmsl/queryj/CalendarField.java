@@ -37,6 +37,7 @@ package org.acmsl.queryj;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -67,6 +68,7 @@ public class CalendarField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition equals(final Calendar value)
     {
         return
@@ -86,10 +88,11 @@ public class CalendarField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition equals(
         final Calendar value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -103,6 +106,7 @@ public class CalendarField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition notEquals(final Calendar value)
     {
         return
@@ -122,10 +126,11 @@ public class CalendarField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition notEquals(
         final Calendar value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(

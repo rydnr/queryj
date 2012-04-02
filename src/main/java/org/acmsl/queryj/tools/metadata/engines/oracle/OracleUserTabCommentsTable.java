@@ -50,6 +50,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the USER_TAB_TABUMNS table in the persistence domain.
@@ -74,18 +76,21 @@ public class OracleUserTabCommentsTable
     /**
      * The user_tab_comments table table_name field.
      */
+    @NotNull
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
      * The user_tab_comments table table_type field.
      */
+    @NotNull
     public StringField TABLE_TYPE =
         new StringField("TABLE_TYPE", this);
 
     /**
      * The user_tab_comments table comments field.
      */
+    @NotNull
     public StringField COMMENTS =
         new StringField("COMMENTS", this);
 
@@ -111,9 +116,10 @@ public class OracleUserTabCommentsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTabCommentsTable getInstance(final String alias)
+    @Nullable
+    public static OracleUserTabCommentsTable getInstance(@Nullable final String alias)
     {
-        OracleUserTabCommentsTable result = null;
+        @Nullable OracleUserTabCommentsTable result = null;
 
         if  (alias != null)
         {
@@ -131,6 +137,7 @@ public class OracleUserTabCommentsTable
      * Retrieves a OracleUserTabCommentsTable instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleUserTabCommentsTable getInstance()
     {
         return OracleUserTabCommentsTableSingletonContainer.SINGLETON;
@@ -140,6 +147,7 @@ public class OracleUserTabCommentsTable
      * Retrieves the table name.
      * @return such name.
      */
+    @NotNull
     public String getTableName()
     {
         return "USER_TAB_COMMENTS";
@@ -149,6 +157,7 @@ public class OracleUserTabCommentsTable
      * Retrieves <code>all</code> fields. It's equivalent to a star in a query.
      * @return such fields.
      */
+    @NotNull
     public Field[] getAll()
     {
         return

@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -800,9 +801,10 @@ public abstract class AbstractTableTemplate
      * @param field the field.
      * @return the field type.
      */
+    @NotNull
     public String getFieldType(final String field)
     {
-        String result = "Field";
+        @NotNull String result = "Field";
 
         Map t_mFieldTypes = getFieldTypes();
 

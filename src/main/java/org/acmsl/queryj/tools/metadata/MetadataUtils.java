@@ -53,6 +53,8 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -104,6 +106,7 @@ public class MetadataUtils
      * Retrieves a {@link MetadataUtils} instance.
      * @return such instance.
      */
+    @NotNull
     public static MetadataUtils getInstance()
     {
         return MetadataUtilsSingletonContainer.SINGLETON;
@@ -121,11 +124,12 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection retrievePrimaryKeyAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -149,15 +153,16 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection retrieveNonPrimaryKeyAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<String> t_cNonPkNames = new ArrayList<String>();
+        @NotNull Collection<String> t_cNonPkNames = new ArrayList<String>();
 
-        String[] t_astrColumnNames =
+        @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
         int t_iLength =
@@ -193,18 +198,19 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<ForeignKey> retrieveForeignKeyAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<ForeignKey> result = new ArrayList<ForeignKey>();
+        @NotNull Collection<ForeignKey> result = new ArrayList<ForeignKey>();
 
-        String[] t_astrReferredTables =
+        @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
-        String[][] t_aastrForeignKeys =
+        @Nullable String[][] t_aastrForeignKeys =
             metadataManager.getForeignKeys(tableName);
 
         int t_iLength =
@@ -217,9 +223,9 @@ public class MetadataUtils
 		: 0,
 		t_iLength);
 
-        Collection<Attribute> t_cAttributes = null;
-        ForeignKey t_CurrentFk = null;
-        Attribute t_FirstAttribute = null;
+        @Nullable Collection<Attribute> t_cAttributes = null;
+        @Nullable ForeignKey t_CurrentFk = null;
+        @Nullable Attribute t_FirstAttribute = null;
         boolean t_bAllowsNullAsAWhole = false;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
@@ -265,11 +271,12 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection retrieveAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -292,16 +299,17 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> retrieveExternallyManagedAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<String> t_cExternallyManagedAttributeNames =
+        @NotNull Collection<String> t_cExternallyManagedAttributeNames =
             new ArrayList<String>();
 
-        String[] t_astrColumnNames =
+        @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
         int t_iLength =
@@ -339,16 +347,17 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> retrieveAllButExternallyManagedAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<String> t_cNonExternallyManagedAttributeNames =
+        @NotNull Collection<String> t_cNonExternallyManagedAttributeNames =
             new ArrayList<String>();
 
-        String[] t_astrColumnNames =
+        @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
         int t_iLength =
@@ -387,25 +396,26 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Collection<Attribute>> retrieveForeignKeys(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<Collection<Attribute>> result = new ArrayList<Collection<Attribute>>();
+        @NotNull Collection<Collection<Attribute>> result = new ArrayList<Collection<Attribute>>();
 
-        String[] t_astrReferredTables =
+        @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
-        String[] t_astrReferredColumns = null;
+        @Nullable String[] t_astrReferredColumns = null;
 
         int t_iLength =
             (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
 
-        Collection<Attribute> t_cCurrentForeignKey = null;
+        @Nullable Collection<Attribute> t_cCurrentForeignKey = null;
 
-        String t_strReferredTable = null;
+        @Nullable String t_strReferredTable = null;
 
         for  (int t_iRefTableIndex = 0;
                   t_iRefTableIndex < t_iLength;
@@ -414,7 +424,7 @@ public class MetadataUtils
             t_strReferredTable =
                 t_astrReferredTables[t_iRefTableIndex];
 
-            String[][] t_aastrForeignKeys =
+            @NotNull String[][] t_aastrForeignKeys =
                 metadataManager.getForeignKeys(tableName, t_strReferredTable);
 
             int t_iFkLength =
@@ -457,15 +467,16 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Map<String,ForeignKey[]> retrieveReferringKeys(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Map<String,ForeignKey[]> result = new HashMap<String,ForeignKey[]>();
+        @NotNull Map<String,ForeignKey[]> result = new HashMap<String,ForeignKey[]>();
 
-        String[] t_astrReferringTables =
+        @NotNull String[] t_astrReferringTables =
             metadataManager.getReferringTables(tableName);
 
         int t_iLength =
@@ -506,12 +517,13 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> buildAttributes(
-        final String[] columnNames,
+        @NotNull final String[] columnNames,
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -538,13 +550,14 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> buildAttributes(
-        final String[] columnNames,
+        @NotNull final String[] columnNames,
         final String tableName,
         final boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -572,13 +585,14 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> buildAttributes(
         final String[] columnNames,
         final String[] columnValues,
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -607,13 +621,14 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> buildAttributes(
-        final String[] columnNames,
+        @NotNull final String[] columnNames,
         final String tableName,
         final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -643,16 +658,17 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> buildAttributes(
-        final String[] columnNames,
+        @Nullable final String[] columnNames,
         final String[] columnValues,
         final String tableName,
-        final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @Nullable final Boolean allowsNullAsAWhole,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<Attribute> result = new ArrayList<Attribute>();
+        @NotNull Collection<Attribute> result = new ArrayList<Attribute>();
 
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
@@ -662,7 +678,7 @@ public class MetadataUtils
                 metadataManager.getColumnType(
                     tableName, columnNames[t_iIndex]);
 
-            String t_strNativeType =
+            @Nullable String t_strNativeType =
                 metadataTypeManager.getNativeType(t_iType);
 
             boolean t_bAllowsNull = false;
@@ -708,7 +724,7 @@ public class MetadataUtils
      * @return such information.
      * @precondition attributes != null
      */
-    public boolean allowsNullAsAWhole(final Collection<Attribute> attributes)
+    public boolean allowsNullAsAWhole(@Nullable final Collection<Attribute> attributes)
     {
         boolean result = false;
 
@@ -718,7 +734,7 @@ public class MetadataUtils
 
             if  (t_itAttributes != null)
             {
-                Attribute t_CurrentAttribute = null;
+                @Nullable Attribute t_CurrentAttribute = null;
 
                 while  (t_itAttributes.hasNext())
                 {
@@ -748,9 +764,9 @@ public class MetadataUtils
      * @precondition metadataManager != null
      */
     public boolean allowsNullAsAWhole(
-        final String[] columnNames,
+        @Nullable final String[] columnNames,
         final String tableName,
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         boolean result = false;
 
@@ -783,8 +799,8 @@ public class MetadataUtils
      */
     public ForeignKey[] retrieveForeignKeys(
         final String tableName,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             retrieveFks(
@@ -808,13 +824,13 @@ public class MetadataUtils
      */
     protected ForeignKey[] retrieveFks(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<ForeignKey> result = new ArrayList<ForeignKey>();
+        @NotNull Collection<ForeignKey> result = new ArrayList<ForeignKey>();
 
-        String[] t_astrReferredTables =
+        @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
         int t_iLength =
@@ -851,13 +867,13 @@ public class MetadataUtils
     protected ForeignKey[] retrieveForeignKeys(
         final String sourceTableName,
         final String targetTableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<ForeignKey> result = new ArrayList<ForeignKey>();
+        @NotNull Collection<ForeignKey> result = new ArrayList<ForeignKey>();
 
-        String[][] t_aastrForeignKeys =
+        @NotNull String[][] t_aastrForeignKeys =
             metadataManager.getForeignKeys(
                 sourceTableName, targetTableName);
 
@@ -901,11 +917,12 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> retrieveLobAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             retrieveLobAttributes(
@@ -928,11 +945,12 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public Collection<Attribute> retrieveAllButLobAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             retrieveLobAttributes(
@@ -956,16 +974,17 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection<Attribute> retrieveLobAttributes(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
         final boolean includeLob,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection<String> t_cLobAttributeNames = new ArrayList<String>();
+        @NotNull Collection<String> t_cLobAttributeNames = new ArrayList<String>();
 
-        String[] t_astrColumnNames =
+        @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
         int t_iLength =
@@ -1005,11 +1024,12 @@ public class MetadataUtils
      * @precondition properties != null
      * @precondition metadataTypeManager != null
      */
+    @NotNull
     public Collection<Property> filterLobProperties(
-        final Collection<Property> properties,
-        final MetadataTypeManager metadataTypeManager)
+        @Nullable final Collection<Property> properties,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        Collection<Property> result = new ArrayList<Property>();
+        @NotNull Collection<Property> result = new ArrayList<Property>();
 
         Iterator<Property> t_itPropertyIterator =
             (properties != null)
@@ -1050,9 +1070,9 @@ public class MetadataUtils
      * @precondition tableName != null
      */
     public boolean contain(
-        final Collection<Attribute> attributes,
-        final String attributeName,
-        final String tableName)
+        @Nullable final Collection<Attribute> attributes,
+        @NotNull final String attributeName,
+        @NotNull final String tableName)
     {
         boolean result = false;
 
@@ -1060,7 +1080,7 @@ public class MetadataUtils
             (attributes != null)
             ? attributes.iterator() : new ArrayList<Attribute>().iterator();
 
-        Attribute t_CurrentItem = null;
+        @Nullable Attribute t_CurrentItem = null;
 
         while  (t_Iterator.hasNext())
         {
@@ -1091,9 +1111,9 @@ public class MetadataUtils
      * @precondition tableName != null
      */
     public boolean match(
-        final Attribute attribute,
-        final String name,
-        final String tableName)
+        @Nullable final Attribute attribute,
+        @NotNull final String name,
+        @NotNull final String tableName)
     {
         boolean result = false;
 

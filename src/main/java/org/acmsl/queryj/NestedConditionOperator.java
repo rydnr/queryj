@@ -40,6 +40,8 @@ package org.acmsl.queryj;
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.ConditionOperator;
 import org.acmsl.queryj.Field;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents condition operators involving nested queries SQL statements.
@@ -109,7 +111,7 @@ public class NestedConditionOperator
      * @param query the query.
      * @return <code>true</code> if both objects are logically equal.
      */
-    public boolean equals(final Object candidate, final SelectQuery query)
+    public boolean equals(final Object candidate, @Nullable final SelectQuery query)
     {
         boolean result = super.equals(candidate);
 
@@ -120,7 +122,7 @@ public class NestedConditionOperator
 
         if  (!result)
         {
-            NestedConditionOperator t_Candidate =
+            @NotNull NestedConditionOperator t_Candidate =
                 (NestedConditionOperator) candidate;
 
             result = (t_Candidate.getQuery() == query);
@@ -157,7 +159,7 @@ public class NestedConditionOperator
      * @param query the select query.
      * @return such information.
      */
-    protected int hashCode(final SelectQuery query)
+    protected int hashCode(@NotNull final SelectQuery query)
     {
         return (NestedConditionOperator.class + query.toString()).hashCode();
     }

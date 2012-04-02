@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.customsql;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -112,6 +114,7 @@ public class ConnectionFlagsElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return
@@ -126,6 +129,7 @@ public class ConnectionFlagsElement
      * @param transactionIsolation the <i>transactionisolation</i> attribute.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String transactionIsolation)
@@ -161,7 +165,7 @@ public class ConnectionFlagsElement
 
         if  (object instanceof ConnectionFlags)
         {
-            final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
+            @NotNull final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -187,11 +191,11 @@ public class ConnectionFlagsElement
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof ConnectionFlags)
         {
-            final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
+            @NotNull final ConnectionFlags t_OtherInstance = (ConnectionFlags) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

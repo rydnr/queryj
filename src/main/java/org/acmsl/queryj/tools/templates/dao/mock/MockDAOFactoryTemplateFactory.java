@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create Mock DAO factory templates.
@@ -54,6 +55,7 @@ public interface MockDAOFactoryTemplateFactory
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
+    @NotNull
     public MockDAOFactoryTemplate createMockDAOFactoryTemplate(
         final TableTemplate tableTemplate,
         final String        packageName,

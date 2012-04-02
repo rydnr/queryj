@@ -53,6 +53,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -91,6 +92,7 @@ public class ValueObjectImplTemplateGenerator
      * Retrieves a {@link ValueObjectImplTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static ValueObjectImplTemplateGenerator getInstance()
     {
         return ValueObjectImplTemplateGeneratorSingletonContainer.SINGLETON;
@@ -120,6 +122,7 @@ public class ValueObjectImplTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @NotNull
     public BasePerTableTemplate createTemplate(
         final String tableName,
         final MetadataManager metadataManager,
@@ -168,8 +171,8 @@ public class ValueObjectImplTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerTableTemplate template,
-        final File outputDir,
+        @NotNull final BasePerTableTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -203,13 +206,13 @@ public class ValueObjectImplTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerTableTemplate valueObjectImplTemplate,
-        final File outputDir,
+        @NotNull final BasePerTableTemplate valueObjectImplTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final ValueObjectTemplateGenerator valueObjectTemplateGenerator,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

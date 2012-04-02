@@ -49,6 +49,8 @@ import org.acmsl.queryj.QueryResultSet;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -85,6 +87,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  @Nullable
   org.acmsl.queryj.QueryResultSet queryresultset = null;
   // JUnitDoclet end class
   
@@ -104,6 +107,7 @@ extends TestCase
   * @return such instance.
   
   */
+  @Nullable
   public org.acmsl.queryj.QueryResultSet createInstance()
   throws Exception
   {
@@ -386,7 +390,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setFetchDirection getFetchDirection
-    int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
+    @NotNull int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -406,7 +410,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setFetchSize getFetchSize
-    int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
+    @NotNull int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {

@@ -36,6 +36,8 @@ package org.acmsl.queryj.dao;
 /*
  * Importing Spring classes.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -125,7 +127,8 @@ public class QueryjJdbcTemplate
      * @return the result of the operation.
      * @precondition action != null
      */
-    public Object execute(final ConnectionCallback action)
+    @Nullable
+    public Object execute(@NotNull final ConnectionCallback action)
         throws DataAccessException
     {
         return
@@ -148,16 +151,17 @@ public class QueryjJdbcTemplate
      * @precondition nativeJdbcExtractor != null
      * @precondition exceptionTranslator != null
      */
+    @Nullable
     protected Object execute(
-        final ConnectionCallback action,
+        @NotNull final ConnectionCallback action,
         final DataSource dataSource,
-        final NativeJdbcExtractor nativeJdbcExtractor,
-        final SQLExceptionTranslator exceptionTranslator)
+        @Nullable final NativeJdbcExtractor nativeJdbcExtractor,
+        @NotNull final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException
     {
-        Object result = null;
+        @Nullable Object result = null;
 
-        Connection t_Connection = null;
+        @Nullable Connection t_Connection = null;
 
         boolean t_bCloseConnection = false;
 
@@ -170,7 +174,7 @@ public class QueryjJdbcTemplate
 
         try
         {
-            ConnectionHolder t_ConnectionHolder =
+            @NotNull ConnectionHolder t_ConnectionHolder =
                 (ConnectionHolder)
                     TransactionSynchronizationManager.getResource(
                         t_DataSource);
@@ -197,7 +201,7 @@ public class QueryjJdbcTemplate
                         t_ConnectionHolder, t_DataSource));
             }
 
-            Connection t_ConnectionToUse = t_Connection;
+            @Nullable Connection t_ConnectionToUse = t_Connection;
 
             if  (nativeJdbcExtractor != null)
             {
@@ -207,7 +211,7 @@ public class QueryjJdbcTemplate
 
             result = action.doInConnection(t_ConnectionToUse);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 exceptionTranslator.translate(
@@ -222,7 +226,7 @@ public class QueryjJdbcTemplate
                 {
                     t_Connection.close();
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     LogFactory.getLog(QueryjJdbcTemplate.class).info(
                         "Could not close connection",
@@ -240,7 +244,8 @@ public class QueryjJdbcTemplate
      * @return the result of the operation.
      * @precondition action != null
      */
-    public Object execute(final StatementCallback action)
+    @Nullable
+    public Object execute(@NotNull final StatementCallback action)
         throws DataAccessException
     {
         return
@@ -263,20 +268,21 @@ public class QueryjJdbcTemplate
      * @precondition nativeJdbcExtractor != null
      * @precondition exceptionTranslator != null
      */
+    @Nullable
     protected Object execute(
-        final StatementCallback action,
+        @NotNull final StatementCallback action,
         final DataSource dataSource,
-        final NativeJdbcExtractor nativeJdbcExtractor,
-        final SQLExceptionTranslator exceptionTranslator)
+        @Nullable final NativeJdbcExtractor nativeJdbcExtractor,
+        @NotNull final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException
     {
-        Object result = null;
+        @Nullable Object result = null;
 
-        Connection t_Connection = null;
+        @Nullable Connection t_Connection = null;
 
         boolean t_bCloseConnection = false;
 
-        Statement t_Statement = null;
+        @Nullable Statement t_Statement = null;
 
         DataSource t_DataSource = dataSource;
 
@@ -287,7 +293,7 @@ public class QueryjJdbcTemplate
 
         try
         {
-            ConnectionHolder t_ConnectionHolder =
+            @NotNull ConnectionHolder t_ConnectionHolder =
                 (ConnectionHolder)
                     TransactionSynchronizationManager.getResource(
                         t_DataSource);
@@ -316,7 +322,7 @@ public class QueryjJdbcTemplate
                         t_ConnectionHolder, t_DataSource));
             }
 
-            Connection t_ConnectionToUse = t_Connection;
+            @Nullable Connection t_ConnectionToUse = t_Connection;
 
             if  (   (nativeJdbcExtractor != null)
                  && (nativeJdbcExtractor
@@ -331,7 +337,7 @@ public class QueryjJdbcTemplate
             DataSourceUtils.applyTransactionTimeout(
                 t_Statement, t_DataSource);
             
-            Statement t_StatementToUse = t_Statement;
+            @Nullable Statement t_StatementToUse = t_Statement;
 
             if  (nativeJdbcExtractor != null)
             {
@@ -345,7 +351,7 @@ public class QueryjJdbcTemplate
 
             throwExceptionOnWarningIfNotIgnoringWarnings(t_Warning);
         }
-        catch (final SQLException sqlException)
+        catch (@NotNull final SQLException sqlException)
         {
             throw exceptionTranslator.translate(
                 "executing StatementCallback", getSql(action), sqlException);
@@ -361,7 +367,7 @@ public class QueryjJdbcTemplate
                 {
                     t_Connection.close();
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     LogFactory.getLog(QueryjJdbcTemplate.class).info(
                         "Could not close connection",
@@ -380,9 +386,10 @@ public class QueryjJdbcTemplate
      * @return the result of the operation.
      * @precondition action != null
      */
+    @Nullable
     public Object execute(
-        final PreparedStatementCreator preparedStatementCreator,
-        final PreparedStatementCallback action)
+        @NotNull final PreparedStatementCreator preparedStatementCreator,
+        @NotNull final PreparedStatementCallback action)
       throws DataAccessException
     {
         return
@@ -409,21 +416,22 @@ public class QueryjJdbcTemplate
      * @precondition nativeJdbcExtractor != null
      * @precondition exceptionTranslator != null
      */
+    @Nullable
     protected Object execute(
-        final PreparedStatementCreator preparedStatementCreator,
-        final PreparedStatementCallback action,
+        @NotNull final PreparedStatementCreator preparedStatementCreator,
+        @NotNull final PreparedStatementCallback action,
         final DataSource dataSource,
-        final NativeJdbcExtractor nativeJdbcExtractor,
-        final SQLExceptionTranslator exceptionTranslator)
+        @Nullable final NativeJdbcExtractor nativeJdbcExtractor,
+        @NotNull final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException
     {
-        Object result = null;
+        @Nullable Object result = null;
 
-        Connection t_Connection = null;
+        @Nullable Connection t_Connection = null;
 
         boolean t_bCloseConnection = false;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         DataSource t_DataSource = dataSource;
 
@@ -434,7 +442,7 @@ public class QueryjJdbcTemplate
 
         try
         {
-            ConnectionHolder t_ConnectionHolder =
+            @NotNull ConnectionHolder t_ConnectionHolder =
                 (ConnectionHolder)
                     TransactionSynchronizationManager.getResource(
                         t_DataSource);
@@ -463,7 +471,7 @@ public class QueryjJdbcTemplate
                         t_ConnectionHolder, t_DataSource));
             }
 
-            Connection t_ConnectionToUse = t_Connection;
+            @Nullable Connection t_ConnectionToUse = t_Connection;
 
             if  (   (nativeJdbcExtractor != null)
                  && (nativeJdbcExtractor
@@ -480,7 +488,7 @@ public class QueryjJdbcTemplate
             DataSourceUtils.applyTransactionTimeout(
                 t_PreparedStatement, t_DataSource);
             
-            PreparedStatement t_PreparedStatementToUse =
+            @Nullable PreparedStatement t_PreparedStatementToUse =
                 t_PreparedStatement;
 
             if  (nativeJdbcExtractor != null)
@@ -496,7 +504,7 @@ public class QueryjJdbcTemplate
             
             throwExceptionOnWarningIfNotIgnoringWarnings(t_Warning);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw exceptionTranslator.translate(
                   "executing PreparedStatementCallback ["
@@ -521,7 +529,7 @@ public class QueryjJdbcTemplate
                 {
                     t_Connection.close();
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     LogFactory.getLog(QueryjJdbcTemplate.class).info(
                         "Could not close connection",
@@ -539,9 +547,10 @@ public class QueryjJdbcTemplate
      * @return the SQL string, or null
      * @see SqlProvider
      */
-    protected String getSql(final Object sqlProvider)
+    @Nullable
+    protected String getSql(@NotNull final Object sqlProvider)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (sqlProvider instanceof SqlProvider)
         {
@@ -569,7 +578,7 @@ public class QueryjJdbcTemplate
      * @param ignoreWarnings whether to ignore warnings.
      */
     protected void throwExceptionOnWarningIfNotIgnoringWarnings(
-        final SQLWarning warning, final boolean ignoreWarnings)
+        @Nullable final SQLWarning warning, final boolean ignoreWarnings)
       throws SQLWarningException
     {
         if  (   (warning != null)

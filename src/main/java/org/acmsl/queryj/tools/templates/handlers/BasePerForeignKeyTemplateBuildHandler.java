@@ -52,6 +52,8 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -94,7 +96,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -111,7 +113,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition metaData != null
      */
     protected void buildTemplates(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
@@ -122,7 +124,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -144,7 +146,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition quote != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote)
@@ -174,12 +176,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
         final MetadataManager metadataManager,
-        final BasePerForeignKeyTemplateFactory templateFactory)
+        @NotNull final BasePerForeignKeyTemplateFactory templateFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -208,13 +210,13 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition decoratorFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager,
-        final BasePerForeignKeyTemplateFactory templateFactory,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final BasePerForeignKeyTemplateFactory templateFactory,
+        @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -236,6 +238,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected abstract BasePerForeignKeyTemplateFactory retrieveTemplateFactory();
 
     /**
@@ -262,25 +265,25 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition foreignKeys != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerForeignKeyTemplateFactory templateFactory,
+        @NotNull final BasePerForeignKeyTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
         final String header,
-        final ForeignKey[] foreignKeys)
+        @Nullable final ForeignKey[] foreignKeys)
       throws  QueryJBuildException
     {
         int t_iLength = (foreignKeys != null) ? foreignKeys.length : 0;
         
-        BasePerForeignKeyTemplate[] t_aTemplates =
+        @NotNull BasePerForeignKeyTemplate[] t_aTemplates =
             new BasePerForeignKeyTemplate[t_iLength];
 
-        ForeignKey t_ForeignKey = null;
+        @Nullable ForeignKey t_ForeignKey = null;
             
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
@@ -313,8 +316,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
+    @NotNull
     protected String retrievePackage(
-        final String tableName, final String engineName, final Map parameters)
+        final String tableName, final String engineName, @NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -334,6 +338,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected abstract String retrievePackage(
         final String tableName,
         final String engineName,
@@ -361,18 +366,19 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected ForeignKey[] retrieveForeignKeys(
-        final Map parameters,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final Map parameters,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        ForeignKey[] result = (ForeignKey[]) parameters.get(FOREIGN_KEYS);
+        @NotNull ForeignKey[] result = (ForeignKey[]) parameters.get(FOREIGN_KEYS);
 
         if  (result == null)
         {
-            Collection t_cForeignKeys = new ArrayList();
+            @NotNull Collection t_cForeignKeys = new ArrayList();
             
-            ForeignKey[] t_aFks =
+            @NotNull ForeignKey[] t_aFks =
                 retrieveForeignKeys(metadataManager, decoratorFactory);
 
             int t_iLength = (t_aFks != null) ? t_aFks.length : 0;
@@ -398,25 +404,26 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected ForeignKey[] retrieveForeignKeys(
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        ForeignKey[] result = EMPTY_FOREIGNKEY_ARRAY;
+        @NotNull ForeignKey[] result = EMPTY_FOREIGNKEY_ARRAY;
 
-        Collection t_cResult = null;
+        @Nullable Collection t_cResult = null;
 
         String[] t_astrTableNames = metadataManager.getTableNames();
 
         int t_iTableLength =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-        String t_strSourceTable = null;
-        String[] t_astrReferredTables = null;
+        @Nullable String t_strSourceTable = null;
+        @Nullable String[] t_astrReferredTables = null;
         int t_iReferredTableLength = 0;
-        String[][] t_aastrForeignKeys;
+        @Nullable String[][] t_aastrForeignKeys;
         int t_iForeignKeyLength = 0;
-        String t_strReferredTable = null;
+        @Nullable String t_strReferredTable = null;
         
         for  (int t_iTableIndex = 0;
                   t_iTableIndex < t_iTableLength;
@@ -493,23 +500,24 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
+    @Nullable
     protected ForeignKey buildForeignKey(
-        final String[] attributes,
+        @Nullable final String[] attributes,
         final String sourceTable,
         final String targetTable,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        ForeignKey result = null;
+        @Nullable ForeignKey result = null;
 
-        Collection t_cAttributes = new ArrayList();
+        @NotNull Collection t_cAttributes = new ArrayList();
 
         int t_iAttributeLength = (attributes != null) ? attributes.length : 0;
 
         MetadataTypeManager t_TypeManager =
             metadataManager.getMetadataTypeManager();
 
-        Attribute t_Attribute = null;
+        @Nullable Attribute t_Attribute = null;
         boolean t_bAllowsNull = false;
 
         for  (int t_iIndex = 0; t_iIndex < t_iAttributeLength; t_iIndex++)
@@ -555,18 +563,19 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @Nullable
     protected Attribute buildAttribute(
         final String attributeName,
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Attribute result = null;
+        @Nullable Attribute result = null;
 
         int t_iType = metadataManager.getColumnType(tableName, attributeName);
 
-        String t_strNativeType = metadataTypeManager.getNativeType(t_iType);
+        @Nullable String t_strNativeType = metadataTypeManager.getNativeType(t_iType);
 
         boolean t_bAllowsNull =
             metadataManager.allowsNull(tableName, attributeName);

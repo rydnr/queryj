@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLValueObjectFactoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -83,7 +85,7 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplates(
@@ -108,10 +110,10 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplates(
-        final XMLValueObjectFactoryTemplate[] templates,
-        final File outputDir,
+        @Nullable final XMLValueObjectFactoryTemplate[] templates,
+        @NotNull final File outputDir,
         final Charset charset,
-        final XMLValueObjectFactoryTemplateGenerator generator)
+        @NotNull final XMLValueObjectFactoryTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
@@ -126,7 +128,7 @@ public class XMLValueObjectFactoryTemplateWritingHandler
                     templates[t_iValueObjectFactoryIndex], outputDir, charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -141,8 +143,9 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
+    @NotNull
     protected XMLValueObjectFactoryTemplate[] retrieveXMLValueObjectFactoryTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (XMLValueObjectFactoryTemplate[])
@@ -156,7 +159,8 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -169,8 +173,9 @@ public class XMLValueObjectFactoryTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveXMLValueObjectFactoryFolder(

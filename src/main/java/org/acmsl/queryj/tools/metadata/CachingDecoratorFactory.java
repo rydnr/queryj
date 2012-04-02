@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -84,6 +86,7 @@ public class CachingDecoratorFactory
      * Retrieves a <code>CachingDecoratorFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static CachingDecoratorFactory getInstance()
     {
         return CachingDecoratorFactorySingletonContainer.SINGLETON;
@@ -96,6 +99,7 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager)
     {
@@ -109,8 +113,9 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
+    @NotNull
     public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager)
+        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
         return new CachingPropertyDecorator(property, metadataManager);
     }
@@ -123,8 +128,9 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated result for the concrete template.
      */
+    @NotNull
     public ResultDecorator createDecorator(
-        final Result result,
+        @NotNull final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
@@ -140,8 +146,9 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
      */
+    @NotNull
     public SqlDecorator createDecorator(
-        final Sql sql,
+        @NotNull final Sql sql,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
@@ -156,6 +163,7 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
      */
+    @NotNull
     public TableDecorator createTableDecorator(
         final String table, final MetadataManager metadataManager)
     {
@@ -170,6 +178,7 @@ public class CachingDecoratorFactory
      * @param allowsNull whether the fk can be null as a whole.
      * @return the decorator instance.
      */
+    @NotNull
     public ForeignKeyDecorator createDecorator(
         final String sourceTableName,
         final Collection attributes,
@@ -242,7 +251,7 @@ public class CachingDecoratorFactory
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof DecoratorFactory)
         {

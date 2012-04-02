@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -126,11 +128,11 @@ public class CustomResultSetExtractorTemplate
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
-        final Map input,
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final Map input,
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String engineName,
         final String engineVersion)
     {
@@ -143,7 +145,7 @@ public class CustomResultSetExtractorTemplate
             engineName,
             engineVersion);
 
-        String t_strTable =
+        @Nullable String t_strTable =
             retrieveTable(
                 result,
                 customSqlProvider,
@@ -162,6 +164,7 @@ public class CustomResultSetExtractorTemplate
      * Retrieves the table associated to the result.
      * @return the table name.
      */
+    @Nullable
     public String retrieveTable()
     {
         return
@@ -184,11 +187,12 @@ public class CustomResultSetExtractorTemplate
      * @precondition metadataManager != null
      * @precondition customResultUtils != null
      */
+    @Nullable
     protected String retrieveTable(
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final CustomResultUtils customResultUtils)
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomResultUtils customResultUtils)
       throws  InvalidTemplateException
     {
         return
@@ -200,6 +204,7 @@ public class CustomResultSetExtractorTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return
@@ -211,6 +216,7 @@ public class CustomResultSetExtractorTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "CustomResultSetExtractor";
@@ -236,7 +242,7 @@ public class CustomResultSetExtractorTemplate
      * @precondition decoratorUtils != null
      */
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }

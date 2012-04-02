@@ -69,6 +69,8 @@ import java.util.Map;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds a per-table template using database metadata.
@@ -96,7 +98,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplate(parameters, retrieveDatabaseMetaData(parameters));
@@ -113,7 +115,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition metaData != null
      */
     protected void buildTemplate(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
@@ -124,7 +126,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -144,7 +146,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition quote != null
      */
     protected void buildTemplate(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote)
@@ -197,25 +199,25 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition tableTemplates != null
      */
     protected void buildTemplate(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerTableTemplateFactory templateFactory,
+        @NotNull final BasePerTableTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
         final String header,
         final boolean implementMarkerInterfaces,
-        final TableTemplate[] tableTemplates)
+        @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
 
-        Collection t_cTemplates = new ArrayList();
+        @NotNull Collection t_cTemplates = new ArrayList();
 
-        BasePerTableTemplate t_Template;
+        @Nullable BasePerTableTemplate t_Template;
 
         String t_strTableName;
 
@@ -262,7 +264,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String tableName, final String engineName, final Map parameters)
+        final String tableName, final String engineName, @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -308,7 +310,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * any reason.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -343,8 +346,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition repository != null
      * @precondition parameters != null
      */
+    @Nullable
     protected BasePerTableTemplate createTemplate(
-        final BasePerTableTemplateFactory templateFactory,
+        @NotNull final BasePerTableTemplateFactory templateFactory,
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
@@ -384,7 +388,7 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected boolean isStaticTable(
         final String tableName,
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         return
             isStaticTable(
@@ -403,8 +407,8 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected boolean isStaticTable(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetaLanguageUtils metaLanguageUtils)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
         return
             metaLanguageUtils.containsStaticValues(
@@ -423,13 +427,14 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
+    @Nullable
     protected Collection retrieveStaticContent(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String tableName,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
     {
-        Collection result =
+        @Nullable Collection result =
             retrieveCachedStaticContent(parameters, tableName);
 
         if  (result == null)
@@ -444,7 +449,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         DAOTemplateUtils.getInstance());
                 storeCachedStaticContent(result, parameters, tableName);
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 Log t_Log =
                     UniqueLogFactory.getLog(
@@ -475,11 +480,12 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @Nullable
     protected Collection retrieveStaticContent(
         final String tableName,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  SQLException
     {
         return
@@ -495,8 +501,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      * @precondition tableName != null
      */
+    @NotNull
     protected Collection retrieveCachedStaticContent(
-        final Map parameters, final String tableName)
+        @NotNull final Map parameters, final String tableName)
     {
         return (Collection) parameters.get(buildStaticContentKey(tableName));
     }
@@ -512,7 +519,7 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected void storeCachedStaticContent(
         final Collection contents,
-        final Map parameters,
+        @NotNull final Map parameters,
         final String tableName)
     {
         parameters.put(buildStaticContentKey(tableName), contents);
@@ -524,6 +531,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @return such key.
      * @precondition tableName != null
      */
+    @NotNull
     protected Object buildStaticContentKey(final String tableName)
     {
         return "..static-contents-for-table-" + tableName + "..";

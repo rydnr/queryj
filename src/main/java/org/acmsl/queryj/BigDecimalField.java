@@ -37,6 +37,7 @@ package org.acmsl.queryj;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.DoubleField;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -65,6 +66,7 @@ public abstract class BigDecimalField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition equals(final BigDecimal value)
     {
         return
@@ -84,10 +86,11 @@ public abstract class BigDecimalField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition equals(
         final BigDecimal value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -101,6 +104,7 @@ public abstract class BigDecimalField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition notEquals(final BigDecimal value)
     {
         return
@@ -120,10 +124,11 @@ public abstract class BigDecimalField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition notEquals(
         final BigDecimal value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -137,6 +142,7 @@ public abstract class BigDecimalField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition greaterThan(final BigDecimal value)
     {
         return
@@ -156,10 +162,11 @@ public abstract class BigDecimalField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition greaterThan(
         final BigDecimal value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -173,6 +180,7 @@ public abstract class BigDecimalField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition lessThan(final BigDecimal value)
     {
         return
@@ -192,10 +200,11 @@ public abstract class BigDecimalField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition lessThan(
         final BigDecimal value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(

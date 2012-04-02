@@ -36,6 +36,8 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -869,7 +871,7 @@ public abstract class AbstractProcedureRepositoryTemplate
      * Adds a new procedure metadata.
      * @param procedureMetadata the new procedure metadata.
      */
-    public void addProcedureMetadata(final ProcedureMetadata procedureMetadata)
+    public void addProcedureMetadata(@Nullable final ProcedureMetadata procedureMetadata)
     {
         if  (procedureMetadata != null)
         {
@@ -916,8 +918,8 @@ public abstract class AbstractProcedureRepositoryTemplate
      * @param parametersMetadata the parameters metadata.
      */
     public void addProcedureParametersMetadata(
-        final ProcedureMetadata procedureMetadata,
-        final ProcedureParameterMetadata[] parametersMetadata)
+        @Nullable final ProcedureMetadata procedureMetadata,
+        @Nullable final ProcedureParameterMetadata[] parametersMetadata)
     {
         if  (   (procedureMetadata  != null)
              && (parametersMetadata != null))
@@ -937,10 +939,11 @@ public abstract class AbstractProcedureRepositoryTemplate
      * @param procedureMetadata the procedure metadata.
      * @return the associated parameters metadata.
      */
+    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
-        final ProcedureMetadata procedureMetadata)
+        @Nullable final ProcedureMetadata procedureMetadata)
     {
-        ProcedureParameterMetadata[] result =
+        @NotNull ProcedureParameterMetadata[] result =
             EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
 
         if  (procedureMetadata != null)
@@ -964,9 +967,10 @@ public abstract class AbstractProcedureRepositoryTemplate
      * @param procedureMetadata the procedure metadata.
      * @return the associated key.
      */
-    protected Object buildKey(final ProcedureMetadata procedureMetadata)
+    @Nullable
+    protected Object buildKey(@Nullable final ProcedureMetadata procedureMetadata)
     {
-        Object result = procedureMetadata;
+        @Nullable Object result = procedureMetadata;
 
         if  (procedureMetadata != null)
         {
@@ -990,7 +994,7 @@ public abstract class AbstractProcedureRepositoryTemplate
      * @param proceduresMetadata the metadata associated to the procedures.
      * @return <code>true</code> in such case.
      */
-    protected boolean isEmpty(final List proceduresMetadata)
+    protected boolean isEmpty(@Nullable final List proceduresMetadata)
     {
         return
             (   (proceduresMetadata == null)

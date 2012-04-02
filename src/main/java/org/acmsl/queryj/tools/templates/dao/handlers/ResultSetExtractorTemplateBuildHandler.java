@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -79,7 +81,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -96,8 +98,8 @@ public class ResultSetExtractorTemplateBuildHandler
      * @precondition metaData != null
      */
     protected void buildTemplates(
-        final Map parameters,
-        final DatabaseMetaData metaData)
+        @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
@@ -108,7 +110,7 @@ public class ResultSetExtractorTemplateBuildHandler
                 retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -129,8 +131,8 @@ public class ResultSetExtractorTemplateBuildHandler
      * @precondition engineName != null
      */
     protected void buildTemplates(
-        final Map parameters,
-        final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final String engineName,
         final String engineVersion,
         final String quote)
       throws  QueryJBuildException
@@ -179,8 +181,8 @@ public class ResultSetExtractorTemplateBuildHandler
      * @precondition tableTemplates != null
      */
     protected void buildTemplates(
-        final Map parameters,
-        final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final String engineName,
         final String engineVersion,
         final String quote,
         final MetadataManager metadataManager,
@@ -189,16 +191,16 @@ public class ResultSetExtractorTemplateBuildHandler
         final String repositoryName,
         final String header,
         final boolean implementMarkerInterfaces,
-        final ResultSetExtractorTemplateFactory templateFactory,
-        final TableTemplate[] tableTemplates)
+        @NotNull final ResultSetExtractorTemplateFactory templateFactory,
+        @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
         
-        ResultSetExtractorTemplate[] t_aTemplates =
+        @NotNull ResultSetExtractorTemplate[] t_aTemplates =
             new ResultSetExtractorTemplate[t_iLength];
 
-        TableTemplate t_TableTemplate;
+        @Nullable TableTemplate t_TableTemplate;
         String t_strTableName;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
@@ -255,9 +257,9 @@ public class ResultSetExtractorTemplateBuildHandler
      * @precondition tableName != null
      */
     protected String retrievePackage(
-        final String engineName,
-        final String tableName,
-        final Map parameters)
+        @NotNull final String engineName,
+        @NotNull final String tableName,
+        @NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -281,9 +283,9 @@ public class ResultSetExtractorTemplateBuildHandler
      */
     protected String retrievePackage(
         final String projectPackage,
-        final String engineName,
-        final String tableName,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final String tableName,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveResultSetExtractorPackage(
@@ -298,7 +300,8 @@ public class ResultSetExtractorTemplateBuildHandler
      * @return the repository's name.
      * @precondition parameters != null
      */
-    protected String retrieveTableRepositoryName(final Map parameters)
+    @NotNull
+    protected String retrieveTableRepositoryName(@NotNull final Map parameters)
     {
         return
             (String)
@@ -312,7 +315,8 @@ public class ResultSetExtractorTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
             (TableTemplate[])
@@ -325,8 +329,9 @@ public class ResultSetExtractorTemplateBuildHandler
      * @return the provider.
      * @precondition parameters != null
      */
+    @NotNull
     public static CustomSqlProvider retrieveCustomSqlProvider(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             DAOTemplateBuildHandler.retrieveCustomSqlProvider(parameters);
@@ -341,7 +346,7 @@ public class ResultSetExtractorTemplateBuildHandler
      */
     protected void storeTemplates(
         final ResultSetExtractorTemplate[] templates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.RESULTSET_EXTRACTOR_TEMPLATES,

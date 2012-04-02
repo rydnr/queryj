@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.TestTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -88,7 +90,7 @@ public class MockDAOTestTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -105,14 +107,14 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition metaData != null
      */
     protected void buildTemplates(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
         {
             buildTemplates(parameters, metaData.getDatabaseProductName());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -132,7 +134,7 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition engineName != null
      */
     protected void buildTemplates(
-        final Map parameters, final String engineName)
+        @NotNull final Map parameters, final String engineName)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -167,19 +169,19 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final MetadataManager metadataManager,
-        final TableTemplate[] tableTemplates,
+        @Nullable final TableTemplate[] tableTemplates,
         final String valueObjectPackage,
         final String mockDAOPackage,
         final String mockDAOTestPackage,
         final String header,
-        final MockDAOTestTemplateFactory templateFactory)
+        @NotNull final MockDAOTestTemplateFactory templateFactory)
       throws  QueryJBuildException
     {
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
             
-        MockDAOTestTemplate[] t_aMockDAOTestTemplates =
+        @NotNull MockDAOTestTemplate[] t_aMockDAOTestTemplates =
             new MockDAOTestTemplate[t_iLength];
 
         for  (int t_iMockDAOTestIndex = 0;
@@ -209,7 +211,7 @@ public class MockDAOTestTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrieveMockDAOTestPackage(final Map parameters)
+    protected String retrieveMockDAOTestPackage(@NotNull final Map parameters)
     {
         return
             retrieveMockDAOTestPackage(parameters, PackageUtils.getInstance());
@@ -224,7 +226,7 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveMockDAOTestPackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveMockDAOTestPackage(
@@ -240,7 +242,7 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrieveMockDAOPackage(
-        final String engineName, final Map parameters)
+        final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveMockDAOPackage(
@@ -258,8 +260,8 @@ public class MockDAOTestTemplateBuildHandler
      */
     protected String retrieveMockDAOPackage(
         final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveMockDAOPackage(
@@ -272,7 +274,7 @@ public class MockDAOTestTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrieveValueObjectPackage(final Map parameters)
+    protected String retrieveValueObjectPackage(@NotNull final Map parameters)
     {
         return
             retrieveValueObjectPackage(parameters, PackageUtils.getInstance());
@@ -287,7 +289,7 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveValueObjectPackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveValueObjectPackage(
@@ -300,7 +302,8 @@ public class MockDAOTestTemplateBuildHandler
      * @return the test templates.
      * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(final Map parameters)
+    @NotNull
+    protected Collection retrieveTestTemplates(@NotNull final Map parameters)
     {
         return
             (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
@@ -315,7 +318,7 @@ public class MockDAOTestTemplateBuildHandler
      */
     protected void storeMockDAOTestTemplates(
         final MockDAOTestTemplate[] mockDAOTestTemplates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.MOCK_DAO_TEST_TEMPLATES,
@@ -328,7 +331,8 @@ public class MockDAOTestTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
             (TableTemplate[])
@@ -344,7 +348,7 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplates(
-        final Collection templates, final Map parameters)
+        final Collection templates, @NotNull final Map parameters)
     {
         parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
@@ -357,9 +361,9 @@ public class MockDAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplate(
-        final TestTemplate template, final Map parameters)
+        final TestTemplate template, @NotNull final Map parameters)
     {
-        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+        @NotNull Collection t_cTestTemplates = retrieveTestTemplates(parameters);
 
         if  (t_cTestTemplates == null) 
         {

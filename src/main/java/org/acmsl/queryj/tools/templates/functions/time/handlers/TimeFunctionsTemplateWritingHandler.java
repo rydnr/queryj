@@ -44,6 +44,8 @@ import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.time
     .TimeFunctionsTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -74,7 +76,7 @@ public class TimeFunctionsTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplate(
@@ -98,10 +100,10 @@ public class TimeFunctionsTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplate(
-        final TimeFunctionsTemplate template,
-        final File outputDir,
+        @Nullable final TimeFunctionsTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final TimeFunctionsTemplateGenerator generator)
+        @NotNull final TimeFunctionsTemplateGenerator generator)
       throws  QueryJBuildException
     {
         if  (template != null)
@@ -110,7 +112,7 @@ public class TimeFunctionsTemplateWritingHandler
             {
                 generator.write(template, outputDir, charset);
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 throw
                     new QueryJBuildException(
@@ -126,8 +128,9 @@ public class TimeFunctionsTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
+    @NotNull
     protected TimeFunctionsTemplate retrieveTimeFunctionsTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (TimeFunctionsTemplate)
@@ -141,7 +144,8 @@ public class TimeFunctionsTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @Nullable
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -154,8 +158,9 @@ public class TimeFunctionsTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveFunctionsFolder(

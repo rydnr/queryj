@@ -51,6 +51,7 @@ import java.util.Collection;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -285,7 +286,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method parse
-      SqlXmlParser t_Parser =
+      @NotNull SqlXmlParser t_Parser =
           new SqlXmlParser(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
       assertNotNull(t_Parser);
       t_Parser.parse();

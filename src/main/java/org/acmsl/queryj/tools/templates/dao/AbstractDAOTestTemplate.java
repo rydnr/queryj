@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.templates.AbstractTestTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains the subtemplates for creating JUnit tests to ensure
@@ -1412,6 +1413,7 @@ public abstract class AbstractDAOTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return
@@ -1427,9 +1429,10 @@ public abstract class AbstractDAOTestTemplate
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
+    @NotNull
     protected String getTestName(
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
               getEngineName()
@@ -1454,6 +1457,7 @@ public abstract class AbstractDAOTestTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
@@ -1465,7 +1469,8 @@ public abstract class AbstractDAOTestTemplate
      * @return such header.
      * @precondition tableTemplate != null
      */
-    protected String buildHeader(final TableTemplate tableTemplate)
+    @NotNull
+    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
     {
         return
               "Generating DAOTest for "

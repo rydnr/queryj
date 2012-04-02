@@ -38,6 +38,8 @@ package org.acmsl.queryj.tools.customsql;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.customsql.IdentifiableElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Common parent to all <i>custom-sql</i> elements with <i>id</i>
@@ -106,6 +108,7 @@ public abstract class AbstractIdElement
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
+    @NotNull
     protected String toString(final String id)
     {
         return
@@ -136,7 +139,7 @@ public abstract class AbstractIdElement
 
         if  (object instanceof IdentifiableElement)
         {
-            final IdentifiableElement t_OtherInstance =
+            @NotNull final IdentifiableElement t_OtherInstance =
                 (IdentifiableElement) object;
 
             result =
@@ -162,11 +165,11 @@ public abstract class AbstractIdElement
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof IdentifiableElement)
         {
-                final IdentifiableElement t_OtherInstance =
+                @NotNull final IdentifiableElement t_OtherInstance =
                     (IdentifiableElement) object;
 
                 result =

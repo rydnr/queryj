@@ -63,6 +63,8 @@ import java.nio.charset.Charset;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate the JUnit classes to test the Database's time functions.
@@ -93,6 +95,7 @@ public class TimeFunctionsTestTemplateGenerator
      * Retrieves a {@link TimeFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static TimeFunctionsTestTemplateGenerator getInstance()
     {
         return TimeFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -106,6 +109,7 @@ public class TimeFunctionsTestTemplateGenerator
      * @throws QueryJBuildException if the factory class is invalid.
      * @precondition engineName != null
      */
+    @Nullable
     protected TimeFunctionsTestTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
       throws  QueryJBuildException
@@ -128,15 +132,16 @@ public class TimeFunctionsTestTemplateGenerator
      * @precondition engineName != null
      * @precondition templateMappingManager != null
      */
+    @Nullable
     protected TimeFunctionsTestTemplateFactory getTemplateFactory(
         final String engineName,
         final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
       throws  QueryJBuildException
     {
-        TimeFunctionsTestTemplateFactory result = null;
+        @Nullable TimeFunctionsTestTemplateFactory result = null;
 
-        Object t_TemplateFactory =
+        @Nullable Object t_TemplateFactory =
             templateMappingManager.getTemplateFactory(
                 TemplateMappingManager.TIME_FUNCTIONS_TEST_TEMPLATE,
                 engineName,
@@ -172,6 +177,7 @@ public class TimeFunctionsTestTemplateGenerator
      * @precondition engineVersion != null
      * @precondition quote != null
      */
+    @Nullable
     public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
         final String packageName,
         final String testedPackageName,
@@ -179,16 +185,16 @@ public class TimeFunctionsTestTemplateGenerator
         final String engineVersion,
         final String quote)
     {
-        TimeFunctionsTestTemplate result = null;
+        @Nullable TimeFunctionsTestTemplate result = null;
 
-        TimeFunctionsTestTemplateFactory t_TemplateFactory = null;
+        @Nullable TimeFunctionsTestTemplateFactory t_TemplateFactory = null;
 
         try
         {
             t_TemplateFactory =
                 getTemplateFactory(engineName, engineVersion);
         }
-        catch  (final QueryJBuildException buildException)
+        catch  (@NotNull final QueryJBuildException buildException)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(
@@ -226,8 +232,8 @@ public class TimeFunctionsTestTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final TimeFunctionsTestTemplate template,
-        final File outputDir,
+        @NotNull final TimeFunctionsTestTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -253,11 +259,11 @@ public class TimeFunctionsTestTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final TimeFunctionsTestTemplate template,
-        final File outputDir,
+        @NotNull final TimeFunctionsTestTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

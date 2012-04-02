@@ -37,6 +37,8 @@ package org.acmsl.queryj;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.QueryResultSet;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK1.3 classes.
@@ -205,7 +207,7 @@ public abstract class Query
      * @precondition field != null
      * @precondition fields != null
      */
-    protected final void addField(final Field field, final List fields)
+    protected final void addField(final Field field, @NotNull final List fields)
     {
         fields.add(field);
     }
@@ -266,7 +268,7 @@ public abstract class Query
      * @precondition tables != null
      */
     protected final void addTable(
-        final Table table, final List tables)
+        final Table table, @NotNull final List tables)
     {
         tables.add(table);
     }
@@ -303,7 +305,7 @@ public abstract class Query
      * @param condition the condition to add.
      * @precondition condition != null
      */
-    protected void addCondition(final Condition condition)
+    protected void addCondition(@NotNull final Condition condition)
     {
         addCondition(condition, true);
     }
@@ -316,7 +318,7 @@ public abstract class Query
      * @precondition condition != null
      */
     protected void addCondition(
-        final Condition condition,
+        @NotNull final Condition condition,
         final boolean processNestedVariableConditions)
     {
         addCondition(
@@ -337,9 +339,9 @@ public abstract class Query
      * @precondition conditions != null
      */
     protected final void addCondition(
-        final Condition condition,
-        final List conditions,
-        final List variableConditions)
+        @NotNull final Condition condition,
+        @NotNull final List conditions,
+        @Nullable final List variableConditions)
     {
         conditions.add(condition);
 
@@ -384,7 +386,7 @@ public abstract class Query
      * @precondition variableCondition != null
      */
     protected void addVariableCondition(
-        final VariableCondition variableCondition)
+        @NotNull final VariableCondition variableCondition)
     {
         addVariableCondition(variableCondition, getVariableConditions());
     }
@@ -397,8 +399,8 @@ public abstract class Query
      * @precondition variableConditions != null
      */
     protected void addVariableCondition(
-        final VariableCondition variableCondition,
-        final List variableConditions)
+        @NotNull final VariableCondition variableCondition,
+        @NotNull final List variableConditions)
     {
         addVariableConditions(
             variableCondition,
@@ -414,7 +416,7 @@ public abstract class Query
      */
     protected final void addVariableConditions(
         final Collection newVariableConditions,
-        final List variableConditions)
+        @NotNull final List variableConditions)
     {
         addVariableConditions(null, newVariableConditions, variableConditions);
     }
@@ -427,9 +429,9 @@ public abstract class Query
      * @precondition variableConditions != null
      */
     protected final void addVariableConditions(
-        final VariableCondition variableCondition,
-        final Collection newVariableConditions,
-        final List variableConditions)
+        @Nullable final VariableCondition variableCondition,
+        @Nullable final Collection newVariableConditions,
+        @NotNull final List variableConditions)
     {
         int offset = 0;
 
@@ -458,7 +460,7 @@ public abstract class Query
      * @precondition list != null
      * @precondition object != null
      */
-    protected final int getIndex(final List list, final Object object)
+    protected final int getIndex(@NotNull final List list, final Object object)
     {
         int result = list.indexOf(object);
 
@@ -482,7 +484,7 @@ public abstract class Query
      * @precondition list != null
      * @precondition object != null
      */
-    protected final int getIndex(final List list, final Object object, final int index)
+    protected final int getIndex(@NotNull final List list, final Object object, final int index)
     {
         int result = getIndex(list, object);
 
@@ -501,7 +503,7 @@ public abstract class Query
      * @precondition list != null
      * @precondition object != null
      */
-    protected int retrieveIndex(final List list, final Object object)
+    protected int retrieveIndex(@NotNull final List list, final Object object)
         throws  SQLException
     {
         int result = getIndex(list, object);
@@ -525,7 +527,7 @@ public abstract class Query
      * @precondition list != null
      * @precondition object != null
      */
-    protected int retrieveIndex(final List list, final Object object, final int index)
+    protected int retrieveIndex(@NotNull final List list, final Object object, final int index)
         throws  SQLException
     {
         int result = getIndex(list, object, index);
@@ -547,7 +549,7 @@ public abstract class Query
      * @throws SQLException if the clob cannot be processed.
      * @precondition clob != null
      */
-    protected String clobToString(final Clob clob)
+    protected String clobToString(@NotNull final Clob clob)
       throws  SQLException
     {
         return clobToString(clob, QueryUtils.getInstance());
@@ -563,7 +565,7 @@ public abstract class Query
      * @precondition queryUtils != null
      */
     protected String clobToString(
-        final Clob clob, final QueryUtils queryUtils)
+        @NotNull final Clob clob, @NotNull final QueryUtils queryUtils)
       throws  SQLException
     {
         return queryUtils.clobToString(clob);
@@ -576,7 +578,8 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition connection != null
      */
-    public PreparedStatement prepareStatement(final Connection connection)
+    @NotNull
+    public PreparedStatement prepareStatement(@NotNull final Connection connection)
         throws  SQLException
     {
         setPreparedStatement(connection.prepareStatement(toString()));
@@ -595,8 +598,9 @@ public abstract class Query
      * @precondition (resultSetType == ResultSet.TYPE_FORWARD_ONLY) || (resultSetType == ResultSet.TYPE_SCROLL_INSENSITIVE) || (resultSetType == ResultSet.TYPE_SCROLL_SENSITIVE)
      * @precondition (resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) || (resultSetConcurrency == ResultSet.CONCUR_UPDATABLE)
      */
+    @NotNull
     public PreparedStatement prepareStatement(
-        final Connection connection,
+        @NotNull final Connection connection,
         final int resultSetType,
         final int resultSetConcurrency)
       throws  SQLException
@@ -623,8 +627,9 @@ public abstract class Query
      * @precondition (resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) || (resultSetConcurrency == ResultSet.CONCUR_UPDATABLE)
      * @precondition (resultSetHoldability == ResultSet.HOLD_CURSORS_OVER_COMMIT) || (resultSetHoldability == ResultSet.CLOSE_CURSORS_AT_COMMIT)
      */
+    @NotNull
     public PreparedStatement prepareStatement(
-        final Connection connection,
+        @NotNull final Connection connection,
         final int resultSetType,
         final int resultSetConcurrency,
         final int resultSetHoldability)
@@ -715,6 +720,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition sql != null
      */
+    @NotNull
     public ResultSet executeQuery(final String sql)
         throws  SQLException
     {
@@ -1073,6 +1079,7 @@ public abstract class Query
      * that contains the data produced by the query; never null.
      * @throws SQLException if an error occurs.
      */
+    @NotNull
     public ResultSet executeQuery()
         throws  SQLException
     {
@@ -1417,7 +1424,7 @@ public abstract class Query
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
      * @throws SQLException if an error occurs.
      */
-    public void setClob(final int index, final String value)
+    public void setClob(final int index, @NotNull final String value)
         throws  SQLException
     {
         retrievePreparedStatement().setCharacterStream(
@@ -1498,8 +1505,8 @@ public abstract class Query
      */
     protected void setDate(
         final int index,
-        final java.util.Date value,
-        final PreparedStatement preparedStatement)
+        @Nullable final java.util.Date value,
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         if  (value != null)
@@ -1655,8 +1662,8 @@ public abstract class Query
      */
     protected void setTimestamp(
         final int index,
-        final java.util.Date value,
-        final PreparedStatement preparedStatement)
+        @Nullable final java.util.Date value,
+        @NotNull final PreparedStatement preparedStatement)
         throws  SQLException
     {
         if  (value != null)
@@ -1700,9 +1707,9 @@ public abstract class Query
      */
     protected void setTimestamp(
         final int index,
-        final java.util.Date value,
+        @Nullable final java.util.Date value,
         final Calendar calendar,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         if  (value != null)
@@ -1746,7 +1753,7 @@ public abstract class Query
         final int index,
         final InputStream inputStream,
         final int length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         preparedStatement.setUnicodeStream(index, inputStream, length);
@@ -1763,7 +1770,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setTime(final Field field, final Time value)
+    public void setTime(@NotNull final Field field, final Time value)
         throws  SQLException
     {
         setTime(field.equals(), value);
@@ -1796,7 +1803,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setTime(
-        final Field field,
+        @NotNull final Field field,
         final Time value,
         final Calendar calendar)
       throws  SQLException
@@ -1837,7 +1844,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setBoolean(
-        final Field field, final boolean value)
+        @NotNull final Field field, final boolean value)
       throws  SQLException
     {
         setBoolean(field.equals(), value);
@@ -1868,7 +1875,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setByte(final Field field, final byte value)
+    public void setByte(@NotNull final Field field, final byte value)
         throws  SQLException
     {
         setByte(field.equals(), value);
@@ -1898,7 +1905,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setShort(final Field field, final short value)
+    public void setShort(@NotNull final Field field, final short value)
         throws  SQLException
     {
         setShort(field.equals(), value);
@@ -1947,8 +1954,8 @@ public abstract class Query
      */
     protected void setInt(
         final int index,
-        final Integer value,
-        final PreparedStatement preparedStatement)
+        @Nullable final Integer value,
+        @NotNull final PreparedStatement preparedStatement)
         throws  SQLException
     {
         if  (value != null)
@@ -1970,7 +1977,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setInt(final Field field, final int value)
+    public void setInt(@NotNull final Field field, final int value)
         throws  SQLException
     {
         setInt(field.equals(), value);
@@ -1985,7 +1992,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setInt(final Field field, final Integer value)
+    public void setInt(@NotNull final Field field, final Integer value)
         throws  SQLException
     {
         setInt(field.equals(), value);
@@ -2049,8 +2056,8 @@ public abstract class Query
      */
     protected void setLong(
         final int index,
-        final Long value,
-        final PreparedStatement preparedStatement)
+        @Nullable final Long value,
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         if  (value != null)
@@ -2072,7 +2079,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setLong(final Field field, final long value)
+    public void setLong(@NotNull final Field field, final long value)
         throws  SQLException
     {
         setLong(field.equals(), value);
@@ -2087,7 +2094,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setLong(final Field field, final Long value)
+    public void setLong(@NotNull final Field field, final Long value)
         throws  SQLException
     {
         setLong(field.equals(), value);
@@ -2133,7 +2140,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setFloat(final Field field, final float value)
+    public void setFloat(@NotNull final Field field, final float value)
         throws  SQLException
     {
         setFloat(field.equals(), value);
@@ -2182,8 +2189,8 @@ public abstract class Query
      */
     protected void setDouble(
         final int index,
-        final Double value,
-        final PreparedStatement preparedStatement)
+        @Nullable final Double value,
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         if  (value != null)
@@ -2205,7 +2212,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setDouble(final Field field, final double value)
+    public void setDouble(@NotNull final Field field, final double value)
       throws  SQLException
     {
         setDouble(field.equals(), value);
@@ -2220,7 +2227,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setDouble(final Field field, final Double value)
+    public void setDouble(@NotNull final Field field, final Double value)
       throws  SQLException
     {
         setDouble(field.equals(), value);
@@ -2269,7 +2276,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setNull(final Field field, final int sqlType)
+    public void setNull(@NotNull final Field field, final int sqlType)
         throws  SQLException
     {
         setNull(field.equals(), sqlType);
@@ -2306,7 +2313,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setNull(
-        final Field field,
+        @NotNull final Field field,
         final int sqlType,
         final String typeName)
       throws  SQLException
@@ -2349,7 +2356,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setString(final ClobField field, final String value)
+    public void setString(@NotNull final ClobField field, @NotNull final String value)
         throws  SQLException
     {
         setClob(field, value);
@@ -2365,7 +2372,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setString(final Field field, final String value)
+    public void setString(@NotNull final Field field, final String value)
         throws  SQLException
     {
         setString(field.equals(), value);
@@ -2396,7 +2403,7 @@ public abstract class Query
      * @precondition variableCondition != null
      */
     public void setStrings(
-        final VariableCondition condition, final String[] values)
+        final VariableCondition condition, @Nullable final String[] values)
       throws  SQLException
     {
         int t_iCount = (values != null) ? values.length : 0;
@@ -2418,7 +2425,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setArray(final Field field, final Array value)
+    public void setArray(@NotNull final Field field, final Array value)
         throws  SQLException
     {
         setArray(field.equals(), value);
@@ -2453,7 +2460,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setAsciiStream(
-        final Field field,
+        @NotNull final Field field,
         final InputStream       inputStream,
         final int               length)
       throws  SQLException
@@ -2496,7 +2503,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setBigDecimal(
-        final Field  field, final BigDecimal value)
+        @NotNull final Field  field, final BigDecimal value)
       throws  SQLException
     {
         setBigDecimal(field.equals(), value);
@@ -2534,7 +2541,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setBinaryStream(
-        final Field field,
+        @NotNull final Field field,
         final InputStream inputStream,
         final int length)
       throws  SQLException
@@ -2576,7 +2583,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setBlob(final Field field, final Blob value)
+    public void setBlob(@NotNull final Field field, final Blob value)
         throws  SQLException
     {
         setBlob(field.equals(), value);
@@ -2607,7 +2614,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setBytes(final Field field, final byte[] value)
+    public void setBytes(@NotNull final Field field, final byte[] value)
         throws  SQLException
     {
         setBytes(field.equals(), value);
@@ -2642,7 +2649,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setCharacterStream(
-        final Field field,
+        @NotNull final Field field,
         final Reader reader,
         final int length)
       throws  SQLException
@@ -2682,7 +2689,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setClob(final Field field, final Clob value)
+    public void setClob(@NotNull final Field field, final Clob value)
         throws  SQLException
     {
         setClob(field.equals(), value);
@@ -2698,7 +2705,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setClob(final Field field, final String value)
+    public void setClob(@NotNull final Field field, @NotNull final String value)
         throws  SQLException
     {
         setClob(field.equals(), value);
@@ -2728,7 +2735,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
      */
-    public void setClob(final VariableCondition condition, final String value)
+    public void setClob(final VariableCondition condition, @NotNull final String value)
         throws  SQLException
     {
         setClob(retrieveIndex(getVariableConditions(), condition), value);
@@ -2743,7 +2750,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setDate(final Field field, final Date value)
+    public void setDate(@NotNull final Field field, final Date value)
         throws  SQLException
     {
         setDate(field.equals(), value);
@@ -2761,7 +2768,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setDate(
-        final Field field,
+        @NotNull final Field field,
         final Date value,
         final Calendar calendar)
       throws  SQLException
@@ -2809,7 +2816,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setObject(
-        final Field field,
+        @NotNull final Field field,
         final Object value,
         final int sqlType,
         final int scale)
@@ -2861,7 +2868,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setObject(
-        final Field field,
+        @NotNull final Field field,
         final Object value,
         final int sqlType)
       throws  SQLException
@@ -2901,7 +2908,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setObject(
-        final Field field, final Object value)
+        @NotNull final Field field, final Object value)
       throws  SQLException
     {
         setObject(field.equals(), value);
@@ -2933,7 +2940,7 @@ public abstract class Query
      * @throws SQLException if an error occurs.
      * @precondition field != null
      */
-    public void setRef(final Field field, final Ref value)
+    public void setRef(@NotNull final Field field, final Ref value)
         throws  SQLException
     {
         setRef(field.equals(), value);
@@ -2964,7 +2971,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setTimestamp(
-        final Field field, final Timestamp value)
+        @NotNull final Field field, final Timestamp value)
       throws  SQLException
     {
         setTimestamp(field.equals(), value);
@@ -2998,7 +3005,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setTimestamp(
-        final Field field,
+        @NotNull final Field field,
         final Timestamp value,
         final Calendar calendar)
       throws  SQLException
@@ -3039,7 +3046,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setTimestamp(
-        final Field field, final java.util.Date value)
+        @NotNull final Field field, @Nullable final java.util.Date value)
       throws  SQLException
     {
         setTimestamp(
@@ -3058,7 +3065,7 @@ public abstract class Query
      * @precondition value != null
      */
     public void setTimestamp(
-        final VariableCondition condition, final java.util.Date value)
+        final VariableCondition condition, @Nullable final java.util.Date value)
       throws  SQLException
     {
         setTimestamp(
@@ -3080,8 +3087,8 @@ public abstract class Query
      * @precondition value != null
      */
     public void setTimestamp(
-        final Field field,
-        final java.util.Date value,
+        @NotNull final Field field,
+        @Nullable final java.util.Date value,
         final Calendar calendar)
       throws  SQLException
     {
@@ -3105,7 +3112,7 @@ public abstract class Query
      */
     public void setTimestamp(
         final VariableCondition condition,
-        final java.util.Date value,
+        @Nullable final java.util.Date value,
         final Calendar calendar)
       throws  SQLException
     {
@@ -3130,7 +3137,7 @@ public abstract class Query
      * @precondition field != null
      */
     public void setUnicodeStream(
-        final Field field,
+        @NotNull final Field field,
         final InputStream inputStream,
         final int length)
       throws  SQLException
@@ -3191,6 +3198,7 @@ public abstract class Query
      * object.
      * @throws SQLException if an error occurs.
      */
+    @NotNull
     public ResultSet getGeneratedKeys()
         throws SQLException
     {
@@ -3379,7 +3387,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setClob(
-        final int index, final Reader reader, final PreparedStatement preparedStatement)
+        final int index, final Reader reader, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setClob(index, reader);
@@ -3407,7 +3415,7 @@ public abstract class Query
         final int index,
         final Reader reader,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setClob(index, reader, length);
@@ -3431,7 +3439,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setNClob(
-        final int index, final Reader reader, final PreparedStatement preparedStatement)
+        final int index, final Reader reader, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setNClob(index, reader);
@@ -3459,7 +3467,7 @@ public abstract class Query
         final int index,
         final Reader reader,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setClob(index, reader, length);
@@ -3486,7 +3494,7 @@ public abstract class Query
     protected void setNClob(
         final int index,
         final NClob nclob,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setNClob(index, nclob);
@@ -3510,7 +3518,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setBlob(
-        final int index, final InputStream stream, final PreparedStatement preparedStatement)
+        final int index, final InputStream stream, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setBlob(index, stream);
@@ -3538,7 +3546,7 @@ public abstract class Query
         final int index,
         final InputStream stream,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setBlob(index, stream, length);
@@ -3562,7 +3570,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setNCharacterStream(
-        final int index, final Reader reader, final PreparedStatement preparedStatement)
+        final int index, final Reader reader, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setNCharacterStream(index, reader);
@@ -3590,7 +3598,7 @@ public abstract class Query
         final int index,
         final Reader reader,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setNCharacterStream(index, reader, length);
@@ -3614,7 +3622,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setCharacterStream(
-        final int index, final Reader reader, final PreparedStatement preparedStatement)
+        final int index, final Reader reader, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setCharacterStream(index, reader);
@@ -3642,7 +3650,7 @@ public abstract class Query
         final int index,
         final Reader reader,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setCharacterStream(index, reader, length);
@@ -3666,7 +3674,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setBinaryStream(
-        final int index, final InputStream stream, final PreparedStatement preparedStatement)
+        final int index, final InputStream stream, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setBinaryStream(index, stream);
@@ -3694,7 +3702,7 @@ public abstract class Query
         final int index,
         final InputStream stream,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setBinaryStream(index, stream, length);
@@ -3718,7 +3726,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setAsciiStream(
-        final int index, final InputStream stream, final PreparedStatement preparedStatement)
+        final int index, final InputStream stream, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setAsciiStream(index, stream);
@@ -3746,7 +3754,7 @@ public abstract class Query
         final int index,
         final InputStream stream,
         final long length,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setAsciiStream(index, stream, length);
@@ -3770,7 +3778,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setSQLXML(
-        final int index, final SQLXML sqlXml, final PreparedStatement preparedStatement)
+        final int index, final SQLXML sqlXml, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setSQLXML(index, sqlXml);
@@ -3798,7 +3806,7 @@ public abstract class Query
     protected void setNString(
         final int index,
         final String nstring,
-        final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setNString(index, nstring);
@@ -3822,7 +3830,7 @@ public abstract class Query
      * @precondition preparedStatement != null
      */
     protected void setRowId(
-        final int index, final RowId rowId, final PreparedStatement preparedStatement)
+        final int index, final RowId rowId, @NotNull final PreparedStatement preparedStatement)
       throws SQLException
     {
         preparedStatement.setRowId(index, rowId);
@@ -3845,7 +3853,7 @@ public abstract class Query
      * @throws SQLException if the check fails.
      * @precondition statement != null
      */
-    protected boolean isPoolable(final Statement statement)
+    protected boolean isPoolable(@NotNull final Statement statement)
         throws SQLException
     {
         return statement.isPoolable();
@@ -3868,7 +3876,7 @@ public abstract class Query
      * @throws SQLException if the check fails.
      * @precondition statement != null
      */
-    protected void setPoolable(final boolean flag, final Statement statement)
+    protected void setPoolable(final boolean flag, @NotNull final Statement statement)
         throws SQLException
     {
         statement.setPoolable(flag);
@@ -3890,7 +3898,7 @@ public abstract class Query
      * @throws SQLException if the check fails.
      * @precondition statement != null
      */
-    protected boolean isClosed(final Statement statement)
+    protected boolean isClosed(@NotNull final Statement statement)
         throws SQLException
     {
         return statement.isClosed();
@@ -3910,7 +3918,7 @@ public abstract class Query
      * @param wrappedStatement the wrapped statement.
      * @return <code>true</code> if the wrapped statement is compatible with given class.
      */
-    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedStatement)
+    protected boolean isWrapperFor(final Class wrapperClass, @Nullable final Object wrappedStatement)
     {
         return
             (   (wrappedStatement != null)
@@ -3920,6 +3928,7 @@ public abstract class Query
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Object unwrap(final Class wrapperClass)
     {
         return unwrap(wrapperClass, getPreparedStatement());
@@ -3931,9 +3940,10 @@ public abstract class Query
      * @param wrappedStatement the wrapped statement.
      * @return the wrapped statement if it's compatible.
      */
+    @Nullable
     protected Object unwrap(final Class wrapperClass, final Object wrappedStatement)
     {
-        Object result = null;
+        @Nullable Object result = null;
 
         if  (isWrapperFor(wrapperClass, wrappedStatement))
         {

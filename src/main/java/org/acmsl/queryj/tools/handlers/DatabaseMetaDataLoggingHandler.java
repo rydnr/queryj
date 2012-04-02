@@ -51,6 +51,8 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -82,7 +84,7 @@ public class DatabaseMetaDataLoggingHandler
      * @precondition project != null
      * @precondition task != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return handle(retrieveDatabaseMetaData(parameters));
@@ -95,12 +97,12 @@ public class DatabaseMetaDataLoggingHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition metaData != null
      */
-    protected boolean handle(final DatabaseMetaData metaData)
+    protected boolean handle(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {
         boolean result = false;
 
-        Log t_Log = null;
+        @Nullable Log t_Log = null;
         
         try 
         {
@@ -402,7 +404,7 @@ public class DatabaseMetaDataLoggingHandler
                     t_strSupportsGetGeneratedKeys =
                             "" + metaData.supportsGetGeneratedKeys();
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     t_strSupportsGetGeneratedKeys +=
                         sqlException.getMessage();
@@ -717,7 +719,7 @@ public class DatabaseMetaDataLoggingHandler
                     + metaData.usesLocalFiles());
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {

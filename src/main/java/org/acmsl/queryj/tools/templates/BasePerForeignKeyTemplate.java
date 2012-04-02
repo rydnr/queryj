@@ -75,6 +75,8 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base logic for all per-fk templates.
@@ -131,6 +133,7 @@ public abstract class BasePerForeignKeyTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected abstract StringTemplateGroup retrieveGroup();
 
     /**
@@ -151,7 +154,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
@@ -206,10 +209,10 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metaLanguageUtils != null
      */
     protected String generateOutput(
-        final ForeignKey foreignKey,
+        @NotNull final ForeignKey foreignKey,
         final MetadataManager metadataManager,
         final String packageName,
-        final String engineName,
+        @NotNull final String engineName,
         final String engineVersion,
         final String quote,
         final String basePackageName,
@@ -217,18 +220,18 @@ public abstract class BasePerForeignKeyTemplate
         final MetadataTypeManager metadataTypeManager,
         final String header,
         final DecoratorFactory decoratorFactory,
-        final StringUtils stringUtils,
+        @NotNull final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
-        final PackageUtils packageUtils,
+        @NotNull final PackageUtils packageUtils,
         final StringValidator stringValidator,
         final EnglishGrammarUtils englishGrammarUtils,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String result = "";
 
-        StringTemplateGroup t_Group = retrieveGroup();
+        @Nullable StringTemplateGroup t_Group = retrieveGroup();
 
-        StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
         String t_strRepositoryName =
             stringUtils.capitalize(repositoryName, '_');
@@ -287,16 +290,16 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
-        final Map input,
-        final StringTemplate template,
+        @NotNull final Map input,
+        @NotNull final StringTemplate template,
         final Integer[] copyrightYears,
-        final ForeignKey foreignKey,
+        @NotNull final ForeignKey foreignKey,
         final String engineName,
         final String engineVersion,
         final String basePackageName,
         final String subpackageName,
         final String timestamp,
-        final String tableRepositoryName,
+        @NotNull final String tableRepositoryName,
         final String header,
         final DecoratorFactory decoratorFactory,
         final StringUtils stringUtils)
@@ -340,8 +343,8 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
-        final Map input,
-        final ForeignKey foreignKey,
+        @NotNull final Map input,
+        @NotNull final ForeignKey foreignKey,
         final String engineName,
         final String engineVersion)
     {
@@ -362,8 +365,8 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition timestamp != null
      */
     protected void fillJavaHeaderParameters(
-        final Map input,
-        final String header,
+        @NotNull final Map input,
+        @Nullable final String header,
         final Integer[] copyrightYears,
         final String timestamp)
     {
@@ -388,7 +391,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition tableName != null
      */
     protected void fillPackageDeclarationParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName,
         final String tableName)
@@ -413,7 +416,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition fkAttributes != null
      */
     protected void fillProjectImportsParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName,
         final Collection fkAttributes)
@@ -439,12 +442,12 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition tableRepositoryName != null
      */
     protected void fillClassParameters(
-        final Map input,
+        @NotNull final Map input,
         final ForeignKey foreignKey,
         final String engineName,
         final String engineVersion,
         final String timestamp,
-        final String tableRepositoryName)
+        @NotNull final String tableRepositoryName)
     {
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);
@@ -468,11 +471,12 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection retrieveForeignKeyAttributes(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -499,12 +503,13 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection buildAttributes(
-        final String[] columnNames,
+        @NotNull final String[] columnNames,
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -533,13 +538,14 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection buildAttributes(
         final String[] columnNames,
         final String[] columnValues,
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -570,13 +576,14 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection buildAttributes(
-        final String[] columnNames,
+        @NotNull final String[] columnNames,
         final String tableName,
         final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             buildAttributes(
@@ -608,16 +615,17 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection buildAttributes(
-        final String[] columnNames,
+        @Nullable final String[] columnNames,
         final String[] columnValues,
         final String tableName,
-        final Boolean allowsNullAsAWhole,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @Nullable final Boolean allowsNullAsAWhole,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
@@ -627,7 +635,7 @@ public abstract class BasePerForeignKeyTemplate
                 metadataManager.getColumnType(
                     tableName, columnNames[t_iIndex]);
 
-            String t_strNativeType =
+            @Nullable String t_strNativeType =
                 metadataTypeManager.getNativeType(t_iType);
 
             boolean t_bAllowsNull = false;
@@ -676,7 +684,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition decorationUtils != null
      */
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -690,7 +698,7 @@ public abstract class BasePerForeignKeyTemplate
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }

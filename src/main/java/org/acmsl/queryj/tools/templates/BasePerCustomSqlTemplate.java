@@ -74,6 +74,8 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base logic for all templates to be processed once per custom SQL.
@@ -134,6 +136,7 @@ public abstract class BasePerCustomSqlTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @NotNull
     protected abstract StringTemplateGroup retrieveGroup();
 
     /**
@@ -154,7 +157,7 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
@@ -211,24 +214,24 @@ public abstract class BasePerCustomSqlTemplate
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String packageName,
-        final String engineName,
+        @NotNull final String engineName,
         final String engineVersion,
         final String basePackageName,
         final String repositoryName,
         final MetadataTypeManager metadataTypeManager,
         final String header,
-        final StringUtils stringUtils,
+        @NotNull final StringUtils stringUtils,
         final DefaultThemeUtils defaultThemeUtils,
-        final PackageUtils packageUtils,
+        @NotNull final PackageUtils packageUtils,
         final StringValidator stringValidator,
         final EnglishGrammarUtils englishGrammarUtils,
         final MetaLanguageUtils metaLanguageUtils)
     {
         String result = "";
 
-        StringTemplateGroup t_Group = retrieveGroup();
+        @NotNull StringTemplateGroup t_Group = retrieveGroup();
 
-        StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
         String t_strRepositoryName =
             stringUtils.capitalize(repositoryName, '_');
@@ -287,8 +290,8 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
-        final Map input,
-        final StringTemplate template,
+        @NotNull final Map input,
+        @NotNull final StringTemplate template,
         final Integer[] copyrightYears,
         final SqlElement sql,
         final CustomSqlProvider customSqlProvider,
@@ -297,7 +300,7 @@ public abstract class BasePerCustomSqlTemplate
         final String basePackageName,
         final String subpackageName,
         final String timestamp,
-        final String tableRepositoryName,
+        @NotNull final String tableRepositoryName,
         final String header,
         final StringUtils stringUtils)
     {
@@ -335,7 +338,7 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
-        final Map input,
+        @NotNull final Map input,
         final SqlElement sql,
         final String engineName,
         final String engineVersion)
@@ -357,8 +360,8 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition timestamp != null
      */
     protected void fillJavaHeaderParameters(
-        final Map input,
-        final String header,
+        @NotNull final Map input,
+        @Nullable final String header,
         final Integer[] copyrightYears,
         final String timestamp)
     {
@@ -381,7 +384,7 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition subpackageName != null
      */
     protected void fillPackageDeclarationParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName)
     {
@@ -399,7 +402,7 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition subpackageName != null
      */
     protected void fillProjectImportsParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName)
     {
@@ -425,13 +428,13 @@ public abstract class BasePerCustomSqlTemplate
      * @precondition tableRepositoryName != null
      */
     protected void fillClassParameters(
-        final Map input,
+        @NotNull final Map input,
         final SqlElement sql,
         final CustomSqlProvider customSqlProvider,
         final String engineName,
         final String engineVersion,
         final String timestamp,
-        final String tableRepositoryName)
+        @NotNull final String tableRepositoryName)
     {
         input.put("engine_name", engineName);
         input.put("engine_version", engineVersion);

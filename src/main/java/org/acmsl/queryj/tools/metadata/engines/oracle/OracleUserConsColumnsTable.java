@@ -50,6 +50,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the USER_CONS_COLUMNS table in the persistence domain.
@@ -74,24 +76,28 @@ public class OracleUserConsColumnsTable
     /**
      * The user_cons_columns table constraint_name field.
      */
+    @NotNull
     public StringField CONSTRAINT_NAME =
         new StringField("CONSTRAINT_NAME", this);
 
     /**
      * The user_cons_columns table table_name field.
      */
+    @NotNull
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
      * The user_cons_columns table column_name field.
      */
+    @NotNull
     public StringField COLUMN_NAME =
         new StringField("COLUMN_NAME", this);
 
     /**
      * The user_constraints table position field.
      */
+    @NotNull
     public IntField POSITION =
         new IntField("POSITION", this);
 
@@ -117,9 +123,10 @@ public class OracleUserConsColumnsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserConsColumnsTable getInstance(final String alias)
+    @Nullable
+    public static OracleUserConsColumnsTable getInstance(@Nullable final String alias)
     {
-        OracleUserConsColumnsTable result = null;
+        @Nullable OracleUserConsColumnsTable result = null;
 
         if  (alias != null)
         {
@@ -137,6 +144,7 @@ public class OracleUserConsColumnsTable
      * Retrieves a OracleUserConsColumnsTable instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleUserConsColumnsTable getInstance()
     {
         return OracleUserConsColumnsTableSingletonContainer.SINGLETON;
@@ -146,6 +154,7 @@ public class OracleUserConsColumnsTable
      * Retrieves the table name.
      * @return such name.
      */
+    @NotNull
     public String getTableName()
     {
         return "USER_CONS_COLUMNS";
@@ -155,6 +164,7 @@ public class OracleUserConsColumnsTable
      * Retrieves <code>all</code> fields. It's equivalent to a star in a query.
      * @return such fields.
      */
+    @NotNull
     public Field[] getAll()
     {
         return

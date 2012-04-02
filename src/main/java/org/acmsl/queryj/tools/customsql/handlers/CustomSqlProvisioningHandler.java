@@ -58,6 +58,7 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -87,7 +88,7 @@ public class CustomSqlProvisioningHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -105,8 +106,8 @@ public class CustomSqlProvisioningHandler
      * @precondition metadataManager != null
      */
     protected boolean handle(
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
         return
@@ -128,9 +129,9 @@ public class CustomSqlProvisioningHandler
      * @precondition metadataTypeManager != null
      */
     protected boolean handle(
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
         boolean result = false;

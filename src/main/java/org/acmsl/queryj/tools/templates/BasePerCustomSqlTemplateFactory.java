@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create per-<i>custom sql</i> templates.
@@ -66,6 +67,7 @@ public interface BasePerCustomSqlTemplateFactory
      * @param repositoryName the repository name.
      * @param header the file header.
      */
+    @NotNull
     public BasePerCustomSqlTemplate createTemplate(
         final SqlElement sql,
         final CustomSqlProvider customSqlProvider,

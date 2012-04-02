@@ -53,6 +53,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -198,6 +200,7 @@ public class DAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/DAO.stg");
@@ -207,6 +210,7 @@ public class DAOTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "DAO";
@@ -272,18 +276,18 @@ public class DAOTemplate
      * @precondition metadataManager != null
      */
     protected void fillClassParameters(
-        final Map input,
-        final String voName,
+        @NotNull final Map input,
+        @NotNull final String voName,
         final String engineName,
         final String engineVersion,
         final String timestamp,
         final boolean staticTable,
-        final String tableRepositoryName,
-        final String tableName,
+        @NotNull final String tableRepositoryName,
+        @NotNull final String tableName,
         final Collection pkAttributes,
         final Collection nonPkAttributes,
         final Collection fkAttributes,
-        final Map referingKeys,
+        @NotNull final Map referingKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,

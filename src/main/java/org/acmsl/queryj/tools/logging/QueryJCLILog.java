@@ -46,6 +46,8 @@ package org.acmsl.queryj.tools.logging;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -342,7 +344,7 @@ public class QueryJCLILog
      * @param printStream the <code>PrintStream</code> instance.
      * @precondition project != null
      */
-    protected void log(final Object message, final PrintStream printStream)
+    protected void log(final Object message, @NotNull final PrintStream printStream)
     {
         printStream.println("" + message);
     }
@@ -356,10 +358,10 @@ public class QueryJCLILog
      */
     protected void log(
         final Object message,
-        final Throwable throwable,
-        final PrintStream printStream)
+        @Nullable final Throwable throwable,
+        @NotNull final PrintStream printStream)
     {
-        String t_strMessage = "" + message;
+        @NotNull String t_strMessage = "" + message;
 
         if  (throwable != null)
         {

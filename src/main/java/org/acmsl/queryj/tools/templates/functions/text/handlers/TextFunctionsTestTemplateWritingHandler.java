@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -77,7 +79,7 @@ public class TextFunctionsTestTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplate(
@@ -101,10 +103,10 @@ public class TextFunctionsTestTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplate(
-        final TextFunctionsTestTemplate template,
-        final File outputDir,
+        @Nullable final TextFunctionsTestTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final TextFunctionsTestTemplateGenerator generator)
+        @NotNull final TextFunctionsTestTemplateGenerator generator)
       throws  QueryJBuildException
     {
         if  (template != null)
@@ -113,7 +115,7 @@ public class TextFunctionsTestTemplateWritingHandler
             {
                 generator.write(template, outputDir, charset);
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 throw
                     new QueryJBuildException(
@@ -129,8 +131,9 @@ public class TextFunctionsTestTemplateWritingHandler
      * @return the test template.
      * @precondition parameters != null
      */
+    @NotNull
     protected TextFunctionsTestTemplate retrieveTextFunctionsTestTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (TextFunctionsTestTemplate)
@@ -144,7 +147,8 @@ public class TextFunctionsTestTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return
             retrieveOutputDir(parameters, PackageUtils.getInstance());
@@ -158,8 +162,9 @@ public class TextFunctionsTestTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveTestFunctionsFolder(

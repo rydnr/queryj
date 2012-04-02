@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -85,7 +87,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(
@@ -125,15 +127,15 @@ public class XMLValueObjectFactoryTemplateBuildHandler
         final String packageName,
         final String valueObjectPackage,
         final String header,
-        final TableTemplate[] tableTemplates,
-        final XMLValueObjectFactoryTemplateGenerator generator,
-        final Map parameters)
+        @Nullable final TableTemplate[] tableTemplates,
+        @NotNull final XMLValueObjectFactoryTemplateGenerator generator,
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         int t_iCount =
             (tableTemplates != null) ? tableTemplates.length : 0;
 
-        XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
+        @NotNull XMLValueObjectFactoryTemplate[] t_aValueObjectFactoryTemplates =
             new XMLValueObjectFactoryTemplate[t_iCount];
 
         for  (int t_iValueObjectFactoryIndex = 0;
@@ -158,7 +160,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -175,7 +177,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveXMLValueObjectFactoryPackage(projectPackage);
@@ -187,7 +189,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrieveValueObjectPackage(final Map parameters)
+    protected String retrieveValueObjectPackage(@NotNull final Map parameters)
     {
         return
             retrieveValueObjectPackage(
@@ -204,7 +206,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveValueObjectPackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveValueObjectFactoryPackage(projectPackage);
@@ -220,7 +222,7 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      */
     protected void storeXMLValueObjectFactoryTemplates(
         final XMLValueObjectFactoryTemplate[] valueObjectFactoryTemplates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.XML_VALUE_OBJECT_FACTORY_TEMPLATES,
@@ -232,10 +234,11 @@ public class XMLValueObjectFactoryTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such templates.
      */
+    @NotNull
     protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
+        @Nullable final Map parameters)
     {
-        TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
+        @NotNull TableTemplate[] result = EMPTY_TABLE_TEMPLATE_ARRAY;
 
         if  (parameters != null)
         {

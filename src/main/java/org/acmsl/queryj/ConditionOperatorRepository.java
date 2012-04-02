@@ -44,6 +44,7 @@ import org.acmsl.queryj.NestedConditionOperator;
  */
 import org.acmsl.commons.patterns.Repository;
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains references to declared operators.
@@ -74,6 +75,7 @@ public class ConditionOperatorRepository
      * Retrieves a <code>ConditionOperatorRepository</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static ConditionOperatorRepository getInstance()
     {
         return ConditionOperatorRepositorySingletonContainer.SINGLETON;
@@ -83,6 +85,7 @@ public class ConditionOperatorRepository
      * Retrieves the equality operator.
      * @return such operator
      */
+    @NotNull
     public ConditionOperator getEquals()
     {
         return new ConditionOperator("=");
@@ -92,6 +95,7 @@ public class ConditionOperatorRepository
      * Retrieves the unequality operator.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getNotEquals()
     {
         return new ConditionOperator("!=");
@@ -101,6 +105,7 @@ public class ConditionOperatorRepository
      * Retrieves the greater-than operator.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getGreaterThan()
     {
         return new ConditionOperator(">");
@@ -110,6 +115,7 @@ public class ConditionOperatorRepository
      * Retrieves the less-than operator.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getLessThan()
     {
         return new ConditionOperator("<");
@@ -119,6 +125,7 @@ public class ConditionOperatorRepository
      * Retrieves the null operator.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getIsNull()
     {
         return new ConditionOperator("is null");
@@ -129,6 +136,7 @@ public class ConditionOperatorRepository
      * @param query the query.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getBelongsTo(final SelectQuery query)
     {
         return new NestedConditionOperator("in", query);
@@ -139,6 +147,7 @@ public class ConditionOperatorRepository
      * @param query the query.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getNotBelongsTo(final SelectQuery query)
     {
         return new NestedConditionOperator("not in", query);
@@ -149,6 +158,7 @@ public class ConditionOperatorRepository
      * @param count the number of parameters within the clause.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getIn(final int count)
     {
         return new MultipleConditionOperator("in", count);
@@ -159,6 +169,7 @@ public class ConditionOperatorRepository
      * @param count the number of parameters within the clause.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getNotIn(final int count)
     {
         return new MultipleConditionOperator("not in", count);
@@ -168,6 +179,7 @@ public class ConditionOperatorRepository
      * Retrieves the <code>like</code> operator.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getLike()
     {
         return new ConditionOperator("like");
@@ -177,6 +189,7 @@ public class ConditionOperatorRepository
      * Retrieves the <code>not like</code> operator.
      * @return such operator.
      */
+    @NotNull
     public ConditionOperator getNotLike()
     {
         return new ConditionOperator("not like");

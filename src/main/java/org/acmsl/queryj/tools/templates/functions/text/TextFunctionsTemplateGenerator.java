@@ -65,6 +65,8 @@ import java.nio.charset.Charset;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate text function repositories according to database
@@ -92,7 +94,7 @@ public class TextFunctionsTemplateGenerator
      */
     public TextFunctionsTemplateGenerator()
     {
-        TemplateMappingManager t_TemplateMappingManager =
+        @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
         if  (t_TemplateMappingManager != null)
@@ -107,6 +109,7 @@ public class TextFunctionsTemplateGenerator
      * Retrieves a TextFunctionsTemplateGenerator instance.
      * @return such instance.
      */
+    @NotNull
     public static TextFunctionsTemplateGenerator getInstance()
     {
         return TextFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -147,7 +150,7 @@ public class TextFunctionsTemplateGenerator
         final String engineName,
         final String engineVersion,
         final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
     {
         templateMappingManager.addTemplateFactoryClass(
             TemplateMappingManager.TEXT_FUNCTIONS_TEMPLATE,
@@ -163,6 +166,7 @@ public class TextFunctionsTemplateGenerator
      * @return the template factory class name.
      * @precondition engineName != null
      */
+    @Nullable
     protected String getTemplateFactoryClass(
         final String engineName, final String engineVersion)
     {
@@ -183,10 +187,11 @@ public class TextFunctionsTemplateGenerator
      * @precondition engineName != null
      * @precondition templateMappingManager != null
      */
+    @Nullable
     protected String getTemplateFactoryClass(
         final String engineName,
         final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
     {
         return
             templateMappingManager.getTemplateFactoryClass(
@@ -202,6 +207,7 @@ public class TextFunctionsTemplateGenerator
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
      */
+    @Nullable
     protected TextFunctionsTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
       throws  QueryJBuildException
@@ -223,15 +229,16 @@ public class TextFunctionsTemplateGenerator
      * @throws QueryJBuildException if the factory class is invalid.
      * @precondition templateMappingManager != null
      */
+    @Nullable
     protected TextFunctionsTemplateFactory getTemplateFactory(
         final String engineName,
         final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
       throws  QueryJBuildException
     {
-        TextFunctionsTemplateFactory result = null;
+        @Nullable TextFunctionsTemplateFactory result = null;
 
-        Object t_TemplateFactory =
+        @Nullable Object t_TemplateFactory =
             templateMappingManager.getTemplateFactory(
                 TemplateMappingManager.TEXT_FUNCTIONS_TEMPLATE,
                 engineName,
@@ -265,22 +272,23 @@ public class TextFunctionsTemplateGenerator
      * @precondition engineName != null
      * @precondition quote != null
      */
+    @Nullable
     public TextFunctionsTemplate createTextFunctionsTemplate(
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote)
     {
-        TextFunctionsTemplate result = null;
+        @Nullable TextFunctionsTemplate result = null;
 
-        TextFunctionsTemplateFactory t_TemplateFactory = null;
+        @Nullable TextFunctionsTemplateFactory t_TemplateFactory = null;
 
         try
         {
             t_TemplateFactory =
                 getTemplateFactory(engineName, engineVersion);
         }
-        catch  (final QueryJBuildException buildException)
+        catch  (@NotNull final QueryJBuildException buildException)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(
@@ -318,8 +326,8 @@ public class TextFunctionsTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final TextFunctionsTemplate textFunctionsTemplate,
-        final File outputDir,
+        @NotNull final TextFunctionsTemplate textFunctionsTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -345,11 +353,11 @@ public class TextFunctionsTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final TextFunctionsTemplate textFunctionsTemplate,
-        final File outputDir,
+        @NotNull final TextFunctionsTemplate textFunctionsTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

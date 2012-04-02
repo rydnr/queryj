@@ -36,6 +36,8 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing some JDK classes.
  */
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -265,7 +267,7 @@ public abstract class AbstractField
 
         if  (object instanceof AbstractField)
         {
-            final Field t_OtherInstance = (Field) object;
+            @NotNull final Field t_OtherInstance = (Field) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -306,7 +308,7 @@ public abstract class AbstractField
 
         if  (object instanceof Field)
         {
-            final Field t_OtherInstance = (Field) object;
+            @NotNull final Field t_OtherInstance = (Field) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

@@ -44,6 +44,7 @@ import org.acmsl.commons.utils.ConversionUtils;
  */
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.ObjectCreationFactory;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -90,6 +91,7 @@ public abstract class ElementFactory
      * @throws SAXException if the attributes are not valid.
      * @precondition attributes != null
      */
+    @Nullable
     public Object createObject(final Attributes attributes)
       throws SAXException
     {
@@ -107,6 +109,7 @@ public abstract class ElementFactory
      * @precondition digester != null
      * @precondition conversionUtils != null
      */
+    @Nullable
     protected abstract Object createObject(
         final Attributes attributes,
         final Digester digester,

@@ -35,6 +35,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate value object factories according to
@@ -734,6 +735,7 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
@@ -745,7 +747,8 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
      * @return such header.
      * @precondition tableTemplate != null
      */
-    protected String buildHeader(final TableTemplate tableTemplate)
+    @NotNull
+    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
     {
         return
               "Generating XML DAO Factory for "

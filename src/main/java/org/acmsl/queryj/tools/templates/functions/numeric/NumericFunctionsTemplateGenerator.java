@@ -54,6 +54,8 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -88,7 +90,7 @@ public class NumericFunctionsTemplateGenerator
      */
     public NumericFunctionsTemplateGenerator()
     {
-        TemplateMappingManager t_TemplateMappingManager =
+        @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
         if  (t_TemplateMappingManager != null)
@@ -103,6 +105,7 @@ public class NumericFunctionsTemplateGenerator
      * Retrieves a {@link NumericFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static NumericFunctionsTemplateGenerator getInstance()
     {
         return NumericFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -115,6 +118,7 @@ public class NumericFunctionsTemplateGenerator
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
      */
+    @Nullable
     protected NumericFunctionsTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
       throws  QueryJBuildException
@@ -136,15 +140,16 @@ public class NumericFunctionsTemplateGenerator
      * @throws QueryJBuildException if the factory class is invalid.
      * @precondition templateMappingManager != null
      */
+    @Nullable
     protected NumericFunctionsTemplateFactory getTemplateFactory(
         final String engineName,
         final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
       throws  QueryJBuildException
     {
-        NumericFunctionsTemplateFactory result = null;
+        @Nullable NumericFunctionsTemplateFactory result = null;
 
-        Object t_TemplateFactory =
+        @Nullable Object t_TemplateFactory =
             templateMappingManager.getTemplateFactory(
                 TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
                 engineName,
@@ -179,6 +184,7 @@ public class NumericFunctionsTemplateGenerator
      * @precondition engineName != null
      * @precondition quote != null
      */
+    @Nullable
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
         final String packageName,
         final String engineName,
@@ -186,11 +192,11 @@ public class NumericFunctionsTemplateGenerator
         final String quote,
         final String header)
     {
-        NumericFunctionsTemplate result = null;
+        @Nullable NumericFunctionsTemplate result = null;
 
         try
         {
-            NumericFunctionsTemplateFactory t_TemplateFactory =
+            @Nullable NumericFunctionsTemplateFactory t_TemplateFactory =
                 getTemplateFactory(engineName, engineVersion);
 
             if  (   (t_TemplateFactory != null)
@@ -205,7 +211,7 @@ public class NumericFunctionsTemplateGenerator
                         header);
             }
         }
-        catch  (final QueryJBuildException buildException)
+        catch  (@NotNull final QueryJBuildException buildException)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(
@@ -232,8 +238,8 @@ public class NumericFunctionsTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final NumericFunctionsTemplate numericFunctionsTemplate,
-        final File outputDir,
+        @NotNull final NumericFunctionsTemplate numericFunctionsTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -259,11 +265,11 @@ public class NumericFunctionsTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final NumericFunctionsTemplate numericFunctionsTemplate,
-        final File outputDir,
+        @NotNull final NumericFunctionsTemplate numericFunctionsTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

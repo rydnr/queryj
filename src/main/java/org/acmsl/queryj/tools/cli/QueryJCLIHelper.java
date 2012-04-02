@@ -65,6 +65,8 @@ import java.util.Properties;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some useful methods for executing QueryJ from the command-line.
@@ -100,6 +102,7 @@ public class QueryJCLIHelper
      * Retrieves a <code>QueryJCLIHelper</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static QueryJCLIHelper getInstance()
     {
         return QueryJCLIHelperSingletonContainer.SINGLETON;
@@ -173,9 +176,10 @@ public class QueryJCLIHelper
      * Creates the command-line option for the verbosity levels.
      * @return such <code>Option</code> instances.
      */
+    @NotNull
     public Option[] createVerbosityOptions()
     {
-        Collection t_cResult = new ArrayList();
+        @NotNull Collection t_cResult = new ArrayList();
 
         Option t_Option =
             OptionBuilder
@@ -250,13 +254,14 @@ public class QueryJCLIHelper
      * @precondition verbosityOptions != null
      * @precondition helpOption != null
      */
+    @NotNull
     public Options createOptions(
         final Option configurationOption,
         final Option customSqlOption,
         final Option[] verbosityOptions,
         final Option helpOption)
     {
-        Options result = new Options();
+        @NotNull Options result = new Options();
 
         addOptions(
             result,
@@ -284,10 +289,10 @@ public class QueryJCLIHelper
      * @precondition helpOption != null
      */
     protected void addOptions(
-        final Options options,
+        @NotNull final Options options,
         final Option configurationOption,
         final Option customSqlOption,
-        final Option[] verbosityOptions,
+        @Nullable final Option[] verbosityOptions,
         final Option helpOption)
     {
         options.addOption(configurationOption);
@@ -311,7 +316,7 @@ public class QueryJCLIHelper
      * @precondition message != null
      * @precondition printStream != null
      */
-    public void printError(final String message, final PrintStream printStream)
+    public void printError(final String message, @NotNull final PrintStream printStream)
     {
         printStream.println("Error: " + message);
     }
@@ -361,7 +366,7 @@ public class QueryJCLIHelper
         final Option helpLongOption,
         final PrintStream printStream)
     {
-        Options t_Options = new Options();
+        @NotNull Options t_Options = new Options();
 
         addOptions(
             t_Options,
@@ -387,18 +392,19 @@ public class QueryJCLIHelper
      * @return the <code>Properties</code> instance with the configuration
      * settings.
      */
+    @Nullable
     public Properties readConfigurationSettings(
-        final String configurationFile)
+        @Nullable final String configurationFile)
     {
-        Properties result = null;
+        @Nullable Properties result = null;
 
         if  (configurationFile != null)
         {
-            InputStream stream = null;
+            @Nullable InputStream stream = null;
 
             try
             {
-                File t_File = new File(configurationFile);
+                @NotNull File t_File = new File(configurationFile);
 
                 if  (   (t_File.exists())
                      && (t_File.canRead()))
@@ -426,7 +432,7 @@ public class QueryJCLIHelper
                     }
                 }
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 Log t_Log =
                     UniqueLogFactory.getLog(QueryJCLIHelper.class);
@@ -446,7 +452,7 @@ public class QueryJCLIHelper
                     {
                         stream.close();
                     }
-                    catch  (final IOException ioException)
+                    catch  (@NotNull final IOException ioException)
                     {
                         Log t_Log =
                             UniqueLogFactory.getLog(QueryJCLIHelper.class);
@@ -475,16 +481,17 @@ public class QueryJCLIHelper
      * settings.
      * @precondition stream != null
      */
+    @Nullable
     public Properties readConfigurationSettings(
         final InputStream stream, final boolean log)
     {
-        Properties result = new Properties();
+        @Nullable Properties result = new Properties();
 
         try
         {
             result.load(stream);
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             result = null;
 

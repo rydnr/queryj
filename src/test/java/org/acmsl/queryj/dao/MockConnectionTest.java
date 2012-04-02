@@ -49,6 +49,8 @@ import org.acmsl.queryj.dao.MockConnection;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -85,6 +87,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  @Nullable
   org.acmsl.queryj.dao.MockConnection mockconnection = null;
   // JUnitDoclet end class
   
@@ -104,6 +107,7 @@ extends TestCase
   * @return such instance.
   
   */
+  @Nullable
   public org.acmsl.queryj.dao.MockConnection createInstance()
   throws Exception
   {
@@ -302,7 +306,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setAutoCommit getAutoCommit
-    boolean[] t_aTests = {true, false};
+    @NotNull boolean[] t_aTests = {true, false};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -322,7 +326,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setCatalog getCatalog
-    java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
+    @NotNull java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -342,7 +346,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setReadOnly isReadOnly
-    boolean[] t_aTests = {true, false};
+    @NotNull boolean[] t_aTests = {true, false};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -362,7 +366,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setTransactionIsolation getTransactionIsolation
-    int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
+    @NotNull int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -382,7 +386,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setTypeMap getTypeMap
-    java.util.Map[] t_aTests = {new java.util.HashMap(), null};
+    @NotNull java.util.Map[] t_aTests = {new java.util.HashMap(), null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -402,7 +406,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setHoldability getHoldability
-    int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
+    @NotNull int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {

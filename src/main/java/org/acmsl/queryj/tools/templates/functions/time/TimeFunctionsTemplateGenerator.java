@@ -62,6 +62,8 @@ import java.nio.charset.Charset;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate time function repositories according to database
@@ -89,7 +91,7 @@ public class TimeFunctionsTemplateGenerator
      */
     public TimeFunctionsTemplateGenerator()
     {
-        TemplateMappingManager t_TemplateMappingManager =
+        @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
         if  (t_TemplateMappingManager != null)
@@ -104,6 +106,7 @@ public class TimeFunctionsTemplateGenerator
      * Retrieves a {@link TimeFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static TimeFunctionsTemplateGenerator getInstance()
     {
         return TimeFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -144,7 +147,7 @@ public class TimeFunctionsTemplateGenerator
         final String engineName,
         final String engineVersion,
         final String templateFactoryClass,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
     {
         templateMappingManager.addTemplateFactoryClass(
             TemplateMappingManager.TIME_FUNCTIONS_TEMPLATE,
@@ -160,6 +163,7 @@ public class TimeFunctionsTemplateGenerator
      * @return the template factory class name.
      * @precondition engineName != null
      */
+    @Nullable
     protected String getTemplateFactoryClass(
         final String engineName, final String engineVersion)
     {
@@ -180,10 +184,11 @@ public class TimeFunctionsTemplateGenerator
      * @precondition engineName != null
      * @precondition templateMappingManager != null
      */
+    @Nullable
     protected String getTemplateFactoryClass(
         final String engineName,
         final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
     {
         return
             templateMappingManager.getTemplateFactoryClass(
@@ -199,6 +204,7 @@ public class TimeFunctionsTemplateGenerator
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
      */
+    @Nullable
     protected TimeFunctionsTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
       throws  QueryJBuildException
@@ -220,15 +226,16 @@ public class TimeFunctionsTemplateGenerator
      * @throws QueryJBuildException if the factory class is invalid.
      * @precondition templateMappingManager != null
      */
+    @Nullable
     protected TimeFunctionsTemplateFactory getTemplateFactory(
         final String engineName,
         final String engineVersion,
-        final TemplateMappingManager templateMappingManager)
+        @NotNull final TemplateMappingManager templateMappingManager)
       throws  QueryJBuildException
     {
-        TimeFunctionsTemplateFactory result = null;
+        @Nullable TimeFunctionsTemplateFactory result = null;
 
-        Object t_TemplateFactory =
+        @Nullable Object t_TemplateFactory =
             templateMappingManager.getTemplateFactory(
                 TemplateMappingManager.TIME_FUNCTIONS_TEMPLATE,
                 engineName,
@@ -262,22 +269,23 @@ public class TimeFunctionsTemplateGenerator
      * @precondition engineName != null
      * @precondition quote != null
      */
+    @Nullable
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
         final String packageName,
         final String engineName,
         final String engineVersion,
         final String quote)
     {
-        TimeFunctionsTemplate result = null;
+        @Nullable TimeFunctionsTemplate result = null;
 
-        TimeFunctionsTemplateFactory t_TemplateFactory = null;
+        @Nullable TimeFunctionsTemplateFactory t_TemplateFactory = null;
 
         try
         {
             t_TemplateFactory =
                 getTemplateFactory(engineName, engineVersion);
         }
-        catch  (final QueryJBuildException buildException)
+        catch  (@NotNull final QueryJBuildException buildException)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(
@@ -315,8 +323,8 @@ public class TimeFunctionsTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final TimeFunctionsTemplate timeFunctionsTemplate,
-        final File outputDir,
+        @NotNull final TimeFunctionsTemplate timeFunctionsTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -342,11 +350,11 @@ public class TimeFunctionsTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final TimeFunctionsTemplate timeFunctionsTemplate,
-        final File outputDir,
+        @NotNull final TimeFunctionsTemplate timeFunctionsTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

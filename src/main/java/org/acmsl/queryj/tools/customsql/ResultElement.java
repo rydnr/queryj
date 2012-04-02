@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.customsql;
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JDK classes.
@@ -164,16 +165,16 @@ public class ResultElement
      */
     public boolean equals(
         final Object instance,
-        final String id,
-        final String classValue,
-        final String matches,
+        @NotNull final String id,
+        @NotNull final String classValue,
+        @NotNull final String matches,
         final Collection propertyRefs)
     {
         boolean result = false;
 
         if  (instance instanceof ResultElement)
         {
-            ResultElement candidate = (ResultElement) instance;
+            @NotNull ResultElement candidate = (ResultElement) instance;
 
             result =
                 (   (id.equalsIgnoreCase(candidate.getId())
@@ -190,6 +191,7 @@ public class ResultElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return
@@ -208,6 +210,7 @@ public class ResultElement
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String classValue,

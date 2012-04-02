@@ -52,6 +52,7 @@ import org.acmsl.queryj.TableAlias;
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Indicates JUnit how to test InsertQuery classes.
@@ -112,11 +113,11 @@ public class InsertQueryTest
      */
     public void testToString1()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        InsertQuery t_Query = t_QueryFactory.createInsertQuery();
+        @NotNull InsertQuery t_Query = t_QueryFactory.createInsertQuery();
 
         t_Query.insertInto(USERS);
         t_Query.value(USERS.NAME, "myself");
@@ -137,11 +138,11 @@ public class InsertQueryTest
      */
     public void testToString2()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        InsertQuery t_Query = t_QueryFactory.createInsertQuery();
+        @NotNull InsertQuery t_Query = t_QueryFactory.createInsertQuery();
 
         t_Query.insertInto(USERS);
         t_Query.value(USERS.NAME);
@@ -162,11 +163,11 @@ public class InsertQueryTest
      */
     public void testToString3()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        InsertQuery t_Query = t_QueryFactory.createInsertQuery();
+        @NotNull InsertQuery t_Query = t_QueryFactory.createInsertQuery();
 
         t_Query.insertInto(USERS);
         t_Query.value(USERS.NAME, "myself");
@@ -201,24 +202,28 @@ public class InsertQueryTest
         /**
          * The USERS table USERID field.
          */
+        @NotNull
         public IntField USERID =
             new IntField("USERID", this) {};
 
         /**
          * The USERS table NAME field.
          */
+        @NotNull
         public StringField NAME =
             new StringField("NAME", this) {};
 
         /**
          * The USERS table AGE field.
          */
+        @NotNull
         public IntField AGE =
             new IntField("AGE", this) {};
 
         /**
          * All fields.
          */
+        @NotNull
         public Field[] ALL =
             new Field[] {USERID, NAME, AGE};
 
@@ -230,6 +235,7 @@ public class InsertQueryTest
         /**
          * The table alias.
          */
+        @NotNull
         public TableAlias ALIAS =
             new TableAlias("usrs", this) {};
 
@@ -246,6 +252,7 @@ public class InsertQueryTest
          * star in a query.
          * @return such fields.
          */
+        @NotNull
         public Field[] getAll()
         {
             return ALL;

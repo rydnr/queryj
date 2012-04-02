@@ -53,6 +53,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -141,18 +143,18 @@ public class RepositoryDAOTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
-        final Map input,
-        final StringTemplate template,
+        @NotNull final Map input,
+        @NotNull final StringTemplate template,
         final String header,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
         final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final Integer[] copyrightYears,
         final StringUtils stringUtils)
@@ -231,13 +233,13 @@ public class RepositoryDAOTemplate
      * @precondition templateUtils != null
      */
     protected void fillParameters(
-        final Map input,
+        @NotNull final Map input,
         final StringTemplate template,
         final String header,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
         final String tableRepositoryName,
@@ -246,10 +248,10 @@ public class RepositoryDAOTemplate
         final String timestamp,
         final Integer[] copyrightYears,
         final StringUtils stringUtils,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection t_cCustomSelects =
+        @Nullable Collection t_cCustomSelects =
             retrieveCustomSelects(
                 customSqlProvider,
                 metadataManager,
@@ -260,7 +262,7 @@ public class RepositoryDAOTemplate
 
         input.put("custom_selects", t_cCustomSelects);
 
-        Collection t_cCustomUpdatesOrInserts =
+        @Nullable Collection t_cCustomUpdatesOrInserts =
             retrieveCustomUpdatesOrInserts(
                 customSqlProvider,
                 metadataManager,
@@ -271,7 +273,7 @@ public class RepositoryDAOTemplate
 
         input.put("custom_updates_or_inserts", t_cCustomUpdatesOrInserts);
 
-        Collection t_cCustomSelectsForUpdate =
+        @Nullable Collection t_cCustomSelectsForUpdate =
             retrieveCustomSelectsForUpdate(
                 customSqlProvider,
                 metadataManager,
@@ -282,7 +284,7 @@ public class RepositoryDAOTemplate
 
         input.put("custom_selects_for_update", t_cCustomSelectsForUpdate);
 
-        Collection t_cCustomResults =
+        @Nullable Collection t_cCustomResults =
             retrieveCustomResults(
                 customSqlProvider,
                 metadataManager,
@@ -309,15 +311,16 @@ public class RepositoryDAOTemplate
      * @precondition templateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomSelects(
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -353,15 +356,16 @@ public class RepositoryDAOTemplate
      * @precondition daoTemplateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomUpdatesOrInserts(
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -397,15 +401,16 @@ public class RepositoryDAOTemplate
      * @precondition daoTemplateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomSelectsForUpdate(
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -440,14 +445,15 @@ public class RepositoryDAOTemplate
      * @precondition daoTemplateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomResults(
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -471,6 +477,7 @@ public class RepositoryDAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/RepositoryDAO.stg");
@@ -480,6 +487,7 @@ public class RepositoryDAOTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "Repository DAO";

@@ -57,6 +57,8 @@ import org.apache.commons.logging.Log;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create DAO interfaces for each table in the
@@ -115,6 +117,7 @@ public class MockDAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/mock/MockDAO.stg");
@@ -124,6 +127,7 @@ public class MockDAOTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "MockDAO";

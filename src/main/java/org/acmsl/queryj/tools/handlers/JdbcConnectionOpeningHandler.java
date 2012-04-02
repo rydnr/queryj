@@ -49,6 +49,8 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -82,7 +84,7 @@ public class JdbcConnectionOpeningHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         storeConnection(openConnection(parameters), parameters);
@@ -98,7 +100,8 @@ public class JdbcConnectionOpeningHandler
      * @throws QueryJBuildException if the connection cannot be opened.
      * @precondition parameters != null
      */
-    protected Connection openConnection(final Map parameters)
+    @Nullable
+    protected Connection openConnection(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -130,6 +133,7 @@ public class JdbcConnectionOpeningHandler
      * @precondition url != null
      * @precondition username != null
      */
+    @Nullable
     protected Connection openConnection(
         final String driver,
         final String url,
@@ -137,7 +141,7 @@ public class JdbcConnectionOpeningHandler
         final String password)
       throws  QueryJBuildException
     {
-        Connection result = null;
+        @Nullable Connection result = null;
 
         try 
         {
@@ -147,17 +151,17 @@ public class JdbcConnectionOpeningHandler
                 DriverManager.getConnection(
                     url, username, password);
         }
-        catch  (final RuntimeException exception)
+        catch  (@NotNull final RuntimeException exception)
         {
             throw exception;
         }
-        catch  (final ClassNotFoundException classNotFoundException)
+        catch  (@NotNull final ClassNotFoundException classNotFoundException)
         {
             throw
                 new QueryJBuildException(
                     "JDBC driver not found", classNotFoundException);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -175,7 +179,7 @@ public class JdbcConnectionOpeningHandler
      * @precondition parameters != null
      */
     protected void storeConnection(
-        final Connection connection, final Map parameters)
+        final Connection connection, @NotNull final Map parameters)
     {
         parameters.put(JDBC_CONNECTION, connection);
     }

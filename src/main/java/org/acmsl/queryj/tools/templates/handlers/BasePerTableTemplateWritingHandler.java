@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -77,7 +79,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -94,7 +96,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition metadata != null
      */
     protected void writeTemplates(
-        final Map parameters, final DatabaseMetaData metadata)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metadata)
       throws  QueryJBuildException
     {
         try
@@ -102,7 +104,7 @@ public abstract class BasePerTableTemplateWritingHandler
             writeTemplates(
                 parameters, metadata.getDatabaseProductName());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -121,7 +123,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition engineName != null
      */
     protected void writeTemplates(
-        final Map parameters, final String engineName)
+        @NotNull final Map parameters, final String engineName)
       throws  QueryJBuildException
     {
         writeTemplates(
@@ -145,11 +147,11 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition templateGenerator != null
      */
     protected void writeTemplates(
-        final BasePerTableTemplate[] templates,
+        @Nullable final BasePerTableTemplate[] templates,
         final String engineName,
-        final Map parameters,
+        @NotNull final Map parameters,
         final Charset charset,
-        final BasePerTableTemplateGenerator templateGenerator)
+        @NotNull final BasePerTableTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
         try 
@@ -157,7 +159,7 @@ public abstract class BasePerTableTemplateWritingHandler
             int t_iCount =
                 (templates != null) ? templates.length : 0;
 
-            BasePerTableTemplate t_Template;
+            @Nullable BasePerTableTemplate t_Template;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
@@ -175,7 +177,7 @@ public abstract class BasePerTableTemplateWritingHandler
                 }
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -208,8 +210,9 @@ public abstract class BasePerTableTemplateWritingHandler
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
+    @Nullable
     protected File retrieveOutputDir(
-        final String tableName, final String engineName, final Map parameters)
+        final String tableName, final String engineName, @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -239,6 +242,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected abstract File retrieveOutputDir(
         final File projectFolder,
         final String projectPackage,

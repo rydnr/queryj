@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.customsql;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models &lt;connection-flags-ref&gt; elements in <i>custom-sql</i> models, which
@@ -96,7 +98,7 @@ public class ConnectionFlagsRefElement
 
         if  (object instanceof ConnectionFlagsRefElement)
         {
-            final ConnectionFlagsRefElement t_OtherInstance =
+            @NotNull final ConnectionFlagsRefElement t_OtherInstance =
                 (ConnectionFlagsRefElement) object;
 
             result =
@@ -120,7 +122,7 @@ public class ConnectionFlagsRefElement
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof ConnectionFlagsRefElement)
         {

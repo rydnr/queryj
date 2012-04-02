@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -147,7 +149,7 @@ public class XMLDAOTestTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
@@ -238,8 +240,8 @@ public class XMLDAOTestTemplate
      * @precondition englishGrammarUtils != null
      */
     protected String generateOutput(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -269,11 +271,11 @@ public class XMLDAOTestTemplate
         final String removeTest,
         final String removeFilterValues,
         final String classEnd,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
@@ -281,20 +283,20 @@ public class XMLDAOTestTemplate
                     tableTemplate.getTableName().toLowerCase()),
                 '_');
 
-        MessageFormat t_HeaderFormatter = new MessageFormat(header);
+        @NotNull MessageFormat t_HeaderFormatter = new MessageFormat(header);
 
         t_sbResult.append(
             t_HeaderFormatter.format(
                 new Object[] { tableTemplate.getTableName() }));
 
-        MessageFormat t_PackageDeclarationFormatter =
+        @NotNull MessageFormat t_PackageDeclarationFormatter =
             new MessageFormat(packageDeclaration);
 
         t_sbResult.append(
             t_PackageDeclarationFormatter.format(
                 new Object[]{packageName}));
 
-        MessageFormat t_ProjectImportsFormatter =
+        @NotNull MessageFormat t_ProjectImportsFormatter =
             new MessageFormat(projectImports);
 
         t_sbResult.append(
@@ -310,7 +312,7 @@ public class XMLDAOTestTemplate
         t_sbResult.append(jdkImports);
         t_sbResult.append(junitImports);
 
-        MessageFormat t_JavadocFormatter = new MessageFormat(javadoc);
+        @NotNull MessageFormat t_JavadocFormatter = new MessageFormat(javadoc);
 
         t_sbResult.append(
             t_JavadocFormatter.format(
@@ -320,7 +322,7 @@ public class XMLDAOTestTemplate
                     t_strCapitalizedTableName
                 }));
 
-        MessageFormat t_ClassDefinitionFormatter =
+        @NotNull MessageFormat t_ClassDefinitionFormatter =
             new MessageFormat(classDefinition);
 
         t_sbResult.append(
@@ -330,7 +332,7 @@ public class XMLDAOTestTemplate
                     t_strCapitalizedTableName
                 }));
 
-        MessageFormat t_ClassStartFormatter = new MessageFormat(classStart);
+        @NotNull MessageFormat t_ClassStartFormatter = new MessageFormat(classStart);
 
         t_sbResult.append(
             t_ClassStartFormatter.format(
@@ -343,7 +345,7 @@ public class XMLDAOTestTemplate
 
         t_sbResult.append(testUpdatedValues);
 
-        MessageFormat t_ConstructorFormatter = new MessageFormat(constructor);
+        @NotNull MessageFormat t_ConstructorFormatter = new MessageFormat(constructor);
 
         t_sbResult.append(
             t_ConstructorFormatter.format(
@@ -354,7 +356,7 @@ public class XMLDAOTestTemplate
 
         t_sbResult.append(innerMethods);
 
-        MessageFormat t_InitMethodsFormatter = new MessageFormat(initMethods);
+        @NotNull MessageFormat t_InitMethodsFormatter = new MessageFormat(initMethods);
 
         t_sbResult.append(
             t_InitMethodsFormatter.format(
@@ -365,7 +367,7 @@ public class XMLDAOTestTemplate
                     + t_strCapitalizedTableName.substring(1)
                 }));
 
-        MessageFormat t_TestSuiteFormatter = new MessageFormat(testSuite);
+        @NotNull MessageFormat t_TestSuiteFormatter = new MessageFormat(testSuite);
 
         t_sbResult.append(
             t_TestSuiteFormatter.format(
@@ -374,38 +376,38 @@ public class XMLDAOTestTemplate
                     t_strCapitalizedTableName
                 }));
 
-        MessageFormat t_TestParametersValuesFormatter =
+        @NotNull MessageFormat t_TestParametersValuesFormatter =
             new MessageFormat(testParametersValues);
 
-        MessageFormat t_NullableInsertedValuesConversionFormatter =
+        @NotNull MessageFormat t_NullableInsertedValuesConversionFormatter =
             new MessageFormat(nullableInsertedValuesConversion);
 
-        MessageFormat t_UpdateFilterValuesFormatter =
+        @NotNull MessageFormat t_UpdateFilterValuesFormatter =
             new MessageFormat(updateFilterValues);
 
-        MessageFormat t_NullableUpdatedValuesConversionFormatter =
+        @NotNull MessageFormat t_NullableUpdatedValuesConversionFormatter =
             new MessageFormat(nullableUpdatedValuesConversion);
 
-        StringBuffer t_sbUpdateFilterValues =
+        @NotNull StringBuffer t_sbUpdateFilterValues =
             new StringBuffer();
 
         String[] t_astrPrimaryKeys =
             metadataManager.getPrimaryKey(
                 tableTemplate.getTableName());
 
-        StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
+        @NotNull StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
             new StringBuffer();
 
-        StringBuffer t_sbFindByPrimaryKeyParametersTypes =
+        @NotNull StringBuffer t_sbFindByPrimaryKeyParametersTypes =
             new StringBuffer();
 
-        StringBuffer t_sbUpdateParametersTypes =
+        @NotNull StringBuffer t_sbUpdateParametersTypes =
             new StringBuffer();
 
-        MessageFormat t_RemoveFilterValuesFormatter =
+        @NotNull MessageFormat t_RemoveFilterValuesFormatter =
             new MessageFormat(removeFilterValues);
 
-        StringBuffer t_sbRemoveFilterValues =
+        @NotNull StringBuffer t_sbRemoveFilterValues =
             new StringBuffer();
 
         int t_iColumnType;
@@ -471,16 +473,16 @@ public class XMLDAOTestTemplate
 
         t_iLength = (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
 
-        StringBuffer t_sbInsertTestParametersValues =
+        @NotNull StringBuffer t_sbInsertTestParametersValues =
             new StringBuffer();
 
-        StringBuffer t_sbInsertParametersTypes =
+        @NotNull StringBuffer t_sbInsertParametersTypes =
             new StringBuffer();
 
-        MessageFormat t_TestParametersUpdatedValuesFormatter =
+        @NotNull MessageFormat t_TestParametersUpdatedValuesFormatter =
             new MessageFormat(testParametersUpdatedValues);
 
-        StringBuffer t_sbTestParametersUpdatedValues =
+        @NotNull StringBuffer t_sbTestParametersUpdatedValues =
             new StringBuffer();
 
         boolean t_bFirstNonPkColumn = true;
@@ -505,13 +507,13 @@ public class XMLDAOTestTemplate
                      tableTemplate.getTableName(),
                      t_astrColumnNames[t_iColumnIndex]))
             {
-                String t_strTestValue =
+                @Nullable String t_strTestValue =
                     metadataTypeManager.getNativeType(t_iColumnType);
 
-                Object[] t_aParams =
+                @NotNull Object[] t_aParams =
                     new Object[] { t_strTestValue.toUpperCase() };
 
-                MessageFormat t_Formatter = t_TestParametersValuesFormatter;
+                @NotNull MessageFormat t_Formatter = t_TestParametersValuesFormatter;
 
                 if  (   (t_bAllowsNull)
                      && (metadataTypeManager.isPrimitive(t_iColumnType)))
@@ -576,7 +578,7 @@ public class XMLDAOTestTemplate
             }
         }
 
-        MessageFormat t_StoreTestFormatter = new MessageFormat(storeTest);
+        @NotNull MessageFormat t_StoreTestFormatter = new MessageFormat(storeTest);
 
         t_sbResult.append(
             t_StoreTestFormatter.format(
@@ -588,7 +590,7 @@ public class XMLDAOTestTemplate
                     t_sbInsertTestParametersValues
                 }));
 
-        MessageFormat t_LoadTestFormatter = new MessageFormat(loadTest);
+        @NotNull MessageFormat t_LoadTestFormatter = new MessageFormat(loadTest);
 
         t_sbResult.append(
             t_LoadTestFormatter.format(
@@ -600,7 +602,7 @@ public class XMLDAOTestTemplate
                     t_sbFindByPrimaryKeyTestParametersValues
                 }));
 
-        MessageFormat t_UpdateTestFormatter = new MessageFormat(updateTest);
+        @NotNull MessageFormat t_UpdateTestFormatter = new MessageFormat(updateTest);
 
         t_sbResult.append(
             t_UpdateTestFormatter.format(
@@ -613,7 +615,7 @@ public class XMLDAOTestTemplate
                     t_sbTestParametersUpdatedValues
                 }));
 
-        MessageFormat t_RemoveTestFormatter = new MessageFormat(removeTest);
+        @NotNull MessageFormat t_RemoveTestFormatter = new MessageFormat(removeTest);
 
         t_sbResult.append(
             t_RemoveTestFormatter.format(

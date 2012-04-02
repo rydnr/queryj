@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.customsql.Property;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
@@ -61,6 +62,7 @@ public interface PropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @Nullable
     public String getJavaType();
 
     /**

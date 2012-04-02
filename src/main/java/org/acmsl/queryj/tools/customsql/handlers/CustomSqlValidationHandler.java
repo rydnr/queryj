@@ -90,6 +90,8 @@ import java.util.Map;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Validates any custom sql queries.
@@ -132,7 +134,7 @@ public class CustomSqlValidationHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         if  (!retrieveDisableCustomSqlValidation(parameters))
@@ -156,19 +158,19 @@ public class CustomSqlValidationHandler
      * @precondition metadataManager != null
      */
     protected void validate(
-        final CustomSqlProvider customSqlProvider,
-        final Connection connection,
-        final MetadataManager metadataManager)
+        @Nullable final CustomSqlProvider customSqlProvider,
+        @NotNull final Connection connection,
+        @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        Collection t_cElements = null;
+        @Nullable Collection t_cElements = null;
 
         if  (customSqlProvider != null)
         {
             t_cElements = customSqlProvider.getCollection();
         }
 
-        Iterator t_itElements =
+        @Nullable Iterator t_itElements =
             (t_cElements != null)
             ?  t_cElements.iterator()
             :  null;
@@ -216,18 +218,18 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager != null
      */
     protected void validate(
-        final Sql sql,
-        final CustomSqlProvider customSqlProvider,
-        final Connection connection,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final Sql sql,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final Connection connection,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
         String t_strSql = sql.getValue().trim();
 
-        SQLException t_ExceptionToWrap = null;
+        @Nullable SQLException t_ExceptionToWrap = null;
 
-        QueryJBuildException t_ExceptionToThrow = null;
+        @Nullable QueryJBuildException t_ExceptionToThrow = null;
 
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
@@ -237,8 +239,8 @@ public class CustomSqlValidationHandler
                 "Validating " + sql.getId() + " [\n" + t_strSql + "\n]");
         }
         
-        PreparedStatement t_PreparedStatement = null;
-        ResultSet t_ResultSet = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
+        @Nullable ResultSet t_ResultSet = null;
 
         // The standard is true, but we assume false.
         boolean t_bLastAutoCommit = false;
@@ -247,7 +249,7 @@ public class CustomSqlValidationHandler
         {
             t_bLastAutoCommit = connection.getAutoCommit();
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -261,7 +263,7 @@ public class CustomSqlValidationHandler
         {
             connection.setAutoCommit(false);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -276,7 +278,7 @@ public class CustomSqlValidationHandler
             t_PreparedStatement =
                 connection.prepareStatement(t_strSql);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             t_ExceptionToWrap = sqlException;
         }
@@ -316,11 +318,11 @@ public class CustomSqlValidationHandler
                     }
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 t_ExceptionToWrap = sqlException;
             }
-            catch  (final QueryJBuildException buildException)
+            catch  (@NotNull final QueryJBuildException buildException)
             {
                 t_ExceptionToThrow = buildException;
             }
@@ -331,7 +333,7 @@ public class CustomSqlValidationHandler
                 {
                     t_ResultSet.close();
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     if  (t_Log != null)
                     {
@@ -345,7 +347,7 @@ public class CustomSqlValidationHandler
             {
                 t_PreparedStatement.close();
             }
-            catch  (final SQLException anotherSqlException)
+            catch  (@NotNull final SQLException anotherSqlException)
             {
                 if  (t_Log != null)
                 {
@@ -359,7 +361,7 @@ public class CustomSqlValidationHandler
             {
                 connection.setAutoCommit(t_bLastAutoCommit);
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -373,7 +375,7 @@ public class CustomSqlValidationHandler
             {
                 connection.rollback();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -413,30 +415,30 @@ public class CustomSqlValidationHandler
      * @precondition conversionUtils != null
      */
     protected void bindParameters(
-        final Sql sql,
-        final PreparedStatement statement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataTypeManager metadataTypeManager,
-        final ConversionUtils conversionUtils)
+        @NotNull final Sql sql,
+        @NotNull final PreparedStatement statement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final ConversionUtils conversionUtils)
      throws  SQLException,
              QueryJBuildException
     {
-        QueryJBuildException exceptionToThrow = null;
+        @Nullable QueryJBuildException exceptionToThrow = null;
 
         ParameterElement[] t_aParameters =
             retrieveParameterElements(sql, customSqlProvider);
 
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        ParameterElement t_Parameter = null;
+        @Nullable ParameterElement t_Parameter = null;
 
-        Method t_Method = null;
+        @Nullable Method t_Method = null;
 
-        Collection<Class> t_cSetterParams = null;
+        @Nullable Collection<Class> t_cSetterParams = null;
 
-        Class<?> t_Type = null;
+        @Nullable Class<?> t_Type = null;
 
-        String t_strType = null;
+        @Nullable String t_strType = null;
 
         int t_iLength = (t_aParameters != null) ? t_aParameters.length : 0;
         
@@ -476,7 +478,7 @@ public class CustomSqlValidationHandler
             {
                 t_cSetterParams.add(t_Type);
 
-                Object t_ParameterValue = null;
+                @Nullable Object t_ParameterValue = null;
 
                 try
                 {
@@ -486,7 +488,7 @@ public class CustomSqlValidationHandler
                             getSetterMethod(t_strType, metadataTypeManager),
                             t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
                 }
-                catch  (final NoSuchMethodException noSuchMethodException)
+                catch  (@NotNull final NoSuchMethodException noSuchMethodException)
                 {
                     exceptionToThrow =
                         new QueryJBuildException(
@@ -497,7 +499,7 @@ public class CustomSqlValidationHandler
 
                 try
                 {
-                    Method t_ParameterMethod = null;
+                    @Nullable Method t_ParameterMethod = null;
 
                     if  (   (   ("Date".equals(t_strType))
                              || ("Timestamp".equals(t_strType)))
@@ -526,19 +528,19 @@ public class CustomSqlValidationHandler
                         }
                     }
                 }
-                catch  (final NoSuchMethodException noSuchMethod)
+                catch  (@NotNull final NoSuchMethodException noSuchMethod)
                 {
                     // it's not a plain type.
                 }
-                catch  (final SecurityException securityMethod)
+                catch  (@NotNull final SecurityException securityMethod)
                 {
                     // can do little
                 }
-                catch  (final IllegalAccessException illegalAccessException)
+                catch  (@NotNull final IllegalAccessException illegalAccessException)
                 {
                     // can do little
                 }
-                catch  (final InvocationTargetException invocationTargetException)
+                catch  (@NotNull final InvocationTargetException invocationTargetException)
                 {
                     // can do little
                 }
@@ -571,7 +573,7 @@ public class CustomSqlValidationHandler
                                     + "date parameter [" + t_Parameter.getId() + "]");
                         }
                     }
-                    catch  (final ParseException parseException)
+                    catch  (@NotNull final ParseException parseException)
                     {
                         // We have only once chance: constructor call.
                         try
@@ -589,7 +591,7 @@ public class CustomSqlValidationHandler
                                         });
                             }
                         }
-                        catch  (final NoSuchMethodException noSuchMethod)
+                        catch  (@NotNull final NoSuchMethodException noSuchMethod)
                         {
                             exceptionToThrow =
                                 new QueryJBuildException(
@@ -597,7 +599,7 @@ public class CustomSqlValidationHandler
                                     + t_strType,
                                     noSuchMethod);
                         }
-                        catch  (final SecurityException securityException)
+                        catch  (@NotNull final SecurityException securityException)
                         {
                             exceptionToThrow =
                                 new QueryJBuildException(
@@ -605,7 +607,7 @@ public class CustomSqlValidationHandler
                                     + t_strType,
                                     securityException);
                         }
-                        catch  (final IllegalAccessException illegalAccessException)
+                        catch  (@NotNull final IllegalAccessException illegalAccessException)
                         {
                             exceptionToThrow =
                                 new QueryJBuildException(
@@ -613,7 +615,7 @@ public class CustomSqlValidationHandler
                                     + t_strType,
                                     illegalAccessException);
                         }
-                        catch  (final InstantiationException instantiationException)
+                        catch  (@NotNull final InstantiationException instantiationException)
                         {
                             exceptionToThrow =
                                 new QueryJBuildException(
@@ -621,7 +623,7 @@ public class CustomSqlValidationHandler
                                     + t_strType,
                                     instantiationException);
                         }
-                        catch  (final InvocationTargetException invocationTargetException)
+                        catch  (@NotNull final InvocationTargetException invocationTargetException)
                         {
                             exceptionToThrow =
                                 new QueryJBuildException(
@@ -654,7 +656,7 @@ public class CustomSqlValidationHandler
                             });
                         
                     }
-                    catch  (final IllegalAccessException illegalAccessException)
+                    catch  (@NotNull final IllegalAccessException illegalAccessException)
                     {
                         if  (t_Log != null)
                         {
@@ -671,7 +673,7 @@ public class CustomSqlValidationHandler
                                 + t_strType,
                                 illegalAccessException);
                     }
-                    catch  (final InvocationTargetException invocationTargetException)
+                    catch  (@NotNull final InvocationTargetException invocationTargetException)
                     {
                         if  (t_Log != null)
                         {
@@ -711,9 +713,9 @@ public class CustomSqlValidationHandler
      * @precondition customSqlProvider != null
      */
     protected ParameterElement[] retrieveParameterElements(
-        final Sql sql, final CustomSqlProvider customSqlProvider)
+        @NotNull final Sql sql, @NotNull final CustomSqlProvider customSqlProvider)
     {
-        Collection<ParameterElement> t_cResult = new ArrayList<ParameterElement>();
+        @NotNull Collection<ParameterElement> t_cResult = new ArrayList<ParameterElement>();
 
         Collection t_cParameterRefs = sql.getParameterRefs();
 
@@ -744,7 +746,7 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager the metadata type manager.
      */
     protected String getSetterMethod(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             getAccessorMethod(
@@ -760,7 +762,7 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager the metadata type manager.
      */
     protected String getGetterMethod(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             getAccessorMethod(
@@ -781,8 +783,8 @@ public class CustomSqlValidationHandler
     protected String getAccessorMethod(
         final String prefix,
         final String type,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final StringUtils stringUtils)
     {
         String result = prefix;
 
@@ -820,18 +822,18 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager != null
      */
     protected void validateResultSet(
-        final ResultSet resultSet,
-        final Sql sql,
+        @NotNull final ResultSet resultSet,
+        @NotNull final Sql sql,
         final Result sqlResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws SQLException,
              QueryJBuildException
     {
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        Collection t_cProperties =
+        @NotNull Collection t_cProperties =
             retrieveProperties(
                 sql,
                 sqlResult,
@@ -877,7 +879,7 @@ public class CustomSqlValidationHandler
                                         :  String.class
                                     });
                         }
-                        catch  (final NoSuchMethodException noSuchMethod)
+                        catch  (@NotNull final NoSuchMethodException noSuchMethod)
                         {
                             throw
                                 new QueryJBuildException(
@@ -953,17 +955,18 @@ public class CustomSqlValidationHandler
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
+    @NotNull
     protected Collection<Property> retrieveProperties(
         final Sql sql,
-        final Result sqlResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @Nullable final Result sqlResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        Collection<Property> result = new ArrayList<Property>();
+        @NotNull Collection<Property> result = new ArrayList<Property>();
         
-        Collection<PropertyRefElement> t_cPropertyRefs =
+        @Nullable Collection<PropertyRefElement> t_cPropertyRefs =
             (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
 
         if  (t_cPropertyRefs == null)
@@ -980,7 +983,7 @@ public class CustomSqlValidationHandler
             Iterator<PropertyRefElement> t_Iterator = t_cPropertyRefs.iterator();
 
             Object t_Item;
-            Property t_Property;
+            @Nullable Property t_Property;
 
             if  (t_Iterator != null)
             {
@@ -1014,11 +1017,12 @@ public class CustomSqlValidationHandler
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
+    @NotNull
     protected Collection<Property> retrieveImplicitProperties(
-        final Result sqlResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final Result sqlResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
         return
@@ -1046,17 +1050,18 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager != null
      * @precondition customResultUtils != null
      */
+    @NotNull
     protected Collection<Property> retrieveImplicitProperties(
-        final Result sqlResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomResultUtils customResultUtils)
+        @NotNull final Result sqlResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        Collection<Property> result = new ArrayList<Property>();
+        @NotNull Collection<Property> result = new ArrayList<Property>();
 
-        String t_strTable =
+        @Nullable String t_strTable =
             customResultUtils.retrieveTable(
                 sqlResult,
                 customSqlProvider,
@@ -1074,7 +1079,7 @@ public class CustomSqlValidationHandler
             String t_strId;
             String t_strColumnName;
             String t_strName;
-            String t_strType;
+            @Nullable String t_strType;
             boolean t_bNullable;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
@@ -1104,7 +1109,7 @@ public class CustomSqlValidationHandler
         }
         else
         {
-            String t_strErrorMessage =
+            @NotNull String t_strErrorMessage =
                 "Cannot retrieve table associated to SQL result " + sqlResult.getId();
 
             Log t_Log =
@@ -1134,17 +1139,17 @@ public class CustomSqlValidationHandler
      * @precondition sql != null
      */
     protected void invokeResultSetGetter(
-        final Method method,
+        @NotNull final Method method,
         final ResultSet resultSet,
-        final Property property,
-        final Sql sql)
+        @NotNull final Property property,
+        @NotNull final Sql sql)
       throws QueryJBuildException
     {
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
         try
         {
-            Object[] t_aParameters = new Object[1];
+            @NotNull Object[] t_aParameters = new Object[1];
 
             if  (property.getIndex() > 0)
             {
@@ -1158,7 +1163,7 @@ public class CustomSqlValidationHandler
 
             method.invoke(resultSet, t_aParameters);
         }
-        catch  (final IllegalAccessException illegalAccessException)
+        catch  (@NotNull final IllegalAccessException illegalAccessException)
         {
             if  (t_Log != null)
             {
@@ -1182,7 +1187,7 @@ public class CustomSqlValidationHandler
                        :  property.getColumnName()),
                     illegalAccessException);
         }
-        catch  (final InvocationTargetException invocationTargetException)
+        catch  (@NotNull final InvocationTargetException invocationTargetException)
         {
             if  (t_Log != null)
             {
@@ -1217,30 +1222,31 @@ public class CustomSqlValidationHandler
      * @precondition type != null
      * @precondition parameterType != null
      */
+    @Nullable
     protected Class retrieveType(
-        final String type, final String parameterType)
+        @NotNull final String type, final String parameterType)
     {
-        Class result = null;
+        @Nullable Class result = null;
 
         try
         {
             result = Class.forName("java.lang." + type);
         }
-        catch  (final ClassNotFoundException firstClassNotFoundException)
+        catch  (@NotNull final ClassNotFoundException firstClassNotFoundException)
         {
             // Second try
             try
             {
                 result = Class.forName("java.util." + type);
             }
-            catch  (final ClassNotFoundException secondClassNotFoundException)
+            catch  (@NotNull final ClassNotFoundException secondClassNotFoundException)
             {
                 // third try
                 try
                 {
                     result = Class.forName("java.sql." + type);
                 }
-                catch  (final ClassNotFoundException
+                catch  (@NotNull final ClassNotFoundException
                               thirddClassNotFoundException)
                 {
                     // fourth try
@@ -1248,7 +1254,7 @@ public class CustomSqlValidationHandler
                     {
                         result = Class.forName(type);
                     }
-                    catch  (final ClassNotFoundException
+                    catch  (@NotNull final ClassNotFoundException
                                   fourthClassNotFoundException)
                     {
                         Log t_Log =
@@ -1275,11 +1281,11 @@ public class CustomSqlValidationHandler
                     result =
                         (Class) result.getDeclaredField("TYPE").get(result);
                 }
-                catch  (final NoSuchFieldException noSuchFieldException)
+                catch  (@NotNull final NoSuchFieldException noSuchFieldException)
                 {
                     // Nothing to do.
                 }
-                catch  (final IllegalAccessException illegalAccessException)
+                catch  (@NotNull final IllegalAccessException illegalAccessException)
                 {
                     // Nothing to do.
                 }
@@ -1304,7 +1310,7 @@ public class CustomSqlValidationHandler
      * @precondition methodName != null
      */
     protected Method retrieveMethod(
-        final Class<?> instanceClass, final String methodName, final Class[] parameterClasses)
+        @NotNull final Class<?> instanceClass, final String methodName, final Class[] parameterClasses)
       throws  NoSuchMethodException
     {       
         return instanceClass.getDeclaredMethod(methodName, parameterClasses);
@@ -1326,12 +1332,12 @@ public class CustomSqlValidationHandler
         final String name,
         final int type,
         final int index,
-        final Collection properties,
+        @Nullable final Collection properties,
         final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
 
-        Iterator t_Iterator =
+        @Nullable Iterator t_Iterator =
             (properties != null) ? properties.iterator() : null;
         
         if  (t_Iterator != null)
@@ -1378,10 +1384,10 @@ public class CustomSqlValidationHandler
      * @precondition metadataTypeManager != null
      */
     protected boolean matches(
-        final String name,
+        @Nullable final String name,
         final int type,
         final int index,
-        final Property property,
+        @NotNull final Property property,
         final int propertyIndex,
         final MetadataTypeManager metadataTypeManager)
     {
@@ -1416,11 +1422,11 @@ public class CustomSqlValidationHandler
      * @return <code>true</code> in such case.
      * @precondition settings != null
      */
-    protected boolean retrieveDisableCustomSqlValidation(final Map settings)
+    protected boolean retrieveDisableCustomSqlValidation(@NotNull final Map settings)
     {
         boolean result = false;
 
-        Boolean flag =
+        @NotNull Boolean flag =
             (Boolean)
                 settings.get(
                     ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION);

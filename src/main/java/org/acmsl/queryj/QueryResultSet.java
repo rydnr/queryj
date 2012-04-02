@@ -37,6 +37,8 @@ package org.acmsl.queryj;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.Query;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK1.3 classes.
@@ -168,10 +170,11 @@ public class QueryResultSet
      * the value is SQL NULL, the value returned is null
      * @exception SQLException if an error occurs.
      */
+    @Nullable
     public byte[] getBytes(final int index)
         throws  SQLException
     {
-        byte[] result = null;
+        @Nullable byte[] result = null;
 
         ResultSet t_ResultSet = getResultSet();
 
@@ -210,7 +213,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected byte[] getBytes(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBytes(columnName);
@@ -238,7 +241,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean next(final ResultSet resultSet)
+    protected boolean next(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.next();
@@ -266,7 +269,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean previous(final ResultSet resultSet)
+    protected boolean previous(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.previous();
@@ -298,7 +301,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean getBoolean(final int index, final ResultSet resultSet)
+    protected boolean getBoolean(final int index, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getBoolean(index);
@@ -330,7 +333,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean getBoolean(final String columnName, final ResultSet resultSet)
+    protected boolean getBoolean(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBoolean(columnName);
@@ -358,7 +361,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int getType(final ResultSet resultSet)
+    protected int getType(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getType();
@@ -390,7 +393,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected long getLong(final int index, final ResultSet resultSet)
+    protected long getLong(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getLong(index);
@@ -422,7 +425,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected long getLong(final String columnName, final ResultSet resultSet)
+    protected long getLong(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getLong(columnName);
@@ -454,7 +457,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Object getObject(final int index, final ResultSet resultSet)
+    protected Object getObject(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getObject(index);
@@ -482,7 +485,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Object getObject(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getObject(columnName);
@@ -521,7 +524,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Object getObject(
-        final int index, final Map map, final ResultSet resultSet)
+        final int index, final Map map, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getObject(index, map);
@@ -561,7 +564,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Object getObject(
-        final String columnName, final Map map, final ResultSet resultSet)
+        final String columnName, final Map map, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getObject(columnName, map);
@@ -584,7 +587,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void close(final ResultSet resultSet)
+    protected void close(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.close();
@@ -616,7 +619,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Ref getRef(final int index, final ResultSet resultSet)
+    protected Ref getRef(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getRef(index);
@@ -648,7 +651,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Ref getRef(final String columnName, final ResultSet resultSet)
+    protected Ref getRef(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getRef(columnName);
@@ -680,7 +683,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Time getTime(final int index, final ResultSet resultSet)
+    protected Time getTime(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getTime(index);
@@ -712,7 +715,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Time getTime(final String columnName, final ResultSet resultSet)
+    protected Time getTime(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getTime(columnName);
@@ -749,7 +752,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Time getTime(
-        final int index, final Calendar calendar, final ResultSet resultSet)
+        final int index, final Calendar calendar, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTime(index, calendar);
@@ -788,7 +791,7 @@ public class QueryResultSet
     protected Time getTime(
         final String columnName,
         final Calendar calendar,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTime(columnName, calendar);
@@ -821,7 +824,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Date getDate(final int index, final ResultSet resultSet)
+    protected Date getDate(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getDate(index);
@@ -848,7 +851,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Date getDate(final String columnName, final ResultSet resultSet)
+    protected Date getDate(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getDate(columnName);
@@ -885,7 +888,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Date getDate(
-        final int index, final Calendar calendar, final ResultSet resultSet)
+        final int index, final Calendar calendar, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getDate(index, calendar);
@@ -924,7 +927,7 @@ public class QueryResultSet
     protected Date getDate(
         final String columnName,
         final Calendar calendar,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getDate(columnName, calendar);
@@ -950,7 +953,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean first(final ResultSet resultSet)
+    protected boolean first(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.first();
@@ -984,7 +987,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected byte getByte(final int index, final ResultSet resultSet)
+    protected byte getByte(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getByte(index);
@@ -1011,7 +1014,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected byte getByte(final String columnName, final ResultSet resultSet)
+    protected byte getByte(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getByte(columnName);
@@ -1044,7 +1047,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected short getShort(final int index, final ResultSet resultSet)
+    protected short getShort(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getShort(index);
@@ -1072,7 +1075,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected short getShort(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getShort(columnName);
@@ -1104,7 +1107,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int getInt(final int index, final ResultSet resultSet)
+    protected int getInt(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getInt(index);
@@ -1131,7 +1134,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int getInt(final String columnName, final ResultSet resultSet)
+    protected int getInt(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getInt(columnName);
@@ -1163,7 +1166,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected float getFloat(final int index, final ResultSet resultSet)
+    protected float getFloat(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getFloat(index);
@@ -1190,7 +1193,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected float getFloat(final String columnName, final ResultSet resultSet)
+    protected float getFloat(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getFloat(columnName);
@@ -1222,7 +1225,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected double getDouble(final int index, final ResultSet resultSet)
+    protected double getDouble(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getDouble(index);
@@ -1255,7 +1258,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected double getDouble(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getDouble(columnName);
@@ -1285,7 +1288,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected ResultSetMetaData getMetaData(final ResultSet resultSet)
+    protected ResultSetMetaData getMetaData(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getMetaData();
@@ -1313,7 +1316,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected SQLWarning getWarnings(final ResultSet resultSet)
+    protected SQLWarning getWarnings(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getWarnings();
@@ -1336,7 +1339,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void clearWarnings(final ResultSet resultSet)
+    protected void clearWarnings(@NotNull final ResultSet resultSet)
         throws SQLException
     {
         resultSet.clearWarnings();
@@ -1365,7 +1368,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      */
     protected void setFetchDirection(
-        final int direction, final ResultSet resultSet)
+        final int direction, @Nullable final ResultSet resultSet)
       throws  SQLException
     {
         if  (resultSet != null) 
@@ -1400,7 +1403,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int getFetchDirection(final ResultSet resultSet)
+    protected int getFetchDirection(@Nullable final ResultSet resultSet)
         throws  SQLException
     {
         int result = m__iTempFetchDirection;
@@ -1432,7 +1435,7 @@ public class QueryResultSet
      * @param resultSet the result set.
      * @exception SQLException if an error occurs.
      */
-    protected void setFetchSize(final int size, final ResultSet resultSet)
+    protected void setFetchSize(final int size, @Nullable final ResultSet resultSet)
         throws  SQLException
     {
         if  (resultSet != null) 
@@ -1466,7 +1469,7 @@ public class QueryResultSet
      * ResultSet object.
      * @exception SQLException if an error occurs.
      */
-    protected int getFetchSize(final ResultSet resultSet)
+    protected int getFetchSize(@Nullable final ResultSet resultSet)
         throws  SQLException
     {
         int result = m__iTempFetchSize;
@@ -1505,7 +1508,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected String getString(final int index, final ResultSet resultSet)
+    protected String getString(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getString(index);
@@ -1534,7 +1537,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected String getString(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getString(columnName);
@@ -1566,7 +1569,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Array getArray(final int index, final ResultSet resultSet)
+    protected Array getArray(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getArray(index);
@@ -1595,7 +1598,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Array getArray(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getArray(columnName);
@@ -1628,7 +1631,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getAsciiStream(
-        final int index, final ResultSet resultSet)
+        final int index, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getAsciiStream(index);
@@ -1657,7 +1660,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getAsciiStream(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getAsciiStream(columnName);
@@ -1696,7 +1699,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected BigDecimal getBigDecimal(
-        final int index, final int scale, final ResultSet resultSet)
+        final int index, final int scale, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBigDecimal(index, scale);
@@ -1731,7 +1734,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected BigDecimal getBigDecimal(
-        final String columnName, final int scale, final ResultSet resultSet)
+        final String columnName, final int scale, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBigDecimal(columnName, scale);
@@ -1764,7 +1767,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected BigDecimal getBigDecimal(
-        final int index, final ResultSet resultSet)
+        final int index, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBigDecimal(index);
@@ -1793,7 +1796,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected BigDecimal getBigDecimal(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBigDecimal(columnName);
@@ -1826,7 +1829,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getBinaryStream(
-        final int index, final ResultSet resultSet)
+        final int index, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBinaryStream(index);
@@ -1855,7 +1858,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getBinaryStream(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBinaryStream(columnName);
@@ -1887,7 +1890,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Blob getBlob(final int index, final ResultSet resultSet)
+    protected Blob getBlob(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBlob(index);
@@ -1919,7 +1922,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Blob getBlob(final String columnName, final ResultSet resultSet)
+    protected Blob getBlob(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBlob(columnName);
@@ -1951,7 +1954,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Clob getClob(final int index, final ResultSet resultSet)
+    protected Clob getClob(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getClob(index);
@@ -1983,7 +1986,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected Clob getClob(final String columnName, final ResultSet resultSet)
+    protected Clob getClob(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getClob(columnName);
@@ -2016,7 +2019,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Timestamp getTimestamp(
-        final int index, final ResultSet resultSet)
+        final int index, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTimestamp(index);
@@ -2049,7 +2052,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Timestamp getTimestamp(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTimestamp(columnName);
@@ -2086,7 +2089,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Timestamp getTimestamp(
-        final int index, final Calendar calendar, final ResultSet resultSet)
+        final int index, final Calendar calendar, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTimestamp(index, calendar);
@@ -2125,7 +2128,7 @@ public class QueryResultSet
     protected Timestamp getTimestamp(
         final String columnName,
         final Calendar calendar,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTimestamp(columnName, calendar);
@@ -2160,7 +2163,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getUnicodeStream(
-        final int index, final ResultSet resultSet)
+        final int index, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getUnicodeStream(index);
@@ -2191,7 +2194,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getUnicodeStream(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getUnicodeStream(columnName);
@@ -2219,7 +2222,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean wasNull(final ResultSet resultSet)
+    protected boolean wasNull(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.wasNull();
@@ -2252,7 +2255,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Reader getCharacterStream(
-        final int index, final ResultSet resultSet)
+        final int index, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getCharacterStream(index);
@@ -2285,7 +2288,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Reader getCharacterStream(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getCharacterStream(columnName);
@@ -2317,7 +2320,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean absolute(final int index, final ResultSet resultSet)
+    protected boolean absolute(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.absolute(index);
@@ -2341,7 +2344,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void afterLast(final ResultSet resultSet)
+    protected void afterLast(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.afterLast();
@@ -2365,7 +2368,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void beforeFirst(final ResultSet resultSet)
+    protected void beforeFirst(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.beforeFirst();
@@ -2389,7 +2392,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void cancelRowUpdates(final ResultSet resultSet)
+    protected void cancelRowUpdates(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.cancelRowUpdates();
@@ -2413,7 +2416,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void deleteRow(final ResultSet resultSet)
+    protected void deleteRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.deleteRow();
@@ -2445,7 +2448,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int findColumn(final String columnName, final ResultSet resultSet)
+    protected int findColumn(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.findColumn(columnName);
@@ -2473,7 +2476,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int getConcurrency(final ResultSet resultSet)
+    protected int getConcurrency(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getConcurrency();
@@ -2501,7 +2504,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected String getCursorName(final ResultSet resultSet)
+    protected String getCursorName(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getCursorName();
@@ -2529,7 +2532,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected int getRow(final ResultSet resultSet)
+    protected int getRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getRow();
@@ -2561,7 +2564,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     public Statement getStatement(
-        final Statement query, final ResultSet resultSet)
+        final Statement query, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         Statement result = query;
@@ -2592,7 +2595,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void insertRow(final ResultSet resultSet)
+    protected void insertRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.insertRow();
@@ -2622,7 +2625,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean isAfterLast(final ResultSet resultSet)
+    protected boolean isAfterLast(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.isAfterLast();
@@ -2652,7 +2655,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean isBeforeFirst(final ResultSet resultSet)
+    protected boolean isBeforeFirst(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.isBeforeFirst();
@@ -2680,7 +2683,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean isFirst(final ResultSet resultSet)
+    protected boolean isFirst(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.isFirst();
@@ -2708,7 +2711,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean isLast(final ResultSet resultSet)
+    protected boolean isLast(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.isLast();
@@ -2738,7 +2741,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean last(final ResultSet resultSet)
+    protected boolean last(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.last();
@@ -2762,7 +2765,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void moveToCurrentRow(final ResultSet resultSet)
+    protected void moveToCurrentRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.moveToCurrentRow();
@@ -2786,7 +2789,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void moveToInsertRow(final ResultSet resultSet)
+    protected void moveToInsertRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.moveToInsertRow();
@@ -2810,7 +2813,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void refreshRow(final ResultSet resultSet)
+    protected void refreshRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.refreshRow();
@@ -2842,7 +2845,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean relative(final int index, final ResultSet resultSet)
+    protected boolean relative(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.relative(index);
@@ -2870,7 +2873,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean rowDeleted(final ResultSet resultSet)
+    protected boolean rowDeleted(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.rowDeleted();
@@ -2898,7 +2901,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean rowInserted(final ResultSet resultSet)
+    protected boolean rowInserted(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.rowInserted();
@@ -2928,7 +2931,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected boolean rowUpdated(final ResultSet resultSet)
+    protected boolean rowUpdated(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.rowUpdated();
@@ -2967,7 +2970,7 @@ public class QueryResultSet
         final int index,
         final InputStream value,
         final int length,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateAsciiStream(index, value, length);
@@ -3006,7 +3009,7 @@ public class QueryResultSet
         final String columnName,
         final InputStream value,
         final int length,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateAsciiStream(columnName, value, length);
@@ -3037,7 +3040,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBigDecimal(
-        final int index, final BigDecimal value, final ResultSet resultSet)
+        final int index, final BigDecimal value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBigDecimal(index, value);
@@ -3070,7 +3073,7 @@ public class QueryResultSet
     protected void updateBigDecimal(
         final String columnName,
         final BigDecimal value,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBigDecimal(columnName, value);
@@ -3109,7 +3112,7 @@ public class QueryResultSet
         final int index,
         final InputStream value,
         final int length,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBinaryStream(index, value, length);
@@ -3148,7 +3151,7 @@ public class QueryResultSet
         final String columnName,
         final InputStream value,
         final int length,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBinaryStream(columnName, value, length);
@@ -3179,7 +3182,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBoolean(
-        final int index, final boolean value, final ResultSet resultSet)
+        final int index, final boolean value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBoolean(index, value);
@@ -3212,7 +3215,7 @@ public class QueryResultSet
     protected void updateBoolean(
         final String columnName,
         final boolean value,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBoolean(columnName, value);
@@ -3243,7 +3246,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateByte(
-        final int index, final byte value, final ResultSet resultSet)
+        final int index, final byte value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateByte(index, value);
@@ -3274,7 +3277,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateByte(
-        final String columnName, final byte value, final ResultSet resultSet)
+        final String columnName, final byte value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateByte(columnName, value);
@@ -3305,7 +3308,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBytes(
-        final int index, final byte[] value, final ResultSet resultSet)
+        final int index, final byte[] value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBytes(index, value);
@@ -3336,7 +3339,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBytes(
-        final String columnName, final byte[] value, final ResultSet resultSet)
+        final String columnName, final byte[] value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBytes(columnName, value);
@@ -3369,7 +3372,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateCharacterStream(
-        final int index, Reader value, final int length, final ResultSet resultSet)
+        final int index, Reader value, final int length, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateCharacterStream(index, value, length);
@@ -3408,7 +3411,7 @@ public class QueryResultSet
         final String columnName,
         final Reader value,
         final int length,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateCharacterStream(columnName, value, length);
@@ -3439,7 +3442,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateDate(
-        final int index, final Date value, final ResultSet resultSet)
+        final int index, final Date value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateDate(index, value);
@@ -3470,7 +3473,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateDate(
-        final String columnName, final Date value, final ResultSet resultSet)
+        final String columnName, final Date value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateDate(columnName, value);
@@ -3501,7 +3504,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateDouble(
-        final int index, final double value, final ResultSet resultSet)
+        final int index, final double value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateDouble(index, value);
@@ -3532,7 +3535,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateDouble(
-        final String columnName, final double value, final ResultSet resultSet)
+        final String columnName, final double value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateDouble(columnName, value);
@@ -3563,7 +3566,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateFloat(
-        final int index, final float value, final ResultSet resultSet)
+        final int index, final float value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateFloat(index, value);
@@ -3594,7 +3597,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateFloat(
-        final String columnName, final float value, final ResultSet resultSet)
+        final String columnName, final float value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateFloat(columnName, value);
@@ -3625,7 +3628,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateInt(
-        final int index, final int value, final ResultSet resultSet)
+        final int index, final int value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateInt(index, value);
@@ -3656,7 +3659,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateInt(
-        final String columnName, final int value, final ResultSet resultSet)
+        final String columnName, final int value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateInt(columnName, value);
@@ -3687,7 +3690,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateLong(
-        final int index, final long value, final ResultSet resultSet)
+        final int index, final long value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateLong(index, value);
@@ -3718,7 +3721,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateLong(
-        final String columnName, final long value, final ResultSet resultSet)
+        final String columnName, final long value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateLong(columnName, value);
@@ -3746,7 +3749,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void updateNull(final int index, final ResultSet resultSet)
+    protected void updateNull(final int index, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.updateNull(index);
@@ -3775,7 +3778,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNull(
-        final String columnName, final ResultSet resultSet)
+        final String columnName, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateNull(columnName);
@@ -3816,7 +3819,7 @@ public class QueryResultSet
         final int index,
         final Object value,
         final int scale,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateObject(index, value, scale);
@@ -3847,7 +3850,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateObject(
-        final int index, final Object value, final ResultSet resultSet)
+        final int index, final Object value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateObject(index, value);
@@ -3888,7 +3891,7 @@ public class QueryResultSet
         final String columnName,
         final Object value,
         final int scale,
-        final ResultSet resultSet)
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateObject(columnName, value, scale);
@@ -3919,7 +3922,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateObject(
-        final String columnName, final Object value, final ResultSet resultSet)
+        final String columnName, final Object value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateObject(columnName, value);
@@ -3943,7 +3946,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected void updateRow(final ResultSet resultSet)
+    protected void updateRow(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         resultSet.updateRow();
@@ -3974,7 +3977,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateShort(
-        final int index, final short value, final ResultSet resultSet)
+        final int index, final short value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateShort(index, value);
@@ -4005,7 +4008,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateShort(
-        final String columnName, final short value, final ResultSet resultSet)
+        final String columnName, final short value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateShort(columnName, value);
@@ -4036,7 +4039,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateString(
-        final int index, final String value, final ResultSet resultSet)
+        final int index, final String value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateString(index, value);
@@ -4067,7 +4070,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateString(
-        final String columnName, final String value, final ResultSet resultSet)
+        final String columnName, final String value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateString(columnName, value);
@@ -4098,7 +4101,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateTime(
-        final int index, final Time value, final ResultSet resultSet)
+        final int index, final Time value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateTime(index, value);
@@ -4129,7 +4132,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateTime(
-        final String columnName, final Time value, final ResultSet resultSet)
+        final String columnName, final Time value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateTime(columnName, value);
@@ -4160,7 +4163,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateTimestamp(
-        final int index, final Timestamp value, final ResultSet resultSet)
+        final int index, final Timestamp value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateTimestamp(index, value);
@@ -4191,7 +4194,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateTimestamp(
-        final String columnName, final Timestamp value, final ResultSet resultSet)
+        final String columnName, final Timestamp value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateTimestamp(columnName, value);
@@ -4227,7 +4230,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected URL getURL(final int columnIndex, final ResultSet resultSet)
+    protected URL getURL(final int columnIndex, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getURL(columnIndex);
@@ -4259,7 +4262,7 @@ public class QueryResultSet
      * @exception SQLException if an error occurs.
      * @precondition resultSet != null
      */
-    protected URL getURL(final String columnName, final ResultSet resultSet)
+    protected URL getURL(final String columnName, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getURL(columnName);
@@ -4290,7 +4293,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateRef(
-        final int columnIndex, final Ref value, final ResultSet resultSet)
+        final int columnIndex, final Ref value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateRef(columnIndex, value);
@@ -4319,7 +4322,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateRef(
-        final String columnName, final Ref value, final ResultSet resultSet)
+        final String columnName, final Ref value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateRef(columnName, value);
@@ -4350,7 +4353,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBlob(
-        final int columnIndex, final Blob value, final ResultSet resultSet)
+        final int columnIndex, final Blob value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBlob(columnIndex, value);
@@ -4379,7 +4382,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBlob(
-        final String columnName, final Blob value, final ResultSet resultSet)
+        final String columnName, final Blob value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateBlob(columnName, value);
@@ -4410,7 +4413,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateClob(
-        final int columnIndex, final Clob value, final ResultSet resultSet)
+        final int columnIndex, final Clob value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateClob(columnIndex, value);
@@ -4439,7 +4442,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateClob(
-        final String columnName, final Clob value, final ResultSet resultSet)
+        final String columnName, final Clob value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateClob(columnName, value);
@@ -4470,7 +4473,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateArray(
-        final int columnIndex, final Array value, final ResultSet resultSet)
+        final int columnIndex, final Array value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateArray(columnIndex, value);
@@ -4499,7 +4502,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateArray(
-        final String columnName, final Array value, final ResultSet resultSet)
+        final String columnName, final Array value, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         resultSet.updateArray(columnName, value);
@@ -4532,7 +4535,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected byte[] getBytes(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBytes(query.getFieldIndex(field));
@@ -4563,7 +4566,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected boolean getBoolean(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBoolean(query.getFieldIndex(field));
@@ -4594,7 +4597,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected long getLong(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getLong(query.getFieldIndex(field));
@@ -4621,7 +4624,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Object getObject(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getObject(query.getFieldIndex(field));
@@ -4660,8 +4663,8 @@ public class QueryResultSet
     protected Object getObject(
         final Field field,
         final Map map,
-        final Query query,
-        final ResultSet resultSet)
+        @NotNull final Query query,
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getObject(query.getFieldIndex(field), map);
@@ -4692,7 +4695,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Ref getRef(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getRef(query.getFieldIndex(field));
@@ -4723,7 +4726,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Time getTime(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getTime(query.getFieldIndex(field));
@@ -4760,8 +4763,8 @@ public class QueryResultSet
     protected Time getTime(
         final Field field,
         final Calendar calendar,
-        final Query query,
-        final ResultSet resultSet)
+        @NotNull final Query query,
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTime(query.getFieldIndex(field), calendar);
@@ -4791,7 +4794,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Date getDate(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getDate(query.getFieldIndex(field));
@@ -4828,8 +4831,8 @@ public class QueryResultSet
     protected Date getDate(
         final Field field,
         final Calendar calendar,
-        final Query query,
-        final ResultSet resultSet)
+        @NotNull final Query query,
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getDate(query.getFieldIndex(field), calendar);
@@ -4858,7 +4861,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected byte getByte(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getByte(query.getFieldIndex(field));
@@ -4887,7 +4890,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected short getShort(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getShort(query.getFieldIndex(field));
@@ -4916,7 +4919,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected int getInt(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getInt(query.getFieldIndex(field));
@@ -4945,7 +4948,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected float getFloat(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getFloat(query.getFieldIndex(field));
@@ -4976,7 +4979,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected double getDouble(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getDouble(query.getFieldIndex(field));
@@ -5011,9 +5014,9 @@ public class QueryResultSet
      */
     protected String getString(
         final ClobField field,
-        final Query query,
-        final ResultSet resultSet,
-        final QueryUtils queryUtils)
+        @NotNull final Query query,
+        @NotNull final ResultSet resultSet,
+        @NotNull final QueryUtils queryUtils)
       throws  SQLException
     {
         return
@@ -5044,7 +5047,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected String getString(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getString(query.getFieldIndex(field));
@@ -5073,7 +5076,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Array getArray(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getArray(query.getFieldIndex(field));
@@ -5102,7 +5105,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getAsciiStream(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getAsciiStream(query.getFieldIndex(field));
@@ -5140,8 +5143,8 @@ public class QueryResultSet
     protected BigDecimal getBigDecimal(
         final Field field,
         final int scale,
-        final Query query,
-        final ResultSet resultSet)
+        @NotNull final Query query,
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBigDecimal(query.getFieldIndex(field), scale);
@@ -5170,7 +5173,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected BigDecimal getBigDecimal(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBigDecimal(query.getFieldIndex(field));
@@ -5199,7 +5202,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getBinaryStream(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getBinaryStream(query.getFieldIndex(field));
@@ -5230,7 +5233,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Blob getBlob(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getBlob(query.getFieldIndex(field));
@@ -5261,7 +5264,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Clob getClob(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getClob(query.getFieldIndex(field));
@@ -5292,7 +5295,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Timestamp getTimestamp(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return resultSet.getTimestamp(query.getFieldIndex(field));
@@ -5329,8 +5332,8 @@ public class QueryResultSet
     protected Timestamp getTimestamp(
         final Field field,
         final Calendar calendar,
-        final Query query,
-        final ResultSet resultSet)
+        @NotNull final Query query,
+        @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getTimestamp(query.getFieldIndex(field), calendar);
@@ -5361,7 +5364,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected InputStream getUnicodeStream(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getUnicodeStream(query.getFieldIndex(field));
@@ -5392,7 +5395,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected Reader getCharacterStream(
-        final Field field, final Query query, final ResultSet resultSet)
+        final Field field, @NotNull final Query query, @NotNull final ResultSet resultSet)
       throws  SQLException
     {
         return resultSet.getCharacterStream(query.getFieldIndex(field));
@@ -5408,10 +5411,11 @@ public class QueryResultSet
      * Java programming language.
      * @exception SQLException if an error occurs.
      */
+    @Nullable
     public URL getURL(final Field field)
         throws  SQLException
     {
-        URL result = null;
+        @Nullable URL result = null;
 
         Query t_Query = getQuery();
 
@@ -6043,7 +6047,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNClob(
-        final String name, final Reader reader, final ResultSet resultSet)
+        final String name, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNClob(name, reader);
@@ -6068,7 +6072,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNClob(
-        final String name, final Reader reader, final long length, final ResultSet resultSet)
+        final String name, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNClob(name, reader, length);
@@ -6092,7 +6096,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNClob(
-        final int index, final Reader reader, final ResultSet resultSet)
+        final int index, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNClob(index, reader);
@@ -6117,7 +6121,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNClob(
-        final int index, final Reader reader, final long length, final ResultSet resultSet)
+        final int index, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNClob(index, reader, length);
@@ -6141,7 +6145,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateClob(
-        final String name, final Reader reader, final ResultSet resultSet)
+        final String name, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateClob(name, reader);
@@ -6166,7 +6170,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateClob(
-        final String name, final Reader reader, final long length, final ResultSet resultSet)
+        final String name, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateClob(name, reader, length);
@@ -6190,7 +6194,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateClob(
-        final int index, final Reader reader, final ResultSet resultSet)
+        final int index, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateClob(index, reader);
@@ -6215,7 +6219,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateClob(
-        final int index, final Reader reader, final long length, final ResultSet resultSet)
+        final int index, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateClob(index, reader, length);
@@ -6239,7 +6243,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBlob(
-        final String name, final InputStream stream, final ResultSet resultSet)
+        final String name, final InputStream stream, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBlob(name, stream);
@@ -6264,7 +6268,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBlob(
-        final String name, final InputStream stream, final long length, final ResultSet resultSet)
+        final String name, final InputStream stream, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBlob(name, stream, length);
@@ -6288,7 +6292,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBlob(
-        final int index, final InputStream stream, final ResultSet resultSet)
+        final int index, final InputStream stream, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBlob(index, stream);
@@ -6313,7 +6317,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBlob(
-        final int index, final InputStream stream, final long length, final ResultSet resultSet)
+        final int index, final InputStream stream, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBlob(index, stream, length);
@@ -6337,7 +6341,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateCharacterStream(
-        final String name, final Reader reader, final ResultSet resultSet)
+        final String name, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateCharacterStream(name, reader);
@@ -6362,7 +6366,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateCharacterStream(
-        final String name, final Reader reader, final long length, final ResultSet resultSet)
+        final String name, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateCharacterStream(name, reader, length);
@@ -6386,7 +6390,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateCharacterStream(
-        final int index, final Reader reader, final ResultSet resultSet)
+        final int index, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateCharacterStream(index, reader);
@@ -6411,7 +6415,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateCharacterStream(
-        final int index, final Reader reader, final long length, final ResultSet resultSet)
+        final int index, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateCharacterStream(index, reader, length);
@@ -6435,7 +6439,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNCharacterStream(
-        final String name, final Reader reader, final ResultSet resultSet)
+        final String name, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNCharacterStream(name, reader);
@@ -6460,7 +6464,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNCharacterStream(
-        final String name, final Reader reader, final long length, final ResultSet resultSet)
+        final String name, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNCharacterStream(name, reader, length);
@@ -6484,7 +6488,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNCharacterStream(
-        final int index, final Reader reader, final ResultSet resultSet)
+        final int index, final Reader reader, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNCharacterStream(index, reader);
@@ -6509,7 +6513,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNCharacterStream(
-        final int index, final Reader reader, final long length, final ResultSet resultSet)
+        final int index, final Reader reader, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNCharacterStream(index, reader, length);
@@ -6533,7 +6537,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBinaryStream(
-        final String name, final InputStream stream, final ResultSet resultSet)
+        final String name, final InputStream stream, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBinaryStream(name, stream);
@@ -6558,7 +6562,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBinaryStream(
-        final String name, final InputStream stream, final long length, final ResultSet resultSet)
+        final String name, final InputStream stream, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBinaryStream(name, stream, length);
@@ -6582,7 +6586,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBinaryStream(
-        final int index, final InputStream stream, final ResultSet resultSet)
+        final int index, final InputStream stream, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBinaryStream(index, stream);
@@ -6607,7 +6611,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateBinaryStream(
-        final int index, final InputStream stream, final long length, final ResultSet resultSet)
+        final int index, final InputStream stream, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateBinaryStream(index, stream, length);
@@ -6631,7 +6635,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateAsciiStream(
-        final String name, final InputStream stream, final ResultSet resultSet)
+        final String name, final InputStream stream, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateAsciiStream(name, stream);
@@ -6656,7 +6660,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateAsciiStream(
-        final String name, final InputStream stream, final long length, final ResultSet resultSet)
+        final String name, final InputStream stream, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateAsciiStream(name, stream, length);
@@ -6680,7 +6684,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateAsciiStream(
-        final int index, final InputStream stream, final ResultSet resultSet)
+        final int index, final InputStream stream, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateAsciiStream(index, stream);
@@ -6705,7 +6709,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateAsciiStream(
-        final int index, final InputStream stream, final long length, final ResultSet resultSet)
+        final int index, final InputStream stream, final long length, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateAsciiStream(index, stream, length);
@@ -6728,7 +6732,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected Reader getNCharacterStream(final String name, final ResultSet resultSet)
+    protected Reader getNCharacterStream(final String name, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getNCharacterStream(name);
@@ -6751,7 +6755,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected Reader getNCharacterStream(final int index, final ResultSet resultSet)
+    protected Reader getNCharacterStream(final int index, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getNCharacterStream(index);
@@ -6774,7 +6778,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected String getNString(final String name, final ResultSet resultSet)
+    protected String getNString(final String name, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getNString(name);
@@ -6797,7 +6801,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected String getNString(final int index, final ResultSet resultSet)
+    protected String getNString(final int index, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getNString(index);
@@ -6821,7 +6825,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateSQLXML(
-        final String name, final SQLXML sqlXml , final ResultSet resultSet)
+        final String name, final SQLXML sqlXml , @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateSQLXML(name, sqlXml);
@@ -6845,7 +6849,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateSQLXML(
-        final int index, final SQLXML sqlXml , final ResultSet resultSet)
+        final int index, final SQLXML sqlXml , @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateSQLXML(index, sqlXml);
@@ -6868,7 +6872,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected SQLXML getSQLXML(final String name, final ResultSet resultSet)
+    protected SQLXML getSQLXML(final String name, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getSQLXML(name);
@@ -6891,7 +6895,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected SQLXML getSQLXML(final int index, final ResultSet resultSet)
+    protected SQLXML getSQLXML(final int index, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getSQLXML(index);
@@ -6914,7 +6918,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected NClob getNClob(final String name, final ResultSet resultSet)
+    protected NClob getNClob(final String name, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getNClob(name);
@@ -6937,7 +6941,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected NClob getNClob(final int index, final ResultSet resultSet)
+    protected NClob getNClob(final int index, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getNClob(index);
@@ -6961,7 +6965,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNClob(
-        final String name, final NClob nclob , final ResultSet resultSet)
+        final String name, final NClob nclob , @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNClob(name, nclob);
@@ -6985,7 +6989,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNClob(
-        final int index, final NClob nclob , final ResultSet resultSet)
+        final int index, final NClob nclob , @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNClob(index, nclob);
@@ -7009,7 +7013,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNString(
-        final String name, final String nstring, final ResultSet resultSet)
+        final String name, final String nstring, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNString(name, nstring);
@@ -7033,7 +7037,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateNString(
-        final int index, final String nstring, final ResultSet resultSet)
+        final int index, final String nstring, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateNString(index, nstring);
@@ -7056,7 +7060,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected RowId getRowId(final String name, final ResultSet resultSet)
+    protected RowId getRowId(final String name, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getRowId(name);
@@ -7079,7 +7083,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected RowId getRowId(final int index, final ResultSet resultSet)
+    protected RowId getRowId(final int index, @NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getRowId(index);
@@ -7103,7 +7107,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateRowId(
-        final String name, final RowId rowId, final ResultSet resultSet)
+        final String name, final RowId rowId, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateRowId(name, rowId);
@@ -7127,7 +7131,7 @@ public class QueryResultSet
      * @precondition resultSet != null
      */
     protected void updateRowId(
-        final int index, final RowId rowId, final ResultSet resultSet)
+        final int index, final RowId rowId, @NotNull final ResultSet resultSet)
       throws SQLException
     {
         resultSet.updateRowId(index, rowId);
@@ -7149,7 +7153,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected boolean isClosed(final ResultSet resultSet)
+    protected boolean isClosed(@NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.isClosed();
@@ -7171,7 +7175,7 @@ public class QueryResultSet
      * @throws SQLException if the operation fails.
      * @precondition resultSet != null
      */
-    protected int getHoldability(final ResultSet resultSet)
+    protected int getHoldability(@NotNull final ResultSet resultSet)
         throws SQLException
     {
         return resultSet.getHoldability();
@@ -7191,7 +7195,7 @@ public class QueryResultSet
      * @param wrappedResultSet the wrapped result set.
      * @return <code>true</code> if the wrapped statement is compatible with given class.
      */
-    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedResultSet)
+    protected boolean isWrapperFor(final Class wrapperClass, @Nullable final Object wrappedResultSet)
     {
         return
             (   (wrappedResultSet != null)
@@ -7201,6 +7205,7 @@ public class QueryResultSet
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Object unwrap(final Class wrapperClass)
     {
         return unwrap(wrapperClass, getResultSet());
@@ -7212,9 +7217,10 @@ public class QueryResultSet
      * @param wrappedResultSet the wrapped result set.
      * @return the wrapped statement if it's compatible.
      */
+    @Nullable
     protected Object unwrap(final Class wrapperClass, final Object wrappedResultSet)
     {
-        Object result = null;
+        @Nullable Object result = null;
 
         if  (isWrapperFor(wrapperClass, wrappedResultSet))
         {

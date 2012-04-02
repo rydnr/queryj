@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.ant;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains all information inside a "fk" XML element in Ant scripts,
@@ -121,6 +122,7 @@ public class AntFieldFkElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
+    @NotNull
     public Object createDynamicElement(final String name)
     {
         throw

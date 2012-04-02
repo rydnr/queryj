@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -499,6 +501,7 @@ public abstract class FunctionsTestTemplate
      * @param function the function.
      * @return the field type.
      */
+    @Nullable
     protected String getSpecialMappingReturnType(final String function)
     {
         // Not used for unit test generation, since the comparision is done
@@ -510,6 +513,7 @@ public abstract class FunctionsTestTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getClassDescription());
@@ -521,6 +525,7 @@ public abstract class FunctionsTestTemplate
      * @return such header.
      * @precondition type != null
      */
+    @NotNull
     protected String buildHeader(final String type)
     {
         return "Generating " + type + " test functions template.";
@@ -533,13 +538,13 @@ public abstract class FunctionsTestTemplate
      */
     protected String generateOutput(final String header)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         if  (t_StringUtils != null) 
         {
-            Object t_aEngine =
+            @NotNull Object t_aEngine =
                 new Object[]
                 {
                     getEngineName(),
@@ -547,11 +552,11 @@ public abstract class FunctionsTestTemplate
                     getClassDescription()
                 };
 
-            Object[] t_aPackageName = new Object[]{getPackageName()};
+            @NotNull Object[] t_aPackageName = new Object[]{getPackageName()};
 
-            Object[] t_aClassPrefix = new Object[]{getClassPrefix()};
+            @NotNull Object[] t_aClassPrefix = new Object[]{getClassPrefix()};
 
-            MessageFormat t_Formatter = null;
+            @Nullable MessageFormat t_Formatter = null;
 
             String t_strHeader = header;
 
@@ -686,12 +691,12 @@ public abstract class FunctionsTestTemplate
                 {
                     Iterator t_itFunctions = t_lFunctions.iterator();
 
-                    MessageFormat t_TestMethodFormatter =
+                    @NotNull MessageFormat t_TestMethodFormatter =
                         new MessageFormat(t_strDefaultFunctionMethodTest);
 
                     while  (t_itFunctions.hasNext()) 
                     {
-                        String t_strFunction = (String) t_itFunctions.next();
+                        @NotNull String t_strFunction = (String) t_itFunctions.next();
 
                         String t_strMapping = getMapping(t_strFunction);
 
@@ -722,7 +727,7 @@ public abstract class FunctionsTestTemplate
                                 '_',
                                 getCapitalizedWords());
 
-                        String t_strTestJavaMethod =
+                        @NotNull String t_strTestJavaMethod =
                             "test" + t_StringUtils.capitalize(t_strJavaMethod, '_');
 
                         t_sbResult.append(

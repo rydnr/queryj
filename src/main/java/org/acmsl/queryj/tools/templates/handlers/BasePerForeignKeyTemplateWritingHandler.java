@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerForeignKeyTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -77,7 +78,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         writeTemplate(parameters, retrieveDatabaseMetaData(parameters));
@@ -94,14 +95,14 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @precondition metaData != null
      */
     protected void writeTemplate(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
         {
             writeTemplate(parameters, metaData.getDatabaseProductName());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -119,7 +120,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @precondition parameters != null
      * @precondition engineName != null
      */
-    protected void writeTemplate(final Map parameters, final String engineName)
+    protected void writeTemplate(@NotNull final Map parameters, final String engineName)
       throws  QueryJBuildException
     {
         writeTemplate(
@@ -144,14 +145,14 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         final BasePerForeignKeyTemplate template,
         final File outputDir,
         final Charset charset,
-        final BasePerForeignKeyTemplateGenerator templateGenerator)
+        @NotNull final BasePerForeignKeyTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
         try
         {
             templateGenerator.write(template, outputDir, charset);
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -163,6 +164,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     protected abstract BasePerForeignKeyTemplateGenerator retrieveTemplateGenerator();
 
     /**
@@ -170,6 +172,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     protected abstract BasePerForeignKeyTemplate retrieveTemplate(
         final Map parameters);
 
@@ -180,8 +183,9 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -207,6 +211,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected abstract File retrieveOutputDir(
         final File projectFolder,
         final String projectPackage,

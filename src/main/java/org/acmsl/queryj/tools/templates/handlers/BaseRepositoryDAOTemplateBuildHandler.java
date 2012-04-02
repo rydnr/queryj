@@ -41,6 +41,7 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -58,6 +59,7 @@ public class BaseRepositoryDAOTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return BaseRepositoryDAOTemplateGenerator.getInstance();
@@ -75,7 +77,7 @@ public class BaseRepositoryDAOTemplateBuildHandler
     protected String retrievePackage(
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveBaseRepositoryDAOPackage(projectPackage);
     }
@@ -88,7 +90,7 @@ public class BaseRepositoryDAOTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE,

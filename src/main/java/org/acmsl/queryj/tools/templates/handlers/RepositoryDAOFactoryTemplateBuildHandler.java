@@ -63,6 +63,8 @@ import java.util.Map;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds the repository DAO factory implementation if requested.
@@ -75,6 +77,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return RepositoryDAOFactoryTemplateGenerator.getInstance();
@@ -105,21 +108,22 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @precondition tableNames != null
      * @precondition factory != null
      */
+    @Nullable
     protected BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
         final String engineName,
         final String header,
         final Collection tableNames,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        BasePerRepositoryTemplate result = null;
+        @Nullable BasePerRepositoryTemplate result = null;
 
         if  (templateFactory instanceof RepositoryDAOFactoryTemplateFactory)
         {
@@ -158,7 +162,8 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @return the JNDI location.
      * @precondition parameters != null
      */
-    protected String retrieveJNDIDataSource(final Map parameters)
+    @NotNull
+    protected String retrieveJNDIDataSource(@NotNull final Map parameters)
     {
         return
             (String)
@@ -177,9 +182,9 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String engineName,
+        @NotNull final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveRepositoryDAOPackage(
@@ -194,7 +199,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.REPOSITORY_DAO_FACTORY_TEMPLATE,

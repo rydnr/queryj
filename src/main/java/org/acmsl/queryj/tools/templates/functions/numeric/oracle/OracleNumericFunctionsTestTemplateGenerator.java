@@ -52,6 +52,9 @@ import org.acmsl.queryj.tools.templates.functions.numeric.oracle
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Is able to generate the JUnit classes to test the Database's numeric functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -81,6 +84,7 @@ public class OracleNumericFunctionsTestTemplateGenerator
      * Retrieves a <code>OracleNumericFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleNumericFunctionsTestTemplateGenerator getOracleInstance()
     {
         return OracleNumericFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -96,15 +100,16 @@ public class OracleNumericFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        final String packageName,
+        @Nullable final String packageName,
         final String testedPackageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        NumericFunctionsTestTemplate result = null;
+        @Nullable NumericFunctionsTestTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -129,6 +134,7 @@ public class OracleNumericFunctionsTestTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

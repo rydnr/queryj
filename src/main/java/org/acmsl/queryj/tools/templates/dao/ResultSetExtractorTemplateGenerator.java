@@ -51,6 +51,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -87,6 +88,7 @@ public class ResultSetExtractorTemplateGenerator
      * Retrieves a {@link ResultSetExtractorTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static ResultSetExtractorTemplateGenerator getInstance()
     {
         return ResultSetExtractorTemplateGeneratorSingletonContainer.SINGLETON;
@@ -116,6 +118,7 @@ public class ResultSetExtractorTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @NotNull
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
         final String tableName,
         final MetadataManager metadataManager,
@@ -149,6 +152,7 @@ public class ResultSetExtractorTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return ResultSetExtractorDecoratorFactory.getInstance();
@@ -164,8 +168,8 @@ public class ResultSetExtractorTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final ResultSetExtractorTemplate template,
-        final File outputDir,
+        @NotNull final ResultSetExtractorTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -195,12 +199,12 @@ public class ResultSetExtractorTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final ResultSetExtractorTemplate template,
-        final File outputDir,
+        @NotNull final ResultSetExtractorTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

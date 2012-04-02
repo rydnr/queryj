@@ -56,6 +56,8 @@ import javax.sql.DataSource;
  * Importing commons-logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implements DataSource interface and just returns
@@ -118,7 +120,8 @@ public class MockDataSource
     /**
      * The log writer.
      */
-    private PrintWriter m__pwLogWriter = null; 
+    @Nullable
+    private PrintWriter m__pwLogWriter = null;
 
     /**
      * The login timeout.
@@ -369,20 +372,20 @@ public class MockDataSource
     protected void ensureDriverRegistered()
         throws  SQLException
     {
-        Driver t_Driver = null;
+        @Nullable Driver t_Driver = null;
 
         try 
         {
             t_Driver = DriverManager.getDriver(getURL());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             try
             {
                 LogFactory.getLog(MockDataSource.class).info(
                     "Driver not yet registered. Performing registration.");
             }
-            catch  (final Throwable throwable)
+            catch  (@NotNull final Throwable throwable)
             {
                 // class-loading problem.
             }
@@ -397,13 +400,13 @@ public class MockDataSource
 
                 t_Driver = (Driver) t_DriverClass.newInstance();
             }
-            catch  (final RuntimeException exception)
+            catch  (@NotNull final RuntimeException exception)
             {
                 throw exception;
             }
-            catch  (final Exception exception)
+            catch  (@NotNull final Exception exception)
             {
-                SQLException sqlException =
+                @NotNull SQLException sqlException =
                     new SQLException(exception.getMessage());
 
                 sqlException.initCause(exception);
@@ -419,7 +422,7 @@ public class MockDataSource
      * Adds a new exception to the list.
      * @param exception the new exception to add.
      */
-    public void addException(Exception exception)
+    public void addException(@Nullable Exception exception)
     {
         if  (exception != null)
         {
@@ -458,10 +461,11 @@ public class MockDataSource
      * @return a Connection to the database
      * @throws java.sql.SQLException if a database-access error occurs.
      */
+    @Nullable
     public Connection getConnection()
         throws SQLException
     {
-        MockConnection result = null;
+        @Nullable MockConnection result = null;
 
         try
         {
@@ -508,10 +512,11 @@ public class MockDataSource
      * @return a Connection to the database
      * @throws SQLException if a database-access error occurs.
      */
+    @Nullable
     public Connection getConnection(String username, String password)
         throws SQLException
     {
-        MockConnection result = null;
+        @Nullable MockConnection result = null;
 
         try
         {
@@ -565,6 +570,7 @@ public class MockDataSource
      * @return the log writer for this data source, null if disabled.
      * @throws SQLException if a database-access error occurs.
      */
+    @Nullable
     public PrintWriter getLogWriter()
         throws SQLException
     {
@@ -632,6 +638,7 @@ public class MockDataSource
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Object unwrap(final Class wrapperClass)
     {
         return null;

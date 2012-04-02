@@ -60,6 +60,8 @@ import java.util.Iterator;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some useful methods when working with queries.
@@ -89,6 +91,7 @@ public class QueryUtils
      * Retrieves a <code>QueryUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static QueryUtils getInstance()
     {
         return QueryUtilsSingletonContainer.SINGLETON;
@@ -114,9 +117,9 @@ public class QueryUtils
      * @return such concatenation.
      */
     public String concatenate(
-        final Collection items, final String separator, final boolean simplify)
+        @Nullable final Collection items, final String separator, final boolean simplify)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         if  (items != null) 
         {
@@ -143,7 +146,7 @@ public class QueryUtils
      * without explicit table information.
      * @return such text.
      */
-    protected String concatenate(final Object item, final boolean simplify)
+    protected String concatenate(@Nullable final Object item, final boolean simplify)
     {
         String result = "null";
 
@@ -178,7 +181,7 @@ public class QueryUtils
      * @param object the element.
      * @return <code>true</code> if such object should be escaped.
      */
-    public boolean shouldBeEscaped(final Object object)
+    public boolean shouldBeEscaped(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -206,14 +209,14 @@ public class QueryUtils
      * @see <a href="http://www.opengroup.org/bookstore/catalog/c449.htm">SQL 2</a>.
      * @precondition clob != null
      */
-    public String clobToString(final Clob clob)
+    public String clobToString(@NotNull final Clob clob)
         throws  SQLException
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
-        SQLException t_ExceptionToThrow = null;
+        @Nullable SQLException t_ExceptionToThrow = null;
 
-        BufferedReader t_Reader =
+        @NotNull BufferedReader t_Reader =
             new BufferedReader(clob.getCharacterStream());
 
         try 
@@ -228,7 +231,7 @@ public class QueryUtils
             } // end of while  ()
             
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             t_ExceptionToThrow =
                 new SQLException(
@@ -243,7 +246,7 @@ public class QueryUtils
             {
                 t_Reader.close();
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 LogFactory.getLog(QueryUtils.class).warn(
                     "Cannot close CLOB stream.",

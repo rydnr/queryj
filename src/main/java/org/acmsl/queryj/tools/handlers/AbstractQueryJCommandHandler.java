@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -63,6 +62,8 @@ import java.util.Map;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Inside a Chain Of Responsibility, these are the chain links.
@@ -76,7 +77,6 @@ public abstract class AbstractQueryJCommandHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the process fails unexpectedly.
      * @precondition command != null
      */
     public boolean handle(final Command command)
@@ -85,7 +85,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if  (command instanceof QueryJCommand)
         {
-            QueryJCommand t_Command = (QueryJCommand) command;
+            @NotNull QueryJCommand t_Command = (QueryJCommand) command;
             
             Log t_OtherLog =
                 UniqueLogFactory.getLog(
@@ -100,7 +100,7 @@ public abstract class AbstractQueryJCommandHandler
             {
                 result = handle(t_Command);
             }
-            catch  (final QueryJBuildException buildException)
+            catch  (@NotNull final QueryJBuildException buildException)
             {
                 Log t_Log =
                     UniqueLogFactory.getLog(
@@ -123,7 +123,7 @@ public abstract class AbstractQueryJCommandHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition command != null
      */
-    public boolean handle(final QueryJCommand command)
+    public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
         return handle(command.getAttributeMap());
@@ -145,7 +145,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveProjectOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveProjectOutputDir(@NotNull final Map parameters)
     {
         return
             (File) parameters.get(ParameterValidationHandler.OUTPUT_DIR);
@@ -157,7 +158,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the package name.
      * @precondition parameters !0 null
      */
-    protected String retrieveProjectPackage(final Map parameters)
+    @NotNull
+    protected String retrieveProjectPackage(@NotNull final Map parameters)
     {
         return (String) parameters.get(ParameterValidationHandler.PACKAGE);
     }
@@ -168,8 +170,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the metadata.
      * @precondition parameters != null
      */
+    @NotNull
     protected DatabaseMetaData retrieveDatabaseMetaData(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (DatabaseMetaData)
@@ -183,8 +186,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the manager.
      * @precondition parameters != null
      */
+    @NotNull
     protected MetadataManager retrieveMetadataManager(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (MetadataManager)
@@ -198,7 +202,7 @@ public abstract class AbstractQueryJCommandHandler
      * @return such flag.
      * @precondition parameters != null
      */
-    protected boolean retrieveUseSubfoldersFlag(final Map parameters)
+    protected boolean retrieveUseSubfoldersFlag(@NotNull final Map parameters)
     {
         boolean result = false;
 
@@ -220,7 +224,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the driver name.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcDriver(final Map parameters)
+    @NotNull
+    protected String retrieveJdbcDriver(@NotNull final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_DRIVER);
@@ -232,7 +237,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the url name.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcUrl(final Map parameters)
+    @NotNull
+    protected String retrieveJdbcUrl(@NotNull final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_URL);
@@ -244,7 +250,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the username name.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcUsername(final Map parameters)
+    @NotNull
+    protected String retrieveJdbcUsername(@NotNull final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_USERNAME);
@@ -256,7 +263,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the password name.
      * @precondition parameters != null
      */
-    protected String retrieveJdbcPassword(final Map parameters)
+    @NotNull
+    protected String retrieveJdbcPassword(@NotNull final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JDBC_PASSWORD);
@@ -290,8 +298,9 @@ public abstract class AbstractQueryJCommandHandler
      * @return the provider.
      * @precondition parameters != null
      */
+    @NotNull
     public static CustomSqlProvider retrieveCustomSqlProvider(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (CustomSqlProvider)
@@ -305,7 +314,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the repository's name.
      * @precondition parameters != null
      */
-    protected String retrieveTableRepositoryName(final Map parameters)
+    @NotNull
+    protected String retrieveTableRepositoryName(@NotNull final Map parameters)
     {
         return
             (String)
@@ -319,7 +329,8 @@ public abstract class AbstractQueryJCommandHandler
      * @return the header.
      * @precondition parameters != null
      */
-    protected String retrieveHeader(final Map parameters)
+    @NotNull
+    protected String retrieveHeader(@NotNull final Map parameters)
     {
         return (String) parameters.get(ParameterValidationHandler.HEADER);
     }
@@ -330,9 +341,18 @@ public abstract class AbstractQueryJCommandHandler
      * @return such condition.
      * @precondition parameters != null
      */
-    protected boolean retrieveJmx(final Map parameters)
+    protected boolean retrieveJmx(@NotNull final Map parameters)
     {
-        return (Boolean) parameters.get(ParameterValidationHandler.JMX);
+        boolean result = false;
+
+        Boolean jmx = (Boolean) parameters.get(ParameterValidationHandler.JMX);
+
+        if (jmx != null)
+        {
+            result = jmx;
+        }
+
+        return result;
     }
 
     /**
@@ -342,7 +362,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     protected boolean retrieveImplementMarkerInterfaces(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         Boolean result =
             (Boolean)
@@ -363,16 +383,17 @@ public abstract class AbstractQueryJCommandHandler
      * @return such information, or null if the vendor complains.
      * @precondition metadata != null
      */
+    @Nullable
     protected String retrieveDatabaseProductName(
-            final DatabaseMetaData metadata)
+            @NotNull final DatabaseMetaData metadata)
     {
-        String result = null;
+        @Nullable String result = null;
 
         try
         {
             result = metadata.getDatabaseProductName();
         }
-        catch  (final Throwable throwable)
+        catch  (@NotNull final Throwable throwable)
         {
             Log t_Log =
                     UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
@@ -396,16 +417,17 @@ public abstract class AbstractQueryJCommandHandler
      * @return such information, or null if the vendor complains.
      * @precondition metadata != null
      */
+    @Nullable
     protected String retrieveDatabaseProductVersion(
-        final DatabaseMetaData metadata)
+        @NotNull final DatabaseMetaData metadata)
     {
-        String result = null;
+        @Nullable String result = null;
 
         try
         {
             result = metadata.getDatabaseProductVersion();
         }
-        catch  (final Throwable throwable)
+        catch  (@NotNull final Throwable throwable)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
@@ -429,16 +451,17 @@ public abstract class AbstractQueryJCommandHandler
      * @return such information.
      * @precondition parameters != null
      */
+    @Nullable
     protected String retrieveDatabaseIdentifierQuoteString(
-        final DatabaseMetaData metadata)
+        @NotNull final DatabaseMetaData metadata)
     {
-        String result = null;
+        @Nullable String result = null;
 
         try
         {
             result = metadata.getIdentifierQuoteString();
         }
-        catch  (final Throwable throwable)
+        catch  (@NotNull final Throwable throwable)
         {
             Log t_Log =
                     UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
@@ -464,7 +487,8 @@ public abstract class AbstractQueryJCommandHandler
      * any reason.
      * @precondition parameters != null
      */
-    protected Connection retrieveConnection(final Map parameters)
+    @NotNull
+    protected Connection retrieveConnection(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -480,17 +504,18 @@ public abstract class AbstractQueryJCommandHandler
      * @throws QueryJBuildException if the charset is not valid.
      * @precondition parameters != null
      */
-    protected Charset retrieveCharset(final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected Charset retrieveCharset(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         Charset result =
             (Charset) parameters.get(ParameterValidationHandler.CHARSET);
 
-        QueryJBuildException exceptionToThrow = null;
+        @Nullable QueryJBuildException exceptionToThrow = null;
 
         if (result == null)
         {
-            String encoding =
+            @NotNull String encoding =
                 (String) parameters.get(ParameterValidationHandler.ENCODING);
 
             if (encoding == null)
@@ -507,7 +532,7 @@ public abstract class AbstractQueryJCommandHandler
                         result = Charset.forName(encoding);
                         parameters.put(ParameterValidationHandler.CHARSET, result);
                     }
-                    catch (final IllegalArgumentException nullCharset)
+                    catch (@NotNull final IllegalArgumentException nullCharset)
                     {
                         // should not happen since encoding is optional anyway.
                         exceptionToThrow =

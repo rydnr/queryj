@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.templates.functions.text.oracle
 
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -179,6 +180,7 @@ public class OracleTextFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getMapping(final String function)
     {
         // It's not OracleTextFunctionsTestTemplate.class since
@@ -191,6 +193,7 @@ public class OracleTextFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getSpecialMapping(final String function)
     {
         return
@@ -205,7 +208,7 @@ public class OracleTextFunctionsTestTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(final Map mappings)
+    protected boolean isFilledIn(@Nullable final Map mappings)
     {
         return
             (   (mappings != null)

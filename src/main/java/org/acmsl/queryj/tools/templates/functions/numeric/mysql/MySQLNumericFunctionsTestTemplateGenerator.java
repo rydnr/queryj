@@ -52,6 +52,8 @@ import org.acmsl.queryj.tools.templates.functions.numeric
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate the JUnit classes to test the Database's numeric functions.
@@ -82,6 +84,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
      * Retrieves a <code>MySQLNumericFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MySQLNumericFunctionsTestTemplateGenerator
         getMySQLInstance()
     {
@@ -98,15 +101,16 @@ public class MySQLNumericFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
-        final String packageName,
+        @Nullable final String packageName,
         final String testedPackageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        NumericFunctionsTestTemplate result = null;
+        @Nullable NumericFunctionsTestTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -131,6 +135,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

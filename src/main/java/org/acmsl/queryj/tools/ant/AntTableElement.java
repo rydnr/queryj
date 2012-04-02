@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.ant.AntFieldElement;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -148,9 +149,10 @@ public class AntTableElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
+    @Nullable
     public Object createDynamicElement(final String name)
     {
-        AntFieldElement result = null;
+        @Nullable AntFieldElement result = null;
 
         if  ("field".equals(name)) 
         {

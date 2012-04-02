@@ -70,6 +70,8 @@ import org.apache.tools.ant.types.Reference;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates QueryJ classes using Ant.
@@ -151,7 +153,7 @@ public class QueryJTask
      * @param delegee the delegee.
      * @precondition delegee != null
      */
-    protected void setSettingsFile(final File file, final QueryJChain delegee)
+    protected void setSettingsFile(final File file, @NotNull final QueryJChain delegee)
     {
         delegee.setSettingsFile(file);
     }
@@ -171,7 +173,7 @@ public class QueryJTask
      * @return such file.
      * @precondition delegee != null
      */
-    protected File getSettingsFile(final QueryJChain delegee)
+    protected File getSettingsFile(@NotNull final QueryJChain delegee)
     {
         return delegee.getSettingsFile();
     }
@@ -191,7 +193,7 @@ public class QueryJTask
      * @param delegee the delegee.
      * @precondition delegee != null
      */
-    protected void setDriver(final String driver, final QueryJChain delegee)
+    protected void setDriver(final String driver, @NotNull final QueryJChain delegee)
     {
         delegee.setDriver(driver);
     }
@@ -211,7 +213,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getDriver(final QueryJChain delegee)
+    protected String getDriver(@NotNull final QueryJChain delegee)
     {
         return delegee.getDriver();
     }
@@ -231,7 +233,7 @@ public class QueryJTask
      * @param delegee the delegee.
      * @precondition delegee != null
      */
-    protected void setUrl(final String url, final QueryJChain delegee)
+    protected void setUrl(final String url, @NotNull final QueryJChain delegee)
     {
         delegee.setUrl(url);
     }
@@ -251,7 +253,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getUrl(final QueryJChain delegee)
+    protected String getUrl(@NotNull final QueryJChain delegee)
     {
         return delegee.getUrl();
     }
@@ -272,7 +274,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setUsername(
-        final String username, final QueryJChain delegee)
+        final String username, @NotNull final QueryJChain delegee)
     {
         delegee.setUsername(username);
     }
@@ -292,7 +294,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getUsername(final QueryJChain delegee)
+    protected String getUsername(@NotNull final QueryJChain delegee)
     {
         return delegee.getUsername();
     }
@@ -313,7 +315,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setPassword(
-        final String password, final QueryJChain delegee)
+        final String password, @NotNull final QueryJChain delegee)
     {
         delegee.setPassword(password);
     }
@@ -333,7 +335,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getPassword(final QueryJChain delegee)
+    protected String getPassword(@NotNull final QueryJChain delegee)
     {
         return delegee.getPassword();
     }
@@ -354,7 +356,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setCatalog(
-        final String catalog, final QueryJChain delegee)
+        final String catalog, @NotNull final QueryJChain delegee)
     {
         delegee.setCatalog(catalog);
     }
@@ -374,7 +376,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getCatalog(final QueryJChain delegee)
+    protected String getCatalog(@NotNull final QueryJChain delegee)
     {
         return delegee.getCatalog();
     }
@@ -395,7 +397,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setSchema(
-        final String schema, final QueryJChain delegee)
+        final String schema, @NotNull final QueryJChain delegee)
     {
         delegee.setSchema(schema);
     }
@@ -415,7 +417,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getSchema(final QueryJChain delegee)
+    protected String getSchema(@NotNull final QueryJChain delegee)
     {
         return delegee.getSchema();
     }
@@ -436,7 +438,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setRepository(
-        final String repository, final QueryJChain delegee)
+        final String repository, @NotNull final QueryJChain delegee)
     {
         delegee.setRepository(repository);
     }
@@ -456,7 +458,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getRepository(final QueryJChain delegee)
+    protected String getRepository(@NotNull final QueryJChain delegee)
     {
         return delegee.getRepository();
     }
@@ -477,7 +479,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setPackage(
-        final String packageName, final QueryJChain delegee)
+        final String packageName, @NotNull final QueryJChain delegee)
     {
         delegee.setPackage(packageName);
     }
@@ -497,7 +499,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getPackage(final QueryJChain delegee)
+    protected String getPackage(@NotNull final QueryJChain delegee)
     {
         return delegee.getPackage();
     }
@@ -518,7 +520,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setOutputdir(
-        final File outputdir, final QueryJChain delegee)
+        final File outputdir, @NotNull final QueryJChain delegee)
     {
         delegee.setOutputdir(outputdir);
     }
@@ -538,7 +540,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected File getOutputdir(final QueryJChain delegee)
+    protected File getOutputdir(@NotNull final QueryJChain delegee)
     {
         return delegee.getOutputdir();
     }
@@ -559,7 +561,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setHeaderfile(
-        final File headerfile, final QueryJChain delegee)
+        final File headerfile, @NotNull final QueryJChain delegee)
     {
         delegee.setHeaderfile(headerfile);
     }
@@ -579,7 +581,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected File getHeaderfile(final QueryJChain delegee)
+    protected File getHeaderfile(@NotNull final QueryJChain delegee)
     {
         return delegee.getHeaderfile();
     }
@@ -600,7 +602,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setOutputdirsubfolders(
-        final String outputDirSubFolders, final QueryJChain delegee)
+        final String outputDirSubFolders, @NotNull final QueryJChain delegee)
     {
         delegee.setOutputdirsubfolders(outputDirSubFolders);
     }
@@ -620,7 +622,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getOutputdirsubfolders(final QueryJChain delegee)
+    protected String getOutputdirsubfolders(@NotNull final QueryJChain delegee)
     {
         return delegee.getOutputdirsubfolders();
     }
@@ -641,7 +643,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setExtractTables(
-        final String extractTables, final QueryJChain delegee)
+        final String extractTables, @NotNull final QueryJChain delegee)
     {
         delegee.setExtractTables(extractTables);
     }
@@ -661,7 +663,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getExtractTables(final QueryJChain delegee)
+    protected String getExtractTables(@NotNull final QueryJChain delegee)
     {
         return delegee.getExtractTables();
     }
@@ -679,7 +681,7 @@ public class QueryJTask
      * Retrieves the "extract-tables" flag.
      * @return such flag.
      */
-    protected boolean getExtractTablesFlag(final QueryJChain delegee)
+    protected boolean getExtractTablesFlag(@NotNull final QueryJChain delegee)
     {
         return delegee.getExtractTablesFlag();
     }
@@ -700,7 +702,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setExtractProcedures(
-        final String extractProcedures, final QueryJChain delegee)
+        final String extractProcedures, @NotNull final QueryJChain delegee)
     {
         delegee.setExtractProcedures(extractProcedures);
     }
@@ -720,7 +722,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getExtractProcedures(final QueryJChain delegee)
+    protected String getExtractProcedures(@NotNull final QueryJChain delegee)
     {
         return delegee.getExtractProcedures();
     }
@@ -741,7 +743,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setExtractFunctions(
-        final String extractFunctions, final QueryJChain delegee)
+        final String extractFunctions, @NotNull final QueryJChain delegee)
     {
         delegee.setExtractFunctions(extractFunctions);
     }
@@ -761,7 +763,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getExtractFunctions(final QueryJChain delegee)
+    protected String getExtractFunctions(@NotNull final QueryJChain delegee)
     {
         return delegee.getExtractFunctions();
     }
@@ -782,7 +784,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setJndiDataSource(
-        final String jndiLocation, final QueryJChain delegee)
+        final String jndiLocation, @NotNull final QueryJChain delegee)
     {
         delegee.setJndiDataSource(jndiLocation);
     }
@@ -802,7 +804,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getJndiDataSource(final QueryJChain delegee)
+    protected String getJndiDataSource(@NotNull final QueryJChain delegee)
     {
         return delegee.getJndiDataSource();
     }
@@ -823,7 +825,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setGenerateMockDAOImplementation(
-        final String generate, final QueryJChain delegee)
+        final String generate, @NotNull final QueryJChain delegee)
     {
         delegee.setGenerateMockDAOImplementation(generate);
     }
@@ -842,7 +844,7 @@ public class QueryJTask
      * @return such setting.
      */
     protected String getGenerateMockDAOImplementation(
-        final QueryJChain delegee)
+        @NotNull final QueryJChain delegee)
     {
         return delegee.getGenerateMockDAOImplementation();
     }
@@ -863,7 +865,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setGenerateXMLDAOImplementation(
-        final String generate, final QueryJChain delegee)
+        final String generate, @NotNull final QueryJChain delegee)
     {
         delegee.setGenerateXMLDAOImplementation(generate);
     }
@@ -884,7 +886,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected String getGenerateXMLDAOImplementation(
-        final QueryJChain delegee)
+        @NotNull final QueryJChain delegee)
     {
         return delegee.getGenerateXMLDAOImplementation();
     }
@@ -905,7 +907,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setGenerateTests(
-        final String generate, final QueryJChain delegee)
+        final String generate, @NotNull final QueryJChain delegee)
     {
         delegee.setGenerateTests(generate);
     }
@@ -926,7 +928,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected String getGenerateTests(
-        final QueryJChain delegee)
+        @NotNull final QueryJChain delegee)
     {
         return delegee.getGenerateTests();
     }
@@ -947,7 +949,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setAllowEmptyRepositoryDAO(
-        final String allow, final QueryJChain delegee)
+        final String allow, @NotNull final QueryJChain delegee)
     {
         delegee.setAllowEmptyRepositoryDAO(allow);
     }
@@ -967,7 +969,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getAllowEmptyRepositoryDAO(final QueryJChain delegee)
+    protected String getAllowEmptyRepositoryDAO(@NotNull final QueryJChain delegee)
     {
         return delegee.getAllowEmptyRepositoryDAO();
     }
@@ -988,7 +990,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setImplementMarkerInterfaces(
-        final String implement, final QueryJChain delegee)
+        final String implement, @NotNull final QueryJChain delegee)
     {
         delegee.setImplementMarkerInterfaces(implement);
     }
@@ -1008,7 +1010,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getImplementMarkerInterfaces(final QueryJChain delegee)
+    protected String getImplementMarkerInterfaces(@NotNull final QueryJChain delegee)
     {
         return delegee.getImplementMarkerInterfaces();
     }
@@ -1029,7 +1031,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setCustomSqlModel(
-        final String model, final QueryJChain delegee)
+        final String model, @NotNull final QueryJChain delegee)
     {
         delegee.setCustomSqlModel(model);
     }
@@ -1038,6 +1040,7 @@ public class QueryJTask
      * Retrieves the custom-sql model.
      * @return such model.
      */
+    @Nullable
     public String getCustomSqlModel()
     {
         return getCustomSqlModel(getQueryJChain());
@@ -1049,7 +1052,8 @@ public class QueryJTask
      * @return such model.
      * @precondition delegee != null
      */
-    protected String getCustomSqlModel(final QueryJChain delegee)
+    @Nullable
+    protected String getCustomSqlModel(@NotNull final QueryJChain delegee)
     {
         return delegee.getCustomSqlModel();
     }
@@ -1070,7 +1074,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setDisableCustomSqlValidation(
-        final String disable, final QueryJChain delegee)
+        final String disable, @NotNull final QueryJChain delegee)
     {
         delegee.setDisableCustomSqlValidation(disable);
     }
@@ -1090,7 +1094,7 @@ public class QueryJTask
      * @return such setting.
      * @precondition delegee != null
      */
-    protected String getDisableCustomSqlValidation(final QueryJChain delegee)
+    protected String getDisableCustomSqlValidation(@NotNull final QueryJChain delegee)
     {
         return delegee.getDisableCustomSqlValidation();
     }
@@ -1110,7 +1114,7 @@ public class QueryJTask
      * @param delegee the delegee.
      * @precondition delegee != null
      */
-    protected void setSqlXmlFile(final File file, final QueryJChain delegee)
+    protected void setSqlXmlFile(final File file, @NotNull final QueryJChain delegee)
     {
         delegee.setSqlXmlFile(file);
     }
@@ -1130,7 +1134,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected File getSqlXmlFile(final QueryJChain delegee)
+    protected File getSqlXmlFile(@NotNull final QueryJChain delegee)
     {
         return delegee.getSqlXmlFile();
     }
@@ -1151,7 +1155,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setGrammarbundle(
-        final String grammarBundle, final QueryJChain delegee)
+        final String grammarBundle, @NotNull final QueryJChain delegee)
     {
         delegee.setGrammarbundle(grammarBundle);
     }
@@ -1171,7 +1175,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getGrammarbundle(final QueryJChain delegee)
+    protected String getGrammarbundle(@NotNull final QueryJChain delegee)
     {
         return delegee.getGrammarbundle();
     }
@@ -1269,7 +1273,7 @@ public class QueryJTask
      * @precondition delegee != null
      */
     protected void setEncoding(
-        final String encoding, final QueryJChain delegee)
+        final String encoding, @NotNull final QueryJChain delegee)
     {
         delegee.setEncoding(encoding);
     }
@@ -1289,7 +1293,7 @@ public class QueryJTask
      * @return such information.
      * @precondition delegee != null
      */
-    protected String getEncoding(final QueryJChain delegee)
+    protected String getEncoding(@NotNull final QueryJChain delegee)
     {
         return delegee.getEncoding();
     }
@@ -1311,14 +1315,14 @@ public class QueryJTask
      * @throws BuildException whenever the required
      * parameters are not present or valid.
      */
-    protected void execute(final QueryJChain delegee)
+    protected void execute(@NotNull final QueryJChain delegee)
         throws  BuildException
     {
         try
         {
             delegee.process();
         }
-        catch  (final QueryJBuildException buildException)
+        catch  (@NotNull final QueryJBuildException buildException)
         {
             throw
                 new BuildException(
@@ -1363,6 +1367,7 @@ public class QueryJTask
          * Builds the command.
          * @return the initialized command.
          */
+        @NotNull
         protected QueryJCommand buildCommand()
         {
             return
@@ -1479,10 +1484,10 @@ public class QueryJTask
          * @precondition attributes != null
          */
         protected void mapAttributes(
-            final Map attributes,
-            final AntTablesElement tables,
-            final AntExternallyManagedFieldsElement externallyManagedFields,
-            final Path classpath)
+            @Nullable final Map attributes,
+            @Nullable final AntTablesElement tables,
+            @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
+            @Nullable final Path classpath)
         {
             if  (attributes != null)
             {
@@ -1530,13 +1535,14 @@ public class QueryJTask
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
+    @Nullable
     public Object createDynamicElement(final String name)
     {
-        Object result = null;
+        @Nullable Object result = null;
 
         if  ("tables".equals(name))
         {
-            AntTablesElement t_ateResult = null;
+            @Nullable AntTablesElement t_ateResult = null;
 
             if  (!getExtractTablesFlag())
             {
@@ -1553,7 +1559,7 @@ public class QueryJTask
         }
         else if  ("externally-managed-fields".equals(name))
         {
-            AntExternallyManagedFieldsElement t_aemfeResult =
+            @NotNull AntExternallyManagedFieldsElement t_aemfeResult =
                 new AntExternallyManagedFieldsElement();
 
             setExternallyManagedFields(t_aemfeResult);

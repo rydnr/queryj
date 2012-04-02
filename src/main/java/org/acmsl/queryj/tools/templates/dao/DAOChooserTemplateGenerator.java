@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -93,6 +94,7 @@ public class DAOChooserTemplateGenerator
      * Retrieves a {@link DAOChooserTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static DAOChooserTemplateGenerator getInstance()
     {
         return DAOChooserTemplateGeneratorSingletonContainer.SINGLETON;
@@ -118,6 +120,7 @@ public class DAOChooserTemplateGenerator
      * @precondition engineName != null
      * @precondition tables != null
      */
+    @NotNull
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -148,6 +151,7 @@ public class DAOChooserTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -159,7 +163,7 @@ public class DAOChooserTemplateGenerator
      * @return the capitalized value.
      * @precondition value != null
      */
-    protected String capitalize(final String value)
+    protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
@@ -173,7 +177,7 @@ public class DAOChooserTemplateGenerator
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }
@@ -188,8 +192,8 @@ public class DAOChooserTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -215,11 +219,11 @@ public class DAOChooserTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

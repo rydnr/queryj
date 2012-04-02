@@ -36,6 +36,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains the elements required to create any template of any type,
@@ -438,6 +439,7 @@ public abstract class AbstractBasePerTableTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTemplateName(), getTableName());
@@ -451,6 +453,7 @@ public abstract class AbstractBasePerTableTemplate
      * @precondition templateName != null
      * @precondition tableName != null
      */
+    @NotNull
     protected String buildHeader(
         final String templateName, final String tableName)
     {

@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides some useful methods when generating DAOChooser class.
@@ -68,6 +69,7 @@ public class DAOChooserTemplateUtils
      * Retrieves a <code>DAOChooserTemplateUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static DAOChooserTemplateUtils getInstance()
     {
         return DAOChooserTemplateUtilsSingletonContainer.SINGLETON;
@@ -80,7 +82,8 @@ public class DAOChooserTemplateUtils
      * @return such name.
      * @precondition repository != null
      */
-    public String retrievePropertiesFileName(final String repository)
+    @NotNull
+    public String retrievePropertiesFileName(@NotNull final String repository)
     {
         return repository.toLowerCase() + "-queryj.properties";
     }

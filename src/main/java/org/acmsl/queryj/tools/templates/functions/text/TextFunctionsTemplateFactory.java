@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.functions.text;
  */
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create text function templates.
@@ -54,6 +55,7 @@ public interface TextFunctionsTemplateFactory
      * @param quote the identifier quote string.
      * @return a template.
      */
+    @Nullable
     public TextFunctionsTemplate createTextFunctionsTemplate(
         final String packageName,
         final String engineName,

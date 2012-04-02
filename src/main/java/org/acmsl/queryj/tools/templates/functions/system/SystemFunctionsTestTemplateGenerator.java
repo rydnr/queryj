@@ -65,6 +65,8 @@ import java.nio.charset.Charset;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate the JUnit classes to test the Database's system functions.
@@ -95,6 +97,7 @@ public class SystemFunctionsTestTemplateGenerator
      * Retrieves a {@link SystemFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static SystemFunctionsTestTemplateGenerator getInstance()
     {
         return SystemFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -107,11 +110,11 @@ public class SystemFunctionsTestTemplateGenerator
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        final String engineName,
+        @Nullable final String engineName,
         final String engineVersion,
-        final String templateFactoryClass)
+        @Nullable final String templateFactoryClass)
     {
-        TemplateMappingManager t_MappingManager =
+        @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
         if  (   (t_MappingManager     != null)
@@ -132,12 +135,13 @@ public class SystemFunctionsTestTemplateGenerator
      * @param engineVersion the engine version.
      * @return the template factory class name.
      */
+    @Nullable
     protected String getTemplateFactoryClass(
-        final String engineName, final String engineVersion)
+        @Nullable final String engineName, final String engineVersion)
     {
-        String result = null;
+        @Nullable String result = null;
 
-        TemplateMappingManager t_MappingManager =
+        @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
         if  (   (t_MappingManager != null)
@@ -160,18 +164,19 @@ public class SystemFunctionsTestTemplateGenerator
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
      */
+    @Nullable
     protected SystemFunctionsTestTemplateFactory getTemplateFactory(
         final String engineName, final String engineVersion)
       throws  QueryJBuildException
     {
-        SystemFunctionsTestTemplateFactory result = null;
+        @Nullable SystemFunctionsTestTemplateFactory result = null;
 
-        TemplateMappingManager t_MappingManager =
+        @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
         if  (t_MappingManager != null)
         {
-            Object t_TemplateFactory =
+            @Nullable Object t_TemplateFactory =
                 t_MappingManager.getTemplateFactory(
                     TemplateMappingManager.SYSTEM_FUNCTIONS_TEST_TEMPLATE,
                     engineName,
@@ -204,28 +209,29 @@ public class SystemFunctionsTestTemplateGenerator
      * @param quote the identifier quote string.
      * @return a template.
      */
+    @Nullable
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
-        final String packageName,
+        @Nullable final String packageName,
         final String testedPackageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote)
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote)
     {
-        SystemFunctionsTestTemplate result = null;
+        @Nullable SystemFunctionsTestTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
              && (engineVersion != null)
              && (quote         != null))
         {
-            SystemFunctionsTestTemplateFactory t_TemplateFactory = null;
+            @Nullable SystemFunctionsTestTemplateFactory t_TemplateFactory = null;
 
             try
             {
                 t_TemplateFactory =
                     getTemplateFactory(engineName, engineVersion);
             }
-            catch  (final QueryJBuildException buildException)
+            catch  (@NotNull final QueryJBuildException buildException)
             {
                 Log t_Log =
                     UniqueLogFactory.getLog(
@@ -263,8 +269,8 @@ public class SystemFunctionsTestTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
-        final File outputDir,
+        @NotNull final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -288,11 +294,11 @@ public class SystemFunctionsTestTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
-        final File outputDir,
+        @NotNull final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

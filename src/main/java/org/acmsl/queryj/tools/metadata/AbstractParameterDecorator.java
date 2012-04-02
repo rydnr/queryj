@@ -39,6 +39,8 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
@@ -66,7 +68,7 @@ public abstract class AbstractParameterDecorator
      * @precondition metadataTypeManager != null
      */
     public AbstractParameterDecorator(
-        final ParameterElement parameter,
+        @NotNull final ParameterElement parameter,
         final MetadataTypeManager metadataTypeManager)
     {
         super(
@@ -143,6 +145,7 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      * @see java.sql.Types
      */
+    @Nullable
     public String getSqlType()
     {
         return getSqlType(getType(), getMetadataTypeManager());
@@ -155,8 +158,9 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      * @precondition metadataTypeManager != null
      */
+    @Nullable
     protected String getSqlType(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.getConstantName(
@@ -167,6 +171,7 @@ public abstract class AbstractParameterDecorator
      * Retrieves the object type of the parameter.
      * @return such information.
      */
+    @Nullable
     public String getObjectType()
     {
         return getObjectType(getType(), getMetadataTypeManager());
@@ -179,8 +184,9 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      * @precondition metadataTypeManager != null
      */
+    @Nullable
     public String getObjectType(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.getObjectType(
@@ -204,7 +210,7 @@ public abstract class AbstractParameterDecorator
      * @precondition metadataTypeManager != null
      */
     protected boolean isObject(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isObject(
@@ -228,7 +234,7 @@ public abstract class AbstractParameterDecorator
      * @precondition metadataTypeManager != null
      */
     protected boolean isString(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isString(
@@ -252,7 +258,7 @@ public abstract class AbstractParameterDecorator
      * @precondition metadataTypeManager != null
      */
     public String getFieldType(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.getFieldType(
@@ -277,7 +283,7 @@ public abstract class AbstractParameterDecorator
      * @precondition decorationUtils != null
      */
     protected String lowerCase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.lowerCase(value);
     }
@@ -301,7 +307,7 @@ public abstract class AbstractParameterDecorator
      * @precondition metadataTypeManager != null
      */
     protected boolean isClob(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isClob(metadataTypeManager.getJavaType(type));
@@ -312,6 +318,7 @@ public abstract class AbstractParameterDecorator
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return toString(getParameter());
@@ -323,6 +330,7 @@ public abstract class AbstractParameterDecorator
      * @param parameter the decorated parameter.
      * @return such information.
      */
+    @NotNull
     protected String toString(final Parameter parameter)
     {
         return "" + parameter;
@@ -343,7 +351,7 @@ public abstract class AbstractParameterDecorator
      * @return such information.
      * @precondition parameter != null
      */
-    protected int hashCode(final Parameter parameter)
+    protected int hashCode(@NotNull final Parameter parameter)
     {
         return parameter.hashCode();
     }
@@ -365,7 +373,7 @@ public abstract class AbstractParameterDecorator
      * @return the result of such comparison.
      * @precondition parameter != null
      */
-    protected boolean equals(final Parameter parameter, final Object object)
+    protected boolean equals(@NotNull final Parameter parameter, final Object object)
     {
         return parameter.equals(object);
     }
@@ -392,7 +400,7 @@ public abstract class AbstractParameterDecorator
      * object prevents it from being compared to this Object.
      * @precondition parameter != null
      */
-    protected int compareTo(final Parameter parameter, final Object object)
+    protected int compareTo(@NotNull final Parameter parameter, final Object object)
         throws  ClassCastException
     {
         return parameter.compareTo(object);

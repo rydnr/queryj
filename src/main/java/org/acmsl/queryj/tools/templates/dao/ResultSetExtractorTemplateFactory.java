@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create ResultSetExtractor templates.
@@ -70,6 +71,7 @@ public interface ResultSetExtractorTemplateFactory
      * interfaces.
      * @return such template.
      */
+    @NotNull
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
         final String tableName,
         final MetadataManager metadataManager,

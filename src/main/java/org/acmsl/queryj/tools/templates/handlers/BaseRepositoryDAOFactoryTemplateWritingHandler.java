@@ -43,6 +43,8 @@ import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritin
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOFactoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.BaseRepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -61,6 +63,7 @@ public class BaseRepositoryDAOFactoryTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
@@ -72,9 +75,10 @@ public class BaseRepositoryDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     @Override
     protected BasePerRepositoryTemplate retrieveTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (BasePerRepositoryTemplate)
@@ -97,14 +101,15 @@ public class BaseRepositoryDAOFactoryTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @Nullable
     @Override
     protected File retrieveOutputDir(
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
         final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveBaseRepositoryDAOFolder(

@@ -33,6 +33,9 @@
  */
 package org.acmsl.queryj.tools.metadata;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents procedure metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -206,7 +209,7 @@ public class ProcedureMetadata
 
         if  (object instanceof ProcedureMetadata)
         {
-            final ProcedureMetadata t_OtherInstance =
+            @NotNull final ProcedureMetadata t_OtherInstance =
                 (ProcedureMetadata) object;
 
             result =
@@ -239,11 +242,11 @@ public class ProcedureMetadata
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof ProcedureMetadata)
         {
-            final ProcedureMetadata t_OtherInstance =
+            @NotNull final ProcedureMetadata t_OtherInstance =
                 (ProcedureMetadata) object;
 
             result =

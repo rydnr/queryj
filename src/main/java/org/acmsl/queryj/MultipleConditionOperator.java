@@ -38,6 +38,7 @@ package org.acmsl.queryj;
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.ConditionOperator;
 import org.acmsl.queryj.Field;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents condition operators involving multiple bindings.
@@ -118,7 +119,7 @@ public class MultipleConditionOperator
 
         if  (!result)
         {
-            MultipleConditionOperator t_Candidate =
+            @NotNull MultipleConditionOperator t_Candidate =
                 (MultipleConditionOperator) candidate;
 
             result = (t_Candidate.getBindingCount() == count);

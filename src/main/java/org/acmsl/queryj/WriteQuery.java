@@ -45,6 +45,8 @@ import org.acmsl.queryj.IntField;
 import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -91,7 +93,7 @@ public abstract class WriteQuery
     {
         super();
 
-        Map uniqueMap = new HashMap();
+        @NotNull Map uniqueMap = new HashMap();
         immutableSetValues(uniqueMap);
         immutableSetEscapingFlags(uniqueMap);
     }
@@ -216,8 +218,8 @@ public abstract class WriteQuery
         final StringField field,
         final String value,
         final boolean escape,
-        final Map<Field,Object> values,
-        final Map<String,Boolean> escapingFlags)
+        @NotNull final Map<Field,Object> values,
+        @NotNull final Map<String,Boolean> escapingFlags)
     {
         String t_strValue = value;
 
@@ -254,7 +256,7 @@ public abstract class WriteQuery
      * @precondition values != null
      */
     protected void putValue(
-        final IntField field, final int value, final Map values)
+        final IntField field, final int value, @NotNull final Map values)
     {
         values.put(field, Integer.valueOf(value));
     }
@@ -297,8 +299,8 @@ public abstract class WriteQuery
         final IntField field,
         final String value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        @NotNull final Map values,
+        @NotNull final Map escapingFlags)
     {
         values.put(field, value);
 
@@ -327,7 +329,7 @@ public abstract class WriteQuery
      * @precondition values != null
      */
     protected void putValue(
-        final LongField field, final long value, final Map values)
+        final LongField field, final long value, @NotNull final Map values)
     {
         values.put(field, Long.valueOf(value));
     }
@@ -367,8 +369,8 @@ public abstract class WriteQuery
         final LongField field,
         final String value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        @NotNull final Map values,
+        @NotNull final Map escapingFlags)
     {
         values.put(field, value);
 
@@ -398,7 +400,7 @@ public abstract class WriteQuery
      * @precondition values != null
      */
     protected void putValue(
-        final DoubleField field, final double value, final Map values)
+        final DoubleField field, final double value, @NotNull final Map values)
     {
         values.put(field, Double.valueOf(value));
     }
@@ -442,8 +444,8 @@ public abstract class WriteQuery
         final DoubleField field,
         final String value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        @NotNull final Map values,
+        @NotNull final Map escapingFlags)
     {
         values.put(field, value);
 
@@ -473,7 +475,7 @@ public abstract class WriteQuery
      * @precondition values != null
      */
     protected void putValue(
-        final CalendarField field, final Calendar value, final Map values)
+        final CalendarField field, final Calendar value, @NotNull final Map values)
     {
         values.put(field, value);
     }
@@ -517,8 +519,8 @@ public abstract class WriteQuery
         final CalendarField field,
         final String value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        @NotNull final Map values,
+        @NotNull final Map escapingFlags)
     {
         values.put(field, value);
 
@@ -548,7 +550,7 @@ public abstract class WriteQuery
      * @precondition values != null
      */
     protected void putValue(
-        final DateField field, final Date value, final Map values)
+        final DateField field, final Date value, @NotNull final Map values)
     {
         values.put(field, value);
     }
@@ -592,8 +594,8 @@ public abstract class WriteQuery
         final DateField field,
         final String value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        @NotNull final Map values,
+        @NotNull final Map escapingFlags)
     {
         values.put(field, value);
 
@@ -624,7 +626,7 @@ public abstract class WriteQuery
      * @precondition values != null
      */
     protected void putValue(
-        final BigDecimalField field, final BigDecimal value, final Map values)
+        final BigDecimalField field, final BigDecimal value, @NotNull final Map values)
     {
         values.put(field, value);
     }
@@ -668,8 +670,8 @@ public abstract class WriteQuery
         final Field field,
         final Object value,
         final boolean escape,
-        final Map values,
-        final Map escapingFlags)
+        @NotNull final Map values,
+        @NotNull final Map escapingFlags)
     {
         values.put(field, value);
 
@@ -698,7 +700,7 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected Object getValue(final Field field, final Map values)
+    protected Object getValue(final Field field, @NotNull final Map values)
     {
         return values.get(field);
     }
@@ -709,6 +711,7 @@ public abstract class WriteQuery
      * @return the value.
      * @precondition field != null
      */
+    @NotNull
     protected String getValue(final StringField field)
     {
         return getValue(field, getValues());
@@ -722,9 +725,10 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected String getValue(final StringField field, final Map values)
+    @NotNull
+    protected String getValue(final StringField field, @NotNull final Map values)
     {
-        String result = "null";
+        @NotNull String result = "null";
 
         Object t_Result = values.get(field);
 
@@ -755,7 +759,7 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected int getValue(final IntField field, final Map values)
+    protected int getValue(final IntField field, @NotNull final Map values)
     {
         int result = -1;
 
@@ -788,7 +792,7 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected long getValue(final LongField field, final Map values)
+    protected long getValue(final LongField field, @NotNull final Map values)
     {
         long result = -1;
 
@@ -821,7 +825,7 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected double getValue(final DoubleField field, final Map values)
+    protected double getValue(final DoubleField field, @NotNull final Map values)
     {
         double result = -1.0;
 
@@ -841,6 +845,7 @@ public abstract class WriteQuery
      * @return the value.
      * @precondition field != null
      */
+    @Nullable
     protected Calendar getValue(final CalendarField field)
     {
         return getValue(field, getValues());
@@ -854,9 +859,10 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
-    protected Calendar getValue(final CalendarField field, final Map values)
+    @Nullable
+    protected Calendar getValue(final CalendarField field, @NotNull final Map values)
     {
-        Calendar result = null;
+        @Nullable Calendar result = null;
 
         Object t_Result = values.get(field);
 
@@ -874,6 +880,7 @@ public abstract class WriteQuery
      * @return the value.
      * @precondition field != null
      */
+    @Nullable
     protected BigDecimal getValue(final BigDecimalField field)
     {
         return getValue(field, getValues());
@@ -887,10 +894,11 @@ public abstract class WriteQuery
      * @precondition field != null
      * @precondition values != null
      */
+    @Nullable
     protected BigDecimal getValue(
-        final BigDecimalField field, final Map values)
+        final BigDecimalField field, @NotNull final Map values)
     {
-        BigDecimal result = null;
+        @Nullable BigDecimal result = null;
 
         Object t_Result = values.get(field);
 
@@ -1200,8 +1208,8 @@ public abstract class WriteQuery
      */
     protected boolean shouldBeEscaped(
         final Object value,
-        final Map escapingFlags,
-        final QueryUtils queryUtils)
+        @NotNull final Map escapingFlags,
+        @NotNull final QueryUtils queryUtils)
     {
         boolean result = true;
 
@@ -1225,6 +1233,7 @@ public abstract class WriteQuery
      * @return the escaping flag key.
      * @precondition value != null
      */
+    @NotNull
     protected String buildEscapingFlagKey(final Object value)
     {
         return "||queryj||escaping-flag||" + value;

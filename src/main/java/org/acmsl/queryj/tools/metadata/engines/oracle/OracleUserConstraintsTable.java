@@ -50,6 +50,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the USER_CONSTRAINTS table in the persistence domain.
@@ -74,36 +76,42 @@ public class OracleUserConstraintsTable
     /**
      * The user_constraints table constraint_name field.
      */
+    @NotNull
     public StringField CONSTRAINT_NAME =
         new StringField("CONSTRAINT_NAME", this);
 
     /**
      * The user_constraints table r_constraint_name field.
      */
+    @NotNull
     public StringField R_CONSTRAINT_NAME =
         new StringField("R_CONSTRAINT_NAME", this);
 
     /**
      * The user_constraints table constraint_type field.
      */
+    @NotNull
     public StringField CONSTRAINT_TYPE =
         new StringField("CONSTRAINT_TYPE", this);
 
     /**
      * The user_constraints table table_name field.
      */
+    @NotNull
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
      * The user_constraints table column_name field.
      */
+    @NotNull
     public StringField COLUMN_NAME =
         new StringField("COLUMN_NAME", this);
 
     /**
      * The user_constraints table position field.
      */
+    @NotNull
     public IntField POSITION =
         new IntField("POSITION", this);
 
@@ -129,9 +137,10 @@ public class OracleUserConstraintsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserConstraintsTable getInstance(final String alias)
+    @Nullable
+    public static OracleUserConstraintsTable getInstance(@Nullable final String alias)
     {
-        OracleUserConstraintsTable result = null;
+        @Nullable OracleUserConstraintsTable result = null;
 
         if  (alias != null)
         {
@@ -149,6 +158,7 @@ public class OracleUserConstraintsTable
      * Retrieves a OracleUserConstraintsTable instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleUserConstraintsTable getInstance()
     {
         return OracleUserConstraintsTableSingletonContainer.SINGLETON;
@@ -158,6 +168,7 @@ public class OracleUserConstraintsTable
      * Retrieves the table name.
      * @return such name.
      */
+    @NotNull
     public String getTableName()
     {
         return "USER_CONSTRAINTS";
@@ -167,6 +178,7 @@ public class OracleUserConstraintsTable
      * Retrieves <code>all</code> fields. It's equivalent to a star in a query.
      * @return such fields.
      */
+    @NotNull
     public Field[] getAll()
     {
         return

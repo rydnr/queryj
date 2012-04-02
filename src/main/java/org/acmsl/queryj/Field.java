@@ -37,6 +37,8 @@ package org.acmsl.queryj;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents fields.
@@ -126,6 +128,7 @@ public abstract class Field
      * @param field the field to filter with.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition equals(final Field field)
     {
         return
@@ -145,10 +148,11 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition equals(
         final Field field,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -159,6 +163,7 @@ public abstract class Field
      * Retrieves the variable condition to be able to filter for equality.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition equals()
     {
         return
@@ -176,9 +181,10 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition equals(
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -189,6 +195,7 @@ public abstract class Field
      * Retrieves the variable condition to be able to filter for non-equality.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition notEquals()
     {
         return
@@ -206,9 +213,10 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition notEquals(
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -219,6 +227,7 @@ public abstract class Field
      * Retrieves the variable condition to be able to filter for lower values.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition greaterThan()
     {
         return
@@ -236,9 +245,10 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition greaterThan(
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -250,6 +260,7 @@ public abstract class Field
      * values.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition lessThan()
     {
         return
@@ -267,9 +278,10 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition lessThan(
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -282,6 +294,7 @@ public abstract class Field
      * @return such kind of condition.
      * @precondition query != null
      */
+    @NotNull
     public VariableCondition in(final SelectQuery query)
     {
         return
@@ -303,10 +316,11 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition in(
         final SelectQuery query,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -318,6 +332,7 @@ public abstract class Field
      * not-belongs-to relationships.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition notIn(final SelectQuery query)
     {
         return
@@ -339,10 +354,11 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition notIn(
         final SelectQuery query,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -354,6 +370,7 @@ public abstract class Field
      * Retrieves the variable condition to be able to filter for null values.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition isNull()
     {
         return
@@ -371,9 +388,10 @@ public abstract class Field
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition isNull(
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -399,9 +417,9 @@ public abstract class Field
      * @param name the name.
      * @return the field.
      */
-    protected String toString(final Table table, final String name)
+    protected String toString(@Nullable final Table table, final String name)
     {
-        StringBuffer result = new StringBuffer();
+        @NotNull StringBuffer result = new StringBuffer();
 
         if  (table != null) 
         {

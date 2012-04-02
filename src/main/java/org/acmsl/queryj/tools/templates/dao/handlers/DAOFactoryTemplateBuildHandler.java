@@ -48,6 +48,8 @@ import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -84,7 +86,7 @@ public class DAOFactoryTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -106,8 +108,8 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition basePackage != null
      */
     protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
+        @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData,
         final String basePackage)
       throws  QueryJBuildException
     {
@@ -127,7 +129,7 @@ public class DAOFactoryTemplateBuildHandler
                 retrieveTableTemplates(parameters),
                 DAOFactoryTemplateGenerator.getInstance());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -156,20 +158,20 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String jndiDataSource,
         final String packageName,
         final String basePackage,
         final String engineName,
         final String header,
-        final TableTemplate[] tableTemplates,
-        final DAOFactoryTemplateFactory templateFactory)
+        @Nullable final TableTemplate[] tableTemplates,
+        @NotNull final DAOFactoryTemplateFactory templateFactory)
       throws  QueryJBuildException
     {
         int t_iLength =
             (tableTemplates != null) ? tableTemplates.length : 0;
             
-        DAOFactoryTemplate[] t_aDAOFactoryTemplates =
+        @NotNull DAOFactoryTemplate[] t_aDAOFactoryTemplates =
             new DAOFactoryTemplate[t_iLength];
 
         for  (int t_iDAOFactoryIndex = 0;
@@ -197,7 +199,7 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String basePackage, final String engineName)
+        final String basePackage, @NotNull final String engineName)
     {
         return
             retrievePackage(
@@ -215,8 +217,8 @@ public class DAOFactoryTemplateBuildHandler
      */
     protected String retrievePackage(
         final String basePackage,
-        final String engineName,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOFactoryPackage(
@@ -231,8 +233,9 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition engineName != null
      * @precondition parameters != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -249,10 +252,11 @@ public class DAOFactoryTemplateBuildHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOFactoryFolder(
@@ -268,7 +272,8 @@ public class DAOFactoryTemplateBuildHandler
      * @return the JNDI location.
      * @precondition parameters != null
      */
-    protected String retrieveJNDIDataSource(final Map parameters)
+    @NotNull
+    protected String retrieveJNDIDataSource(@NotNull final Map parameters)
     {
         return
             (String)
@@ -285,7 +290,7 @@ public class DAOFactoryTemplateBuildHandler
      */
     protected void storeDAOFactoryTemplates(
         final DAOFactoryTemplate[] daoFactoryTemplates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DAO_FACTORY_TEMPLATES,
@@ -298,8 +303,9 @@ public class DAOFactoryTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
+    @NotNull
     protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (TableTemplate[])

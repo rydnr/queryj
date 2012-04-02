@@ -50,6 +50,7 @@ import org.acmsl.queryj.TableAlias;
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Indicates JUnit how to test Condition classes.
@@ -84,7 +85,7 @@ public class ConditionTest
      */
     public void test1Condition()
     {
-        Condition t_FirstCondition = USERS.USERID.greaterThan(10);
+        @NotNull Condition t_FirstCondition = USERS.USERID.greaterThan(10);
 
         assertTrue(t_FirstCondition != null);
 
@@ -97,7 +98,7 @@ public class ConditionTest
      */
     public void test2Condition()
     {
-        Condition t_SecondCondition = USERS.NAME.equals();
+        @NotNull Condition t_SecondCondition = USERS.NAME.equals();
 
         assertEquals("USERS.NAME = ?", t_SecondCondition.toString());
     }
@@ -108,7 +109,7 @@ public class ConditionTest
      */
     public void test3Condition()
     {
-        Condition t_SecondCondition = USERS.NAME.equals();
+        @NotNull Condition t_SecondCondition = USERS.NAME.equals();
 
         t_SecondCondition = USERS.NAME.equals();
 
@@ -125,9 +126,9 @@ public class ConditionTest
      */
     public void test4Condition()
     {
-        Condition t_FirstCondition = USERS.USERID.greaterThan(10);
+        @NotNull Condition t_FirstCondition = USERS.USERID.greaterThan(10);
 
-        Condition t_SecondCondition = USERS.NAME.equals();
+        @NotNull Condition t_SecondCondition = USERS.NAME.equals();
 
         t_SecondCondition = t_SecondCondition.or(USERS.NAME.isNull());
 
@@ -144,13 +145,13 @@ public class ConditionTest
      */
     public void test5Condition()
     {
-        Condition t_FirstCondition = USERS.USERID.greaterThan(10);
+        @NotNull Condition t_FirstCondition = USERS.USERID.greaterThan(10);
 
-        Condition t_SecondCondition = USERS.NAME.equals();
+        @NotNull Condition t_SecondCondition = USERS.NAME.equals();
 
         t_SecondCondition = t_SecondCondition.or(USERS.NAME.isNull());
 
-        Condition t_ThirdCondition = USERS.NAME.equals();
+        @NotNull Condition t_ThirdCondition = USERS.NAME.equals();
 
         t_FirstCondition = t_FirstCondition.and(t_SecondCondition);
 
@@ -187,18 +188,21 @@ public class ConditionTest
         /**
          * The USERS table USERID field.
          */
+        @NotNull
         public IntField USERID =
             new IntField("USERID", this) {};
 
         /**
          * The USERS table NAME field.
          */
+        @NotNull
         public Field NAME =
             new Field("NAME", this) {};
 
         /**
          * All fields.
          */
+        @NotNull
         public Field[] ALL =
             new Field[] {USERID, NAME};
 
@@ -210,6 +214,7 @@ public class ConditionTest
         /**
          * The table alias.
          */
+        @NotNull
         public TableAlias ALIAS =
             new TableAlias("usrs", this) {};
 
@@ -226,6 +231,7 @@ public class ConditionTest
          * star in a query.
          * @return such fields.
          */
+        @NotNull
         public Field[] getAll()
         {
             return new Field[] {USERID, NAME};

@@ -40,6 +40,8 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTestSuiteTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -130,27 +132,27 @@ public class TestSuiteTemplate
         final String testCaseImportStatement,
         final String addingTestCaseToSuiteStatement,
         final String addingTestSuiteToSuiteStatement,
-        final Collection testCases)
+        @NotNull final Collection testCases)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
-        StringBuffer t_sbTestCaseImportStatements =
+        @NotNull StringBuffer t_sbTestCaseImportStatements =
             new StringBuffer();
 
-        StringBuffer t_sbAddingTestCasesToSuiteStatements =
+        @NotNull StringBuffer t_sbAddingTestCasesToSuiteStatements =
             new StringBuffer();
 
         Iterator t_itTestCases = testCases.iterator();
 
-        TestTemplate t_TestCase = null;
+        @Nullable TestTemplate t_TestCase = null;
 
-        MessageFormat t_ImportFormatter =
+        @NotNull MessageFormat t_ImportFormatter =
             new MessageFormat(testCaseImportStatement);
 
-        MessageFormat t_TestCaseFormatter =
+        @NotNull MessageFormat t_TestCaseFormatter =
             new MessageFormat(addingTestCaseToSuiteStatement);
 
-        MessageFormat t_TestSuiteFormatter =
+        @NotNull MessageFormat t_TestSuiteFormatter =
             new MessageFormat(addingTestSuiteToSuiteStatement);
 
         while  (   (t_itTestCases != null)
@@ -168,7 +170,7 @@ public class TestSuiteTemplate
                             t_TestCase.getTestName()
                         }));
 
-                MessageFormat t_Formatter = t_TestCaseFormatter;
+                @NotNull MessageFormat t_Formatter = t_TestCaseFormatter;
 
                 if  (t_TestCase.isSuite())
                 {
@@ -184,7 +186,7 @@ public class TestSuiteTemplate
             }
         }
 
-        MessageFormat t_Formatter =
+        @NotNull MessageFormat t_Formatter =
             new MessageFormat(testSuiteTemplate);
 
         t_sbResult.append(

@@ -41,6 +41,7 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -58,6 +59,7 @@ public class TableRepositoryTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return TableRepositoryTemplateGenerator.getInstance();
@@ -76,7 +78,7 @@ public class TableRepositoryTemplateBuildHandler
     protected String retrievePackage(
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveTableRepositoryPackage(projectPackage);
     }
@@ -89,7 +91,7 @@ public class TableRepositoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.TABLE_REPOSITORY_TEMPLATE,

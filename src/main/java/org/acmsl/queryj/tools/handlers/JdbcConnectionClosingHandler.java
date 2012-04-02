@@ -51,6 +51,8 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -78,7 +80,7 @@ public class JdbcConnectionClosingHandler
      * @throws BuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         closeConnection(parameters);
@@ -94,7 +96,7 @@ public class JdbcConnectionClosingHandler
      * @throws QueryJBuildException if the connection cannot be closed.
      * @precondition parameters != null
      */
-    protected void closeConnection(final Map parameters)
+    protected void closeConnection(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         closeConnection(
@@ -109,7 +111,7 @@ public class JdbcConnectionClosingHandler
      * @throws QueryJBuildException whenever the required
      * connection is not present or valid.
      */
-    protected void closeConnection(final Connection connection)
+    protected void closeConnection(@Nullable final Connection connection)
         throws  QueryJBuildException
     {
         if  (connection != null)
@@ -118,7 +120,7 @@ public class JdbcConnectionClosingHandler
             {
                 connection.close();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJBuildException(
@@ -134,7 +136,7 @@ public class JdbcConnectionClosingHandler
      * any reason.
      * @precondition parameters != null
      */
-    protected void removeConnection(final Map parameters)
+    protected void removeConnection(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         parameters.remove(JdbcConnectionOpeningHandler.JDBC_CONNECTION);

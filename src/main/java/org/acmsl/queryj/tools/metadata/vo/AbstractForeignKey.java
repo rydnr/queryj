@@ -36,6 +36,8 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -242,7 +244,7 @@ public abstract class AbstractForeignKey
 
         if  (object instanceof ForeignKey)
         {
-            final ForeignKey t_OtherInstance = (ForeignKey) object;
+            @NotNull final ForeignKey t_OtherInstance = (ForeignKey) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -276,11 +278,11 @@ public abstract class AbstractForeignKey
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof ForeignKey)
         {
-            final ForeignKey t_OtherInstance = (ForeignKey) object;
+            @NotNull final ForeignKey t_OtherInstance = (ForeignKey) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

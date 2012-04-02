@@ -50,6 +50,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.TestTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -87,7 +89,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -108,7 +110,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @precondition projectPackage != null
      */
     protected boolean handle(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String projectPackage,
         final boolean useSubfolders)
       throws  QueryJBuildException
@@ -150,21 +152,21 @@ public class XMLDAOTestTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final DatabaseMetaData metaData,
         final MetadataManager metadataManager,
         final String packageName,
         final String voPackageName,
         final String xmlDAOPackageName,
-        final TableTemplate[] tableTemplates,
+        @Nullable final TableTemplate[] tableTemplates,
         final String header,
-        final XMLDAOTestTemplateFactory templateFactory)
+        @NotNull final XMLDAOTestTemplateFactory templateFactory)
       throws  QueryJBuildException
     {
         int t_iLength =
             (tableTemplates != null) ? tableTemplates.length : 0;
 
-        XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
+        @NotNull XMLDAOTestTemplate[] t_aXMLDAOTestTemplates =
             new XMLDAOTestTemplate[t_iLength];
 
         for  (int t_iXMLDAOTestIndex = 0;
@@ -214,7 +216,7 @@ public class XMLDAOTestTemplateBuildHandler
     protected String retrieveXMLDAOTestPackage(
         final String projectPackage,
         final boolean useSubfolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveXMLDAOTestPackage(
@@ -242,7 +244,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveXMLDAOPackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveXMLDAOPackage(projectPackage);
     }
@@ -269,7 +271,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveValueObjectPackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveValueObjectPackage(projectPackage);
@@ -281,7 +283,8 @@ public class XMLDAOTestTemplateBuildHandler
      * @return the test templates.
      * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(final Map parameters)
+    @NotNull
+    protected Collection retrieveTestTemplates(@NotNull final Map parameters)
     {
         return
             (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
@@ -296,7 +299,7 @@ public class XMLDAOTestTemplateBuildHandler
      */
     protected void storeXMLDAOTestTemplates(
         final XMLDAOTestTemplate[] xmlDAOTestTemplates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.XML_DAO_TEST_TEMPLATES,
@@ -309,7 +312,8 @@ public class XMLDAOTestTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
             (TableTemplate[])
@@ -325,7 +329,7 @@ public class XMLDAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplates(
-        final Collection templates, final Map parameters)
+        final Collection templates, @NotNull final Map parameters)
     {
         parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
@@ -338,9 +342,9 @@ public class XMLDAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplate(
-        final TestTemplate template, final Map parameters)
+        final TestTemplate template, @NotNull final Map parameters)
     {
-        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+        @NotNull Collection t_cTestTemplates = retrieveTestTemplates(parameters);
 
         if  (t_cTestTemplates == null) 
         {

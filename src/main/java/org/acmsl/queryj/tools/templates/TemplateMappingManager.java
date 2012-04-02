@@ -128,6 +128,8 @@ import java.util.Map;
  * Importing Jakarta Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Manages the association between database engines and template
@@ -576,6 +578,7 @@ public class TemplateMappingManager
      * Retrieves a <code>TemplateMappingManager</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static TemplateMappingManager getInstance()
     {
         return TemplateMappingManagerSingletonContainer.SINGLETON;
@@ -642,10 +645,10 @@ public class TemplateMappingManager
      * @param templateFactoryClass the template factory.
      */
     public void addTemplateFactoryClass(
-        final String type,
-        final String engineName,
+        @Nullable final String type,
+        @Nullable final String engineName,
         final String engineVersion,
-        final String templateFactoryClass)
+        @Nullable final String templateFactoryClass)
     {
         if  (   (type                 != null)
              && (engineName           != null)
@@ -659,7 +662,7 @@ public class TemplateMappingManager
                 setMapping(t_mMapping);
             }
 
-            Object t_Key =
+            @NotNull Object t_Key =
                 buildKey(type, engineName, engineVersion);
 
             if  (t_Key != null)
@@ -682,6 +685,7 @@ public class TemplateMappingManager
      * @param type the template type.
      * @return the template factory class name.
      */
+    @Nullable
     public String getDefaultTemplateFactoryClass(final String type)
     {
         return getTemplateFactoryClass(type, DEFAULT_TEMPLATE, null);
@@ -694,14 +698,15 @@ public class TemplateMappingManager
      * @param engineVersion the engine version.
      * @return the template factory class name.
      */
+    @Nullable
     public String getTemplateFactoryClass(
-        final String type,
-        final String engineName,
+        @Nullable final String type,
+        @Nullable final String engineName,
         final String engineVersion)
     {
-        String result = null;
+        @Nullable String result = null;
 
-        Object t_Key = null;
+        @Nullable Object t_Key = null;
 
         if  (   (type       != null)
              && (engineName != null))
@@ -748,13 +753,14 @@ public class TemplateMappingManager
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
      */
+    @Nullable
     public TemplateFactory getTemplateFactory(
         final String type, final String engineName, final String engineVersion)
       throws  QueryJBuildException
     {
-        TemplateFactory result = null;
+        @Nullable TemplateFactory result = null;
 
-        String t_strClassName =
+        @Nullable String t_strClassName =
             getTemplateFactoryClass(
                 type, engineName, engineVersion);
 
@@ -780,21 +786,21 @@ public class TemplateMappingManager
                             type + ".template.factory.class.not.available");
                 }
             }
-            catch  (final ClassNotFoundException classNotFoundException)
+            catch  (@NotNull final ClassNotFoundException classNotFoundException)
             {
                 throw
                     new QueryJBuildException(
                         type + ".template.factory.not.found",
                         classNotFoundException);
             }
-            catch  (final InstantiationException instantiationException)
+            catch  (@NotNull final InstantiationException instantiationException)
             {
                 throw
                     new QueryJBuildException(
                         "invalid." + type + ".template.factory",
                         instantiationException);
             }
-            catch  (final IllegalAccessException illegalAccessException)
+            catch  (@NotNull final IllegalAccessException illegalAccessException)
             {
                 throw
                     new QueryJBuildException(
@@ -812,6 +818,7 @@ public class TemplateMappingManager
      * @param type the template type.
      * @return the key.
      */
+    @NotNull
     protected final String buildKey(final String type)
     {
         return buildKey(type, DEFAULT_TEMPLATE);
@@ -823,9 +830,10 @@ public class TemplateMappingManager
      * @param engineName the engine name.
      * @return the key.
      */
-    private String buildKey(final String type, final String engineName)
+    @NotNull
+    private String buildKey(@Nullable final String type, @Nullable final String engineName)
     {
-        String result = "";
+        @NotNull String result = "";
 
         if  (   (type       != null)
              && (engineName != null))
@@ -843,10 +851,11 @@ public class TemplateMappingManager
      * @param engineVersion the engine version.
      * @return the key.
      */
+    @NotNull
     private String buildKey(
-        final String type, final String engineName, final String engineVersion)
+        final String type, final String engineName, @Nullable final String engineVersion)
     {
-        String result = buildKey(type, engineName);
+        @NotNull String result = buildKey(type, engineName);
 
         if  (engineVersion != null)
         {

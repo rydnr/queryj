@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * importing JDK classes.
@@ -206,7 +208,7 @@ public abstract class AbstractRow
 
         if  (object instanceof Row)
         {
-            final Row t_OtherInstance = (Row) object;
+            @NotNull final Row t_OtherInstance = (Row) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -237,11 +239,11 @@ public abstract class AbstractRow
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof Row)
         {
-            final Row t_OtherInstance = (Row) object;
+            @NotNull final Row t_OtherInstance = (Row) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

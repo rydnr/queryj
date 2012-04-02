@@ -61,6 +61,8 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -152,6 +154,7 @@ public class DataAccessContextLocalTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/DataAccessContextLocal.stg");
@@ -161,6 +164,7 @@ public class DataAccessContextLocalTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "DataAccessContextLocal";
@@ -191,15 +195,15 @@ public class DataAccessContextLocalTemplate
      * @precondition stringUtils != null
      */
     protected void fillCoreParameters(
-        final Map input,
+        @NotNull final Map input,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String basePackageName,
         final String subpackageName,
         final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final StringUtils stringUtils)
     {
@@ -218,7 +222,7 @@ public class DataAccessContextLocalTemplate
 
         input.put("engine_name", engineName);
         input.put("engine_name_lowercased", engineName.toLowerCase());
-        String t_strProcessedHeader = getProcessedHeader(input);
+        @Nullable String t_strProcessedHeader = getProcessedHeader(input);
         if  (t_strProcessedHeader != null)
         {
             input.put("splitted_header", split(t_strProcessedHeader));
@@ -233,7 +237,7 @@ public class DataAccessContextLocalTemplate
      * @precondition input != null
      * @precondition jndiLocation != null
      */
-    protected void fillJndiLocation(final Map input, final String jndiLocation)
+    protected void fillJndiLocation(@NotNull final Map input, final String jndiLocation)
     {
         input.put("jndi_location", jndiLocation);
     }
@@ -255,7 +259,7 @@ public class DataAccessContextLocalTemplate
      * @return the splitted text.
      */
     protected String[] split(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.split(value);
     }

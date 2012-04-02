@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to create DAO test templates.
@@ -69,6 +70,7 @@ public interface DAOTestTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @NotNull
     public DAOTestTemplate createDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,

@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplat
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -78,7 +79,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(
@@ -102,13 +103,13 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String packageName,
         final String header,
-        final QueryPreparedStatementCreatorTemplateFactory templateFactory)
+        @NotNull final QueryPreparedStatementCreatorTemplateFactory templateFactory)
       throws  QueryJBuildException
     {
-        QueryPreparedStatementCreatorTemplate t_Template =
+        @NotNull QueryPreparedStatementCreatorTemplate t_Template =
             templateFactory.createQueryPreparedStatementCreatorTemplate(
                 packageName, header);
 
@@ -121,7 +122,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -139,7 +140,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      */
     protected String retrievePackage(
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveQueryPreparedStatementCreatorPackage(
@@ -155,7 +156,7 @@ public class QueryPreparedStatementCreatorTemplateBuildHandler
      */
     protected void storeTemplate(
         final QueryPreparedStatementCreatorTemplate template,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.QUERY_PREPARED_STATEMENT_CREATOR_TEMPLATE,

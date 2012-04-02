@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains the subtemplates required to create abstract base JDBC DAO.
@@ -676,6 +677,7 @@ public abstract class AbstractJdbcDAOTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return"Generating JdbcDAO.";

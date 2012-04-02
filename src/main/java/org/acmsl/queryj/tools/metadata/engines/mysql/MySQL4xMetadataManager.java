@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.QueryJException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JDK classes.
@@ -140,6 +141,7 @@ public class MySQL4xMetadataManager
      * Retrieves the type manager.
      * @return such instance.
      */
+    @NotNull
     public MetadataTypeManager getMetadataTypeManager()
     {
         return MySQL4xMetadataTypeManager.getInstance();
@@ -149,6 +151,7 @@ public class MySQL4xMetadataManager
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */
+    @NotNull
     public String getName()
     {
         return "mysql4";

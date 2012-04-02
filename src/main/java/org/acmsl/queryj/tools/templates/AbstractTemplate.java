@@ -62,6 +62,8 @@ import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -83,6 +85,7 @@ public abstract class AbstractTemplate
     /**
      * The default StringTemplate error listener.
      */
+    @Nullable
     protected static final StringTemplateErrorListener
         DEFAULT_ST_ERROR_LISTENER =
             new StringTemplateErrorListener()
@@ -169,6 +172,7 @@ public abstract class AbstractTemplate
          * Retrieves the thread.
          * @return such information.
          */
+        @NotNull
         public static FinalizingThread getInstance()
         {
             return THREAD;
@@ -251,9 +255,10 @@ public abstract class AbstractTemplate
      * @return such information.
      * @precondition input != null
      */
+    @Nullable
     public String getProcessedHeader(final Map input)
     {
-        String result = getCachedProcessedHeader();
+        @Nullable String result = getCachedProcessedHeader();
         
         if  (result == null)
         {
@@ -269,9 +274,10 @@ public abstract class AbstractTemplate
      * @return such information.
      * @precondition input != null
      */
+    @Nullable
     public String processHeader(final Map input, final String header)
     {
-        String result = processInnerTemplate(header, input);
+        @Nullable String result = processInnerTemplate(header, input);
 
         setCachedProcessedHeader(result);
         
@@ -331,6 +337,7 @@ public abstract class AbstractTemplate
      * @return such instance.
      * @precondition path != null
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup(final String path)
     {
         return
@@ -350,12 +357,13 @@ public abstract class AbstractTemplate
      * @precondition theme != null
      * @precondition cache != null
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup(
-        final String path, final String theme, final Map cache)
+        final String path, final String theme, @NotNull final Map cache)
     {
-        StringTemplateGroup result = null;
+        @Nullable StringTemplateGroup result = null;
         
-        Object t_Key = buildSTGroupKey(path, theme);
+        @NotNull Object t_Key = buildSTGroupKey(path, theme);
 
         result = (StringTemplateGroup) cache.get(t_Key);
 
@@ -381,6 +389,7 @@ public abstract class AbstractTemplate
      * Retrieves the StringTemplate error listener.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateErrorListener retrieveStErrorListener()
     {
         return DEFAULT_ST_ERROR_LISTENER;
@@ -395,6 +404,7 @@ public abstract class AbstractTemplate
      * @precondition path != null
      * @precondition theme != null
      */
+    @NotNull
     protected final Object buildSTGroupKey(
         final String path, final String theme)
     {
@@ -413,11 +423,12 @@ public abstract class AbstractTemplate
      * @precondition theme != null
      * @precondition stUtils != null
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup(
         final String path,
         final String theme,
         final StringTemplateErrorListener errorListener,
-        final STUtils stUtils)
+        @NotNull final STUtils stUtils)
     {
         return stUtils.retrieveGroup(path, theme, errorListener);
     }
@@ -427,7 +438,7 @@ public abstract class AbstractTemplate
      * @param stringTemplate such template.
      * @precondition stringTemplate != null
      */
-    protected void configure(final StringTemplate stringTemplate)
+    protected void configure(@NotNull final StringTemplate stringTemplate)
     {
         stringTemplate.setPassThroughAttributes(true);
         stringTemplate.setLintMode(true);
@@ -440,9 +451,10 @@ public abstract class AbstractTemplate
      * @return the template.
      * @precondition group != null
      */
-    protected StringTemplate retrieveTemplate(final StringTemplateGroup group)
+    @Nullable
+    protected StringTemplate retrieveTemplate(@Nullable final StringTemplateGroup group)
     {
-        StringTemplate result = null;
+        @Nullable StringTemplate result = null;
         
         if  (group != null)
         {
@@ -467,7 +479,7 @@ public abstract class AbstractTemplate
      * @return such value.
      * @precondition calendar != null
      */
-    protected int retrieveYear(final Calendar calendar)
+    protected int retrieveYear(@NotNull final Calendar calendar)
     {
         return calendar.get(Calendar.YEAR);
     }
@@ -547,14 +559,15 @@ public abstract class AbstractTemplate
      * @precondition template != null
      * @precondition input != null
      */
+    @Nullable
     protected String processInnerTemplate(
-        final String template, final Map input)
+        @Nullable final String template, final Map input)
     {
-        String result = null;
+        @Nullable String result = null;
         
         if  (template != null)
         {
-            StringTemplate t_strInnerTemplate =
+            @NotNull StringTemplate t_strInnerTemplate =
                 new StringTemplate(
                     template, AngleBracketTemplateLexer.class);
 
@@ -572,7 +585,7 @@ public abstract class AbstractTemplate
      */
     protected void traceClassLoaders()
     {
-        FinalizingThread t_FinalizingThread =
+        @NotNull FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
         synchronized (t_FinalizingThread)
@@ -591,7 +604,7 @@ public abstract class AbstractTemplate
      */
     protected void cleanUpClassLoaderTracing()
     {
-        FinalizingThread t_FinalizingThread =
+        @NotNull FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
         synchronized (t_FinalizingThread)
@@ -661,7 +674,7 @@ public abstract class AbstractTemplate
         if  (   (t_Log != null)
              && (t_ClassLoaderUtils != null))
         {
-            StringBuffer t_sbMessage = new StringBuffer();
+            @NotNull StringBuffer t_sbMessage = new StringBuffer();
 
             String t_strAntlrLocation =
                 t_ClassLoaderUtils.findLocation(
@@ -740,7 +753,7 @@ public abstract class AbstractTemplate
      * @precondition decorationUtils != null
      */
     protected String lowercase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.lowerCase(value);
     }
@@ -765,7 +778,7 @@ public abstract class AbstractTemplate
      * @precondition decorationUtils != null
      */
     protected String normalize(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -779,7 +792,7 @@ public abstract class AbstractTemplate
      * @precondition decorationUtils != null
      */
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -793,7 +806,7 @@ public abstract class AbstractTemplate
      * @precondition decorationUtils != null
      */
     protected String normalizeUppercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeUppercase(value);
     }
@@ -804,7 +817,7 @@ public abstract class AbstractTemplate
      * @return such output.
      * @precondition value != null
      */
-    protected String capitalize(final String value)
+    protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
@@ -818,7 +831,7 @@ public abstract class AbstractTemplate
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }

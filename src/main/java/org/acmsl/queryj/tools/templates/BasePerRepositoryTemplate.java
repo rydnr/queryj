@@ -71,6 +71,8 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base logic for all per-repository templates.
@@ -145,6 +147,7 @@ public abstract class BasePerRepositoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected abstract StringTemplateGroup retrieveGroup();
 
     /**
@@ -178,20 +181,20 @@ public abstract class BasePerRepositoryTemplate
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String repositoryName,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final StringUtils stringUtils,
         final PackageUtils packageUtils)
     {
         String result = "";
 
-        StringTemplateGroup t_Group = retrieveGroup();
+        @Nullable StringTemplateGroup t_Group = retrieveGroup();
 
-        StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
         fillParameters(
             new HashMap(),
@@ -252,18 +255,18 @@ public abstract class BasePerRepositoryTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
-        final Map input,
-        final StringTemplate template,
+        @NotNull final Map input,
+        @NotNull final StringTemplate template,
         final String header,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
-        final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String tableRepositoryName,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final Integer[] copyrightYears,
         final StringUtils stringUtils)
@@ -297,8 +300,8 @@ public abstract class BasePerRepositoryTemplate
      * @precondition timestamp != null
      */
     protected void fillHeaderParameters(
-        final Map input,
-        final String header,
+        @NotNull final Map input,
+        @Nullable final String header,
         final Integer[] copyrightYears,
         final String timestamp)
     {
@@ -338,15 +341,15 @@ public abstract class BasePerRepositoryTemplate
      * @precondition stringUtils != null
      */
     protected void fillCoreParameters(
-        final Map input,
+        @NotNull final Map input,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
-        final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String tableRepositoryName,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final StringUtils stringUtils)
     {
@@ -387,8 +390,8 @@ public abstract class BasePerRepositoryTemplate
      */
     protected String retrieveDAOSubpackageName(
         final String basePackageName,
-        final String engineName,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveDAOPackage(basePackageName, engineName);
     }
@@ -403,12 +406,13 @@ public abstract class BasePerRepositoryTemplate
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected Collection decorateTables(
-        final Collection tables,
+        @NotNull final Collection tables,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
         Iterator t_itTableIterator = tables.iterator();
 
@@ -440,7 +444,7 @@ public abstract class BasePerRepositoryTemplate
     protected TableDecorator decorate(
         final String table,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return decoratorFactory.createTableDecorator(table, metadataManager);
     }
@@ -452,18 +456,18 @@ public abstract class BasePerRepositoryTemplate
      * @return <code>true</code> in such case.
      */
     protected boolean definesRepositoryScopedSql(
-        final CustomSqlProvider customSqlProvider)
+        @Nullable final CustomSqlProvider customSqlProvider)
     {
         boolean result = false;
 
-        Collection t_cContents =
+        @Nullable Collection t_cContents =
             (customSqlProvider != null)
             ?  customSqlProvider.getCollection() : null;
 
         if  (t_cContents != null)
         {
-            Object t_Content = null;
-            Sql t_Sql = null;
+            @Nullable Object t_Content = null;
+            @Nullable Sql t_Sql = null;
             String t_strDao;
             boolean t_bMatches;
 

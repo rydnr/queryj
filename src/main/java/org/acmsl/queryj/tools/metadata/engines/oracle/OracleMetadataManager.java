@@ -56,6 +56,8 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -172,7 +174,7 @@ public class OracleMetadataManager
      * @precondition metaData != null
      */
     protected void extractPrimaryKeys(
-        final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema)
       throws  SQLException,
@@ -200,17 +202,17 @@ public class OracleMetadataManager
      * @precndition queryFactory != null
      */
     protected void extractPrimaryKeys(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
-        final String[] tableNames,
-        final QueryFactory queryFactory)
+        @Nullable final String[] tableNames,
+        @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
-        ResultSet t_rsResults = null;
+        @Nullable ResultSet t_rsResults = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
 
@@ -224,14 +226,14 @@ public class OracleMetadataManager
             {
                 try
                 {
-                    SelectQuery t_Query = queryFactory.createSelectQuery();
+                    @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
                     t_Query.select(USER_CONS_COLUMNS.COLUMN_NAME);
 
                     t_Query.from(USER_CONS_COLUMNS);
                     t_Query.from(USER_CONSTRAINTS);
 
-                    Condition t_Condition =
+                    @NotNull Condition t_Condition =
                         USER_CONS_COLUMNS.CONSTRAINT_NAME.equals(
                             USER_CONSTRAINTS.CONSTRAINT_NAME);
 
@@ -281,7 +283,7 @@ public class OracleMetadataManager
                                 USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
                     }
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     throw
                         new QueryJException(
@@ -290,7 +292,7 @@ public class OracleMetadataManager
                 }
             }
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             throw queryjException;
         }
@@ -303,7 +305,7 @@ public class OracleMetadataManager
                     t_rsResults.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -320,7 +322,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -373,18 +375,18 @@ public class OracleMetadataManager
      * @precondition textFunctions != null
      */
     protected void extractForeignKeys(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
-        final String[] tableNames,
-        final QueryFactory queryFactory,
-        final OracleTextFunctions textFunctions)
+        @Nullable final String[] tableNames,
+        @NotNull final QueryFactory queryFactory,
+        @NotNull final OracleTextFunctions textFunctions)
       throws  SQLException,
               QueryJException
     {
-        QueryResultSet t_Results = null;
+        @Nullable QueryResultSet t_Results = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -412,15 +414,15 @@ public class OracleMetadataManager
                     //   and rcol.position = col.position
                     //   and upper(col.table_name) = ?
 
-                    SelectQuery t_Query = queryFactory.createSelectQuery();
+                    @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                    OracleUserConstraintsTable CON =
+                    @Nullable OracleUserConstraintsTable CON =
                         OracleUserConstraintsTable.getInstance("con");
-                    OracleUserConsColumnsTable COL =
+                    @Nullable OracleUserConsColumnsTable COL =
                         OracleUserConsColumnsTable.getInstance("col");
-                    OracleUserConstraintsTable RCON =
+                    @Nullable OracleUserConstraintsTable RCON =
                         OracleUserConstraintsTable.getInstance("rcon");
-                    OracleUserConsColumnsTable RCOL =
+                    @Nullable OracleUserConsColumnsTable RCOL =
                         OracleUserConsColumnsTable.getInstance("rcol");
 
                     t_Query.select(CON.CONSTRAINT_NAME);
@@ -455,12 +457,12 @@ public class OracleMetadataManager
 
                     if  (t_Results != null)
                     {
-                        Collection t_cOriginAttributes = new ArrayList();
-                        Collection t_cDestinationAttributes = new ArrayList();
+                        @NotNull Collection t_cOriginAttributes = new ArrayList();
+                        @NotNull Collection t_cDestinationAttributes = new ArrayList();
                         boolean t_bNewFk = true;
-                        String t_strLastTable = null;
-                        String t_strCurrentTable = null;
-                        String t_strOriginTable = null;
+                        @Nullable String t_strLastTable = null;
+                        @Nullable String t_strCurrentTable = null;
+                        @Nullable String t_strOriginTable = null;
 
                         while  (t_Results.next())
                         {
@@ -514,7 +516,7 @@ public class OracleMetadataManager
                         }
                     }
                 }
-                catch  (final SQLException sqlException)
+                catch  (@NotNull final SQLException sqlException)
                 {
                     throw
                         new QueryJException(
@@ -523,7 +525,7 @@ public class OracleMetadataManager
                 }
 //            }
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             throw queryjException;
         }
@@ -536,7 +538,7 @@ public class OracleMetadataManager
                     t_Results.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -553,7 +555,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -575,7 +577,7 @@ public class OracleMetadataManager
      * @precondition metaData != null
      */
     protected String[] getTableNames(
-        final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema)
       throws  SQLException,
@@ -601,10 +603,10 @@ public class OracleMetadataManager
      * @precondition queryFactory != null
      */
     protected String[] getTableNames(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
-        final QueryFactory queryFactory)
+        @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
@@ -612,15 +614,15 @@ public class OracleMetadataManager
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
-        QueryResultSet t_Results = null;
+        @Nullable QueryResultSet t_Results = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         try
         {
             try
             {
-                SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TABLES.TABLE_NAME);
 
@@ -632,7 +634,7 @@ public class OracleMetadataManager
 
                 t_Results = t_Query.retrieveMatchingResults();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -642,7 +644,7 @@ public class OracleMetadataManager
 
             result = extractTableNames(t_Results);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -653,7 +655,7 @@ public class OracleMetadataManager
 
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             if  (t_Log != null)
             {
@@ -673,7 +675,7 @@ public class OracleMetadataManager
                     t_Results.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -690,7 +692,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -716,7 +718,8 @@ public class OracleMetadataManager
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String[] extractTableNames(final QueryResultSet resultSet)
+    @NotNull
+    protected String[] extractTableNames(@NotNull final QueryResultSet resultSet)
         throws  SQLException
     {
         return
@@ -737,7 +740,7 @@ public class OracleMetadataManager
      * @precondition metaData != null
      */
     protected String[] getColumnNames(
-        final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName)
@@ -767,11 +770,11 @@ public class OracleMetadataManager
      * @precondition queryFactory != null
      */
     protected String[] getColumnNames(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
         final String tableName,
-        final QueryFactory queryFactory)
+        @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
@@ -779,15 +782,15 @@ public class OracleMetadataManager
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
-        ResultSet t_rsResults = null;
+        @Nullable ResultSet t_rsResults = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         try
         {
             try
             {
-                SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.COLUMN_NAME);
 
@@ -813,7 +816,7 @@ public class OracleMetadataManager
                 t_rsResults = t_Query.executeQuery();
                 //t_rsResults = t_PreparedStatement.executeQuery();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -823,7 +826,7 @@ public class OracleMetadataManager
 
             result = extractColumnNames(t_rsResults);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -834,7 +837,7 @@ public class OracleMetadataManager
 
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             if  (t_Log != null)
             {
@@ -854,7 +857,7 @@ public class OracleMetadataManager
                     t_rsResults.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -871,7 +874,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -897,7 +900,8 @@ public class OracleMetadataManager
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String[] extractColumnNames(final ResultSet resultSet)
+    @NotNull
+    protected String[] extractColumnNames(@NotNull final ResultSet resultSet)
         throws  SQLException
     {
         return
@@ -919,7 +923,7 @@ public class OracleMetadataManager
      * @precondition metaData != null
      */
     protected int[] getColumnTypes(
-        final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName,
@@ -952,12 +956,12 @@ public class OracleMetadataManager
      * @precondition queryFactory != null
      */
     protected int[] getColumnTypes(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
         final String tableName,
         final int size,
-        final QueryFactory queryFactory)
+        @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
@@ -965,15 +969,15 @@ public class OracleMetadataManager
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
-        ResultSet t_rsResults = null;
+        @Nullable ResultSet t_rsResults = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         try
         {
             try
             {
-                SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.DATA_TYPE);
 
@@ -990,7 +994,7 @@ public class OracleMetadataManager
 
                 t_rsResults = t_Query.executeQuery();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -1000,7 +1004,7 @@ public class OracleMetadataManager
 
             result = extractColumnTypes(t_rsResults, USER_TAB_COLUMNS.DATA_TYPE);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -1011,7 +1015,7 @@ public class OracleMetadataManager
 
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             if  (t_Log != null)
             {
@@ -1031,7 +1035,7 @@ public class OracleMetadataManager
                     t_rsResults.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1048,7 +1052,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1076,7 +1080,7 @@ public class OracleMetadataManager
      * @precondition resultSet != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet, final String fieldName)
+        @NotNull final ResultSet resultSet, final String fieldName)
       throws  SQLException
     {
         return
@@ -1095,14 +1099,14 @@ public class OracleMetadataManager
      * @precondition metadataTypeManager != null
      */
     protected int[] extractColumnTypes(
-        final ResultSet resultSet,
+        @NotNull final ResultSet resultSet,
         final String fieldName,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws  SQLException
     {
         int[] result = EMPTY_INT_ARRAY;
 
-        String[] t_astrTypes = extractStringFields(resultSet, fieldName);
+        @NotNull String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 
@@ -1135,7 +1139,7 @@ public class OracleMetadataManager
      * @precondition metaData != null
      */
     protected boolean[] getAllowNulls(
-        final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName,
@@ -1168,12 +1172,12 @@ public class OracleMetadataManager
      * @precondition queryFactory != null
      */
     protected boolean[] getAllowNulls(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
         final String tableName,
         final int size,
-        final QueryFactory queryFactory)
+        @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
@@ -1181,15 +1185,15 @@ public class OracleMetadataManager
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
-        ResultSet t_rsResults = null;
+        @Nullable ResultSet t_rsResults = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         try
         {
             try
             {
-                SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COLUMNS.NULLABLE);
 
@@ -1206,7 +1210,7 @@ public class OracleMetadataManager
 
                 t_rsResults = t_Query.executeQuery();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -1219,7 +1223,7 @@ public class OracleMetadataManager
                     t_rsResults,
                     USER_TAB_COLUMNS.NULLABLE);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -1230,7 +1234,7 @@ public class OracleMetadataManager
 
             throw sqlException;
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             if  (t_Log != null)
             {
@@ -1250,7 +1254,7 @@ public class OracleMetadataManager
                     t_rsResults.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1267,7 +1271,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1295,12 +1299,12 @@ public class OracleMetadataManager
      * @precondition resultSet != null
      */
     protected boolean[] extractAllowNull(
-        final ResultSet resultSet, final String fieldName)
+        @NotNull final ResultSet resultSet, final String fieldName)
       throws  SQLException
     {
         boolean[] result = EMPTY_BOOLEAN_ARRAY;
 
-        String[] t_astrTypes = extractStringFields(resultSet, fieldName);
+        @NotNull String[] t_astrTypes = extractStringFields(resultSet, fieldName);
 
         int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
 
@@ -1332,8 +1336,9 @@ public class OracleMetadataManager
      * @precondition metaData != null
      * @precondition tableName != null
      */
+    @Nullable
     protected String getTableComment(
-        final DatabaseMetaData metaData,
+        @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName)
@@ -1363,28 +1368,29 @@ public class OracleMetadataManager
      * @precondition tableNames != null
      * @precndition queryFactory != null
      */
+    @Nullable
     protected String getTableComment(
-        final Connection connection,
+        @NotNull final Connection connection,
         final String catalog,
         final String schema,
         final String tableName,
-        final QueryFactory queryFactory)
+        @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
-        String result = "";
+        @Nullable String result = "";
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
-        ResultSet t_rsResults = null;
+        @Nullable ResultSet t_rsResults = null;
 
-        PreparedStatement t_PreparedStatement = null;
+        @Nullable PreparedStatement t_PreparedStatement = null;
 
         try
         {
             try
             {
-                SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
 
                 t_Query.select(USER_TAB_COMMENTS.COMMENTS);
 
@@ -1406,7 +1412,7 @@ public class OracleMetadataManager
                 
                 t_rsResults = t_Query.executeQuery();
 
-                String t_strComment = null;
+                @Nullable String t_strComment = null;
 
                 if  (   (t_rsResults != null)
                         && (t_rsResults.next()))
@@ -1432,7 +1438,7 @@ public class OracleMetadataManager
                     result = t_strComment;
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -1440,7 +1446,7 @@ public class OracleMetadataManager
                         sqlException);
             }
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             throw queryjException;
         }
@@ -1453,7 +1459,7 @@ public class OracleMetadataManager
                     t_rsResults.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1470,7 +1476,7 @@ public class OracleMetadataManager
                     t_PreparedStatement.close();
                 }
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1488,6 +1494,7 @@ public class OracleMetadataManager
      * Retrieves the type manager.
      * @return such instance.
      */
+    @NotNull
     public MetadataTypeManager getMetadataTypeManager()
     {
         return OracleMetadataTypeManager.getInstance();
@@ -1497,6 +1504,7 @@ public class OracleMetadataManager
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */
+    @NotNull
     public String getName()
     {
         return "oracle";
@@ -1527,9 +1535,10 @@ public class OracleMetadataManager
      * @return the upper-case version of given values.
      * @precondition values != null
      */
-    protected String[] toUpperCase(final String[] values)
+    @NotNull
+    protected String[] toUpperCase(@Nullable final String[] values)
     {
-        final String[] result = new String[(values != null) ? values.length : 0];
+        @NotNull final String[] result = new String[(values != null) ? values.length : 0];
 
         int t_iCount = 0;
 
@@ -1538,7 +1547,7 @@ public class OracleMetadataManager
             t_iCount = values.length;
         }
 
-        String value;
+        @Nullable String value;
 
         for (int t_iIndex = 0 ; t_iIndex < t_iCount; t_iIndex++)
         {

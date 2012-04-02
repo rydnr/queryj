@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -1074,6 +1075,7 @@ public abstract class AbstractMockDAOTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return
@@ -1089,9 +1091,10 @@ public abstract class AbstractMockDAOTestTemplate
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
+    @NotNull
     protected String getTestName(
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
               "Mock"
@@ -1116,6 +1119,7 @@ public abstract class AbstractMockDAOTestTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
@@ -1127,7 +1131,8 @@ public abstract class AbstractMockDAOTestTemplate
      * @return such header.
      * @precondition tableTemplate != null
      */
-    protected String buildHeader(final TableTemplate tableTemplate)
+    @NotNull
+    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
     {
         return
               "Generating MockDAOTest for "

@@ -58,6 +58,7 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -105,7 +106,7 @@ public class CustomValueObjectTemplateBuildHandler
         final MetadataManager metadataManager,
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws BuildException
     {
         return
@@ -121,7 +122,7 @@ public class CustomValueObjectTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, final Map parameters)
+        final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES,
@@ -139,7 +140,7 @@ public class CustomValueObjectTemplateBuildHandler
      */
     protected String retrievePackage(
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {
         return

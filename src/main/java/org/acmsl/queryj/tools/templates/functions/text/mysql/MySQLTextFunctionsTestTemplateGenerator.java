@@ -54,6 +54,8 @@ import org.acmsl.queryj.tools.templates.functions.text
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -90,6 +92,7 @@ public class MySQLTextFunctionsTestTemplateGenerator
      * Retrieves a <code>TextFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MySQLTextFunctionsTestTemplateGenerator getMySQLInstance()
     {
         return MySQLTextFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -106,15 +109,16 @@ public class MySQLTextFunctionsTestTemplateGenerator
      * @return a template.
      * invalid.
      */
+    @Nullable
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        final String packageName,
+        @Nullable final String packageName,
         final String testedPackageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        TextFunctionsTestTemplate result = null;
+        @Nullable TextFunctionsTestTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -139,6 +143,7 @@ public class MySQLTextFunctionsTestTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGene
 import org.acmsl.queryj.tools.templates.dao.handlers.CustomResultSetExtractorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -73,6 +74,7 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
     {
@@ -84,9 +86,10 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the templates.
      */
+    @NotNull
     @Override
     protected BasePerCustomResultTemplate[] retrieveTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (BasePerCustomResultTemplate[])
@@ -109,17 +112,18 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      */
+    @NotNull
     @Override
     protected File retrieveOutputDir(
         final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
+        @NotNull final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             retrieveOutputDir(
@@ -143,12 +147,13 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final File projectOutputDir,
+        @NotNull final File projectOutputDir,
         final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveCustomResultSetExtractorFolder(

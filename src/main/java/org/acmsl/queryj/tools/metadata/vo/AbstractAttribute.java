@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract logicless implementation of <code>Attribute</code> interface.
@@ -412,7 +414,7 @@ public abstract class AbstractAttribute
 
         if  (object instanceof Attribute)
         {
-            final Attribute t_OtherInstance = (Attribute) object;
+            @NotNull final Attribute t_OtherInstance = (Attribute) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -458,11 +460,11 @@ public abstract class AbstractAttribute
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof Attribute)
         {
-            final Attribute t_OtherInstance = (Attribute) object;
+            @NotNull final Attribute t_OtherInstance = (Attribute) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

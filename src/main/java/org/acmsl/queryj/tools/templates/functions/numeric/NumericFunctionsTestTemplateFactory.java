@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTestTemplate;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate JUnit templates test the Database's
@@ -76,6 +77,7 @@ public interface NumericFunctionsTestTemplateFactory
      * @param classEnd the class end.
      * @return a template.
      */
+    @Nullable
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String header,
         final String packageDeclaration,
@@ -110,6 +112,7 @@ public interface NumericFunctionsTestTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         final String packageName,
         final String testedPackageName,

@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Contains the subtemplates used to generate DAO factories according to
@@ -310,6 +311,7 @@ public abstract class AbstractDAOFactoryTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
@@ -321,7 +323,8 @@ public abstract class AbstractDAOFactoryTemplate
      * @return such header.
      * @precondition tableTemplate != null
      */
-    protected String buildHeader(final TableTemplate tableTemplate)
+    @NotNull
+    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
     {
         return
               "Generating DAOFactory for "

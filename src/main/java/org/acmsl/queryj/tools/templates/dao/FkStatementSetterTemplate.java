@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates <code>ForeignKeyStatementSetter</code> sources for a concrete
@@ -98,6 +100,7 @@ public class FkStatementSetterTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return
@@ -109,6 +112,7 @@ public class FkStatementSetterTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "ForeignKeyStatementSetter";

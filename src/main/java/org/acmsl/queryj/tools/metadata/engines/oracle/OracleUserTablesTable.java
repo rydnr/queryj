@@ -49,6 +49,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the USER_TABLES table in the persistence domain.
@@ -73,6 +75,7 @@ public class OracleUserTablesTable
     /**
      * The user_tables table table_name field.
      */
+    @NotNull
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
@@ -98,9 +101,10 @@ public class OracleUserTablesTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTablesTable getInstance(final String alias)
+    @Nullable
+    public static OracleUserTablesTable getInstance(@Nullable final String alias)
     {
-        OracleUserTablesTable result = null;
+        @Nullable OracleUserTablesTable result = null;
 
         if  (alias != null)
         {
@@ -118,6 +122,7 @@ public class OracleUserTablesTable
      * Retrieves a OracleUserTablesTable instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleUserTablesTable getInstance()
     {
         return OracleUserTablesTableSingletonContainer.SINGLETON;
@@ -127,6 +132,7 @@ public class OracleUserTablesTable
      * Retrieves the table name.
      * @return such name.
      */
+    @NotNull
     public String getTableName()
     {
         return "USER_TABLES";
@@ -136,6 +142,7 @@ public class OracleUserTablesTable
      * Retrieves <code>all</code> fields. It's equivalent to a star in a query.
      * @return such fields.
      */
+    @NotNull
     public Field[] getAll()
     {
         return

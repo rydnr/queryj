@@ -41,6 +41,8 @@ import org.acmsl.queryj.Field;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents text fields.
@@ -66,6 +68,7 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition equals(final String value)
     {
         return
@@ -88,11 +91,12 @@ public class StringField
      * @precondition conditionOperatorRepository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected Condition equals(
         final String value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository,
-        final StringUtils stringUtils)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository,
+        @NotNull final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
@@ -106,6 +110,7 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition notEquals(final String value)
     {
         return
@@ -128,11 +133,12 @@ public class StringField
      * @precondition conditionOperatorRepository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected Condition notEquals(
         final String value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository,
-        final StringUtils stringUtils)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository,
+        @NotNull final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
@@ -146,6 +152,7 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition like(final String value)
     {
         return
@@ -168,11 +175,12 @@ public class StringField
      * @precondition conditionOperatorRepository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected Condition like(
         final String value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository,
-        final StringUtils stringUtils)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository,
+        @NotNull final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
@@ -187,6 +195,7 @@ public class StringField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition notLike(final String value)
     {
         return
@@ -210,11 +219,12 @@ public class StringField
      * @precondition conditionOperatorRepository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected Condition notLike(
         final String value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository,
-        final StringUtils stringUtils)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository,
+        @NotNull final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
@@ -229,6 +239,7 @@ public class StringField
      * @param values the values.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition in(final String[] values)
     {
         return
@@ -252,11 +263,12 @@ public class StringField
      * @precondition conditionOperatorRepository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected Condition in(
-        final String[] values,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository,
-        final StringUtils stringUtils)
+        @Nullable final String[] values,
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository,
+        @NotNull final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
@@ -273,13 +285,13 @@ public class StringField
      * @precondition values != null
      * @precondition stringUtils != null
      */
-    protected String toQuotedCsv(final String[] values, final StringUtils stringUtils)
+    protected String toQuotedCsv(@Nullable final String[] values, @NotNull final StringUtils stringUtils)
     {
-        StringBuilder t_sbResult = new StringBuilder();
+        @NotNull StringBuilder t_sbResult = new StringBuilder();
 
         int t_iCount = (values != null) ? values.length : 0;
 
-        String t_strValue;
+        @Nullable String t_strValue;
 
         for (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
@@ -305,6 +317,7 @@ public class StringField
      * @param values the values.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition notIn(final String[] values)
     {
         return
@@ -328,11 +341,12 @@ public class StringField
      * @precondition conditionOperatorRepository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected Condition notIn(
-        final String[] values,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository,
-        final StringUtils stringUtils)
+        @Nullable final String[] values,
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository,
+        @NotNull final StringUtils stringUtils)
     {
         return
             conditionFactory.createCondition(
@@ -347,6 +361,7 @@ public class StringField
      * @param count the parameter count.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition in(final int count)
     {
         return
@@ -367,10 +382,11 @@ public class StringField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition in(
         final int count,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(
@@ -384,6 +400,7 @@ public class StringField
      * @param count the parameter count.
      * @return such kind of condition.
      */
+    @NotNull
     public VariableCondition notIn(final int count)
     {
         return
@@ -404,10 +421,11 @@ public class StringField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected VariableCondition notIn(
         final int count,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createVariableCondition(

@@ -37,6 +37,7 @@ package org.acmsl.queryj;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents double fields.
@@ -62,6 +63,7 @@ public class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition equals(final double value)
     {
         return
@@ -81,10 +83,11 @@ public class DoubleField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition equals(
         final double value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -98,6 +101,7 @@ public class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition notEquals(final double value)
     {
         return
@@ -117,10 +121,11 @@ public class DoubleField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition notEquals(
         final double value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -134,6 +139,7 @@ public class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition greaterThan(final double value)
     {
         return
@@ -153,10 +159,11 @@ public class DoubleField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition greaterThan(
         final double value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(
@@ -170,6 +177,7 @@ public class DoubleField
      * @param value the value.
      * @return such kind of condition.
      */
+    @NotNull
     public Condition lessThan(final double value)
     {
         return
@@ -189,10 +197,11 @@ public class DoubleField
      * @precondition conditionFactory != null
      * @precondition conditionOperatorRepository != null
      */
+    @NotNull
     protected Condition lessThan(
         final double value,
-        final ConditionFactory conditionFactory,
-        final ConditionOperatorRepository conditionOperatorRepository)
+        @NotNull final ConditionFactory conditionFactory,
+        @NotNull final ConditionOperatorRepository conditionOperatorRepository)
     {
         return
             conditionFactory.createCondition(

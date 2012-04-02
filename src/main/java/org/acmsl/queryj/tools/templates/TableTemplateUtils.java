@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides some useful methods when generating Table class.
@@ -73,6 +74,7 @@ public class TableTemplateUtils
      * Retrieves a <code>TableTemplateUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static TableTemplateUtils getInstance()
     {
         return TableTemplateUtilsSingletonContainer.SINGLETON;
@@ -84,7 +86,8 @@ public class TableTemplateUtils
      * @return such name.
      * @precondition table != null
      */
-    public String retrieveTableClassName(final String table)
+    @NotNull
+    public String retrieveTableClassName(@NotNull final String table)
     {
         return
             retrieveTableClassName(table, DecorationUtils.getInstance());
@@ -98,8 +101,9 @@ public class TableTemplateUtils
      * @precondition table != null
      * @precondition decorationUtils != null
      */
+    @NotNull
     protected String retrieveTableClassName(
-        final String table, final DecorationUtils decorationUtils)
+        @NotNull final String table, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(table) + "Table";
     }

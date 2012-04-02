@@ -49,6 +49,8 @@ import org.acmsl.queryj.dao.AutoCommitDisabledMockConnection;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -85,6 +87,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  @Nullable
   org.acmsl.queryj.dao.AutoCommitDisabledMockConnection autocommitdisabledmockconnection = null;
   // JUnitDoclet end class
   
@@ -104,18 +107,19 @@ extends TestCase
   * @return such instance.
   
   */
+  @Nullable
   public org.acmsl.queryj.dao.AutoCommitDisabledMockConnection createInstance()
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-      org.acmsl.queryj.dao.AutoCommitDisabledMockConnection result = null;
+      @Nullable org.acmsl.queryj.dao.AutoCommitDisabledMockConnection result = null;
       try
       {
           result =
               new org.acmsl.queryj.dao.AutoCommitDisabledMockConnection(
                   new org.acmsl.queryj.dao.MockConnection(null, null), null);
       }
-      catch  (final java.sql.SQLException sqlException)
+      catch  (@NotNull final java.sql.SQLException sqlException)
       {
           System.err.println(
               "Cannot create autocommit-disabled mock connection:" + sqlException);

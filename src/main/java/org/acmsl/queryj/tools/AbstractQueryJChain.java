@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.commons.patterns.ArrayListChainAdapter;
 import org.acmsl.commons.patterns.Chain;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -132,6 +134,7 @@ public abstract class AbstractQueryJChain
      * Builds the command.
      * @return the initialized command.
      */
+    @NotNull
     protected QueryJCommand buildCommand()
     {
         return buildCommand(new QueryJCommand());
@@ -142,6 +145,7 @@ public abstract class AbstractQueryJChain
      * @param command the command to be initialized.
      * @return the initialized command.
      */
+    @NotNull
     protected abstract QueryJCommand buildCommand(final QueryJCommand command);
 
     /**
@@ -152,10 +156,11 @@ public abstract class AbstractQueryJChain
      * @return the next hanlder in the chain.
      * @precondition chain != null
      */
+    @Nullable
     public QueryJCommandHandler getNextChainLink(
-        final Chain chain, final QueryJCommandHandler commandHandler)
+        @Nullable final Chain chain, @Nullable final QueryJCommandHandler commandHandler)
     {
-        QueryJCommandHandler result = null;
+        @Nullable QueryJCommandHandler result = null;
 
         if  (   (chain != null)
              && (!chain.isEmpty()))
@@ -188,7 +193,7 @@ public abstract class AbstractQueryJChain
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
-        final Chain chain, final QueryJCommand command)
+        final Chain chain, @NotNull final QueryJCommand command)
       throws QueryJBuildException
     {
         boolean result = false;
@@ -199,7 +204,7 @@ public abstract class AbstractQueryJChain
 
         try 
         {
-            QueryJCommandHandler t_CurrentCommandHandler = null;
+            @Nullable QueryJCommandHandler t_CurrentCommandHandler = null;
 
             do
             {
@@ -226,7 +231,7 @@ public abstract class AbstractQueryJChain
             while  (   (!result)
                     && (t_CurrentCommandHandler != null));
         }
-        catch  (final QueryJBuildException buildException)
+        catch  (@NotNull final QueryJBuildException buildException)
         {
             cleanUpOnError(buildException, command);
 

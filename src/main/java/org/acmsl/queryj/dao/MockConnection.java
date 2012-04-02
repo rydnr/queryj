@@ -63,6 +63,8 @@ import java.util.Properties;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Wraps Connection objects and provides useful insight in unit testing.
@@ -89,7 +91,8 @@ public class MockConnection
     /**
      * The temporary catalog (in case connection set is null).
      */
-    private String m__strTempCatalog = null; 
+    @Nullable
+    private String m__strTempCatalog = null;
 
     /**
      * The temporary read-only attribute (in case connection set is null).
@@ -104,7 +107,8 @@ public class MockConnection
     /**
      * The temporary type map (in case connection set is null).
      */
-    private Map m__mTempTypeMap = null; 
+    @Nullable
+    private Map m__mTempTypeMap = null;
 
     /**
      * The temporary holdability attribute (in case connection set is null).
@@ -202,13 +206,13 @@ public class MockConnection
                     LogFactory.getLog(MockConnection.class).fatal(
                         "Wrapped connection null");
                 }
-                catch  (final Throwable throwable)
+                catch  (@NotNull final Throwable throwable)
                 {
                     // class-loading problem.
                 }
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -348,10 +352,11 @@ public class MockConnection
      * @return a new default Statement object.
      * @exception SQLException if a database access error occurs.
      */
+    @Nullable
     public Statement createStatement()
         throws  SQLException
     {
-        Statement result = null;
+        @Nullable Statement result = null;
 
         try
         {
@@ -405,11 +410,12 @@ public class MockConnection
      * concurrency.
      * @since 1.2
      */
+    @Nullable
     public Statement createStatement(
             int resultSetType, int resultSetConcurrency)
         throws  SQLException
     {
-        Statement result = null;
+        @Nullable Statement result = null;
 
         try
         {
@@ -471,13 +477,14 @@ public class MockConnection
      * concurrency and holdability.
      * @since 1.4
      */
+    @Nullable
     public Statement createStatement(
             int resultSetType,
             int resultSetConcurrency,
             int resultSetHoldability)
         throws  SQLException
     {
-        Statement result = null;
+        @Nullable Statement result = null;
 
         try
         {
@@ -554,10 +561,11 @@ public class MockConnection
      * @exception SQLException if a database access error occurs.
      * @see #setCatalog(java.lang.String)
      */
+    @Nullable
     public String getCatalog()
         throws  SQLException
     {
-        String result = m__strTempCatalog;
+        @Nullable String result = m__strTempCatalog;
 
         try
         {
@@ -603,10 +611,11 @@ public class MockConnection
      * @return a DatabaseMetaData object for this Connection object.
      * @exception SQLException if a database access error occurs.
      */
+    @Nullable
     public DatabaseMetaData getMetaData()
         throws  SQLException
     {
-        DatabaseMetaData result = null;
+        @Nullable DatabaseMetaData result = null;
 
         try
         {
@@ -701,10 +710,11 @@ public class MockConnection
      * @since 1.2
      * @see #setTypeMap(java.util.Map)
      */
+    @Nullable
     public Map getTypeMap()
         throws  SQLException
     {
-        Map result = m__mTempTypeMap;
+        @Nullable Map result = m__mTempTypeMap;
 
         try
         {
@@ -757,10 +767,11 @@ public class MockConnection
      * or this method is called on a closed connection.
      * @see SQLWarning
      */
+    @Nullable
     public SQLWarning getWarnings()
         throws  SQLException
     {
-        SQLWarning result = null;
+        @Nullable SQLWarning result = null;
 
         try
         {
@@ -910,10 +921,11 @@ public class MockConnection
      * @return the native form of this statement.
      * @exception SQLException if a database access error occurs.
     */
+    @Nullable
     public String nativeSQL(String sql)
         throws  SQLException
     {
-        String result = null;
+        @Nullable String result = null;
 
         try
         {
@@ -971,10 +983,11 @@ public class MockConnection
      * the pre-compiled SQL statement.
      * @exception SQLException if a database access error occurs.
      */
+    @Nullable
     public CallableStatement prepareCall(String sql)
         throws  SQLException
     {
-        CallableStatement result = null;
+        @Nullable CallableStatement result = null;
 
         try
         {
@@ -1032,11 +1045,12 @@ public class MockConnection
      * concurrency.
      * @since 1.2
      */
+    @Nullable
     public CallableStatement prepareCall(
             String sql, int resultSetType, int resultSetConcurrency)
         throws  SQLException
     {
-        CallableStatement result = null;
+        @Nullable CallableStatement result = null;
 
         try
         {
@@ -1101,10 +1115,11 @@ public class MockConnection
      * pre-compiled SQL statement.
      * @exception SQLException if a database access error occurs.
      */
+    @Nullable
     public PreparedStatement prepareStatement(final String sql)
         throws  SQLException
     {
-        PreparedStatement result = null;
+        @Nullable PreparedStatement result = null;
 
         try
         {
@@ -1121,14 +1136,14 @@ public class MockConnection
                     LogFactory.getLog(MockConnection.class).fatal(
                         "Wrapped connection null");
                 }
-                catch (final Throwable throwable)
+                catch (@NotNull final Throwable throwable)
                 {
                     // Class loading problem.
                     System.err.println("Wrapped connection null");
                 }
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -1175,11 +1190,12 @@ public class MockConnection
      * type and concurrency.
      * @since 1.2
      */
+    @Nullable
     public PreparedStatement prepareStatement(
             String sql, int resultSetType, int resultSetConcurrency)
         throws  SQLException
     {
-        PreparedStatement result = null;
+        @Nullable PreparedStatement result = null;
 
         try
         {
@@ -1650,10 +1666,11 @@ public class MockConnection
      * @since 1.4
      * @see Savepoint
      */
+    @Nullable
     public Savepoint setSavepoint()
         throws  SQLException
     {
-        Savepoint result = null;
+        @Nullable Savepoint result = null;
 
         try
         {
@@ -1701,10 +1718,11 @@ public class MockConnection
      * @since 1.4
      * @see Savepoint
      */
+    @Nullable
     public Savepoint setSavepoint(final String savepoint)
         throws  SQLException
     {
-        Savepoint result = null;
+        @Nullable Savepoint result = null;
 
         try
         {
@@ -1860,6 +1878,7 @@ public class MockConnection
      * @since 1.4
      * @see java.sql.ResultSet
      */
+    @Nullable
     public PreparedStatement prepareStatement(
         final String sql,
         final int    resultSetType,
@@ -1867,7 +1886,7 @@ public class MockConnection
         final int    resultSetHoldability)
       throws  SQLException
     {
-        PreparedStatement result = null;
+        @Nullable PreparedStatement result = null;
 
         try
         {
@@ -1936,6 +1955,7 @@ public class MockConnection
      * @since 1.4
      * @see java.sql.ResultSet
      */
+    @Nullable
     public CallableStatement prepareCall(
         final String sql,
         final int    resultSetType,
@@ -1943,7 +1963,7 @@ public class MockConnection
         final int    resultSetHoldability)
       throws  SQLException
     {
-        CallableStatement result = null;
+        @Nullable CallableStatement result = null;
 
         try
         {
@@ -2017,11 +2037,12 @@ public class MockConnection
      * auto-generated keys should be returned.
      * @since 1.4
      */
+    @Nullable
     public PreparedStatement prepareStatement(
         final String sql, final int autoGeneratedKeys)
       throws  SQLException
     {
-        PreparedStatement result = null;
+        @Nullable PreparedStatement result = null;
 
         try
         {
@@ -2091,11 +2112,12 @@ public class MockConnection
      * @exception SQLException if a database access error occurs.
      * @since 1.4
      */
+    @Nullable
     public PreparedStatement prepareStatement(
         final String sql, final int[] columnIndexes)
       throws  SQLException
     {
-        PreparedStatement result = null;
+        @Nullable PreparedStatement result = null;
 
         try
         {
@@ -2168,11 +2190,12 @@ public class MockConnection
      * @exception SQLException if a database access error occurs.
      * @since 1.4
      */
+    @Nullable
     public PreparedStatement prepareStatement(
         final String sql, final String[] columnNames)
       throws  SQLException
     {
-        PreparedStatement result = null;
+        @Nullable PreparedStatement result = null;
 
         try
         {
@@ -2214,10 +2237,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Struct createStruct(final String name, final Object[] attributes)
         throws SQLException
     {
-        Struct result = null;
+        @Nullable Struct result = null;
 
         try
         {
@@ -2235,7 +2259,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2258,10 +2282,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Array createArrayOf(final String typeName, final Object[] elements)
         throws SQLException
     {
-        Array result = null;
+        @Nullable Array result = null;
 
         try
         {
@@ -2279,7 +2304,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2302,10 +2327,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Properties getClientInfo()
         throws SQLException
     {
-        Properties result = null;
+        @Nullable Properties result = null;
 
         try
         {
@@ -2321,7 +2347,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2360,7 +2386,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2379,10 +2405,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public String getClientInfo(final String value)
         throws SQLException
     {
-        String result = null;
+        @Nullable String result = null;
 
         try
         {
@@ -2398,7 +2425,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2437,7 +2464,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2475,7 +2502,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2498,10 +2525,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public SQLXML createSQLXML()
         throws SQLException
     {
-        SQLXML result = null;
+        @Nullable SQLXML result = null;
 
         try
         {
@@ -2517,7 +2545,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2540,10 +2568,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public NClob createNClob()
         throws SQLException
     {
-        NClob result = null;
+        @Nullable NClob result = null;
 
         try
         {
@@ -2559,7 +2588,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2582,10 +2611,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Blob createBlob()
         throws SQLException
     {
-        Blob result = null;
+        @Nullable Blob result = null;
 
         try
         {
@@ -2601,7 +2631,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2624,10 +2654,11 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Clob createClob()
         throws SQLException
     {
-        Clob result = null;
+        @Nullable Clob result = null;
 
         try
         {
@@ -2643,7 +2674,7 @@ public class MockConnection
                     "Wrapped connection null");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             MockDataSource t_MockDataSource = getMockDataSource();
 
@@ -2677,7 +2708,7 @@ public class MockConnection
      * @param wrappedConnection the wrapped connection.
      * @return <code>true</code> if the wrapped connection is compatible with given class.
      */
-    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedConnection)
+    protected boolean isWrapperFor(final Class wrapperClass, @Nullable final Object wrappedConnection)
     {
         return
             (   (wrappedConnection != null)
@@ -2687,6 +2718,7 @@ public class MockConnection
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Object unwrap(final Class wrapperClass)
     {
         return unwrap(wrapperClass, getConnection());
@@ -2698,9 +2730,10 @@ public class MockConnection
      * @param wrappedConnection the wrapped connection.
      * @return the wrapped connection if it's compatible.
      */
+    @Nullable
     protected Object unwrap(final Class wrapperClass, final Object wrappedConnection)
     {
-        Object result = null;
+        @Nullable Object result = null;
 
         if  (isWrapperFor(wrapperClass, wrappedConnection))
         {

@@ -64,6 +64,8 @@ import java.util.Map;
  * Importing some Commons-Collection classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds the Spring DAO declaration file.
@@ -82,6 +84,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return DataAccessContextLocalTemplateGenerator.getInstance();
@@ -111,21 +114,22 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @precondition tableNames != null
      * @precondition factory != null
      */
+    @Nullable
     protected BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
         final String engineName,
         final String header,
         final Collection tableNames,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        BasePerRepositoryTemplate result = null;
+        @Nullable BasePerRepositoryTemplate result = null;
 
         if  (templateFactory instanceof DataAccessContextLocalTemplateFactory)
         {
@@ -169,6 +173,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected String retrievePackage(
         final String engineName,
         final String projectPackage,
@@ -185,7 +190,7 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DATAACCESSCONTEXTLOCAL_TEMPLATE,
@@ -198,7 +203,8 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @return the location.
      * @precondition parameters != null
      */
-    protected String retrieveJNDILocation(final Map parameters)
+    @NotNull
+    protected String retrieveJNDILocation(@NotNull final Map parameters)
     {
         return
             (String) parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);

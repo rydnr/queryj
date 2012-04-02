@@ -51,6 +51,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.Project;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Minimal logging helper to avoid using Ant-specific
@@ -204,7 +205,7 @@ public class QueryJAntLog
      * @param project the <code>Project</code> instance.
      * @precondition project != null
      */
-    protected void trace(final Object message, final Project project)
+    protected void trace(final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_VERBOSE);
     }
@@ -214,7 +215,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void trace(final Object message, final Throwable throwable)
+    public void trace(final Object message, @NotNull final Throwable throwable)
     {
         trace(message, throwable, getProject());
     }
@@ -226,8 +227,8 @@ public class QueryJAntLog
      */
     protected void trace(
         final Object message,
-        final Throwable throwable,
-        final Project project)
+        @NotNull final Throwable throwable,
+        @NotNull final Project project)
     {
         project.log(
             message + "(" + throwable.getMessage() + ")",
@@ -249,7 +250,7 @@ public class QueryJAntLog
      * @param project the <code>Project</code> instance.
      * @precondition project != null
      */
-    protected void debug(final Object message, final Project project)
+    protected void debug(final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_DEBUG);
     }
@@ -259,7 +260,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void debug(final Object message, final Throwable throwable)
+    public void debug(final Object message, @NotNull final Throwable throwable)
     {
         debug(message, throwable, getProject());
     }
@@ -271,8 +272,8 @@ public class QueryJAntLog
      */
     protected void debug(
         final Object message,
-        final Throwable throwable,
-        final Project project)
+        @NotNull final Throwable throwable,
+        @NotNull final Project project)
     {
         project.log(
             message + "(" + throwable.getMessage() + ")",
@@ -294,7 +295,7 @@ public class QueryJAntLog
      * @param project the <code>Project</code> instance.
      * @precondition project != null
      */
-    protected void info(final Object message, final Project project)
+    protected void info(final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_INFO);
     }
@@ -304,7 +305,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void info(final Object message, final Throwable throwable)
+    public void info(final Object message, @NotNull final Throwable throwable)
     {
         info(message, throwable, getProject());
     }
@@ -316,8 +317,8 @@ public class QueryJAntLog
      */
     protected void info(
         final Object message,
-        final Throwable throwable,
-        final Project project)
+        @NotNull final Throwable throwable,
+        @NotNull final Project project)
     {
         project.log(
             message + "(" + throwable.getMessage() + ")",
@@ -339,7 +340,7 @@ public class QueryJAntLog
      * @param project the <code>Project</code> instance.
      * @precondition project != null
      */
-    protected void warn(final Object message, final Project project)
+    protected void warn(final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_WARN);
     }
@@ -349,7 +350,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void warn(final Object message, final Throwable throwable)
+    public void warn(final Object message, @NotNull final Throwable throwable)
     {
         warn(message, throwable, getProject());
     }
@@ -361,8 +362,8 @@ public class QueryJAntLog
      */
     protected void warn(
         final Object message,
-        final Throwable throwable,
-        final Project project)
+        @NotNull final Throwable throwable,
+        @NotNull final Project project)
     {
         project.log(
             message + "(" + throwable.getMessage() + ")",
@@ -384,7 +385,7 @@ public class QueryJAntLog
      * @param project the <code>Project</code> instance.
      * @precondition project != null
      */
-    protected void error(final Object message, final Project project)
+    protected void error(final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_ERR);
     }
@@ -394,7 +395,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void error(final Object message, final Throwable throwable)
+    public void error(final Object message, @NotNull final Throwable throwable)
     {
         error(message, throwable, getProject());
     }
@@ -406,8 +407,8 @@ public class QueryJAntLog
      */
     protected void error(
         final Object message,
-        final Throwable throwable,
-        final Project project)
+        @NotNull final Throwable throwable,
+        @NotNull final Project project)
     {
         project.log(
             message + "(" + throwable.getMessage() + ")",
@@ -429,7 +430,7 @@ public class QueryJAntLog
      * @param project the <code>Project</code> instance.
      * @precondition project != null
      */
-    protected void fatal(final Object message, final Project project)
+    protected void fatal(final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_ERR);
     }
@@ -439,7 +440,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void fatal(final Object message, final Throwable throwable)
+    public void fatal(final Object message, @NotNull final Throwable throwable)
     {
         fatal(message, throwable, getProject());
     }
@@ -451,8 +452,8 @@ public class QueryJAntLog
      */
     protected void fatal(
         final Object message,
-        final Throwable throwable,
-        final Project project)
+        @NotNull final Throwable throwable,
+        @NotNull final Project project)
     {
         project.log(
             message + "(" + throwable.getMessage() + ")",

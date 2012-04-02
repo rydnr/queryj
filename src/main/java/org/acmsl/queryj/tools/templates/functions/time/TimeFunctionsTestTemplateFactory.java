@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.functions.time;
  */
 import org.acmsl.queryj.tools.templates.TemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplate;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate JUnit templates test the Database's
@@ -57,6 +58,7 @@ public interface TimeFunctionsTestTemplateFactory
      * @param quote the identifier quote string.
      * @return a template.
      */
+    @Nullable
     public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
         final String packageName,
         final String testedPackageName,

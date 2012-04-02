@@ -39,6 +39,8 @@ package org.acmsl.queryj.dao;
 /*
  * Importing Spring classes.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.transaction.support.DefaultTransactionStatus;
 
 /*
@@ -83,6 +85,7 @@ public class TransactionTokenFactory
      * Retrieves a <code>TransactionTokenFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static TransactionTokenFactory getInstance()
     {
         return TransactionTokenFactorySingletonContainer.SINGLETON;
@@ -95,11 +98,12 @@ public class TransactionTokenFactory
      * @precondition transactionStatus != null
      * @precondition dataSource != null
      */
+    @Nullable
     public DataSourceTransactionToken createTransactionToken(
-        final DefaultTransactionStatus transactionStatus,
-        final DataSource dataSource)
+        @Nullable final DefaultTransactionStatus transactionStatus,
+        @Nullable final DataSource dataSource)
     {
-        DataSourceTransactionToken result = null;
+        @Nullable DataSourceTransactionToken result = null;
 
         if  (   (transactionStatus != null)
              && (dataSource != null))

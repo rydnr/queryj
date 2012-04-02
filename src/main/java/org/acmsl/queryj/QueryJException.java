@@ -33,6 +33,9 @@
  */
 package org.acmsl.queryj;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents abnormal situations regarding QueryJ processing.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -74,9 +77,9 @@ public class QueryJException
      * @param cause the cause.
      * @return the error description.
      */
-    public String toString(final String message, final Throwable cause)
+    public String toString(final String message, @Nullable final Throwable cause)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append(message);
 

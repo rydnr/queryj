@@ -43,6 +43,8 @@ import org.acmsl.queryj.tools.templates.functions.numeric
 
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTestTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -165,6 +167,7 @@ public class MySQLNumericFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getMapping(final String function)
     {
         return getMapping(function, MySQLNumericFunctionsTemplate.class);
@@ -175,6 +178,7 @@ public class MySQLNumericFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getSpecialMapping(final String function)
     {
         return
@@ -189,7 +193,7 @@ public class MySQLNumericFunctionsTestTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(final Map mappings)
+    protected boolean isFilledIn(@Nullable final Map mappings)
     {
         return
             (   (mappings != null)
@@ -212,6 +216,7 @@ public class MySQLNumericFunctionsTestTemplate
      * Retrieves the capitalized words.
      * @return such words.
      */
+    @NotNull
     protected String[] getCapitalizedWords()
     {
         return MySQLNumericFunctionsTemplate.CAPITALIZED_WORDS;
@@ -221,6 +226,7 @@ public class MySQLNumericFunctionsTestTemplate
      * Retrieves the field types.
      * @return such words.
      */
+    @NotNull
     protected String[] getFieldTypes()
     {
         return MySQLNumericFunctionsTemplate.FIELD_TYPES;

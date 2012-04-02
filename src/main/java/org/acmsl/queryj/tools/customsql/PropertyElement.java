@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.customsql;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models &lt;property&gt; elements in <i>custom-sql</i> models, which
@@ -150,7 +152,7 @@ public class PropertyElement
 
         if  (object instanceof Property)
         {
-            final Property t_OtherInstance = (Property) object;
+            @NotNull final Property t_OtherInstance = (Property) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -176,11 +178,11 @@ public class PropertyElement
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof Property)
         {
-            final Property t_OtherInstance = (Property) object;
+            @NotNull final Property t_OtherInstance = (Property) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

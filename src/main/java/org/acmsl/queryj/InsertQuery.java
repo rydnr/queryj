@@ -43,6 +43,7 @@ import org.acmsl.queryj.IntField;
 import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.Table;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -338,7 +339,7 @@ public class InsertQuery
      * @param field the field.
      * @precondition field != null
      */
-    public void value(final Field field)
+    public void value(@NotNull final Field field)
     {
         addField(field);
         addVariableCondition(field.equals());
@@ -381,10 +382,10 @@ public class InsertQuery
      */
     protected String toString(
         final Table table,
-        final List fields,
-        final QueryUtils queryUtils)
+        @NotNull final List fields,
+        @NotNull final QueryUtils queryUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append("INSERT INTO ");
 
@@ -392,21 +393,21 @@ public class InsertQuery
 
         t_sbResult.append(" ( ");
 
-        List t_alBriefFields = new ArrayList();
-        List t_alValues = new ArrayList();
+        @NotNull List t_alBriefFields = new ArrayList();
+        @NotNull List t_alValues = new ArrayList();
 
         Iterator t_FieldIterator = fields.iterator();
 
         while  (   (t_FieldIterator != null)
                 && (t_FieldIterator.hasNext()))
         {
-            Field t_Field = (Field) t_FieldIterator.next();
+            @NotNull Field t_Field = (Field) t_FieldIterator.next();
 
             if  (t_Field != null)
             {
                 t_alBriefFields.add(t_Field.toSimplifiedString());
 
-                String t_strValue = "";
+                @NotNull String t_strValue = "";
 
                 Object t_Value = getValue(t_Field);
 

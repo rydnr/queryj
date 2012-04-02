@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate JUnit templates test the Database's
@@ -58,6 +59,7 @@ public interface SystemFunctionsTestTemplateFactory
      * @param quote the identifier quote string.
      * @return a template.
      */
+    @Nullable
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
         final String packageName,
         final String testedPackageName,

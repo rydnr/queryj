@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create base DAO factory templates.
@@ -60,6 +61,7 @@ public interface BaseDAOFactoryTemplateFactory
      * @param repositoryName the repository name.
      * @return the template.
      */
+    @NotNull
     public BaseDAOFactoryTemplate createBaseDAOFactoryTemplate(
         final String tableName,
         final MetadataManager metadataManager,

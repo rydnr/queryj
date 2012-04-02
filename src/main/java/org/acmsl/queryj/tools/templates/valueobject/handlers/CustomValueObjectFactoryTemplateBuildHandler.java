@@ -58,6 +58,7 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -83,6 +84,7 @@ public class CustomValueObjectFactoryTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
     {
         return CustomValueObjectFactoryTemplateGenerator.getInstance();
@@ -96,7 +98,7 @@ public class CustomValueObjectFactoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, final Map parameters)
+        final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_FACTORY_TEMPLATES,

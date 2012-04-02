@@ -54,6 +54,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -103,7 +105,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -120,7 +122,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition metaData != null
      */
     protected void buildTemplates(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
@@ -131,7 +133,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -152,7 +154,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition quote != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote)
@@ -181,7 +183,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition metadataManager != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
@@ -234,28 +236,28 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition resultElements != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerCustomResultTemplateFactory templateFactory,
+        @NotNull final BasePerCustomResultTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
         final String header,
-        final Result[] resultElements)
+        @Nullable final Result[] resultElements)
       throws  QueryJBuildException
     {
         boolean result = false;
 
         int t_iLength = (resultElements != null) ? resultElements.length : 0;
 
-        Collection t_cTemplates = new ArrayList();
+        @NotNull Collection t_cTemplates = new ArrayList();
 
-        Result t_ResultElement = null;
+        @Nullable Result t_ResultElement = null;
 
-        BasePerCustomResultTemplate t_Template = null;
+        @Nullable BasePerCustomResultTemplate t_Template = null;
 
         try
         {
@@ -286,7 +288,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                 }
             }
         }
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             throw
                 new QueryJBuildException(
@@ -317,7 +319,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -371,19 +373,20 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
+    @NotNull
     protected Result[] retrieveCustomResult(
-        final Map parameters,
+        @NotNull final Map parameters,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        Result[] result = (Result[]) parameters.get(CUSTOM_RESULT);
+        @NotNull Result[] result = (Result[]) parameters.get(CUSTOM_RESULT);
 
         if  (result == null)
         {
-            Collection t_cCustomResult = new ArrayList();
+            @NotNull Collection t_cCustomResult = new ArrayList();
 
-            Result[] t_aResultElements =
+            @NotNull Result[] t_aResultElements =
                 retrieveCustomResultElements(
                     customSqlProvider, metadataManager);
 
@@ -409,13 +412,14 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @return such foreign keys.
      * @precondition metadataManager != null
      */
+    @NotNull
     protected Result[] retrieveCustomResultElements(
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
-        Collection t_cResult = new ArrayList();
+        @NotNull Collection t_cResult = new ArrayList();
 
-        Collection t_cCollection =
+        @Nullable Collection t_cCollection =
             (customSqlProvider != null)
             ? customSqlProvider.getCollection() : null;
 
@@ -425,7 +429,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
             if  (t_itElements != null)
             {
-                Object t_Item = null;
+                @Nullable Object t_Item = null;
 
                 while  (t_itElements.hasNext())
                 {

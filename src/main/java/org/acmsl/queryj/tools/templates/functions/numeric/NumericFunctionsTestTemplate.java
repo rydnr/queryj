@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.templates.functions.numeric
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -179,6 +180,7 @@ public abstract class NumericFunctionsTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return "NumericFunctionsTest";

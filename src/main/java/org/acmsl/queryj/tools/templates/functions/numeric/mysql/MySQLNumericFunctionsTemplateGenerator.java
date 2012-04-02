@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.functions.numeric
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate MySQL's numeric function repositories.
@@ -81,6 +83,7 @@ public class MySQLNumericFunctionsTemplateGenerator
      * Retrieves a <code>MySQLNumericFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MySQLNumericFunctionsTemplateGenerator getMySQLInstance()
     {
         return MySQLNumericFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -95,14 +98,15 @@ public class MySQLNumericFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String packageName,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        NumericFunctionsTemplate result = null;
+        @Nullable NumericFunctionsTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -126,6 +130,7 @@ public class MySQLNumericFunctionsTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -78,7 +80,7 @@ public class ProcedureRepositoryTemplate
      * @precondition metadataTypeManager != null
      */
     public ProcedureRepositoryTemplate(
-        final String header,
+        @Nullable final String header,
         final DecoratorFactory decoratorFactory,
         final String packageName,
         final String repository,
@@ -202,22 +204,22 @@ public class ProcedureRepositoryTemplate
         final String outParameterRetrieval,
         final String valueObjectConstruction,
         final String classEnd,
-        final List proceduresMetadata,
-        final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils)
+        @NotNull final List proceduresMetadata,
+        @NotNull final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final StringUtils stringUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
-        Object[] t_aRepository =
+        @NotNull Object[] t_aRepository =
             new Object[]
             {
                 stringUtils.normalize(repository, '_')
             };
 
-        Object[] t_aPackageName = new Object[]{packageName};
+        @NotNull Object[] t_aPackageName = new Object[]{packageName};
 
-        MessageFormat t_Formatter = new MessageFormat(header);
+        @NotNull MessageFormat t_Formatter = new MessageFormat(header);
         t_sbResult.append(t_Formatter.format(t_aRepository));
 
         t_Formatter = new MessageFormat(packageDeclaration);
@@ -245,49 +247,49 @@ public class ProcedureRepositoryTemplate
 
         Iterator t_itProceduresMetadata = proceduresMetadata.iterator();
 
-        MessageFormat t_JavadocFormatter =
+        @NotNull MessageFormat t_JavadocFormatter =
             new MessageFormat(procedureJavadoc);
 
-        MessageFormat t_ParameterJavadocFormatter =
+        @NotNull MessageFormat t_ParameterJavadocFormatter =
             new MessageFormat(procedureParameterJavadoc);
 
-        MessageFormat t_ParameterDeclarationFormatter =
+        @NotNull MessageFormat t_ParameterDeclarationFormatter =
             new MessageFormat(procedureParameterDeclaration);
 
-        MessageFormat t_ProcedureSentenceFormatter =
+        @NotNull MessageFormat t_ProcedureSentenceFormatter =
             new MessageFormat(procedureSentence);
 
-        MessageFormat t_OutParameterRegistrationFormatter =
+        @NotNull MessageFormat t_OutParameterRegistrationFormatter =
             new MessageFormat(outParameterRegistration);
 
-        MessageFormat t_InParameterSpecificationFormatter =
+        @NotNull MessageFormat t_InParameterSpecificationFormatter =
             new MessageFormat(inParameterSpecification);
 
-        MessageFormat t_ValueObjectConstructionFormatter =
+        @NotNull MessageFormat t_ValueObjectConstructionFormatter =
             new MessageFormat(valueObjectConstruction);
 
-        String t_strComment = null;
+        @Nullable String t_strComment = null;
 
         int t_iReturnType = -1;
 
         while  (t_itProceduresMetadata.hasNext())
         {
-            ProcedureMetadata t_ProcedureMetadata =
+            @NotNull ProcedureMetadata t_ProcedureMetadata =
                 (ProcedureMetadata) t_itProceduresMetadata.next();
 
-            ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
+            @NotNull ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
                 getProcedureParametersMetadata(t_ProcedureMetadata);
 
             if  (   (t_ProcedureMetadata            != null)
                  && (t_aProcedureParametersMetadata != null))
             {
-                StringBuffer t_sbParametersJavadoc = new StringBuffer();
-                StringBuffer t_sbParametersDeclaration = new StringBuffer();
-                StringBuffer t_sbProcedureSentenceParameters = new StringBuffer();
-                StringBuffer t_sbOutParametersRegistration = new StringBuffer();
-                StringBuffer t_sbInParametersSpecification = new StringBuffer();
-                StringBuffer t_sbOutParametersRetrieval = new StringBuffer();
-                StringBuffer t_sbValueObjectConstruction = new StringBuffer();
+                @NotNull StringBuffer t_sbParametersJavadoc = new StringBuffer();
+                @NotNull StringBuffer t_sbParametersDeclaration = new StringBuffer();
+                @NotNull StringBuffer t_sbProcedureSentenceParameters = new StringBuffer();
+                @NotNull StringBuffer t_sbOutParametersRegistration = new StringBuffer();
+                @NotNull StringBuffer t_sbInParametersSpecification = new StringBuffer();
+                @NotNull StringBuffer t_sbOutParametersRetrieval = new StringBuffer();
+                @NotNull StringBuffer t_sbValueObjectConstruction = new StringBuffer();
 
                 int t_iInParameterIndex = 1;
 
@@ -503,10 +505,10 @@ public class ProcedureRepositoryTemplate
                             t_sbParametersJavadoc.toString()}
                         ));
 
-                String t_strReturnType =
+                @Nullable String t_strReturnType =
                     metadataTypeManager.getProcedureResultType(t_iReturnType);
 
-                MessageFormat t_ProcedureBodyFormatter =
+                @NotNull MessageFormat t_ProcedureBodyFormatter =
                     new MessageFormat(procedureBody);
 
                 t_sbResult.append(

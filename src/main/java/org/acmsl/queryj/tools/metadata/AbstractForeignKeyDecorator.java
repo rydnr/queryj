@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -71,7 +72,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param foreignKey the foreign key.
      * @precondition foreignKey != null
      */
-    public AbstractForeignKeyDecorator(final ForeignKey foreignKey)
+    public AbstractForeignKeyDecorator(@NotNull final ForeignKey foreignKey)
     {
         this(
             foreignKey.getSourceTableName(),
@@ -178,9 +179,9 @@ public abstract class AbstractForeignKeyDecorator
      * @precondition decorationUtils != null
      */
     protected String toVo(
-        final String tableName,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final DecorationUtils decorationUtils)
+        @NotNull final String tableName,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final DecorationUtils decorationUtils)
     {
         return
             capitalize(
@@ -197,7 +198,7 @@ public abstract class AbstractForeignKeyDecorator
      * @precondition decorationUtils != null
      */
     protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value.toLowerCase());
     }
@@ -211,7 +212,7 @@ public abstract class AbstractForeignKeyDecorator
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }
@@ -221,6 +222,7 @@ public abstract class AbstractForeignKeyDecorator
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return "" + getForeignKey();
@@ -233,6 +235,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      * @precondition foreignKey != null
      */
+    @NotNull
     protected String toString(final ForeignKey foreignKey)
     {
         return "" + foreignKey;
@@ -253,7 +256,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return such information.
      * @precondition foreignKey != null
      */
-    protected int hashCode(final ForeignKey foreignKey)
+    protected int hashCode(@NotNull final ForeignKey foreignKey)
     {
         return foreignKey.hashCode();
     }
@@ -275,7 +278,7 @@ public abstract class AbstractForeignKeyDecorator
      * @return the result of such comparison.
      * @precondition foreignKey != null
      */
-    protected boolean equals(final ForeignKey foreignKey, final Object object)
+    protected boolean equals(@NotNull final ForeignKey foreignKey, final Object object)
     {
         return foreignKey.equals(object);
     }    
@@ -302,7 +305,7 @@ public abstract class AbstractForeignKeyDecorator
      * object prevents it from being compared to this Object.
      * @precondition foreignKey != null
      */
-    protected int compareTo(final ForeignKey foreignKey, final Object object)
+    protected int compareTo(@NotNull final ForeignKey foreignKey, final Object object)
         throws  ClassCastException
     {
         return foreignKey.compareTo(object);

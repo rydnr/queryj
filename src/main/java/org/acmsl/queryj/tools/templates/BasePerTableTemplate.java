@@ -90,6 +90,8 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base logic for all per-table templates.
@@ -146,6 +148,7 @@ public abstract class BasePerTableTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected abstract StringTemplateGroup retrieveGroup();
 
     /**
@@ -169,7 +172,7 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
         throws InvalidTemplateException
     {
         return
@@ -239,28 +242,28 @@ public abstract class BasePerTableTemplate
      * @precondition metadataUtils != null
      */
     protected String generateOutput(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
-        final String engineName,
+        @NotNull final String engineName,
         final String engineVersion,
         final String quote,
         final String basePackageName,
         final String repositoryName,
         final String header,
         final boolean implementMarkerInterfaces,
-        final DecoratorFactory decoratorFactory,
-        final StringUtils stringUtils,
-        final DefaultThemeUtils defaultThemeUtils,
-        final PackageUtils packageUtils,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final DefaultThemeUtils defaultThemeUtils,
+        @NotNull final PackageUtils packageUtils,
         final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils,
         final MetaLanguageUtils metaLanguageUtils,
-        final MetadataUtils metadataUtils)
+        @NotNull final MetadataUtils metadataUtils)
       throws InvalidTemplateException
     {
         String result = "";
@@ -271,9 +274,9 @@ public abstract class BasePerTableTemplate
                     tableName.toLowerCase()),
                 '_');
 
-        StringTemplateGroup t_Group = retrieveGroup();
+        @Nullable StringTemplateGroup t_Group = retrieveGroup();
 
-        StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
         String t_strCapitalizedEngine =
             stringUtils.capitalize(engineName, '_');
@@ -294,7 +297,7 @@ public abstract class BasePerTableTemplate
         int t_iPrimaryKeysLength =
             (t_astrPrimaryKeys != null) ? t_astrPrimaryKeys.length : 0;
 
-        String t_strStaticAttributeName =
+        @Nullable String t_strStaticAttributeName =
             retrieveStaticAttribute(tableName, metadataManager);
 
         String t_strStaticAttributeType =
@@ -312,21 +315,21 @@ public abstract class BasePerTableTemplate
         // getTableName()
         // getUncapitalizedTableName()
         // getAllowsNull()
-        Collection t_cPrimaryKeyAttributes =
+        @NotNull Collection t_cPrimaryKeyAttributes =
             metadataUtils.retrievePrimaryKeyAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cNonPrimaryKeyAttributes =
+        @NotNull Collection t_cNonPrimaryKeyAttributes =
             metadataUtils.retrieveNonPrimaryKeyAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cForeignKeyAttributes =
+        @NotNull Collection t_cForeignKeyAttributes =
             metadataUtils.retrieveForeignKeyAttributes(
                 tableName,
                 metadataManager,
@@ -334,42 +337,42 @@ public abstract class BasePerTableTemplate
                 decoratorFactory);
 
         // A map of "fk_"referringTableName -> foreign_keys (list of lists)
-        Map t_mReferringKeys =
+        @NotNull Map t_mReferringKeys =
             metadataUtils.retrieveReferringKeys(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cAttributes =
+        @NotNull Collection t_cAttributes =
             metadataUtils.retrieveAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cExternallyManagedAttributes =
+        @NotNull Collection t_cExternallyManagedAttributes =
             metadataUtils.retrieveExternallyManagedAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cAllButExternallyManagedAttributes =
+        @NotNull Collection t_cAllButExternallyManagedAttributes =
             metadataUtils.retrieveAllButExternallyManagedAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cLobAttributes =
+        @NotNull Collection t_cLobAttributes =
             metadataUtils.retrieveLobAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        Collection t_cAllButLobAttributes =
+        @NotNull Collection t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
                 tableName,
                 metadataManager,
@@ -395,7 +398,7 @@ public abstract class BasePerTableTemplate
         //   getName()
         //   getType()
         //   getSqlType() // the java.sql.Types constant
-        Collection t_cCustomSelects =
+        @Nullable Collection t_cCustomSelects =
             retrieveCustomSelects(
                 tableName,
                 customSqlProvider,
@@ -405,7 +408,7 @@ public abstract class BasePerTableTemplate
                 daoTemplateUtils,
                 templateUtils);
 
-        Collection t_cCustomUpdatesOrInserts =
+        @Nullable Collection t_cCustomUpdatesOrInserts =
             retrieveCustomUpdatesOrInserts(
                 tableName,
                 customSqlProvider,
@@ -415,7 +418,7 @@ public abstract class BasePerTableTemplate
                 daoTemplateUtils,
                 templateUtils);
 
-        Collection t_cCustomSelectsForUpdate =
+        @Nullable Collection t_cCustomSelectsForUpdate =
             retrieveCustomSelectsForUpdate(
                 tableName,
                 customSqlProvider,
@@ -429,7 +432,7 @@ public abstract class BasePerTableTemplate
         // getId()
         // getIdNormalized()
         // getIdNormalizedUppercased()
-        Collection t_cCustomResults =
+        @Nullable Collection t_cCustomResults =
             retrieveCustomResults(
                 tableName,
                 customSqlProvider,
@@ -486,7 +489,7 @@ public abstract class BasePerTableTemplate
         {
             result = t_Template.toString();
         }
-        catch (final IllegalArgumentException invalidTemplate)
+        catch (@NotNull final IllegalArgumentException invalidTemplate)
         {
             throw
                 new InvalidTemplateException(
@@ -585,11 +588,11 @@ public abstract class BasePerTableTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
-        final Map input,
-        final StringTemplate template,
+        @NotNull final Map input,
+        @NotNull final StringTemplate template,
         final Integer[] copyrightYears,
-        final String tableName,
-        final String voName,
+        @NotNull final String tableName,
+        @NotNull final String voName,
         final String engineName,
         final String engineVersion,
         final String basePackageName,
@@ -601,7 +604,7 @@ public abstract class BasePerTableTemplate
         final Collection primaryKeyAttributes,
         final Collection nonPrimaryKeyAttributes,
         final Collection foreignKeyAttributes,
-        final Map referringKeys,
+        @NotNull final Map referringKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
@@ -612,15 +615,15 @@ public abstract class BasePerTableTemplate
         final Collection customUpdatesOrInserts,
         final Collection customSelectsForUpdate,
         final Collection customResults,
-        final String staticAttributeName,
+        @Nullable final String staticAttributeName,
         final String staticAttributeType,
-        final String tableRepositoryName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
+        @NotNull final String tableRepositoryName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
         final String header,
         final boolean implementMarkerInterfaces,
-        final DecoratorFactory decoratorFactory,
-        final MetadataUtils metadataUtils,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final MetadataUtils metadataUtils,
         final StringUtils stringUtils)
     {
         template.setAttribute("input", input);
@@ -727,13 +730,13 @@ public abstract class BasePerTableTemplate
      * @precondition decoratorFactory != null
      */
     protected void fillCommonParameters(
-        final Map input,
+        @NotNull final Map input,
         final String tableName,
         final String engineName,
         final String engineVersion,
         final boolean implementMarkerInterfaces,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         input.put("table_name",  tableName);
         input.put(
@@ -759,8 +762,8 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      */
     protected void fillJavaHeaderParameters(
-        final Map input,
-        final String header,
+        @NotNull final Map input,
+        @Nullable final String header,
         final Integer[] copyrightYears,
         final String timestamp,
         final MetadataManager metadataManager)
@@ -787,7 +790,7 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      */
     protected void fillPackageDeclarationParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName,
         final MetadataManager metadataManager)
@@ -816,7 +819,7 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      */
     protected void fillProjectImportsParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName,
         final String tableName,
@@ -892,18 +895,18 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      */
     protected void fillClassParameters(
-        final Map input,
-        final String voName,
+        @NotNull final Map input,
+        @NotNull final String voName,
         final String engineName,
         final String engineVersion,
         final String timestamp,
         final boolean staticTable,
-        final String tableRepositoryName,
-        final String tableName,
+        @NotNull final String tableRepositoryName,
+        @NotNull final String tableName,
         final Collection pkAttributes,
         final Collection nonPkAttributes,
         final Collection fkAttributes,
-        final Map referringKeys,
+        @NotNull final Map referringKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,
         final Collection allButExternallyManagedAttributes,
@@ -992,15 +995,15 @@ public abstract class BasePerTableTemplate
      * @precondition decoratorFactory != null
      */
     protected void fillStaticTableParameters(
-        final Map input,
+        @NotNull final Map input,
         final String staticAttributeName,
         final String staticAttributeType,
         final String tableName,
         final boolean managedExternally,
         final boolean allowsNull,
         final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         input.put(
             "static_attribute",
@@ -1035,16 +1038,17 @@ public abstract class BasePerTableTemplate
      * @precondition templateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomSelects(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -1083,16 +1087,17 @@ public abstract class BasePerTableTemplate
      * @precondition daoTemplateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomUpdatesOrInserts(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -1131,16 +1136,17 @@ public abstract class BasePerTableTemplate
      * @precondition daoTemplateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomSelectsForUpdate(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -1177,15 +1183,16 @@ public abstract class BasePerTableTemplate
      * @precondition daoTemplateUtils != null
      * @precondition templateUtils != null
      */
+    @Nullable
     protected Collection retrieveCustomResults(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils,
-        final TemplateUtils templateUtils)
+        @NotNull final DAOTemplateUtils daoTemplateUtils,
+        @NotNull final TemplateUtils templateUtils)
     {
-        Collection result = null;
+        @Nullable Collection result = null;
 
         if  (customSqlProvider != null)
         {
@@ -1215,7 +1222,7 @@ public abstract class BasePerTableTemplate
      * @precondition decorationUtils != null
      */
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -1226,7 +1233,7 @@ public abstract class BasePerTableTemplate
      * @return such output.
      * @precondition value != null
      */
-    protected String capitalize(final String value)
+    protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
@@ -1240,7 +1247,7 @@ public abstract class BasePerTableTemplate
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }
@@ -1257,8 +1264,8 @@ public abstract class BasePerTableTemplate
      */
     protected boolean containsLobs(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
 
@@ -1295,7 +1302,7 @@ public abstract class BasePerTableTemplate
     protected TableDecorator decorate(
         final String table,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return decoratorFactory.createTableDecorator(table, metadataManager);
     }
@@ -1308,8 +1315,9 @@ public abstract class BasePerTableTemplate
      * @precondition tableName != null
      * @precondition metadataManager != null
      */
+    @Nullable
     protected String retrieveStaticAttribute(
-        final String tableName, final MetadataManager metadataManager)
+        final String tableName, @NotNull final MetadataManager metadataManager)
     {
         return
             retrieveStaticAttribute(
@@ -1328,10 +1336,11 @@ public abstract class BasePerTableTemplate
      * @precondition metadataManager != null
      * @precondition metaLanguageUtils != null
      */
+    @Nullable
     protected String retrieveStaticAttribute(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetaLanguageUtils metaLanguageUtils)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
         return
             metaLanguageUtils.retrieveStaticAttribute(
@@ -1344,6 +1353,7 @@ public abstract class BasePerTableTemplate
      * @return such converted values.
      * @precondition collection != null
      */
+    @NotNull
     protected Collection toVoNames(final Collection collection)
     {
         return
@@ -1364,14 +1374,15 @@ public abstract class BasePerTableTemplate
      * @precondition decorationUtils != null
      * @precondition englishGrammarUtils != null
      */
+    @NotNull
     protected Collection toVoNames(
-        final Collection collection,
-        final DecorationUtils decorationUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @Nullable final Collection collection,
+        @NotNull final DecorationUtils decorationUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
-        Iterator t_Iterator =
+        @Nullable Iterator t_Iterator =
             (collection != null) ? collection.iterator() : null;
 
         if  (t_Iterator != null)
@@ -1401,9 +1412,9 @@ public abstract class BasePerTableTemplate
      * @precondition englishGrammarUtils != null
      */
     protected String toVoName(
-        final String value,
-        final DecorationUtils decorationUtils, 
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final String value,
+        @NotNull final DecorationUtils decorationUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
             decorationUtils.capitalize(
@@ -1419,14 +1430,15 @@ public abstract class BasePerTableTemplate
      * @precondition foreignKeys != null
      * @precondition tableName != null
      */
+    @NotNull
     protected List buildOwnForeignKeyList(
         final String tableName,
-        final Collection referringTables,
-        final Map referringKeys)
+        @Nullable final Collection referringTables,
+        @NotNull final Map referringKeys)
     {
-        List result = new ArrayList();
+        @NotNull List result = new ArrayList();
 
-        Iterator t_Iterator =
+        @Nullable Iterator t_Iterator =
             (referringTables != null) ? referringTables.iterator() : null;
 
         if  (t_Iterator != null)
@@ -1466,15 +1478,15 @@ public abstract class BasePerTableTemplate
      * @precondition map != null
      */
     protected void debugReferringKeys(
-        final Collection referringTables,
-        final Map map,
-        final ForeignKey[] foreignKeys)
+        @Nullable final Collection referringTables,
+        @NotNull final Map map,
+        @Nullable final ForeignKey[] foreignKeys)
     {
         org.apache.commons.logging.Log t_Log =
             org.acmsl.commons.logging.UniqueLogFactory.getLog(
                 BasePerTableTemplate.class);
 
-        Iterator t_Iterator =
+        @Nullable Iterator t_Iterator =
             (referringTables != null)
             ? referringTables.iterator() : null;
 
@@ -1548,7 +1560,7 @@ public abstract class BasePerTableTemplate
     protected String concat(
         final Collection list,
         final String separator,
-        final StringUtils stringUtils)
+        @NotNull final StringUtils stringUtils)
     {
         return stringUtils.concatenate(list, separator);
     }

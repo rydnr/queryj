@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.dao.handlers
     .DAOTestTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -85,7 +87,7 @@ public class DAOTestTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -102,7 +104,7 @@ public class DAOTestTemplateWritingHandler
      * @precondition metadata != null
      */
     protected void writeTemplates(
-        final Map parameters, final DatabaseMetaData metadata)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metadata)
       throws  QueryJBuildException
     {
         try
@@ -115,7 +117,7 @@ public class DAOTestTemplateWritingHandler
                 retrieveCharset(parameters),
                 DAOTestTemplateGenerator.getInstance());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -135,10 +137,10 @@ public class DAOTestTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplates(
-        final DAOTestTemplate[] templates,
-        final File outputDir,
+        @Nullable final DAOTestTemplate[] templates,
+        @NotNull final File outputDir,
         final Charset charset,
-        final DAOTestTemplateGenerator generator)
+        @NotNull final DAOTestTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
@@ -152,7 +154,7 @@ public class DAOTestTemplateWritingHandler
                 generator.write(templates[t_iDAOTestIndex], outputDir, charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -166,7 +168,8 @@ public class DAOTestTemplateWritingHandler
      * @return the templates.
      * @precondition parameters != null
      */
-    protected DAOTestTemplate[] retrieveDAOTestTemplates(final Map parameters)
+    @NotNull
+    protected DAOTestTemplate[] retrieveDAOTestTemplates(@NotNull final Map parameters)
     {
         return
             (DAOTestTemplate[])
@@ -182,8 +185,9 @@ public class DAOTestTemplateWritingHandler
      * @precondition engineName != null
      * @precondition parameters != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -200,10 +204,11 @@ public class DAOTestTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOTestFolder(

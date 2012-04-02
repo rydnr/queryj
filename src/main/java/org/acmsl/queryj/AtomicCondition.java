@@ -37,6 +37,8 @@ package org.acmsl.queryj;
  */
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -241,6 +243,7 @@ public class AtomicCondition
      * Retrieves the left-side field.
      * @return such reference.
      */
+    @Nullable
     public Field getLeftSideField()
     {
         return m__LeftSideField;
@@ -268,6 +271,7 @@ public class AtomicCondition
      * Retrieves the operator.
      * @return such reference.
      */
+    @Nullable
     public ConditionOperator getOperator()
     {
         return m__Operator;
@@ -295,6 +299,7 @@ public class AtomicCondition
      * Retrieves the right-side field.
      * @return such reference.
      */
+    @Nullable
     public Field getRightSideField()
     {
         return m__RightSideField;
@@ -322,6 +327,7 @@ public class AtomicCondition
      * Retrieves the right-side value.
      * @return such reference.
      */
+    @Nullable
     public String getRightSideValue()
     {
         return m__strRightSideValue;
@@ -353,7 +359,7 @@ public class AtomicCondition
      */
     protected String toString(final boolean simplify)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         if  (getInnerCondition() != null)
         {
@@ -365,9 +371,9 @@ public class AtomicCondition
             t_sbResult.append(" ");
             t_sbResult.append(getOperator());
 
-            Field t_RightSideField = getRightSideField();
+            @Nullable Field t_RightSideField = getRightSideField();
 
-            String t_strRightSide = "";
+            @Nullable String t_strRightSide = "";
 
             if  (t_RightSideField != null) 
             {
@@ -404,9 +410,9 @@ public class AtomicCondition
 
         if  (object instanceof VariableCondition)
         {
-            VariableCondition t_Object = (VariableCondition) object;
+            @NotNull VariableCondition t_Object = (VariableCondition) object;
 
-            Field t_LeftSideField = t_Object.getLeftSideField();
+            @Nullable Field t_LeftSideField = t_Object.getLeftSideField();
 
             if  (t_LeftSideField == null)
             {
@@ -419,7 +425,7 @@ public class AtomicCondition
 
             if  (result) 
             {
-                ConditionOperator t_Operator = t_Object.getOperator();
+                @Nullable ConditionOperator t_Operator = t_Object.getOperator();
 
                 if  (t_Operator == null)
                 {
@@ -432,7 +438,7 @@ public class AtomicCondition
 
                 if  (result) 
                 {
-                    Field t_RightSideField = t_Object.getRightSideField();
+                    @Nullable Field t_RightSideField = t_Object.getRightSideField();
 
                     if  (t_RightSideField == null)
                     {
@@ -457,21 +463,21 @@ public class AtomicCondition
     {
         int result = toString().hashCode();
 
-        Field t_LeftSideField = getLeftSideField();
+        @Nullable Field t_LeftSideField = getLeftSideField();
 
         if  (t_LeftSideField != null)
         {
             result += t_LeftSideField.hashCode();
         }
 
-        ConditionOperator t_Operator = getOperator();
+        @Nullable ConditionOperator t_Operator = getOperator();
 
         if  (t_Operator != null)
         {
             result += t_Operator.hashCode();
         }
 
-        Field t_RightSideField = getRightSideField();
+        @Nullable Field t_RightSideField = getRightSideField();
 
         if  (t_RightSideField != null)
         {

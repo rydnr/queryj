@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.version.VersionUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -76,7 +77,7 @@ public class MySQL4xMetaDataRetrievalHandler
      * @precondition product != null
      */
     protected boolean checkVendor(
-        final String productName,
+        @NotNull final String productName,
         final String productVersion,
         final int majorVersion,
         final int minorVersion)
@@ -100,7 +101,7 @@ public class MySQL4xMetaDataRetrievalHandler
      * @precondition versionUtils != null
      */
     protected boolean checkVersion(
-        final String version, final VersionUtils versionUtils)
+        final String version, @NotNull final VersionUtils versionUtils)
     {
         return versionUtils.matches(version, "4.x");
     }
@@ -153,14 +154,14 @@ public class MySQL4xMetaDataRetrievalHandler
                     catalog,
                     schema);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
                     "Cannot process MySQL metadata", sqlException);
         }
 
-        catch  (final QueryJException queryjException)
+        catch  (@NotNull final QueryJException queryjException)
         {
             throw
                 new QueryJBuildException(

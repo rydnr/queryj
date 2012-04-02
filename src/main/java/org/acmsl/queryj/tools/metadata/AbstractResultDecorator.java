@@ -56,6 +56,8 @@ import java.util.Iterator;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -98,7 +100,7 @@ public abstract class AbstractResultDecorator
      * @precondition decoratorFactory != null
      */
     public AbstractResultDecorator(
-        final Result result,
+        @NotNull final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)
@@ -215,7 +217,7 @@ public abstract class AbstractResultDecorator
      * @precondition metadataManager != null
      */
     protected MetadataTypeManager getMetadataTypeManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         return metadataManager.getMetadataTypeManager();
     }
@@ -276,7 +278,7 @@ public abstract class AbstractResultDecorator
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }
@@ -290,7 +292,7 @@ public abstract class AbstractResultDecorator
      * @precondition decorationUtils != null
      */
     protected String normalize(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -313,7 +315,7 @@ public abstract class AbstractResultDecorator
      * @precondition decorationUtils != null
      */
     protected String normalizeUppercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeUppercase(value);
     }
@@ -335,7 +337,7 @@ public abstract class AbstractResultDecorator
      * @return such information.
      * @precondition result != null
      */
-    protected boolean isMultiple(final Result result)
+    protected boolean isMultiple(@NotNull final Result result)
     {
         return Result.MULTIPLE.equalsIgnoreCase(result.getMatches());
     }
@@ -371,23 +373,24 @@ public abstract class AbstractResultDecorator
      * @precondition decoratorFactory != null
      * @precondition customResultUtils != null
      */
+    @NotNull
     public Collection getProperties(
-        final Collection propertyRefs,
-        final Result resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
-        final CustomResultUtils customResultUtils)
+        @Nullable final Collection propertyRefs,
+        @NotNull final Result resultElement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomResultUtils customResultUtils)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
-        Iterator t_PropertyRefIterator =
+        @Nullable Iterator t_PropertyRefIterator =
             (propertyRefs != null) ? propertyRefs.iterator() : null;
 
         if  (t_PropertyRefIterator != null)
         {
-            PropertyRefElement t_PropertyRef = null;
-            Property t_Property = null;
+            @Nullable PropertyRefElement t_PropertyRef = null;
+            @Nullable Property t_Property = null;
 
             while  (t_PropertyRefIterator.hasNext())
             {
@@ -414,7 +417,7 @@ public abstract class AbstractResultDecorator
                                 "Referenced property not found:"
                                 + t_PropertyRef.getId());
                         }
-                        catch  (final Throwable throwable)
+                        catch  (@NotNull final Throwable throwable)
                         {
                             // class-loading problem.
                         }
@@ -424,7 +427,7 @@ public abstract class AbstractResultDecorator
         }
         else
         {
-            String t_strTable =
+            @Nullable String t_strTable =
                 customResultUtils.retrieveTable(
                     resultElement,
                     customSqlProvider,
@@ -436,7 +439,7 @@ public abstract class AbstractResultDecorator
             if  (   (t_strTable != null)
                  && (t_MetadataTypeManager != null))
             {
-                String[] t_astrColumnNames =
+                @NotNull String[] t_astrColumnNames =
                     metadataManager.getColumnNames(t_strTable);
 
                 int t_iCount =
@@ -495,10 +498,11 @@ public abstract class AbstractResultDecorator
      * @precondition metadataTypeManager != null
      * @precondition metadataUtils != null
      */
+    @NotNull
     protected Collection filterLobProperties(
         final Collection properties,
-        final MetadataTypeManager metadataTypeManager,
-        final MetadataUtils metadataUtils)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final MetadataUtils metadataUtils)
     {
         return
             metadataUtils.filterLobProperties(
@@ -510,6 +514,7 @@ public abstract class AbstractResultDecorator
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return toString(getResult());
@@ -521,6 +526,7 @@ public abstract class AbstractResultDecorator
      * @param result the decorated result.
      * @return such information.
      */
+    @NotNull
     protected String toString(final Result result)
     {
         return "" + result;
@@ -541,7 +547,7 @@ public abstract class AbstractResultDecorator
      * @return such value.
      * @precondition result != null
      */
-    protected final int hashCode(final Result result)
+    protected final int hashCode(@NotNull final Result result)
     {
         return result.hashCode();
     }
@@ -561,7 +567,7 @@ public abstract class AbstractResultDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    protected boolean equals(final Result result, final Object object)
+    protected boolean equals(@NotNull final Result result, final Object object)
     {
         return result.equals(object);
     }
@@ -588,7 +594,7 @@ public abstract class AbstractResultDecorator
      * object prevents it from being compared to this Object.
      * @precondition result != null
      */
-    protected int compareTo(final Result result, final Object object)
+    protected int compareTo(@NotNull final Result result, final Object object)
         throws  ClassCastException
     {
         return result.compareTo(object);

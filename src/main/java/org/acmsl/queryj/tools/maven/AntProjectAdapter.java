@@ -51,6 +51,7 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FilterSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Resource;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -177,7 +178,7 @@ public class AntProjectAdapter
      * @param handler such handler.
      * @param project the {@link Project} instance.
      */
-    protected void setInputHandler(final InputHandler handler, final Project project)
+    protected void setInputHandler(final InputHandler handler, @NotNull final Project project)
     {
         project.setInputHandler(handler);
     }
@@ -195,7 +196,7 @@ public class AntProjectAdapter
      * Retrieves the input handler.
      * @param project the {@link Project} instance.
      */
-    protected InputHandler getInputHandler(final Project project)
+    protected InputHandler getInputHandler(@NotNull final Project project)
     {
         return project.getInputHandler();
     }
@@ -215,7 +216,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      */
     protected void setDefaultInputStream(
-        final InputStream defaultInputStream, final Project project)
+        final InputStream defaultInputStream, @NotNull final Project project)
     {
         project.setDefaultInputStream(defaultInputStream);
     }
@@ -233,7 +234,7 @@ public class AntProjectAdapter
      * Retrieves the default input stream.
      * @param project the {@link Project} instance.
      */
-    protected InputStream getDefaultInputStream(final Project project)
+    protected InputStream getDefaultInputStream(@NotNull final Project project)
     {
         return project.getDefaultInputStream();
     }
@@ -251,7 +252,7 @@ public class AntProjectAdapter
      * Creates a subproject.
      * @param project the {@link Project} instance.
      */
-    protected Project createSubProject(final Project project)
+    protected Project createSubProject(@NotNull final Project project)
     {
         return project.createSubProject();
     }
@@ -270,7 +271,7 @@ public class AntProjectAdapter
      * @param subProject the subproject to initialize.
      * @param project the {@link Project} instance.
      */
-    protected void initSubProject(final Project subProject, final Project project)
+    protected void initSubProject(final Project subProject, @NotNull final Project project)
     {
         project.initSubProject(subProject);
     }
@@ -290,7 +291,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the initialization fails.
      */
-    protected void init(final Project project)
+    protected void init(@NotNull final Project project)
         throws BuildException
     {
         project.init();
@@ -311,7 +312,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the initialization fails.
      */
-    protected void initProperties(final Project project)
+    protected void initProperties(@NotNull final Project project)
         throws BuildException
     {
         project.initProperties();
@@ -331,7 +332,7 @@ public class AntProjectAdapter
      * @param path the path.
      * @param project the {@link Project} instance.
      */
-    protected AntClassLoader createClassLoader(final Path path, final Project project)
+    protected AntClassLoader createClassLoader(final Path path, @NotNull final Project project)
     {
         return project.createClassLoader(path);
     }
@@ -352,7 +353,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      */
     protected AntClassLoader createClassLoader(
-        final ClassLoader classLoader, final Path path, final Project project)
+        final ClassLoader classLoader, final Path path, @NotNull final Project project)
     {
         return project.createClassLoader(classLoader, path);
     }
@@ -371,7 +372,7 @@ public class AntProjectAdapter
      * @param coreLoader such class loader.
      * @param project the {@link Project} instance.
      */
-    protected void setCoreLoader(final ClassLoader coreLoader, final Project project)
+    protected void setCoreLoader(final ClassLoader coreLoader, @NotNull final Project project)
     {
         project.setCoreLoader(coreLoader);
     }
@@ -390,7 +391,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such class loader.
      */
-    protected ClassLoader getCoreLoader(final Project project)
+    protected ClassLoader getCoreLoader(@NotNull final Project project)
     {
         return project.getCoreLoader();
     }
@@ -409,7 +410,7 @@ public class AntProjectAdapter
      * @param listener the {@link BuildListener} instance to add.
      * @param project the {@link Project} instance.
      */
-    protected void addBuildListener(final BuildListener listener, final Project project)
+    protected void addBuildListener(final BuildListener listener, @NotNull final Project project)
     {
         project.addBuildListener(listener);
     }
@@ -428,7 +429,7 @@ public class AntProjectAdapter
      * @param listener the {@link BuildListener} instance.
      * @param project the {@link Project} instance.
      */
-    protected void removeBuildListener(final BuildListener listener, final Project project)
+    protected void removeBuildListener(final BuildListener listener, @NotNull final Project project)
     {
         project.removeBuildListener(listener);
     }
@@ -447,7 +448,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such listeners.
      */
-    protected Vector getBuildListeners(final Project project)
+    protected Vector getBuildListeners(@NotNull final Project project)
     {
         return project.getBuildListeners();
     }
@@ -466,7 +467,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such filter set.
      */
-    protected FilterSet getGlobalFilterSet(final Project project)
+    protected FilterSet getGlobalFilterSet(@NotNull final Project project)
     {
         return project.getGlobalFilterSet();
     }
@@ -486,7 +487,7 @@ public class AntProjectAdapter
      * @param value the value.
      * @param project the {@link Project} instance.
      */
-    protected void setProperty(final String name, final String value, final Project project)
+    protected void setProperty(final String name, final String value, @NotNull final Project project)
     {
         project.setProperty(name, value);
     }
@@ -506,7 +507,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the property value.
      */
-    public String getProperty(final String propertyName, final Project project)
+    public String getProperty(final String propertyName, @NotNull final Project project)
     {
         return project.getProperty(propertyName);
     }
@@ -526,7 +527,7 @@ public class AntProjectAdapter
      * @param value the value.
      * @param project the {@link Project} instance.
      */
-    protected void setNewProperty(final String name, final String value, final Project project)
+    protected void setNewProperty(final String name, final String value, @NotNull final Project project)
     {
         project.setNewProperty(name, value);
     }
@@ -546,7 +547,7 @@ public class AntProjectAdapter
      * @param value the value.
      * @param project the {@link Project} instance.
      */
-    protected void setUserProperty(final String name, final String value, final Project project)
+    protected void setUserProperty(final String name, final String value, @NotNull final Project project)
     {
         project.setUserProperty(name, value);
     }
@@ -566,7 +567,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the property value.
      */
-    public String getUserProperty(final String propertyName, final Project project)
+    public String getUserProperty(final String propertyName, @NotNull final Project project)
     {
         return project.getUserProperty(propertyName);
     }
@@ -587,7 +588,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      */
     protected void setInheritedProperty(
-        final String name, final String value, final Project project)
+        final String name, final String value, @NotNull final Project project)
     {
         project.setInheritedProperty(name, value);
     }
@@ -616,7 +617,7 @@ public class AntProjectAdapter
      * @throws BuildException if the given value has an unclosed
      *                        property name, e.g. <code>${xxx</code>.
      */
-    protected String replaceProperties(final String value, final Project project)
+    protected String replaceProperties(final String value, @NotNull final Project project)
         throws BuildException
     {
         return project.replaceProperties(value);
@@ -636,7 +637,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such properties.
      */
-    protected Hashtable getProperties(final Project project)
+    protected Hashtable getProperties(@NotNull final Project project)
     {
         return project.getProperties();
     }
@@ -655,7 +656,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such properties.
      */
-    protected Hashtable getUserProperties(final Project project)
+    protected Hashtable getUserProperties(@NotNull final Project project)
     {
         return project.getUserProperties();
     }
@@ -674,7 +675,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such properties.
      */
-    protected Hashtable getInheritedProperties(final Project project)
+    protected Hashtable getInheritedProperties(@NotNull final Project project)
     {
         return project.getInheritedProperties();
     }
@@ -693,7 +694,7 @@ public class AntProjectAdapter
      * @param other the other {@link Project}.
      * @param project the adapted {@link Project}.
      */
-    protected void copyUserProperties(final Project other, final Project project)
+    protected void copyUserProperties(final Project other, @NotNull final Project project)
     {
         project.copyUserProperties(other);
     }
@@ -712,7 +713,7 @@ public class AntProjectAdapter
      * @param other the other {@link Project}.
      * @param project the adapted {@link Project}.
      */
-    protected void copyInheritedProperties(final Project other, final Project project)
+    protected void copyInheritedProperties(final Project other, @NotNull final Project project)
     {
         project.copyInheritedProperties(other);
     }
@@ -731,7 +732,7 @@ public class AntProjectAdapter
      * @param defaultTarget such target.
      * @param project the {@link Project} instance.
      */
-    protected void setDefaultTarget(final String defaultTarget, final Project project)
+    protected void setDefaultTarget(final String defaultTarget, @NotNull final Project project)
     {
         project.setDefaultTarget(defaultTarget);
     }
@@ -750,7 +751,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such target.
      */
-    protected String getDefaultTarget(final Project project)
+    protected String getDefaultTarget(@NotNull final Project project)
     {
         return project.getDefaultTarget();
     }
@@ -769,7 +770,7 @@ public class AntProjectAdapter
      * @param defaultTarget such target.
      * @param project the {@link Project} instance.
      */
-    protected void setDefault(final String defaultTarget, final Project project)
+    protected void setDefault(final String defaultTarget, @NotNull final Project project)
     {
         project.setDefault(defaultTarget);
     }
@@ -788,7 +789,7 @@ public class AntProjectAdapter
      * @param name the project name.
      * @param project the {@link Project} instance.
      */
-    protected void setName(final String name, final Project project)
+    protected void setName(final String name, @NotNull final Project project)
     {
         project.setName(name);
     }
@@ -807,7 +808,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the project name.
      */
-    protected String getName(final Project project)
+    protected String getName(@NotNull final Project project)
     {
         return project.getName();
     }
@@ -825,7 +826,7 @@ public class AntProjectAdapter
      * Specifies the description.
      * @param project the {@link Project} instance.
      */
-    protected void setDescription(final String description, final Project project)
+    protected void setDescription(final String description, @NotNull final Project project)
     {
         project.setDescription(description);
     }
@@ -844,7 +845,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} project.
      * @return such information.
      */
-    protected String getDescription(final Project project)
+    protected String getDescription(@NotNull final Project project)
     {
         return project.getDescription();
     }
@@ -864,7 +865,7 @@ public class AntProjectAdapter
      * @param value the replacement.
      * @param project the {@link Project} instance.
      */
-    protected void addFilter(final String token, final String value, final Project project)
+    protected void addFilter(final String token, final String value, @NotNull final Project project)
     {
         project.addFilter(token, value);
     }
@@ -883,7 +884,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such information.
      */
-    protected Hashtable getFilters(final Project project)
+    protected Hashtable getFilters(@NotNull final Project project)
     {
         return project.getFilters();
     }
@@ -903,7 +904,7 @@ public class AntProjectAdapter
      * @param baseD the base dir.
      * @param project the {@link Project} instance.
      */
-    protected void setBasedir(final String baseD, final Project project)
+    protected void setBasedir(final String baseD, @NotNull final Project project)
         throws BuildException
     {
         project.setBasedir(baseD);
@@ -924,7 +925,7 @@ public class AntProjectAdapter
      * @param baseDir the base dir.
      * @param project the {@link Project} instance.
      */
-    protected void setBaseDir(final File baseDir, final Project project)
+    protected void setBaseDir(final File baseDir, @NotNull final Project project)
         throws BuildException 
     {
         project.setBaseDir(baseDir);
@@ -944,7 +945,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such dir.
      */
-    protected File getBaseDir(final Project project)
+    protected File getBaseDir(@NotNull final Project project)
     {
         return project.getBaseDir();
     }
@@ -963,7 +964,7 @@ public class AntProjectAdapter
      * @param keepGoingMode such behavior.
      * @param project the {@link Project} instance.
      */
-    protected void setKeepGoingMode(final boolean keepGoingMode, final Project project)
+    protected void setKeepGoingMode(final boolean keepGoingMode, @NotNull final Project project)
     {
         project.setKeepGoingMode(keepGoingMode);
     }
@@ -982,7 +983,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such behavior.
      */
-    protected boolean isKeepGoingMode(final Project project)
+    protected boolean isKeepGoingMode(@NotNull final Project project)
     {
         return project.isKeepGoingMode();
     }
@@ -1009,7 +1010,7 @@ public class AntProjectAdapter
      *
      * @see org.apache.tools.ant.util.JavaEnvUtils#getJavaVersion
      */
-    protected void setJavaVersionProperty(final Project project)
+    protected void setJavaVersionProperty(@NotNull final Project project)
         throws BuildException
     {
         project.setJavaVersionProperty();
@@ -1028,7 +1029,7 @@ public class AntProjectAdapter
      * Specifies all system properties.
      * @param project the {@link Project} instance.
      */
-    protected void setSystemProperties(final Project project)
+    protected void setSystemProperties(@NotNull final Project project)
     {
         project.setSystemProperties();
     }
@@ -1051,7 +1052,7 @@ public class AntProjectAdapter
      * @throws BuildException if the operation fails.
      */
     protected void addTaskDefinition(
-        final String taskName, final Class taskClass, final Project project)
+        final String taskName, final Class taskClass, @NotNull final Project project)
       throws BuildException
     {
         project.addTaskDefinition(taskName, taskClass);
@@ -1073,7 +1074,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the verification fails.
      */
-    protected void checkTaskClass(final Class taskClass, final Project project)
+    protected void checkTaskClass(final Class taskClass, @NotNull final Project project)
         throws BuildException
     {
         project.checkTaskClass(taskClass);
@@ -1092,7 +1093,7 @@ public class AntProjectAdapter
      * Retrieves the task definitions.
      * @param project the {@link Project} instance.
      */
-    protected Hashtable getTaskDefinitions(final Project project)
+    protected Hashtable getTaskDefinitions(@NotNull final Project project)
     {
         return project.getTaskDefinitions();
     }
@@ -1111,7 +1112,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such information.
      */
-    protected Map getCopyOfTaskDefinitions(final Project project)
+    protected Map getCopyOfTaskDefinitions(@NotNull final Project project)
     {
         return project.getCopyOfTaskDefinitions();
     }
@@ -1132,7 +1133,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      */
     protected void addDataTypeDefinition(
-        final String typeName, final Class typeClass, final Project project)
+        final String typeName, final Class typeClass, @NotNull final Project project)
     {
         project.addDataTypeDefinition(typeName, typeClass);
     }
@@ -1151,7 +1152,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such information.
      */
-    protected Hashtable getDataTypeDefinitions(final Project project)
+    protected Hashtable getDataTypeDefinitions(@NotNull final Project project)
     {
         return project.getDataTypeDefinitions();
     }
@@ -1170,7 +1171,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such information.
      */
-    protected Map getCopyOfDataTypeDefinitions(final Project project)
+    protected Map getCopyOfDataTypeDefinitions(@NotNull final Project project)
     {
         return project.getCopyOfDataTypeDefinitions();
     }
@@ -1191,7 +1192,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the target cannot be added.
      */
-    protected void addTarget(final Target target, final Project project)
+    protected void addTarget(final Target target, @NotNull final Project project)
         throws BuildException
     {
         project.addTarget(target);
@@ -1215,7 +1216,7 @@ public class AntProjectAdapter
      * @throws BuildException if the target cannot be added.
      */
     protected void addTarget(
-        final String targetName, final Target target, final Project project)
+        final String targetName, final Target target, @NotNull final Project project)
         throws BuildException
     {
         project.addTarget(targetName, target);
@@ -1237,7 +1238,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the target cannot be added.
      */
-    protected void addOrReplaceTarget(final Target target, final Project project)
+    protected void addOrReplaceTarget(final Target target, @NotNull final Project project)
         throws BuildException
     {
         project.addOrReplaceTarget(target);
@@ -1261,7 +1262,7 @@ public class AntProjectAdapter
      * @throws BuildException if the target cannot be added.
      */
     protected void addOrReplaceTarget(
-        final String targetName, final Target target, final Project project)
+        final String targetName, final Target target, @NotNull final Project project)
         throws BuildException
     {
         project.addOrReplaceTarget(targetName, target);
@@ -1281,7 +1282,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such information.
      */
-    protected Hashtable getTargets(final Project project)
+    protected Hashtable getTargets(@NotNull final Project project)
     {
         return project.getTargets();
     }
@@ -1300,7 +1301,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such information.
      */
-    protected Map getCopyOfTargets(final Project project)
+    protected Map getCopyOfTargets(@NotNull final Project project)
     {
         return project.getCopyOfTargets();
     }
@@ -1322,7 +1323,7 @@ public class AntProjectAdapter
      * @return the new task.
      * @throws BuildException if the task cannot be created.
      */
-    protected Task createTask(final String taskType, final Project project)
+    protected Task createTask(final String taskType, @NotNull final Project project)
         throws BuildException
     {
         return project.createTask(taskType);
@@ -1345,7 +1346,7 @@ public class AntProjectAdapter
      * @return the new data type.
      * @throws BuildException if the data type cannot be created.
      */
-    protected Object createDataType(final String typeName, final Project project)
+    protected Object createDataType(final String typeName, @NotNull final Project project)
         throws BuildException
     {
         return project.createDataType(typeName);
@@ -1365,7 +1366,7 @@ public class AntProjectAdapter
      * @param executor the new {@link Executor} instance to use.
      * @param project the {@link Project} instance.
      */
-    protected void setExecutor(final Executor executor, final Project project)
+    protected void setExecutor(final Executor executor, @NotNull final Project project)
     {
         project.setExecutor(executor);
     }
@@ -1384,7 +1385,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such instance.
      */
-    protected Executor getExecutor(final Project project)
+    protected Executor getExecutor(@NotNull final Project project)
     {
         return project.getExecutor();
     }
@@ -1404,7 +1405,7 @@ public class AntProjectAdapter
      * @param names the target names.
      * @param project the {@link Project} instance.
      */
-    protected void executeTargets(final Vector names, final Project project)
+    protected void executeTargets(final Vector names, @NotNull final Project project)
         throws BuildException
     {
         project.executeTargets(names);
@@ -1426,7 +1427,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      */
     protected void demuxOutput(
-        final String output, final boolean isWarning, final Project project)
+        final String output, final boolean isWarning, @NotNull final Project project)
     {
         project.demuxOutput(output, isWarning);
     }
@@ -1451,7 +1452,7 @@ public class AntProjectAdapter
      * @throws IOException in some cases.
      */
     protected int defaultInput(
-        final byte[] buffer, final int offset, final int length, final Project project)
+        final byte[] buffer, final int offset, final int length, @NotNull final Project project)
         throws IOException
     {
         return project.defaultInput(buffer, offset, length);
@@ -1477,7 +1478,7 @@ public class AntProjectAdapter
      * @throws IOException in some cases.
      */
     protected int demuxInput(
-        final byte[] buffer, final int offset, final int length, final Project project)
+        final byte[] buffer, final int offset, final int length, @NotNull final Project project)
         throws IOException
     {
         return project.demuxInput(buffer, offset, length);
@@ -1500,7 +1501,7 @@ public class AntProjectAdapter
      * @throws IOException in some cases.
      */
     protected void demuxFlush(
-        final String output, final boolean isError, final Project project)
+        final String output, final boolean isError, @NotNull final Project project)
     {
         project.demuxFlush(output, isError);
     }
@@ -1521,7 +1522,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the target fails.
      */
-    protected void executeTarget(final String targetName, final Project project)
+    protected void executeTarget(final String targetName, @NotNull final Project project)
         throws BuildException
     {
         project.executeTarget(targetName);
@@ -1543,7 +1544,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if any of the targets fails.
      */
-    protected void executeSortedTargets(final Vector sortedTargets, final Project project)
+    protected void executeSortedTargets(final Vector sortedTargets, @NotNull final Project project)
         throws BuildException
     {
         project.executeSortedTargets(sortedTargets);
@@ -1565,7 +1566,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the file.
      */
-    protected File resolveFile(final String fileName, final File rootDir, final Project project)
+    protected File resolveFile(final String fileName, final File rootDir, @NotNull final Project project)
     {
         return project.resolveFile(fileName, rootDir);
     }
@@ -1585,7 +1586,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the file.
      */
-    protected File resolveFile(final String fileName, final Project project)
+    protected File resolveFile(final String fileName, @NotNull final Project project)
     {
         return project.resolveFile(fileName);
     }
@@ -1608,7 +1609,7 @@ public class AntProjectAdapter
      * @throws IOException if the file cannot be copied.
      */
     protected void copyFile(
-        final String sourceFile, final String destFile, final Project project)
+        final String sourceFile, final String destFile, @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile);
@@ -1636,7 +1637,7 @@ public class AntProjectAdapter
         final String sourceFile,
         final String destFile,
         final boolean filtering,
-        final Project project)
+        @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile, filtering);
@@ -1670,7 +1671,7 @@ public class AntProjectAdapter
         final String destFile,
         final boolean filtering,
         final boolean overwrite,
-        final Project project)
+        @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile, filtering, overwrite);
@@ -1708,7 +1709,7 @@ public class AntProjectAdapter
         final boolean filtering,
         final boolean overwrite,
         final boolean preserveLastModified,
-        final Project project)
+        @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile, filtering, overwrite, preserveLastModified);
@@ -1732,7 +1733,7 @@ public class AntProjectAdapter
      * @throws IOException if the file cannot be copied.
      */
     protected void copyFile(
-        final File sourceFile, final File destFile, final Project project)
+        final File sourceFile, final File destFile, @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile);
@@ -1760,7 +1761,7 @@ public class AntProjectAdapter
         final File sourceFile,
         final File destFile,
         final boolean filtering,
-        final Project project)
+        @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile, filtering);
@@ -1794,7 +1795,7 @@ public class AntProjectAdapter
         final File destFile,
         final boolean filtering,
         final boolean overwrite,
-        final Project project)
+        @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile, filtering, overwrite);
@@ -1832,7 +1833,7 @@ public class AntProjectAdapter
         final boolean filtering,
         final boolean overwrite,
         final boolean preserveLastModified,
-        final Project project)
+        @NotNull final Project project)
       throws IOException
     {
         project.copyFile(sourceFile, destFile, filtering, overwrite, preserveLastModified);
@@ -1855,7 +1856,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @throws BuildException if the last-modified cannot be modified.
      */
-    protected void setFileLastModified(final File file, final long time, final Project project)
+    protected void setFileLastModified(final File file, final long time, @NotNull final Project project)
         throws BuildException
     {
         project.setFileLastModified(file, time);
@@ -1875,7 +1876,7 @@ public class AntProjectAdapter
      * @param parent the parent project.
      * @param project the {@link Project} instance.
      */
-    protected void inheritIDReferences(final Project parent, final Project project)
+    protected void inheritIDReferences(final Project parent, @NotNull final Project project)
     {
         project.inheritIDReferences(parent);
     }
@@ -1895,7 +1896,7 @@ public class AntProjectAdapter
      * @param value the reference.
      * @param project the {@link Project} instance.
      */
-    protected void addIdReference(final String id, final Object value, final Project project)
+    protected void addIdReference(final String id, final Object value, @NotNull final Project project)
     {
         project.addIdReference(id, value);
     }
@@ -1916,7 +1917,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      */
     protected void addReference(
-        final String referenceName, final Object value, final Project project)
+        final String referenceName, final Object value, @NotNull final Project project)
     {
         project.addReference(referenceName, value);
     }
@@ -1935,7 +1936,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such references.
      */
-    protected Hashtable getReferences(final Project project)
+    protected Hashtable getReferences(@NotNull final Project project)
     {
         return project.getReferences();
     }
@@ -1955,7 +1956,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return <code>true</code> in such case.
      */
-    protected boolean hasReference(final String key, final Project project)
+    protected boolean hasReference(final String key, @NotNull final Project project)
     {
         return project.hasReference(key);
     }
@@ -1974,7 +1975,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return such references.
      */
-    protected Map getCopyOfReferences(final Project project)
+    protected Map getCopyOfReferences(@NotNull final Project project)
     {
         return project.getCopyOfReferences();
     }
@@ -1994,7 +1995,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the reference value.
      */
-    protected Object getReference(final String key, final Project project)
+    protected Object getReference(final String key, @NotNull final Project project)
     {
         return project.getReference(key);
     }
@@ -2014,7 +2015,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the name.
      */
-    protected String getElementName(final Object element, final Project project)
+    protected String getElementName(final Object element, @NotNull final Project project)
     {
         return project.getElementName(element);
     }
@@ -2032,7 +2033,7 @@ public class AntProjectAdapter
      * @see {@link Project#fireBuildStarted()}.
      * @param project the {@link Project} instance.
      */
-    protected void fireBuildStarted(final Project project)
+    protected void fireBuildStarted(@NotNull final Project project)
     {
         project.fireBuildStarted();
     }
@@ -2051,7 +2052,7 @@ public class AntProjectAdapter
      * @param exception the exception, should it occurs.
      * @param project the {@link Project} instance.
      */
-    protected void fireBuildFinished(final Throwable exception, final Project project)
+    protected void fireBuildFinished(final Throwable exception, @NotNull final Project project)
     {
         project.fireBuildFinished(exception);
     }
@@ -2069,7 +2070,7 @@ public class AntProjectAdapter
      * @see {@link Project#fireSubBuildStarted()}.
      * @param project the {@link Project} instance.
      */
-    protected void fireSubBuildStarted(final Project project)
+    protected void fireSubBuildStarted(@NotNull final Project project)
     {
         project.fireSubBuildStarted();
     }
@@ -2088,7 +2089,7 @@ public class AntProjectAdapter
      * @param exception the exception, should it occurs.
      * @param project the {@link Project} instance.
      */
-    protected void fireSubBuildFinished(final Throwable exception, final Project project)
+    protected void fireSubBuildFinished(final Throwable exception, @NotNull final Project project)
     {
         project.fireSubBuildFinished(exception);
     }
@@ -2106,7 +2107,7 @@ public class AntProjectAdapter
      * {@inheritDoc}
      */
     protected void registerThreadTask(
-        final Thread thread, final Task task, final Project project)
+        final Thread thread, final Task task, @NotNull final Project project)
     {
         project.registerThreadTask(thread, task);
     }
@@ -2126,7 +2127,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the task.
      */
-    protected Task getThreadTask(final Thread thread, final Project project)
+    protected Task getThreadTask(final Thread thread, @NotNull final Project project)
     {
         return project.getThreadTask(thread);
     }
@@ -2146,7 +2147,7 @@ public class AntProjectAdapter
      * @param project the {@link Project} instance.
      * @return the resource.
      */
-    protected Resource getResource(final String name, final Project project)
+    protected Resource getResource(final String name, @NotNull final Project project)
     {
         return project.getResource(name);
     }
@@ -2167,7 +2168,7 @@ public class AntProjectAdapter
      * @param message the message.
      * @param log the {@link Log} instance.
      */
-    protected void log(final String message, final Log log)
+    protected void log(final String message, @NotNull final Log log)
     {
         log.info(message);
     }
@@ -2188,7 +2189,7 @@ public class AntProjectAdapter
      * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
-    protected void log(final String message, final int msgLevel, final Log log)
+    protected void log(final String message, final int msgLevel, @NotNull final Log log)
     {
         switch (msgLevel)
         {
@@ -2231,7 +2232,7 @@ public class AntProjectAdapter
      * @param log the {@link Log} instance.
      */
     protected void log(
-        final String message, final Throwable throwable, final int msgLevel, final Log log)
+        final String message, final Throwable throwable, final int msgLevel, @NotNull final Log log)
     {
         switch (msgLevel)
         {
@@ -2260,7 +2261,7 @@ public class AntProjectAdapter
      * {@inheritDoc}
      */
     @Override
-    public void log(final Task task, final String message, final int msgLevel)
+    public void log(@NotNull final Task task, final String message, final int msgLevel)
     {
         log(task, message, msgLevel, getLog());
     }
@@ -2273,9 +2274,9 @@ public class AntProjectAdapter
      * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
-    protected void log(final Task task, final String message, final int msgLevel, final Log log)
+    protected void log(@NotNull final Task task, final String message, final int msgLevel, @NotNull final Log log)
     {
-        String t_strMessage = "[" + task.getTaskName() + "] " + message;
+        @NotNull String t_strMessage = "[" + task.getTaskName() + "] " + message;
 
         switch (msgLevel)
         {
@@ -2305,7 +2306,7 @@ public class AntProjectAdapter
      */
     @Override
     public void log(
-        final Task task, final String message, final Throwable throwable, final int msgLevel)
+        @NotNull final Task task, final String message, final Throwable throwable, final int msgLevel)
     {
         log(task, message, throwable, msgLevel, getLog());
     }
@@ -2320,12 +2321,12 @@ public class AntProjectAdapter
      * @param log the {@link Log} instance.
      */
     protected void log(
-        final Task task,
+        @NotNull final Task task,
         final String message,
         final Throwable throwable,
-        final int msgLevel, final Log log)
+        final int msgLevel, @NotNull final Log log)
     {
-        String t_strMessage = "[" + task.getTaskName() + "] " + message;
+        @NotNull String t_strMessage = "[" + task.getTaskName() + "] " + message;
 
         switch (msgLevel)
         {
@@ -2354,7 +2355,7 @@ public class AntProjectAdapter
      * {@inheritDoc}
      */
     @Override
-    public void log(final Target target, final String message, final int msgLevel)
+    public void log(@NotNull final Target target, final String message, final int msgLevel)
     {
         log(target, message, msgLevel, getLog());
     }
@@ -2368,9 +2369,9 @@ public class AntProjectAdapter
      * @param log the {@link Log} instance.
      */
     protected void log(
-        final Target target, final String message, final int msgLevel, final Log log)
+        @NotNull final Target target, final String message, final int msgLevel, @NotNull final Log log)
     {
-        String t_strMessage = "[" + target.getName() + "] " + message;
+        @NotNull String t_strMessage = "[" + target.getName() + "] " + message;
 
         switch (msgLevel)
         {
@@ -2400,7 +2401,7 @@ public class AntProjectAdapter
      */
     @Override
     public void log(
-        final Target target, final String message, final Throwable throwable, final int msgLevel)
+        @NotNull final Target target, final String message, final Throwable throwable, final int msgLevel)
     {
         log(target, message, throwable, msgLevel, getLog());
     }
@@ -2415,12 +2416,12 @@ public class AntProjectAdapter
      * @param log the {@link Log} instance.
      */
     protected void log(
-        final Target target,
+        @NotNull final Target target,
         final String message,
         final Throwable throwable,
-        final int msgLevel, final Log log)
+        final int msgLevel, @NotNull final Log log)
     {
-        String t_strMessage = "[" + target.getName() + "] " + message;
+        @NotNull String t_strMessage = "[" + target.getName() + "] " + message;
 
         switch (msgLevel)
         {

@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.RowDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Row;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -68,7 +69,7 @@ public class CachingRowDecorator
      * @precondition metadataManager != null
      */
     public CachingRowDecorator(
-        final Row row, final MetadataManager metadataManager)
+        @NotNull final Row row, @NotNull final MetadataManager metadataManager)
     {
         super(row, metadataManager);
     }

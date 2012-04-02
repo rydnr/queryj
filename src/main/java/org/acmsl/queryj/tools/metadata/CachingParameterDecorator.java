@@ -40,6 +40,8 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ParameterDecorator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Parameter</code>
@@ -87,7 +89,7 @@ public class CachingParameterDecorator
      * @precondition metadataTypeManager != null
      */
     public CachingParameterDecorator(
-        final ParameterElement parameter,
+        @NotNull final ParameterElement parameter,
         final MetadataTypeManager metadataTypeManager)
     {
         super(parameter, metadataTypeManager);
@@ -128,7 +130,7 @@ public class CachingParameterDecorator
      */
     public String getSqlType()
     {
-        String result = getCachedSqlType();
+        @Nullable String result = getCachedSqlType();
         
         if  (result == null)
         {
@@ -173,7 +175,7 @@ public class CachingParameterDecorator
      */
     public String getObjectType()
     {
-        String result = getCachedObjectType();
+        @Nullable String result = getCachedObjectType();
         
         if  (result == null)
         {

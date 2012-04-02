@@ -53,6 +53,8 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -90,6 +92,7 @@ public class CustomValueObjectImplTemplateGenerator
      * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static CustomValueObjectTemplateGenerator getInstance()
     {
         return CustomValueObjectImplTemplateGeneratorSingletonContainer.SINGLETON;
@@ -114,10 +117,11 @@ public class CustomValueObjectImplTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @Nullable
     public BasePerCustomResultTemplate createTemplate(
-        final Result customResult,
+        @NotNull final Result customResult,
         final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -125,7 +129,7 @@ public class CustomValueObjectImplTemplateGenerator
         final String repositoryName,
         final String header)
     {
-        BasePerCustomResultTemplate result = null;
+        @Nullable BasePerCustomResultTemplate result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
@@ -166,12 +170,12 @@ public class CustomValueObjectImplTemplateGenerator
      */
     @Override
     protected void write(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
+        @NotNull final BasePerCustomResultTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

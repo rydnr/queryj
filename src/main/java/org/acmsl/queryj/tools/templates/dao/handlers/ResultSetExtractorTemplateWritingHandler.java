@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -79,7 +81,7 @@ public class ResultSetExtractorTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -98,7 +100,7 @@ public class ResultSetExtractorTemplateWritingHandler
      * @precondition metaData != null
      */
     protected boolean handle(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         boolean result = false;
@@ -112,7 +114,7 @@ public class ResultSetExtractorTemplateWritingHandler
                 retrieveTemplates(parameters),
                 ResultSetExtractorTemplateGenerator.getInstance());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -138,18 +140,18 @@ public class ResultSetExtractorTemplateWritingHandler
      * @precondition templateGenerator != null
      */
     protected void writeTemplates(
-        final Map parameters,
-        final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final String engineName,
         final Charset charset,
-        final ResultSetExtractorTemplate[] templates,
-        final ResultSetExtractorTemplateGenerator templateGenerator)
+        @Nullable final ResultSetExtractorTemplate[] templates,
+        @NotNull final ResultSetExtractorTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
         try 
         {
             int t_iLength = (templates != null) ? templates.length : 0;
 
-            ResultSetExtractorTemplate t_Template;
+            @Nullable ResultSetExtractorTemplate t_Template;
 
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
@@ -167,7 +169,7 @@ public class ResultSetExtractorTemplateWritingHandler
                 }
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -181,8 +183,9 @@ public class ResultSetExtractorTemplateWritingHandler
      * @return the templates.
      * @precondition parameters != null
      */
+    @NotNull
     protected ResultSetExtractorTemplate[] retrieveTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (ResultSetExtractorTemplate[])
@@ -200,8 +203,9 @@ public class ResultSetExtractorTemplateWritingHandler
      * @precondition tableName != null
      * @precondition parameters != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName, final String tableName, final Map parameters)
+        @NotNull final String engineName, @NotNull final String tableName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -228,13 +232,14 @@ public class ResultSetExtractorTemplateWritingHandler
      * @precondition tableName != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName,
-        final File projectOutputDir,
+        @NotNull final String engineName,
+        @NotNull final File projectOutputDir,
         final String projectPackage,
-        final String tableName,
+        @NotNull final String tableName,
         final boolean subFolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveResultSetExtractorFolder(

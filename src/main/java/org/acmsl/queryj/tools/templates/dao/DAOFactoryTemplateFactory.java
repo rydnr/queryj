@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create DAO factory templates.
@@ -62,6 +63,7 @@ public interface DAOFactoryTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @NotNull
     public DAOFactoryTemplate createDAOFactoryTemplate(
         final TableTemplate tableTemplate,
         final String packageName,

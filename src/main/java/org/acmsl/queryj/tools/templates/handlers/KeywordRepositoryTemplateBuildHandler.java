@@ -67,6 +67,8 @@ import java.util.Map;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds a keyword repository from declared keyword definition.
@@ -79,6 +81,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return KeywordRepositoryTemplateGenerator.getInstance();
@@ -108,21 +111,22 @@ public class KeywordRepositoryTemplateBuildHandler
      * @precondition tableNames != null
      * @precondition factory != null
      */
+    @Nullable
     protected BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
         final String engineName,
         final String header,
         final Collection tableNames,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        KeywordRepositoryTemplate result = null;
+        @Nullable KeywordRepositoryTemplate result = null;
 
         if  (templateFactory instanceof KeywordRepositoryTemplateFactory)
         {
@@ -139,9 +143,9 @@ public class KeywordRepositoryTemplateBuildHandler
                             engineName,
                             header);
 
-            Collection t_cFieldElements = null;
+            @Nullable Collection t_cFieldElements = null;
 
-            AntExternallyManagedFieldsElement
+            @NotNull AntExternallyManagedFieldsElement
                 t_ExternallyManagedFieldsElement =
                     retrieveExternallyManagedFieldsElement(parameters);
 
@@ -165,7 +169,7 @@ public class KeywordRepositoryTemplateBuildHandler
                     while  (   (t_itFieldIterator != null)
                             && (t_itFieldIterator.hasNext()))
                     {
-                        AntFieldElement t_Field =
+                        @NotNull AntFieldElement t_Field =
                             (AntFieldElement) t_itFieldIterator.next();
 
                         if  (t_Field != null)
@@ -202,8 +206,9 @@ public class KeywordRepositoryTemplateBuildHandler
      * @return the externally-managed-fields information.
      * @precondition parameters != null
      */
+    @NotNull
     protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(final Map parameters)
+        retrieveExternallyManagedFieldsElement(@NotNull final Map parameters)
     {
         return
             (AntExternallyManagedFieldsElement)
@@ -223,7 +228,7 @@ public class KeywordRepositoryTemplateBuildHandler
     protected String retrievePackage(
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveKeywordRepositoryPackage(
@@ -238,7 +243,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.KEYWORD_REPOSITORY_TEMPLATE,

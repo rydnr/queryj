@@ -53,6 +53,8 @@ import org.apache.commons.digester.Digester;
 /*
  * Importing some SAX classes.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -80,13 +82,14 @@ public class SqlElementFactory
      * @precondition digester != null
      * @precondition conversionUtils != null
      */
+    @Nullable
     public Object createObject(
-        final Attributes attributes,
+        @NotNull final Attributes attributes,
         final Digester digester,
-        final ConversionUtils conversionUtils)
+        @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        SqlElement result = null;
+        @Nullable SqlElement result = null;
 
         String t_strId = attributes.getValue("id");
 

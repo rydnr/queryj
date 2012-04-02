@@ -56,6 +56,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -164,6 +165,7 @@ public class Oracle8MetadataManager
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */
+    @NotNull
     public String getName()
     {
         return "oracle8";

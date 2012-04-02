@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -355,6 +356,7 @@ public abstract class AbstractBasePerCustomSqlTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTemplateName(), getSql());
@@ -368,8 +370,9 @@ public abstract class AbstractBasePerCustomSqlTemplate
      * @precondition templateName != null
      * @precondition sql != null
      */
+    @NotNull
     protected String buildHeader(
-        final String templateName, final SqlElement sql)
+        final String templateName, @NotNull final SqlElement sql)
     {
         return
               "Generating " + templateName + " for " + sql.getName();
@@ -379,5 +382,6 @@ public abstract class AbstractBasePerCustomSqlTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public abstract String getTemplateName();
 }

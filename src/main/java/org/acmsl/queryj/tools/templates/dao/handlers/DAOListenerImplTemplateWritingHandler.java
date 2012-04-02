@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -72,6 +73,7 @@ public class DAOListenerImplTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
         return DAOListenerImplTemplateGenerator.getInstance();
@@ -83,8 +85,9 @@ public class DAOListenerImplTemplateWritingHandler
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
+    @NotNull
     protected BasePerRepositoryTemplate retrieveTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  BuildException
     {
         return
@@ -109,12 +112,12 @@ public class DAOListenerImplTemplateWritingHandler
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
+        @NotNull final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {
         return

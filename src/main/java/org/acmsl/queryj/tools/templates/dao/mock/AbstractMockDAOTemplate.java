@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to create mock DAO implementations for each
@@ -1573,6 +1574,7 @@ public abstract class AbstractMockDAOTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
@@ -1584,7 +1586,8 @@ public abstract class AbstractMockDAOTemplate
      * @return such header.
      * @precondition tableTemplate != null
      */
-    protected String buildHeader(final TableTemplate tableTemplate)
+    @NotNull
+    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
     {
         return
               "Generating MockDAO for "

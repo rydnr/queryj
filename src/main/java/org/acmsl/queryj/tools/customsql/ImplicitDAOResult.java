@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.customsql;
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JDK classes.
@@ -105,6 +106,7 @@ public class ImplicitDAOResult
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getClassValue()
     {
         throw
@@ -168,16 +170,16 @@ public class ImplicitDAOResult
      */
     public boolean equals(
         final Object instance,
-        final String id,
-        final String matches,
-        final String daoRef,
+        @NotNull final String id,
+        @NotNull final String matches,
+        @NotNull final String daoRef,
         final Collection propertyRefs)
     {
         boolean result = false;
 
         if  (instance instanceof ImplicitDAOResult)
         {
-            ImplicitDAOResult candidate = (ImplicitDAOResult) instance;
+            @NotNull ImplicitDAOResult candidate = (ImplicitDAOResult) instance;
 
             result =
                 (   (id.equalsIgnoreCase(candidate.getId())
@@ -194,6 +196,7 @@ public class ImplicitDAOResult
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return
@@ -212,6 +215,7 @@ public class ImplicitDAOResult
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String matches,
@@ -240,7 +244,7 @@ public class ImplicitDAOResult
 
         if  (object instanceof ImplicitDAOResult)
         {
-            final ImplicitDAOResult t_OtherInstance =
+            @NotNull final ImplicitDAOResult t_OtherInstance =
                 (ImplicitDAOResult) object;
 
             result =

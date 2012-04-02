@@ -46,6 +46,8 @@ import org.acmsl.queryj.IntField;
 import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -162,7 +164,7 @@ public class UpdateQuery
      * Specifies the value of a field.
      * @param field the field.
      */
-    public void set(final Field field)
+    public void set(@NotNull final Field field)
     {
         addField(field);
         addVariableCondition(field.equals());
@@ -183,7 +185,7 @@ public class UpdateQuery
      * @param condition such condition.
      * @precondition condition != null
      */
-    public void where(final Condition condition)
+    public void where(@NotNull final Condition condition)
     {
         addCondition(condition);
     }
@@ -193,7 +195,7 @@ public class UpdateQuery
      * @param variableCondition such variable condition.
      * @precondition variableCondition != null
      */
-    public void where(final VariableCondition variableCondition)
+    public void where(@NotNull final VariableCondition variableCondition)
     {
         addCondition(variableCondition);
         addVariableCondition(variableCondition);
@@ -228,11 +230,11 @@ public class UpdateQuery
      */
     protected String toString(
         final Table table,
-        final List fields,
-        final List conditions,
-        final QueryUtils queryUtils)
+        @NotNull final List fields,
+        @Nullable final List conditions,
+        @NotNull final QueryUtils queryUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append("UPDATE ");
 
@@ -240,7 +242,7 @@ public class UpdateQuery
 
         t_sbResult.append(" SET ");
 
-        List t_alValues = new ArrayList();
+        @NotNull List t_alValues = new ArrayList();
 
         Iterator t_FieldIterator = fields.iterator();
 
@@ -248,9 +250,9 @@ public class UpdateQuery
         {
             while  (t_FieldIterator.hasNext())
             {
-                Field t_Field = (Field) t_FieldIterator.next();
+                @NotNull Field t_Field = (Field) t_FieldIterator.next();
 
-                String t_strValue = "";
+                @NotNull String t_strValue = "";
 
                 Object t_Value = getValue(t_Field);
 

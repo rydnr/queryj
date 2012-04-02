@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ResultDecorator;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -99,7 +100,7 @@ public class CachingResultDecorator
      * @precondition metadataManager != null
      */
     public CachingResultDecorator(
-        final Result result,
+        @NotNull final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory)

@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Abstract logicless implementation of <code>Table</code> interface.
@@ -123,7 +125,7 @@ public abstract class AbstractTable
 
         if  (object instanceof Table)
         {
-            final Table t_OtherInstance = (Table) object;
+            @NotNull final Table t_OtherInstance = (Table) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -149,11 +151,11 @@ public abstract class AbstractTable
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof Table)
         {
-            final Table t_OtherInstance = (Table) object;
+            @NotNull final Table t_OtherInstance = (Table) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()

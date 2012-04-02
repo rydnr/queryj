@@ -42,6 +42,8 @@ import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.SqlDecorator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -107,7 +109,7 @@ public class CachingSqlDecorator
      * @precondition metadataManager != null
      */
     public CachingSqlDecorator(
-        final Sql sql,
+        @NotNull final Sql sql,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
@@ -146,6 +148,7 @@ public class CachingSqlDecorator
      * Retrieves the cached splitted quoted value.
      * @return such value.
      */
+    @NotNull
     public String[] getCachedSplittedQuotedValue()
     {
         return clone(immutableGetCachedSplittedQuotedValue());
@@ -383,7 +386,7 @@ public class CachingSqlDecorator
      */
     public String getResultClass()
     {
-        String result = getCachedResultClass();
+        @Nullable String result = getCachedResultClass();
 
         if  (result == null)
         {
@@ -428,7 +431,7 @@ public class CachingSqlDecorator
      */
     public String getResultIdAsConstant()
     {
-        String result = getCachedResultIdAsConstant();
+        @Nullable String result = getCachedResultIdAsConstant();
 
         if  (result == null)
         {
@@ -445,9 +448,10 @@ public class CachingSqlDecorator
      * @return the cloned array.
      * @precondition array != null
      */
-    protected String[] clone(final String[] array)
+    @NotNull
+    protected String[] clone(@Nullable final String[] array)
     {
-        String[] result = EMPTY_STRING_ARRAY;
+        @NotNull String[] result = EMPTY_STRING_ARRAY;
 
         int t_iCount = (array != null) ? array.length : 0;
 

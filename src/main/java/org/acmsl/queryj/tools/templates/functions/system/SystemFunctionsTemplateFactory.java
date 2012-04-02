@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create system function templates.
@@ -55,6 +56,7 @@ public interface SystemFunctionsTemplateFactory
      * @param quote the identifier quote string.
      * @return a template.
      */
+    @Nullable
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
         final String packageName,
         final String engineName,

@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to generate TestSuite templates.
@@ -58,6 +59,7 @@ public interface TestSuiteTemplateFactory
      * @param useSubfolders whether to use subfolders.
      * @return a template.
      */
+    @NotNull
     public TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,

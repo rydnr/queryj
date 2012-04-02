@@ -41,6 +41,8 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
 import org.acmsl.queryj.QueryJException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -80,6 +82,7 @@ public interface MetadataManager
      * Retrieves the table names.
      * @return such names.
      */
+    @NotNull
     public String[] getTableNames();
 
     /**
@@ -95,6 +98,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return the table comment.
      */
+    @NotNull
     public String getTableComment(final String tableName);
 
     /**
@@ -110,6 +114,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return the column names.
      */
+    @NotNull
     public String[] getColumnNames(final String tableName);
 
     /**
@@ -198,6 +203,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return the primary key.
      */
+    @NotNull
     public String[] getPrimaryKey(final String tableName);
 
     /**
@@ -228,6 +234,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return such tables.
      */
+    @NotNull
     public String[] getReferringTables(final String tableName);
     
     /**
@@ -250,6 +257,7 @@ public interface MetadataManager
      *   {foreign-keyM-attribute1,..foreign-keyM-attributeN}
      * </pre>
      */
+    @Nullable
     public String[][] getForeignKeys(final String tableName);
 
     /**
@@ -264,6 +272,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return such tables.
      */
+    @NotNull
     public String[] getReferredTables(final String tableName);
 
     /**
@@ -272,6 +281,7 @@ public interface MetadataManager
      * @param refTableName the referred table name.
      * @return such field.
      */
+    @NotNull
     public String[][] getForeignKeys(
         final String tableName, String refTableName);
 
@@ -281,6 +291,7 @@ public interface MetadataManager
      * @param foreignKey the foreign key.
      * @return the referred table name.
      */
+    @Nullable
     public String getReferredTable(
         final String tableName, final String[] foreignKey);
     
@@ -291,6 +302,7 @@ public interface MetadataManager
      * @param refTableName the referred table name.
      * @return such field.
      */
+    @NotNull
     public String[][] getReferredKeys(
         final String tableName, String refTableName);
 
@@ -331,6 +343,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return the externally-managed fields of such table.
      */
+    @NotNull
     public String[] getExternallyManagedFields(final String tableName);
 
     /**
@@ -349,6 +362,7 @@ public interface MetadataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
+    @Nullable
     public String getKeyword(final String tableName, String fieldName);
 
     /**
@@ -358,6 +372,7 @@ public interface MetadataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
+    @Nullable
     public String getExternallyManagedFieldRetrievalQuery(
         final String tableName, String fieldName);
     
@@ -365,6 +380,7 @@ public interface MetadataManager
      * Retrieves the procedures metadata.
      * @return such metadata.
      */
+    @NotNull
     public ProcedureMetadata[] getProceduresMetadata();
 
     /**
@@ -372,6 +388,7 @@ public interface MetadataManager
      * @param procedure the procedure.
      * @return the parameters metadata.
      */
+    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
         final ProcedureMetadata procedure);
 
@@ -380,6 +397,7 @@ public interface MetadataManager
      * @param procedureName the procedure name.
      * @return the parameters metadata.
      */
+    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
         final String procedureName);
 

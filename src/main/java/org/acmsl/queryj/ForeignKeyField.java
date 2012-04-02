@@ -37,6 +37,7 @@ package org.acmsl.queryj;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.PrimaryKeyField;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents foreign keys.
@@ -48,5 +49,6 @@ public interface ForeignKeyField
      * Retrieves the primary key this foreign key points to.
      * @return such primary key.
      */
+    @NotNull
     public PrimaryKeyField getPrimaryKey();
 }

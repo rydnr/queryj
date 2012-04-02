@@ -90,6 +90,8 @@ import org.apache.commons.digester.Digester;
  * Importing Jakarta Commons Logging classes
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to read the contents contained in QueryJ's sql.xml files.
@@ -214,6 +216,7 @@ public class SqlXmlParser
      * @return the custom SQL information.
      * @throws QueryJBuildException if the information cannot be read.
      */
+    @Nullable
     protected Map load()
       throws  QueryJBuildException
     {
@@ -228,15 +231,16 @@ public class SqlXmlParser
      * @throws QueryJBuildException if the information cannot be read.
      * @precondition (stream != null)
      */
+    @Nullable
     protected synchronized Map load(
-        final Digester digester, final InputStream input)
+        @Nullable final Digester digester, @Nullable final InputStream input)
       throws  QueryJBuildException
     {
-        Map result = null;
+        @Nullable Map result = null;
 
         if  (digester != null)
         {
-            Collection collection = new ArrayList();
+            @NotNull Collection collection = new ArrayList();
 
             digester.push(collection);
 
@@ -252,11 +256,11 @@ public class SqlXmlParser
                     setMap(result);
                 }
             }
-            catch  (final RuntimeException exception)
+            catch  (@NotNull final RuntimeException exception)
             {
                 throw exception;
             }
-            catch  (final Exception exception)
+            catch  (@NotNull final Exception exception)
             {
                 try
                 {
@@ -269,7 +273,7 @@ public class SqlXmlParser
                             exception);
                     }
                 }
-                catch  (final Throwable throwable)
+                catch  (@NotNull final Throwable throwable)
                 {
                     // class-loading problem.
                 }
@@ -289,9 +293,10 @@ public class SqlXmlParser
      * @param classLoader <i>optional</i> the class loader.
      * @return a configured digester instance.
      */
-    protected Digester configureDigester(final ClassLoader classLoader)
+    @NotNull
+    protected Digester configureDigester(@Nullable final ClassLoader classLoader)
     {
-        Digester result = new Digester();
+        @NotNull Digester result = new Digester();
 
         if  (classLoader != null)
         {
@@ -441,7 +446,7 @@ public class SqlXmlParser
      * @precondition map != null
      */
     protected synchronized void processSqlXml(
-        final Collection collection, final Map map)
+        @NotNull final Collection collection, @NotNull final Map map)
     {
         Iterator t_Iterator = collection.iterator();
 
@@ -512,7 +517,7 @@ public class SqlXmlParser
     public void parse()
         throws  QueryJBuildException
     {
-        Map t_mSqlXmlMap = getMap();
+        @Nullable Map t_mSqlXmlMap = getMap();
 
         if  (t_mSqlXmlMap == null)
         {
@@ -526,6 +531,7 @@ public class SqlXmlParser
      * @param sqlElement such element.
      * @return the key.
      */
+    @NotNull
     protected Object buildSqlKey(final Object sqlElement)
     {
         return "\\/sql\\::" + sqlElement;
@@ -536,8 +542,9 @@ public class SqlXmlParser
      * @param parameterElement such element.
      * @return the key.
      */
+    @NotNull
     protected Object buildParameterKey(
-        final AbstractIdElement parameterElement)
+        @NotNull final AbstractIdElement parameterElement)
     {
         return buildParameterKey(parameterElement.getId());
     }
@@ -547,6 +554,7 @@ public class SqlXmlParser
      * @param parameterElementId such element id.
      * @return the key.
      */
+    @NotNull
     protected Object buildParameterKey(final String parameterElementId)
     {
         return "\\/parameter\\::" + parameterElementId;
@@ -557,7 +565,8 @@ public class SqlXmlParser
      * @param resultElement such element.
      * @return the key.
      */
-    protected Object buildResultKey(final AbstractIdElement resultElement)
+    @NotNull
+    protected Object buildResultKey(@NotNull final AbstractIdElement resultElement)
     {
         return buildResultKey(resultElement.getId());
     }
@@ -567,6 +576,7 @@ public class SqlXmlParser
      * @param resultElementId such element id.
      * @return the key.
      */
+    @NotNull
     protected Object buildResultKey(final String resultElementId)
     {
         return "\\/result\\::" + resultElementId;
@@ -577,7 +587,8 @@ public class SqlXmlParser
      * @param propertyElement such element.
      * @return the key.
      */
-    protected Object buildPropertyKey(final AbstractIdElement propertyElement)
+    @NotNull
+    protected Object buildPropertyKey(@NotNull final AbstractIdElement propertyElement)
     {
         return buildPropertyKey(propertyElement.getId());
     }
@@ -587,6 +598,7 @@ public class SqlXmlParser
      * @param propertyElementId such element id.
      * @return the key.
      */
+    @NotNull
     protected Object buildPropertyKey(final String propertyElementId)
     {
         return "\\/property\\::" + propertyElementId;
@@ -597,8 +609,9 @@ public class SqlXmlParser
      * @param connectionFlagsElement such element.
      * @return the key.
      */
+    @NotNull
     protected Object buildConnectionFlagsKey(
-        final AbstractIdElement connectionFlagsElement)
+        @NotNull final AbstractIdElement connectionFlagsElement)
     {
         return buildConnectionFlagsKey(connectionFlagsElement.getId());
     }
@@ -608,6 +621,7 @@ public class SqlXmlParser
      * @param connectionFlagsElementId such element id.
      * @return the key.
      */
+    @NotNull
     protected Object buildConnectionFlagsKey(final String connectionFlagsElementId)
     {
         return "\\/connection|flags\\::" + connectionFlagsElementId;
@@ -618,8 +632,9 @@ public class SqlXmlParser
      * @param statementFlagsElement such element.
      * @return the key.
      */
+    @NotNull
     protected Object buildStatementFlagsKey(
-        final AbstractIdElement statementFlagsElement)
+        @NotNull final AbstractIdElement statementFlagsElement)
     {
         return buildStatementFlagsKey(statementFlagsElement.getId());
     }
@@ -629,6 +644,7 @@ public class SqlXmlParser
      * @param statementFlagsElementId such element id.
      * @return the key.
      */
+    @NotNull
     protected Object buildStatementFlagsKey(final String statementFlagsElementId)
     {
         return "\\/statement|flags\\::" + statementFlagsElementId;
@@ -639,8 +655,9 @@ public class SqlXmlParser
      * @param resultSetFlagsElement such element.
      * @return the key.
      */
+    @NotNull
     protected Object buildResultSetFlagsKey(
-        final AbstractIdElement resultSetFlagsElement)
+        @NotNull final AbstractIdElement resultSetFlagsElement)
     {
         return buildResultSetFlagsKey(resultSetFlagsElement.getId());
     }
@@ -650,6 +667,7 @@ public class SqlXmlParser
      * @param resultSetFlagsElementId such element id.
      * @return the key.
      */
+    @NotNull
     protected Object buildResultSetFlagsKey(final String resultSetFlagsElementId)
     {
         return "\\/resultset|flags\\::" + resultSetFlagsElementId;
@@ -661,8 +679,9 @@ public class SqlXmlParser
      * @return the referenced parameter.
      * @precondition reference != null
      */
+    @Nullable
     public ParameterElement resolveReference(
-        final ParameterRefElement reference)
+        @NotNull final ParameterRefElement reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -674,11 +693,12 @@ public class SqlXmlParser
      * @return the referenced parameter.
      * @precondition reference != null
      */
+    @Nullable
     protected ParameterElement resolveReference(
-        final ParameterRefElement reference,
-        final Map map)
+        @NotNull final ParameterRefElement reference,
+        @Nullable final Map map)
     {
-        ParameterElement result = null;
+        @Nullable ParameterElement result = null;
 
         if  (map != null)
         {
@@ -696,8 +716,9 @@ public class SqlXmlParser
      * @return the referenced result.
      * @precondition reference != null
      */
+    @Nullable
     public ResultElement resolveReference(
-        final ResultRefElement reference)
+        @NotNull final ResultRefElement reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -709,11 +730,12 @@ public class SqlXmlParser
      * @return the referenced result.
      * @precondition reference != null
      */
+    @Nullable
     protected ResultElement resolveReference(
-        final ResultRefElement reference,
-        final Map map)
+        @NotNull final ResultRefElement reference,
+        @Nullable final Map map)
     {
-        ResultElement result = null;
+        @Nullable ResultElement result = null;
 
         if  (map != null)
         {
@@ -731,8 +753,9 @@ public class SqlXmlParser
      * @return the referenced property.
      * @precondition reference != null
      */
+    @Nullable
     public PropertyElement resolveReference(
-        final PropertyRefElement reference)
+        @NotNull final PropertyRefElement reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -744,11 +767,12 @@ public class SqlXmlParser
      * @return the referenced property.
      * @precondition reference != null
      */
+    @Nullable
     protected PropertyElement resolveReference(
-        final PropertyRefElement reference,
-        final Map map)
+        @NotNull final PropertyRefElement reference,
+        @Nullable final Map map)
     {
-        PropertyElement result = null;
+        @Nullable PropertyElement result = null;
 
         if  (map != null)
         {
@@ -766,8 +790,9 @@ public class SqlXmlParser
      * @return the referenced connection flags.
      * @precondition reference != null
      */
+    @Nullable
     public ConnectionFlagsElement resolveReference(
-        final ConnectionFlagsRefElement reference)
+        @NotNull final ConnectionFlagsRefElement reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -779,11 +804,12 @@ public class SqlXmlParser
      * @return the referenced connection flags.
      * @precondition reference != null
      */
+    @Nullable
     protected ConnectionFlagsElement resolveReference(
-        final ConnectionFlagsRefElement reference,
-        final Map map)
+        @NotNull final ConnectionFlagsRefElement reference,
+        @Nullable final Map map)
     {
-        ConnectionFlagsElement result = null;
+        @Nullable ConnectionFlagsElement result = null;
 
         if  (map != null)
         {
@@ -801,8 +827,9 @@ public class SqlXmlParser
      * @return the referenced statement flags.
      * @precondition reference != null
      */
+    @Nullable
     public StatementFlagsElement resolveReference(
-        final StatementFlagsRefElement reference)
+        @NotNull final StatementFlagsRefElement reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -814,11 +841,12 @@ public class SqlXmlParser
      * @return the referenced statement flags.
      * @precondition reference != null
      */
+    @Nullable
     protected StatementFlagsElement resolveReference(
-        final StatementFlagsRefElement reference,
-        final Map map)
+        @NotNull final StatementFlagsRefElement reference,
+        @Nullable final Map map)
     {
-        StatementFlagsElement result = null;
+        @Nullable StatementFlagsElement result = null;
 
         if  (map != null)
         {
@@ -836,8 +864,9 @@ public class SqlXmlParser
      * @return the referenced resultset flags.
      * @precondition reference != null
      */
+    @Nullable
     public ResultSetFlagsElement resolveReference(
-        final ResultSetFlagsRefElement reference)
+        @NotNull final ResultSetFlagsRefElement reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -849,11 +878,12 @@ public class SqlXmlParser
      * @return the referenced resultset flags.
      * @precondition reference != null
      */
+    @Nullable
     protected ResultSetFlagsElement resolveReference(
-        final ResultSetFlagsRefElement reference,
-        final Map map)
+        @NotNull final ResultSetFlagsRefElement reference,
+        @Nullable final Map map)
     {
-        ResultSetFlagsElement result = null;
+        @Nullable ResultSetFlagsElement result = null;
 
         if  (map != null)
         {

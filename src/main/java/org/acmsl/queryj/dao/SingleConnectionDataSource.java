@@ -36,6 +36,9 @@ package org.acmsl.queryj.dao;
 /*
  * Importing some JDK1.3 classes.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -125,8 +128,9 @@ public class   SingleConnectionDataSource
      * @throws SQLException if a database-access error occurs.
      * @precondition username != null
      */
+    @NotNull
     public Connection getConnection(
-        final String username, final String password)
+        @NotNull final String username, final String password)
       throws SQLException
     {
         return
@@ -147,23 +151,24 @@ public class   SingleConnectionDataSource
      * @precondition username != null
      * @precondition connection != null
      */
+    @NotNull
     protected Connection getConnection(
-        final String username,
+        @NotNull final String username,
         final String password,
-        final Connection connection)
+        @NotNull final Connection connection)
       throws SQLException
     {
-        Connection result = connection;
+        @NotNull Connection result = connection;
 
-        SQLException exceptionToThrow = null;
+        @Nullable SQLException exceptionToThrow = null;
 
-        DatabaseMetaData databaseMetaData = null;
+        @Nullable DatabaseMetaData databaseMetaData = null;
 
         try
         {
             databaseMetaData = connection.getMetaData();
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             exceptionToThrow = sqlException;
         }
@@ -178,7 +183,7 @@ public class   SingleConnectionDataSource
                         "Cannot use different username/password settings.");
             }
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             exceptionToThrow = sqlException;
         }
@@ -295,7 +300,7 @@ public class   SingleConnectionDataSource
      * @param object the object to check.
      * @return <code>true</code> in such case.
      */
-    protected boolean equals(final Object object, final Connection connection)
+    protected boolean equals(@Nullable final Object object, @Nullable final Connection connection)
     {
         boolean result = false;
 
@@ -324,7 +329,7 @@ public class   SingleConnectionDataSource
      * @return such hashcode.
      * @precondition object != null
      */
-    protected int hashCode(final Object object)
+    protected int hashCode(@NotNull final Object object)
     {
         return object.hashCode();
     }
@@ -334,6 +339,7 @@ public class   SingleConnectionDataSource
      * "datasource wrapped: " prefix.
      * @return such text.
      */
+    @NotNull
     public String toString()
     {
         return toString(getWrappedConnection());
@@ -346,6 +352,7 @@ public class   SingleConnectionDataSource
      * @return such text.
      * @precondition object != null
      */
+    @NotNull
     protected String toString(final Object object)
     {
         return "connection wrapped: " + object;
@@ -365,7 +372,7 @@ public class   SingleConnectionDataSource
      * @param wrappedConnection the wrapped connection.
      * @return <code>true</code> if the wrapped connection is compatible with given class.
      */
-    protected boolean isWrapperFor(final Class wrapperClass, final Object wrappedConnection)
+    protected boolean isWrapperFor(final Class wrapperClass, @Nullable final Object wrappedConnection)
     {
         return
             (   (wrappedConnection != null)
@@ -375,6 +382,7 @@ public class   SingleConnectionDataSource
     /**
      * {@inheritDoc}
      */
+    @Nullable
     public Object unwrap(final Class wrapperClass)
     {
         return unwrap(wrapperClass, getWrappedConnection());
@@ -386,9 +394,10 @@ public class   SingleConnectionDataSource
      * @param wrappedConnection the wrapped connection.
      * @return the wrapped connection if it's compatible.
      */
+    @Nullable
     protected Object unwrap(final Class wrapperClass, final Object wrappedConnection)
     {
-        Object result = null;
+        @Nullable Object result = null;
 
         if  (isWrapperFor(wrapperClass, wrappedConnection))
         {

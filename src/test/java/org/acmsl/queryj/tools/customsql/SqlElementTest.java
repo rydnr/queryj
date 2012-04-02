@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.customsql.SqlElement;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -85,6 +87,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  @Nullable
   org.acmsl.queryj.tools.customsql.SqlElement sqlelement = null;
   // JUnitDoclet end class
   
@@ -104,6 +107,7 @@ extends TestCase
   * @return such instance.
   
   */
+  @NotNull
   public org.acmsl.queryj.tools.customsql.SqlElement createInstance()
   throws Exception
   {
@@ -194,7 +198,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setDescription getDescription
-    java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
+    @NotNull java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -214,7 +218,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setValue getValue
-    java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
+    @NotNull java.lang.String[] t_aTests = {"", " ", "a", "A", "?", "?", "0123456789", "012345678901234567890", "\n", null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -258,7 +262,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setResultRef getResultRef
-    org.acmsl.queryj.tools.customsql.ResultRefElement[] t_aTests =
+    @NotNull org.acmsl.queryj.tools.customsql.ResultRefElement[] t_aTests =
         {new org.acmsl.queryj.tools.customsql.ResultRefElement("r1"), null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
@@ -279,7 +283,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setConnectionFlagsRef getConnectionFlagsRef
-    org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement[] t_aTests =
+    @NotNull org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement[] t_aTests =
         {
             new org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement(
                 "connection-flags-1"),
@@ -304,7 +308,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setStatementFlagsRef getStatementFlagsRef
-    org.acmsl.queryj.tools.customsql.StatementFlagsRefElement[] t_aTests =
+    @NotNull org.acmsl.queryj.tools.customsql.StatementFlagsRefElement[] t_aTests =
         {
             new org.acmsl.queryj.tools.customsql.StatementFlagsRefElement(
                 "statement-flags-1"),
@@ -329,7 +333,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setResultSetFlagsRef getResultSetFlagsRef
-    org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement[] t_aTests =
+    @NotNull org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement[] t_aTests =
         {
             new org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement(
                 "resultset-flags-1"),

@@ -58,6 +58,8 @@ import org.acmsl.commons.utils.StringValidator;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -91,7 +93,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -112,9 +114,9 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @precondition metadataManager != null
      */
     protected boolean handle(
-        final MetadataManager metadataManager,
-        final AntExternallyManagedFieldsElement externallyManagedFields,
-        final StringValidator stringValidator)
+        @NotNull final MetadataManager metadataManager,
+        @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
+        @NotNull final StringValidator stringValidator)
       throws  QueryJBuildException
     {
         boolean result = false;
@@ -124,7 +126,7 @@ public class ExternallyManagedFieldsRetrievalHandler
             Collection t_cFieldElements =
                 externallyManagedFields.getFields();
 
-            Iterator t_itFieldIterator =
+            @Nullable Iterator t_itFieldIterator =
                 (t_cFieldElements != null)
                 ?  t_cFieldElements.iterator()
                 :  null;
@@ -175,8 +177,9 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @return the externally-managed-fields information.
      * @precondition parameters != null
      */
+    @NotNull
     protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(final Map parameters)
+        retrieveExternallyManagedFieldsElement(@NotNull final Map parameters)
     {
         return
             (AntExternallyManagedFieldsElement)

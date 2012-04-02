@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -112,6 +114,7 @@ public class CustomBaseValueObjectTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return
@@ -123,6 +126,7 @@ public class CustomBaseValueObjectTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "CustomBaseValueObject";

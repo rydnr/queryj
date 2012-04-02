@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Bundles a pair of template build and writing handlers.
@@ -69,7 +70,7 @@ public class TemplateHandlerBundle
      * @param bundles the first bundle.
      * @precondition bundles != null
      */
-    public TemplateHandlerBundle(final TemplateHandlerBundle[] bundles)
+    public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
     {
         int t_iLength = (bundles != null) ? bundles.length : 0;
         

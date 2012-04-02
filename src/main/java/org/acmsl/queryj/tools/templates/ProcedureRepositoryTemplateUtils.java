@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides some useful methods when generating ProcedureRepository class.
@@ -70,6 +71,7 @@ public class ProcedureRepositoryTemplateUtils
      * Retrieves a <code>ProcedureRepositoryTemplateUtils</ocde> instance.
      * @return such instance.
      */
+    @NotNull
     public static ProcedureRepositoryTemplateUtils getInstance()
     {
         return ProcedureRepositoryTemplateUtilsSingletonContainer.SINGLETON;
@@ -81,6 +83,7 @@ public class ProcedureRepositoryTemplateUtils
      * @return such name.
      * @precondition repository != null
      */
+    @NotNull
     public String retrieveProcedureRepositoryClassName(final String repository)
     {
         return
@@ -96,8 +99,9 @@ public class ProcedureRepositoryTemplateUtils
      * @precondition repository != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected String retrieveProcedureRepositoryClassName(
-        final String repository, final StringUtils stringUtils)
+        final String repository, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.normalize(repository, '_') + "ProcedureRepository";
     }

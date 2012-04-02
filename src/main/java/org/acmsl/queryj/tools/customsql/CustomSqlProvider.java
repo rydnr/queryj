@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
 import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -73,6 +74,7 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced parameter.
      */
+    @Nullable
     public ParameterElement resolveReference(
         final ParameterRefElement reference);
 
@@ -81,6 +83,7 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced result.
      */
+    @Nullable
     public ResultElement resolveReference(
         final ResultRefElement reference);
 
@@ -89,6 +92,7 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced property.
      */
+    @Nullable
     public PropertyElement resolveReference(
         final PropertyRefElement reference);
 
@@ -113,6 +117,7 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced property.
      */
+    @Nullable
     public ConnectionFlagsElement resolveReference(
         final ConnectionFlagsRefElement reference);
 
@@ -121,6 +126,7 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced property.
      */
+    @Nullable
     public StatementFlagsElement resolveReference(
         final StatementFlagsRefElement reference);
 
@@ -129,6 +135,7 @@ public interface CustomSqlProvider
      * @param reference such reference.
      * @return the referenced property.
      */
+    @Nullable
     public ResultSetFlagsElement resolveReference(
         final ResultSetFlagsRefElement reference);
 }

@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents entities able to create per-table templates.
@@ -68,6 +69,7 @@ public interface BasePerTableTemplateFactory
      * interfaces.
      * @return a template.
      */
+    @Nullable
     public BasePerTableTemplate createTemplate(
         final String tableName,
         final MetadataManager metadataManager,

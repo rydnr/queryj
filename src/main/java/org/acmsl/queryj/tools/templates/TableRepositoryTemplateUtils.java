@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides some useful methods when generating TableRepository class.
@@ -74,6 +75,7 @@ public class TableRepositoryTemplateUtils
      * Retrieves a <code>TableRepositoryTemplateUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static TableRepositoryTemplateUtils getInstance()
     {
         return TableRepositoryTemplateUtilsSingletonContainer.SINGLETON;
@@ -85,7 +87,8 @@ public class TableRepositoryTemplateUtils
      * @return such name.
      * @precondition repository != null
      */
-    public String retrieveTableRepositoryClassName(final String repository)
+    @NotNull
+    public String retrieveTableRepositoryClassName(@NotNull final String repository)
     {
         return
             retrieveTableRepositoryClassName(
@@ -100,8 +103,9 @@ public class TableRepositoryTemplateUtils
      * @precondition repository != null
      * @precondition decorationUtils != null
      */
+    @NotNull
     protected String retrieveTableRepositoryClassName(
-        final String repository, final DecorationUtils decorationUtils)
+        @NotNull final String repository, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(repository) + "TableRepository";
     }

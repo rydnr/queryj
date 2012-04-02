@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create per-<i>foreign key</i> templates.
@@ -65,6 +66,7 @@ public interface BasePerForeignKeyTemplateFactory
      * @param repositoryName the repository name.
      * @param header the header.
      */
+    @NotNull
     public BasePerForeignKeyTemplate createTemplate(
         final ForeignKey foreignKey,
         final MetadataManager metadataManager,

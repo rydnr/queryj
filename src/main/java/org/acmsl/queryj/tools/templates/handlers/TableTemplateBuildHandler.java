@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -87,7 +89,7 @@ public class TableTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -104,7 +106,7 @@ public class TableTemplateBuildHandler
      * @precondition metaData != null
      */
     protected void buildTemplates(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
@@ -115,7 +117,7 @@ public class TableTemplateBuildHandler
                 retrieveDatabaseProductVersion(metaData),
                 fixQuote(metaData.getIdentifierQuoteString()));
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -137,7 +139,7 @@ public class TableTemplateBuildHandler
      * @precondition quote != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote)
@@ -184,13 +186,13 @@ public class TableTemplateBuildHandler
      * @precondition repository != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final TableTemplateFactory templateFactory,
+        @NotNull final TableTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
@@ -200,7 +202,7 @@ public class TableTemplateBuildHandler
     {
         String[] t_astrTableNames = metadataManager.getTableNames();
 
-        String[] t_astrColumnNames = null;
+        @Nullable String[] t_astrColumnNames = null;
 
         MetadataTypeManager t_MetadataTypeManager =
             metadataManager.getMetadataTypeManager();
@@ -212,7 +214,7 @@ public class TableTemplateBuildHandler
 
         if  (t_iCount > 0)
         {
-            TableTemplate[] t_aTableTemplates =
+            @NotNull TableTemplate[] t_aTableTemplates =
                 new TableTemplate[t_iCount];
 
             for  (int t_iTableIndex = 0;
@@ -278,7 +280,7 @@ public class TableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String engineName, final Map parameters)
+        final String engineName, @NotNull final Map parameters)
     {
         return retrievePackage(parameters, PackageUtils.getInstance());
     }
@@ -292,7 +294,7 @@ public class TableTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveTablePackage(
@@ -307,7 +309,7 @@ public class TableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTableNames(
-        final String[] tableNames, final Map parameters)
+        final String[] tableNames, @NotNull final Map parameters)
     {
         parameters.put(TABLE_NAMES, tableNames);
     }
@@ -320,7 +322,7 @@ public class TableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTableTemplates(
-        final TableTemplate[] tableTemplates, final Map parameters)
+        final TableTemplate[] tableTemplates, @NotNull final Map parameters)
     {
         parameters.put(TABLE_TEMPLATES, tableTemplates);
     }
@@ -351,8 +353,9 @@ public class TableTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition repository != null
      */
+    @NotNull
     protected TableTemplate createTemplate(
-        final TableTemplateFactory templateFactory,
+        @NotNull final TableTemplateFactory templateFactory,
         final String tableName,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,

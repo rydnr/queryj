@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -69,6 +70,7 @@ public class ValueObjectImplTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
         return ValueObjectImplTemplateGenerator.getInstance();
@@ -89,7 +91,7 @@ public class ValueObjectImplTemplateBuildHandler
         final String tableName,
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {
         return
@@ -104,7 +106,7 @@ public class ValueObjectImplTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, final Map parameters)
+        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATES, templates);

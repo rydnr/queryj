@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.metadata.vo.AbstractRow;
 import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JDK classes.
@@ -74,7 +75,7 @@ public abstract class AbstractRowDecorator
      * @precondition metadataManager != null
      */
     public AbstractRowDecorator(
-        final Row row, final MetadataManager metadataManager)
+        @NotNull final Row row, @NotNull final MetadataManager metadataManager)
     {
         this(
             row.getName(),
@@ -182,7 +183,7 @@ public abstract class AbstractRowDecorator
      * @precondition decorationUtils != null
      */
     protected String normalizeUppercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.softNormalizeUppercase(value);
     }
@@ -192,6 +193,7 @@ public abstract class AbstractRowDecorator
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return toString(getRow());
@@ -204,6 +206,7 @@ public abstract class AbstractRowDecorator
      * @return such information.
      * @precondition row != null
      */
+    @NotNull
     protected String toString(final Row row)
     {
         return "" + row;
@@ -224,7 +227,7 @@ public abstract class AbstractRowDecorator
      * @return such information.
      * @precondition row != null
      */
-    protected int hashCode(final Row row)
+    protected int hashCode(@NotNull final Row row)
     {
         return row.hashCode();
     }
@@ -246,7 +249,7 @@ public abstract class AbstractRowDecorator
      * @return the result of such comparison.
      * @precondition row != null
      */
-    protected boolean equals(final Row row, final Object object)
+    protected boolean equals(@NotNull final Row row, final Object object)
     {
         return row.equals(object);
     }
@@ -273,7 +276,7 @@ public abstract class AbstractRowDecorator
      * object prevents it from being compared to this Object.
      * @precondition row != null
      */
-    protected int compareTo(final Row row, final Object object)
+    protected int compareTo(@NotNull final Row row, final Object object)
         throws  ClassCastException
     {
         return row.compareTo(object);

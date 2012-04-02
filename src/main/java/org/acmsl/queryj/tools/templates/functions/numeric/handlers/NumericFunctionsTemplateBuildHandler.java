@@ -50,6 +50,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -86,7 +88,7 @@ public class NumericFunctionsTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         if  (retrieveExtractFunctions(parameters))
@@ -120,17 +122,17 @@ public class NumericFunctionsTemplateBuildHandler
      * @precondition stringUtils != null
      */
     protected void buildTemplate(
-        final DatabaseMetaData metadata,
+        @NotNull final DatabaseMetaData metadata,
         final String packageName,
         final String header,
-        final NumericFunctionsTemplateGenerator generator,
-        final Map parameters,
-        final StringUtils stringUtils)
+        @NotNull final NumericFunctionsTemplateGenerator generator,
+        @NotNull final Map parameters,
+        @NotNull final StringUtils stringUtils)
       throws  QueryJBuildException
     {
         try 
         {
-            NumericFunctionsTemplate t_Template =
+            @Nullable NumericFunctionsTemplate t_Template =
                 generator.createNumericFunctionsTemplate(
                     packageName,
                     metadata.getDatabaseProductName(),
@@ -141,7 +143,7 @@ public class NumericFunctionsTemplateBuildHandler
             Collection t_cFunctions =
                 stringUtils.tokenize(metadata.getNumericFunctions(), ",");
 
-            Iterator t_itFunctions =
+            @Nullable Iterator t_itFunctions =
                 (t_cFunctions != null) ? t_cFunctions.iterator() : null;
 
             if  (t_itFunctions != null)
@@ -158,7 +160,7 @@ public class NumericFunctionsTemplateBuildHandler
 
             storeNumericFunctionsTemplate(t_Template, parameters);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -173,11 +175,11 @@ public class NumericFunctionsTemplateBuildHandler
      * @param parameters the parameter map.
      * @return such information.
      */
-    protected boolean retrieveExtractFunctions(final Map parameters)
+    protected boolean retrieveExtractFunctions(@NotNull final Map parameters)
     {
         boolean result = true;
 
-        Boolean t_bResult =
+        @NotNull Boolean t_bResult =
             (Boolean)
                 parameters.get(ParameterValidationHandler.EXTRACT_FUNCTIONS);
 
@@ -197,7 +199,7 @@ public class NumericFunctionsTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeNumericFunctionsTemplate(
-        final NumericFunctionsTemplate template, final Map parameters)
+        final NumericFunctionsTemplate template, @NotNull final Map parameters)
     {
         parameters.put(NUMERIC_FUNCTIONS_TEMPLATE, template);
     }
@@ -207,7 +209,7 @@ public class NumericFunctionsTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -224,7 +226,7 @@ public class NumericFunctionsTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveFunctionsPackage(projectPackage);
     }

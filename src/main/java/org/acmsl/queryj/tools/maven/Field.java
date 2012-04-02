@@ -31,6 +31,8 @@
  */
 package org.acmsl.queryj.tools.maven;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Models a field
  * @author <a href="mailto:jose.juan@ventura24.es">Jose Juan</a>
@@ -191,7 +193,7 @@ public class Field
         final String type,
         final String pk)
     {
-        StringBuilder result = new StringBuilder();
+        @NotNull StringBuilder result = new StringBuilder();
 
         result.append(" { class-name : \"");
         result.append(className);

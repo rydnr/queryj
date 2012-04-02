@@ -52,6 +52,7 @@ import org.acmsl.queryj.TableAlias;
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Indicates JUnit how to test UpdateQuery classes.
@@ -124,11 +125,11 @@ public class UpdateQueryTest
      */
     public void testToString1()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
+        @NotNull UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
 
         t_Query.update(USERS);
         t_Query.set(USERS.NAME, "myself");
@@ -151,11 +152,11 @@ public class UpdateQueryTest
      */
     public void testToString2()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
+        @NotNull UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
 
         t_Query.update(USERS);
         t_Query.set(USERS.NAME);
@@ -178,11 +179,11 @@ public class UpdateQueryTest
      */
     public void testToString3()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
+        @NotNull UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
 
         t_Query.update(USERS);
         t_Query.set(USERS.NAME);
@@ -205,11 +206,11 @@ public class UpdateQueryTest
      */
     public void testToString4()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
+        @NotNull UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
 
         t_Query.update(USERS);
         t_Query.set(USERS.NAME);
@@ -232,11 +233,11 @@ public class UpdateQueryTest
      */
     public void testToString5()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
+        @NotNull UpdateQuery t_Query = t_QueryFactory.createUpdateQuery();
 
         t_Query.update(USERS);
         t_Query.set(USERS.AGE);
@@ -272,24 +273,28 @@ public class UpdateQueryTest
         /**
          * The USERS table USERID field.
          */
+        @NotNull
         public IntField USERID =
             new IntField("USERID", this) {};
 
         /**
          * The USERS table NAME field.
          */
+        @NotNull
         public StringField NAME =
             new StringField("NAME", this) {};
 
         /**
          * The USERS table AGE field.
          */
+        @NotNull
         public IntField AGE =
             new IntField("AGE", this) {};
 
         /**
          * All fields.
          */
+        @NotNull
         public Field[] ALL =
             new Field[] {USERID, NAME, AGE};
 
@@ -301,6 +306,7 @@ public class UpdateQueryTest
         /**
          * The table alias.
          */
+        @NotNull
         public TableAlias ALIAS =
             new TableAlias("usrs", this) {};
 
@@ -317,6 +323,7 @@ public class UpdateQueryTest
          * star in a query.
          * @return such fields.
          */
+        @NotNull
         public Field[] getAll()
         {
             return ALL;

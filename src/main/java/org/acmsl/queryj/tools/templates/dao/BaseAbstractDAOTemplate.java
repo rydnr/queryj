@@ -81,6 +81,8 @@ import java.util.Map;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create abstract DAO implementations for certain tables in the
@@ -187,6 +189,7 @@ public class BaseAbstractDAOTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "Abstract DAO";
@@ -196,6 +199,7 @@ public class BaseAbstractDAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/BaseAbstractDAO.stg");

@@ -54,6 +54,8 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -78,6 +80,7 @@ public class CustomValueObjectTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
     {
@@ -90,9 +93,10 @@ public class CustomValueObjectTemplateWritingHandler
      * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
      */
+    @NotNull
     @Override
     protected BasePerCustomResultTemplate[] retrieveTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
         throws  BuildException
     {
         return
@@ -116,17 +120,18 @@ public class CustomValueObjectTemplateWritingHandler
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      */
+    @Nullable
     @Override
     protected File retrieveOutputDir(
         final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
         final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {
         return
@@ -149,11 +154,12 @@ public class CustomValueObjectTemplateWritingHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected File retrieveOutputDir(
-        final File projectOutputDir,
+        @NotNull final File projectOutputDir,
         final String projectPackage,
         final boolean useSubfolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {
         return

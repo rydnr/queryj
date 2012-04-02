@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -89,6 +90,7 @@ public class TableRepositoryTemplateGenerator
      * Retrieves a {@link TableRepositoryTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static TableRepositoryTemplateGenerator getInstance()
     {
         return TableRepositoryTemplateGeneratorSingletonContainer.SINGLETON;
@@ -108,6 +110,7 @@ public class TableRepositoryTemplateGenerator
      * @oaram jmx whether to support JMX.
      * @return a template.
      */
+    @NotNull
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -138,6 +141,7 @@ public class TableRepositoryTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -151,8 +155,8 @@ public class TableRepositoryTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -179,11 +183,11 @@ public class TableRepositoryTemplateGenerator
      * @precondition tableRepositoryTemplateUtils != null
      */
     public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final FileUtils fileUtils,
-        final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
+        @NotNull final FileUtils fileUtils,
+        @NotNull final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

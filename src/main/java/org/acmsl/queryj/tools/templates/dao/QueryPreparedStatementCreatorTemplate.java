@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.dao.AbstractQueryPreparedStatementCreatorTemplate;
 import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateDefaults;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -138,9 +139,9 @@ public class QueryPreparedStatementCreatorTemplate
         final String createPreparedStatementMethod,
         final String classEnd)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
-        MessageFormat t_PackageDeclarationFormatter =
+        @NotNull MessageFormat t_PackageDeclarationFormatter =
             new MessageFormat(packageDeclaration);
 
         t_sbResult.append(header);

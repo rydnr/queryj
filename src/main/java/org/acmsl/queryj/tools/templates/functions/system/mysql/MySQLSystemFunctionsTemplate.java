@@ -40,6 +40,8 @@ package org.acmsl.queryj.tools.templates.functions.system.mysql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -218,6 +220,7 @@ public class MySQLSystemFunctionsTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getMapping(final String function)
     {
         return getMapping(function, MySQLSystemFunctionsTemplate.class);
@@ -228,6 +231,7 @@ public class MySQLSystemFunctionsTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getSpecialMapping(final String function)
     {
         return
@@ -254,7 +258,7 @@ public class MySQLSystemFunctionsTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(final Map mappings)
+    protected boolean isFilledIn(@Nullable final Map mappings)
     {
         return
             (   (mappings != null)
@@ -277,6 +281,7 @@ public class MySQLSystemFunctionsTemplate
      * Retrieves the capitalized words.
      * @return such words.
      */
+    @NotNull
     protected String[] getCapitalizedWords()
     {
         return CAPITALIZED_WORDS;
@@ -286,6 +291,7 @@ public class MySQLSystemFunctionsTemplate
      * Retrieves the field types.
      * @return such array.
      */
+    @NotNull
     protected String[] getFieldTypes()
     {
         return FIELD_TYPES;

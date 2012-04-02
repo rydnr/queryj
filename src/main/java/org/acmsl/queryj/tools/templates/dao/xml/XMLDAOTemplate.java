@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -153,7 +155,7 @@ public class XMLDAOTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
@@ -283,8 +285,8 @@ public class XMLDAOTemplate
      * @precondition packageUtils != null
      */
     protected String generateOutput(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -331,140 +333,140 @@ public class XMLDAOTemplate
         final String persistMethod,
         final String undigesterPropertyRules,
         final String classEnd,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils,
-        final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final PackageUtils packageUtils)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final StringValidator stringValidator,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final PackageUtils packageUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         String t_strTableName = tableTemplate.getTableName();
 
-        MessageFormat t_HeaderFormatter = new MessageFormat(header);
+        @NotNull MessageFormat t_HeaderFormatter = new MessageFormat(header);
 
-        MessageFormat t_PackageDeclarationFormatter =
+        @NotNull MessageFormat t_PackageDeclarationFormatter =
             new MessageFormat(packageDeclaration);
 
-        MessageFormat t_ProjectImportFormatter =
+        @NotNull MessageFormat t_ProjectImportFormatter =
             new MessageFormat(projectImports);
 
-        MessageFormat t_ForeignDAOImportsFormatter =
+        @NotNull MessageFormat t_ForeignDAOImportsFormatter =
             new MessageFormat(foreignDAOImports);
 
-        MessageFormat t_JavadocFormatter = new MessageFormat(javadoc);
+        @NotNull MessageFormat t_JavadocFormatter = new MessageFormat(javadoc);
 
-        MessageFormat t_ClassStartFormatter =
+        @NotNull MessageFormat t_ClassStartFormatter =
             new MessageFormat(classStart);
 
-        MessageFormat t_ClassDefinitionFormatter =
+        @NotNull MessageFormat t_ClassDefinitionFormatter =
             new MessageFormat(classDefinition);
 
-        MessageFormat t_ClassConstructorFormatter =
+        @NotNull MessageFormat t_ClassConstructorFormatter =
             new MessageFormat(classConstructor);
 
-        MessageFormat t_ClassInternalMethodsFormatter =
+        @NotNull MessageFormat t_ClassInternalMethodsFormatter =
             new MessageFormat(classInternalMethods);
 
-        MessageFormat t_BuildKeyPkDeclarationFormatter =
+        @NotNull MessageFormat t_BuildKeyPkDeclarationFormatter =
             new MessageFormat(buildKeyPkDeclaration);
 
-        MessageFormat t_ProcessPkAttributesFormatter =
+        @NotNull MessageFormat t_ProcessPkAttributesFormatter =
             new MessageFormat(processPkAttributes);
 
-        MessageFormat t_FindByPrimaryKeyFormatter =
+        @NotNull MessageFormat t_FindByPrimaryKeyFormatter =
             new MessageFormat(findByPrimaryKeyMethod);
 
-        MessageFormat t_FindByPrimaryKeyPkJavadocFormatter =
+        @NotNull MessageFormat t_FindByPrimaryKeyPkJavadocFormatter =
             new MessageFormat(findByPrimaryKeyPkJavadoc);
 
-        MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
+        @NotNull MessageFormat t_FindByPrimaryKeyPkDeclarationFormatter =
             new MessageFormat(findByPrimaryKeyPkDeclaration);
 
-        MessageFormat t_FindByPrimaryKeyPkFilterValuesFormatter =
+        @NotNull MessageFormat t_FindByPrimaryKeyPkFilterValuesFormatter =
             new MessageFormat(findByPrimaryKeyPkFilterValues);
 
-        MessageFormat t_BuildValueObjectMethodFormatter =
+        @NotNull MessageFormat t_BuildValueObjectMethodFormatter =
             new MessageFormat(buildValueObjectMethod);
 
-        MessageFormat t_BuildValueObjectValueRetrieval =
+        @NotNull MessageFormat t_BuildValueObjectValueRetrieval =
             new MessageFormat(buildValueObjectValueRetrieval);
 
-        MessageFormat t_InsertMethodFormatter =
+        @NotNull MessageFormat t_InsertMethodFormatter =
             new MessageFormat(insertMethod);
 
-        MessageFormat t_InsertParametersJavadocFormatter =
+        @NotNull MessageFormat t_InsertParametersJavadocFormatter =
             new MessageFormat(insertParametersJavadoc);
 
-        MessageFormat t_InsertParametersDeclarationFormatter =
+        @NotNull MessageFormat t_InsertParametersDeclarationFormatter =
             new MessageFormat(insertParametersDeclaration);
 
-        MessageFormat t_UpdateMethodFormatter =
+        @NotNull MessageFormat t_UpdateMethodFormatter =
             new MessageFormat(updateMethod);
 
-        MessageFormat t_UpdateParametersJavadocFormatter =
+        @NotNull MessageFormat t_UpdateParametersJavadocFormatter =
             new MessageFormat(updateParametersJavadoc);
 
-        MessageFormat t_UpdateParametersDeclarationFormatter =
+        @NotNull MessageFormat t_UpdateParametersDeclarationFormatter =
             new MessageFormat(updateParametersDeclaration);
 
-        MessageFormat t_DeleteMethodFormatter =
+        @NotNull MessageFormat t_DeleteMethodFormatter =
             new MessageFormat(deleteMethodSubtemplate);
 
-        MessageFormat t_DeleteNoFkMethodFormatter =
+        @NotNull MessageFormat t_DeleteNoFkMethodFormatter =
             new MessageFormat(deleteNoFkMethod);
 
-        MessageFormat t_DeleteWithFkPkJavadocFormatter =
+        @NotNull MessageFormat t_DeleteWithFkPkJavadocFormatter =
             new MessageFormat(deleteWithFkPkJavadoc);
 
-        MessageFormat t_DeleteWithFkPkDeclarationFormatter =
+        @NotNull MessageFormat t_DeleteWithFkPkDeclarationFormatter =
             new MessageFormat(deleteWithFkPkDeclaration);
 
-        MessageFormat t_DeleteWithFkDAODeleteRequestFormatter =
+        @NotNull MessageFormat t_DeleteWithFkDAODeleteRequestFormatter =
             new MessageFormat(deleteWithFkDAODeleteRequest);
 
-        MessageFormat t_DeleteWithFkPkValuesFormatter =
+        @NotNull MessageFormat t_DeleteWithFkPkValuesFormatter =
             new MessageFormat(deleteWithFkPkValues);
 
-        MessageFormat t_DeleteByFkMethodFormatter =
+        @NotNull MessageFormat t_DeleteByFkMethodFormatter =
             new MessageFormat(deleteByFkMethod);
 
-        MessageFormat t_PersistMethodFormatter =
+        @NotNull MessageFormat t_PersistMethodFormatter =
             new MessageFormat(persistMethod);
 
-        MessageFormat t_UndigesterPropertyRulesFormatter =
+        @NotNull MessageFormat t_UndigesterPropertyRulesFormatter =
             new MessageFormat(undigesterPropertyRules);
 
-        StringBuffer t_sbForeignDAOImports = new StringBuffer();
-        StringBuffer t_sbPkJavadoc = new StringBuffer();
-        StringBuffer t_sbPkDeclaration = new StringBuffer();
-        StringBuffer t_sbBuildKeyPkDeclaration = new StringBuffer();
-        StringBuffer t_sbBuildKeyValues = new StringBuffer();
-        StringBuffer t_sbProcessPkAttributes = new StringBuffer();
-        StringBuffer t_sbPkFilterValues = new StringBuffer();
-        StringBuffer t_sbDeleteMethod = new StringBuffer();
-        StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
+        @NotNull StringBuffer t_sbForeignDAOImports = new StringBuffer();
+        @NotNull StringBuffer t_sbPkJavadoc = new StringBuffer();
+        @NotNull StringBuffer t_sbPkDeclaration = new StringBuffer();
+        @NotNull StringBuffer t_sbBuildKeyPkDeclaration = new StringBuffer();
+        @NotNull StringBuffer t_sbBuildKeyValues = new StringBuffer();
+        @NotNull StringBuffer t_sbProcessPkAttributes = new StringBuffer();
+        @NotNull StringBuffer t_sbPkFilterValues = new StringBuffer();
+        @NotNull StringBuffer t_sbDeleteMethod = new StringBuffer();
+        @NotNull StringBuffer t_sbDeleteByFkMethod = new StringBuffer();
+        @NotNull StringBuffer t_sbDeleteWithFkPkValues = new StringBuffer();
+        @NotNull StringBuffer t_sbDeleteWithFkPkValuesDeleteRequest = new StringBuffer();
 
-        StringBuffer t_sbFkJavadoc = new StringBuffer();
+        @NotNull StringBuffer t_sbFkJavadoc = new StringBuffer();
         StringBuffer t_sbFkDeclaration;
-        StringBuffer t_sbDeleteNoFkMethod = new StringBuffer();
-        StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
+        @NotNull StringBuffer t_sbDeleteNoFkMethod = new StringBuffer();
+        @NotNull StringBuffer t_sbDeleteWithFkDAODeleteRequest = new StringBuffer();
 
-        StringBuffer t_sbBuildValueObjectParametersDeclaration =
+        @NotNull StringBuffer t_sbBuildValueObjectParametersDeclaration =
             new StringBuffer();
 
-        StringBuffer t_sbBuildValueObjectValueRetrieval = new StringBuffer();
-        StringBuffer t_sbInsertParametersJavadoc        = new StringBuffer();
-        StringBuffer t_sbInsertParametersDeclaration    = new StringBuffer();
-        StringBuffer t_sbUpdateParametersJavadoc        = new StringBuffer();
-        StringBuffer t_sbUpdateParametersDeclaration    = new StringBuffer();
+        @NotNull StringBuffer t_sbBuildValueObjectValueRetrieval = new StringBuffer();
+        @NotNull StringBuffer t_sbInsertParametersJavadoc        = new StringBuffer();
+        @NotNull StringBuffer t_sbInsertParametersDeclaration    = new StringBuffer();
+        @NotNull StringBuffer t_sbUpdateParametersJavadoc        = new StringBuffer();
+        @NotNull StringBuffer t_sbUpdateParametersDeclaration    = new StringBuffer();
 
-        StringBuffer t_sbPersistMethod = new StringBuffer();
-        StringBuffer t_sbUndigesterPropertyRules = new StringBuffer();
+        @NotNull StringBuffer t_sbPersistMethod = new StringBuffer();
+        @NotNull StringBuffer t_sbUndigesterPropertyRules = new StringBuffer();
 
-        String t_strDeleteMethodModifier = "public";
+        @NotNull String t_strDeleteMethodModifier = "public";
         String t_strDeleteMethodSuffix = "";
 
         boolean t_bForeignKeys = false;
@@ -755,13 +757,13 @@ public class XMLDAOTemplate
 
             if  (t_iKeyIndex >= 0)
             {
-                MessageFormat t_FindByStaticFieldMethodFormatter =
+                @NotNull MessageFormat t_FindByStaticFieldMethodFormatter =
                     new MessageFormat(findByStaticFieldMethod);
 
-                MessageFormat t_FindByStaticFieldJavadocFormatter =
+                @NotNull MessageFormat t_FindByStaticFieldJavadocFormatter =
                     new MessageFormat(findByStaticFieldJavadoc);
 
-                MessageFormat t_FindByStaticFieldDeclarationFormatter =
+                @NotNull MessageFormat t_FindByStaticFieldDeclarationFormatter =
                     new MessageFormat(findByStaticFieldDeclaration);
 
                 String t_strDescriptionColumn =
@@ -846,7 +848,7 @@ public class XMLDAOTemplate
         boolean t_bUpdatePkSeparatorPrinted = false;
         int t_iColumnType;
         boolean t_bAllowsNull;
-        String t_strFieldType;
+        @Nullable String t_strFieldType;
         
         for  (int t_iColumnIndex = 0;
                   t_iColumnIndex < t_iColumnLength;

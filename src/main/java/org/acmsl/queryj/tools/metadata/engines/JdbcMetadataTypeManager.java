@@ -51,6 +51,8 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -95,6 +97,7 @@ public class JdbcMetadataTypeManager
      * Retrieves a <code>JdbcMetadataTypeManager</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static JdbcMetadataTypeManager getInstance()
     {
         return JdbcMetadataTypeManagerSingletonContainer.SINGLETON;
@@ -123,6 +126,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated native type.
      */
+    @Nullable
     public String getNativeType(final int dataType)
     {
         return getNativeType(dataType, false);
@@ -134,10 +138,11 @@ public class JdbcMetadataTypeManager
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
+    @Nullable
     public String getNativeType(
         final int dataType, final boolean allowsNull)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch  (dataType)
         {
@@ -197,7 +202,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated native type.
      */
-    public int getJavaType(final String dataType)
+    public int getJavaType(@Nullable final String dataType)
     {
         int result = Types.NULL;
 
@@ -237,9 +242,10 @@ public class JdbcMetadataTypeManager
      * Builds the native to java type mapping.
      * @return such mapping.
      */
+    @NotNull
     protected Map buildNative2JavaTypeMap()
     {
-        Map result = new HashMap();
+        @NotNull Map result = new HashMap();
 
         Integer t_Numeric = Integer.valueOf(Types.NUMERIC);
         Integer t_Integer = Integer.valueOf(Types.INTEGER);
@@ -305,7 +311,7 @@ public class JdbcMetadataTypeManager
      * @precondition stringUtils != null
      */
     protected String getQueryJFieldType(
-        final int dataType, final StringUtils stringUtils)
+        final int dataType, @NotNull final StringUtils stringUtils)
     {
         return
             stringUtils.capitalize(
@@ -317,6 +323,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
+    @Nullable
     public String getStatementSetterFieldType(final int dataType)
     {
         return getFieldType(dataType, true);
@@ -340,7 +347,7 @@ public class JdbcMetadataTypeManager
      */
     public String getFieldType(final int dataType, final boolean allowsNull)
     {
-        String result = "";
+        @NotNull String result = "";
 
         switch (dataType)
         {
@@ -405,10 +412,11 @@ public class JdbcMetadataTypeManager
      * @param paramName the parameter name.
      * @return the associated setter method name.
      */
+    @Nullable
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName)
     {
-        String result = getObjectType(dataType);
+        @Nullable String result = getObjectType(dataType);
 
         switch  (dataType)
         {
@@ -438,6 +446,7 @@ public class JdbcMetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
+    @Nullable
     public String getGetterMethod(final int dataType, final int paramIndex)
     {
         return getGetterMethod(dataType, "" + paramIndex);
@@ -449,6 +458,7 @@ public class JdbcMetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
+    @Nullable
     public String getGetterMethod(final int dataType)
     {
         return getGetterMethod(dataType, null);
@@ -460,9 +470,10 @@ public class JdbcMetadataTypeManager
      * @param param the parameter.
      * @return the associated getter method name.
      */
-    public String getGetterMethod(final int dataType, final String param)
+    @Nullable
+    public String getGetterMethod(final int dataType, @Nullable final String param)
     {
-        String result = getObjectType(dataType);
+        @Nullable String result = getObjectType(dataType);
 
         switch  (dataType)
         {
@@ -492,9 +503,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated result type.
      */
+    @Nullable
     public String getProcedureResultType(final int dataType)
     {
-        String result = getObjectType(dataType);
+        @Nullable String result = getObjectType(dataType);
 
         switch  (dataType)
         {
@@ -530,9 +542,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated default value.
      */
+    @NotNull
     public String getProcedureDefaultValue(final int dataType)
     {
-        String result = "null";
+        @NotNull String result = "null";
 
         switch  (dataType)
         {
@@ -568,9 +581,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getObjectType(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {
@@ -629,9 +643,10 @@ public class JdbcMetadataTypeManager
      * @return the associated object type.
      * @precondition dataType != null
      */
-    public String getObjectType(final String dataType)
+    @NotNull
+    public String getObjectType(@NotNull final String dataType)
     {
-        String result = dataType;
+        @NotNull String result = dataType;
 
         if  (dataType.equals("int"))
         {
@@ -659,9 +674,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getSmartObjectType(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {
@@ -716,9 +732,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getSmartObjectRetrievalType(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {
@@ -773,9 +790,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated default value.
      */
+    @NotNull
     public String getDefaultValue(final int dataType)
     {
-        String result = "null";
+        @NotNull String result = "null";
 
         switch (dataType)
         {
@@ -806,9 +824,10 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated constant name.
      */
+    @Nullable
     public String getConstantName(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {

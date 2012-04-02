@@ -56,6 +56,7 @@ import org.acmsl.queryj.tools.PackageUtils;
  * Importing some Apache Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -76,6 +77,7 @@ public class DAOListenerImplTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return DAOListenerImplTemplateGenerator.getInstance();
@@ -114,9 +116,9 @@ public class DAOListenerImplTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
@@ -127,19 +129,19 @@ public class DAOListenerImplTemplateBuildHandler
     {
         return
             super.createTemplate(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
-                metadataManager,
-                customSqlProvider,
-                templateFactory,
-                projectPackage,
-                packageName,
-                repository,
-                header,
-                jmx,
-                tableTemplates);
+                    parameters,
+                    engineName,
+                    engineVersion,
+                    quote,
+                    metadataManager,
+                    customSqlProvider,
+                    templateFactory,
+                    projectPackage,
+                    packageName,
+                    repository,
+                    header,
+                    jmx,
+                    tableTemplates);
     }
     
     /**
@@ -153,9 +155,9 @@ public class DAOListenerImplTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String engineName,
+        @NotNull final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOListenerImplPackage(
@@ -170,7 +172,7 @@ public class DAOListenerImplTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DAO_LISTENER_IMPL_TEMPLATE,

@@ -57,6 +57,8 @@ import java.io.IOException;
  * Importing some commons-logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create <b>sql.xml</b> parsers.
@@ -93,6 +95,7 @@ public class SqlXmlParserFactory
      * Retrieves a SqlXmlParserFactory instance.
      * @return such instance.
      */
+    @NotNull
     public static SqlXmlParserFactory getInstance()
     {
         return SqlXmlParserFactorySingletonContainer.SINGLETON;
@@ -102,6 +105,7 @@ public class SqlXmlParserFactory
      * Creates a <b>sql.xml</b> parser.
      * @return such parser.
      */
+    @Nullable
     public SqlXmlParser createSqlXmlParser()
     {
         return createSqlXmlParser(FILE_PATH);
@@ -114,9 +118,10 @@ public class SqlXmlParserFactory
      * @return such parser.
      * @precondition inputFilePath != null
      */
+    @Nullable
     public SqlXmlParser createSqlXmlParser(final String inputFilePath)
     {
-        SqlXmlParser result = null;
+        @Nullable SqlXmlParser result = null;
 
         InputStream t_isInput = SqlXmlParserFactory.class.getResourceAsStream(inputFilePath);
 
@@ -131,7 +136,7 @@ public class SqlXmlParserFactory
             {
                 t_isInput = new FileInputStream(inputFilePath);
             }
-            catch  (final FileNotFoundException fileNotFoundException)
+            catch  (@NotNull final FileNotFoundException fileNotFoundException)
             {
                 try
                 {
@@ -139,7 +144,7 @@ public class SqlXmlParserFactory
                         "Specified sql.xml file does not exist " + inputFilePath,
                         fileNotFoundException);
                 }
-                catch  (final Throwable throwable)
+                catch  (@NotNull final Throwable throwable)
                 {
                     // class-loading problem.
                 }
@@ -153,7 +158,7 @@ public class SqlXmlParserFactory
                 LogFactory.getLog(SqlXmlParserFactory.class).error(
                     "No sql.xml information found at " + inputFilePath);
             }
-            catch  (final Throwable throwable)
+            catch  (@NotNull final Throwable throwable)
             {
                 // class-loading problem.
             }
@@ -172,15 +177,16 @@ public class SqlXmlParserFactory
      * @return such parser.
      * @precondition file != null
      */
+    @Nullable
     public SqlXmlParser createSqlXmlParser(final File file)
     {
-        SqlXmlParser result = null;
+        @Nullable SqlXmlParser result = null;
 
         try
         {
             result = new SqlXmlParser(new FileInputStream(file));
         }
-        catch  (final FileNotFoundException fileNotFoundException)
+        catch  (@NotNull final FileNotFoundException fileNotFoundException)
         {
             try
             {
@@ -188,7 +194,7 @@ public class SqlXmlParserFactory
                     "no sql.xml information found at " + file,
                     fileNotFoundException);
             }
-            catch  (final Throwable throwable)
+            catch  (@NotNull final Throwable throwable)
             {
                 // class-loading problem.
             }

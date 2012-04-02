@@ -64,6 +64,8 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains all common behaviour of function templates.
@@ -735,7 +737,7 @@ public abstract class FunctionsTemplate
      * Adds a new function.
      * @param function the new function.
      */
-    public void addFunction(final String function)
+    public void addFunction(@Nullable final String function)
     {
         if  (function != null) 
         {
@@ -753,6 +755,7 @@ public abstract class FunctionsTemplate
      * @param function the function.
      * @return the field type.
      */
+    @Nullable
     protected abstract String getMapping(final String function);
 
     /**
@@ -760,6 +763,7 @@ public abstract class FunctionsTemplate
      * @param function the function.
      * @return the field type.
      */
+    @Nullable
     protected abstract String getSpecialMapping(final String function);
 
     /**
@@ -767,6 +771,7 @@ public abstract class FunctionsTemplate
      * @param function the function.
      * @return the field type.
      */
+    @Nullable
     protected abstract String getSpecialMappingReturnType(final String function);
 
     /**
@@ -793,8 +798,9 @@ public abstract class FunctionsTemplate
      * @param templateClass the template class.
      * @return the key.
      */
+    @NotNull
     protected static String buildKey(
-        final String function, final Class templateClass)
+        final String function, @Nullable final Class templateClass)
     {
         return
               (  (templateClass != null)
@@ -809,8 +815,9 @@ public abstract class FunctionsTemplate
      * @param templateClass the template class.
      * @return the special key.
      */
+    @NotNull
     protected static String buildSpecialKey(
-        final String function, final Class templateClass)
+        final String function, @Nullable final Class templateClass)
     {
         return
               (  (templateClass != null)
@@ -825,8 +832,9 @@ public abstract class FunctionsTemplate
      * @param templateClass the template class.
      * @return the special key.
      */
+    @NotNull
     protected static String buildSpecialKeyReturnType(
-        final String function, final Class templateClass)
+        final String function, @Nullable final Class templateClass)
     {
         return
               (  (templateClass != null)
@@ -907,9 +915,10 @@ public abstract class FunctionsTemplate
      * @param templateClass the template class.
      * @return the field type.
      */
-    protected String getMapping(final String function, Class templateClass)
+    @Nullable
+    protected String getMapping(@Nullable final String function, @Nullable Class templateClass)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (   (function      != null)
              && (templateClass != null))
@@ -928,9 +937,10 @@ public abstract class FunctionsTemplate
      * @param function the function.
      * @return the field type.
      */
-    public String getSpecialMapping(final String function, Class templateClass)
+    @Nullable
+    public String getSpecialMapping(@Nullable final String function, @Nullable Class templateClass)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (   (function      != null)
              && (templateClass != null))
@@ -950,9 +960,10 @@ public abstract class FunctionsTemplate
      * @param key the key.
      * @return the field type.
      */
-    protected String getMapping(Map mappings, String key)
+    @Nullable
+    protected String getMapping(@Nullable Map mappings, @Nullable String key)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (   (mappings != null)
              && (key      != null))
@@ -990,10 +1001,11 @@ public abstract class FunctionsTemplate
      * @param templateClass the template class.
      * @return the field type.
      */
+    @Nullable
     public String getSpecialMappingReturnType(
-        String function, Class templateClass)
+        @Nullable String function, Class templateClass)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (function != null)
         {
@@ -1014,7 +1026,7 @@ public abstract class FunctionsTemplate
      */
     protected String innerClassesToString()
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         String t_strInnerClass = getInnerClass();
 
@@ -1024,7 +1036,7 @@ public abstract class FunctionsTemplate
 
             if  (t_astrFieldTypes != null) 
             {
-                MessageFormat t_InnerClassFormatter = null;
+                @Nullable MessageFormat t_InnerClassFormatter = null;
 
                 for  (int t_iFieldIndex = 0;
                           t_iFieldIndex < t_astrFieldTypes.length;
@@ -1079,6 +1091,7 @@ public abstract class FunctionsTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getClassDescription());
@@ -1090,6 +1103,7 @@ public abstract class FunctionsTemplate
      * @return such header.
      * @precondition type != null
      */
+    @NotNull
     protected String buildHeader(final String type)
     {
         return "Generating " + type + " functions template.";
@@ -1102,13 +1116,13 @@ public abstract class FunctionsTemplate
      */
     protected String generateOutput(final String header)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
         if  (t_StringUtils != null) 
         {
-            Object t_aEngine =
+            @NotNull Object t_aEngine =
                 new Object[]
                 {
                     getEngineName(),
@@ -1116,11 +1130,11 @@ public abstract class FunctionsTemplate
                     getClassDescription()
                 };
 
-            Object[] t_aPackageName = new Object[]{getPackageName()};
+            @NotNull Object[] t_aPackageName = new Object[]{getPackageName()};
 
-            Object[] t_aClassPrefix = new Object[]{getClassPrefix()};
+            @NotNull Object[] t_aClassPrefix = new Object[]{getClassPrefix()};
 
-            MessageFormat t_Formatter = null;
+            @Nullable MessageFormat t_Formatter = null;
 
             String t_strHeader = header;
 
@@ -1193,14 +1207,14 @@ public abstract class FunctionsTemplate
                 {
                     Iterator t_itFunctions = t_lFunctions.iterator();
 
-                    MessageFormat t_MethodFormatter =
+                    @NotNull MessageFormat t_MethodFormatter =
                         new MessageFormat(t_strFunctionMethod);
 
                     while  (t_itFunctions.hasNext()) 
                     {
-                        String t_strFunction = (String) t_itFunctions.next();
+                        @NotNull String t_strFunction = (String) t_itFunctions.next();
 
-                        String t_strMapping = getMapping(t_strFunction);
+                        @Nullable String t_strMapping = getMapping(t_strFunction);
 
                         if  (t_strMapping == null) 
                         {

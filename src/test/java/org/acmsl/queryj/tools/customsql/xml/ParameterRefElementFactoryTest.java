@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -85,6 +87,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  @Nullable
   ParameterRefElementFactory parameterrefelementfactory = null;
   // JUnitDoclet end class
   
@@ -104,6 +107,7 @@ extends TestCase
   * @return such instance.
   
   */
+  @NotNull
   public ParameterRefElementFactory createInstance()
   throws Exception
   {

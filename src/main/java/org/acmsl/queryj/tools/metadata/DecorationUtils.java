@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -79,6 +80,7 @@ public class DecorationUtils
      * Retrieves a <code>DecorationUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static DecorationUtils getInstance()
     {
         return DecorationUtilsSingletonContainer.SINGLETON;
@@ -90,7 +92,7 @@ public class DecorationUtils
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    public String upperCase(final String value)
+    public String upperCase(@NotNull final String value)
     {
         return value.toUpperCase();
     }
@@ -101,7 +103,7 @@ public class DecorationUtils
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    public String lowerCase(final String value)
+    public String lowerCase(@NotNull final String value)
     {
         return value.toLowerCase();
     }
@@ -126,7 +128,7 @@ public class DecorationUtils
      * @precondition stringUtils != null
      */
     protected String uncapitalize(
-        final String value, final StringUtils stringUtils)
+        final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.unCapitalizeStart(stringUtils.capitalize(value));
     }
@@ -137,7 +139,7 @@ public class DecorationUtils
      * @return the modified version of the value.
      * @precondition value != null
      */
-    public String capitalize(final String value)
+    public String capitalize(@NotNull final String value)
     {
         return capitalize(value, StringUtils.getInstance());
     }
@@ -151,7 +153,7 @@ public class DecorationUtils
      * @precondition stringUtils != null
      */
     protected String capitalize(
-        final String value, final StringUtils stringUtils)
+        @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.capitalize(value.toLowerCase());
     }
@@ -209,7 +211,7 @@ public class DecorationUtils
      * @precondition stringUtils != null
      */
     protected String normalize(
-        final String value, final StringUtils stringUtils)
+        final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.normalize(value, '_');
     }
@@ -234,7 +236,7 @@ public class DecorationUtils
      * @precondition stringUtils != null
      */
     protected String softNormalize(
-        final String value, final StringUtils stringUtils)
+        final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.softNormalize(value);
     }
@@ -259,7 +261,7 @@ public class DecorationUtils
      * @precondition value != null
      * @precondition stringUtils != null
      */
-    public String[] split(final String value, final StringUtils stringUtils)
+    public String[] split(final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.split(value);
     }
@@ -301,7 +303,7 @@ public class DecorationUtils
         final String[] values,
         final String leftSeparator,
         final String rightSeparator,
-        final StringUtils stringUtils)
+        @NotNull final StringUtils stringUtils)
     {
         return stringUtils.surround(values, leftSeparator, rightSeparator);
     }
@@ -326,7 +328,7 @@ public class DecorationUtils
      * @precondition stringUtils != null
      */
     protected String[] trim(
-        final String[] values, final StringUtils stringUtils)
+        final String[] values, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.trim(values);
     }
@@ -355,7 +357,7 @@ public class DecorationUtils
     protected String escape(
         final String value,
         final char charToEscape,
-        final StringUtils stringUtils)
+        @NotNull final StringUtils stringUtils)
     {
         return stringUtils.escape(value, charToEscape);
     }

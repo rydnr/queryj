@@ -52,6 +52,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -83,6 +85,7 @@ public class OracleTextFunctions
      * Retrieves a TextFunctions instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleTextFunctions getInstance()
     {
         return OracleTextFunctionsSingletonContainer.SINGLETON;
@@ -93,6 +96,7 @@ public class OracleTextFunctions
      * @param field the text field.
      * @return the corresponding function call.
      */
+    @NotNull
     public StringField upper(final StringField field)
     {
         return new _StringFieldWrapper(field, "UPPER");
@@ -130,7 +134,7 @@ public class OracleTextFunctions
          * @param field the field to wrap.
          * @param function the function.
          */
-        private _StringFieldWrapper(final Field field, final String function)
+        private _StringFieldWrapper(@Nullable final Field field, final String function)
         {
             // Example of when ? operator cannot be subsituted by if-else.
             super(
@@ -300,9 +304,9 @@ public class OracleTextFunctions
          */
         public String toString()
         {
-            StringBuffer t_sbResult = new StringBuffer();
+            @NotNull StringBuffer t_sbResult = new StringBuffer();
 
-            QueryUtils t_QueryUtils = QueryUtils.getInstance();
+            @NotNull QueryUtils t_QueryUtils = QueryUtils.getInstance();
             boolean t_bVariable = isNotAFunction();
             String t_strFunction = getFunction();
             if  (t_strFunction != null)
@@ -383,7 +387,7 @@ public class OracleTextFunctions
          * @return <code>true</code> if both instances represent
          * the same entity.
          */
-        public boolean equals(final Object other)
+        public boolean equals(@Nullable final Object other)
         {
             boolean result = false;
 
@@ -425,13 +429,13 @@ public class OracleTextFunctions
         protected int hashCode(
             final Field field,
             final String function,
-            final Object[] parameters)
+            @Nullable final Object[] parameters)
         {
             int result = (field + function).hashCode();
             
             int t_iCount = (parameters != null) ? parameters.length : 0;
 
-            Object t_CurrentParameter = null;
+            @Nullable Object t_CurrentParameter = null;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {

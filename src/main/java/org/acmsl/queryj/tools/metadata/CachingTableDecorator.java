@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Table</code>
@@ -56,7 +57,7 @@ public class CachingTableDecorator
      * @precondition metadataManager != null
      */
     public CachingTableDecorator(
-        final Table table, final MetadataManager metadataManager)
+        @NotNull final Table table, final MetadataManager metadataManager)
     {
         super(table, metadataManager);
     }

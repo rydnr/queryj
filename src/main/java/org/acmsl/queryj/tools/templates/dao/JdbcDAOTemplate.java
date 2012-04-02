@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -172,11 +173,11 @@ public class JdbcDAOTemplate
         final String classEnd,
         final StringUtils stringUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append(header);
 
-        MessageFormat t_PackageDeclarationFormatter =
+        @NotNull MessageFormat t_PackageDeclarationFormatter =
             new MessageFormat(packageDeclaration);
 
         t_sbResult.append(

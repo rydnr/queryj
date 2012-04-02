@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.Sql;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JDK classes.
@@ -654,6 +655,7 @@ public class SqlElement
      * @param resultSetFlagsRef the <i>resultset-flags-ref</i> element.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String description,

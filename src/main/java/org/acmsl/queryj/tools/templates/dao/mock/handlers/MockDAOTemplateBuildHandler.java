@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -69,6 +70,7 @@ public class MockDAOTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
         return MockDAOTemplateGenerator.getInstance();
@@ -89,7 +91,7 @@ public class MockDAOTemplateBuildHandler
         final String tableName,
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {
         return
@@ -104,7 +106,7 @@ public class MockDAOTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, final Map parameters)
+        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.MOCK_DAO_TEMPLATES, templates);

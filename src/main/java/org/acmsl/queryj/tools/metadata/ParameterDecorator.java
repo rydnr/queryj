@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.customsql.Parameter;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;parameter&gt; elements in <i>custom-sql</i> models.
@@ -62,12 +63,14 @@ public interface ParameterDecorator
      * @return such information.
      * @see java.sql.Types
      */
+    @Nullable
     public String getSqlType();
 
     /**
      * Retrieves the object type of the parameter.
      * @return such information.
      */
+    @Nullable
     public String getObjectType();
 
     /**

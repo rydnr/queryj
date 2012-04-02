@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -87,6 +88,7 @@ public class TableTemplateGenerator
      * Retrieves a {@link TableTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static TableTemplateGenerator getInstance()
     {
         return TableTemplateGeneratorSingletonContainer.SINGLETON;
@@ -108,6 +110,7 @@ public class TableTemplateGenerator
      * interfaces.
      * @return a template.
      */
+    @NotNull
     public TableTemplate createTableTemplate(
         final String tableName,
         final MetadataManager metadataManager,
@@ -141,6 +144,7 @@ public class TableTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -156,8 +160,8 @@ public class TableTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final TableTemplate tableTemplate,
-        final File outputDir,
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -183,11 +187,11 @@ public class TableTemplateGenerator
      * @precondition tableTemplateUtils != null
      */
     protected void write(
-        final TableTemplate tableTemplate,
-        final File outputDir,
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final FileUtils fileUtils,
-        final TableTemplateUtils tableTemplateUtils)
+        @NotNull final FileUtils fileUtils,
+        @NotNull final TableTemplateUtils tableTemplateUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

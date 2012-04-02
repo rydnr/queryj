@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -352,6 +353,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTemplateName(), getForeignKey());
@@ -365,8 +367,9 @@ public abstract class AbstractBasePerForeignKeyTemplate
      * @precondition templateName != null
      * @precondition foreignKey != null
      */
+    @NotNull
     protected String buildHeader(
-        final String templateName, final ForeignKey foreignKey)
+        final String templateName, @NotNull final ForeignKey foreignKey)
     {
         return
               "Generating " + templateName + " for "
@@ -380,6 +383,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public abstract String getTemplateName();
 
     /**
@@ -404,7 +408,7 @@ public abstract class AbstractBasePerForeignKeyTemplate
     protected String concat(
         final Collection list,
         final String separator,
-        final StringUtils stringUtils)
+        @NotNull final StringUtils stringUtils)
     {
         return stringUtils.concatenate(list, separator);
     }

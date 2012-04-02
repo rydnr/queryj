@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create XML DAO templates.
@@ -59,6 +60,7 @@ public interface XMLDAOTemplateFactory
      * @precondition metaDataManager != null
      * @precondition packageName != null
      */
+    @NotNull
     public XMLDAOTemplate createXMLDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,

@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to create Mock DAO test templates.
@@ -56,6 +57,7 @@ public interface MockDAOTestTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @NotNull
     public MockDAOTestTemplate createMockDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,

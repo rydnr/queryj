@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create JdbcDAO templates.
@@ -56,6 +57,7 @@ public interface JdbcDAOTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @NotNull
     public JdbcDAOTemplate createJdbcDAOTemplate(
         final String packageName, final String header);
 }

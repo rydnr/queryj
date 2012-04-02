@@ -54,6 +54,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -95,6 +96,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * instance.
      * @return such instance.
      */
+    @NotNull
     public static ConfigurationPropertiesTemplateGenerator getInstance()
     {
         return ConfigurationPropertiesTemplateGeneratorSingletonContainer.SINGLETON;
@@ -120,6 +122,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * @precondition engineName != null
      * @precondition tables != null
      */
+    @NotNull
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -150,6 +153,7 @@ public class ConfigurationPropertiesTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -165,8 +169,8 @@ public class ConfigurationPropertiesTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -196,12 +200,12 @@ public class ConfigurationPropertiesTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerRepositoryTemplate template,
-        final String repository,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final String repository,
+        @NotNull final File outputDir,
         final Charset charset,
-        final DAOChooserTemplateUtils daoChooserTemplateUtils,
-        final FileUtils fileUtils)
+        @NotNull final DAOChooserTemplateUtils daoChooserTemplateUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

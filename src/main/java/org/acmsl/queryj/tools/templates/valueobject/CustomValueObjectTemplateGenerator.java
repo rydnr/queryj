@@ -53,6 +53,8 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -91,6 +93,7 @@ public class CustomValueObjectTemplateGenerator
      * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static CustomValueObjectTemplateGenerator getInstance()
     {
         return CustomValueObjectTemplateGeneratorSingletonContainer.SINGLETON;
@@ -115,10 +118,11 @@ public class CustomValueObjectTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @Nullable
     public BasePerCustomResultTemplate createTemplate(
-        final Result customResult,
+        @NotNull final Result customResult,
         final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
         final String engineVersion,
@@ -126,7 +130,7 @@ public class CustomValueObjectTemplateGenerator
         final String repositoryName,
         final String header)
     {
-        BasePerCustomResultTemplate result = null;
+        @Nullable BasePerCustomResultTemplate result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
@@ -153,6 +157,7 @@ public class CustomValueObjectTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CustomValueObjectDecoratorFactory.getInstance();
@@ -168,7 +173,7 @@ public class CustomValueObjectTemplateGenerator
      * @precondition metadataManager != null
      */
     protected boolean isStandard(
-        final String className, final MetadataManager metadataManager)
+        final String className, @NotNull final MetadataManager metadataManager)
     {
         return
             isStandard(
@@ -191,8 +196,8 @@ public class CustomValueObjectTemplateGenerator
      */
     protected boolean isStandard(
         final String className,
-        final MetadataManager metadataManager,
-        final ValueObjectTemplateGenerator valueObjectTemplateGenerator)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final ValueObjectTemplateGenerator valueObjectTemplateGenerator)
     {
         boolean result = false;
 
@@ -236,6 +241,7 @@ public class CustomValueObjectTemplateGenerator
      * @return the class name.
      * @precondition fqcn != null
      */
+    @Nullable
     public String extractClassName(final String fqdn)
     {
         return extractClassName(fqdn, PackageUtils.getInstance());
@@ -249,8 +255,9 @@ public class CustomValueObjectTemplateGenerator
      * @precondition fqcn != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected String extractClassName(
-        final String fqdn, final PackageUtils packageUtils)
+        final String fqdn, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.extractClassName(fqdn);
     }
@@ -263,8 +270,8 @@ public class CustomValueObjectTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
+        @NotNull final BasePerCustomResultTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -294,12 +301,12 @@ public class CustomValueObjectTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
+        @NotNull final BasePerCustomResultTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
         final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

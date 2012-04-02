@@ -65,6 +65,7 @@ import java.util.Map;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Template for creating JUnit tests to ensure generated Mock DAOs
@@ -137,7 +138,7 @@ public class MockDAOTestTemplate
      */
     protected String generateOutput(final String header)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         StringUtils t_StringUtils = StringUtils.getInstance();
 
@@ -160,7 +161,7 @@ public class MockDAOTestTemplate
         try 
          */
         {
-            MessageFormat t_Formatter = new MessageFormat(header);
+            @NotNull MessageFormat t_Formatter = new MessageFormat(header);
 
             t_sbResult.append(
                 t_Formatter.format(
@@ -253,29 +254,29 @@ public class MockDAOTestTemplate
 
             t_Formatter = new MessageFormat(getTestParametersValues());
 
-            MessageFormat t_UpdateFilterValuesFormatter =
+            @NotNull MessageFormat t_UpdateFilterValuesFormatter =
                 new MessageFormat(getUpdateFilterValues());
 
-            StringBuffer t_sbUpdateFilterValues =
+            @NotNull StringBuffer t_sbUpdateFilterValues =
                 new StringBuffer();
 
             String[] t_astrPrimaryKeys =
                 t_MetadataManager.getPrimaryKey(
                     t_TableTemplate.getTableName());
 
-            StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
+            @NotNull StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
                 new StringBuffer();
 
-            StringBuffer t_sbFindByPrimaryKeyParametersTypes =
+            @NotNull StringBuffer t_sbFindByPrimaryKeyParametersTypes =
                 new StringBuffer();
 
-            StringBuffer t_sbUpdateParametersTypes =
+            @NotNull StringBuffer t_sbUpdateParametersTypes =
                 new StringBuffer();
 
-            MessageFormat t_RemoveFilterValuesFormatter =
+            @NotNull MessageFormat t_RemoveFilterValuesFormatter =
                 new MessageFormat(getRemoveFilterValues());
 
-            StringBuffer t_sbRemoveFilterValues =
+            @NotNull StringBuffer t_sbRemoveFilterValues =
                 new StringBuffer();
 
             if  (t_astrPrimaryKeys != null)
@@ -343,16 +344,16 @@ public class MockDAOTestTemplate
                 t_MetadataManager.getColumnNames(
                     t_TableTemplate.getTableName());
 
-            StringBuffer t_sbInsertTestParametersValues =
+            @NotNull StringBuffer t_sbInsertTestParametersValues =
                 new StringBuffer();
 
-            StringBuffer t_sbInsertParametersTypes =
+            @NotNull StringBuffer t_sbInsertParametersTypes =
                 new StringBuffer();
 
-            MessageFormat t_TestParametersUpdatedValuesFormatter =
+            @NotNull MessageFormat t_TestParametersUpdatedValuesFormatter =
                 new MessageFormat(getTestParametersUpdatedValues());
 
-            StringBuffer t_sbTestParametersUpdatedValues =
+            @NotNull StringBuffer t_sbTestParametersUpdatedValues =
                 new StringBuffer();
 
             if  (t_astrColumnNames != null)

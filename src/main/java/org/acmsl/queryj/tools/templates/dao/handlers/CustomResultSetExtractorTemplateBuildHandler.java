@@ -52,6 +52,8 @@ import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGene
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -86,6 +88,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
     {
         return CustomResultSetExtractorTemplateGenerator.getInstance();
@@ -105,9 +108,9 @@ public class CustomResultSetExtractorTemplateBuildHandler
         final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final String engineName,
+        @NotNull final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveCustomResultSetExtractorPackage(
@@ -122,13 +125,13 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, final Map parameters)
+        @Nullable final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
     {
-        Collection t_cFilteredTemplates = new ArrayList();
+        @NotNull Collection t_cFilteredTemplates = new ArrayList();
         
         int t_iCount = (templates != null) ? templates.length : 0;
 
-        BasePerCustomResultTemplate t_Template;
+        @Nullable BasePerCustomResultTemplate t_Template;
         
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
@@ -152,7 +155,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param template the template to check.
      * @return <code>true</code> in such case.
      */
-    protected boolean matchesSqlFilter(final BasePerCustomResultTemplate template)
+    protected boolean matchesSqlFilter(@Nullable final BasePerCustomResultTemplate template)
     {
         boolean result = false;
 
@@ -183,14 +186,14 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @precondition customResultUtils != null
      */
     protected boolean matchesSqlFilter(
-        final Result resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final CustomResultUtils customResultUtils)
+        @NotNull final Result resultElement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomResultUtils customResultUtils)
     {
         boolean result = false;
 
-        String t_strTable =
+        @Nullable String t_strTable =
             customResultUtils.retrieveTable(
                 resultElement, customSqlProvider, metadataManager);
         
@@ -211,8 +214,8 @@ public class CustomResultSetExtractorTemplateBuildHandler
      */
     protected String retrievePackage(
         final String projectPackage,
-        final String engineName,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveCustomResultSetExtractorPackage(

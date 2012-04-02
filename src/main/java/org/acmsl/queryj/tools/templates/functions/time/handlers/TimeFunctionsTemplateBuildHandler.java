@@ -57,6 +57,8 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -93,7 +95,7 @@ public class TimeFunctionsTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         if  (retrieveExtractFunctions(parameters))
@@ -125,16 +127,16 @@ public class TimeFunctionsTemplateBuildHandler
      * @precondition stringUtils != null
      */
     protected void buildTemplate(
-        final DatabaseMetaData metadata,
+        @NotNull final DatabaseMetaData metadata,
         final String packageName,
-        final TimeFunctionsTemplateGenerator generator,
-        final Map parameters,
-        final StringUtils stringUtils)
+        @NotNull final TimeFunctionsTemplateGenerator generator,
+        @NotNull final Map parameters,
+        @NotNull final StringUtils stringUtils)
       throws  QueryJBuildException
     {
         try 
         {
-            TimeFunctionsTemplate t_Template =
+            @Nullable TimeFunctionsTemplate t_Template =
                 generator.createTimeFunctionsTemplate(
                     packageName,
                     metadata.getDatabaseProductName(),
@@ -144,7 +146,7 @@ public class TimeFunctionsTemplateBuildHandler
             Collection t_cFunctions =
                 stringUtils.tokenize(metadata.getTimeDateFunctions(), ",");
 
-            Iterator t_itFunctions =
+            @Nullable Iterator t_itFunctions =
                 (t_cFunctions != null) ? t_cFunctions.iterator() : null;
 
             if  (t_itFunctions != null) 
@@ -161,7 +163,7 @@ public class TimeFunctionsTemplateBuildHandler
 
             storeTimeFunctionsTemplate(t_Template, parameters);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(
@@ -188,11 +190,11 @@ public class TimeFunctionsTemplateBuildHandler
      * @return such information.
      * @precondition parameters != null
      */
-    protected boolean retrieveExtractFunctions(final Map parameters)
+    protected boolean retrieveExtractFunctions(@NotNull final Map parameters)
     {
         boolean result = true;
 
-        Boolean t_bResult =
+        @NotNull Boolean t_bResult =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.EXTRACT_FUNCTIONS);
@@ -213,7 +215,7 @@ public class TimeFunctionsTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTimeFunctionsTemplate(
-        final TimeFunctionsTemplate template, final Map parameters)
+        final TimeFunctionsTemplate template, @NotNull final Map parameters)
     {
         parameters.put(TIME_FUNCTIONS_TEMPLATE, template);
     }
@@ -223,7 +225,7 @@ public class TimeFunctionsTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -240,7 +242,7 @@ public class TimeFunctionsTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveFunctionsPackage(projectPackage);
     }

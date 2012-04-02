@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -87,7 +89,7 @@ public class TextFunctionsTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         if  (retrieveExtractFunctions(parameters))
@@ -119,16 +121,16 @@ public class TextFunctionsTemplateBuildHandler
      * @precondition stringUtils != null
      */
     protected void buildTemplate(
-        final DatabaseMetaData metadata,
+        @NotNull final DatabaseMetaData metadata,
         final String packageName,
-        final TextFunctionsTemplateGenerator generator,
-        final Map parameters,
-        final StringUtils stringUtils)
+        @NotNull final TextFunctionsTemplateGenerator generator,
+        @NotNull final Map parameters,
+        @NotNull final StringUtils stringUtils)
       throws  QueryJBuildException
     {
         try 
         {
-            TextFunctionsTemplate t_Template =
+            @Nullable TextFunctionsTemplate t_Template =
                 generator.createTextFunctionsTemplate(
                     packageName,
                     metadata.getDatabaseProductName(),
@@ -138,7 +140,7 @@ public class TextFunctionsTemplateBuildHandler
             Collection t_cFunctions =
                 stringUtils.tokenize(metadata.getStringFunctions(), ",");
 
-            Iterator t_itFunctions =
+            @Nullable Iterator t_itFunctions =
                 (t_cFunctions != null) ? t_cFunctions.iterator() : null;
 
             if  (t_itFunctions != null) 
@@ -164,7 +166,7 @@ public class TextFunctionsTemplateBuildHandler
 
             storeTextFunctionsTemplate(t_Template, parameters);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -180,11 +182,11 @@ public class TextFunctionsTemplateBuildHandler
      * @return such information.
      * @precondition parameters != null
      */
-    protected boolean retrieveExtractFunctions(final Map parameters)
+    protected boolean retrieveExtractFunctions(@NotNull final Map parameters)
     {
         boolean result = true;
 
-        Boolean t_bResult =
+        @NotNull Boolean t_bResult =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.EXTRACT_FUNCTIONS);
@@ -205,7 +207,7 @@ public class TextFunctionsTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTextFunctionsTemplate(
-        final TextFunctionsTemplate template, final Map parameters)
+        final TextFunctionsTemplate template, @NotNull final Map parameters)
     {
         parameters.put(TEXT_FUNCTIONS_TEMPLATE, template);
     }
@@ -215,7 +217,7 @@ public class TextFunctionsTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -232,7 +234,7 @@ public class TextFunctionsTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveFunctionsPackage(projectPackage);
     }

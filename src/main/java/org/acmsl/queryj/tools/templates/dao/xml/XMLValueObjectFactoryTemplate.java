@@ -41,6 +41,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -122,7 +124,7 @@ public class XMLValueObjectFactoryTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
@@ -152,15 +154,15 @@ public class XMLValueObjectFactoryTemplate
      */
     protected String generateOutput(
         final String header,
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
-        MessageFormat t_Formatter = new MessageFormat(header);
+        @NotNull MessageFormat t_Formatter = new MessageFormat(header);
 
         t_sbResult.append(
             t_Formatter.format(
@@ -218,7 +220,7 @@ public class XMLValueObjectFactoryTemplate
 
         t_sbResult.append(getClassStart());
 
-        MessageFormat t_SingletonBodyFormatter =
+        @NotNull MessageFormat t_SingletonBodyFormatter =
             new MessageFormat(getSingletonBody());
 
         t_sbResult.append(
@@ -235,21 +237,21 @@ public class XMLValueObjectFactoryTemplate
 
         List t_lFields = tableTemplate.getFields();
 
-        MessageFormat t_FactoryMethodFormatter =
+        @NotNull MessageFormat t_FactoryMethodFormatter =
             new MessageFormat(getFactoryMethod());
 
         if  (t_lFields != null)
         {
             Iterator t_itFields = t_lFields.iterator();
 
-            StringBuffer t_sbFactoryMethodAttributeBuild = new StringBuffer();
+            @NotNull StringBuffer t_sbFactoryMethodAttributeBuild = new StringBuffer();
 
-            MessageFormat t_FactoryMethodAttributeBuildFormatter =
+            @NotNull MessageFormat t_FactoryMethodAttributeBuildFormatter =
                 new MessageFormat(getFactoryMethodAttributeBuild());
 
-            StringBuffer t_sbFactoryMethodValueObjectBuild = new StringBuffer();
+            @NotNull StringBuffer t_sbFactoryMethodValueObjectBuild = new StringBuffer();
 
-            MessageFormat t_FactoryMethodValueObjectBuildFormatter =
+            @NotNull MessageFormat t_FactoryMethodValueObjectBuildFormatter =
                 new MessageFormat(getFactoryMethodValueObjectBuild());
 
             String t_strConversionMethodSuffixForNullableValues =
@@ -257,7 +259,7 @@ public class XMLValueObjectFactoryTemplate
 
             while  (t_itFields.hasNext()) 
             {
-                String t_strField = (String) t_itFields.next();
+                @NotNull String t_strField = (String) t_itFields.next();
 
                 int t_iColumnType =
                     metadataManager.getColumnType(
@@ -279,7 +281,7 @@ public class XMLValueObjectFactoryTemplate
                             t_strField);
                 }
 
-                String t_strFieldType =
+                @Nullable String t_strFieldType =
                     metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
 
                 if  (t_bAllowsNull)

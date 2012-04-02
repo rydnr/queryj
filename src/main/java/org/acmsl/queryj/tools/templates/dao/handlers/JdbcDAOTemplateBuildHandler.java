@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -71,7 +72,7 @@ public class JdbcDAOTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         buildTemplates(parameters, JdbcDAOTemplateGenerator.getInstance());
@@ -88,8 +89,8 @@ public class JdbcDAOTemplateBuildHandler
      * @precondition jdbcDAOTemplateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
-        final JdbcDAOTemplateFactory jdbcDAOTemplateFactory)
+        @NotNull final Map parameters,
+        @NotNull final JdbcDAOTemplateFactory jdbcDAOTemplateFactory)
       throws  QueryJBuildException
     {
         storeJdbcDAOTemplate(
@@ -105,7 +106,7 @@ public class JdbcDAOTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(parameters, PackageUtils.getInstance());
@@ -120,7 +121,7 @@ public class JdbcDAOTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveJdbcDAOPackage(
@@ -136,7 +137,7 @@ public class JdbcDAOTemplateBuildHandler
      */
     protected void storeJdbcDAOTemplate(
         final JdbcDAOTemplate jdbcDAOTemplate,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.JDBC_DAO_TEMPLATE, jdbcDAOTemplate);

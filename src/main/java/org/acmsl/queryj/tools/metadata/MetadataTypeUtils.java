@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides some methods commonly-used when working with types of metadata.
@@ -68,6 +69,7 @@ public class MetadataTypeUtils
      * Retrieves a <code>MetadataTypeUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MetadataTypeUtils getInstance()
     {
         return MetadataTypeUtilsSingletonContainer.SINGLETON;

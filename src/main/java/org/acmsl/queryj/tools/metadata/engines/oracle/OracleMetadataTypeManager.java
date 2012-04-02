@@ -50,6 +50,8 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -87,6 +89,7 @@ public class OracleMetadataTypeManager
      * Retrieves an <code>OracleMetadataTypeManager</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static JdbcMetadataTypeManager getInstance()
     {
         return OracleMetadataTypeManagerSingletonContainer.SINGLETON;
@@ -122,10 +125,11 @@ public class OracleMetadataTypeManager
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
+    @Nullable
     public String getNativeType(
         final int dataType, final boolean allowsNull)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch  (dataType)
         {
@@ -170,9 +174,10 @@ public class OracleMetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
+    @Nullable
     public String getStatementSetterFieldType(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {

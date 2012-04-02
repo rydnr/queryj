@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -126,11 +128,11 @@ public class CustomValueObjectTemplate
      * @precondition engineVersion != null
      */
     protected void fillCommonParameters(
-        final Map input,
-        final Result result,
+        @NotNull final Map input,
+        @NotNull final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String engineName,
         final String engineVersion)
     {
@@ -143,7 +145,7 @@ public class CustomValueObjectTemplate
             engineName,
             engineVersion);
 
-        String t_strVoName = extractClassName(result.getClassValue());
+        @Nullable String t_strVoName = extractClassName(result.getClassValue());
 
         if  (t_strVoName != null)
         {
@@ -157,6 +159,7 @@ public class CustomValueObjectTemplate
      * @return the class name.
      * @precondition fqcn != null
      */
+    @Nullable
     public String extractClassName(final String fqdn)
     {
         return extractClassName(fqdn, PackageUtils.getInstance());
@@ -170,8 +173,9 @@ public class CustomValueObjectTemplate
      * @precondition fqcn != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected String extractClassName(
-        final String fqdn, final PackageUtils packageUtils)
+        final String fqdn, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.extractClassName(fqdn);
     }
@@ -180,6 +184,7 @@ public class CustomValueObjectTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return
@@ -191,6 +196,7 @@ public class CustomValueObjectTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "CustomValueObject";

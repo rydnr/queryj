@@ -44,6 +44,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -74,7 +76,7 @@ public class TableTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -98,10 +100,10 @@ public class TableTemplateWritingHandler
      * @precondition generator != null
      */
     protected boolean handle(
-        final TableTemplate[] templates,
-        final File outputDir,
+        @Nullable final TableTemplate[] templates,
+        @NotNull final File outputDir,
         final Charset charset,
-        final TableTemplateGenerator generator)
+        @NotNull final TableTemplateGenerator generator)
       throws  QueryJBuildException
     {
         boolean result = false;
@@ -118,7 +120,7 @@ public class TableTemplateWritingHandler
                     templates[t_iTableIndex], outputDir, charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -134,7 +136,8 @@ public class TableTemplateWritingHandler
      * @return the template array.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
             (TableTemplate[])
@@ -148,7 +151,8 @@ public class TableTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @Nullable
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -161,8 +165,9 @@ public class TableTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveTableFolder(

@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides custom decorators for the ResultSetExtractor template.
@@ -80,6 +81,7 @@ public class ResultSetExtractorDecoratorFactory
      * Retrieves a <code>ResultSetExtractorDecoratorFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static CachingDecoratorFactory getInstance()
     {
         return ResultSetExtractorDecoratorFactorySingletonContainer.SINGLETON;
@@ -92,6 +94,7 @@ public class ResultSetExtractorDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager)
     {

@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create QueryPreparedStatementCreator templates.
@@ -53,6 +54,7 @@ public interface QueryPreparedStatementCreatorTemplateFactory
      * @return a template.
      * @throws QueryJException if the input values are invalid.
      */
+    @NotNull
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
         final String packageName, final String header);
 }

@@ -54,6 +54,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -78,6 +79,7 @@ public class CustomValueObjectFactoryTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
     {
@@ -90,9 +92,10 @@ public class CustomValueObjectFactoryTemplateWritingHandler
      * @return the templates.
      * @throws BuildException if the template retrieval process if faulty.
      */
+    @NotNull
     @Override
     protected BasePerCustomResultTemplate[] retrieveTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
         throws  BuildException
     {
         return

@@ -50,6 +50,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the ALL_TAB_COLUMNS table in the persistence domain.
@@ -75,24 +77,28 @@ public class OracleAllTabColumnsTable
     /**
      * The all_tab_columns table table_name field.
      */
+    @NotNull
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
      * The all_tab_columns table column_name field.
      */
+    @NotNull
     public StringField COLUMN_NAME =
         new StringField("COLUMN_NAME", this);
 
     /**
      * The all_tab_columns table data_type field.
      */
+    @NotNull
     public StringField DATA_TYPE =
         new StringField("DATA_TYPE", this);
 
     /**
      * The all_tab_columns table column_id field.
      */
+    @NotNull
     public LongField COLUMN_ID =
         new LongField("COLUMN_ID", this);
 
@@ -118,9 +124,10 @@ public class OracleAllTabColumnsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleAllTabColumnsTable getInstance(final String alias)
+    @Nullable
+    public static OracleAllTabColumnsTable getInstance(@Nullable final String alias)
     {
-        OracleAllTabColumnsTable result = null;
+        @Nullable OracleAllTabColumnsTable result = null;
 
         if  (alias != null)
         {
@@ -138,6 +145,7 @@ public class OracleAllTabColumnsTable
      * Retrieves a OracleAllTabColumnsTable instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleAllTabColumnsTable getInstance()
     {
         return OracleAllTabColumnsTableSingletonContainer.SINGLETON;
@@ -147,6 +155,7 @@ public class OracleAllTabColumnsTable
      * Retrieves the table name.
      * @return such name.
      */
+    @NotNull
     public String getTableName()
     {
         return "ALL_TAB_COLUMNS";
@@ -156,6 +165,7 @@ public class OracleAllTabColumnsTable
      * Retrieves <code>all</code> fields. It's equivalent to a star in a query.
      * @return such fields.
      */
+    @NotNull
     public Field[] getAll()
     {
         return

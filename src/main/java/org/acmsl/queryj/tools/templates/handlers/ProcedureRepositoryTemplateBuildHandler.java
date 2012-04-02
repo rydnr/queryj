@@ -48,6 +48,8 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -79,16 +81,16 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws QueryJBuildException
     {
         boolean result = false;
 
-        MetadataManager t_MetadataManager =
+        @NotNull MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
 
-        ProcedureMetadata[] t_aProceduresMetadata = null;
-        ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate = null;
+        @Nullable ProcedureMetadata[] t_aProceduresMetadata = null;
+        @Nullable ProcedureRepositoryTemplate t_ProcedureRepositoryTemplate = null;
             
         if  (t_MetadataManager != null)
         {
@@ -137,10 +139,11 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
      */
-    protected String retrievePackage(final Map parameters)
+    @Nullable
+    protected String retrievePackage(@Nullable final Map parameters)
         throws QueryJBuildException
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (parameters != null)
         {
@@ -159,11 +162,12 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @return the ProcedureRepositoryTemplate instance.
      * @throws QueryJBuildException if the repository cannot be created.
      */
+    @Nullable
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
-        final Map parameters, final MetadataTypeManager metadataTypeManager)
+        @Nullable final Map parameters, final MetadataTypeManager metadataTypeManager)
       throws QueryJBuildException
     {
-        ProcedureRepositoryTemplate result = null;
+        @Nullable ProcedureRepositoryTemplate result = null;
 
         if  (parameters != null) 
         {
@@ -212,20 +216,21 @@ public class ProcedureRepositoryTemplateBuildHandler
      * @throws QueryJBuildException whenever the repository
      * information is not valid.
      */
+    @Nullable
     protected ProcedureRepositoryTemplate buildProcedureRepositoryTemplate(
-        final String packageName,
-        final String repository,
-        final MetadataTypeManager metadataTypeManager,
+        @Nullable final String packageName,
+        @Nullable final String repository,
+        @Nullable final MetadataTypeManager metadataTypeManager,
         final String header)
       throws QueryJBuildException
     {
-        ProcedureRepositoryTemplate result = null;
+        @Nullable ProcedureRepositoryTemplate result = null;
 
         if  (   (packageName != null)
              && (repository != null)
              && (metadataTypeManager != null))
         {
-            ProcedureRepositoryTemplateGenerator t_ProcedureRepositoryTemplateGenerator =
+            @NotNull ProcedureRepositoryTemplateGenerator t_ProcedureRepositoryTemplateGenerator =
                 ProcedureRepositoryTemplateGenerator.getInstance();
 
             if  (t_ProcedureRepositoryTemplateGenerator != null)
@@ -247,8 +252,8 @@ public class ProcedureRepositoryTemplateBuildHandler
      * any reason.
      */
     protected void storeProcedureRepositoryTemplate(
-        final ProcedureRepositoryTemplate procedureRepositoryTemplate,
-        final Map parameters)
+        @Nullable final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        @Nullable final Map parameters)
       throws QueryJBuildException
     {
         if  (   (procedureRepositoryTemplate != null)

@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -75,7 +77,7 @@ public class XMLDAOTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplates(
@@ -99,10 +101,10 @@ public class XMLDAOTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplates(
-        final XMLDAOTemplate[] templates,
-        final File outputDir,
+        @Nullable final XMLDAOTemplate[] templates,
+        @NotNull final File outputDir,
         final Charset charset,
-        final XMLDAOTemplateGenerator generator)
+        @NotNull final XMLDAOTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
@@ -116,7 +118,7 @@ public class XMLDAOTemplateWritingHandler
                 generator.write(templates[t_iXMLDAOIndex], outputDir, charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -130,7 +132,8 @@ public class XMLDAOTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
-    protected XMLDAOTemplate[] retrieveXMLDAOTemplates(final Map parameters)
+    @NotNull
+    protected XMLDAOTemplate[] retrieveXMLDAOTemplates(@NotNull final Map parameters)
     {
         return
             (XMLDAOTemplate[])
@@ -144,7 +147,8 @@ public class XMLDAOTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -165,11 +169,12 @@ public class XMLDAOTemplateWritingHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final File outputDir,
+        @NotNull final File outputDir,
         final String projectPackage,
         final boolean subFolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveXMLDAOFolder(

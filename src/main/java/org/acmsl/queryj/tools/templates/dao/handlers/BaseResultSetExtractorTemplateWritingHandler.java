@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.dao.handlers.BaseResultSetExtractorTempl
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -67,6 +68,7 @@ public class BaseResultSetExtractorTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
         return BaseResultSetExtractorTemplateGenerator.getInstance();
@@ -77,8 +79,9 @@ public class BaseResultSetExtractorTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     protected BasePerRepositoryTemplate retrieveTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (BasePerRepositoryTemplate)
@@ -101,12 +104,12 @@ public class BaseResultSetExtractorTemplateWritingHandler
      * @precondition packageUtils != null
      */
     protected File retrieveOutputDir(
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
         final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveBaseResultSetExtractorFolder(

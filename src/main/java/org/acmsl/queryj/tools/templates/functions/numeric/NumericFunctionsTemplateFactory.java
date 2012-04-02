@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
 import org.acmsl.queryj.tools.templates.functions.numeric
     .NumericFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create numeric function templates.
@@ -56,6 +57,7 @@ public interface NumericFunctionsTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
         final String packageName,
         final String engineName,

@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -84,6 +85,7 @@ public class JdbcDAOTemplateGenerator
      * Retrieves a {@link JdbcDAOTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static JdbcDAOTemplateGenerator getInstance()
     {
         return JdbcDAOTemplateGeneratorSingletonContainer.SINGLETON;
@@ -96,6 +98,7 @@ public class JdbcDAOTemplateGenerator
      * @return a template.
      * @precondition packageName != null
      */
+    @NotNull
     public JdbcDAOTemplate createJdbcDAOTemplate(
         final String packageName, final String header)
     {
@@ -106,6 +109,7 @@ public class JdbcDAOTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -121,8 +125,8 @@ public class JdbcDAOTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final JdbcDAOTemplate jdbcDAOTemplate,
-        final File outputDir,
+        @NotNull final JdbcDAOTemplate jdbcDAOTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -148,11 +152,11 @@ public class JdbcDAOTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final JdbcDAOTemplate jdbcDAOTemplate,
-        final File outputDir,
+        @NotNull final JdbcDAOTemplate jdbcDAOTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

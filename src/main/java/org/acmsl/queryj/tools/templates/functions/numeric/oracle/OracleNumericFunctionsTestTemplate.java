@@ -44,6 +44,8 @@ import org.acmsl.queryj.tools.templates.functions.numeric
 
 import org.acmsl.queryj.tools.templates.functions.numeric.oracle
     .OracleNumericFunctionsTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -155,6 +157,7 @@ public class OracleNumericFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getMapping(final String function)
     {
         // It's not OracleNumericFunctionsTestTemplate.class since
@@ -167,6 +170,7 @@ public class OracleNumericFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getSpecialMapping(final String function)
     {
         return
@@ -182,7 +186,7 @@ public class OracleNumericFunctionsTestTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(final Map mappings)
+    protected boolean isFilledIn(@Nullable final Map mappings)
     {
         return
             (   (mappings != null)
@@ -216,6 +220,7 @@ public class OracleNumericFunctionsTestTemplate
      * Retrieves the capitalized words.
      * @return such words.
      */
+    @NotNull
     protected String[] getCapitalizedWords()
     {
         return OracleNumericFunctionsTemplate.CAPITALIZED_WORDS;
@@ -225,6 +230,7 @@ public class OracleNumericFunctionsTestTemplate
      * Retrieves the field types.
      * @return such array.
      */
+    @NotNull
     protected String[] getFieldTypes()
     {
         return OracleNumericFunctionsTemplate.FIELD_TYPES;

@@ -61,6 +61,8 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -121,6 +123,7 @@ public class DAOChooserTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/DAOChooser.stg");
@@ -130,6 +133,7 @@ public class DAOChooserTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "DAOChooser";
@@ -160,15 +164,15 @@ public class DAOChooserTemplate
      * @precondition stringUtils != null
      */
     protected void fillCoreParameters(
-        final Map input,
+        @NotNull final Map input,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String basePackageName,
         final String subpackageName,
-        final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String tableRepositoryName,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final StringUtils stringUtils)
     {
@@ -185,7 +189,7 @@ public class DAOChooserTemplate
             timestamp,
             stringUtils);
 
-        DecorationUtils decorationUtils = DecorationUtils.getInstance();
+        @NotNull DecorationUtils decorationUtils = DecorationUtils.getInstance();
 
         input.put(
             "tr_name_uppercased",
@@ -210,7 +214,8 @@ public class DAOChooserTemplate
      * @return the properties file.
      * @precondition repository != null
      */
-    protected String retrievePropertiesFileName(final String repository)
+    @NotNull
+    protected String retrievePropertiesFileName(@NotNull final String repository)
     {
         return retrievePropertiesFileName(repository, DAOChooserTemplateUtils.getInstance());
     }
@@ -223,8 +228,9 @@ public class DAOChooserTemplate
      * @precondition repository != null
      * @precondition daoChooserTemplateUtils != null
      */
+    @NotNull
     protected String retrievePropertiesFileName(
-        final String repository, final DAOChooserTemplateUtils daoChooserTemplateUtils)
+        @NotNull final String repository, @NotNull final DAOChooserTemplateUtils daoChooserTemplateUtils)
     {
         return daoChooserTemplateUtils.retrievePropertiesFileName(repository);
     }

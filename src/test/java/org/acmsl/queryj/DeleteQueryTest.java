@@ -52,6 +52,7 @@ import org.acmsl.queryj.TableAlias;
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Indicates JUnit how to test DeleteQuery classes.
@@ -130,11 +131,11 @@ public class DeleteQueryTest
      */
     public void testToString1()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
+        @NotNull DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
 
         t_Query.deleteFrom(USERS);
 
@@ -155,11 +156,11 @@ public class DeleteQueryTest
      */
     public void testToString2()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
+        @NotNull DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
 
         t_Query.deleteFrom(USERS);
 
@@ -180,11 +181,11 @@ public class DeleteQueryTest
      */
     public void testToString3()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
+        @NotNull DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
 
         t_Query.deleteFrom(USERS);
 
@@ -208,11 +209,11 @@ public class DeleteQueryTest
      */
     public void testToString4()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
+        @NotNull DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
 
         t_Query.deleteFrom(USERS);
 
@@ -236,11 +237,11 @@ public class DeleteQueryTest
      */
     public void testToString5()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
+        @NotNull DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
 
         t_Query.deleteFrom(USERS);
 
@@ -264,11 +265,11 @@ public class DeleteQueryTest
      */
     public void testToString6()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
+        @NotNull DeleteQuery t_Query = t_QueryFactory.createDeleteQuery();
 
         t_Query.deleteFrom(USERS);
 
@@ -306,24 +307,28 @@ public class DeleteQueryTest
         /**
          * The USERS table USERID field.
          */
+        @NotNull
         public IntField USERID =
             new IntField("USERID", this) {};
 
         /**
          * The USERS table NAME field.
          */
+        @NotNull
         public StringField NAME =
             new StringField("NAME", this) {};
 
         /**
          * The USERS table AGE field.
          */
+        @NotNull
         public IntField AGE =
             new IntField("AGE", this) {};
 
         /**
          * All fields.
          */
+        @NotNull
         public Field[] ALL =
             new Field[] {USERID, NAME, AGE};
 
@@ -335,6 +340,7 @@ public class DeleteQueryTest
         /**
          * The table alias.
          */
+        @NotNull
         public TableAlias ALIAS =
             new TableAlias("usrs", this) {};
 
@@ -351,6 +357,7 @@ public class DeleteQueryTest
          * star in a query.
          * @return such fields.
          */
+        @NotNull
         public Field[] getAll()
         {
             return ALL;

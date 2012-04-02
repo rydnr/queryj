@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -85,6 +86,7 @@ public class TestSuiteTemplateGenerator
      * Retrieves a {@link TestSuiteTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static TestSuiteTemplateGenerator getInstance()
     {
         return TestSuiteTemplateGeneratorSingletonContainer.SINGLETON;
@@ -100,6 +102,7 @@ public class TestSuiteTemplateGenerator
      * @precondition packageName != null
      * @precondition suiteName != null
      */
+    @NotNull
     public TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
@@ -127,12 +130,13 @@ public class TestSuiteTemplateGenerator
      * @precondition suiteName != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected TestSuiteTemplate createTestSuiteTemplate(
         final String packageName,
         final String suiteName,
         final String header,
         final boolean useSubfolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             new TestSuiteTemplate(
@@ -148,6 +152,7 @@ public class TestSuiteTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -163,8 +168,8 @@ public class TestSuiteTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final TestSuiteTemplate testSuiteTemplate,
-        final File outputDir,
+        @NotNull final TestSuiteTemplate testSuiteTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -190,11 +195,11 @@ public class TestSuiteTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final TestSuiteTemplate testSuiteTemplate,
-        final File outputDir,
+        @NotNull final TestSuiteTemplate testSuiteTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

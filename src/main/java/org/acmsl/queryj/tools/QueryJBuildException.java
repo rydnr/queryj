@@ -38,6 +38,8 @@ package org.acmsl.queryj.tools;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents abnormal situations regarding QueryJ generation process.
@@ -80,9 +82,9 @@ public class QueryJBuildException
      * @param cause the cause.
      * @return the error description.
      */
-    public String toString(final String message, final Throwable cause)
+    public String toString(final String message, @Nullable final Throwable cause)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append(message);
 

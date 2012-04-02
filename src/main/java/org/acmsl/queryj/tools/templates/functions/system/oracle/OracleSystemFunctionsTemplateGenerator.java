@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.functions.system
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -89,6 +90,7 @@ public class OracleSystemFunctionsTemplateGenerator
      * Retrieves a <code>OracleSystemFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleSystemFunctionsTemplateGenerator getOracleInstance()
     {
         return OracleSystemFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -107,6 +109,7 @@ public class OracleSystemFunctionsTemplateGenerator
      * @precondition engineVersion != null
      * @precondition quote != null
      */
+    @NotNull
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
         final String packageName,
         final String engineName,
@@ -128,6 +131,7 @@ public class OracleSystemFunctionsTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

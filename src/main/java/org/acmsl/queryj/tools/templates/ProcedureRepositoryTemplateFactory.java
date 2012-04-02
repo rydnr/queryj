@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to create procedure repository templates.
@@ -59,6 +60,7 @@ public interface ProcedureRepositoryTemplateFactory
      * @param header the header.
      * @return such template.
      */
+    @NotNull
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
         final String packageName,
         final String repository,

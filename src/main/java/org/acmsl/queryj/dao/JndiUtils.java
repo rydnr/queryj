@@ -35,6 +35,7 @@ package org.acmsl.queryj.dao;
 /*
  * Importing Spring classes.
  */
+import org.jetbrains.annotations.NotNull;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 /*
@@ -77,6 +78,7 @@ public class JndiUtils
      * Retrieves a <code>JndiUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static JndiUtils getInstance()
     {
         return JndiUtilsSingletonContainer.SINGLETON;

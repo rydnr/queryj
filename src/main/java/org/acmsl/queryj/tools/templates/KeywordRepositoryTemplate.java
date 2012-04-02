@@ -52,6 +52,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -146,15 +148,15 @@ public class KeywordRepositoryTemplate
      * @precondition stringUtils != null
      */
     protected void fillCoreParameters(
-        final Map input,
+        @NotNull final Map input,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
         final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final StringUtils stringUtils)
     {
@@ -233,9 +235,10 @@ public class KeywordRepositoryTemplate
      * @param keyword the keyword.
      * @return the field type.
      */
-    protected String getKeywordFieldType(final String keyword)
+    @NotNull
+    protected String getKeywordFieldType(@Nullable final String keyword)
     {
-        String result = "";
+        @NotNull String result = "";
 
         if  (keyword != null)
         {
@@ -284,9 +287,10 @@ public class KeywordRepositoryTemplate
      * @param keyword the keyword.
      * @return the associated key.
      */
-    protected Object buildKey(final String keyword)
+    @Nullable
+    protected Object buildKey(@Nullable final String keyword)
     {
-        Object result = keyword;
+        @Nullable Object result = keyword;
 
         if  (keyword != null)
         {
@@ -300,6 +304,7 @@ public class KeywordRepositoryTemplate
      * Retrieves the keyword types.
      * @return such information.
      */
+    @NotNull
     protected Collection retrieveKeywordTypes()
     {
         return retrieveKeywordTypes(getKeywords());
@@ -310,11 +315,12 @@ public class KeywordRepositoryTemplate
      * @param keywords the keywords.
      * @return such information.
      */
-    protected Collection retrieveKeywordTypes(final Collection keywords)
+    @NotNull
+    protected Collection retrieveKeywordTypes(@Nullable final Collection keywords)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
-        Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
+        @Nullable Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
 
         if  (t_Iterator != null)
         {
@@ -331,6 +337,7 @@ public class KeywordRepositoryTemplate
      * Retrieves the uncapitalized keywords.
      * @return such information.
      */
+    @NotNull
     protected Collection retrieveKeywordsUncapitalized()
     {
         return
@@ -344,12 +351,13 @@ public class KeywordRepositoryTemplate
      * @return such information.
      * @precondition decorationUtils != null
      */
+    @NotNull
     protected Collection retrieveKeywordsUncapitalized(
-        final Collection keywords, final DecorationUtils decorationUtils)
+        @Nullable final Collection keywords, @NotNull final DecorationUtils decorationUtils)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
-        Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
+        @Nullable Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
 
         if  (t_Iterator != null)
         {
@@ -371,7 +379,7 @@ public class KeywordRepositoryTemplate
      * @precondition decorationUtils != null
      */
     protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(decorationUtils.capitalize(value));
     }
@@ -380,6 +388,7 @@ public class KeywordRepositoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/sql/KeywordRepository.stg");
@@ -389,6 +398,7 @@ public class KeywordRepositoryTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "Keyword repository";

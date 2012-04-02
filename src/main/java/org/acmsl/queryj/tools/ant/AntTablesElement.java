@@ -50,6 +50,7 @@ import java.util.Collection;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains all information regarding the tables to be managed by
@@ -117,9 +118,10 @@ public class AntTablesElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
+    @Nullable
     public Object createDynamicElement(String name)
     {
-        AntTableElement result = null;
+        @Nullable AntTableElement result = null;
 
         if  ("table".equals(name)) 
         {

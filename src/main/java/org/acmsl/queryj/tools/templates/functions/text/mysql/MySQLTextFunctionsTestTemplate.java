@@ -41,6 +41,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -196,6 +197,7 @@ public class MySQLTextFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getMapping(final String function)
     {
         return getMapping(function, MySQLTextFunctionsTemplate.class);
@@ -206,6 +208,7 @@ public class MySQLTextFunctionsTestTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getSpecialMapping(final String function)
     {
         return
@@ -220,7 +223,7 @@ public class MySQLTextFunctionsTestTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(final Map mappings)
+    protected boolean isFilledIn(@Nullable final Map mappings)
     {
         return
             (   (mappings != null)

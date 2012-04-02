@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides some useful methods when working with templates for the default
@@ -69,6 +70,7 @@ public class DefaultThemeUtils
      * Retrieves a <code>DefaultThemeUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static DefaultThemeUtils getInstance()
     {
         return DefaultThemeUtilsSingletonContainer.SINGLETON;
@@ -80,6 +82,7 @@ public class DefaultThemeUtils
      * @return such name.
      * @precondition tableName != null
      */
+    @NotNull
     public String buildDAOClassName(final String tableName)
     {
         return tableName + "DAO";
@@ -91,6 +94,7 @@ public class DefaultThemeUtils
      * @return such name.
      * @precondition tableName != null
      */
+    @NotNull
     public String buildDAOFactoryClassName(
         final String tableName)
     {
@@ -105,6 +109,7 @@ public class DefaultThemeUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String buildDAOFactoryImplementationClassName(
         final String engineName, final String tableName)
     {
@@ -119,6 +124,7 @@ public class DefaultThemeUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String buildDAOImplementationClassName(
         final String engineName, final String tableName)
     {

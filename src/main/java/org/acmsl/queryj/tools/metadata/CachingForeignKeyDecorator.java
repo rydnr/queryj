@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -74,7 +75,7 @@ public class CachingForeignKeyDecorator
      * @param foreignKey the foreign key.
      * @precondition foreignKey != null
      */
-    public CachingForeignKeyDecorator(final ForeignKey foreignKey)
+    public CachingForeignKeyDecorator(@NotNull final ForeignKey foreignKey)
     {
         super(foreignKey);
     }

@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -66,6 +67,7 @@ public class ConfigurationPropertiesTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
@@ -77,8 +79,9 @@ public class ConfigurationPropertiesTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     @Override
-    protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
+    protected BasePerRepositoryTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
             (BasePerRepositoryTemplate)

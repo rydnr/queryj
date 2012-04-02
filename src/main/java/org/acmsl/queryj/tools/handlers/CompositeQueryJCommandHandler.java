@@ -59,6 +59,8 @@ import java.util.Iterator;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * General-purpose AntCommandHandler composed of an arbitrary number
@@ -126,7 +128,7 @@ public class CompositeQueryJCommandHandler
      * @param collection the handler collection.
      */
     protected void addHandler(
-        final QueryJCommandHandler handler, final Collection handlerCollection)
+        @Nullable final QueryJCommandHandler handler, @Nullable final Collection handlerCollection)
     {
         if  (   (handler != null)
              && (handlerCollection != null))
@@ -147,13 +149,13 @@ public class CompositeQueryJCommandHandler
 
         if  (command instanceof QueryJCommand)
         {
-            QueryJCommand t_Command = (QueryJCommand) command;
+            @NotNull QueryJCommand t_Command = (QueryJCommand) command;
             
             try 
             {
                 result = handle(t_Command);
             }
-            catch  (final QueryJBuildException buildException)
+            catch  (@NotNull final QueryJBuildException buildException)
             {
                 Log t_Log =
                     UniqueLogFactory.getLog(
@@ -191,12 +193,12 @@ public class CompositeQueryJCommandHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
-        final QueryJCommand command, final Collection handlerCollection)
+        final QueryJCommand command, @Nullable final Collection handlerCollection)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        Iterator t_itHandlerIterator =
+        @Nullable Iterator t_itHandlerIterator =
             (handlerCollection != null)
             ?  handlerCollection.iterator()
             :  null;
@@ -233,7 +235,7 @@ public class CompositeQueryJCommandHandler
      * @precondition handler != null
      */
     protected boolean handle(
-        final QueryJCommand command, final QueryJCommandHandler handler)
+        final QueryJCommand command, @NotNull final QueryJCommandHandler handler)
       throws  QueryJBuildException
     {
         return handler.handle(command);

@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.customsql;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing JDK classes.
@@ -221,6 +222,7 @@ public class ResultSetFlagsElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return
@@ -239,6 +241,7 @@ public class ResultSetFlagsElement
      * @param holdability the <i>holdability</i> attribute.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String type,

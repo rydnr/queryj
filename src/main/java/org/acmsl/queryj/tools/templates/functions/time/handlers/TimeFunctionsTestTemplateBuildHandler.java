@@ -53,6 +53,8 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -84,7 +86,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         if  (retrieveExtractFunctions(parameters))
@@ -119,17 +121,17 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @precondition stringUtils != null
      */
     protected void buildTemplate(
-        final DatabaseMetaData metadata,
+        @NotNull final DatabaseMetaData metadata,
         final String packageName,
         final String testedPackage,
-        final TimeFunctionsTestTemplateGenerator generator,
-        final Map parameters,
-        final StringUtils stringUtils)
+        @NotNull final TimeFunctionsTestTemplateGenerator generator,
+        @NotNull final Map parameters,
+        @NotNull final StringUtils stringUtils)
       throws  QueryJBuildException
     {
         try 
         {
-            TimeFunctionsTestTemplate t_Template =
+            @Nullable TimeFunctionsTestTemplate t_Template =
                 generator.createTimeFunctionsTestTemplate(
                     packageName,
                     testedPackage,
@@ -140,7 +142,7 @@ public class TimeFunctionsTestTemplateBuildHandler
             Collection t_cFunctions =
                 stringUtils.tokenize(metadata.getTimeDateFunctions(), ",");
 
-            Iterator t_itFunctions =
+            @Nullable Iterator t_itFunctions =
                 (t_cFunctions != null) ? t_cFunctions.iterator() : null;
 
             if  (t_itFunctions != null) 
@@ -157,7 +159,7 @@ public class TimeFunctionsTestTemplateBuildHandler
 
             storeTimeFunctionsTestTemplate(t_Template, parameters);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -173,11 +175,11 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @return such information.
      * @precondition parameters != null
      */
-    protected boolean retrieveExtractFunctions(final Map parameters)
+    protected boolean retrieveExtractFunctions(@NotNull final Map parameters)
     {
         boolean result = true;
 
-        Boolean t_bResult =
+        @NotNull Boolean t_bResult =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.EXTRACT_FUNCTIONS);
@@ -196,7 +198,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(parameters, PackageUtils.getInstance());
@@ -211,7 +213,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveTestFunctionsPackage(
@@ -225,7 +227,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrieveTestedPackage(final Map parameters)
+    protected String retrieveTestedPackage(@NotNull final Map parameters)
     {
         return retrieveTestedPackage(parameters, PackageUtils.getInstance());
     }
@@ -239,7 +241,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveTestedPackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveFunctionsPackage(
@@ -252,7 +254,8 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @return the test templates.
      * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(Map parameters)
+    @NotNull
+    protected Collection retrieveTestTemplates(@NotNull Map parameters)
     {
         return
             (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
@@ -267,7 +270,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      */
     protected void storeTimeFunctionsTestTemplate(
         final TimeFunctionsTestTemplate template,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.TIME_FUNCTIONS_TEST_TEMPLATE, template);
@@ -284,7 +287,7 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplates(
-        final Collection templates, final Map parameters)
+        final Collection templates, @NotNull final Map parameters)
     {
         parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
@@ -297,9 +300,9 @@ public class TimeFunctionsTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplate(
-        final TestTemplate template, final Map parameters)
+        final TestTemplate template, @NotNull final Map parameters)
     {
-        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+        @NotNull Collection t_cTestTemplates = retrieveTestTemplates(parameters);
 
         if  (t_cTestTemplates == null) 
         {

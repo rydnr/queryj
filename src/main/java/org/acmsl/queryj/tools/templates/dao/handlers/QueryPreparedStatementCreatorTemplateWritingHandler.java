@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplat
 import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -80,7 +81,7 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplate(
@@ -104,17 +105,17 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplate(
-        final QueryPreparedStatementCreatorTemplate template,
-        final File outputDir,
+        @NotNull final QueryPreparedStatementCreatorTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final QueryPreparedStatementCreatorTemplateGenerator generator)
+        @NotNull final QueryPreparedStatementCreatorTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
         {
             generator.write(template, outputDir, charset);
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -128,8 +129,9 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
+    @NotNull
     protected QueryPreparedStatementCreatorTemplate retrieveTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (QueryPreparedStatementCreatorTemplate)
@@ -144,7 +146,8 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -165,11 +168,12 @@ public class QueryPreparedStatementCreatorTemplateWritingHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final File projectOutputDir,
+        @NotNull final File projectOutputDir,
         final String projectPackage,
         final boolean subFolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveQueryPreparedStatementCreatorFolder(

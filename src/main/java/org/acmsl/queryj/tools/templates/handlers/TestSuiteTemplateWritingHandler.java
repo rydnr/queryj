@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
 import org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -75,7 +76,7 @@ public class TestSuiteTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplate(
@@ -100,17 +101,17 @@ public class TestSuiteTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplate(
-        final TestSuiteTemplate template,
-        final File outputDir,
+        @NotNull final TestSuiteTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final TestSuiteTemplateGenerator generator)
+        @NotNull final TestSuiteTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
         {
             generator.write(template, outputDir, charset);
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -124,8 +125,9 @@ public class TestSuiteTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
+    @NotNull
     protected TestSuiteTemplate retrieveTestSuiteTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (TestSuiteTemplate)
@@ -139,7 +141,8 @@ public class TestSuiteTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -152,8 +155,9 @@ public class TestSuiteTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveBaseTestSuiteFolder(

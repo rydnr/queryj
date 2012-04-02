@@ -31,6 +31,9 @@
  */
 package org.acmsl.queryj.tools.maven;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Models an externally-managed field.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -233,10 +236,10 @@ public class ExternallyManagedField
         final String className,
         final String tableName,
         final String name,
-        final String keyword,
-        final String retrievalQuery)
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery)
     {
-        StringBuilder result = new StringBuilder();
+        @NotNull StringBuilder result = new StringBuilder();
 
         result.append("{ class-name : \"");
         result.append(className);

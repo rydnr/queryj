@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.dao.handlers
     .DAOFactoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -85,7 +87,7 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -101,7 +103,7 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition parameters != null
      */
     protected void writeTemplates(
-        final Map parameters, final DatabaseMetaData metadata)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metadata)
       throws  QueryJBuildException
     {
         try
@@ -114,7 +116,7 @@ public class DAOFactoryTemplateWritingHandler
                 retrieveCharset(parameters),
                 DAOFactoryTemplateGenerator.getInstance());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -134,10 +136,10 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition generator != null
      */
     protected void writeTemplates(
-        final DAOFactoryTemplate[] templates,
-        final File outputDir,
+        @Nullable final DAOFactoryTemplate[] templates,
+        @NotNull final File outputDir,
         final Charset charset,
-        final DAOFactoryTemplateGenerator generator)
+        @NotNull final DAOFactoryTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
@@ -152,7 +154,7 @@ public class DAOFactoryTemplateWritingHandler
                     templates[t_iDAOFactoryIndex], outputDir, charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -166,8 +168,9 @@ public class DAOFactoryTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
+    @NotNull
     protected DAOFactoryTemplate[] retrieveDAOFactoryTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (DAOFactoryTemplate[])
@@ -183,8 +186,9 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition engineName != null
      * @precondition parameters != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -201,10 +205,11 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOFactoryFolder(

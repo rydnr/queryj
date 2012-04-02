@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * Importing some StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -114,6 +115,7 @@ public class BaseRepositoryDAOFactoryTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "Base Repository DAO Factory";

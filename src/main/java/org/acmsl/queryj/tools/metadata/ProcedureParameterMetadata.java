@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents procedure parameter metadata.
@@ -119,7 +120,7 @@ public class ProcedureParameterMetadata
                 + name + ", " + type + ", " + comment + ", " + dataType
                 + ", " + length + ", " + nullable);
         }
-        catch  (final Throwable throwable)
+        catch  (@NotNull final Throwable throwable)
         {
             // class-loading problem.
         }
@@ -248,7 +249,7 @@ public class ProcedureParameterMetadata
 
         if  (object instanceof ProcedureParameterMetadata)
         {
-            final ProcedureParameterMetadata t_OtherInstance =
+            @NotNull final ProcedureParameterMetadata t_OtherInstance =
                 (ProcedureParameterMetadata) object;
 
             result =
@@ -287,7 +288,7 @@ public class ProcedureParameterMetadata
 
         if  (object instanceof ProcedureParameterMetadata)
         {
-            final ProcedureParameterMetadata t_OtherInstance =
+            @NotNull final ProcedureParameterMetadata t_OtherInstance =
                 (ProcedureParameterMetadata) object;
 
             result =

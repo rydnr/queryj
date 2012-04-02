@@ -53,6 +53,8 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -143,15 +145,15 @@ public class DAOFactoryTemplate
      */
     protected String generateOutput(
         final String header,
-        final TableTemplate tableTemplate,
+        @NotNull final TableTemplate tableTemplate,
         final String packageName,
-        final String engineName,
+        @NotNull final String engineName,
         final String basePackageName,
         final String jndiDataSource,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final DefaultThemeUtils defaultThemeUtils,
-        final PackageUtils packageUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final DefaultThemeUtils defaultThemeUtils,
+        @NotNull final PackageUtils packageUtils)
     {
         String result = "";
 
@@ -163,9 +165,9 @@ public class DAOFactoryTemplate
                     t_strTableName.toLowerCase()),
                 '_');
 
-        StringTemplateGroup t_Group = retrieveGroup();
+        @Nullable StringTemplateGroup t_Group = retrieveGroup();
 
-        StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
         String t_strCapitalizedEngine =
             stringUtils.capitalize(engineName, '_');
@@ -246,9 +248,9 @@ public class DAOFactoryTemplate
      * @precondition jndiLocation != null
      */
     protected void fillParameters(
-        final StringTemplate template,
+        @NotNull final StringTemplate template,
         final Integer[] copyrightYears,
-        final String header,
+        @Nullable final String header,
         final String tableName,
         final String engineName,
         final String basePackageName,
@@ -264,7 +266,7 @@ public class DAOFactoryTemplate
         final String daoImplementationPackageName,
         final String jndiLocation)
     {
-        Map input = new HashMap();
+        @NotNull Map input = new HashMap();
 
         template.setAttribute("input", input);
 
@@ -314,7 +316,7 @@ public class DAOFactoryTemplate
      * @precondition subpackageName != null
      */
     protected void fillPackageDeclarationParameters(
-        final Map input,
+        @NotNull final Map input,
         final String basePackageName,
         final String subpackageName)
     {
@@ -326,6 +328,7 @@ public class DAOFactoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/DAOFactory.stg");

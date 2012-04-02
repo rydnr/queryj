@@ -35,6 +35,8 @@ package org.acmsl.queryj.dao;
 /*
  * Importing Spring classes.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.jdbc.datasource.SmartDataSource;
 import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
@@ -136,7 +138,7 @@ public class ThreadAwareDataSourceWrapper
      */
     protected Connection getConnection(
         final Connection internalConnection,
-        final DataSource dataSource)
+        @Nullable final DataSource dataSource)
       throws  SQLException
     {
         Connection result = internalConnection;
@@ -261,14 +263,14 @@ public class ThreadAwareDataSourceWrapper
      * @precondition dataSource != null
      */
     protected boolean equals(
-        final Object object, final DataSource dataSource)
+        @Nullable final Object object, final DataSource dataSource)
     {
         boolean result = false;
 
         if  (   (object != null)
              && (object instanceof DataSource))
         {
-            DataSource t_GivenDataSource = (DataSource) object;
+            @NotNull DataSource t_GivenDataSource = (DataSource) object;
 
             result =
                 (   (t_GivenDataSource == dataSource)
@@ -305,7 +307,7 @@ public class ThreadAwareDataSourceWrapper
     protected int hashCode(
         final int threadBasedHashCode,
         final int currentThreadBasedHashCode,
-        final DataSource dataSource)
+        @NotNull final DataSource dataSource)
     {
         int result = currentThreadBasedHashCode;
 
@@ -324,6 +326,7 @@ public class ThreadAwareDataSourceWrapper
      * Retrieves the textual version of this instance.
      * @return such information.
      */
+    @Nullable
     public String toString()
     {
         return toString(getTargetDataSource());
@@ -334,9 +337,10 @@ public class ThreadAwareDataSourceWrapper
      * @param dataSource the wrapped data source.
      * @return such information.
      */
-    protected String toString(final DataSource dataSource)
+    @Nullable
+    protected String toString(@Nullable final DataSource dataSource)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (dataSource == null)
         {
@@ -356,7 +360,7 @@ public class ThreadAwareDataSourceWrapper
      * @return <code>true</code> in such case.
      * @precondition connection != null
      */
-    protected boolean isClosed(final Connection connection)
+    protected boolean isClosed(@NotNull final Connection connection)
     {
         boolean result = false;
 
@@ -364,7 +368,7 @@ public class ThreadAwareDataSourceWrapper
         {
             result = connection.isClosed();
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             try
             {
@@ -372,7 +376,7 @@ public class ThreadAwareDataSourceWrapper
                     "Error checking if connection is closed.",
                     sqlException);
             }
-            catch  (final Throwable throwable)
+            catch  (@NotNull final Throwable throwable)
             {
                 // class-loading problem.
             }

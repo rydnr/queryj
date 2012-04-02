@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -85,7 +87,7 @@ public class TestSuiteTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    public boolean handle(final Map parameters)
+    public boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -117,25 +119,25 @@ public class TestSuiteTemplateBuildHandler
      * @precondition stringUtils != null
      */
     protected boolean handle(
-        final Map parameters,
-        final Collection testTemplates,
+        @NotNull final Map parameters,
+        @Nullable final Collection testTemplates,
         final String projectPackage,
         final String header,
         final boolean subFolders,
-        final TestSuiteTemplateFactory templateFactory,
-        final StringUtils stringUtils)
+        @NotNull final TestSuiteTemplateFactory templateFactory,
+        @NotNull final StringUtils stringUtils)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        TestSuiteTemplate t_TestSuiteTemplate =
+        @NotNull TestSuiteTemplate t_TestSuiteTemplate =
             templateFactory.createTestSuiteTemplate(
                 projectPackage,
                 stringUtils.extractPackageName(projectPackage),
                 header,
                 subFolders);
 
-        Iterator t_itTestTemplates =
+        @Nullable Iterator t_itTestTemplates =
             (testTemplates != null) ? testTemplates.iterator() : null;
 
         if  (t_itTestTemplates != null)
@@ -163,7 +165,8 @@ public class TestSuiteTemplateBuildHandler
      * @return the test templates.
      * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(final Map  parameters)
+    @NotNull
+    protected Collection retrieveTestTemplates(@NotNull final Map  parameters)
     {
         return
             (Collection)
@@ -178,7 +181,7 @@ public class TestSuiteTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestSuiteTemplate(
-        final TestSuiteTemplate testSuiteTemplate, final Map parameters)
+        final TestSuiteTemplate testSuiteTemplate, @NotNull final Map parameters)
     {
         parameters.put(TEST_SUITE_TEMPLATE, testSuiteTemplate);
     }

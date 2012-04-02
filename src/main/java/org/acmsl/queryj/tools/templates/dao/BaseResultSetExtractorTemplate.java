@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -51,6 +50,8 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -110,6 +111,7 @@ public class BaseResultSetExtractorTemplate
      * Builds a key to store the template cache.
      * @return such key.
      */
+    @NotNull
     protected Object buildTemplateCacheKey()
     {
         return "//BaseResultSetExtractorTemplate//";
@@ -119,6 +121,7 @@ public class BaseResultSetExtractorTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/BaseResultSetExtractor.stg");
@@ -128,6 +131,7 @@ public class BaseResultSetExtractorTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "BaseResultSetExtractor";

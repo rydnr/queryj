@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
  */
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -111,6 +113,7 @@ public class DAOListenerTemplate
      * Builds a key to store the template cache.
      * @return such key.
      */
+    @NotNull
     protected Object buildTemplateCacheKey()
     {
         return "//DAOListenerTemplate//";
@@ -120,6 +123,7 @@ public class DAOListenerTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/DAOListener.stg");
@@ -129,6 +133,7 @@ public class DAOListenerTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "DAO listener";

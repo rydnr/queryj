@@ -66,6 +66,8 @@ import java.util.Map;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds a per-repository template using database metadata.
@@ -89,7 +91,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition command != null
      */
     @Override
-    public boolean handle(final QueryJCommand command)
+    public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
         return handle(command.getAttributeMap());
@@ -102,7 +104,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -148,10 +150,10 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition tableTemplates != null
      */
     protected boolean createTemplate(
-        final Map parameters,
-        final MetadataManager metadataManager,
+        @NotNull final Map parameters,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
         final String header,
@@ -203,13 +205,13 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition tableTemplates != null
      */
     protected boolean createTemplate(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String repository,
         final String header,
@@ -266,20 +268,20 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
         final String header,
         final boolean jmx,
-        final TableTemplate[] tableTemplates)
+        @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        Collection t_cTableNames = new ArrayList();
+        @NotNull Collection t_cTableNames = new ArrayList();
 
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
 
@@ -288,7 +290,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             t_cTableNames.add(tableTemplates[t_iIndex].getTableName());
         }
 
-        BasePerRepositoryTemplate t_Template =
+        @Nullable BasePerRepositoryTemplate t_Template =
             createTemplate(
                 metadataManager,
                 metadataManager.getMetadataTypeManager(),
@@ -335,11 +337,12 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition tableNames != null
      * @precondition factory != null
      */
+    @Nullable
     protected BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
@@ -350,7 +353,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final Map parameters)
       throws  QueryJBuildException
     {
-        BasePerRepositoryTemplate result = null;
+        @Nullable BasePerRepositoryTemplate result = null;
 
         if  (templateFactory instanceof DefaultBasePerRepositoryTemplateFactory)
         {
@@ -386,7 +389,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String engineName, final Map parameters)
+        final String engineName, @NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -425,7 +428,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
             (TableTemplate[])

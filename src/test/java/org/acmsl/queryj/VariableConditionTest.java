@@ -56,6 +56,7 @@ import java.util.Collection;
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Indicates JUnit how to test VariableCondition classes.
@@ -90,7 +91,7 @@ public class VariableConditionTest
      */
     public void test1Condition()
     {
-        Condition t_Condition = USERS.USERID.greaterThan();
+        @NotNull Condition t_Condition = USERS.USERID.greaterThan();
 
         assertTrue(t_Condition != null);
 
@@ -107,7 +108,7 @@ public class VariableConditionTest
      */
     public void test2Condition()
     {
-        Condition t_Condition =
+        @NotNull Condition t_Condition =
             USERS.USERID.greaterThan().and(USERS.USERID.equals());
 
         assertTrue(t_Condition != null);
@@ -125,7 +126,7 @@ public class VariableConditionTest
      */
     public void test3Condition()
     {
-        Condition t_Condition =
+        @NotNull Condition t_Condition =
             USERS.USERID.greaterThan(1).and(USERS.USERID.equals()).and(USERS.USERID.equals(1));
 
         assertTrue(t_Condition != null);
@@ -143,7 +144,7 @@ public class VariableConditionTest
      */
     public void test3Condition2()
     {
-        Condition t_Condition =
+        @NotNull Condition t_Condition =
             USERS.USERID.greaterThan(1).and(USERS.USERID.equals()).and(USERS.USERID.equals());
 
         assertTrue(t_Condition != null);
@@ -161,7 +162,7 @@ public class VariableConditionTest
      */
     public void test3Condition3()
     {
-        Condition t_Condition =
+        @NotNull Condition t_Condition =
             USERS.USERID.greaterThan().and(USERS.USERID.equals()).and(USERS.USERID.equals());
 
         assertTrue(t_Condition != null);
@@ -193,18 +194,21 @@ public class VariableConditionTest
         /**
          * The USERS table USERID field.
          */
+        @NotNull
         public IntField USERID =
             new IntField("USERID", this) {};
 
         /**
          * The USERS table NAME field.
          */
+        @NotNull
         public Field NAME =
             new Field("NAME", this) {};
 
         /**
          * All fields.
          */
+        @NotNull
         public Field[] ALL =
             new Field[] {USERID, NAME};
 
@@ -216,6 +220,7 @@ public class VariableConditionTest
         /**
          * The table alias.
          */
+        @NotNull
         public TableAlias ALIAS =
             new TableAlias("usrs", this) {};
 
@@ -232,6 +237,7 @@ public class VariableConditionTest
          * star in a query.
          * @return such fields.
          */
+        @NotNull
         public Field[] getAll()
         {
             return ALL;

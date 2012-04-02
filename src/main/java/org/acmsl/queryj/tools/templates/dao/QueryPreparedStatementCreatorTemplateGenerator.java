@@ -50,6 +50,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -88,6 +89,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * instance.
      * @return such instance.
      */
+    @NotNull
     public static QueryPreparedStatementCreatorTemplateGenerator getInstance()
     {
         return QueryPreparedStatementCreatorTemplateGeneratorSingletonContainer.SINGLETON;
@@ -100,6 +102,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * @return a template.
      * @precondition packageName != null
      */
+    @NotNull
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
         final String packageName, final String header)
     {
@@ -112,6 +115,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -127,8 +131,8 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final QueryPreparedStatementCreatorTemplate template,
-        final File outputDir,
+        @NotNull final QueryPreparedStatementCreatorTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -151,10 +155,10 @@ public class QueryPreparedStatementCreatorTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final QueryPreparedStatementCreatorTemplate template,
-        final File outputDir,
+        @NotNull final QueryPreparedStatementCreatorTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

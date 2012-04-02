@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.functions.time;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate tests on Database's time functions.
@@ -82,6 +83,7 @@ public abstract class TimeFunctionsTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return "TimeFunctionsTest";

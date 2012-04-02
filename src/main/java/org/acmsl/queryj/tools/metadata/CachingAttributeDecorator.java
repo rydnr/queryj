@@ -39,6 +39,8 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Attribute</code>
@@ -157,8 +159,8 @@ public class CachingAttributeDecorator
      * @precondition metadataManager != null
      */
     public CachingAttributeDecorator(
-        final Attribute attribute,
-        final MetadataManager metadataManager)
+        @NotNull final Attribute attribute,
+        @NotNull final MetadataManager metadataManager)
     {
         super(attribute, metadataManager);
     }
@@ -603,6 +605,7 @@ public class CachingAttributeDecorator
      * Retrieves the object type.
      * @return such information.
      */
+    @Nullable
     public String getObjectType()
     {
         String result = getCachedObjectType();

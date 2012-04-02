@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -105,6 +107,7 @@ public class CustomResultUtils
      * Retrieves a <code>CustomResultUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static CustomResultUtils getInstance()
     {
         return CustomResultUtilsSingletonContainer.SINGLETON;
@@ -120,19 +123,20 @@ public class CustomResultUtils
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      */
+    @Nullable
     public String retrieveTable(
-        final Result resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final Result resultElement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
-        String result = null;
+        @Nullable String result = null;
 
         String[] t_astrTableNames = metadataManager.getTableNames();
 
         int t_iTableCount =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-        SqlElement[] t_aSqlElements = null;
+        @Nullable SqlElement[] t_aSqlElements = null;
 
         int t_iSqlCount = 0;
 
@@ -181,13 +185,13 @@ public class CustomResultUtils
      * @precondition customSqlProvider != null
      */
     public boolean matches(
-        final Result resultElement,
-        final String tableName,
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final Result resultElement,
+        @NotNull final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         boolean result = false;
 
-        SqlElement[] t_aSqlElements =
+        @NotNull SqlElement[] t_aSqlElements =
             findSqlElementsByResultId(
                 resultElement.getId(), customSqlProvider);
 
@@ -220,7 +224,7 @@ public class CustomResultUtils
      * @precondition daoId != null
      */
     public boolean matches(
-        final String tableName, final String daoId)
+        @NotNull final String tableName, @NotNull final String daoId)
     {
         return matches(tableName, daoId, EnglishGrammarUtils.getInstance());
     }
@@ -237,9 +241,9 @@ public class CustomResultUtils
      * @precondition englishGrammarUtils != null
      */
     protected boolean matches(
-        final String tableName,
-        final String daoId,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final String tableName,
+        @NotNull final String daoId,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         boolean result = false;
 
@@ -296,11 +300,12 @@ public class CustomResultUtils
      * @precondition sqlProvider != null
      * @precondition resultId != null
      */
+    @NotNull
     public SqlElement[] retrieveSqlElementsByResultId(
-        final CustomSqlProvider customSqlProvider,
-        final String resultId)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String resultId)
     {
-        Collection t_cResult = new ArrayList();
+        @NotNull Collection t_cResult = new ArrayList();
 
         Collection t_cElements = customSqlProvider.getCollection();
 
@@ -310,9 +315,9 @@ public class CustomResultUtils
 
             if  (t_itElements != null)
             {
-                Object t_CurrentItem = null;
+                @Nullable Object t_CurrentItem = null;
 
-                ResultRefElement t_ResultRef = null;
+                @Nullable ResultRefElement t_ResultRef = null;
 
                 while  (t_itElements.hasNext())
                 {
@@ -344,16 +349,17 @@ public class CustomResultUtils
      * @precondition sqlProvider != null
      * @precondition type != null
      */
+    @NotNull
     public Result[] retrieveResultsByType(
-        final CustomSqlProvider customSqlProvider,
-        final String type)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String type)
     {
-        Collection t_cResult = new ArrayList();
+        @NotNull Collection t_cResult = new ArrayList();
 
-        SqlElement[] t_aSqlElements =
+        @NotNull SqlElement[] t_aSqlElements =
             retrieveSqlElementsByType(customSqlProvider, type);
 
-        Result t_CurrentElement = null;
+        @Nullable Result t_CurrentElement = null;
 
         for  (int t_iIndex = 0; t_iIndex < t_aSqlElements.length; t_iIndex++)
         {
@@ -378,13 +384,14 @@ public class CustomResultUtils
      * @return such elements.
      * @precondition type != null
      */
+    @NotNull
     public SqlElement[] retrieveSqlElementsByType(
-        final CustomSqlProvider customSqlProvider,
-        final String type)
+        @Nullable final CustomSqlProvider customSqlProvider,
+        @NotNull final String type)
     {
-        Collection t_cResult = new ArrayList();
+        @NotNull Collection t_cResult = new ArrayList();
 
-        Collection t_cElements = null;
+        @Nullable Collection t_cElements = null;
 
         if  (customSqlProvider != null)
         {
@@ -397,7 +404,7 @@ public class CustomResultUtils
 
             if  (t_itElements != null)
             {
-                Object t_CurrentItem = null;
+                @Nullable Object t_CurrentItem = null;
 
                 while  (t_itElements.hasNext())
                 {
@@ -425,11 +432,12 @@ public class CustomResultUtils
      * @precondition resultId != null
      * @precondition customSqlProvider != null
      */
+    @NotNull
     public SqlElement[] findSqlElementsByResultId(
-        final String resultId,
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final String resultId,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        Collection t_cResult = new ArrayList();
+        @NotNull Collection t_cResult = new ArrayList();
 
         Collection t_cElements = customSqlProvider.getCollection();
 
@@ -439,7 +447,7 @@ public class CustomResultUtils
 
             if  (t_itElements != null)
             {
-                Object t_CurrentItem = null;
+                @Nullable Object t_CurrentItem = null;
 
                 while  (t_itElements.hasNext())
                 {
@@ -494,7 +502,7 @@ public class CustomResultUtils
      * @precondition key != null
      */
     protected void cacheEntry(
-        final String key, final String value)
+        final String key, @Nullable final String value)
     {
         if  (value == null)
         {
@@ -512,6 +520,7 @@ public class CustomResultUtils
      * @return such value.
      * @precondition tableName != null
      */
+    @NotNull
     protected String retrieveCachedSingularTableName(final String tableName)
     {
         return retrieveCachedEntry(buildSingularKey(tableName));
@@ -523,6 +532,7 @@ public class CustomResultUtils
      * @return such value.
      * @precondition tableName != null
      */
+    @NotNull
     protected String retrieveCachedPluralTableName(final String tableName)
     {
         return retrieveCachedEntry(buildPluralKey(tableName));
@@ -534,6 +544,7 @@ public class CustomResultUtils
      * @return the cached entry, or <code>null</code> if it's not cached.
      * @precondition key != null
      */
+    @NotNull
     protected String retrieveCachedEntry(final String key)
     {
         return retrieveCachedEntry(CACHE, key);
@@ -548,7 +559,7 @@ public class CustomResultUtils
      * @precondition key != null
      * @precondition value != null
      */
-    protected void cache(final Map map, final String key, final String value)
+    protected void cache(@NotNull final Map map, final String key, final String value)
     {
         map.put(key, value);
     }
@@ -561,7 +572,8 @@ public class CustomResultUtils
      * @precondition cache != null
      * @precondition key != null
      */
-    protected String retrieveCachedEntry(final Map cache, final String key)
+    @NotNull
+    protected String retrieveCachedEntry(@NotNull final Map cache, final String key)
     {
         return (String) cache.get(key);
     }
@@ -573,7 +585,7 @@ public class CustomResultUtils
      * @precondition cache != null
      * @precondition key != null
      */
-    protected void removeEntryFromCache(final Map cache, final String key)
+    protected void removeEntryFromCache(@NotNull final Map cache, final String key)
     {
         cache.remove(key);
     }
@@ -584,6 +596,7 @@ public class CustomResultUtils
      * @return such key.
      * @precondition tableName != null
      */
+    @NotNull
     protected String buildSingularKey(final String tableName)
     {
         return "~singular--" + tableName;
@@ -595,6 +608,7 @@ public class CustomResultUtils
      * @return such key.
      * @precondition tableName != null
      */
+    @NotNull
     protected String buildPluralKey(final String tableName)
     {
         return "~plural--" + tableName;
@@ -636,7 +650,7 @@ public class CustomResultUtils
 
         if  (object instanceof CustomResultUtils)
         {
-            final CustomResultUtils t_OtherInstance =
+            @NotNull final CustomResultUtils t_OtherInstance =
                 (CustomResultUtils) object;
 
             result =

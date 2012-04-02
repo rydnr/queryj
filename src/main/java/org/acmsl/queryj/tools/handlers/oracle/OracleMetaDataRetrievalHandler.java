@@ -50,6 +50,8 @@ import org.acmsl.commons.version.VersionUtils;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -79,7 +81,7 @@ public class OracleMetaDataRetrievalHandler
      * @precondition product != null
      */
     protected boolean checkVendor(
-        final String productName,
+        @NotNull final String productName,
         final String productVfersion,
         final int majorVersion,
         final int minorVersion)
@@ -103,7 +105,7 @@ public class OracleMetaDataRetrievalHandler
      * @precondition versionUtils != null
      */
     protected boolean checkVersion(
-        final String version, final VersionUtils versionUtils)
+        final String version, @NotNull final VersionUtils versionUtils)
     {
         return versionUtils.matches(version, "8.x");
     }
@@ -128,6 +130,7 @@ public class OracleMetaDataRetrievalHandler
      * parameters are not present or valid.
      * @precondition metaData != null
      */
+    @Nullable
     protected MetadataManager buildMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
@@ -140,7 +143,7 @@ public class OracleMetaDataRetrievalHandler
         final String schema)
         throws  BuildException
     {
-        MetadataManager result = null;
+        @Nullable MetadataManager result = null;
 
         try 
         {
@@ -156,11 +159,11 @@ public class OracleMetaDataRetrievalHandler
                     catalog,
                     schema);
         }
-        catch  (final RuntimeException exception)
+        catch  (@NotNull final RuntimeException exception)
         {
             throw exception;
         }
-        catch  (final Exception exception)
+        catch  (@NotNull final Exception exception)
         {
             throw new BuildException(exception);
         }

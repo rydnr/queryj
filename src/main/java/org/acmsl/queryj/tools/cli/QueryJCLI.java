@@ -54,6 +54,8 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -84,7 +86,7 @@ public final class QueryJCLI
      * @precondition helper != null
      */
     protected static void executeQueryJ(
-        final String[] args, final QueryJCLIHelper helper)
+        final String[] args, @NotNull final QueryJCLIHelper helper)
     {
         executeQueryJ(
             args,
@@ -130,11 +132,11 @@ public final class QueryJCLI
         final Option[] verbosityOptions,
         final Option helpOption,
         final Option helpLongOption,
-        final QueryJCLIHelper helper)
+        @NotNull final QueryJCLIHelper helper)
     {
-        Options t_Options = null;
+        @Nullable Options t_Options = null;
 
-        CommandLine t_CommandLine = null;
+        @Nullable CommandLine t_CommandLine = null;
 
         try
         {
@@ -147,7 +149,7 @@ public final class QueryJCLI
 
             t_CommandLine = new GnuParser().parse(t_Options, args);
         }
-        catch  (final ParseException parseException)
+        catch  (@NotNull final ParseException parseException)
         {
             try
             {
@@ -160,7 +162,7 @@ public final class QueryJCLI
 
                 t_CommandLine = new PosixParser().parse(t_Options, args);
             }
-            catch  (final ParseException anotherParseException)
+            catch  (@NotNull final ParseException anotherParseException)
             {
                 helper.printError(
                         parseException.getMessage() + "\n"
@@ -215,7 +217,7 @@ public final class QueryJCLI
                         t_CommandLine.getOptionValue(CUSTOM_SQL_LONG_OPTION);
                 }
 
-                Properties t_ConfigurationSettings =
+                @Nullable Properties t_ConfigurationSettings =
                     helper.readConfigurationSettings(
                         t_strConfigurationFileName);
 
@@ -234,7 +236,7 @@ public final class QueryJCLI
                             retrieveLogThreshold(t_CommandLine),
                             t_strCustomSqlFileName);
                     }
-                    catch  (final QueryJBuildException buildException)
+                    catch  (@NotNull final QueryJBuildException buildException)
                     {
                         helper.printError(
                             "QueryJ failed. Reason: "
@@ -320,6 +322,7 @@ public final class QueryJCLI
          * Builds the command.
          * @return the initialized command.
          */
+        @NotNull
         protected QueryJCommand buildCommand()
         {
             return
@@ -336,7 +339,7 @@ public final class QueryJCLI
      * @returh such threshold.
      * @precondition commandLine != null
      */
-    protected static int retrieveLogThreshold(final CommandLine commandLine)
+    protected static int retrieveLogThreshold(@NotNull final CommandLine commandLine)
     {
         int result = QueryJLog.ERROR;
 
@@ -377,7 +380,7 @@ public final class QueryJCLI
      * @return <code>true</code> in such case.
      * @precondition commandLine != null
      */
-    protected static boolean requestsHelp(final CommandLine commandLine)
+    protected static boolean requestsHelp(@NotNull final CommandLine commandLine)
     {
         boolean result = commandLine.hasOption(HELP_OPTION);
 

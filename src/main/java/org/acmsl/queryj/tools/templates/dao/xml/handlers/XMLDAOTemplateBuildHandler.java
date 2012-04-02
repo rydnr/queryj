@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -76,7 +78,7 @@ public class XMLDAOTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -112,19 +114,19 @@ public class XMLDAOTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
+        @NotNull final Map parameters,
         final MetadataManager metadataManager,
         final String basePackage,
         final String packageName,
         final String repositoryName,
-        final TableTemplate[] tableTemplates,
+        @Nullable final TableTemplate[] tableTemplates,
         final String header,
-        final XMLDAOTemplateFactory templateFactory)
+        @NotNull final XMLDAOTemplateFactory templateFactory)
       throws  QueryJBuildException
     {
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
 
-        XMLDAOTemplate[] t_aXMLDAOTemplates =
+        @NotNull XMLDAOTemplate[] t_aXMLDAOTemplates =
             new XMLDAOTemplate[t_iLength];
 
         for  (int t_iXMLDAOIndex = 0;
@@ -150,7 +152,7 @@ public class XMLDAOTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrievePackage(final Map parameters)
+    protected String retrievePackage(@NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -167,7 +169,7 @@ public class XMLDAOTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage, final PackageUtils packageUtils)
+        final String projectPackage, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveXMLDAOPackage(projectPackage);
     }
@@ -178,7 +180,8 @@ public class XMLDAOTemplateBuildHandler
      * @return the repository's name.
      * @precondition parameters != null
      */
-    protected String retrieveTableRepositoryName(final Map parameters)
+    @NotNull
+    protected String retrieveTableRepositoryName(@NotNull final Map parameters)
     {
         return
             (String)
@@ -195,7 +198,7 @@ public class XMLDAOTemplateBuildHandler
      */
     protected void storeXMLDAOTemplates(
         final XMLDAOTemplate[] mockDAOTemplates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.XML_DAO_TEMPLATES, mockDAOTemplates);
@@ -207,7 +210,8 @@ public class XMLDAOTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    protected TableTemplate[] retrieveTableTemplates(final Map parameters)
+    @NotNull
+    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
             (TableTemplate[])

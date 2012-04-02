@@ -58,6 +58,8 @@ import java.util.Iterator;
  * Importing Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;sql&gt; elements in <i>custom-sql</i> models.
@@ -94,7 +96,7 @@ public abstract class AbstractSqlDecorator
      * @precondition metadataTypeManager != null
      */
     public AbstractSqlDecorator(
-        final Sql sql,
+        @NotNull final Sql sql,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager)
     {
@@ -218,7 +220,7 @@ public abstract class AbstractSqlDecorator
      * @precondition metadataManager != null
      */
     protected MetadataTypeManager getMetadataTypeManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         return metadataManager.getMetadataTypeManager();
     }
@@ -241,7 +243,7 @@ public abstract class AbstractSqlDecorator
      * @precondition decorationUtils != null
      */
     protected String[] splitAndQuote(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return
             decorationUtils.surround(
@@ -270,7 +272,7 @@ public abstract class AbstractSqlDecorator
      * @precondition decorationUtils != null
      */
     protected String normalize(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -290,7 +292,7 @@ public abstract class AbstractSqlDecorator
      * @return <code>value.toUpperCase()</code>.
      * @precondition value != null
      */
-    protected String uppercase(final String value)
+    protected String uppercase(@NotNull final String value)
     {
         return value.toUpperCase();
     }
@@ -313,7 +315,7 @@ public abstract class AbstractSqlDecorator
      * @precondition decorationUtils != null
      */
     protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
     }
@@ -327,7 +329,7 @@ public abstract class AbstractSqlDecorator
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }
@@ -355,12 +357,13 @@ public abstract class AbstractSqlDecorator
      * @precondition customSqlProvider != null
      * @precondition metadataTypeManager != null
      */
+    @NotNull
     protected Collection getParameters(
-        final Collection parameterRefs,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final Collection parameterRefs,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataTypeManager metadataTypeManager)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
         if  (parameterRefs != null)
         {
@@ -368,8 +371,8 @@ public abstract class AbstractSqlDecorator
 
             if  (t_ParameterRefIterator != null)
             {
-                ParameterRefElement t_ParameterRef = null;
-                ParameterElement t_Parameter = null;
+                @Nullable ParameterRefElement t_ParameterRef = null;
+                @Nullable ParameterElement t_Parameter = null;
 
                 while  (t_ParameterRefIterator.hasNext())
                 {
@@ -397,7 +400,7 @@ public abstract class AbstractSqlDecorator
                                     "Referenced parameter not found:"
                                     + t_ParameterRef.getId());
                             }
-                            catch  (final Throwable throwable)
+                            catch  (@NotNull final Throwable throwable)
                             {
                                 // class-loading problem.
                             }
@@ -414,6 +417,7 @@ public abstract class AbstractSqlDecorator
      * Retrieves the result class.
      * @return such information.
      */
+    @Nullable
     public String getResultClass()
     {
         return getResultClass(getResultRef(), getCustomSqlProvider());
@@ -426,15 +430,16 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      * @precondition customSqlProvider != null
      */
+    @Nullable
     protected String getResultClass(
-        final ResultRefElement resultRef,
-        final CustomSqlProvider customSqlProvider)
+        @Nullable final ResultRefElement resultRef,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (resultRef != null)
         {
-            ResultElement t_Result =
+            @Nullable ResultElement t_Result =
                 customSqlProvider.resolveReference(resultRef);
 
             if  (t_Result != null)
@@ -458,7 +463,7 @@ public abstract class AbstractSqlDecorator
                           "Referenced result not found:"
                         + resultRef.getId());
                 }
-                catch  (final Throwable throwable)
+                catch  (@NotNull final Throwable throwable)
                 {
                     // class-loading problem.
                 }
@@ -472,6 +477,7 @@ public abstract class AbstractSqlDecorator
      * Retrieves the result id as constant.
      * @return such information.
      */
+    @Nullable
     public String getResultIdAsConstant()
     {
         return
@@ -490,16 +496,17 @@ public abstract class AbstractSqlDecorator
      * @precondition customSqlProvider != null
      * @precondition decorationUtils != null
      */
+    @Nullable
     protected String getResultIdAsConstant(
-        final ResultRefElement resultRef,
-        final CustomSqlProvider customSqlProvider,
-        final DecorationUtils decorationUtils)
+        @Nullable final ResultRefElement resultRef,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecorationUtils decorationUtils)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (resultRef != null)
         {
-            ResultElement t_Result =
+            @Nullable ResultElement t_Result =
                 customSqlProvider.resolveReference(resultRef);
 
             if  (t_Result != null)
@@ -516,7 +523,7 @@ public abstract class AbstractSqlDecorator
                           "Referenced result not found:"
                         + resultRef.getId());
                 }
-                catch  (final Throwable throwable)
+                catch  (@NotNull final Throwable throwable)
                 {
                     // class-loading problem.
                 }
@@ -557,7 +564,7 @@ public abstract class AbstractSqlDecorator
      * @return such information.
      * @precondition sql != null
      */
-    protected int hashCode(final Sql sql)
+    protected int hashCode(@NotNull final Sql sql)
     {
         return sql.hashCode();
     }
@@ -567,13 +574,13 @@ public abstract class AbstractSqlDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    public boolean equals(@NotNull final Object object)
     {
         boolean result = false;
 
         if  (object instanceof AbstractSqlDecorator)
         {
-            final AbstractSqlDecorator t_OtherInstance =
+            @NotNull final AbstractSqlDecorator t_OtherInstance =
                 (AbstractSqlDecorator) object;
 
             result =
@@ -640,7 +647,7 @@ public abstract class AbstractSqlDecorator
 
         if  (object instanceof AbstractSqlDecorator)
         {
-            final AbstractSqlDecorator t_OtherInstance =
+            @NotNull final AbstractSqlDecorator t_OtherInstance =
                 (AbstractSqlDecorator) object;
 
             result =

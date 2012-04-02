@@ -34,6 +34,9 @@ package org.acmsl.queryj.tools.maven;
 /*
  * Importing some JDK classes.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.List;
 
 /**
@@ -150,9 +153,9 @@ public class Table
     protected String toString(
         final String className,
         final String name,
-        final List<Field> fields)
+        @Nullable final List<Field> fields)
     {
-        StringBuilder result = new StringBuilder();
+        @NotNull StringBuilder result = new StringBuilder();
 
         result.append("{ class-name : \"");
         result.append(className);

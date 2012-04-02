@@ -38,6 +38,8 @@ package org.acmsl.queryj;
  */
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.TableAlias;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -92,6 +94,7 @@ public abstract class Table
      * a query.
      * @return such fields.
      */
+    @NotNull
     public abstract Field[] getAll();
 
     /**
@@ -170,9 +173,10 @@ public abstract class Table
      * Retrieves the table alias.
      * @return such instance.
      */
+    @Nullable
     public TableAlias getTableAlias()
     {
-        TableAlias result = null;
+        @Nullable TableAlias result = null;
 
         WeakReference t_TableAliasReference =
             getTableAliasReference();
@@ -202,9 +206,9 @@ public abstract class Table
      */
     public String toString()
     {
-        StringBuffer result = new StringBuffer();
+        @NotNull StringBuffer result = new StringBuffer();
 
-        TableAlias t_TableAlias = getTableAlias();
+        @Nullable TableAlias t_TableAlias = getTableAlias();
 
         if  (t_TableAlias != null) 
         {

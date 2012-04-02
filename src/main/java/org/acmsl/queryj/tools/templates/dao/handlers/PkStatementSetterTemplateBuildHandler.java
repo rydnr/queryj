@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -65,6 +66,7 @@ public class PkStatementSetterTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
         return PkStatementSetterTemplateGenerator.getInstance();
@@ -82,10 +84,10 @@ public class PkStatementSetterTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String tableName,
-        final String engineName,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrievePkStatementSetterPackage(
@@ -102,7 +104,7 @@ public class PkStatementSetterTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, final Map parameters)
+        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.PK_STATEMENT_SETTER_TEMPLATES,

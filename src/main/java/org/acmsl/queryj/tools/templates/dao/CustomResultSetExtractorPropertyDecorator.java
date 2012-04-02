@@ -42,6 +42,8 @@ import org.acmsl.queryj.tools.metadata.CachingPropertyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Property decorator specific for CustomResultSetExtractor template.
@@ -63,7 +65,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * @precondition metadataManager != null
      */
     public CustomResultSetExtractorPropertyDecorator(
-        final Property property, final MetadataManager metadataManager)
+        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
         super(property, metadataManager);
     }
@@ -148,7 +150,7 @@ public class CustomResultSetExtractorPropertyDecorator
      */
     protected String retrieveJavaType(
         final String type,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final boolean allowsNull)
     {
         return
@@ -182,9 +184,10 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the object type.
      * @return such information.
      */
+    @Nullable
     public String getObjectType()
     {
-        String result = getCachedObjectType();
+        @Nullable String result = getCachedObjectType();
 
         if  (result == null)
         {
@@ -202,8 +205,9 @@ public class CustomResultSetExtractorPropertyDecorator
      * @return such type.
      * @precondition metadataTypeManager != null
      */
+    @Nullable
     protected String getObjectType(
-        final String type, final MetadataTypeManager metadataTypeManager)
+        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.getStatementSetterFieldType(

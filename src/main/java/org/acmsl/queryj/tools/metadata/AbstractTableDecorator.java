@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Decorates <code>Table</code> instances to provide required alternate
@@ -75,7 +76,7 @@ public abstract class AbstractTableDecorator
      * @precondition metadataManager != null
      */
     public AbstractTableDecorator(
-        final Table table, final MetadataManager metadataManager)
+        @NotNull final Table table, final MetadataManager metadataManager)
     {
         this(table.getName(), metadataManager);
 
@@ -178,7 +179,7 @@ public abstract class AbstractTableDecorator
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    protected String capitalize(final String value)
+    protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
@@ -192,7 +193,7 @@ public abstract class AbstractTableDecorator
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(lowerCase(value));
     }
@@ -203,7 +204,7 @@ public abstract class AbstractTableDecorator
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    protected String upperCase(final String value)
+    protected String upperCase(@NotNull final String value)
     {
         return upperCase(value, DecorationUtils.getInstance());
     }
@@ -217,7 +218,7 @@ public abstract class AbstractTableDecorator
      * @precondition decorationUtils != null
      */
     protected String upperCase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.upperCase(value);
     }
@@ -242,7 +243,7 @@ public abstract class AbstractTableDecorator
      * @precondition decorationUtils != null
      */
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -267,7 +268,7 @@ public abstract class AbstractTableDecorator
      * @precondition decorationUtils != null
      */
     protected String normalize(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -287,7 +288,7 @@ public abstract class AbstractTableDecorator
      * @return the alternate version of the value.
      * @precondition value != null
      */
-    protected String lowerCase(final String value)
+    protected String lowerCase(@NotNull final String value)
     {
         return lowerCase(value, DecorationUtils.getInstance());
     }
@@ -301,7 +302,7 @@ public abstract class AbstractTableDecorator
      * @precondition decorationUtils != null
      */
     protected String lowerCase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.lowerCase(value);
     }
@@ -335,7 +336,7 @@ public abstract class AbstractTableDecorator
      * @precondition decorationUtils != null
      */
     protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
+        final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
     }
@@ -406,7 +407,7 @@ public abstract class AbstractTableDecorator
      * @precondition englishGrammarUtils != null
      */
     protected String getSingular(
-        final String word, final EnglishGrammarUtils englishGrammarUtils)
+        final String word, @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return englishGrammarUtils.getSingular(word);
     }
@@ -417,7 +418,7 @@ public abstract class AbstractTableDecorator
      * @return the lower-cased value.
      * @precondition value != null
      */
-    protected String lowercase(final String value)
+    protected String lowercase(@NotNull final String value)
     {
         return value.toLowerCase();
     }
@@ -445,6 +446,7 @@ public abstract class AbstractTableDecorator
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return toString(getTable());
@@ -457,6 +459,7 @@ public abstract class AbstractTableDecorator
      * @return such information.
      * @precondition table != null
      */
+    @NotNull
     protected String toString(final Table table)
     {
         return "" + table;
@@ -477,7 +480,7 @@ public abstract class AbstractTableDecorator
      * @return such information.
      * @precondition table != null
      */
-    protected int hashCode(final Table table)
+    protected int hashCode(@NotNull final Table table)
     {
         return table.hashCode();
     }
@@ -499,7 +502,7 @@ public abstract class AbstractTableDecorator
      * @return the result of such comparison.
      * @precondition table != null
      */
-    protected boolean equals(final Table table, final Object object)
+    protected boolean equals(@NotNull final Table table, final Object object)
     {
         return table.equals(object);
     }
@@ -526,7 +529,7 @@ public abstract class AbstractTableDecorator
      * object prevents it from being compared to this Object.
      * @precondition table != null
      */
-    protected int compareTo(final Table table, final Object object)
+    protected int compareTo(@NotNull final Table table, final Object object)
         throws  ClassCastException
     {
         return table.compareTo(object);

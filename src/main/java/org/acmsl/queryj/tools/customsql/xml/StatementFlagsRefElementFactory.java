@@ -50,6 +50,8 @@ import org.acmsl.commons.utils.ConversionUtils;
  * Importing some additional classes.
  */
 import org.apache.commons.digester.Digester;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
@@ -77,13 +79,14 @@ public class StatementFlagsRefElementFactory
      * @precondition digester != null
      * @precondition conversionUtils != null
      */
+    @Nullable
     public Object createObject(
-        final Attributes attributes,
+        @NotNull final Attributes attributes,
         final Digester digester,
         final ConversionUtils conversionUtils)
       throws SAXException
     {
-        StatementFlagsRefElement result = null;
+        @Nullable StatementFlagsRefElement result = null;
 
         String t_strId = attributes.getValue("id");
 

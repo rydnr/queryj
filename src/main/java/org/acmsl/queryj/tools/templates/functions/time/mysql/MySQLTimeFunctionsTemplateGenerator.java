@@ -49,6 +49,8 @@ import org.acmsl.queryj.tools.templates.functions.time
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -86,6 +88,7 @@ public class MySQLTimeFunctionsTemplateGenerator
      * Retrieves a <code>MySQLTimeFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MySQLTimeFunctionsTemplateGenerator getMySQLInstance()
     {
         return MySQLTimeFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -100,14 +103,15 @@ public class MySQLTimeFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String packageName,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        TimeFunctionsTemplate result = null;
+        @Nullable TimeFunctionsTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -131,6 +135,7 @@ public class MySQLTimeFunctionsTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

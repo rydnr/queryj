@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TestTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -375,6 +376,7 @@ public abstract class AbstractTestSuiteTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTestPackageName());
@@ -386,6 +388,7 @@ public abstract class AbstractTestSuiteTemplate
      * @return such header.
      * @precondition testPackageName != null
      */
+    @NotNull
     protected String buildHeader(final String testPackageName)
     {
         return "Generating TestSuiteTemplate for package " + testPackageName;

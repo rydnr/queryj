@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.functions.time;
  */
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create time function templates.
@@ -54,6 +55,7 @@ public interface TimeFunctionsTemplateFactory
      * @param quote the identifier quote string.
      * @return a template.
      */
+    @Nullable
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
         final String packageName,
         final String engineName,

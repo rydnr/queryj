@@ -55,6 +55,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -95,6 +96,7 @@ public class DataAccessManagerTemplateGenerator
      * instance.
      * @return such instance.
      */
+    @NotNull
     public static DataAccessManagerTemplateGenerator getInstance()
     {
         return DataAccessManagerTemplateGeneratorSingletonContainer.SINGLETON;
@@ -120,6 +122,7 @@ public class DataAccessManagerTemplateGenerator
      * @precondition engineName != null
      * @precondition tables != null
      */
+    @NotNull
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -150,6 +153,7 @@ public class DataAccessManagerTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -161,7 +165,7 @@ public class DataAccessManagerTemplateGenerator
      * @return the capitalized value.
      * @precondition value != null
      */
-    protected String capitalize(final String value)
+    protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
     }
@@ -175,7 +179,7 @@ public class DataAccessManagerTemplateGenerator
      * @precondition decorationUtils != null
      */
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
     }
@@ -190,8 +194,8 @@ public class DataAccessManagerTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -220,12 +224,12 @@ public class DataAccessManagerTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerRepositoryTemplate template,
+        @NotNull final BasePerRepositoryTemplate template,
         final String repository,
-        final File outputDir,
+        @NotNull final File outputDir,
         final Charset charset,
         final StringUtils stringUtils,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

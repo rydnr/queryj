@@ -50,6 +50,7 @@ import java.util.Collection;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains all information regarding the declaration of
@@ -107,9 +108,10 @@ public class AntExternallyManagedFieldsElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
+    @Nullable
     public Object createDynamicElement(final String name)
     {
-        AntFieldElement result = null;
+        @Nullable AntFieldElement result = null;
 
         if  ("field".equals(name)) 
         {

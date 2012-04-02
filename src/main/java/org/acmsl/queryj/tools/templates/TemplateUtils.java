@@ -56,6 +56,8 @@ import org.acmsl.commons.patterns.Utils;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -92,6 +94,7 @@ public class TemplateUtils
      * Retrieves a <code>TemplateUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static TemplateUtils getInstance()
     {
         return TemplateUtilsSingletonContainer.SINGLETON;
@@ -111,12 +114,13 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomSelects(
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomSelects(
@@ -144,13 +148,14 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomSelects(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomSql(
@@ -180,12 +185,13 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomUpdatesOrInserts(
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomUpdatesOrInserts(
@@ -213,13 +219,14 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomUpdatesOrInserts(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomSql(
@@ -251,12 +258,13 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomSelectsForUpdate(
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomSelectsForUpdate(
@@ -284,13 +292,14 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomSelectsForUpdate(
         final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomSql(
@@ -324,16 +333,17 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomSql(
-        final String[] types,
-        final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final String[] types,
+        @Nullable final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
-        final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
         Collection t_cContents = customSqlProvider.getCollection();
 
@@ -353,7 +363,7 @@ public class TemplateUtils
 
                     if  (t_Content instanceof Sql)
                     {
-                        Sql t_Sql = (Sql) t_Content;
+                        @NotNull Sql t_Sql = (Sql) t_Content;
 
                         String t_strDao = t_Sql.getDao();
 
@@ -373,7 +383,7 @@ public class TemplateUtils
                         {
                             boolean t_bAdd = false;
 
-                            String t_strCurrentType = null;
+                            @Nullable String t_strCurrentType = null;
 
                             for  (int t_iIndex = 0;
                                       t_iIndex < t_iTypes;
@@ -418,11 +428,12 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomResults(
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         return
             retrieveCustomResults(
@@ -447,23 +458,24 @@ public class TemplateUtils
      * @precondition decoratorFactory != null
      * @precondition daoTemplateUtils != null
      */
+    @NotNull
     public Collection retrieveCustomResults(
-        final String tableName,
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
-        final DAOTemplateUtils daoTemplateUtils)
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
-        Collection result = new ArrayList();
+        @NotNull Collection result = new ArrayList();
 
         Collection t_cContents = customSqlProvider.getCollection();
 
         if  (t_cContents != null)
         {
-            Object t_Content = null;
-            Sql t_Sql = null;
-            ResultRefElement t_ResultRefElement = null;
-            ResultElement t_ResultElement = null;
+            @Nullable Object t_Content = null;
+            @Nullable Sql t_Sql = null;
+            @Nullable ResultRefElement t_ResultRefElement = null;
+            @Nullable ResultElement t_ResultElement = null;
             String t_strDao;
             boolean t_bMatches;
 
@@ -525,7 +537,7 @@ public class TemplateUtils
                                                 "Referenced result not found:"
                                                 + t_ResultRefElement.getId());
                                     }
-                                    catch  (final Throwable throwable)
+                                    catch  (@NotNull final Throwable throwable)
                                     {
                                         // class-loading problem.
                                         System.err.println(
@@ -543,7 +555,7 @@ public class TemplateUtils
                                           "Referenced result not found for sql:"
                                         + t_Sql.getId());
                                 }
-                                catch  (final Throwable throwable)
+                                catch  (@NotNull final Throwable throwable)
                                 {
                                     // class-loading problem.
                                     System.err.println(

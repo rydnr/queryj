@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
  */
 import org.acmsl.commons.patterns.Manager;
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -82,6 +84,7 @@ public class MySQL4xMetadataTypeManager
      * Retrieves a <code>MySQL4xMetadataTypeManager</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static JdbcMetadataTypeManager getInstance()
     {
         return MySQL4xMetadataTypeManagerSingletonContainer.SINGLETON;
@@ -92,9 +95,10 @@ public class MySQL4xMetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getSmartObjectType(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {
@@ -115,9 +119,10 @@ public class MySQL4xMetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getObjectType(final int dataType)
     {
-        String result = null;
+        @Nullable String result = null;
 
         switch (dataType)
         {

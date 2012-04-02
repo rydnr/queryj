@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing ACM-SL classes.
  */
 import org.acmsl.commons.NonCheckedException;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Triggered whenever an invalid template is generated.
@@ -80,6 +81,7 @@ public class InvalidTemplateException
      * Retrieves the exceptions bundle.
      * @return such bundle name.
      */
+    @NotNull
     protected String retrieveExceptionsBundleName()
     {
         return "queryj-exceptions";
@@ -89,6 +91,7 @@ public class InvalidTemplateException
      * Retrieves the exceptions system property.
      * @return such bundle name.
      */
+    @NotNull
     protected String retrieveExceptionsBundleProperty()
     {
         return "org.acmsl.queryj.exceptions";

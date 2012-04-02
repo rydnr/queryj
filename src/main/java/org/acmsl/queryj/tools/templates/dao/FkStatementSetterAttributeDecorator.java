@@ -41,6 +41,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates attributes for FkStatementSetter template.
@@ -87,6 +89,7 @@ public class FkStatementSetterAttributeDecorator
      * Retrieves the object type.
      * @return such information.
      */
+    @Nullable
     public String getObjectType()
     {
         return getObjectType(getType(), getMetadataTypeManager());
@@ -99,8 +102,9 @@ public class FkStatementSetterAttributeDecorator
      * @return such type.
      * @precondition metadataTypeManager != null
      */
+    @Nullable
     protected String getObjectType(
-        final int type, final MetadataTypeManager metadataTypeManager)
+        final int type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.getStatementSetterFieldType(type);
     }

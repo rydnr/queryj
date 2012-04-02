@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTestTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -79,7 +81,7 @@ public class XMLDAOTestTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplates(
@@ -107,10 +109,10 @@ public class XMLDAOTestTemplateWritingHandler
      */
     protected void writeTemplates(
         final Map parameters,
-        final XMLDAOTestTemplate[] templates,
-        final File outputDir,
+        @Nullable final XMLDAOTestTemplate[] templates,
+        @NotNull final File outputDir,
         final Charset charset,
-        final XMLDAOTestTemplateGenerator generator)
+        @NotNull final XMLDAOTestTemplateGenerator generator)
       throws  QueryJBuildException
     {
         try 
@@ -124,7 +126,7 @@ public class XMLDAOTestTemplateWritingHandler
                 generator.write(templates[t_iXMLDAOTestIndex], outputDir, charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -138,8 +140,9 @@ public class XMLDAOTestTemplateWritingHandler
      * @return the templates.
      * @precondition parameters != null
      */
+    @NotNull
     protected XMLDAOTestTemplate[] retrieveXMLDAOTestTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (XMLDAOTestTemplate[])
@@ -153,7 +156,8 @@ public class XMLDAOTestTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -174,11 +178,12 @@ public class XMLDAOTestTemplateWritingHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean subFolders,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveXMLDAOTestFolder(

@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -74,7 +75,7 @@ public class JdbcDAOTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         writeTemplates(
@@ -99,17 +100,17 @@ public class JdbcDAOTemplateWritingHandler
      * @precondition jdbcDAOTemplateGenerator != null
      */
     protected void writeTemplates(
-        final JdbcDAOTemplate jdbcDAOTemplate,
-        final File outputDir,
+        @NotNull final JdbcDAOTemplate jdbcDAOTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final JdbcDAOTemplateGenerator jdbcDAOTemplateGenerator)
+        @NotNull final JdbcDAOTemplateGenerator jdbcDAOTemplateGenerator)
       throws  QueryJBuildException
     {
         try 
         {
             jdbcDAOTemplateGenerator.write(jdbcDAOTemplate, outputDir, charset);
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -123,7 +124,8 @@ public class JdbcDAOTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
-    protected JdbcDAOTemplate retrieveJdbcDAOTemplate(final Map parameters)
+    @NotNull
+    protected JdbcDAOTemplate retrieveJdbcDAOTemplate(@NotNull final Map parameters)
     {
         return
             (JdbcDAOTemplate)
@@ -136,7 +138,8 @@ public class JdbcDAOTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -149,8 +152,9 @@ public class JdbcDAOTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveJdbcDAOFolder(

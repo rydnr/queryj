@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -69,6 +71,7 @@ public class BaseDAOTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerTableTemplateFactory retrieveTemplateFactory()
     {
         return BaseDAOTemplateGenerator.getInstance();
@@ -88,7 +91,7 @@ public class BaseDAOTemplateBuildHandler
         final String tableName,
         final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveBaseDAOPackage(projectPackage);
@@ -102,7 +105,7 @@ public class BaseDAOTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, final Map parameters)
+        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.BASE_DAO_TEMPLATES, templates);
@@ -135,10 +138,11 @@ public class BaseDAOTemplateBuildHandler
      * @precondition repository != null
      * @precondition parameters != null
      */
+    @Nullable
     protected BasePerTableTemplate createTemplate(
-        final BasePerTableTemplateFactory templateFactory,
+        @NotNull final BasePerTableTemplateFactory templateFactory,
         final String tableName,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,
@@ -148,18 +152,18 @@ public class BaseDAOTemplateBuildHandler
         final String repository,
         final String header,
         final boolean implementMarkerInterfaces,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {        
-        BasePerTableTemplate result = null;
+        @Nullable BasePerTableTemplate result = null;
 
         if  (   (templateFactory instanceof BaseDAOTemplateGenerator)
              && (isStaticTable(tableName, metadataManager)))
         {
-            BaseDAOTemplateGenerator t_Generator = 
+            @NotNull BaseDAOTemplateGenerator t_Generator =
                 (BaseDAOTemplateGenerator) templateFactory;
 
-            Collection t_cStaticValues =
+            @Nullable Collection t_cStaticValues =
                 retrieveStaticContent(
                     parameters,
                     tableName,

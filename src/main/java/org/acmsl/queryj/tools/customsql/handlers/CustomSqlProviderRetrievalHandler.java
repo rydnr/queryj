@@ -55,6 +55,8 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -86,7 +88,7 @@ public class CustomSqlProviderRetrievalHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         storeCustomSqlProvider(
@@ -103,7 +105,8 @@ public class CustomSqlProviderRetrievalHandler
      * @throws QueryJBuildException if some problem occurs.
      * @precondition parameters != null
      */
-    protected CustomSqlProvider buildCustomSqlProvider(final Map parameters)
+    @Nullable
+    protected CustomSqlProvider buildCustomSqlProvider(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -119,7 +122,8 @@ public class CustomSqlProviderRetrievalHandler
      * @return such model.
      * @precondition parameters != null
      */
-    protected String retrieveCustomSqlModel(final Map parameters)
+    @NotNull
+    protected String retrieveCustomSqlModel(@NotNull final Map parameters)
     {
         return 
             (String)
@@ -132,7 +136,8 @@ public class CustomSqlProviderRetrievalHandler
      * @return such reference.
      * @precondition parameters != null
      */
-    protected File retrieveCustomSqlModelXmlFile(final Map parameters)
+    @NotNull
+    protected File retrieveCustomSqlModelXmlFile(@NotNull final Map parameters)
     {
         return 
             (File) parameters.get(ParameterValidationHandler.SQL_XML_FILE);
@@ -148,13 +153,14 @@ public class CustomSqlProviderRetrievalHandler
      * @precondition model != null
      * @precondition sqlXmlParserFactory != null
      */
+    @Nullable
     protected CustomSqlProvider buildCustomSqlProvider(
-        final String model,
-        final File xmlFile,
-        final SqlXmlParserFactory factory)
+        @Nullable final String model,
+        @Nullable final File xmlFile,
+        @NotNull final SqlXmlParserFactory factory)
       throws  QueryJBuildException
     {
-        CustomSqlProvider result = null;
+        @Nullable CustomSqlProvider result = null;
 
         if  (model != null)
         {
@@ -170,7 +176,7 @@ public class CustomSqlProviderRetrievalHandler
 
         if  (xmlFile != null)
         {
-            SqlXmlParser t_Parser = factory.createSqlXmlParser(xmlFile);
+            @Nullable SqlXmlParser t_Parser = factory.createSqlXmlParser(xmlFile);
 
             /*
               t_Parser.setClassLoader(
@@ -195,7 +201,7 @@ public class CustomSqlProviderRetrievalHandler
      */
     protected void storeCustomSqlProvider(
         final CustomSqlProvider provider,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(CUSTOM_SQL_PROVIDER, provider);
     }

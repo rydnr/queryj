@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.metadata.vo.AbstractField;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -63,13 +64,14 @@ public class AntFieldElement
     /**
      * The field pk nature.
      */
+    @Nullable
     private String m__strPk;
 
     /**
      * Specifies if the field is a primary key.
      * @param pk such information.
      */
-    public void setPk(final String pk)
+    public void setPk(@Nullable final String pk)
     {
         m__strPk = pk;
 
@@ -83,6 +85,7 @@ public class AntFieldElement
      * Retrieves if the field is a primary key.
      * @return such information.
      */
+    @Nullable
     public String getPk()
     {
         return m__strPk;
@@ -132,9 +135,10 @@ public class AntFieldElement
      * @return the object.
      * @throws BuildException if the element is not supported.
      */
+    @Nullable
     public Object createDynamicElement(final String name)
     {
-        AntFieldFkElement result = null;
+        @Nullable AntFieldFkElement result = null;
 
         if  ("fk".equals(name)) 
         {

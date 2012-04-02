@@ -40,6 +40,8 @@ import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.metadata.AbstractPropertyDecorator;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
@@ -106,7 +108,7 @@ public class CachingPropertyDecorator
      * @precondition metadataManager != null
      */
     public CachingPropertyDecorator(
-        final Property property, final MetadataManager metadataManager)
+        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
         super(property, metadataManager);
     }
@@ -142,9 +144,10 @@ public class CachingPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @Nullable
     public String getJavaType()
     {
-        String result = getCachedJavaType();
+        @Nullable String result = getCachedJavaType();
 
         if  (result == null)
         {
@@ -325,9 +328,10 @@ public class CachingPropertyDecorator
      * Retrieves the object type.
      * @return such information.
      */
+    @Nullable
     public String getObjectType()
     {
-        String result = getCachedObjectType();
+        @Nullable String result = getCachedObjectType();
 
         if  (result == null)
         {

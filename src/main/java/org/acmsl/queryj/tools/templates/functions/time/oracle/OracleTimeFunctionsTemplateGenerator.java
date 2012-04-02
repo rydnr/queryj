@@ -48,6 +48,8 @@ import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGene
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -85,6 +87,7 @@ public class OracleTimeFunctionsTemplateGenerator
      * Retrieves a <code>OracleTimeFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleTimeFunctionsTemplateGenerator getOracleInstance()
     {
         return OracleTimeFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -99,14 +102,15 @@ public class OracleTimeFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String packageName,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        TimeFunctionsTemplate result = null;
+        @Nullable TimeFunctionsTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -130,6 +134,7 @@ public class OracleTimeFunctionsTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

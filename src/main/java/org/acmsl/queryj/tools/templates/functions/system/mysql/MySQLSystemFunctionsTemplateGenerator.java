@@ -53,6 +53,8 @@ import org.acmsl.queryj.tools.templates.functions.system
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -89,6 +91,7 @@ public class MySQLSystemFunctionsTemplateGenerator
      * Retrieves a <code>MySQLSystemFunctionsTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static MySQLSystemFunctionsTemplateGenerator getMySQLInstance()
     {
         return MySQLSystemFunctionsTemplateGeneratorSingletonContainer.SINGLETON;
@@ -103,14 +106,15 @@ public class MySQLSystemFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String packageName,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        SystemFunctionsTemplate result = null;
+        @Nullable SystemFunctionsTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -134,6 +138,7 @@ public class MySQLSystemFunctionsTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

@@ -63,6 +63,8 @@ import org.apache.maven.plugin.logging.Log;
  */
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Executes QueryJ.
@@ -1088,7 +1090,7 @@ public class QueryJMojo
      * @throws MojoExecutionException if something goes wrong.
      * @precondition log != null
      */
-    protected void execute(final Log log)
+    protected void execute(@NotNull final Log log)
         throws MojoExecutionException
     {
         execute(log, retrieveVersion(retrievePomProperties(log)));
@@ -1099,7 +1101,7 @@ public class QueryJMojo
      * @param properties the pom.properties information.
      * @return the version entry.
      */
-    protected String retrieveVersion(final Properties properties)
+    protected String retrieveVersion(@Nullable final Properties properties)
     {
         String result = "(unknown)";
 
@@ -1119,14 +1121,14 @@ public class QueryJMojo
      * @throws MojoExecutionException if something goes wrong.
      * @precondition log != null
      */
-    protected void execute(final Log log, final String version)
+    protected void execute(@NotNull final Log log, final String version)
         throws MojoExecutionException
     {
         boolean running = false;
 
         File outputDirPath = getOutputDir();
 
-        QueryJTask task = null;
+        @Nullable QueryJTask task = null;
 
         if  (outputDirPath != null)
         {
@@ -1173,9 +1175,10 @@ public class QueryJMojo
      * @return such information.
      * @precondition log != null
      */
-    protected Properties retrievePomProperties(final Log log)
+    @Nullable
+    protected Properties retrievePomProperties(@NotNull final Log log)
     {
-        Properties result = null;
+        @Nullable Properties result = null;
 
         try
         {
@@ -1186,7 +1189,7 @@ public class QueryJMojo
 
             result.load(pomProperties);
         }
-        catch (final IOException ioException)
+        catch (@NotNull final IOException ioException)
         {
             log.warn(
                 "Strange... Cannot read my own " + POM_PROPERTIES_LOCATION,
@@ -1202,15 +1205,16 @@ public class QueryJMojo
      * @return such info.
      * @precondition log != null
      */
-    protected QueryJTask buildTask(final Log log)
+    @NotNull
+    protected QueryJTask buildTask(@NotNull final Log log)
     {
-        QueryJTask result = new QueryJTask();
+        @NotNull QueryJTask result = new QueryJTask();
 
-        Project project = new AntProjectAdapter(new Project(), log);
+        @NotNull Project project = new AntProjectAdapter(new Project(), log);
 
         result.setProject(project);
 
-        Path path = new Path(project);
+        @NotNull Path path = new Path(project);
         result.setClasspath(path);
         
         log.debug("Catalog: " + getCatalog());
@@ -1301,14 +1305,14 @@ public class QueryJMojo
      * @param task the task.
      */
     protected void buildExternallyManagedFields(
-        final QueryJTask task)
+        @NotNull final QueryJTask task)
     {
         ExternallyManagedField[] array = getExternallyManagedFields();
 
         int count = (array == null) ? 0 : array.length;
-        AntExternallyManagedFieldsElement element;
+        @Nullable AntExternallyManagedFieldsElement element;
         ExternallyManagedField field;
-        AntFieldElement fieldElement;
+        @Nullable AntFieldElement fieldElement;
 
         if  (count > 0)
         {
@@ -1344,16 +1348,16 @@ public class QueryJMojo
      * Builds the table list.
      * @param task the task.
      */
-    protected void buildTables(final QueryJTask task)
+    protected void buildTables(@NotNull final QueryJTask task)
     {
         Table[] array = getTables();
         Table table;
-        AntTablesElement element;
-        AntTableElement tableElement;
+        @Nullable AntTablesElement element;
+        @Nullable AntTableElement tableElement;
         List<Field> fields;
         int fieldCount;
         Field field;
-        AntFieldElement fieldElement;
+        @Nullable AntFieldElement fieldElement;
 
         int count = (array == null) ? 0 : array.length;
 

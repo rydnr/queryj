@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.logging.QueryJLog;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -132,7 +133,7 @@ public class QueryJCommand
      * @precondition value != null
      */
     protected void setAttribute(
-        final String name, final Object value, final Map map)
+        final String name, final Object value, @Nullable final Map map)
     {
         if  (map != null) 
         {
@@ -146,6 +147,7 @@ public class QueryJCommand
      * @return the value or <code>null</code> if it wasn't found.
      * @precondition name != null
      */
+    @Nullable
     public Object getAttribute(final String name)
     {
         return getAttribute(name, getAttributeMap());
@@ -158,9 +160,10 @@ public class QueryJCommand
      * @return the value or <code>null</code> if it wasn't found.
      * @precondition name != null
      */
-    protected Object getAttribute(final String name, final Map map)
+    @Nullable
+    protected Object getAttribute(final String name, @Nullable final Map map)
     {
-        Object result = null;
+        @Nullable Object result = null;
 
         if  (map != null) 
         {
@@ -188,7 +191,7 @@ public class QueryJCommand
      * @return <code>true</code> if the attribute is already defined.
      * @precondition name != null
      */
-    protected boolean contains(final String name, final Map map)
+    protected boolean contains(final String name, @Nullable final Map map)
     {
         boolean result = false;
 

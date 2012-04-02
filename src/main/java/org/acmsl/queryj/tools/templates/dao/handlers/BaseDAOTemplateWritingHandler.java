@@ -42,6 +42,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -65,6 +67,7 @@ public class BaseDAOTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
     {
@@ -76,9 +79,10 @@ public class BaseDAOTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     @Override
     protected BasePerTableTemplate[] retrieveTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (BasePerTableTemplate[])
@@ -101,15 +105,16 @@ public class BaseDAOTemplateWritingHandler
      * @precondition engineName != null
      * @precondition packageUtils != null
      */
+    @Nullable
     @Override
     protected File retrieveOutputDir(
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
         final String tableName,
         final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveBaseDAOFolder(

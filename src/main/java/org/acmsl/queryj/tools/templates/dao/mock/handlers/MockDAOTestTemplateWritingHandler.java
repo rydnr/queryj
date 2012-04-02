@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.mock.handlers.MockDAOTestTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -78,7 +80,7 @@ public class MockDAOTestTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         writeTemplates(
@@ -106,9 +108,9 @@ public class MockDAOTestTemplateWritingHandler
      */
     protected void writeTemplates(
         final Map parameters,
-        final MockDAOTestTemplate[] templates,
-        final MockDAOTestTemplateGenerator generator,
-        final File outputDir,
+        @Nullable final MockDAOTestTemplate[] templates,
+        @NotNull final MockDAOTestTemplateGenerator generator,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  QueryJBuildException
     {
@@ -126,7 +128,7 @@ public class MockDAOTestTemplateWritingHandler
                     charset);
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -140,8 +142,9 @@ public class MockDAOTestTemplateWritingHandler
      * @return the templates.
      * @precondition parameters != null
      */
+    @NotNull
     protected MockDAOTestTemplate[] retrieveMockDAOTestTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (MockDAOTestTemplate[])
@@ -155,7 +158,8 @@ public class MockDAOTestTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
-    protected File retrieveOutputDir(final Map parameters)
+    @NotNull
+    protected File retrieveOutputDir(@NotNull final Map parameters)
     {
         return retrieveOutputDir(parameters, PackageUtils.getInstance());
     }
@@ -168,8 +172,9 @@ public class MockDAOTestTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected File retrieveOutputDir(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveMockDAOTestFolder(

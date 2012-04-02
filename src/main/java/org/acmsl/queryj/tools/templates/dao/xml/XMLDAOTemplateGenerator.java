@@ -52,6 +52,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -89,6 +90,7 @@ public class XMLDAOTemplateGenerator
      * Retrieves a XMLDAOTemplateGenerator instance.
      * @return such instance.
      */
+    @NotNull
     public static XMLDAOTemplateGenerator getInstance()
     {
         return XMLDAOTemplateGeneratorSingletonContainer.SINGLETON;
@@ -107,6 +109,7 @@ public class XMLDAOTemplateGenerator
      * @precondition metadataManager != null
      * @precondition packageName != null
      */
+    @NotNull
     public XMLDAOTemplate createXMLDAOTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
@@ -130,6 +133,7 @@ public class XMLDAOTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -145,8 +149,8 @@ public class XMLDAOTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final XMLDAOTemplate xmlDAOTemplate,
-        final File outputDir,
+        @NotNull final XMLDAOTemplate xmlDAOTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -176,12 +180,12 @@ public class XMLDAOTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final XMLDAOTemplate xmlDAOTemplate,
-        final File outputDir,
+        @NotNull final XMLDAOTemplate xmlDAOTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

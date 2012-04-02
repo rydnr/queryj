@@ -48,6 +48,8 @@ import org.acmsl.queryj.tools.templates.TestTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -167,7 +169,7 @@ public class DAOTestTemplate
      * @precondition metadataManager != null
      */
     protected String generateOutput(
-        final String header, final MetadataManager metadataManager)
+        final String header, @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
@@ -274,8 +276,8 @@ public class DAOTestTemplate
      * @precondition englishGrammarUtils != null
      */
     protected String generateOutput(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager,
         final String header,
         final String packageDeclaration,
         final String packageName,
@@ -313,11 +315,11 @@ public class DAOTestTemplate
         final String removeTest,
         final String removeFilterValues,
         final String classEnd,
-        final MetadataTypeManager metadataTypeManager,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         String t_strCapitalizedTableName =
             stringUtils.capitalize(
@@ -328,7 +330,7 @@ public class DAOTestTemplate
         try 
         {
         */
-        MessageFormat t_Formatter = new MessageFormat(header);
+        @NotNull MessageFormat t_Formatter = new MessageFormat(header);
 
         t_sbResult.append(
             t_Formatter.format(
@@ -445,10 +447,10 @@ public class DAOTestTemplate
 
         t_Formatter = new MessageFormat(testParametersValues);
 
-        MessageFormat t_UpdateFilterValuesFormatter =
+        @NotNull MessageFormat t_UpdateFilterValuesFormatter =
             new MessageFormat(updateFilterValues);
 
-        StringBuffer t_sbUpdateFilterValues =
+        @NotNull StringBuffer t_sbUpdateFilterValues =
             new StringBuffer();
 
         String[] t_astrPrimaryKeys =
@@ -459,25 +461,25 @@ public class DAOTestTemplate
             metadataManager.getColumnNames(
                 tableTemplate.getTableName());
 
-        StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
+        @NotNull StringBuffer t_sbFindByPrimaryKeyTestParametersValues =
             new StringBuffer();
 
-        StringBuffer t_sbFindByPrimaryKeyParametersTypes =
+        @NotNull StringBuffer t_sbFindByPrimaryKeyParametersTypes =
             new StringBuffer();
 
-        StringBuffer t_sbUpdateParametersTypes =
+        @NotNull StringBuffer t_sbUpdateParametersTypes =
             new StringBuffer();
 
-        MessageFormat t_RemoveFilterValuesFormatter =
+        @NotNull MessageFormat t_RemoveFilterValuesFormatter =
             new MessageFormat(removeFilterValues);
 
-        StringBuffer t_sbRemoveFilterValues =
+        @NotNull StringBuffer t_sbRemoveFilterValues =
             new StringBuffer();
 
-        StringBuffer t_sbInsertTestParametersValues =
+        @NotNull StringBuffer t_sbInsertTestParametersValues =
             new StringBuffer();
 
-        StringBuffer t_sbInsertParametersTypes =
+        @NotNull StringBuffer t_sbInsertParametersTypes =
             new StringBuffer();
 
         boolean t_bNotLastPk = false;
@@ -554,16 +556,16 @@ public class DAOTestTemplate
             }
         }
 
-        MessageFormat t_TestParametersUpdatedValuesFormatter =
+        @NotNull MessageFormat t_TestParametersUpdatedValuesFormatter =
             new MessageFormat(testParametersUpdatedValues);
 
-        MessageFormat t_TestNullableParametersValuesFormatter =
+        @NotNull MessageFormat t_TestNullableParametersValuesFormatter =
             new MessageFormat(testNullableParametersValues);
 
-        MessageFormat t_TestNonNullableParametersValuesFormatter =
+        @NotNull MessageFormat t_TestNonNullableParametersValuesFormatter =
             new MessageFormat(testParametersValues);
 
-        StringBuffer t_sbTestParametersUpdatedValues =
+        @NotNull StringBuffer t_sbTestParametersUpdatedValues =
             new StringBuffer();
 
         if  (t_astrColumnNames != null)
@@ -582,7 +584,7 @@ public class DAOTestTemplate
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
-                String t_strType =
+                @Nullable String t_strType =
                     metadataTypeManager.getNativeType(t_iColumnType);
 
                 boolean t_bAllowsNull =

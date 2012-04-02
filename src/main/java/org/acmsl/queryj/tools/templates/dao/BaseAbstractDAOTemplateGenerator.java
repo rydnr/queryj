@@ -55,6 +55,8 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -95,6 +97,7 @@ public class BaseAbstractDAOTemplateGenerator
      * Retrieves a {@link BaseAbstractDAOTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static BaseAbstractDAOTemplateGenerator getInstance()
     {
         return BaseAbstractDAOTemplateGeneratorSingletonContainer.SINGLETON;
@@ -124,9 +127,10 @@ public class BaseAbstractDAOTemplateGenerator
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @Nullable
     public BasePerTableTemplate createTemplate(
         final String tableName,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,
@@ -137,7 +141,7 @@ public class BaseAbstractDAOTemplateGenerator
         final String header,
         final boolean implementMarkerInterfaces)
     {
-        BasePerTableTemplate result = null;
+        @Nullable BasePerTableTemplate result = null;
 
         if  (isStaticTable(tableName, metadataManager))
         {
@@ -186,9 +190,10 @@ public class BaseAbstractDAOTemplateGenerator
      * @precondition repositoryName != null
      * @precondition staticValues != null
      */
+    @Nullable
     public BasePerTableTemplate createTemplate(
         final String tableName,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
         final String packageName,
         final String engineName,
@@ -198,9 +203,9 @@ public class BaseAbstractDAOTemplateGenerator
         final String repositoryName,
         final String header,
         final boolean implementMarkerInterfaces,
-        final Collection staticValues)
+        @Nullable final Collection staticValues)
     {
-        BasePerTableTemplate result = null;
+        @Nullable BasePerTableTemplate result = null;
 
         if  (staticValues != null)
         {
@@ -244,6 +249,7 @@ public class BaseAbstractDAOTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         // Reusing to avoid copy/paste.
@@ -260,7 +266,7 @@ public class BaseAbstractDAOTemplateGenerator
      * @precondition metadataManager != null
      */
     protected boolean isStaticTable(
-        final String tableName, final MetadataManager metadataManager)
+        final String tableName, @NotNull final MetadataManager metadataManager)
     {
         return
             isStaticTable(
@@ -279,8 +285,8 @@ public class BaseAbstractDAOTemplateGenerator
      */
     protected boolean isStaticTable(
         final String tableName,
-        final MetadataManager metadataManager,
-        final MetaLanguageUtils metaLanguageUtils)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
          return
             metaLanguageUtils.containsStaticValues(
@@ -297,8 +303,8 @@ public class BaseAbstractDAOTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final BasePerTableTemplate template,
-        final File outputDir,
+        @NotNull final BasePerTableTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -328,12 +334,12 @@ public class BaseAbstractDAOTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerTableTemplate template,
-        final File outputDir,
+        @NotNull final BasePerTableTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

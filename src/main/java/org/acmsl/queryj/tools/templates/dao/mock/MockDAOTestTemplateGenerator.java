@@ -52,6 +52,7 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -90,6 +91,7 @@ public class MockDAOTestTemplateGenerator
      * Retrieves a {@link MockDAOTestTemplateGenerator} instance.
      * @return such instance.
      */
+    @NotNull
     public static MockDAOTestTemplateGenerator getInstance()
     {
         return MockDAOTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -113,6 +115,7 @@ public class MockDAOTestTemplateGenerator
      * @precondition daoPackageName != null
      * @precondition valueObjectPackageName != null
      */
+    @NotNull
     public MockDAOTestTemplate createMockDAOTestTemplate(
         final TableTemplate tableTemplate,
         final MetadataManager metadataManager,
@@ -136,6 +139,7 @@ public class MockDAOTestTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -151,8 +155,8 @@ public class MockDAOTestTemplateGenerator
      * @precondition outputDir != null
      */
     public void write(
-        final MockDAOTestTemplate mockDAOTestTemplate,
-        final File outputDir,
+        @NotNull final MockDAOTestTemplate mockDAOTestTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -182,12 +186,12 @@ public class MockDAOTestTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final MockDAOTestTemplate mockDAOTestTemplate,
-        final File outputDir,
+        @NotNull final MockDAOTestTemplate mockDAOTestTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final FileUtils fileUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

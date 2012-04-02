@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -66,6 +68,7 @@ public class RepositoryDAOTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return RepositoryDAOTemplateGenerator.getInstance();
@@ -98,13 +101,13 @@ public class RepositoryDAOTemplateBuildHandler
      */
     @Override
     protected boolean createTemplate(
-        final Map parameters,
+        @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
         final String quote,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider,
-        final BasePerRepositoryTemplateFactory templateFactory,
+        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
         final String projectPackage,
         final String packageName,
         final String repository,
@@ -149,9 +152,9 @@ public class RepositoryDAOTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String engineName,
+        @NotNull final String engineName,
         final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveRepositoryDAOPackage(
@@ -166,7 +169,7 @@ public class RepositoryDAOTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.REPOSITORY_DAO_TEMPLATE,
@@ -181,19 +184,19 @@ public class RepositoryDAOTemplateBuildHandler
      * @return <code>true</code> in such case.
      */
     protected boolean definesRepositoryScopedSql(
-        final CustomSqlProvider customSqlProvider,
+        @Nullable final CustomSqlProvider customSqlProvider,
         final boolean allowEmptyRepositoryDAO)
     {
         boolean result = allowEmptyRepositoryDAO;
 
         if  (!result)
         {
-            Collection t_cElements =
+            @Nullable Collection t_cElements =
                 (customSqlProvider != null)
                 ?  customSqlProvider.getCollection()
                 :  null;
         
-            Iterator t_Iterator =
+            @Nullable Iterator t_Iterator =
                 (t_cElements != null) ? t_cElements.iterator() : null;
         
             if  (t_Iterator != null)
@@ -228,9 +231,9 @@ public class RepositoryDAOTemplateBuildHandler
      * @return <code>true</code> in such case.
      * @precondition parameters != null
      */
-    protected boolean getAllowEmptyRepositoryDAOSetting(final Map parameters)
+    protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map parameters)
     {
-        Boolean t_Result =
+        @NotNull Boolean t_Result =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);

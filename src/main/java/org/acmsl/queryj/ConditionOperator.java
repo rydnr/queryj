@@ -38,6 +38,8 @@ package org.acmsl.queryj;
  */
 import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents operators used inside conditions.
@@ -113,7 +115,7 @@ public class ConditionOperator
      * @return <code>true</code> if both objects are logically equal.
      * @precondition symbol != null
      */
-    protected boolean equals(final Object candidate, final String symbol)
+    protected boolean equals(@Nullable final Object candidate, @Nullable final String symbol)
     {
         boolean result = (candidate == null);
 
@@ -124,7 +126,7 @@ public class ConditionOperator
 
         if  (!result)
         {
-            ConditionOperator t_Candidate = (ConditionOperator) candidate;
+            @NotNull ConditionOperator t_Candidate = (ConditionOperator) candidate;
 
             result = (t_Candidate.getSymbol() == symbol);
 

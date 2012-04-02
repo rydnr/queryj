@@ -56,6 +56,8 @@ import org.acmsl.commons.patterns.Command;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -119,7 +121,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -141,9 +143,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition metaData != null
      */
     protected boolean handle(
-        final Map parameters,
+        @NotNull final Map parameters,
         final boolean alreadyDone,
-        final DatabaseMetaData metaData)
+        @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         boolean result = false;
@@ -173,14 +175,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean oldHandle(final Map parameters)
+    protected boolean oldHandle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         boolean result = false;
 
         storeMetadata(retrieveMetadata(parameters), parameters);
 
-        MetadataManager t_MetadataManager;
+        @Nullable MetadataManager t_MetadataManager;
 
         boolean t_bDisableTableExtraction =
             !retrieveExtractTables(parameters);
@@ -188,23 +190,23 @@ public abstract class DatabaseMetaDataRetrievalHandler
         boolean t_bDisableProcedureExtraction =
             !retrieveExtractProcedures(parameters);
 
-        Collection t_cTableElements = null;
+        @Nullable Collection t_cTableElements = null;
 
-        Iterator t_itTableElements = null;
+        @Nullable Iterator t_itTableElements = null;
 
         String[] t_astrTableNames;
 
-        Collection t_cFieldElements = null;
+        @Nullable Collection t_cFieldElements = null;
 
         int t_iTableIndex = 0;
 
-        Map t_mKeys = new HashMap();
+        @NotNull Map t_mKeys = new HashMap();
 
         Collection t_cTables;
 
         if  (!t_bDisableTableExtraction)
         {
-            AntTablesElement t_TablesElement =
+            @NotNull AntTablesElement t_TablesElement =
                 retrieveTablesElement(parameters);
 
             if  (t_TablesElement != null)
@@ -221,7 +223,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     while  (   (t_itTableElements != null)
                                && (t_itTableElements.hasNext()))
                     {
-                        AntTableElement t_Table =
+                        @NotNull AntTableElement t_Table =
                             (AntTableElement) t_itTableElements.next();
 
                         if  (t_Table != null)
@@ -239,7 +241,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     while  (   (t_itTableElements != null)
                             && (t_itTableElements.hasNext()))
                     {
-                        AntTableElement t_Table =
+                        @NotNull AntTableElement t_Table =
                             (AntTableElement) t_itTableElements.next();
 
                         if  (t_Table != null)
@@ -266,8 +268,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 false,
                 parameters);
 
-        MetadataTypeManager t_MetadataTypeManager = null;
-        
+        @Nullable MetadataTypeManager t_MetadataTypeManager = null;
+
         if  (t_MetadataManager != null)
         {
             storeMetadataManager(t_MetadataManager, parameters);
@@ -286,7 +288,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             while  (t_itTableElements.hasNext())
             {
-                AntTableElement t_Table =
+                @NotNull AntTableElement t_Table =
                     (AntTableElement) t_itTableElements.next();
 
                 if  (t_Table != null)
@@ -306,7 +308,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     if  (   (t_cFieldElements  != null)
                             && (t_cFieldElements.size() > 0))
                     {
-                        String[] t_astrTableFieldNames =
+                        @NotNull String[] t_astrTableFieldNames =
                             new String[t_cFieldElements.size()];
 
                         Iterator t_itFieldElements = t_cFieldElements.iterator();
@@ -316,7 +318,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                         while  (   (t_itFieldElements != null)
                                    && (t_itFieldElements.hasNext()))
                         {
-                            AntFieldElement t_Field =
+                            @NotNull AntFieldElement t_Field =
                                 (AntFieldElement) t_itFieldElements.next();
 
                             if  (t_Field != null)
@@ -330,7 +332,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                     t_MetadataTypeManager.getJavaType(
                                         t_Field.getNativeType()));
 
-                                Collection t_cFields =
+                                @NotNull Collection t_cFields =
                                     (Collection)
                                         t_mKeys.get(
                                             buildTableFieldsKey(
@@ -352,7 +354,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                         t_Table.getName(),
                                         t_Field.getName());
 
-                                    Collection t_cPks =
+                                    @NotNull Collection t_cPks =
                                         (Collection)
                                             t_mKeys.get(
                                                 buildPkKey(t_Table.getName()));
@@ -409,11 +411,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
             while  (   (t_itTables != null)
                        && (t_itTables.hasNext()))
             {
-                String t_strTableName = (String) t_itTables.next();
+                @NotNull String t_strTableName = (String) t_itTables.next();
 
                 if  (t_strTableName != null)
                 {
-                    Collection t_cFields =
+                    @NotNull Collection t_cFields =
                         (Collection)
                         t_mKeys.get(
                             buildTableFieldsKey(
@@ -426,10 +428,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
                         while  (   (t_itFields != null)
                                    && (t_itFields.hasNext()))
                         {
-                            String t_strFieldName =
+                            @NotNull String t_strFieldName =
                                 (String) t_itFields.next();
 
-                            Collection t_cFieldFks =
+                            @NotNull Collection t_cFieldFks =
                                 (Collection)
                                 t_mKeys.get(
                                     buildFkKey(
@@ -443,7 +445,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                 while  (   (t_itFieldFks != null)
                                            && (t_itFieldFks.hasNext()))
                                 {
-                                    AntFieldFkElement t_FieldFk =
+                                    @NotNull AntFieldFkElement t_FieldFk =
                                         (AntFieldFkElement)
                                         t_itFieldFks.next();
 
@@ -462,7 +464,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 }
             }
         }
-        
+
         return result;
     }
 
@@ -478,7 +480,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition metaData != null
      */
     protected boolean handle(
-        final Map parameters,
+        @NotNull final Map parameters,
         final DatabaseMetaData metaData,
         final boolean enableTableExtraction,
         final boolean enableProcedureExtraction)
@@ -488,7 +490,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         storeMetadata(metaData, parameters);
 
-        AntTablesElement t_TablesElement = null;
+        @Nullable AntTablesElement t_TablesElement = null;
 
         if  (enableTableExtraction)
         {
@@ -500,7 +502,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             storeTableNames(t_astrTableNames, parameters);
         }
 
-        MetadataManager t_MetadataManager =
+        @Nullable MetadataManager t_MetadataManager =
             buildMetadataManager(
                 !enableTableExtraction,
                 lazyTableExtraction(t_TablesElement),
@@ -537,7 +539,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     protected String[] extractTableNames(
-        final Map parameters, final AntTablesElement tablesElement)
+        final Map parameters, @Nullable final AntTablesElement tablesElement)
     {
         String[] result = new String[0];
 
@@ -555,7 +557,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return such fields.
      * @precondition tables != null
      */
-    protected String[] extractTableNames(final Collection tables)
+    protected String[] extractTableNames(@Nullable final Collection tables)
     {
         String[] result;
 
@@ -573,7 +575,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 while  (t_itTableElements.hasNext())
                 {
-                    AntTableElement t_Table =
+                    @NotNull AntTableElement t_Table =
                         (AntTableElement) t_itTableElements.next();
 
                     if  (t_Table != null)
@@ -595,7 +597,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the result of such analysis..
      * @precondition tablesElement != null
      */
-    protected boolean lazyTableExtraction(final AntTablesElement tablesElement)
+    protected boolean lazyTableExtraction(@Nullable final AntTablesElement tablesElement)
     {
         boolean result = false;
 
@@ -613,7 +615,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the result of such analysis..
      * @precondition tables != null
      */
-    protected boolean lazyTableExtraction(final Collection tables)
+    protected boolean lazyTableExtraction(@Nullable final Collection tables)
     {
         boolean result = false;
 
@@ -627,7 +629,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 while  (t_itTableElements.hasNext())
                 {
-                    AntTableElement t_Table =
+                    @NotNull AntTableElement t_Table =
                         (AntTableElement) t_itTableElements.next();
 
                     if  (t_Table != null)
@@ -666,9 +668,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
     protected boolean extractProcedures(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final MetadataManager metadataManager,
-        final AntTablesElement tablesElement,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final AntTablesElement tablesElement,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             extractProcedures(
@@ -699,20 +701,20 @@ public abstract class DatabaseMetaDataRetrievalHandler
     protected boolean extractProcedures(
         final Map parameters,
         final DatabaseMetaData metaData,
-        final MetadataManager metadataManager,
-        final Collection tableElements,
+        @NotNull final MetadataManager metadataManager,
+        @Nullable final Collection tableElements,
         final Object tableKey,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
 
-        Iterator t_itTableElements = null;
+        @Nullable Iterator t_itTableElements = null;
 
-        String[] t_astrTableNames = null;
+        @Nullable String[] t_astrTableNames = null;
 
-        Map t_mKeys = new HashMap();
+        @NotNull Map t_mKeys = new HashMap();
 
-        Collection t_cTables = null;
+        @Nullable Collection t_cTables = null;
 
         Collection t_cFields;
 
@@ -879,9 +881,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition tableKey != null
      */
     protected void extractForeignKeys(
-        final Collection tables,
-        final Map extractedMap,
-        final MetadataManager metadataManager,
+        @NotNull final Collection tables,
+        @NotNull final Map extractedMap,
+        @NotNull final MetadataManager metadataManager,
         final Object tableKey)
     {
         Iterator t_itTables = tables.iterator();
@@ -890,11 +892,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             while  (t_itTables.hasNext())
             {
-                String t_strTableName = (String) t_itTables.next();
+                @NotNull String t_strTableName = (String) t_itTables.next();
 
                 if  (t_strTableName != null)
                 {
-                    Collection t_cFields =
+                    @NotNull Collection t_cFields =
                         (Collection)
                             extractedMap.get(
                                 buildTableFieldsKey(t_strTableName));
@@ -907,17 +909,17 @@ public abstract class DatabaseMetaDataRetrievalHandler
                         {
                             while  (t_itFields.hasNext())
                             {
-                                String t_strFieldName =
+                                @NotNull String t_strFieldName =
                                     (String) t_itFields.next();
 
-                                Collection t_cFieldFks =
+                                @NotNull Collection t_cFieldFks =
                                     (Collection)
                                         extractedMap.get(
                                             buildFkKey(
                                                 t_strTableName,
                                                 t_strFieldName));
 
-                                Iterator t_itFieldFks = null;
+                                @Nullable Iterator t_itFieldFks = null;
 
                                 if  (t_cFieldFks != null)
                                 {
@@ -929,7 +931,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                 {
                                     while  (t_itFieldFks.hasNext())
                                     {
-                                        AntFieldFkElement t_FieldFk =
+                                        @NotNull AntFieldFkElement t_FieldFk =
                                             (AntFieldFkElement)
                                                 t_itFieldFks.next();
 
@@ -962,15 +964,14 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws QueryJBuildException if the metadata cannot be retrieved.
      * @precondition parameters != null
      */
-    protected DatabaseMetaData retrieveMetadata(final Map parameters)
+    protected DatabaseMetaData retrieveMetadata(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
-            (DatabaseMetaData)
-                retrieveMetadata(
-                    (Connection)
-                        parameters.get(
-                            JdbcConnectionOpeningHandler.JDBC_CONNECTION));
+            retrieveMetadata(
+                (Connection)
+                    parameters.get(
+                        JdbcConnectionOpeningHandler.JDBC_CONNECTION));
     }
 
     /**
@@ -981,7 +982,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * parameters are not present or valid.
      * @precondition connection != null
      */
-    protected DatabaseMetaData retrieveMetadata(final Connection connection)
+    protected DatabaseMetaData retrieveMetadata(@NotNull final Connection connection)
         throws  QueryJBuildException
     {
         DatabaseMetaData result;
@@ -990,7 +991,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             result = connection.getMetaData();
         }
-        catch  (final SQLException exception)
+        catch  (@NotNull final SQLException exception)
         {
             throw
                 new QueryJBuildException(
@@ -1008,7 +1009,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the table information.
      * @precondition parameters != null
      */
-    protected AntTablesElement retrieveTablesElement(final Map parameters)
+    @NotNull
+    protected AntTablesElement retrieveTablesElement(@NotNull final Map parameters)
     {
         return
             (AntTablesElement)
@@ -1020,7 +1022,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      * @return such setting.
      */
-    protected boolean retrieveExtractTables(final Map parameters)
+    protected boolean retrieveExtractTables(@NotNull final Map parameters)
     {
         return
             retrieveBoolean(
@@ -1032,7 +1034,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      * @return such setting.
      */
-    protected boolean retrieveExtractProcedures(final Map parameters)
+    protected boolean retrieveExtractProcedures(@NotNull final Map parameters)
     {
         return
             retrieveBoolean(
@@ -1046,7 +1048,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the boolean value.
      * @precondition parameters != null
      */
-    protected boolean retrieveBoolean(final String name, final Map parameters)
+    protected boolean retrieveBoolean(final String name, @NotNull final Map parameters)
     {
         boolean result = false;
 
@@ -1078,15 +1080,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * performed.
      * @precondition parameters != null
      */
+    @Nullable
     protected MetadataManager buildMetadataManager(
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        MetadataManager result =
+        @Nullable MetadataManager result =
             retrieveMetadataManager(parameters);
 
         if  (result == null) 
@@ -1114,20 +1117,20 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 result.retrieveMetadata();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 throw
                     new QueryJBuildException(
                         "Cannot retrieve metadata.", sqlException);
             }
-            catch  (final QueryJException queryjException)
+            catch  (@NotNull final QueryJException queryjException)
             {
                 throw
                     new QueryJBuildException(
                         "Cannot retrieve metadata.", queryjException);
             }
         }
-        
+
         return result;
     }
 
@@ -1151,6 +1154,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * parameters are not present or valid.
      * @precondition metaData != null
      */
+    @Nullable
     protected MetadataManager buildMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
@@ -1179,16 +1183,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     catalog,
                     schema);
         }
-        catch  (final RuntimeException exception)
+        catch  (@NotNull final RuntimeException exception)
         {
             throw exception;
         }
-        catch  (final Exception exception)
+        catch  (@NotNull final Exception exception)
         {
             Log t_Log =
                 UniqueLogFactory.getLog(
                     DatabaseMetaDataRetrievalHandler.class);
-                
+
             if  (t_Log != null)
             {
                 t_Log.error(
@@ -1212,7 +1216,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     protected void storeMetadata(
-        final DatabaseMetaData metaData, final Map parameters)
+        final DatabaseMetaData metaData, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_METADATA, metaData);
     }
@@ -1222,7 +1226,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      * @precondition parameters != null
      */
-    protected void storeAlreadyDoneFlag(final Map parameters)
+    protected void storeAlreadyDoneFlag(@NotNull final Map parameters)
     {
         parameters.put(METADATA_EXTRACTION_ALREADY_DONE, Boolean.TRUE);
     }
@@ -1233,7 +1237,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameter map.
      * @precondition metaData != null
      */
-    protected boolean retrieveAlreadyDoneFlag(final Map parameters)
+    protected boolean retrieveAlreadyDoneFlag(@NotNull final Map parameters)
     {
         boolean result = false;
 
@@ -1256,7 +1260,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     protected void storeTableNames(
-        final String[] tableNames, final Map parameters)
+        final String[] tableNames, @NotNull final Map parameters)
     {
         parameters.put(TABLE_NAMES, tableNames);
     }
@@ -1269,7 +1273,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     protected void storeMetadataManager(
-        final MetadataManager metadataManager, final Map parameters)
+        final MetadataManager metadataManager, @NotNull final Map parameters)
     {
         parameters.put(METADATA_MANAGER, metadataManager);
     }
@@ -1278,6 +1282,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Builds the table key.
      * @return the map key.
      */
+    @NotNull
     protected Object buildTableKey()
     {
         return "'@'@'table";
@@ -1287,6 +1292,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Builds the table fields key.
      * @return the map key.
      */
+    @NotNull
     protected Object buildTableFieldsKey(final Object key)
     {
         return ".98.table'@'@'fields`p" + key;
@@ -1297,6 +1303,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param firstKey the first object key.
      * @return the map key.
      */
+    @NotNull
     protected Object buildPkKey(final Object firstKey)
     {
         return ".|\\|.pk" + firstKey;
@@ -1308,6 +1315,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param secondKey the second object key.
      * @return the map key.
      */
+    @NotNull
     protected Object buildPkKey(
         final Object firstKey, final Object secondKey)
     {
@@ -1319,6 +1327,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param firstKey the first object key.
      * @return the map key.
      */
+    @NotNull
     protected Object buildFkKey(final Object firstKey)
     {
         return "==fk''" + firstKey;
@@ -1330,6 +1339,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param secondKey the second object key.
      * @return the map key.
      */
+    @NotNull
     protected Object buildFkKey(
         final Object firstKey, final Object secondKey)
     {
@@ -1343,19 +1353,19 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws QueryJBuildException if the check fails.
      * @precondition metaData != null
      */
-    protected boolean checkVendor(final DatabaseMetaData metaData)
+    protected boolean checkVendor(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {
         boolean result = false;
 
-        QueryJBuildException t_ExceptionToThrow = null;
+        @Nullable QueryJBuildException t_ExceptionToThrow = null;
 
         Log t_Log =
             UniqueLogFactory.getLog(
                 DatabaseMetaDataRetrievalHandler.class);
 
-        String t_strProduct = null;
-        String t_strVersion = null;
+        @Nullable String t_strProduct = null;
+        @Nullable String t_strVersion = null;
         int t_iMajorVersion = 0;
         int t_iMinorVersion = 0;
 
@@ -1363,7 +1373,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             t_strProduct = metaData.getDatabaseProductName();
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             if  (t_Log != null)
             {
@@ -1384,7 +1394,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 t_strVersion = metaData.getDatabaseProductVersion();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1398,7 +1408,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 t_iMajorVersion = metaData.getDatabaseMajorVersion();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {
@@ -1413,7 +1423,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 t_iMinorVersion = metaData.getDatabaseMinorVersion();
             }
-            catch  (final SQLException sqlException)
+            catch  (@NotNull final SQLException sqlException)
             {
                 if  (t_Log != null)
                 {

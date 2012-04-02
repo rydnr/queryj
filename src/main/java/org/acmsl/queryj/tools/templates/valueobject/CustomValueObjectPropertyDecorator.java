@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.metadata.CachingPropertyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Property decorator specific for CustomResultSetExtractor template.
@@ -58,7 +59,7 @@ public class CustomValueObjectPropertyDecorator
      * @precondition metadataManager != null
      */
     public CustomValueObjectPropertyDecorator(
-        final Property property, final MetadataManager metadataManager)
+        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
         super(property, metadataManager);
     }
@@ -99,7 +100,7 @@ public class CustomValueObjectPropertyDecorator
      */
     protected String retrieveJavaType(
         final String type,
-        final MetadataManager metadataManager,
+        @NotNull final MetadataManager metadataManager,
         final boolean allowsNull)
     {
         return

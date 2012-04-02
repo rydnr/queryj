@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.functions.text;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -167,6 +168,7 @@ public abstract class TextFunctionsTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return "TextFunctionsTest";

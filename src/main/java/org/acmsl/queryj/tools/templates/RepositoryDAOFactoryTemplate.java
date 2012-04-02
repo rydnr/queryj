@@ -52,6 +52,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -176,18 +178,18 @@ public class RepositoryDAOFactoryTemplate
      * @precondition stringUtils != null
      */
     protected void fillParameters(
-        final Map input,
-        final StringTemplate template,
+        @NotNull final Map input,
+        @NotNull final StringTemplate template,
         final String header,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         final String subpackageName,
         final String basePackageName,
         final String tableRepositoryName,
-        final String engineName,
-        final Collection tables,
+        @NotNull final String engineName,
+        @NotNull final Collection tables,
         final String timestamp,
         final Integer[] copyrightYears,
         final StringUtils stringUtils)
@@ -215,6 +217,7 @@ public class RepositoryDAOFactoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return
@@ -226,6 +229,7 @@ public class RepositoryDAOFactoryTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "Repository DAO Factory";

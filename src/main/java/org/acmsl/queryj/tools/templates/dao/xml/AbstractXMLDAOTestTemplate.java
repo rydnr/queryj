@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.AbstractTestTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -1157,6 +1158,7 @@ public abstract class AbstractXMLDAOTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return
@@ -1172,9 +1174,10 @@ public abstract class AbstractXMLDAOTestTemplate
      * @precondition stringUtils != null
      * @precondition englishGrammarUtils != null
      */
+    @NotNull
     protected String getTestName(
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
               "XML"
@@ -1198,6 +1201,7 @@ public abstract class AbstractXMLDAOTestTemplate
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
@@ -1209,7 +1213,8 @@ public abstract class AbstractXMLDAOTestTemplate
      * @return such header.
      * @precondition tableTemplate != null
      */
-    protected String buildHeader(final TableTemplate tableTemplate)
+    @NotNull
+    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
     {
         return "Generating XMLDAOTest for " + tableTemplate.getTableName() + ".";
     }

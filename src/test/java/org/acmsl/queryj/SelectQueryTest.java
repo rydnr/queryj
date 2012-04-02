@@ -51,6 +51,7 @@ import org.acmsl.queryj.TableAlias;
  * Importing JUnit classes.
  */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Indicates JUnit how to test SelectQuery classes.
@@ -108,11 +109,11 @@ public class SelectQueryTest
      */
     protected void setUp()
     {
-        QueryFactory t_QueryFactory = QueryFactory.getInstance();
+        @NotNull QueryFactory t_QueryFactory = QueryFactory.getInstance();
 
         assertNotNull(t_QueryFactory);
 
-        SelectQuery t_Query = t_QueryFactory.createSelectQuery();
+        @NotNull SelectQuery t_Query = t_QueryFactory.createSelectQuery();
 
         t_Query.select(USERS.USERID);
         t_Query.select(USERS.NAME);
@@ -173,18 +174,21 @@ public class SelectQueryTest
         /**
          * The USERS table USERID field.
          */
+        @NotNull
         public IntField USERID =
             new IntField("USERID", this) {};
 
         /**
          * The USERS table NAME field.
          */
+        @NotNull
         public Field NAME =
             new Field("NAME", this) {};
 
         /**
          * All fields.
          */
+        @NotNull
         public Field[] ALL =
             new Field[] {USERID, NAME};
 
@@ -196,6 +200,7 @@ public class SelectQueryTest
         /**
          * The table alias.
          */
+        @NotNull
         public TableAlias ALIAS =
             new TableAlias("usrs", this) {};
 
@@ -212,6 +217,7 @@ public class SelectQueryTest
          * star in a query.
          * @return such fields.
          */
+        @NotNull
         public Field[] getAll()
         {
             return ALL;

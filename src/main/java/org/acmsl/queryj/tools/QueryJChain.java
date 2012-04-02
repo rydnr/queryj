@@ -90,6 +90,8 @@ import java.util.Properties;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Defines the steps performed by QueryJ.
@@ -237,6 +239,7 @@ public class QueryJChain
     /**
      * The "custom-sql-model" type.
      */
+    @Nullable
     private String m__strCustomSqlModel = null;
 
     /**
@@ -477,7 +480,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JDBC driver.
      */
-    protected String getDriver(final Properties properties)
+    protected String getDriver(@Nullable final Properties properties)
     {
         String result = getDriver();
 
@@ -523,7 +526,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JDBC url.
      */
-    protected String getUrl(final Properties properties)
+    protected String getUrl(@Nullable final Properties properties)
     {
         String result = getUrl();
 
@@ -569,7 +572,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JDBC username.
      */
-    protected String getUsername(final Properties properties)
+    protected String getUsername(@Nullable final Properties properties)
     {
         String result = getUsername();
 
@@ -615,7 +618,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JDBC password.
      */
-    protected String getPassword(final Properties properties)
+    protected String getPassword(@Nullable final Properties properties)
     {
         String result = getPassword();
 
@@ -661,7 +664,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JDBC catalog.
      */
-    protected String getCatalog(final Properties properties)
+    protected String getCatalog(@Nullable final Properties properties)
     {
         String result = getCatalog();
 
@@ -707,7 +710,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JDBC schema.
      */
-    protected String getSchema(final Properties properties)
+    protected String getSchema(@Nullable final Properties properties)
     {
         String result = getSchema();
 
@@ -753,7 +756,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the repository.
      */
-    protected String getRepository(final Properties properties)
+    protected String getRepository(@Nullable final Properties properties)
     {
         String result = getRepository();
 
@@ -799,7 +802,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the package.
      */
-    protected String getPackage(final Properties properties)
+    protected String getPackage(@Nullable final Properties properties)
     {
         String result = getPackage();
 
@@ -845,7 +848,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the output folder.
      */
-    protected File getOutputdir(final Properties properties)
+    protected File getOutputdir(@Nullable final Properties properties)
     {
         File result = getOutputdir();
 
@@ -896,7 +899,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the header file.
      */
-    protected File getHeaderfile(final Properties properties)
+    protected File getHeaderfile(@Nullable final Properties properties)
     {
         File result = getHeaderfile();
 
@@ -979,7 +982,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such flag.
      */
-    protected boolean getOutputdirsubfoldersFlag(final Properties properties)
+    protected boolean getOutputdirsubfoldersFlag(@Nullable final Properties properties)
     {
         String t_strResult = getOutputdirsubfolders();
 
@@ -1054,7 +1057,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such flag.
      */
-    protected boolean getExtractTablesFlag(final Properties properties)
+    protected boolean getExtractTablesFlag(@Nullable final Properties properties)
     {
         String t_strResult = getExtractTables();
 
@@ -1131,7 +1134,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such flag.
      */
-    protected boolean getExtractProceduresFlag(final Properties properties)
+    protected boolean getExtractProceduresFlag(@Nullable final Properties properties)
     {
         String t_strResult = getExtractProcedures();
 
@@ -1208,7 +1211,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such flag.
      */
-    protected boolean getExtractFunctionsFlag(final Properties properties)
+    protected boolean getExtractFunctionsFlag(@Nullable final Properties properties)
     {
         String t_strResult = getExtractFunctions();
 
@@ -1254,7 +1257,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return the JNDI location of the DataSource..
      */
-    protected String getJndiDataSource(final Properties properties)
+    protected String getJndiDataSource(@Nullable final Properties properties)
     {
         String result = getJndiDataSource();
 
@@ -1333,7 +1336,7 @@ public class QueryJChain
      * @return such flag.
      */
     protected boolean getGenerateMockDAOImplementationFlag(
-        final Properties properties)
+        @Nullable final Properties properties)
     {
         String t_strResult = getGenerateMockDAOImplementation();
 
@@ -1413,7 +1416,7 @@ public class QueryJChain
      * @return such flag.
      */
     protected boolean getGenerateXMLDAOImplementationFlag(
-        final Properties properties)
+        @Nullable final Properties properties)
     {
         String t_strResult = getGenerateXMLDAOImplementation();
 
@@ -1493,7 +1496,7 @@ public class QueryJChain
      * @return such flag.
      */
     protected boolean getGenerateTestsFlag(
-        final Properties properties)
+        @Nullable final Properties properties)
     {
         String t_strResult = getGenerateTests();
 
@@ -1573,7 +1576,7 @@ public class QueryJChain
      * @return such flag.
      */
     protected boolean getAllowEmptyRepositoryDAOFlag(
-        final Properties properties)
+        @Nullable final Properties properties)
     {
         String t_strResult = getAllowEmptyRepositoryDAO();
 
@@ -1652,7 +1655,7 @@ public class QueryJChain
      * @return such flag.
      */
     protected boolean getImplementMarkerInterfacesFlag(
-        final Properties properties)
+        @Nullable final Properties properties)
     {
         String t_strResult = getImplementMarkerInterfaces();
 
@@ -1688,6 +1691,7 @@ public class QueryJChain
      * Retrieves the custom-sql model.
      * @return such model.
      */
+    @Nullable
     public String getCustomSqlModel()
     {
         return m__strCustomSqlModel;
@@ -1699,9 +1703,10 @@ public class QueryJChain
      * @param properties the properties.
      * @return such model.
      */
-    protected String getCustomSqlModel(final Properties properties)
+    @Nullable
+    protected String getCustomSqlModel(@Nullable final Properties properties)
     {
-        String result = getCustomSqlModel();
+        @Nullable String result = getCustomSqlModel();
 
         if  (   (result == null)
              && (properties != null))
@@ -1778,7 +1783,7 @@ public class QueryJChain
      * @return such flag.
      */
     protected boolean getDisableCustomSqlValidationFlag(
-        final Properties properties)
+        @Nullable final Properties properties)
     {
         String t_strResult = getDisableCustomSqlValidation();
 
@@ -1826,7 +1831,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
-    protected File getSqlXmlFile(final Properties properties)
+    protected File getSqlXmlFile(@Nullable final Properties properties)
     {
         File result = getSqlXmlFile();
 
@@ -1879,7 +1884,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
-    protected String getGrammarbundle(final Properties properties)
+    protected String getGrammarbundle(@Nullable final Properties properties)
     {
         String result = getGrammarbundle();
 
@@ -1926,7 +1931,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
-    protected String getEncoding(final Properties properties)
+    protected String getEncoding(@Nullable final Properties properties)
     {
         String result = getEncoding();
 
@@ -2032,7 +2037,7 @@ public class QueryJChain
      * @param command the command.
      */
     protected void cleanUpOnError(
-        final QueryJBuildException buildException, final QueryJCommand command)
+        final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
         Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
@@ -2045,7 +2050,7 @@ public class QueryJChain
         {
             new JdbcConnectionClosingHandler().handle(command);
         }
-        catch  (final QueryJBuildException closingException)
+        catch  (@NotNull final QueryJBuildException closingException)
         {
             if  (t_Log != null)
             {
@@ -2060,7 +2065,8 @@ public class QueryJChain
      * @return the initialized command.
      * @precondition command != null
      */
-    protected QueryJCommand buildCommand(final QueryJCommand command)
+    @NotNull
+    protected QueryJCommand buildCommand(@NotNull final QueryJCommand command)
     {
         return buildCommand(command, getSettings());
     }
@@ -2072,10 +2078,11 @@ public class QueryJChain
      * @return the initialized command.
      * @precondition command != null
      */
+    @NotNull
     protected QueryJCommand buildCommand(
-        final QueryJCommand command, final Properties settings)
+        @NotNull final QueryJCommand command, final Properties settings)
     {
-        Properties t_Settings = settings;
+        @Nullable Properties t_Settings = settings;
 
         if  (t_Settings == null)
         {
@@ -2092,10 +2099,11 @@ public class QueryJChain
      * @return the initialized command.
      * @precondition command != null
      */
+    @NotNull
     protected QueryJCommand buildCommandFromSettingsIfPossible(
-        final QueryJCommand command, final Properties settings)
+        @NotNull final QueryJCommand command, final Properties settings)
     {
-        QueryJCommand result = command;
+        @NotNull QueryJCommand result = command;
 
         if  (result != null)
         {
@@ -2169,32 +2177,32 @@ public class QueryJChain
      * @precondition attributes != null
      */
     protected void mapAttributes(
-        final Map attributes,
-        final String driver,
-        final String url,
-        final String username,
-        final String password,
-        final String catalog,
-        final String schema,
-        final String repository,
-        final String packageName,
-        final File outputdir,
-        final File header,
+        @Nullable final Map attributes,
+        @Nullable final String driver,
+        @Nullable final String url,
+        @Nullable final String username,
+        @Nullable final String password,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final String repository,
+        @Nullable final String packageName,
+        @Nullable final File outputdir,
+        @Nullable final File header,
         final boolean outputdirsubfolders,
         final boolean extractTables,
         final boolean extractProcedures,
         final boolean extractFunctions,
-        final String jndiDataSource,
+        @Nullable final String jndiDataSource,
         final boolean generateMockDAOImplementation,
         final boolean generateXmlDAOImplementation,
         final boolean generateTests,
         final boolean allowEmptyRepositoryDAO,
         final boolean implementMarkerInterfaces,
-        final String customSqlModel,
+        @Nullable final String customSqlModel,
         final boolean disableCustomSqlValidation,
-        final File sqlXmlFile,
-        final String grammarBundle,
-        final String encoding)
+        @Nullable final File sqlXmlFile,
+        @Nullable final String grammarBundle,
+        @Nullable final String encoding)
     {
         if  (attributes != null)
         {
@@ -2382,7 +2390,7 @@ public class QueryJChain
      * @return the converted value.
      */
     protected boolean toBoolean(
-        final String value, final boolean defaultValue)
+        @Nullable final String value, final boolean defaultValue)
     {
         boolean result = defaultValue;
 
@@ -2404,13 +2412,14 @@ public class QueryJChain
      * @return the {@link Properties} instance, or <code>null</code>
      * if the file doesn't exist.
      */
-    protected Properties readSettings(final File file)
+    @Nullable
+    protected Properties readSettings(@Nullable final File file)
     {
-        Properties result = new Properties();
+        @Nullable Properties result = new Properties();
 
         if  (file != null)
         {
-            InputStream t_isSettings = null;
+            @Nullable InputStream t_isSettings = null;
 
             try
             {
@@ -2418,7 +2427,7 @@ public class QueryJChain
 
                 result.load(t_isSettings);
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 result = null;
 
@@ -2440,7 +2449,7 @@ public class QueryJChain
                     {
                         t_isSettings.close();
                     }
-                    catch  (final IOException ioException)
+                    catch  (@NotNull final IOException ioException)
                     {
                         Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 

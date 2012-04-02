@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides custom decorators for the FkStatementSetter template.
@@ -78,6 +79,7 @@ public class FkStatementSetterDecoratorFactory
      * Retrieves a <code>FkStatementSetterDecoratorFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static CachingDecoratorFactory getInstance()
     {
         return FkStatementSetterDecoratorFactorySingletonContainer.SINGLETON;
@@ -90,6 +92,7 @@ public class FkStatementSetterDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager)
     {

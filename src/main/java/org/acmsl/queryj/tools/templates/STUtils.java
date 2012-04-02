@@ -45,6 +45,8 @@ import org.acmsl.commons.patterns.Utils;
 import org.antlr.stringtemplate.language.AngleBracketTemplateLexer;
 import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -87,6 +89,7 @@ public class STUtils
      * Retrieves a <code>STUtils</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static STUtils getInstance()
     {
         return STUtilsSingletonContainer.SINGLETON;
@@ -102,16 +105,17 @@ public class STUtils
      * @precondition path != null
      * @precondition theme != null
      */
+    @Nullable
     public StringTemplateGroup retrieveGroup(
         final String path,
         final String theme,
         final StringTemplateErrorListener errorListener)
     {
-        StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
+        @Nullable StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
         
         if  (result == null)
         {
-            StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener);
+            @Nullable StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener);
             result = retrieveUncachedGroup(path, errorListener);
 
             if  (result != null)
@@ -134,10 +138,11 @@ public class STUtils
      * @precondition path != null
      * @precondition theme != null
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup(
         final String path, final StringTemplateErrorListener errorListener)
     {
-        StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
+        @Nullable StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
         
         if  (result == null)
         {
@@ -158,10 +163,11 @@ public class STUtils
      * @precondition path != null
      * @precondition theme != null
      */
+    @Nullable
     protected StringTemplateGroup retrieveUncachedGroup(
         final String path, final StringTemplateErrorListener errorListener)
     {
-        StringTemplateGroup result = null;
+        @Nullable StringTemplateGroup result = null;
 
         InputStream t_Input = STUtils.class.getResourceAsStream(path);
 

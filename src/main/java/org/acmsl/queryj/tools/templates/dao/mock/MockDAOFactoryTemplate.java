@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -111,6 +113,7 @@ public class MockDAOFactoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/mock/MockDAOFactory.stg");
@@ -120,6 +123,7 @@ public class MockDAOFactoryTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "MockDAOFactory";

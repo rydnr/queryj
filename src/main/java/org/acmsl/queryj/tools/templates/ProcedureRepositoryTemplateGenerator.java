@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -86,6 +87,7 @@ public class ProcedureRepositoryTemplateGenerator
      * Retrieves a <code>ProcedureRepositoryTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static ProcedureRepositoryTemplateGenerator getInstance()
     {
         return ProcedureRepositoryTemplateGeneratorSingletonContainer.SINGLETON;
@@ -103,6 +105,7 @@ public class ProcedureRepositoryTemplateGenerator
      * @precondition repository != null
      * @precondition metadataTypeManager != null
      */
+    @NotNull
     public ProcedureRepositoryTemplate createProcedureRepositoryTemplate(
         final String packageName,
         final String repository,
@@ -126,8 +129,8 @@ public class ProcedureRepositoryTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final ProcedureRepositoryTemplate procedureRepositoryTemplate,
-        final File outputDir,
+        @NotNull final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -154,16 +157,16 @@ public class ProcedureRepositoryTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final ProcedureRepositoryTemplate procedureRepositoryTemplate,
-        final File outputDir,
+        @NotNull final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        @NotNull final File outputDir,
         final Charset charset,
-        final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
-        final FileUtils fileUtils)
+        @NotNull final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         if  (!procedureRepositoryTemplate.isEmpty())
         {
-            File t_FinalOutputDir =
+            @NotNull File t_FinalOutputDir =
                 new File(
                       outputDir.getAbsolutePath()
                     + File.separator

@@ -44,6 +44,8 @@ import org.acmsl.queryj.SelectQuery;
  */
 import org.acmsl.commons.patterns.Factory;
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -83,6 +85,7 @@ public class ConditionFactory
      * Retrieves a <code>ConditionFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static ConditionFactory getInstance()
     {
         return ConditionFactorySingletonContainer.SINGLETON;
@@ -99,6 +102,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -118,6 +122,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -135,6 +140,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -152,6 +158,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -169,6 +176,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -186,6 +194,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -203,6 +212,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -220,6 +230,7 @@ public class ConditionFactory
      * @precondition leftSideField != null
      * @precondition operator != null
      */
+    @NotNull
     public Condition createCondition(
         final Field leftSideField,
         final ConditionOperator operator,
@@ -236,6 +247,7 @@ public class ConditionFactory
      * @precondition field != null
      * @precondition operator != null
      */
+    @NotNull
     public VariableCondition createVariableCondition(
         final Field field,
         final ConditionOperator operator)
@@ -251,6 +263,7 @@ public class ConditionFactory
      * @return the wrapped condition.
      * @precondition condition != null
      */
+    @NotNull
     public Condition wrap(
         final Condition condition, final String prefix, final String suffix)
     {
@@ -265,8 +278,9 @@ public class ConditionFactory
      * @return the wrapped condition.
      * @precondition condition != null
      */
+    @NotNull
     public Condition wrap(
-        final AtomicCondition condition,
+        @NotNull final AtomicCondition condition,
         final String prefix,
         final String suffix)
     {
@@ -281,8 +295,9 @@ public class ConditionFactory
      * @return the wrapped condition.
      * @precondition condition != null
      */
+    @NotNull
     public VariableCondition wrap(
-        final VariableCondition condition,
+        @NotNull final VariableCondition condition,
         final String prefix,
         final String suffix)
     {
@@ -431,7 +446,7 @@ public class ConditionFactory
          */
         protected Collection<VariableCondition> getVariableConditions(
             final Collection<VariableCondition> parentVariableConditions,
-            final Condition condition)
+            @Nullable final Condition condition)
         {
             Collection<VariableCondition> result = parentVariableConditions;
 
@@ -459,6 +474,7 @@ public class ConditionFactory
          * Outputs a brief text version of the condition.
          * @return such text.
          */
+        @NotNull
         public String toSimplifiedString()
         {
             return
@@ -475,12 +491,13 @@ public class ConditionFactory
          * @param suffix the suffix.
          * @return such text.
          */
+        @NotNull
         protected String toSimplifiedString(
             final String prefix,
-            final Condition condition,
+            @Nullable final Condition condition,
             final String suffix)
         {
-            String result = "";
+            @NotNull String result = "";
 
             if  (condition != null)
             {
@@ -497,6 +514,7 @@ public class ConditionFactory
          * Outputs a text version of the condition.
          * @return such text.
          */
+        @NotNull
         public String toString()
         {
             return toString(getPrefix(), getCondition(), getSuffix());
@@ -509,6 +527,7 @@ public class ConditionFactory
          * @param suffix the suffix.
          * @return such text.
          */
+        @NotNull
         public String toString(
             final String prefix,
             final Condition condition,
@@ -548,7 +567,7 @@ public class ConditionFactory
          * @param suffix the suffix.
          */
         public _AtomicConditionWrapper(
-            final AtomicCondition condition,
+            @NotNull final AtomicCondition condition,
             final String prefix,
             final String suffix)
         {
@@ -649,6 +668,7 @@ public class ConditionFactory
          * Retrieves the left-side field.
          * @return such reference.
          */
+        @Nullable
         public Field getLeftSideField()
         {
             return getLeftSideField(getCondition());
@@ -659,9 +679,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected Field getLeftSideField(final AtomicCondition condition)
+        @Nullable
+        protected Field getLeftSideField(@Nullable final AtomicCondition condition)
         {
-            Field result = null;
+            @Nullable Field result = null;
 
             if  (condition != null) 
             {
@@ -675,6 +696,7 @@ public class ConditionFactory
          * Retrieves the condition operator.
          * @return such reference.
          */
+        @Nullable
         public ConditionOperator getOperator()
         {
             return getOperator(getCondition());
@@ -685,9 +707,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected ConditionOperator getOperator(final AtomicCondition condition)
+        @Nullable
+        protected ConditionOperator getOperator(@Nullable final AtomicCondition condition)
         {
-            ConditionOperator result = null;
+            @Nullable ConditionOperator result = null;
 
             if  (condition != null) 
             {
@@ -701,6 +724,7 @@ public class ConditionFactory
          * Retrieves the right-side field.
          * @return such reference.
          */
+        @Nullable
         public Field getRightSideField()
         {
             return getRightSideField(getCondition());
@@ -711,9 +735,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected Field getRightSideField(final AtomicCondition condition)
+        @Nullable
+        protected Field getRightSideField(@Nullable final AtomicCondition condition)
         {
-            Field result = null;
+            @Nullable Field result = null;
 
             if  (condition != null) 
             {
@@ -727,6 +752,7 @@ public class ConditionFactory
          * Retrieves the right-side value.
          * @return such reference.
          */
+        @Nullable
         public String getRightSideValue()
         {
             return getRightSideValue(getCondition());
@@ -737,9 +763,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected String getRightSideValue(final AtomicCondition condition)
+        @Nullable
+        protected String getRightSideValue(@Nullable final AtomicCondition condition)
         {
-            String result = null;
+            @Nullable String result = null;
 
             if  (condition != null) 
             {
@@ -769,7 +796,7 @@ public class ConditionFactory
          */
         public Collection<VariableCondition> getVariableConditions(
             final Collection<VariableCondition> parentVariableConditions,
-            final Condition condition)
+            @Nullable final Condition condition)
         {
             Collection<VariableCondition> result = parentVariableConditions;
 
@@ -797,6 +824,7 @@ public class ConditionFactory
          * Outputs a brief text version of the condition.
          * @return such text.
          */
+        @NotNull
         public String toSimplifiedString()
         {
             return
@@ -810,12 +838,13 @@ public class ConditionFactory
          * @param suffix the suffix.
          * @return such text.
          */
+        @NotNull
         protected String toSimplifiedString(
             final String prefix,
-            final Condition condition,
+            @Nullable final Condition condition,
             final String suffix)
         {
-            String result = "";
+            @NotNull String result = "";
 
             if  (condition != null)
             {
@@ -832,6 +861,7 @@ public class ConditionFactory
          * Outputs a text version of the condition.
          * @return such text.
          */
+        @NotNull
         public String toString()
         {
             return toString(getPrefix(), getCondition(), getSuffix());
@@ -844,6 +874,7 @@ public class ConditionFactory
          * @param suffix the suffix.
          * @return such text.
          */
+        @NotNull
         protected String toString(
             final String prefix,
             final Condition condition,
@@ -900,7 +931,7 @@ public class ConditionFactory
          * @param suffix the suffix.
          */
         public _VariableConditionWrapper(
-            final VariableCondition condition,
+            @NotNull final VariableCondition condition,
             final String prefix,
             final String suffix)
         {
@@ -1001,6 +1032,7 @@ public class ConditionFactory
          * Retrieves the left-side field.
          * @return such reference.
          */
+        @Nullable
         public Field getLeftSideField()
         {
             return getLeftSideField(getCondition());
@@ -1011,9 +1043,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected Field getLeftSideField(final VariableCondition condition)
+        @Nullable
+        protected Field getLeftSideField(@Nullable final VariableCondition condition)
         {
-            Field result = null;
+            @Nullable Field result = null;
 
             if  (condition != null) 
             {
@@ -1027,6 +1060,7 @@ public class ConditionFactory
          * Retrieves the condition operator.
          * @return such reference.
          */
+        @Nullable
         public ConditionOperator getOperator()
         {
             return getOperator(getCondition());
@@ -1037,10 +1071,11 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
+        @Nullable
         protected ConditionOperator getOperator(
-            final VariableCondition condition)
+            @Nullable final VariableCondition condition)
         {
-            ConditionOperator result = null;
+            @Nullable ConditionOperator result = null;
 
             if  (condition != null) 
             {
@@ -1054,6 +1089,7 @@ public class ConditionFactory
          * Retrieves the right-side field.
          * @return such reference.
          */
+        @Nullable
         public Field getRightSideField()
         {
             return getRightSideField(getCondition());
@@ -1064,9 +1100,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected Field getRightSideField(final VariableCondition condition)
+        @Nullable
+        protected Field getRightSideField(@Nullable final VariableCondition condition)
         {
-            Field result = null;
+            @Nullable Field result = null;
 
             if  (condition != null) 
             {
@@ -1080,6 +1117,7 @@ public class ConditionFactory
          * Retrieves the right-side value.
          * @return such reference.
          */
+        @Nullable
         public String getRightSideValue()
         {
             return getRightSideValue(getCondition());
@@ -1090,9 +1128,10 @@ public class ConditionFactory
          * @param condition the condition.
          * @return such reference.
          */
-        protected String getRightSideValue(final VariableCondition condition)
+        @Nullable
+        protected String getRightSideValue(@Nullable final VariableCondition condition)
         {
-            String result = null;
+            @Nullable String result = null;
 
             if  (condition != null) 
             {
@@ -1106,6 +1145,7 @@ public class ConditionFactory
          * Outputs a brief text version of the condition.
          * @return such text.
          */
+        @NotNull
         public String toSimplifiedString()
         {
             return
@@ -1122,12 +1162,13 @@ public class ConditionFactory
          * @param suffix the suffix.
          * @return such text.
          */
+        @NotNull
         protected String toSimplifiedString(
             final String prefix,
-            final VariableCondition condition,
+            @Nullable final VariableCondition condition,
             final String suffix)
         {
-            String result = "";
+            @NotNull String result = "";
 
             if  (condition != null)
             {
@@ -1144,6 +1185,7 @@ public class ConditionFactory
          * Outputs a text version of the condition.
          * @return such text.
          */
+        @NotNull
         public String toString()
         {
             return toString(getPrefix(), getCondition(), getSuffix());
@@ -1156,6 +1198,7 @@ public class ConditionFactory
          * @param suffix the suffix.
          * @return such text.
          */
+        @NotNull
         protected String toString(
             final String prefix,
             final Condition condition,

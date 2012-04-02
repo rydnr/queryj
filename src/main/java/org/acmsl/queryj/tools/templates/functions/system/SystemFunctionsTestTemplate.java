@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.FunctionsTestTemplate;
 import org.acmsl.queryj.tools.templates.functions.system
     .SystemFunctionsTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate tests on database's system functions.
@@ -83,6 +84,7 @@ public abstract class SystemFunctionsTestTemplate
      * Retrieves the test name.
      * @return such name.
      */
+    @NotNull
     public String getTestName()
     {
         return "SystemFunctionsTest";

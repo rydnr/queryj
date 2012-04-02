@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.metadata.vo.Row;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Decorates <code>Row</code> instances to provide required alternate
@@ -57,5 +58,6 @@ public interface RowDecorator
      * Retrieves the decorated row.
      * @return such row.
      */
+    @NotNull
     public Row getRow();
 }

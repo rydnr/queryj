@@ -45,6 +45,8 @@ import org.acmsl.queryj.IntField;
 import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -91,7 +93,7 @@ public class DeleteQuery
      * @param condition such condition.
      * @precondition condition != null
      */
-    public void where(final Condition condition)
+    public void where(@NotNull final Condition condition)
     {
         addCondition(condition);
     }
@@ -101,7 +103,7 @@ public class DeleteQuery
      * @param variableCondition such variable condition.
      * @precondition variableCondition != null
      */
-    public void where(final VariableCondition variableCondition)
+    public void where(@NotNull final VariableCondition variableCondition)
     {
         addCondition(variableCondition);
         addVariableCondition(variableCondition);
@@ -137,10 +139,10 @@ public class DeleteQuery
     protected String toString(
         final Table table,
         final List fields,
-        final List conditions,
-        final QueryUtils queryUtils)
+        @Nullable final List conditions,
+        @NotNull final QueryUtils queryUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append("DELETE FROM ");
 

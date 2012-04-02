@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.templates.functions.time
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -352,6 +354,7 @@ public class MySQLTimeFunctionsTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getMapping(final String function)
     {
         return
@@ -364,6 +367,7 @@ public class MySQLTimeFunctionsTemplate
      * @param function the function.
      * @return the mapping.
      */
+    @Nullable
     protected String getSpecialMapping(final String function)
     {
         return
@@ -390,7 +394,7 @@ public class MySQLTimeFunctionsTemplate
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
-    protected boolean isFilledIn(final Map mappings)
+    protected boolean isFilledIn(@Nullable final Map mappings)
     {
         return
             (   (mappings != null)
@@ -413,6 +417,7 @@ public class MySQLTimeFunctionsTemplate
      * Retrieves the capitalized words.
      * @return such words.
      */
+    @NotNull
     protected String[] getCapitalizedWords()
     {
         return CAPITALIZED_WORDS;
@@ -422,6 +427,7 @@ public class MySQLTimeFunctionsTemplate
      * Retrieves the field types.
      * @return such array.
      */
+    @NotNull
     protected String[] getFieldTypes()
     {
         return FIELD_TYPES;
@@ -431,6 +437,7 @@ public class MySQLTimeFunctionsTemplate
      * Retrieves the class name.
      * @return such name.
      */
+    @NotNull
     protected static Class getTemplateClass()
     {
         return MySQLTimeFunctionsTemplate.class;

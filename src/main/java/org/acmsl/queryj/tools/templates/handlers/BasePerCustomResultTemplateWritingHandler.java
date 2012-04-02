@@ -48,6 +48,8 @@ import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -81,7 +83,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
@@ -98,14 +100,14 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition metaData != null
      */
     protected void writeTemplates(
-        final Map parameters, final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
         {
             writeTemplates(parameters, metaData.getDatabaseProductName());
         }
-        catch  (final SQLException resultException)
+        catch  (@NotNull final SQLException resultException)
         {
             throw
                 new QueryJBuildException(
@@ -122,7 +124,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition engineName != null
      */
     protected void writeTemplates(
-        final Map parameters, final String engineName)
+        @NotNull final Map parameters, final String engineName)
       throws  QueryJBuildException
     {
         writeTemplates(
@@ -151,18 +153,18 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition parameters != null
      */
     protected void writeTemplates(
-        final BasePerCustomResultTemplate[] templates,
-        final BasePerCustomResultTemplateGenerator templateGenerator,
+        @Nullable final BasePerCustomResultTemplate[] templates,
+        @NotNull final BasePerCustomResultTemplateGenerator templateGenerator,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
         final Charset charset,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         int t_iCount = (templates != null) ? templates.length : 0;
 
-        BasePerCustomResultTemplate t_Template = null;
+        @Nullable BasePerCustomResultTemplate t_Template = null;
 
         try
         {
@@ -184,7 +186,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
                 }
             }
         }
-        catch  (final IOException ioException)
+        catch  (@NotNull final IOException ioException)
         {
             throw
                 new QueryJBuildException(
@@ -204,6 +206,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @return the templates.
      * @throws QueryJBuildException if the template retrieval process if faulty.
      */
+    @NotNull
     protected abstract BasePerCustomResultTemplate[] retrieveTemplates(
         final Map parameters)
       throws  QueryJBuildException;
@@ -220,12 +223,13 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition parameters != null
      * @precondition resultElement != null
      */
+    @Nullable
     protected File retrieveOutputDir(
         final Result result,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -256,6 +260,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      */
+    @Nullable
     protected abstract File retrieveOutputDir(
         final Result result,
         final CustomSqlProvider customSqlProvider,

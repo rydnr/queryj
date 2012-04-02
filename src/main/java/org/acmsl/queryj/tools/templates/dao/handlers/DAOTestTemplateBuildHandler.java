@@ -51,6 +51,8 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.TestTemplate;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -81,7 +83,7 @@ public class DAOTestTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         return
@@ -103,8 +105,8 @@ public class DAOTestTemplateBuildHandler
      * @precondition metadataManager != null
      */
     protected boolean handle(
-        final Map parameters,
-        final DatabaseMetaData metaData,
+        @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData,
         final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
@@ -128,7 +130,7 @@ public class DAOTestTemplateBuildHandler
                 retrieveHeader(parameters),
                 DAOTestTemplateGenerator.getInstance());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -165,11 +167,11 @@ public class DAOTestTemplateBuildHandler
      * @precondition templateFactory != null
      */
     protected void buildTemplates(
-        final Map parameters,
-        final DatabaseMetaData metaData,
+        @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData,
         final MetadataManager metadataManager,
-        final TableTemplate[] tableTemplates,
-        final String engineName,
+        @Nullable final TableTemplate[] tableTemplates,
+        @NotNull final String engineName,
         final String engineVersion,
         final String daoPackage,
         final String voPackage,
@@ -178,7 +180,7 @@ public class DAOTestTemplateBuildHandler
         final String jdbcUsername,
         final String jdbcPassword,
         final String header,
-        final DAOTestTemplateFactory factory)
+        @NotNull final DAOTestTemplateFactory factory)
       throws  QueryJBuildException
     {
         try
@@ -190,7 +192,7 @@ public class DAOTestTemplateBuildHandler
                 retrieveDAOTestPackage(
                     engineName, parameters);
 
-            DAOTestTemplate[] t_aDAOTestTemplates =
+            @NotNull DAOTestTemplate[] t_aDAOTestTemplates =
                 new DAOTestTemplate[t_iLength];
 
             String t_strQuote = fixQuote(metaData.getIdentifierQuoteString());
@@ -222,7 +224,7 @@ public class DAOTestTemplateBuildHandler
 
             storeDAOTestTemplates(t_aDAOTestTemplates, parameters);
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -240,7 +242,7 @@ public class DAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrieveDAOTestPackage(
-        final String engineName, final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveDAOTestPackage(
@@ -258,9 +260,9 @@ public class DAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveDAOTestPackage(
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOTestPackage(
@@ -278,7 +280,7 @@ public class DAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrieveDAOPackage(
-        final String engineName, final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveDAOPackage(
@@ -298,9 +300,9 @@ public class DAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveDAOPackage(
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDAOPackage(
@@ -314,7 +316,7 @@ public class DAOTestTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
-    protected String retrieveValueObjectPackage(final Map parameters)
+    protected String retrieveValueObjectPackage(@NotNull final Map parameters)
     {
         return
             retrieveValueObjectPackage(
@@ -330,7 +332,7 @@ public class DAOTestTemplateBuildHandler
      * @precondition packageUtils != null
      */
     protected String retrieveValueObjectPackage(
-        final Map parameters, final PackageUtils packageUtils)
+        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveValueObjectPackage(
@@ -343,7 +345,8 @@ public class DAOTestTemplateBuildHandler
      * @return the test templates.
      * @precondition parameters != null
      */
-    protected Collection retrieveTestTemplates(final Map parameters)
+    @NotNull
+    protected Collection retrieveTestTemplates(@NotNull final Map parameters)
     {
         return
             (Collection) parameters.get(TemplateMappingManager.TEST_TEMPLATES);
@@ -358,7 +361,7 @@ public class DAOTestTemplateBuildHandler
      */
     protected void storeDAOTestTemplates(
         final DAOTestTemplate[] daoTestTemplates,
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         parameters.put(TemplateMappingManager.DAO_TEST_TEMPLATES, daoTestTemplates);
     }
@@ -369,8 +372,9 @@ public class DAOTestTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
+    @NotNull
     protected TableTemplate[] retrieveTableTemplates(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (TableTemplate[])
@@ -386,7 +390,7 @@ public class DAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplates(
-        final Collection templates, final Map parameters)
+        final Collection templates, @NotNull final Map parameters)
     {
         parameters.put(TemplateMappingManager.TEST_TEMPLATES, templates);
     }
@@ -399,9 +403,9 @@ public class DAOTestTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTestTemplate(
-        final TestTemplate template, final Map parameters)
+        final TestTemplate template, @NotNull final Map parameters)
     {
-        Collection t_cTestTemplates = retrieveTestTemplates(parameters);
+        @NotNull Collection t_cTestTemplates = retrieveTestTemplates(parameters);
 
         if  (t_cTestTemplates == null) 
         {

@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents entities able to create XML value object templates.
@@ -51,6 +52,7 @@ public interface XMLValueObjectFactoryTemplateFactory
      * @param header the header.
      * @return a template.
      */
+    @NotNull
     public XMLValueObjectFactoryTemplate createXMLValueObjectFactoryTemplate(
         final String packageName,
         final String valueObjectPackageName,

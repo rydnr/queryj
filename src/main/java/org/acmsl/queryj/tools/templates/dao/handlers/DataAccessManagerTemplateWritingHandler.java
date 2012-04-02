@@ -42,6 +42,8 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -66,6 +68,7 @@ public class DataAccessManagerTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @NotNull
     @Override
     protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
@@ -77,8 +80,9 @@ public class DataAccessManagerTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     @Override
-    protected BasePerRepositoryTemplate retrieveTemplate(final Map parameters)
+    protected BasePerRepositoryTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
             (BasePerRepositoryTemplate)
@@ -101,14 +105,15 @@ public class DataAccessManagerTemplateWritingHandler
      * @precondition engineName != null
      * @precondition packageUtils != null
      */
+    @Nullable
     @Override
     protected File retrieveOutputDir(
-        final File projectFolder,
+        @NotNull final File projectFolder,
         final String projectPackage,
         final boolean useSubfolders,
         final String engineName,
         final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveDataAccessManagerFolder(

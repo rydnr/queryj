@@ -58,6 +58,8 @@ import java.io.IOException;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Indicates JUnit how to test PackageUtils class.
@@ -116,7 +118,7 @@ public class PackageUtilsTest
         {
             File t_File = File.createTempFile("queryj", null);
 
-            File t_TestFile =
+            @NotNull File t_TestFile =
                 new File(t_File.getAbsolutePath() + "folder" + File.separator + "tmp");
 
             t_TestFile.mkdirs();
@@ -161,7 +163,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveBaseDAOPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -176,7 +178,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveBaseDAOFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -184,7 +186,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_BaseDAOFolder = 
+        @Nullable File t_BaseDAOFolder =
             t_PackageUtils.retrieveBaseDAOFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -209,7 +211,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveBaseDAOFactoryPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -224,7 +226,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveBaseDAOFactoryFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -232,7 +234,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_BaseDAOFactoryFolder = 
+        @Nullable File t_BaseDAOFactoryFolder =
             t_PackageUtils.retrieveBaseDAOFactoryFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -257,7 +259,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveValueObjectPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -272,7 +274,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveValueObjectFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -280,7 +282,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_ValueObjectFolder = 
+        @Nullable File t_ValueObjectFolder =
             t_PackageUtils.retrieveValueObjectFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -305,7 +307,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveValueObjectFactoryPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -320,7 +322,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveValueObjectFactoryFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -328,7 +330,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_ValueObjectFactoryFolder = 
+        @Nullable File t_ValueObjectFactoryFolder =
             t_PackageUtils.retrieveValueObjectFactoryFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -353,7 +355,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDataAccessManagerPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -368,7 +370,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDataAccessManagerFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -376,7 +378,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_DataAccessManagerFolder = 
+        @Nullable File t_DataAccessManagerFolder =
             t_PackageUtils.retrieveDataAccessManagerFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -401,7 +403,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveJdbcDAOPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -418,7 +420,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveJdbcDAOFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -426,7 +428,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_JdbcDAOFolder = 
+        @NotNull File t_JdbcDAOFolder =
             t_PackageUtils.retrieveJdbcDAOFolder(
                 t_TestFile, "com.foo.bar", false);
 
@@ -453,7 +455,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDAOPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -471,7 +473,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDAOFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -479,7 +481,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_DAOFolder = 
+        @NotNull File t_DAOFolder =
             t_PackageUtils.retrieveDAOFolder(
                 t_TestFile, "com.foo.bar", "mysql", false);
 
@@ -508,7 +510,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDAOFactoryPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -526,7 +528,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveDAOFactoryFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -534,7 +536,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_DAOFactoryFolder = 
+        @NotNull File t_DAOFactoryFolder =
             t_PackageUtils.retrieveDAOFactoryFolder(
                 t_TestFile, "com.foo.bar", "mysql", false);
 
@@ -564,7 +566,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveJdbcOperationsPackage()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -583,7 +585,7 @@ public class PackageUtilsTest
      */
     public void testRetrieveJdbcOperationsFolder()
     {
-        PackageUtils t_PackageUtils = PackageUtils.getInstance();
+        @NotNull PackageUtils t_PackageUtils = PackageUtils.getInstance();
 
         assertNotNull(t_PackageUtils);
 
@@ -591,7 +593,7 @@ public class PackageUtilsTest
 
         assertNotNull(t_TestFile);
 
-        File t_DAOFactoryFolder = 
+        @NotNull File t_DAOFactoryFolder =
             t_PackageUtils.retrieveJdbcOperationsFolder(
                 t_TestFile, "com.foo.bar", "mysql", "user", false);
 

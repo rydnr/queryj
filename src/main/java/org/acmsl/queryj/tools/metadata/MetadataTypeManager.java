@@ -38,6 +38,8 @@ package org.acmsl.queryj.tools.metadata;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Manager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some useful methods when working with database metadata.
@@ -52,6 +54,7 @@ public interface MetadataTypeManager
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
+    @Nullable
     public String getNativeType(final int dataType);
 
     /**
@@ -60,6 +63,7 @@ public interface MetadataTypeManager
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
+    @Nullable
     public String getNativeType(
         final int dataType, final boolean allowsNull);
 
@@ -82,6 +86,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the QueryJ type.
      */
+    @Nullable
     public String getStatementSetterFieldType(final int dataType);
 
     /**
@@ -106,6 +111,7 @@ public interface MetadataTypeManager
      * @param paramName the parameter name.
      * @return the associated setter method name.
      */
+    @Nullable
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName);
 
@@ -115,6 +121,7 @@ public interface MetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
+    @Nullable
     public String getGetterMethod(final int dataType, final int paramIndex);
 
     /**
@@ -123,6 +130,7 @@ public interface MetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
+    @Nullable
     public String getGetterMethod(final int dataType);
 
     /**
@@ -131,6 +139,7 @@ public interface MetadataTypeManager
      * @param param the parameter.
      * @return the associated getter method name.
      */
+    @Nullable
     public String getGetterMethod(final int dataType, final String param);
 
     /**
@@ -138,6 +147,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated result type.
      */
+    @Nullable
     public String getProcedureResultType(final int dataType);
 
     /**
@@ -145,6 +155,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated default value.
      */
+    @NotNull
     public String getProcedureDefaultValue(final int dataType);
 
     /**
@@ -152,6 +163,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getObjectType(final int dataType);
 
     /**
@@ -159,6 +171,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @NotNull
     public String getObjectType(final String dataType);
 
     /**
@@ -166,6 +179,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getSmartObjectType(final int dataType);
 
     /**
@@ -173,6 +187,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated object type.
      */
+    @Nullable
     public String getSmartObjectRetrievalType(final int dataType);
 
     /**
@@ -180,6 +195,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated default value.
      */
+    @NotNull
     public String getDefaultValue(final int dataType);
 
     /**
@@ -187,6 +203,7 @@ public interface MetadataTypeManager
      * @param dataType the data type.
      * @return the associated constant name.
      */
+    @Nullable
     public String getConstantName(final int dataType);
 
     /**

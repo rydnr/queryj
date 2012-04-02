@@ -37,6 +37,8 @@ package org.acmsl.queryj.tools.customsql;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models elements in <i>custom-sql</i> models, which
@@ -231,6 +233,7 @@ public abstract class AbstractParameterElement
      * @param type the <i>type</i> attribute.
      * @return such information.
      */
+    @NotNull
     protected String toString(
         final String id,
         final String columnName,
@@ -275,7 +278,7 @@ public abstract class AbstractParameterElement
 
         if  (object instanceof Parameter)
         {
-            final Parameter t_OtherInstance = (Parameter) object;
+            @NotNull final Parameter t_OtherInstance = (Parameter) object;
 
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
@@ -310,11 +313,11 @@ public abstract class AbstractParameterElement
     {
         int result = 1;
 
-        ClassCastException exceptionToThrow = null;
+        @Nullable ClassCastException exceptionToThrow = null;
 
         if  (object instanceof Parameter)
         {
-                final Parameter t_OtherInstance = (Parameter) object;
+                @NotNull final Parameter t_OtherInstance = (Parameter) object;
 
                 result =
                     new org.apache.commons.lang.builder.CompareToBuilder()

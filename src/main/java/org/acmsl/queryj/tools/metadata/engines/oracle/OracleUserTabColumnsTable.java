@@ -50,6 +50,8 @@ import org.acmsl.queryj.Table;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the USER_TAB_COLUMNS table in the persistence domain.
@@ -75,30 +77,35 @@ public class OracleUserTabColumnsTable
     /**
      * The user_tab_columns table table_name field.
      */
+    @NotNull
     public StringField TABLE_NAME =
         new StringField("TABLE_NAME", this);
 
     /**
      * The user_tab_columns table column_name field.
      */
+    @NotNull
     public StringField COLUMN_NAME =
         new StringField("COLUMN_NAME", this);
 
     /**
      * The user_tab_columns table data_type field.
      */
+    @NotNull
     public StringField DATA_TYPE =
         new StringField("DATA_TYPE", this);
 
     /**
      * The user_tab_columns table nullable field.
      */
+    @NotNull
     public StringField NULLABLE =
         new StringField("NULLABLE", this);
 
     /**
      * The user_tab_columns table column_id field.
      */
+    @NotNull
     public LongField COLUMN_ID =
         new LongField("COLUMN_ID", this);
 
@@ -124,9 +131,10 @@ public class OracleUserTabColumnsTable
      * @param alias the desired table alias.
      * @return such instance.
      */
-    public static OracleUserTabColumnsTable getInstance(final String alias)
+    @Nullable
+    public static OracleUserTabColumnsTable getInstance(@Nullable final String alias)
     {
-        OracleUserTabColumnsTable result = null;
+        @Nullable OracleUserTabColumnsTable result = null;
 
         if  (alias != null)
         {
@@ -144,6 +152,7 @@ public class OracleUserTabColumnsTable
      * Retrieves a OracleUserTabColumnsTable instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleUserTabColumnsTable getInstance()
     {
         return OracleUserTabColumnsTableSingletonContainer.SINGLETON;
@@ -153,6 +162,7 @@ public class OracleUserTabColumnsTable
      * Retrieves the table name.
      * @return such name.
      */
+    @NotNull
     public String getTableName()
     {
         return "USER_TAB_COLUMNS";
@@ -162,6 +172,7 @@ public class OracleUserTabColumnsTable
      * Retrieves <code>all</code> fields. It's equivalent to a star in a query.
      * @return such fields.
      */
+    @NotNull
     public Field[] getAll()
     {
         return

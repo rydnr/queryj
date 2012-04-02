@@ -47,6 +47,7 @@ import org.acmsl.queryj.UpdateQuery;
  */
 import org.acmsl.commons.patterns.Factory;
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Has the responsiblity of knowing how to create queries.
@@ -76,6 +77,7 @@ public class QueryFactory
      * Retrieves a <code>QueryFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static QueryFactory getInstance()
     {
         return QueryFactorySingletonContainer.SINGLETON;
@@ -85,6 +87,7 @@ public class QueryFactory
      * Creates a select query.
      * @return such query.
      */
+    @NotNull
     public SelectQuery createSelectQuery()
     {
         return new SelectQuery();
@@ -94,6 +97,7 @@ public class QueryFactory
      * Creates an insert query.
      * @return such query.
      */
+    @NotNull
     public InsertQuery createInsertQuery()
     {
         return new InsertQuery();
@@ -103,6 +107,7 @@ public class QueryFactory
      * Creates an update query.
      * @return such query.
      */
+    @NotNull
     public UpdateQuery createUpdateQuery()
     {
         return new UpdateQuery();
@@ -112,6 +117,7 @@ public class QueryFactory
      * Creates a delete query.
      * @return such query.
      */
+    @NotNull
     public DeleteQuery createDeleteQuery()
     {
         return new DeleteQuery();

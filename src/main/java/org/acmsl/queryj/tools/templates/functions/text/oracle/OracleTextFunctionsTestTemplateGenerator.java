@@ -54,6 +54,8 @@ import org.acmsl.queryj.tools.templates.functions.text
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -90,6 +92,7 @@ public class OracleTextFunctionsTestTemplateGenerator
      * Retrieves a <code>OracleTextFunctionsTestTemplateGenerator</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static OracleTextFunctionsTestTemplateGenerator getOracleInstance()
     {
         return OracleTextFunctionsTestTemplateGeneratorSingletonContainer.SINGLETON;
@@ -105,15 +108,16 @@ public class OracleTextFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Nullable
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
-        final String packageName,
+        @Nullable final String packageName,
         final String testedPackageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
         final String header)
     {
-        OracleTextFunctionsTestTemplate result = null;
+        @Nullable OracleTextFunctionsTestTemplate result = null;
 
         if  (   (packageName   != null)
              && (engineName    != null)
@@ -138,6 +142,7 @@ public class OracleTextFunctionsTestTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();

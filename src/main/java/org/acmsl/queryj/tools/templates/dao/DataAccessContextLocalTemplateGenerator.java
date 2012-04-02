@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.dao
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -92,6 +93,7 @@ public class DataAccessContextLocalTemplateGenerator
      * Retrieves a DataAccessContextLocalTemplateGenerator instance.
      * @return such instance.
      */
+    @NotNull
     public static DataAccessContextLocalTemplateGenerator getInstance()
     {
         return DataAccessContextLocalTemplateGeneratorSingletonContainer.SINGLETON;
@@ -120,6 +122,7 @@ public class DataAccessContextLocalTemplateGenerator
      * @precondition jndiLocation != null
      * @precondition tables != null
      */
+    @NotNull
     public BasePerRepositoryTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
@@ -151,6 +154,7 @@ public class DataAccessContextLocalTemplateGenerator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CachingDecoratorFactory.getInstance();
@@ -164,8 +168,8 @@ public class DataAccessContextLocalTemplateGenerator
      * @throws IOException if the file cannot be created.
      */
     public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset)
       throws  IOException
     {
@@ -188,10 +192,10 @@ public class DataAccessContextLocalTemplateGenerator
      * @precondition fileUtils != null
      */
     protected void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
+        @NotNull final BasePerRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final FileUtils fileUtils)
+        @NotNull final FileUtils fileUtils)
       throws  IOException
     {
         boolean folderCreated = outputDir.mkdirs();

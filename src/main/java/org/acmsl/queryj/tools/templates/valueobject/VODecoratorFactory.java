@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Provides custom decorators for ValueObject-related templates.
@@ -78,6 +79,7 @@ public class VODecoratorFactory
      * Retrieves a <code>VODecoratorFactory</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static CachingDecoratorFactory getInstance()
     {
         return VODecoratorFactorySingletonContainer.SINGLETON;
@@ -90,6 +92,7 @@ public class VODecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager)
     {

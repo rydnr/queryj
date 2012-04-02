@@ -49,6 +49,8 @@ import org.acmsl.queryj.dao.MockDataSource;
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 This file is part of  JUnitDoclet, a project to generate basic
@@ -85,6 +87,7 @@ extends TestCase
 // JUnitDoclet end extends_implements
 {
   // JUnitDoclet begin class
+  @Nullable
   org.acmsl.queryj.dao.MockDataSource mockdatasource = null;
   // JUnitDoclet end class
   
@@ -104,6 +107,7 @@ extends TestCase
   * @return such instance.
   
   */
+  @Nullable
   public org.acmsl.queryj.dao.MockDataSource createInstance()
   throws Exception
   {
@@ -338,7 +342,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setLogWriter getLogWriter
-    java.io.PrintWriter[] t_aTests = {new java.io.PrintWriter(System.out), null};
+    @NotNull java.io.PrintWriter[] t_aTests = {new java.io.PrintWriter(System.out), null};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {
@@ -358,7 +362,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method setLoginTimeout getLoginTimeout
-    int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
+    @NotNull int[] t_aTests = {Integer.MIN_VALUE, -1, 0, 1, Integer.MAX_VALUE};
     
     for (int t_iTestIndex = 0; t_iTestIndex < t_aTests.length; t_iTestIndex++)
     {

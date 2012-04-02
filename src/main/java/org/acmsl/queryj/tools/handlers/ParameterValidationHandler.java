@@ -53,6 +53,8 @@ import org.apache.tools.ant.types.Path;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -358,7 +360,7 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition command != null
      */
-    public boolean handle(final QueryJCommand command)
+    public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
         return handle(command.getAttributeMap(), command.getLog());
@@ -372,7 +374,7 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters, final QueryJLog log)
+    protected boolean handle(@NotNull final Map parameters, final QueryJLog log)
         throws  QueryJBuildException
     {
         validateParameters(parameters, (log instanceof QueryJAntLog));
@@ -387,7 +389,7 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
         validateParameters(parameters, false);
@@ -403,7 +405,7 @@ public class ParameterValidationHandler
      * @precondition parameters != null
      */
     public void validateParameters(
-        final Map parameters, final boolean usingAnt)
+        @NotNull final Map parameters, final boolean usingAnt)
       throws  QueryJBuildException
     {
         validateParameters(
@@ -467,27 +469,28 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
+    @SuppressWarnings("unchecked")
     protected void validateParameters(
-        final String driver,
-        final String url,
-        final String username,
+        @Nullable final String driver,
+        @Nullable final String url,
+        @Nullable final String username,
         final String password,
         final String catalog,
-        final String schema,
-        final String repository,
-        final String packageName,
-        final File outputDir,
-        final File header,
+        @Nullable final String schema,
+        @Nullable final String repository,
+        @Nullable final String packageName,
+        @Nullable final File outputDir,
+        @Nullable final File header,
         final Boolean outputDirSubFolders,
         final Boolean extractProcedures,
         final Boolean extractFunctions,
-        final String jndiDataSources,
+        @Nullable final String jndiDataSources,
         final Boolean generateMockDAO,
         final String customSqlModel,
-        final File sqlXmlFile,
-        final String grammarBundleName,
-        final String encoding,
-        final Map parameters,
+        @Nullable final File sqlXmlFile,
+        @Nullable final String grammarBundleName,
+        @Nullable final String encoding,
+        @NotNull final Map parameters,
         final boolean usingAnt)
       throws  QueryJBuildException
     {
@@ -560,7 +563,7 @@ public class ParameterValidationHandler
             {
                 parameters.put(HEADER, readFile(header));
             }
-            catch  (final FileNotFoundException fileNotFoundException)
+            catch  (@NotNull final FileNotFoundException fileNotFoundException)
             {
                 t_bExceptionReadingHeader = true;
                 
@@ -571,7 +574,7 @@ public class ParameterValidationHandler
                         fileNotFoundException);
                 }
             }
-            catch  (final SecurityException securityException)
+            catch  (@NotNull final SecurityException securityException)
             {
                 t_bExceptionReadingHeader = true;
                 
@@ -582,7 +585,7 @@ public class ParameterValidationHandler
                         securityException);
                 }
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 t_bExceptionReadingHeader = true;
                 
@@ -636,7 +639,7 @@ public class ParameterValidationHandler
             {
                 ResourceBundle.getBundle(grammarBundleName);
             }
-            catch  (final MissingResourceException missingResourceException)
+            catch  (@NotNull final MissingResourceException missingResourceException)
             {
                 throw new QueryJBuildException(GRAMMAR_BUNDLE_NOT_FOUND);
             }
@@ -654,11 +657,11 @@ public class ParameterValidationHandler
                 {
                     Charset.forName(encoding);
                 }
-                catch (final IllegalCharsetNameException illegalCharset)
+                catch (@NotNull final IllegalCharsetNameException illegalCharset)
                 {
                     throw new QueryJBuildException(ILLEGAL_ENCODING);
                 }
-                catch (final IllegalArgumentException nullCharset)
+                catch (@NotNull final IllegalArgumentException nullCharset)
                 {
                     // should not happen since encoding is optional anyway.
                     throw new QueryJBuildException("encoding is null");
@@ -684,9 +687,9 @@ public class ParameterValidationHandler
      * parameters are not present or valid.
      */
     protected void validateAntParameters(
-        final AntTablesElement tables,
-        final AntExternallyManagedFieldsElement externallyManagedFields,
-        final Path classpath,
+        @Nullable final AntTablesElement tables,
+        @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
+        @Nullable final Path classpath,
         final Map parameters)
       throws  QueryJBuildException
     {
@@ -741,7 +744,7 @@ public class ParameterValidationHandler
      * @precondition file != null
      * @precondition fileUtils != null
      */
-    protected String readFile(final File file, final FileUtils fileUtils)
+    protected String readFile(final File file, @NotNull final FileUtils fileUtils)
         throws  SecurityException,
                 IOException
     {

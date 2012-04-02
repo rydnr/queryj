@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * Importing some StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -102,6 +104,7 @@ public class BaseRepositoryDAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/BaseRepositoryDAO.stg");
@@ -111,6 +114,7 @@ public class BaseRepositoryDAOTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "Base Repository DAO";

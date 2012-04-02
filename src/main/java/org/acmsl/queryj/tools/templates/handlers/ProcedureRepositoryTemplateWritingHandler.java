@@ -43,6 +43,8 @@ import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuil
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGenerator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -74,7 +76,7 @@ public class ProcedureRepositoryTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
         throws QueryJBuildException
     {
         writeTemplate(
@@ -96,10 +98,10 @@ public class ProcedureRepositoryTemplateWritingHandler
      * @precondition parameters != null
      */
     protected void writeTemplate(
-        final ProcedureRepositoryTemplate template,
-        final File outputDir,
+        @Nullable final ProcedureRepositoryTemplate template,
+        @NotNull final File outputDir,
         final Charset charset,
-        final ProcedureRepositoryTemplateGenerator generator)
+        @NotNull final ProcedureRepositoryTemplateGenerator generator)
       throws QueryJBuildException
     {
         if  (template != null)
@@ -108,7 +110,7 @@ public class ProcedureRepositoryTemplateWritingHandler
             {
                 generator.write(template, outputDir, charset);
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 throw
                     new QueryJBuildException(
@@ -124,8 +126,9 @@ public class ProcedureRepositoryTemplateWritingHandler
      * @return the template.
      * @precondition parameters != null
      */
+    @NotNull
     protected ProcedureRepositoryTemplate retrieveProcedureRepositoryTemplate(
-        final Map parameters)
+        @NotNull final Map parameters)
     {
         return
             (ProcedureRepositoryTemplate)

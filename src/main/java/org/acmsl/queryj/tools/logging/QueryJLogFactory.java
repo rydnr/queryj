@@ -48,6 +48,8 @@ package org.acmsl.queryj.tools.logging;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogConfigurationException;
 import org.apache.commons.logging.LogFactory;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <code>LogFactory</code> implementation that uses a
@@ -106,6 +108,7 @@ public class QueryJLogFactory
      * or <code>null</code> if there is no such attribute.
      * @param name Name of the attribute to return.
      */
+    @Nullable
     public Object getAttribute(final String name)
     {
         return null;
@@ -116,6 +119,7 @@ public class QueryJLogFactory
      * configuration attributes.  If there are no such attributes, a zero
      * length array is returned.
      */
+    @NotNull
     public String[] getAttributeNames()
     {
         return new String[0];

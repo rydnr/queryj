@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -77,7 +79,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @precondition parameters != null
      */
     @Override
-    protected boolean handle(final Map parameters)
+    protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
         writeTemplate(parameters, retrieveDatabaseMetaData(parameters));
@@ -95,14 +97,14 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @precondition metadata != null
      */
     protected void writeTemplate(
-        final Map parameters, final DatabaseMetaData metadata)
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metadata)
       throws  QueryJBuildException
     {
         try
         {
             writeTemplate(parameters, metadata.getDatabaseProductName());
         }
-        catch  (final SQLException sqlException)
+        catch  (@NotNull final SQLException sqlException)
         {
             throw
                 new QueryJBuildException(
@@ -118,7 +120,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @precondition parameters != null
      * @precondition engineName != null
      */
-    protected void writeTemplate(final Map parameters, final String engineName)
+    protected void writeTemplate(@NotNull final Map parameters, final String engineName)
       throws  QueryJBuildException
     {
         writeTemplate(
@@ -140,10 +142,10 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @precondition templateGenerator != null
      */
     protected void writeTemplate(
-        final BasePerRepositoryTemplate template,
+        @Nullable final BasePerRepositoryTemplate template,
         final File outputDir,
         final Charset charset,
-        final BasePerRepositoryTemplateGenerator templateGenerator)
+        @NotNull final BasePerRepositoryTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
         if  (template != null)
@@ -152,7 +154,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
             {
                 templateGenerator.write(template, outputDir, charset);
             }
-            catch  (final IOException ioException)
+            catch  (@NotNull final IOException ioException)
             {
                 throw
                     new QueryJBuildException(
@@ -172,6 +174,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @return the template.
      */
+    @NotNull
     protected abstract BasePerRepositoryTemplate retrieveTemplate(
         final Map parameters);
 
@@ -182,8 +185,9 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @return such folder.
      * @precondition parameters != null
      */
+    @Nullable
     protected File retrieveOutputDir(
-        final String engineName, final Map parameters)
+        final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -209,6 +213,7 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
+    @Nullable
     protected abstract File retrieveOutputDir(
         final File projectFolder,
         final String projectPackage,

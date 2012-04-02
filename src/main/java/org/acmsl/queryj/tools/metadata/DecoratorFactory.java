@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -67,6 +68,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager);
 
@@ -77,6 +79,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
+    @NotNull
     public PropertyDecorator createDecorator(
         final Property property, final MetadataManager metadataManager);
 
@@ -88,6 +91,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated result for the concrete template.
      */
+    @NotNull
     public ResultDecorator createDecorator(
         final Result result,
         final CustomSqlProvider customSqlProvider,
@@ -100,6 +104,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
      */
+    @NotNull
     public SqlDecorator createDecorator(
         final Sql sql,
         final CustomSqlProvider customSqlProvider,
@@ -111,6 +116,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated table for the concrete template.
      */
+    @NotNull
     public TableDecorator createTableDecorator(
         final String table, final MetadataManager metadataManager);
 
@@ -122,6 +128,7 @@ public interface DecoratorFactory
      * @param allowsNull whether the fk can be null as a whole.
      * @return the decorator instance.
      */
+    @NotNull
     public ForeignKeyDecorator createDecorator(
         final String sourceTableName,
         final Collection attributes,

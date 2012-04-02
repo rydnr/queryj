@@ -40,6 +40,8 @@ import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.Query;
 import org.acmsl.queryj.Table;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -124,7 +126,7 @@ public class SelectQuery
      * @precondition orderingFields != null
      */
     protected void addOrderingField(
-        final Field orderingField, final List orderingFields)
+        final Field orderingField, @NotNull final List orderingFields)
     {
         orderingFields.add(orderingField);
     }
@@ -185,7 +187,7 @@ public class SelectQuery
      * @precondition groupingFields != null
      */
     protected void addGroupingField(
-        final Field groupingField, final List groupingFields)
+        final Field groupingField, @NotNull final List groupingFields)
     {
         groupingFields.add(groupingField);
     }
@@ -218,7 +220,7 @@ public class SelectQuery
      * @param fields the fields to select.
      * @precondition fields != null
      */
-    public void select(final Field[] fields)
+    public void select(@NotNull final Field[] fields)
     {
         for  (int t_iIndex = 0; t_iIndex < fields.length; t_iIndex++)
         {
@@ -241,7 +243,7 @@ public class SelectQuery
      * @param condition such condition.
      * @precondition condition != null
      */
-    public void where(final Condition condition)
+    public void where(@NotNull final Condition condition)
     {
         addCondition(condition);
     }
@@ -251,7 +253,7 @@ public class SelectQuery
      * @param variableCondition such variable condition.
      * @precondition variableCondition != null
      */
-    public void where(final VariableCondition variableCondition)
+    public void where(@NotNull final VariableCondition variableCondition)
     {
         addCondition(variableCondition, false);
         addVariableCondition(variableCondition);
@@ -282,10 +284,11 @@ public class SelectQuery
      * @return the result set.
      * @exception SQLException if an error occurs.
      */
+    @Nullable
     public QueryResultSet retrieveMatchingResults()
         throws  SQLException
     {
-        QueryResultSet result = null;
+        @Nullable QueryResultSet result = null;
 
         Statement t_Statement = getPreparedStatement();
 
@@ -312,7 +315,7 @@ public class SelectQuery
      * @precondition sql != null
      * @precondition fields != null
      */
-    public int executeUpdate(final String sql, final Field[] fields)
+    public int executeUpdate(final String sql, @NotNull final Field[] fields)
         throws  SQLException
     {
         return
@@ -335,8 +338,8 @@ public class SelectQuery
      */
     protected int executeUpdate(
         final String sql,
-        final Field[] fields,
-        final PreparedStatement preparedStatement)
+        @NotNull final Field[] fields,
+        @Nullable final PreparedStatement preparedStatement)
       throws  SQLException
     {
         int result = 0;
@@ -347,7 +350,7 @@ public class SelectQuery
         }
         else
         {
-            int[] t_aiIndexes = new int[fields.length];
+            @NotNull int[] t_aiIndexes = new int[fields.length];
 
             for  (int t_iIndex = 0; t_iIndex < fields.length; t_iIndex++) 
             {
@@ -372,7 +375,7 @@ public class SelectQuery
      * @precondition sql != null
      * @precondition fields != null
      */
-    public boolean execute(final String sql, final Field[] fields)
+    public boolean execute(final String sql, @NotNull final Field[] fields)
         throws  SQLException
     {
         return execute(sql, fields, getPreparedStatement());
@@ -393,8 +396,8 @@ public class SelectQuery
      */
     protected boolean execute(
         final String sql,
-        final Field[] fields,
-        final PreparedStatement preparedStatement)
+        @NotNull final Field[] fields,
+        @Nullable final PreparedStatement preparedStatement)
       throws  SQLException
     {
         boolean result = false;
@@ -405,7 +408,7 @@ public class SelectQuery
         }
         else
         {
-            int[] t_aiIndexes = new int[fields.length];
+            @NotNull int[] t_aiIndexes = new int[fields.length];
 
             for  (int t_iIndex = 0; t_iIndex < fields.length; t_iIndex++) 
             {
@@ -426,17 +429,18 @@ public class SelectQuery
      * @precondition tables != null
      * @precondition separator != null
      */
-    protected List processTables(final List tables, final String separator)
+    @NotNull
+    protected List processTables(@NotNull final List tables, final String separator)
     {
-        List result = new ArrayList();
+        @NotNull List result = new ArrayList();
 
         Iterator t_itTables = tables.iterator();
 
-        Table t_CurrentTable = null;
+        @Nullable Table t_CurrentTable = null;
 
-        TableAlias t_CurrentTableAlias = null;
+        @Nullable TableAlias t_CurrentTableAlias = null;
 
-        StringBuffer t_sbCurrentTable = null;
+        @Nullable StringBuffer t_sbCurrentTable = null;
 
         while  (   (t_itTables != null)
                 && (t_itTables.hasNext()))
@@ -499,14 +503,14 @@ public class SelectQuery
      * @precondition queryUtils != null
      */
     protected String toString(
-        final List tables,
+        @NotNull final List tables,
         final List fields,
-        final List conditions,
-        final List groupingFields,
-        final List orderingFields,
-        final QueryUtils queryUtils)
+        @NotNull final List conditions,
+        @NotNull final List groupingFields,
+        @NotNull final List orderingFields,
+        @NotNull final QueryUtils queryUtils)
     {
-        StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuffer t_sbResult = new StringBuffer();
 
         t_sbResult.append("SELECT ");
 

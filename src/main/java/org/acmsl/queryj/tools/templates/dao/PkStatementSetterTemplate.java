@@ -46,6 +46,8 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Generates <code>PkStatementSetter</code> sources for a concrete
@@ -105,6 +107,7 @@ public class PkStatementSetterTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Nullable
     protected StringTemplateGroup retrieveGroup()
     {
         return
@@ -116,6 +119,7 @@ public class PkStatementSetterTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public String getTemplateName()
     {
         return "PkStatementSetter";

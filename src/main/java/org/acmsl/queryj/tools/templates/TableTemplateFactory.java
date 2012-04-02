@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate Table repositories according to database metadata.
@@ -69,6 +70,7 @@ public interface TableTemplateFactory
      * interfaces.
      * @return a template.
      */
+    @NotNull
     public TableTemplate createTableTemplate(
         final String tableName,
         final MetadataManager metadataManager,

@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -66,6 +67,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
         return ConfigurationPropertiesTemplateGenerator.getInstance();
@@ -80,6 +82,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected String retrievePackage(
         final String engineName,
         final String projectPackage,
@@ -96,7 +99,7 @@ public class ConfigurationPropertiesTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters)
+        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE,
