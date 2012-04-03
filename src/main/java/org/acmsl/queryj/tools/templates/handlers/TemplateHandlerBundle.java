@@ -37,9 +37,11 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+
+/*
+ * Importing jetbrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -58,8 +60,8 @@ public class TemplateHandlerBundle
      * @precondition writingHandler != null
      */
     public TemplateHandlerBundle(
-        final TemplateBuildHandler buildHandler,
-        final TemplateWritingHandler writingHandler)
+        @NotNull final TemplateBuildHandler buildHandler,
+        @NotNull final TemplateWritingHandler writingHandler)
     {
         immutableAddHandler(buildHandler);
         immutableAddHandler(writingHandler);
@@ -72,13 +74,15 @@ public class TemplateHandlerBundle
      */
     public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
     {
-        int t_iLength = (bundles != null) ? bundles.length : 0;
+        final int t_iLength = (bundles != null) ? bundles.length : 0;
         
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (bundles[t_iIndex] != null)
+            @Nullable TemplateHandlerBundle t_Bundle = bundles[t_iIndex];
+
+            if  (t_Bundle != null)
             {
-                immutableAddHandler(bundles[t_iIndex]);
+                immutableAddHandler(t_Bundle);
             }
         }
     }

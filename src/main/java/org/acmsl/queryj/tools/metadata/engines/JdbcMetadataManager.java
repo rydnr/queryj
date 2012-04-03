@@ -71,7 +71,7 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Creates a <code>JdbcMetadataManager</code> using given information.
+     * Creates a {link JdbcMetadataManager} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table

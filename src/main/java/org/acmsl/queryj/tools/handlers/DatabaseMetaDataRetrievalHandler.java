@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -50,12 +49,15 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -1096,6 +1098,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             result =
                 buildMetadataManager(
+                    parameters,
                     (String[]) parameters.get(TABLE_NAMES),
                     (String[]) parameters.get(PROCEDURE_NAMES),
                     disableTableExtraction,
@@ -1156,15 +1159,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @Nullable
     protected MetadataManager buildMetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
+        @NotNull final Map parameters,
+        @NotNull final String[] tableNames,
+        @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @NotNull final String schema)
       throws  QueryJBuildException
     {
         MetadataManager result;

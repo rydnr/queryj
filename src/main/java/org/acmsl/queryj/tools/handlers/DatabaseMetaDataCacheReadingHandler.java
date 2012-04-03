@@ -23,53 +23,68 @@
 
  ******************************************************************************
  *
- * Filename: OracleMetaDataRetrievalHandler.java
+ * Filename: DatabaseMetaDataCacheReadingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Retrieves the Oracle metadata.
+ * Description: Checks whether we can use the cached metadata or not.
  *
  */
-package org.acmsl.queryj.tools.handlers.oracle;
+package org.acmsl.queryj.tools.handlers;
 
 /*
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.engines.oracle.Oracle8MetadataManager;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing jetbrains annotations.
  */
-import org.acmsl.commons.patterns.Command;
-import org.acmsl.commons.version.VersionUtils;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
+import java.io.File;
 import java.sql.DatabaseMetaData;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Retrieves the Oracle metadata.
+ * Checks whether we can use the cached metadata or not.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleMetaDataRetrievalHandler
-    extends  DatabaseMetaDataRetrievalHandler
+public class DatabaseMetaDataCacheReadingHandler
+    extends  AbstractDatabaseMetaDataCacheHandler
 {
+    /**
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param alreadyDone the flag indicating whether the metadata
+     * extraction has already been done.
+     * @param metaData the database metadata.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     * @precondition parameters != null
+     * @precondition metaData != null
+     */
+    @Override
+    protected boolean handle(
+        @NotNull final Map parameters,
+        final boolean alreadyDone,
+        @NotNull final DatabaseMetaData metaData)
+        throws  QueryJBuildException
+    {
+        boolean result = false;
+
+        if (!alreadyDone)
+        {
+            result = super.handle(parameters, alreadyDone, metaData);
+        }
+
+        return result;
+    }
     /**
      * Checks whether the database vendor matches this handler.
      * @param productName the product name.
@@ -85,28 +100,7 @@ public class OracleMetaDataRetrievalHandler
         final int majorVersion,
         final int minorVersion)
     {
-        boolean result = (productName.indexOf("Oracle") > -1);
-
-//        if  (result)
-//        {
-//            result = checkVersion(productVersion, VersionUtils.getInstance());
-//        }
-
-        return result;
-    }
-
-    /**
-     * Checks the engine version.
-     * @param version the version.
-     * @param versionUtils the {@link VersionUtils} instance.
-     * @return <code>true</code> if the version matches or is compatible with.
-     * @precondition version != null
-     * @precondition versionUtils != null
-     */
-    protected boolean checkVersion(
-        @NotNull final String version, @NotNull final VersionUtils versionUtils)
-    {
-        return versionUtils.matches(version, "8.x");
+        return true;
     }
 
     /**
@@ -117,22 +111,21 @@ public class OracleMetaDataRetrievalHandler
      * @param disableTableExtraction if the table metadata should not
      * be extracted.
      * @param lazyTableExtraction if the table metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param disableProcedureExtraction if the procedure metadata should not
      * be extracted.
      * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @return the metadata manager instance.
      * @throws org.apache.tools.ant.BuildException whenever the required
      * parameters are not present or valid.
-     * @precondition parameters != null
      * @precondition metaData != null
      */
-    @Override
     @Nullable
+    @Override
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
         @NotNull final String[] tableNames,
@@ -144,23 +137,20 @@ public class OracleMetaDataRetrievalHandler
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @NotNull final String schema)
-        throws  BuildException
+        throws  QueryJBuildException
     {
         @Nullable MetadataManager result = null;
 
+        @NotNull File t_OutputDir = retrieveProjectOutputDir(parameters);
+
         try 
         {
-            result =
-                new Oracle8MetadataManager(
-                    tableNames,
-                    procedureNames,
-                    disableTableExtraction,
-                    lazyTableExtraction,
-                    disableProcedureExtraction,
-                    lazyProcedureExtraction,
-                    metaData,
-                    catalog,
-                    schema);
+            if (isCacheAvailable(t_OutputDir))
+            {
+                // TODO: perform checksum validation
+                result = retrieveCache(t_OutputDir);
+                storeAlreadyDoneFlag(parameters);
+            }
         }
         catch  (@NotNull final RuntimeException exception)
         {
@@ -168,7 +158,7 @@ public class OracleMetaDataRetrievalHandler
         }
         catch  (@NotNull final Exception exception)
         {
-            throw new BuildException(exception);
+            throw new QueryJBuildException("cannot.read.metadata.from.cache", exception);
         }
 
         return result;

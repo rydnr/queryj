@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -50,18 +49,21 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
+import java.io.Serializable;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -73,6 +75,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractJdbcMetadataManager
+    implements Serializable
 {
     /**
      * An empty String array.
@@ -878,7 +881,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowName the allow name.
      * @return the allow null.
-     * @see java.sql.Nulls
      * @precondition tableName != null
      * @precondition allowName != null
      */
@@ -893,7 +895,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowNames the allow names.
      * @return the allow null.
-     * @see java.sql.Nulls
      * @precondition tableName != null
      * @precondition allowNames != null
      */
@@ -908,7 +909,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowName the allow name.
      * @return the allow null.
-     * @see java.sql.Nulls
      * @precondition tableName != null
      * @precondition allowName != null
      */
@@ -923,7 +923,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @param allowNames the allow names.
      * @return the allow null.
-     * @see java.sql.Nulls
      * @precondition tableName != null
      * @precondition allowNames != null
      */
@@ -941,7 +940,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param allowNames the allow names.
      * @param allowNulls the allow nulls.
      * @return the allow null.
-     * @see java.sql.Nulls
      * @precondition tableName != null
      * @precondition allowNames != null
      * @precondition allowNulls != null

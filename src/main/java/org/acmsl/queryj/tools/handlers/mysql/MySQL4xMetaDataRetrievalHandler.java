@@ -46,18 +46,18 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.version.VersionUtils;
+
+/*
+* Importing some jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -69,13 +69,14 @@ public class MySQL4xMetaDataRetrievalHandler
 {
     /**
      * Checks whether the database vendor matches this handler.
-     * @param product the product name.
-     * @param version the product version.
-     * @param major the major version number.
-     * @param minor the minor version number.
+     * @param productName the product name.
+     * @param productVersion the product version.
+     * @param majorVersion the major version number.
+     * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
      * @precondition product != null
      */
+    @Override
     protected boolean checkVendor(
         @NotNull final String productName,
         final String productVersion,
@@ -126,16 +127,19 @@ public class MySQL4xMetaDataRetrievalHandler
      * parameters are not present or valid.
      * @precondition metaData != null
      */
+    @Override
+    @Nullable
     protected MetadataManager buildMetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
+        @NotNull final Map parameters,
+        @NotNull String[] tableNames,
+        @NotNull String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @NotNull String schema)
         throws  QueryJBuildException
     {
         MetadataManager result;

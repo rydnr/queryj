@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -64,12 +63,12 @@ public class SelectQuery
     /**
      * The ordering fields.
      */
-    private List m__lOrderingFields;
+    private List<Field> m__lOrderingFields;
 
     /**
      * The grouping fields.
      */
-    private List m__lGroupingFields;
+    private List<Field> m__lGroupingFields;
 
     /**
      * Constructs a query.
@@ -77,15 +76,15 @@ public class SelectQuery
     public SelectQuery()
     {
         super();
-        immutableSetOrderingFields(new ArrayList());
-        immutableSetGroupingFields(new ArrayList());
+        immutableSetOrderingFields(new ArrayList<Field>());
+        immutableSetGroupingFields(new ArrayList<Field>());
     }
 
     /**
      * Specifies new ordering field collection.
      * @param list the new list.
      */
-    private void immutableSetOrderingFields(final List list)
+    private void immutableSetOrderingFields(@NotNull final List<Field> list)
     {
         m__lOrderingFields = list;
     }
@@ -94,7 +93,7 @@ public class SelectQuery
      * Specifies new ordering field collection.
      * @param list the new list.
      */
-    protected void setOrderingFields(final List list)
+    protected void setOrderingFields(@NotNull final List<Field> list)
     {
         immutableSetOrderingFields(list);
     }
@@ -103,7 +102,8 @@ public class SelectQuery
      * Retrieves the ordering field collection.
      * @return such list.
      */
-    protected List getOrderingFields()
+    @NotNull
+    protected List<Field> getOrderingFields()
     {
         return m__lOrderingFields;
     }
@@ -113,7 +113,7 @@ public class SelectQuery
      * @param orderingField the ordering field to add.
      * @precondition orderingField != null
      */
-    protected void addOrderingField(final Field orderingField)
+    protected void addOrderingField(@NotNull final Field orderingField)
     {
         addOrderingField(orderingField, getOrderingFields());
     }
@@ -126,7 +126,7 @@ public class SelectQuery
      * @precondition orderingFields != null
      */
     protected void addOrderingField(
-        final Field orderingField, @NotNull final List orderingFields)
+        @NotNull final Field orderingField, @NotNull final List orderingFields)
     {
         orderingFields.add(orderingField);
     }
@@ -137,7 +137,7 @@ public class SelectQuery
      * @return its position, or -1 if such field doesn't belong to
      * this query.
      */
-    protected int getOrderingFieldIndex(final Field field)
+    protected int getOrderingFieldIndex(@NotNull final Field field)
     {
         return getIndex(getOrderingFields(), field);
     }
@@ -146,7 +146,7 @@ public class SelectQuery
      * Specifies new grouping field collection.
      * @param list the new list.
      */
-    private void immutableSetGroupingFields(final List list)
+    private void immutableSetGroupingFields(@NotNull List list)
     {
         m__lGroupingFields = list;
     }
@@ -155,7 +155,7 @@ public class SelectQuery
      * Specifies new grouping field collection.
      * @param list the new list.
      */
-    protected void setGroupingFields(final List list)
+    protected void setGroupingFields(@NotNull List<Field> list)
     {
         immutableSetGroupingFields(list);
     }
@@ -164,7 +164,8 @@ public class SelectQuery
      * Retrieves the grouping field collection.
      * @return such list.
      */
-    protected List getGroupingFields()
+    @NotNull
+    protected List<Field> getGroupingFields()
     {
         return m__lGroupingFields;
     }
@@ -174,7 +175,7 @@ public class SelectQuery
      * @param groupingField the grouping field to add.
      * @precondition groupingField != null
      */
-    protected void addGroupingField(final Field groupingField)
+    protected void addGroupingField(@NotNull final Field groupingField)
     {
         addGroupingField(groupingField, getGroupingFields());
     }
@@ -187,7 +188,7 @@ public class SelectQuery
      * @precondition groupingFields != null
      */
     protected void addGroupingField(
-        final Field groupingField, @NotNull final List groupingFields)
+        @NotNull final Field groupingField, @NotNull final List groupingFields)
     {
         groupingFields.add(groupingField);
     }
@@ -199,7 +200,7 @@ public class SelectQuery
      * this query.
      * @precondition field != null
      */
-    protected int getGroupingFieldIndex(final Field field)
+    protected int getGroupingFieldIndex(@NotNull final Field field)
     {
         return getIndex(getGroupingFields(), field);
     }
@@ -209,7 +210,7 @@ public class SelectQuery
      * @param field the field to select.
      * @precondition field != null
      */
-    public void select(final Field field)
+    public void select(@NotNull final Field field)
     {
         addField(field);
     }
@@ -222,9 +223,18 @@ public class SelectQuery
      */
     public void select(@NotNull final Field[] fields)
     {
-        for  (int t_iIndex = 0; t_iIndex < fields.length; t_iIndex++)
+        int t_iCount = (fields != null) ? fields.length : 0;
+
+        Field t_Field;
+
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            addField(fields[t_iIndex]);
+            t_Field = fields[t_iIndex];
+
+            if (t_Field != null)
+            {
+                addField(t_Field);
+            }
         }
     }
 
@@ -233,7 +243,7 @@ public class SelectQuery
      * @param table the table.
      * @precondition table != null
      */
-    public void from(final Table table)
+    public void from(@NotNull final Table table)
     {
         addTable(table);
     }
@@ -264,7 +274,7 @@ public class SelectQuery
      * @param groupingField such field.
      * @precondition groupingField != null
      */
-    public void groupBy(final Field groupingField)
+    public void groupBy(@NotNull final Field groupingField)
     {
         addGroupingField(groupingField);
     }
@@ -274,7 +284,7 @@ public class SelectQuery
      * @param orderingField such field.
      * @precondition orderingField != null
      */
-    public void orderBy(final Field orderingField)
+    public void orderBy(@NotNull final Field orderingField)
     {
         addOrderingField(orderingField);
     }
@@ -315,7 +325,7 @@ public class SelectQuery
      * @precondition sql != null
      * @precondition fields != null
      */
-    public int executeUpdate(final String sql, @NotNull final Field[] fields)
+    public int executeUpdate(@NotNull final String sql, @NotNull final Field[] fields)
         throws  SQLException
     {
         return
@@ -328,7 +338,7 @@ public class SelectQuery
      * @param sql (Taken from Sun's Javadoc) must be an SQL INSERT, UPDATE
      * or DELETE statement or an SQL statement that returns nothing.
      * @param fields the fields.
-     * @param preparedStatement the <code>PreparedStatement</code>.
+     * @param preparedStatement the {@link PreparedStatement}.
      * @return (Taken from Sun's Javadoc) either the row count for INSERT,
      * UPDATE or DELETE statements, or 0 for SQL statements that return
      * nothing.
@@ -337,9 +347,9 @@ public class SelectQuery
      * @precondition fields != null
      */
     protected int executeUpdate(
-        final String sql,
+        @NotNull final String sql,
         @NotNull final Field[] fields,
-        @Nullable final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         int result = 0;
@@ -375,7 +385,7 @@ public class SelectQuery
      * @precondition sql != null
      * @precondition fields != null
      */
-    public boolean execute(final String sql, @NotNull final Field[] fields)
+    public boolean execute(@NotNull final String sql, @NotNull final Field[] fields)
         throws  SQLException
     {
         return execute(sql, fields, getPreparedStatement());
@@ -386,7 +396,7 @@ public class SelectQuery
      * @param sql (Taken from Sun's Javadoc) must be an SQL INSERT, UPDATE
      * or DELETE statement or an SQL statement that returns nothing.
      * @param fields the fields.
-     * @param preparedStatement the <code>PreparedStatement</code>.
+     * @param preparedStatement the {@link PreparedStatement}.
      * @return (Taken from Sun's Javadoc) true if the first result is a
      * ResultSet object; false if it is an update count or there are no
      * results.
@@ -395,9 +405,9 @@ public class SelectQuery
      * @precondition fields != null
      */
     protected boolean execute(
-        final String sql,
+        @NotNull final String sql,
         @NotNull final Field[] fields,
-        @Nullable final PreparedStatement preparedStatement)
+        @NotNull final PreparedStatement preparedStatement)
       throws  SQLException
     {
         boolean result = false;
@@ -430,7 +440,7 @@ public class SelectQuery
      * @precondition separator != null
      */
     @NotNull
-    protected List processTables(@NotNull final List tables, final String separator)
+    protected List processTables(@NotNull final List tables, @NotNull final String separator)
     {
         @NotNull List result = new ArrayList();
 
@@ -474,6 +484,7 @@ public class SelectQuery
      * Outputs a text version of the query, in SQL format.
      * @return the SQL query.
      */
+    @NotNull
     public String toString()
     {
         return
@@ -493,7 +504,7 @@ public class SelectQuery
      * @param conditions the conditions.
      * @param groupingFields the <i>group by</i> fields.
      * @param orderingFields the <i>order by</i> fields.
-     * @param queryUtils the <code>QueryUtils</code> instance.
+     * @param queryUtils the {@link QueryUtils} instance.
      * @return the SQL query.
      * @precondition tables != null
      * @precondition fields != null
@@ -502,12 +513,13 @@ public class SelectQuery
      * @precondition orderingFields != null
      * @precondition queryUtils != null
      */
+    @NotNull
     protected String toString(
-        @NotNull final List tables,
-        final List fields,
-        @NotNull final List conditions,
-        @NotNull final List groupingFields,
-        @NotNull final List orderingFields,
+        @NotNull final List<Table> tables,
+        @NotNull final List<Field> fields,
+        @NotNull final List<Condition> conditions,
+        @NotNull final List<Field> groupingFields,
+        @NotNull final List<Field> orderingFields,
         @NotNull final QueryUtils queryUtils)
     {
         @NotNull StringBuffer t_sbResult = new StringBuffer();

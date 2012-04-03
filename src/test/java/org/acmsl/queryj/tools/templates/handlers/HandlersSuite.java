@@ -109,7 +109,7 @@ public class HandlersSuite
     suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateWritingHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableTemplateWritingHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateBuildHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundleTest.class);
+    //suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundleTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandlerTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundleTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundleTest.class);

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -65,13 +64,13 @@ public abstract class Condition
     /**
      * Creates a condition.
      */
-    public Condition() {};
+    public Condition() {}
 
     /**
      * Specifies a new inner condition.
      * @param condition the new condition.
      */
-   protected void setInnerCondition(final Condition condition)
+   protected void setInnerCondition(@NotNull final Condition condition)
     {
         m__InnerCondition = condition;
     }
@@ -80,6 +79,7 @@ public abstract class Condition
      * Retrieves the inner condition.
      * @return such instance.
      */
+    @Nullable
     protected Condition getInnerCondition()
     {
         return m__InnerCondition;
@@ -98,15 +98,17 @@ public abstract class Condition
      * Retrieves the variable conditions.
      * @return such collection.
      */
+    @Nullable
     protected final Collection<VariableCondition> immutableGetVariableConditions()
     {
         return m__cVariableConditions;
     }
 
     /**
-     * Retrieves the variable condition colleciton.
+     * Retrieves the variable condition collection.
      * @return such collection.
      */
+    @Nullable
     protected Collection<VariableCondition> getVariableConditionCollection()
     {
         return immutableGetVariableConditions();
@@ -116,7 +118,8 @@ public abstract class Condition
      * Adds new variable conditions.
      * @param conditions the new conditions.
      */
-    protected void addVariableConditions(@Nullable final Collection<VariableCondition> conditions)
+    protected void addVariableConditions(
+        @Nullable final Collection<VariableCondition> conditions)
     {
         if  (   (conditions != null)
              && (conditions.size() > 0))
@@ -138,6 +141,7 @@ public abstract class Condition
      * Retrieves the variable conditions.
      * @return such collection.
      */
+    @NotNull
     public Collection<VariableCondition> getVariableConditions()
     {
         return getVariableConditions(immutableGetVariableConditions());
@@ -184,7 +188,8 @@ public abstract class Condition
      * @precondition condition != null
      */
     @NotNull
-    public Condition operate(final Condition condition, final String operator)
+    public Condition operate(
+        @NotNull final Condition condition, @NotNull final String operator)
     {
         return
             operate(
@@ -199,16 +204,16 @@ public abstract class Condition
      * @param condition the condition to evaluate.
      * @param operator the operator.
      * @param innerCondition the inner condition.
-     * @param conditionFactory the <code>ConditionFactory</code> instance.
+     * @param conditionFactory the {@link ConditionFactory} instance.
      * @return the resulting condition.
      * @precondition condition != null
      * @precondition conditionFactory != null
      */
     @NotNull
     protected Condition operate(
-        final Condition condition,
-        final String operator,
-        @NotNull final Condition innerCondition,
+        @NotNull final Condition condition,
+        @NotNull final String operator,
+        @Nullable final Condition innerCondition,
         @NotNull final ConditionFactory conditionFactory)
     {
         @NotNull Condition t_InnerCondition = innerCondition;
@@ -222,7 +227,8 @@ public abstract class Condition
             t_InnerCondition = this; // Subclasses override toString()
         }                            //            |
                                      //            v
-        @NotNull String t_strPrefix = "(" + t_InnerCondition.toString() + ") " + operator + " (";
+        @NotNull String t_strPrefix =
+            "(" + t_InnerCondition.toString() + ") " + operator + " (";
         @NotNull String t_strSuffix = ")";
 
         setInnerCondition(
@@ -238,7 +244,7 @@ public abstract class Condition
      * @precondition condition != null
      */
     @NotNull
-    public Condition and(final Condition condition)
+    public Condition and(@NotNull final Condition condition)
     {
         return operate(condition, "AND");
     }
@@ -250,7 +256,7 @@ public abstract class Condition
      * @precondition condition != null
      */
     @NotNull
-    public Condition or(final Condition condition)
+    public Condition or(@NotNull final Condition condition)
     {
         return operate(condition, "OR");
     }
@@ -263,7 +269,8 @@ public abstract class Condition
      * without explicit table information.
      * @return such text.
      */
-    protected String toString(@Nullable final Field field, final boolean simplify)
+    @NotNull
+    protected String toString(@NotNull final Field field, @NotNull final boolean simplify)
     {
         String result = "null";
 
@@ -286,6 +293,7 @@ public abstract class Condition
      * Outputs a brief text version of the condition.
      * @return the condition.
      */
+    @NotNull
     public String toSimplifiedString()
     {
         return toSimplifiedString(getInnerCondition());
@@ -296,7 +304,8 @@ public abstract class Condition
      * @param innerCondition the inner condition.
      * @return the condition.
      */
-    public String toSimplifiedString(@Nullable final Condition innerCondition)
+    @NotNull
+    public String toSimplifiedString(@NotNull final Condition innerCondition)
     {
         String result = "";
 
@@ -312,6 +321,7 @@ public abstract class Condition
      * Outputs a text version of the condition.
      * @return the condition.
      */
+    @NotNull
     public String toString()
     {
         return toString(getInnerCondition());
@@ -323,7 +333,7 @@ public abstract class Condition
      * @return the condition.
      */
     @NotNull
-    protected String toString(final Condition innerCondition)
+    protected String toString(@NotNull final Condition innerCondition)
     {
         return "" + innerCondition;
     }

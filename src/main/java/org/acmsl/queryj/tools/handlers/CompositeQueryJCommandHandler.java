@@ -40,7 +40,6 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -72,16 +71,32 @@ public class CompositeQueryJCommandHandler
     implements  QueryJCommandHandler
 {
     /**
-     * The handler collection.
+     * The handler system property prefix.
      */
-    private Collection m__cHandlers;
+    protected static final String HANDLER_SYSTEM_PROPERTY_PREFIX = "queryj.";
 
     /**
-     * Builds a <code>CompositeQueryJCommandHandler</code> instance.
+     * The handler system property suffix.
+     */
+    protected static final String HANDLER_SYSTEM_PROPERTY_SUFFIX = ".enabled";
+
+    /**
+     * The wildcard system property.
+     */
+    protected static final String WILDCARD_SYSTEM_PROPERTY =
+        HANDLER_SYSTEM_PROPERTY_PREFIX + "all_handlers" + HANDLER_SYSTEM_PROPERTY_SUFFIX;
+
+    /**
+     * The handler collection.
+     */
+    private Collection<QueryJCommandHandler> m__cHandlers;
+
+    /**
+     * Builds a {@link CompositeQueryJCommandHandler} instance.
      */
     public CompositeQueryJCommandHandler()
     {
-        immutableSetHandlerCollection(new ArrayList());
+        immutableSetHandlerCollection(new ArrayList<QueryJCommandHandler>());
     }
 
     /**
@@ -89,7 +104,7 @@ public class CompositeQueryJCommandHandler
      * @param collection such collection.
      */
     private void immutableSetHandlerCollection(
-        final Collection collection)
+        @NotNull final Collection<QueryJCommandHandler> collection)
     {
         m__cHandlers = collection;
     }
@@ -99,7 +114,7 @@ public class CompositeQueryJCommandHandler
      * @param collection such collection.
      */
     protected void setHandlerCollection(
-        final Collection collection)
+        @NotNull final Collection<QueryJCommandHandler> collection)
     {
         immutableSetHandlerCollection(collection);
     }
@@ -108,7 +123,8 @@ public class CompositeQueryJCommandHandler
      * Retrieves the template build handler.
      * @return such handler.
      */
-    protected Collection getHandlerCollection()
+    @NotNull
+    protected Collection<QueryJCommandHandler> getHandlerCollection()
     {
         return m__cHandlers;
     }
@@ -125,10 +141,11 @@ public class CompositeQueryJCommandHandler
     /**
      * Adds a new handler to the collection.
      * @param handler the new handler to add.
-     * @param collection the handler collection.
+     * @param handlerCollection the handler collection.
      */
     protected void addHandler(
-        @Nullable final QueryJCommandHandler handler, @Nullable final Collection handlerCollection)
+        @Nullable final QueryJCommandHandler handler,
+        @Nullable final Collection<QueryJCommandHandler> handlerCollection)
     {
         if  (   (handler != null)
              && (handlerCollection != null))
@@ -143,27 +160,30 @@ public class CompositeQueryJCommandHandler
      * @return <code>true</code> if the chain should be stopped.
      * @precondition command != null
      */
-    public boolean handle(final Command command)
+    public boolean handle(@NotNull final Command command)
     {
         boolean result = false;
 
         if  (command instanceof QueryJCommand)
         {
             @NotNull QueryJCommand t_Command = (QueryJCommand) command;
-            
-            try 
-            {
-                result = handle(t_Command);
-            }
-            catch  (@NotNull final QueryJBuildException buildException)
-            {
-                Log t_Log =
-                    UniqueLogFactory.getLog(
-                        CompositeQueryJCommandHandler.class);
 
-                if  (t_Log != null)
+            if (canProceed())
+            {
+                try
                 {
-                    t_Log.error("Chain step failed.", buildException);
+                    result = handle(t_Command);
+                }
+                catch  (@NotNull final QueryJBuildException buildException)
+                {
+                    Log t_Log =
+                        UniqueLogFactory.getLog(
+                            CompositeQueryJCommandHandler.class);
+
+                    if  (t_Log != null)
+                    {
+                        t_Log.error("Chain step failed.", buildException);
+                    }
                 }
             }
         }
@@ -178,7 +198,7 @@ public class CompositeQueryJCommandHandler
      * by different handlers.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    public boolean handle(final QueryJCommand command)
+    public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
     {
         return handle(command, getHandlerCollection());
@@ -193,7 +213,8 @@ public class CompositeQueryJCommandHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean handle(
-        final QueryJCommand command, @Nullable final Collection handlerCollection)
+        @NotNull final QueryJCommand command,
+        @Nullable final Collection<QueryJCommandHandler> handlerCollection)
       throws  QueryJBuildException
     {
         boolean result = false;
@@ -235,9 +256,38 @@ public class CompositeQueryJCommandHandler
      * @precondition handler != null
      */
     protected boolean handle(
-        final QueryJCommand command, @NotNull final QueryJCommandHandler handler)
+        @NotNull final QueryJCommand command, @NotNull final QueryJCommandHandler handler)
       throws  QueryJBuildException
     {
         return handler.handle(command);
+    }
+
+    /**
+     * Checks whether this handle is allowed to proceed or not.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean canProceed()
+    {
+        boolean result = true;
+
+        String t_strWildcardProperty = System.getProperty(WILDCARD_SYSTEM_PROPERTY);
+
+        if ("false".equalsIgnoreCase(t_strWildcardProperty))
+        {
+            result = false;
+        }
+
+        if (!result)
+        {
+            String t_strHandlerProperty =
+                System.getProperty(
+                      HANDLER_SYSTEM_PROPERTY_PREFIX
+                    + getClass().getName()
+                    + HANDLER_SYSTEM_PROPERTY_SUFFIX);
+
+            result = "true".equalsIgnoreCase(t_strHandlerProperty);
+        }
+
+        return result;
     }
 }

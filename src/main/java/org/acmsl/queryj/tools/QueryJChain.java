@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,29 +37,21 @@ package org.acmsl.queryj.tools;
  */
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheReadingHandler;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
+import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
+import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
+import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.QueryJSettings;
-import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.KeywordRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.functions.FunctionsBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectFactoryTemplateHandlerBundle;
@@ -90,6 +81,10 @@ import java.util.Properties;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -167,7 +162,7 @@ public class QueryJChain
     private String m__strOutputdirsubfolders;
 
     /**
-     * Whether to use subfolders or not.
+     * Whether to use sub folders or not.
      */
     private boolean m__bOutputdirsubfolders = false;
 
@@ -314,13 +309,13 @@ public class QueryJChain
      * @param packageName the base package of the generated sources.
      * @param outputDir the output folder.
      * @param header the copyright header.
-     * @param outputDirSubfolders whether to use main/ and test/ as
+     * @param outputDirSubFolders whether to use main/ and test/ as
      * subfolders.
      * @param extractTables whether to extract tables or not.
      * @param extractProcedures whether to extract the procedures or not.
      * @param extractFunctions whether to extract the functions or not.
      * @param jndiDataSource the location in JNDI of the
-     * {@link DataSource}.
+     * {@link javax.sql.DataSource}.
      * @param generateMockDAOImplementation whether to generate Mock DAOs.
      * @param generateXmlDAOImplementation whether to generate XML DAOs.
      * @param generateTests whether to generate test cases or not.
@@ -346,9 +341,9 @@ public class QueryJChain
         final String schema,
         final String repository,
         final String packageName,
-        final File outputdir,
+        final File outputDir,
         final File header,
-        final boolean outputdirsubfolders,
+        final boolean outputDirSubFolders,
         final boolean extractTables,
         final boolean extractProcedures,
         final boolean extractFunctions,
@@ -373,9 +368,9 @@ public class QueryJChain
         immutableSetSchema(schema);
         immutableSetRepository(repository);
         immutableSetPackage(packageName);
-        immutableSetOutputdir(outputdir);
+        immutableSetOutputdir(outputDir);
         immutableSetHeaderfile(header);
-        immutableSetOutputdirsubfoldersFlag(outputdirsubfolders);
+        immutableSetOutputdirsubfoldersFlag(outputDirSubFolders);
         immutableSetExtractTablesFlag(extractTables);
         immutableSetExtractProceduresFlag(extractProcedures);
         immutableSetExtractFunctionsFlag(extractFunctions);
@@ -1962,8 +1957,8 @@ public class QueryJChain
     /**
      * Builds the chain.
      * @param chain the chain to be configured.
-     * @param includeMock whether to include Mock implementations.
-     * @param includeXML whether to include XML implementations.
+     * @param generateMock whether to include Mock implementations.
+     * @param generateXML whether to include XML implementations.
      * @return the updated chain.
      */
     protected Chain buildChain(
@@ -1980,10 +1975,14 @@ public class QueryJChain
             result.add(new JdbcConnectionOpeningHandler());
             result.add(new CustomSqlProviderRetrievalHandler());
 
+            result.add(new DatabaseMetaDataCacheReadingHandler());
+
             result.add(new MySQL4xMetaDataRetrievalHandler());
             result.add(new OracleMetaDataRetrievalHandler());
             result.add(new JdbcMetaDataRetrievalHandler());
             result.add(new CustomSqlValidationHandler());
+
+            result.add(new DatabaseMetaDataCacheWritingHandler());
 
             result.add(new DatabaseMetaDataLoggingHandler());
 
@@ -2005,7 +2004,7 @@ public class QueryJChain
 
             //result.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            result.add(new DAOBundle(generateMock, generateXML));
+            //result.add(new DAOBundle(generateMock, generateXML));
 
             result.add(new ValueObjectTemplateHandlerBundle());
 
@@ -2152,13 +2151,13 @@ public class QueryJChain
      * @param packageName the base package of the generated sources.
      * @param outputDir the output folder.
      * @param header the copyright header.
-     * @param outputDirSubfolders whether to use main/ and test/ as
-     * subfolders.
+     * @param outputDirSubFolders whether to use main/ and test/ as
+     * sub folders.
      * @param extractTables whether to extract tables or not.
      * @param extractProcedures whether to extract the procedures or not.
      * @param extractFunctions whether to extract the functions or not.
      * @param jndiDataSource the location in JNDI of the
-     * <code>DataSource</code>.
+     * {@link javax.sql.DataSource}.
      * @param generateMockDAOImplementation whether to generate Mock DAOs.
      * @param generateXmlDAOImplementation whether to generate XML DAOs.
      * @param generateTests whether to generate test cases.
@@ -2186,9 +2185,9 @@ public class QueryJChain
         @Nullable final String schema,
         @Nullable final String repository,
         @Nullable final String packageName,
-        @Nullable final File outputdir,
+        @Nullable final File outputDir,
         @Nullable final File header,
-        final boolean outputdirsubfolders,
+        final boolean outputDirSubFolders,
         final boolean extractTables,
         final boolean extractProcedures,
         final boolean extractFunctions,
@@ -2262,11 +2261,11 @@ public class QueryJChain
                     packageName);
             }
 
-            if  (outputdir != null)
+            if  (outputDir != null)
             {
                 attributes.put(
                     ParameterValidationHandler.OUTPUT_DIR,
-                    outputdir);
+                    outputDir);
             }
 
             if  (header != null)
@@ -2278,7 +2277,7 @@ public class QueryJChain
 
             attributes.put(
                 ParameterValidationHandler.OUTPUT_DIR_SUBFOLDERS,
-                (outputdirsubfolders
+                (outputDirSubFolders
                  ?  Boolean.TRUE
                  :  Boolean.FALSE));
 

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -43,7 +42,6 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -51,12 +49,17 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.sql.Types;
 import java.util.Map;
 import java.util.HashMap;
@@ -69,7 +72,8 @@ import java.util.HashMap;
  */
 public class JdbcMetadataTypeManager
     implements  MetadataTypeManager,
-                Singleton
+                Singleton,
+                Serializable
 {
     /**
      * Singleton implemented to avoid the double-checked locking.

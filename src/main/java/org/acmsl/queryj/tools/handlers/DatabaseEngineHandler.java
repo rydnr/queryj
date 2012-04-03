@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -61,7 +60,7 @@ public class DatabaseEngineHandler
     /**
      * Creates a <code>DatabaseEngineHandler</code> instance.
      */
-    public DatabaseEngineHandler() {};
+    public DatabaseEngineHandler() {}
 
     /**
      * Handles given parameters.

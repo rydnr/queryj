@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -93,6 +92,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
@@ -105,10 +105,10 @@ public class ExternallyManagedFieldsRetrievalHandler
                 
     /**
      * Handles given parameters.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param externallyManagedFields information about the
      * externally-managed fields.
-     * @param stringValidator the <code>StringValidator</code> instance.
+     * @param stringValidator the {@link StringValidator} instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition metadataManager != null

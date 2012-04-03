@@ -1,8 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2005  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -28,7 +28,7 @@
 
  ******************************************************************************
  *
- * Filename: $RCSfile$
+ * Filename: SelectQueryTest.java
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -90,7 +90,7 @@ public class SelectQueryTest
      * Specifies a new tested instance.
      * @param query the query to test.
      */
-    protected void setTestedInstance(SelectQuery query)
+    protected void setTestedInstance(final SelectQuery query)
     {
         m__Query = query;
     }
