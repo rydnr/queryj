@@ -69,6 +69,12 @@ source(input) ::= <<
   ])>
 
 /*
+ * Importing some JDK classes.
+ */
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+/*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;

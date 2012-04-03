@@ -1,9 +1,8 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -33,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Builds a BaseResultSetExtractor template.
+ * Description: Builds a BaseResultSetExtractorTemplate instances.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -55,7 +54,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 /**
- * Builds a <code>BaseResultSetExtractor</code> template.
+ * Builds a {@link org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplate}
+ * instances.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
@@ -63,7 +63,7 @@ public class BaseResultSetExtractorTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
 {
     /**
-     * Retrieves the BaseResultSetExtractor template factory.
+     * Retrieves the {@link BaseResultSetExtractorTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -76,9 +76,8 @@ public class BaseResultSetExtractorTemplateBuildHandler
      * Retrieves the package name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */

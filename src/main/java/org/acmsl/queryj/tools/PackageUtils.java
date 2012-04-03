@@ -133,7 +133,7 @@ public class PackageUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected PackageUtils() {};
+    protected PackageUtils() {}
 
     /**
      * Retrieves a PackageUtils instance.
@@ -152,8 +152,9 @@ public class PackageUtils
      * @return the complate package information for given subpackage.
      * @precondition packageName != null
      */
+    @NotNull
     protected String retrievePackage(
-        final String packageName, final String subpackage)
+        @NotNull final String packageName, @NotNull final String subpackage)
     {
         return
             retrievePackage(
@@ -166,14 +167,15 @@ public class PackageUtils
      * Retrieves the package name for given subpackage.
      * @param packageName the original package.
      * @param subpackage the subpackage.
-     * @param stringValidator the <code>StringValidator</code> instance.
-     * @return the complate package information for given subpackage.
+     * @param stringValidator the {@link StringValidator} instance.
+     * @return the complete package information for given subpackage.
      * @precondition packageName != null
      * @precondition stringValidator != null
      */
+    @NotNull
     protected String retrievePackage(
-        final String packageName,
-        final String subpackage,
+        @NotNull final String packageName,
+        @NotNull final String subpackage,
         @NotNull final StringValidator stringValidator)
     {
         String result = packageName;
@@ -199,14 +201,15 @@ public class PackageUtils
      * Retrieves the package name for given subpackage.
      * @param packageName the original package.
      * @param subpackage the subpackage.
-     * @param subFolders whether to use subfolders or not.
-     * @return the complate package information for given subpackage.
+     * @param subFolders whether to use sub folders or not.
+     * @return the complete package information for given subpackage.
      * @precondition packageName != null
      * @precondition subpackage != null
      */
+    @NotNull
     protected String retrieveTestPackage(
-        final String packageName,
-        final String subpackage,
+        @NotNull final String packageName,
+        @NotNull final String subpackage,
         final boolean subFolders)
     {
         return
@@ -220,12 +223,13 @@ public class PackageUtils
     /**
      * Retrieves the package name for given subpackage.
      * @param packageName the original package.
-     * @param subFolders whether to use subfolders or not.
-     * @return the complate package information for given subpackage.
+     * @param subFolders whether to use sub folders or not.
+     * @return the complete package information for given subpackage.
      * @precondition packageName != null
      */
+    @NotNull
     protected String retrieveTestPackage(
-        final String packageName, final boolean subFolders)
+        @NotNull final String packageName, final boolean subFolders)
     {
         return retrieveTestPackage(packageName, "", subFolders);
     }
@@ -241,7 +245,7 @@ public class PackageUtils
      */
     @NotNull
     protected File retrieveFolder(
-        @NotNull final File parentFolder, final String packageName)
+        @NotNull final File parentFolder, @NotNull final String packageName)
     {
         return retrieveFolder(parentFolder, packageName, false);
     }
@@ -250,7 +254,7 @@ public class PackageUtils
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
@@ -259,10 +263,10 @@ public class PackageUtils
     @NotNull
     protected File retrieveFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveFolder(parentFolder, packageName, useSubfolders, false);
+        return retrieveFolder(parentFolder, packageName, useSubFolders, false);
     }
 
     /**
@@ -270,19 +274,19 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the original package.
      * @param subpackage the subpackage.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param useSubFolders whether to use sub folders or not.
      * @param testPackage whether the package contains unit tests.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
      * @precondition packageName != null
      */
-    @Nullable
+    @NotNull
     protected File retrieveFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final String subpackage,
-        final boolean useSubfolders,
+        @NotNull final String packageName,
+        @NotNull final String subpackage,
+        final boolean useSubFolders,
         final boolean testPackage)
     {
         return
@@ -290,7 +294,7 @@ public class PackageUtils
                 parentFolder,
                 packageName,
                 subpackage,
-                useSubfolders,
+                useSubFolders,
                 testPackage,
                 StringUtils.getInstance(),
                 StringValidator.getInstance());
@@ -301,10 +305,10 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the original package.
      * @param subpackage the subpackage.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param useSubFolders whether to use sub folders or not.
      * @param testPackage whether the package contains unit tests.
-     * @param stringUtils the <code>StringUtils</code> instance.
-     * @param stringValidator the <code>StringValidator</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @param stringValidator the {@link StringValidator} instance.
      * @return the folder in which the associated DAO class should be
      * generated.
      * @precondition parentFolder != null
@@ -313,17 +317,17 @@ public class PackageUtils
      * @precondition stringUtils != null
      * @precondition stringValidator != null
      */
-    @Nullable
+    @NotNull
     protected File retrieveFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final String subpackage,
-        final boolean useSubfolders,
+        @NotNull final String packageName,
+        @NotNull final String subpackage,
+        final boolean useSubFolders,
         final boolean testPackage,
         @NotNull final StringUtils stringUtils,
         @NotNull final StringValidator stringValidator)
     {
-        @Nullable File result = null;
+        @NotNull File result;
 
         String t_strWholePackage = packageName;
 
@@ -336,7 +340,7 @@ public class PackageUtils
             retrieveFolder(
                 parentFolder,
                 t_strWholePackage,
-                useSubfolders,
+                useSubFolders,
                 testPackage,
                 stringUtils);
 
@@ -347,7 +351,7 @@ public class PackageUtils
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param useSubFolders whether to use sub folders or not.
      * @param testPackage whether the package contains unit tests.
      * @return the folder in which the associated DAO class should be
      * generated.
@@ -357,15 +361,15 @@ public class PackageUtils
     @NotNull
     protected File retrieveFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders,
+        @NotNull final String packageName,
+        final boolean useSubFolders,
         final boolean testPackage)
     {
         return
             retrieveFolder(
                 parentFolder,
                 packageName,
-                useSubfolders,
+                useSubFolders,
                 testPackage,
                 StringUtils.getInstance());
     }
@@ -374,9 +378,9 @@ public class PackageUtils
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param useSubFolders whether to use sub folders or not.
      * @param testPackage whether the package contains unit tests.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return the folder in which the associated DAO class should be
      * generated.
      * @precondition parentFolder != null
@@ -386,14 +390,14 @@ public class PackageUtils
     @NotNull
     protected File retrieveFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders,
+        @NotNull final String packageName,
+        final boolean useSubFolders,
         final boolean testPackage,
         @NotNull final StringUtils stringUtils)
     {
         String t_strResult = parentFolder.getPath();
 
-        if  (useSubfolders)
+        if  (useSubFolders)
         {
             t_strResult += File.separator;
 
@@ -416,28 +420,28 @@ public class PackageUtils
     /**
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param useSubFolders whether to use subfolders or not.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
      */
     @NotNull
     protected File retrieveTestFolder(
-        @NotNull final File parentFolder, final boolean useSubfolders)
+        @NotNull final File parentFolder, final boolean useSubFolders)
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    (useSubfolders ? "" : UNITTESTS_PACKAGE_PREFIX),
-                    useSubfolders,
-                    true);
+                parentFolder,
+                (useSubFolders ? "" : UNITTESTS_PACKAGE_PREFIX),
+                useSubFolders,
+                true);
     }
 
     /**
      * Retrieves the folder for given subpackage.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
@@ -447,14 +451,14 @@ public class PackageUtils
     protected File retrieveTestFolder(
         @NotNull final File parentFolder,
         final String packageName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    useSubfolders,
-                    true);
+                parentFolder,
+                packageName,
+                useSubFolders,
+                true);
     }
 
     /**
@@ -462,25 +466,25 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the original package.
      * @param subpackage the subpackage.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated class should be
      * generated.
      * @precondition parentFolder != null
      * @precondition packageName != null
      */
-    @Nullable
+    @NotNull
     protected File retrieveTestFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final String subpackage,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        @NotNull final String subpackage,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
-                    retrieveTestFolder(parentFolder, useSubfolders),
+                    retrieveTestFolder(parentFolder, useSubFolders),
                     packageName,
                     subpackage,
-                    useSubfolders,
+                    useSubFolders,
                     true);
     }
 
@@ -499,24 +503,24 @@ public class PackageUtils
      * Retrieves the folder for base DAO templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use subfolders.
      * @return the folder in which the associated DAO class should be
      * generated.
      * @precondition parentFolder != null
      * @precondition packageName != null
      */
-    @Nullable
+    @NotNull
     public File retrieveBaseDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     parentFolder,
                     packageName,
                     BASE_DAO_SUBPACKAGE,
-                    useSubfolders,
+                    useSubFolders,
                     false);
     }
 
@@ -526,8 +530,9 @@ public class PackageUtils
      * @return the package for the associated base DAO factory class.
      * @precondition packageName != null
      */
+    @NotNull
     public String retrieveBaseDAOFactoryPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -536,20 +541,20 @@ public class PackageUtils
      * Retrieves the folder for base DAO factory templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which  the associated DAO factory should be
      * generated.
      * @precondition parentFolder != null
      * @precondition packageName != null
      */
-    @Nullable
+    @NotNull
     public File retrieveBaseDAOFactoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
-            retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
+            retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -558,7 +563,8 @@ public class PackageUtils
      * @return the package for the associated value object class.
      * @precondition packageName != null
      */
-    public String retrieveValueObjectPackage(String packageName)
+    @NotNull
+    public String retrieveValueObjectPackage(@NotNull final String packageName)
     {
         return retrievePackage(packageName, VALUE_OBJECT_SUBPACKAGE);
     }
@@ -567,22 +573,22 @@ public class PackageUtils
      * Retrieves the folder for value object templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated Jdbc DAO should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveValueObjectFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     parentFolder,
                     packageName,
                     VALUE_OBJECT_SUBPACKAGE,
-                    useSubfolders,
+                    useSubFolders,
                     false);
     }
 
@@ -593,7 +599,9 @@ public class PackageUtils
      * @return the package for the associated value object
      * factory class.
      */
-    public String retrieveValueObjectFactoryPackage(final String packageName)
+    @NotNull
+    public String retrieveValueObjectFactoryPackage(
+        @NotNull final String packageName)
     {
         return retrieveValueObjectPackage(packageName);
     }
@@ -602,19 +610,19 @@ public class PackageUtils
      * Retrieves the folder for value object factory templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated value object
      * factories should be generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveValueObjectFactoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveValueObjectFolder(
-                    parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -623,7 +631,9 @@ public class PackageUtils
      * @return the package for the associated baseValue object class.
      * @precondition packageName != null
      */
-    public String retrieveBaseValueObjectPackage(final String packageName)
+    @NotNull
+    public String retrieveBaseValueObjectPackage(
+        @NotNull final String packageName)
     {
         return retrievePackage(packageName, BASE_VALUE_OBJECT_SUBPACKAGE);
     }
@@ -632,22 +642,22 @@ public class PackageUtils
      * Retrieves the folder for baseValue object templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated Jdbc DAO should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveBaseValueObjectFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     parentFolder,
                     packageName,
                     BASE_VALUE_OBJECT_SUBPACKAGE,
-                    useSubfolders,
+                    useSubFolders,
                     false);
     }
 
@@ -657,7 +667,9 @@ public class PackageUtils
      * @return the package for the associated value object class.
      * @precondition packageName != null
      */
-    public String retrieveValueObjectImplPackage(final String packageName)
+    @NotNull
+    public String retrieveValueObjectImplPackage(
+        @NotNull final String packageName)
     {
         return retrievePackage(packageName, VALUE_OBJECT_IMPL_SUBPACKAGE);
     }
@@ -666,22 +678,22 @@ public class PackageUtils
      * Retrieves the folder for value object implementation templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated Jdbc DAO should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveValueObjectImplFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     parentFolder,
                     packageName,
                     VALUE_OBJECT_IMPL_SUBPACKAGE,
-                    useSubfolders,
+                    useSubFolders,
                     false);
     }
 
@@ -690,8 +702,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated manager class.
      */
+    @NotNull
     public String retrieveDataAccessManagerPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -700,17 +713,17 @@ public class PackageUtils
      * Retrieves the folder for DataAccessManager templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated manager should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveDataAccessManagerFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
+        return retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -718,7 +731,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated rdb classes.
      */
-    public String retrieveRdbPackage(final String packageName)
+    @NotNull
+    public String retrieveRdbPackage(@NotNull final String packageName)
     {
         return
             retrievePackage(
@@ -729,20 +743,20 @@ public class PackageUtils
      * Retrieves the folder for base Relational Database common classes.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated rdb classes should be
      * generated.
      */
     @NotNull
     public File retrieveRdbFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     retrieveBaseDAOFolder(
-                            parentFolder, packageName, useSubfolders),
+                            parentFolder, packageName, useSubFolders),
                     RDB_SUBPACKAGE);
     }
 
@@ -751,7 +765,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated Jdbc DAO class.
      */
-    public String retrieveJdbcDAOPackage(final String packageName)
+    @NotNull
+    public String retrieveJdbcDAOPackage(@NotNull final String packageName)
     {
         return retrieveRdbPackage(packageName);
     }
@@ -760,15 +775,17 @@ public class PackageUtils
      * Retrieves the folder for Jdbc DAO factory templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated Jdbc DAO should be
      * generated.
      */
     @NotNull
     public File retrieveJdbcDAOFolder(
-        @NotNull final File parentFolder, final String packageName, final boolean useSubfolders)
+        @NotNull final File parentFolder,
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+        return retrieveRdbFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -777,6 +794,7 @@ public class PackageUtils
      * @return the subpackage for the associated DAO class.
      * @precondition engineName != null
      */
+    @NotNull
     public String retrieveDAOSubpackage(@NotNull final String engineName)
     {
         return engineName.toLowerCase();
@@ -790,8 +808,9 @@ public class PackageUtils
      * @precondition packageName != null
      * @precondition engineName != null
      */
+    @NotNull
     public String retrieveDAOPackage(
-        final String packageName, @NotNull final String engineName)
+            @NotNull final String packageName, @NotNull final String engineName)
     {
         return
             retrievePackage(
@@ -814,7 +833,7 @@ public class PackageUtils
     @NotNull
     public File retrieveDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         final boolean useSubfolders)
     {
@@ -831,8 +850,9 @@ public class PackageUtils
      * @param engineName the DAO engine.
      * @return the package for the associated DAO factory class.
      */
+    @NotNull
     public String retrieveDAOFactoryPackage(
-        final String packageName, @NotNull final String engineName)
+        @NotNull final String packageName, @NotNull final String engineName)
     {
         return retrieveDAOPackage(packageName, engineName);
     }
@@ -842,20 +862,20 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the package name.
      * @param engineName the DAO engine.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAO factory
      * should be generated.
      */
     @NotNull
     public File retrieveDAOFactoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubFolders);
     }
 
     /**
@@ -863,8 +883,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated repository class.
      */
+    @NotNull
     public String retrieveTableRepositoryPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrievePackage(packageName, TABLE_REPOSITORY_SUBPACKAGE);
     }
@@ -873,22 +894,22 @@ public class PackageUtils
      * Retrieves the folder for repository templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which  the associated should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveTableRepositoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     parentFolder,
                     packageName,
                     TABLE_REPOSITORY_SUBPACKAGE,
-                    useSubfolders,
+                    useSubFolders,
                     false);
     }
 
@@ -897,7 +918,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated table classes.
      */
-    public String retrieveTablePackage(final String packageName)
+    @NotNull
+    public String retrieveTablePackage(@NotNull final String packageName)
     {
         return retrieveTableRepositoryPackage(packageName);
     }
@@ -906,19 +928,19 @@ public class PackageUtils
      * Retrieves the folder for table templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated templates should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveTableFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveTableRepositoryFolder(
-                    parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -928,8 +950,9 @@ public class PackageUtils
      * @param subFolders whether to use subfolders or not.
      * @return the package for the associated DAO tests.
      */
+    @NotNull
     public String retrieveDAOTestPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         final boolean subFolders)
     {
@@ -943,53 +966,54 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the original package.
      * @param engineName the engine name.
-     * @param useSubfolders whether to use subfolders or not.
+     * @param useSubFolders whether to use sub folders or not.
      * @return the folder in which the associated test class should be
      * generated.
      */
     @NotNull
     public File retrieveDAOTestFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveTestFolder(
                     parentFolder,
-                    retrieveDAOTestPackage(packageName, engineName, useSubfolders),
-                    useSubfolders);
+                    retrieveDAOTestPackage(packageName, engineName, useSubFolders),
+                    useSubFolders);
     }
 
     /**
      * Retrieves the package name for the base test suite template.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the package for the associated suite.
      */
+    @NotNull
     public String retrieveBaseTestSuitePackage(
-        final String packageName, final boolean useSubfolders)
+        @NotNull final String packageName, final boolean useSubFolders)
     {
-        return retrieveTestPackage(packageName, useSubfolders);
+        return retrieveTestPackage(packageName, useSubFolders);
     }
 
     /**
      * Retrieves the folder for the base test suite template.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated suite class should be
      * generated.
      */
     @NotNull
     public File retrieveBaseTestSuiteFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
-                    retrieveTestFolder(parentFolder, useSubfolders),
+                    retrieveTestFolder(parentFolder, useSubFolders),
                     packageName);
     }
 
@@ -998,7 +1022,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated functions classes.
      */
-    public String retrieveFunctionsPackage(final String packageName)
+    @NotNull
+    public String retrieveFunctionsPackage(@NotNull final String packageName)
     {
         return
             retrievePackage(packageName, FUNCTIONS_SUBPACKAGE);
@@ -1008,33 +1033,34 @@ public class PackageUtils
      * Retrieves the folder for the functions templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated functions classes should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveFunctionsFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
                     parentFolder,
                     packageName,
                     FUNCTIONS_SUBPACKAGE,
-                    useSubfolders,
+                    useSubFolders,
                     false);
     }
 
     /**
      * Retrieves the package name for the functions test templates.
      * @param packageName the original package.
-     * @param subFolders whether to use subfolders or not.
+     * @param subFolders whether to use sub folders or not.
      * @return the package for the associated test classes.
      */
+    @NotNull
     public String retrieveTestFunctionsPackage(
-        final String packageName, final boolean subFolders)
+        @NotNull final String packageName, final boolean subFolders)
     {
         return
             retrieveTestPackage(
@@ -1045,21 +1071,21 @@ public class PackageUtils
      * Retrieves the folder for the functions test templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated functions classes should be
      * generated.
      */
     @NotNull
     public File retrieveTestFunctionsFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveTestFolder(
                     parentFolder,
-                    retrieveTestFunctionsPackage(packageName, useSubfolders),
-                    useSubfolders);
+                    retrieveTestFunctionsPackage(packageName, useSubFolders),
+                    useSubFolders);
     }
 
     /**
@@ -1067,8 +1093,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated manager class.
      */
+    @NotNull
     public String retrieveDAOChooserPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -1077,18 +1104,18 @@ public class PackageUtils
      * Retrieves the folder for DAOChooser templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated template should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveDAOChooserFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
-            retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
+            retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1096,8 +1123,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated repository class.
      */
+    @NotNull
     public String retrieveProcedureRepositoryPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveFunctionsPackage(packageName);
     }
@@ -1106,17 +1134,17 @@ public class PackageUtils
      * Retrieves the folder for ProcedureRepository templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated template should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveProcedureRepositoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveFunctionsFolder(parentFolder, packageName, useSubfolders);
+        return retrieveFunctionsFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1124,8 +1152,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated repository class.
      */
+    @NotNull
     public String retrieveKeywordRepositoryPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveProcedureRepositoryPackage(packageName);
     }
@@ -1134,19 +1163,19 @@ public class PackageUtils
      * Retrieves the folder for KeywordRepository templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use subFolders.
      * @return the folder in which the associated template should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveKeywordRepositoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveProcedureRepositoryFolder(
-                    parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1154,7 +1183,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO class.
      */
-    public String retrieveMockDAOPackage(final String packageName)
+    @NotNull
+    public String retrieveMockDAOPackage(@NotNull final String packageName)
     {
         return
             retrievePackage(
@@ -1166,19 +1196,19 @@ public class PackageUtils
      * Retrieves the folder for Mock DAO templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which  the associated DAO class should be
      * generated.
      */
     @NotNull
     public File retrieveMockDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveFolder(
-                    retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders),
+                    retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders),
                     MOCK_DAO_SUBPACKAGE);
     }
 
@@ -1187,7 +1217,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
-    public String retrieveMockDAOFactoryPackage(final String packageName)
+    @NotNull
+    public String retrieveMockDAOFactoryPackage(@NotNull final String packageName)
     {
         return retrieveMockDAOPackage(packageName);
     }
@@ -1196,27 +1227,28 @@ public class PackageUtils
      * Retrieves the folder for Mock DAO factory templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which  the associated DAO factory should be
      * generated.
      */
     @NotNull
     public File retrieveMockDAOFactoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveMockDAOFolder(parentFolder, packageName, useSubfolders);
+        return retrieveMockDAOFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
      * Retrieves the package name for Mock DAO test templates.
      * @param packageName the original package.
-     * @param subFolders whether to use subfolders or not.
+     * @param subFolders whether to use sub folders or not.
      * @return the package for the associated Mock DAO tests.
      */
+    @NotNull
     public String retrieveMockDAOTestPackage(
-        final String packageName, final boolean subFolders)
+        @NotNull final String packageName, final boolean subFolders)
     {
         return
             retrieveTestPackage(
@@ -1227,21 +1259,21 @@ public class PackageUtils
      * Retrieves the folder for Mock DAO test templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated test class should be
      * generated.
      */
     @NotNull
     public File retrieveMockDAOTestFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveMockDAOFolder(
-                    retrieveTestFolder(parentFolder, useSubfolders),
+                    retrieveTestFolder(parentFolder, useSubFolders),
                     packageName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1249,7 +1281,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO class.
      */
-    public String retrieveXMLDAOPackage(final String packageName)
+    @NotNull
+    public String retrieveXMLDAOPackage(@NotNull final String packageName)
     {
         return
             retrievePackage(
@@ -1261,14 +1294,14 @@ public class PackageUtils
      * Retrieves the folder for XML DAO templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubFolders whether to use subFolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAO class should be
      * generated.
      */
     @NotNull
     public File retrieveXMLDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         final boolean useSubFolders)
     {
         return
@@ -1283,7 +1316,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
-    public String retrieveXmlDAOFactoryPackage(final String packageName)
+    @NotNull
+    public String retrieveXmlDAOFactoryPackage(@NotNull final String packageName)
     {
         return retrieveXMLDAOPackage(packageName);
     }
@@ -1292,27 +1326,28 @@ public class PackageUtils
      * Retrieves the folder for XML DAO factory templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which  the associated DAO factory should be
      * generated.
      */
     @NotNull
     public File retrieveXmlDAOFactoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveXMLDAOFolder(parentFolder, packageName, useSubfolders);
+        return retrieveXMLDAOFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
      * Retrieves the package name for XML DAO test templates.
      * @param packageName the original package.
-     * @param subFolders whether to use subfolders or not.
+     * @param subFolders whether to use sub folders or not.
      * @return the package for the associated XML DAO tests.
      */
+    @NotNull
     public String retrieveXMLDAOTestPackage(
-        final String packageName, final boolean subFolders)
+        @NotNull final String packageName, final boolean subFolders)
     {
         return
             retrieveTestPackage(
@@ -1323,21 +1358,21 @@ public class PackageUtils
      * Retrieves the folder for XML DAO test templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated test class should be
      * generated.
      */
     @NotNull
     public File retrieveXMLDAOTestFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveXMLDAOFolder(
-                    retrieveTestFolder(parentFolder, useSubfolders),
+                    retrieveTestFolder(parentFolder, useSubFolders),
                     packageName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1345,7 +1380,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated factory class.
      */
-    public String retrieveXMLValueObjectFactoryPackage(final String packageName)
+    @NotNull
+    public String retrieveXMLValueObjectFactoryPackage(
+        @NotNull final String packageName)
     {
         return retrieveXMLDAOPackage(packageName);
     }
@@ -1354,19 +1391,19 @@ public class PackageUtils
      * Retrieves the folder for XMLValueObjectFactory templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated factory class should be
      * generated.
      */
     @NotNull
     public File retrieveXMLValueObjectFactoryFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveXMLDAOFolder(
-                    parentFolder, packageName, useSubfolders);
+                    parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1379,8 +1416,9 @@ public class PackageUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String retrieveJdbcOperationsPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName)
     {
@@ -1397,15 +1435,16 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return the package for the associated pointers.
      * @precondition packageName != null
      * @precondition engineName != null
      * @precondition tableName != null
      * @precondition stringUtils != null
      */
+    @NotNull
     public String retrieveJdbcOperationsPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
         @NotNull final StringUtils stringUtils)
@@ -1425,7 +1464,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1435,10 +1474,10 @@ public class PackageUtils
     @NotNull
     public File retrieveJdbcOperationsFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveJdbcOperationsFolder(
@@ -1446,7 +1485,7 @@ public class PackageUtils
                     packageName,
                     engineName,
                     tableName,
-                    useSubfolders,
+                    useSubFolders,
                     StringUtils.getInstance());
     }
 
@@ -1456,8 +1495,8 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param useSubfolders whether to use subfolders.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param useSubFolders whether to use sub folders.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1468,16 +1507,16 @@ public class PackageUtils
     @NotNull
     public File retrieveJdbcOperationsFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
-        final boolean useSubfolders,
+        final boolean useSubFolders,
         @NotNull final StringUtils stringUtils)
     {
         return
             retrieveFolder(
                     retrieveDAOFolder(
-                            parentFolder, packageName, engineName, useSubfolders),
+                            parentFolder, packageName, engineName, useSubFolders),
                     stringUtils.capitalize(
                             tableName.toLowerCase(),
                             '_').toLowerCase());
@@ -1488,8 +1527,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for such class.
      */
+    @NotNull
     public String retrieveQueryPreparedStatementCreatorPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveRdbPackage(packageName);
     }
@@ -1498,17 +1538,17 @@ public class PackageUtils
      * Retrieves the folder for QueryPreparedStatementCreator class.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated rdb classes should be
      * generated.
      */
     @NotNull
     public File retrieveQueryPreparedStatementCreatorFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+        return retrieveRdbFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1521,8 +1561,9 @@ public class PackageUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String retrieveResultSetExtractorPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName)
     {
@@ -1537,7 +1578,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1547,10 +1588,10 @@ public class PackageUtils
     @NotNull
     public File retrieveResultSetExtractorFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveJdbcOperationsFolder(
@@ -1558,7 +1599,7 @@ public class PackageUtils
                     packageName,
                     engineName,
                     tableName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1569,8 +1610,10 @@ public class PackageUtils
      * @precondition packageName != null
      * @precondition engineName != null
      */
+    @NotNull
     public String retrieveCustomResultSetExtractorPackage(
-        final String packageName, @NotNull final String engineName)
+        @NotNull final String packageName,
+        @NotNull final String engineName)
     {
         return retrieveDAOPackage(packageName, engineName);
     }
@@ -1580,7 +1623,7 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the original package.
      * @param engineName the engine.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1589,13 +1632,13 @@ public class PackageUtils
     @NotNull
     public File retrieveCustomResultSetExtractorFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubFolders);
     }
 
     /**
@@ -1608,8 +1651,9 @@ public class PackageUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String retrieveAttributesStatementSetterPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName)
     {
@@ -1624,7 +1668,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1634,10 +1678,10 @@ public class PackageUtils
     @NotNull
     public File retrieveAttributesStatementSetterFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveJdbcOperationsFolder(
@@ -1645,7 +1689,7 @@ public class PackageUtils
                     packageName,
                     engineName,
                     tableName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1658,8 +1702,9 @@ public class PackageUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String retrievePkStatementSetterPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName)
     {
@@ -1674,7 +1719,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1684,10 +1729,10 @@ public class PackageUtils
     @NotNull
     public File retrievePkStatementSetterFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveJdbcOperationsFolder(
@@ -1695,7 +1740,7 @@ public class PackageUtils
                     packageName,
                     engineName,
                     tableName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1708,8 +1753,9 @@ public class PackageUtils
      * @precondition engineName != null
      * @precondition tableName != null
      */
+    @NotNull
     public String retrieveFkStatementSetterPackage(
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName)
     {
@@ -1724,7 +1770,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @param tableName the table name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
      * @precondition parentFolder != null
      * @precondition packageName != null
@@ -1734,10 +1780,10 @@ public class PackageUtils
     @NotNull
     public File retrieveFkStatementSetterFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
         @NotNull final String tableName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveJdbcOperationsFolder(
@@ -1745,7 +1791,7 @@ public class PackageUtils
                     packageName,
                     engineName,
                     tableName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1754,8 +1800,9 @@ public class PackageUtils
      * @param engineName the engine.
      * @return the package for the associated DAO class.
      */
+    @NotNull
     public String retrieveRepositoryDAOPackage(
-        final String packageName, @NotNull final String engineName)
+        @NotNull final String packageName, @NotNull final String engineName)
     {
         return retrieveDAOPackage(packageName, engineName);
     }
@@ -1765,20 +1812,20 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the package name.
      * @param engineName the engine.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAO should be
      * generated.
      */
     @NotNull
     public File retrieveRepositoryDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubFolders);
     }
 
     /**
@@ -1786,8 +1833,9 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO class.
      */
+    @NotNull
     public String retrieveBaseRepositoryDAOPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveBaseDAOPackage(packageName);
     }
@@ -1796,17 +1844,17 @@ public class PackageUtils
      * Retrieves the folder for BaseRepositoryDAO templates.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAO should be
      * generated.
      */
-    @Nullable
+    @NotNull
     public File retrieveBaseRepositoryDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveBaseDAOFolder(parentFolder, packageName, useSubfolders);
+        return retrieveBaseDAOFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1815,7 +1863,9 @@ public class PackageUtils
      * @return the package for the associated base DAO interface.
      * @precondition packageName != null
      */
-    public String retrieveBaseAbstractDAOPackage(final String packageName)
+    @NotNull
+    public String retrieveBaseAbstractDAOPackage(
+        @NotNull final String packageName)
     {
         return retrieveRdbPackage(packageName);
     }
@@ -1824,7 +1874,7 @@ public class PackageUtils
      * Retrieves the folder for base abstract DAO templates.
      * @param parentFolder the parent folder.
      * @param packageName the original package.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAO class should be
      * generated.
      * @precondition parentFolder != null
@@ -1833,14 +1883,14 @@ public class PackageUtils
     @NotNull
     public File retrieveBaseAbstractDAOFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
         return
             retrieveRdbFolder(
                     parentFolder,
                     packageName,
-                    useSubfolders);
+                    useSubFolders);
     }
 
     /**
@@ -1849,8 +1899,9 @@ public class PackageUtils
      * @param engineName the engine.
      * @return the package for the associated DAOListener class.
      */
+    @NotNull
     public String retrieveDAOListenerPackage(
-        final String packageName, @NotNull final String engineName)
+        @NotNull final String packageName, @NotNull final String engineName)
     {
         return retrieveDAOPackage(packageName, engineName);
     }
@@ -1860,20 +1911,20 @@ public class PackageUtils
      * @param parentFolder the parent folder.
      * @param packageName the package name.
      * @param engineName the engine.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAOListener should be
      * generated.
      */
     @NotNull
     public File retrieveDAOListenerFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubfolders);
+                    parentFolder, packageName, engineName, useSubFolders);
     }
 
     /**
@@ -1882,8 +1933,10 @@ public class PackageUtils
      * @param engineName the engine.
      * @return the package for the associated DAOListenerImpl class.
      */
+    @NotNull
     public String retrieveDAOListenerImplPackage(
-        final String packageName, @NotNull final String engineName)
+        @NotNull final String packageName,
+        @NotNull final String engineName)
     {
         return retrieveDAOListenerPackage(packageName, engineName);
     }
@@ -1913,17 +1966,17 @@ public class PackageUtils
      * Retrieves the folder for StatisticsProvider class.
      * @param parentFolder the parent folder.
      * @param packageName the package name.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated rdb classes should be
      * generated.
      */
     @NotNull
     public File retrieveStatisticsProviderFolder(
         @NotNull final File parentFolder,
-        final String packageName,
-        final boolean useSubfolders)
+        @NotNull final String packageName,
+        final boolean useSubFolders)
     {
-        return retrieveRdbFolder(parentFolder, packageName, useSubfolders);
+        return retrieveRdbFolder(parentFolder, packageName, useSubFolders);
     }
 
     /**
@@ -1937,7 +1990,7 @@ public class PackageUtils
     @NotNull
     public File retrieveBaseResultSetExtractorFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         final boolean useSubFolders)
     {
         return retrieveRdbFolder(parentFolder, packageName, useSubFolders);
@@ -1948,19 +2001,23 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for such class.
      */
+    @NotNull
     public String retrieveStatisticsProviderPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveRdbPackage(packageName);
     }
 
     /**
-     * Retrieves the package name for BaseResultSetExtractor class.
+     * Retrieves the package name for
+     * {@link org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplate}
+     * class.
      * @param packageName the original package.
      * @return the package for such class.
      */
+    @NotNull
     public String retrieveBaseResultSetExtractorPackage(
-        final String packageName)
+        @NotNull final String packageName)
     {
         return retrieveRdbPackage(packageName);
     }
@@ -1971,10 +2028,10 @@ public class PackageUtils
      * @return the class name.
      * @precondition fqcn != null
      */
-    @Nullable
-    public String extractClassName(final String fqdn)
+    @NotNull
+    public String extractClassName(@NotNull final String fqdn)
     {
-        @Nullable String result = null;
+        String result = null;
 
         String[] t_astrPieces = split(fqdn, ".");
 
@@ -1997,7 +2054,9 @@ public class PackageUtils
      * @precondition value != null
      * @precondition separator != null
      */
-    public String[] split(final String value, final String separator)
+    @NotNull
+    public String[] split(
+        @NotNull final String value, @NotNull final String separator)
     {
         return split(value, separator, StringUtils.getInstance());
     }
@@ -2006,15 +2065,16 @@ public class PackageUtils
      * Splits given value into chunks separated by a separator.
      * @param value the value.
      * @param separator the separator.
-     * @param stringUtils the <code>StringUtils</code> instance.
+     * @param stringUtils the {@link StringUtils} instance.
      * @return the chunks.
      * @precondition value != null
      * @precondition separator != null
      * @precondition stringUtils != null
      */
+    @NotNull
     protected String[] split(
-        final String value,
-        final String separator,
+        @NotNull final String value,
+        @NotNull final String separator,
         @NotNull final StringUtils stringUtils)
     {
         return stringUtils.split(value, new String[] { separator });

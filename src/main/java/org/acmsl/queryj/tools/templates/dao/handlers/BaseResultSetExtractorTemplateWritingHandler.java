@@ -1,9 +1,8 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
-                        chous@acm-sl.org
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
+                              chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -33,7 +32,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the BaseResultSetExtractor template.
+ * Description: Writes BaseResultSetExtractor templates.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -44,7 +43,6 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseResultSetExtractorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -57,7 +55,7 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the BaseResultSetExtractor template.
+ * Writes {@link org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplate} templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
@@ -93,11 +91,11 @@ public class BaseResultSetExtractorTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param projectFolder the project folder.
      * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
+     * @param useSubFolders whether to use sub folders for tests, or
      * using a different package naming scheme.
      * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return such folder.
      * @precondition engineName != null
      * @precondition parameters != null
@@ -106,7 +104,7 @@ public class BaseResultSetExtractorTemplateWritingHandler
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
         final String projectPackage,
-        final boolean useSubfolders,
+        final boolean useSubFolders,
         final String engineName,
         final Map parameters,
         @NotNull final PackageUtils packageUtils)
@@ -115,6 +113,6 @@ public class BaseResultSetExtractorTemplateWritingHandler
             packageUtils.retrieveBaseResultSetExtractorFolder(
                 projectFolder,
                 projectPackage,
-                useSubfolders);
+                useSubFolders);
     }
 }
