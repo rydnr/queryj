@@ -113,7 +113,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The database metadata.
      */
-    private DatabaseMetaData m__MetaData;
+    private transient DatabaseMetaData m__MetaData;
 
     /**
      * The catalog.
@@ -256,7 +256,7 @@ public abstract class AbstractJdbcMetadataManager
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
+        @Nullable final DatabaseMetaData metaData,
         final String catalog,
         final String schema)
       throws  SQLException,
@@ -345,7 +345,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the meta data.
      * @param metaData the database meta data.
      */
-    protected void setMetaData(final DatabaseMetaData metaData)
+    public void setMetaData(final DatabaseMetaData metaData)
     {
         immutableSetMetaData(metaData);
     }

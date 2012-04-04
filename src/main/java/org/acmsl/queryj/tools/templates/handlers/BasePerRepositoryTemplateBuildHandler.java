@@ -428,7 +428,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    @NotNull
+    @Nullable
     protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
         return

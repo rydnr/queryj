@@ -84,6 +84,12 @@ public interface MetadataManager
     public DatabaseMetaData getMetaData();
 
     /**
+     * Specifies the 'live' database metadata.
+     * @param metaData the {@link DatabaseMetaData} instance in case the manager has been cached.
+     */
+    public void setMetaData(@NotNull DatabaseMetaData metaData);
+
+    /**
      * Retrieves the table names.
      * @return such names.
      */

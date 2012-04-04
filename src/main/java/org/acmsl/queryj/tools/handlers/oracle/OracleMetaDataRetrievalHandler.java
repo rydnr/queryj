@@ -135,15 +135,15 @@ public class OracleMetaDataRetrievalHandler
     @Nullable
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
-        @NotNull final String[] tableNames,
-        @NotNull final String[] procedureNames,
+        @Nullable final String[] tableNames,
+        @Nullable final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @NotNull final String schema)
+        @Nullable final String schema)
         throws  BuildException
     {
         @Nullable MetadataManager result = null;

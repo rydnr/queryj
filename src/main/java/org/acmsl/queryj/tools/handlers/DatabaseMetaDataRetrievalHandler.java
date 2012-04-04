@@ -112,6 +112,26 @@ public abstract class DatabaseMetaDataRetrievalHandler
         "metadata.extraction.already.done";
 
     /**
+     * The database product name.
+     */
+    public static final String DATABASE_PRODUCT_NAME = "database.product.name";
+
+    /**
+     * The database product version.
+     */
+    public static final String DATABASE_PRODUCT_VERSION = "database.product.version";
+
+    /**
+     * The database major version.
+     */
+    public static final String DATABASE_MAJOR_VERSION = "database.major.version";
+
+    /**
+     * The database minor version.
+     */
+    public static final String DATABASE_MINOR_VERSION = "database.minor.version";
+
+    /**
      * Creates a {@link DatabaseMetaDataRetrievalHandler} instance.
      */
     public DatabaseMetaDataRetrievalHandler() {}
@@ -153,7 +173,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         boolean result = false;
 
         if  (    (!alreadyDone)
-              && (checkVendor(metaData)))
+              && (checkVendor(metaData, parameters)))
         {
             result =
                 /*
@@ -1011,7 +1031,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the table information.
      * @precondition parameters != null
      */
-    @NotNull
+    @Nullable
     protected AntTablesElement retrieveTablesElement(@NotNull final Map parameters)
     {
         return
@@ -1044,6 +1064,92 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
+     * Annotates the database product name.
+     * @param productName the product name.
+     * @param parameters the parameters.
+     * @return such name.
+     * @precondition parameters != null
+     */
+    public void storeDatabaseProductName(@NotNull String productName, @NotNull final Map parameters)
+    {
+        parameters.put(DATABASE_PRODUCT_NAME, productName);
+    }
+
+    /**
+     * Retrieves the database product name.
+     * @return such name.
+     */
+    @Nullable
+    public String retrieveDatabaseProductName(@NotNull final Map parameters)
+    {
+        return (String) parameters.get(DATABASE_PRODUCT_NAME);
+    }
+
+    /**
+     * Annotates the database product version.
+     * @param productVersion the product version.
+     * @param parameters the parameters.
+     * @return such name.
+     * @precondition parameters != null
+     */
+    public void storeDatabaseProductVersion(@NotNull String productVersion, @NotNull final Map parameters)
+    {
+        parameters.put(DATABASE_PRODUCT_VERSION, productVersion);
+    }
+
+    /**
+     * Retrieves the database product version.
+     * @return such version.
+     */
+    @Nullable
+    public String retrieveDatabaseProductVersion(@NotNull final Map parameters)
+    {
+        return (String) parameters.get(DATABASE_PRODUCT_VERSION);
+    }
+
+    /**
+     * Annotates the database major version.
+     * @param majorVersion the major version.
+     * @param parameters the parameters.
+     * @return such name.
+     * @precondition parameters != null
+     */
+    public void storeDatabaseMajorVersion(final int majorVersion, @NotNull final Map parameters)
+    {
+        parameters.put(DATABASE_MAJOR_VERSION, majorVersion);
+    }
+
+    /**
+     * Retrieves the database major version.
+     * @return such version.
+     */
+    public int retrieveDatabaseMajorVersion(@NotNull final Map parameters)
+    {
+        return (Integer) parameters.get(DATABASE_MAJOR_VERSION);
+    }
+
+    /**
+     * Annotates the database minor version.
+     * @param minorVersion the minor version.
+     * @param parameters the parameters.
+     * @return such name.
+     * @precondition parameters != null
+     */
+    public void storeDatabaseMinorVersion(final int minorVersion, @NotNull final Map parameters)
+    {
+        parameters.put(DATABASE_MINOR_VERSION, minorVersion);
+    }
+
+    /**
+     * Retrieves the database minor version.
+     * @return such version.
+     */
+    public int retrieveDatabaseMinorVersion(@NotNull final Map parameters)
+    {
+        return (Integer) parameters.get(DATABASE_MINOR_VERSION);
+    }
+
+    /**
      * Retrieves a boolean value stored in the attribute map.
      * @param name the key name.
      * @param parameters the parameter map.
@@ -1071,11 +1177,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param disableTableExtraction if the table metadata should not be
      * extracted.
      * @param lazyTableExtraction if the table metadata should not be
-     * extracted inmediately.
+     * extracted immediately.
      * @param disableProcedureExtraction if the procedure metadata should not be
      * extracted.
      * @param lazyProcedureExtraction if the procedure metadata should not be
-     * extracted inmediately.
+     * extracted immediately.
      * @param parameters the parameter map.
      * @return the metadata manager instance.
      * @throws QueryJBuildException if the retrieval process cannot be
@@ -1144,11 +1250,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param disableTableExtraction if the table metadata should not
      * be extracted.
      * @param lazyTableExtraction if the table metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param disableProcedureExtraction if the procedure metadata should not
      * be extracted.
      * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
@@ -1351,34 +1457,29 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
-     * Checks whether the database vendor matches this handler.
+     * Retrieves the product name.
      * @param metaData the database metadata.
-     * @return <code>true</code> in case it matches.
+     * @return the product name.
      * @throws QueryJBuildException if the check fails.
      * @precondition metaData != null
      */
-    protected boolean checkVendor(@NotNull final DatabaseMetaData metaData)
+    protected String retrieveProductName(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {
-        boolean result = false;
+        @NotNull String result = "";
 
         @Nullable QueryJBuildException t_ExceptionToThrow = null;
 
-        Log t_Log =
-            UniqueLogFactory.getLog(
-                DatabaseMetaDataRetrievalHandler.class);
-
-        @Nullable String t_strProduct = null;
-        @Nullable String t_strVersion = null;
-        int t_iMajorVersion = 0;
-        int t_iMinorVersion = 0;
-
         try
         {
-            t_strProduct = metaData.getDatabaseProductName();
+            result = metaData.getDatabaseProductName();
         }
         catch  (@NotNull final SQLException sqlException)
         {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
             if  (t_Log != null)
             {
                 t_Log.error(
@@ -1392,52 +1493,161 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     sqlException);
         }
 
-        if  (t_ExceptionToThrow == null)
+        if (t_ExceptionToThrow != null)
+        {
+            throw t_ExceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the product version.
+     * @param metaData the database metadata.
+     * @return the product version.
+     * @precondition metaData != null
+     */
+    protected String retrieveProductVersion(@NotNull final DatabaseMetaData metaData)
+    {
+        @NotNull String result = "";
+
+        try
+        {
+            result = metaData.getDatabaseProductVersion();
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve database vendor's product version.",
+                    sqlException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the database major version.
+     * @param metaData the database metadata.
+     * @return the database major version.
+     * @precondition metaData != null
+     */
+    protected int retrieveDatabaseMajorVersion(@NotNull final DatabaseMetaData metaData)
+    {
+        int result = -1;
+
+        try
+        {
+            result = metaData.getDatabaseMajorVersion();
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve database vendor's major version.",
+                    sqlException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the database minor version.
+     * @param metaData the database metadata.
+     * @return the database minor version.
+     * @precondition metaData != null
+     */
+    protected int retrieveDatabaseMinorVersion(@NotNull final DatabaseMetaData metaData)
+    {
+        int result = -1;
+
+        try
+        {
+            result = metaData.getDatabaseMinorVersion();
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve database vendor's minor version.",
+                    sqlException);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the database vendor matches this handler.
+     * @param metaData the database metadata.
+     * @param parameters the command parameters.
+     * @return <code>true</code> in case it matches.
+     * @throws QueryJBuildException if the check fails.
+     * @precondition metaData != null
+     * @precondition parameters != null
+     */
+    protected boolean checkVendor(@NotNull final DatabaseMetaData metaData, @NotNull Map parameters)
+        throws  QueryJBuildException
+    {
+        boolean result = false;
+
+        @Nullable QueryJBuildException t_ExceptionToThrow = null;
+
+        @Nullable String t_strProduct = retrieveDatabaseProductName(parameters);
+        @Nullable String t_strVersion = retrieveDatabaseProductVersion(parameters);
+        int t_iMajorVersion = retrieveDatabaseMajorVersion(parameters);
+        int t_iMinorVersion = retrieveDatabaseMinorVersion(parameters);
+
+        if (t_strProduct == null)
         {
             try
             {
-                t_strVersion = metaData.getDatabaseProductVersion();
+                t_strProduct = retrieveProductName(metaData);
+                storeDatabaseProductName(t_strProduct, parameters);
             }
-            catch  (@NotNull final SQLException sqlException)
+            catch  (@NotNull final QueryJBuildException cannotRetrieveProductName)
             {
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot retrieve database vendor's product version.",
-                        sqlException);
-                }
+                t_ExceptionToThrow = cannotRetrieveProductName;
             }
+        }
 
-            try
-            {
-                t_iMajorVersion = metaData.getDatabaseMajorVersion();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                          "Cannot retrieve database vendor's major version "
-                        + "number.",
-                        sqlException);
-                }
-            }
+        if  (t_strVersion != null)
+        {
+            t_strVersion = retrieveProductVersion(metaData);
+            storeDatabaseProductVersion(t_strVersion, parameters);
+        }
 
-            try
-            {
-                t_iMinorVersion = metaData.getDatabaseMinorVersion();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                if  (t_Log != null)
-                {
-                    t_Log.warn(
-                          "Cannot retrieve database vendor's major version "
-                        + "number.",
-                        sqlException);
-                }
-            }
+        if (t_iMajorVersion < 0)
+        {
+            t_iMajorVersion = retrieveDatabaseMajorVersion(metaData);
+            storeDatabaseMajorVersion(t_iMajorVersion, parameters);
+        }
 
+        if (t_iMinorVersion < 0)
+        {
+            t_iMinorVersion = retrieveDatabaseMinorVersion(metaData);
+            storeDatabaseMinorVersion(t_iMinorVersion, parameters);
+        }
+
+        if (t_ExceptionToThrow != null)
+        {
             result =
                 checkVendor(
                     t_strProduct,

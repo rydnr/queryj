@@ -104,6 +104,15 @@ public class DatabaseMetaDataCacheReadingHandler
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void storeAlreadyDoneFlag(@NotNull Map parameters)
+    {
+        // We want not to store the flag in this case.
+    }
+
+    /**
      * Builds a database metadata manager.
      * @param parameters the command parameters.
      * @param tableNames the table names.
@@ -128,15 +137,15 @@ public class DatabaseMetaDataCacheReadingHandler
     @Override
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
-        @NotNull final String[] tableNames,
-        @NotNull final String[] procedureNames,
+        @Nullable final String[] tableNames,
+        @Nullable final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @NotNull final DatabaseMetaData metaData,
+        @Nullable final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @NotNull final String schema)
+        @Nullable final String schema)
         throws  QueryJBuildException
     {
         @Nullable MetadataManager result = null;
@@ -149,6 +158,7 @@ public class DatabaseMetaDataCacheReadingHandler
             {
                 // TODO: perform checksum validation
                 result = retrieveCache(t_OutputDir);
+                result.setMetaData(metaData);
                 storeAlreadyDoneFlag(parameters);
             }
         }
