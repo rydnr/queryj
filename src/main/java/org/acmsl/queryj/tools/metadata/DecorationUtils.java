@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -39,6 +38,10 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*

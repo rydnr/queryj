@@ -161,6 +161,11 @@ public class OracleMetaDataRetrievalHandler
                     metaData,
                     catalog,
                     schema);
+
+            if (result != null)
+            {
+                result.retrieveMetadata();
+            }
         }
         catch  (@NotNull final RuntimeException exception)
         {

@@ -56,12 +56,17 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Map;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -168,16 +173,42 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the database metadata from the attribute map.
      * @param parameters the parameter map.
      * @return the metadata.
+     * @throws QueryJBuildException if the database metadata is not accessible.
      * @precondition parameters != null
      */
-    @NotNull
+    @Nullable
     protected DatabaseMetaData retrieveDatabaseMetaData(
         @NotNull final Map parameters)
+      throws QueryJBuildException
     {
-        return
+        @Nullable DatabaseMetaData result =
             (DatabaseMetaData)
                 parameters.get(
                     DatabaseMetaDataRetrievalHandler.DATABASE_METADATA);
+
+        if (result == null)
+        {
+            @Nullable final Connection t_Connection =
+                (Connection) parameters.get(
+                    JdbcConnectionOpeningHandler.JDBC_CONNECTION);
+
+            if (t_Connection != null)
+            {
+                try
+                {
+                    result = t_Connection.getMetaData();
+                }
+                catch  (@NotNull final SQLException exception)
+                {
+                    throw
+                        new QueryJBuildException(
+                            "cannot.retrieve.database.metadata",
+                            exception);
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -197,7 +228,7 @@ public abstract class AbstractQueryJCommandHandler
     }
 
     /**
-     * Retrieves whether to use subfolders or not.
+     * Retrieves whether to use sub folders or not.
      * @param parameters the parameters.
      * @return such flag.
      * @precondition parameters != null

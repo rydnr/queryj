@@ -98,13 +98,13 @@ public abstract class AbstractJdbcMetadataManager
     protected final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS = new String[0][0];
 
     /**
-     * An empty array of <code>ProcedureMetadata</code> instances.
+     * An empty array of {@link ProcedureMetadata} instances.
      */
     protected final ProcedureMetadata[] EMPTY_PROCEDURE_METADATA_ARRAY =
         new ProcedureMetadata[0];
     
     /**
-     * An empty array of <code>ProcedureParameterMetadata</code> instances.
+     * An empty array of {@link ProcedureParameterMetadata} instances.
      */
     protected final ProcedureParameterMetadata[]
         EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY =
@@ -209,7 +209,7 @@ public abstract class AbstractJdbcMetadataManager
     private boolean m__bLazyProcedureExtraction;
 
     /**
-     * Creates an empty <code>AbstractJdbcMetadataManager</code> instance.
+     * Creates an empty {@link AbstractJdbcMetadataManager} instance.
      */
     protected AbstractJdbcMetadataManager()
     {

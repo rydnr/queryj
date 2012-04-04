@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -114,11 +113,11 @@ public class MySQL4xMetaDataRetrievalHandler
      * @param disableTableExtraction if the table metadata should not
      * be extracted.
      * @param lazyTableExtraction if the table metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param disableProcedureExtraction if the procedure metadata should not
      * be extracted.
      * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
@@ -157,6 +156,11 @@ public class MySQL4xMetaDataRetrievalHandler
                     metaData,
                     catalog,
                     schema);
+
+            if (result != null)
+            {
+                result.retrieveMetadata();
+            }
         }
         catch  (@NotNull final SQLException sqlException)
         {

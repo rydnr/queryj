@@ -83,7 +83,6 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
             t_sbFilePath.append(t_strCurrentPath);
         }
 
-        t_sbFilePath.append(File.separator);
         t_sbFilePath.append(CACHE_FILENAME);
 
         return new File(t_sbFilePath.toString());

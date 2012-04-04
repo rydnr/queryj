@@ -104,48 +104,31 @@ public class DatabaseMetaDataCacheReadingHandler
     }
 
     /**
-     * {@inheritDoc}
+     * Handles given parameters.
+     * @param parameters the parameters to handle.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
-    protected void storeAlreadyDoneFlag(@NotNull Map parameters)
+    protected boolean handle(
+        @NotNull final Map parameters, @Nullable final MetadataManager metadataManager)
+        throws  QueryJBuildException
     {
-        // We want not to store the flag in this case.
+        // NO-OP implementation to avoid metadata extraction.
+        return false;
     }
 
     /**
-     * Builds a database metadata manager.
-     * @param parameters the command parameters.
-     * @param tableNames the table names.
-     * @param procedureNames the procedure names.
-     * @param disableTableExtraction if the table metadata should not
-     * be extracted.
-     * @param lazyTableExtraction if the table metadata should not
-     * be extracted immediately.
-     * @param disableProcedureExtraction if the procedure metadata should not
-     * be extracted.
-     * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted immediately.
-     * @param metaData the database metadata.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @return the metadata manager instance.
-     * @throws org.apache.tools.ant.BuildException whenever the required
-     * parameters are not present or valid.
-     * @precondition metaData != null
+     * {@inheritDoc}
      */
     @Nullable
-    @Override
     protected MetadataManager buildMetadataManager(
-        @NotNull final Map parameters,
-        @Nullable final String[] tableNames,
-        @Nullable final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @Nullable final DatabaseMetaData metaData,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+        @NotNull final Map parameters)
         throws  QueryJBuildException
     {
         @Nullable MetadataManager result = null;
@@ -158,8 +141,14 @@ public class DatabaseMetaDataCacheReadingHandler
             {
                 // TODO: perform checksum validation
                 result = retrieveCache(t_OutputDir);
-                result.setMetaData(metaData);
-                storeAlreadyDoneFlag(parameters);
+
+                if (result != null)
+                {
+                    storeMetadataManager(result, parameters);
+                    result.setMetaData(retrieveDatabaseMetaData(parameters));
+                    storeAlreadyDoneFlag(parameters);
+
+                }
             }
         }
         catch  (@NotNull final RuntimeException exception)
