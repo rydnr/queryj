@@ -1664,7 +1664,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
             storeDatabaseMinorVersion(t_iMinorVersion, parameters);
         }
 
-        if (t_ExceptionToThrow != null)
+        if (t_ExceptionToThrow == null)
         {
             result =
                 checkVendor(
