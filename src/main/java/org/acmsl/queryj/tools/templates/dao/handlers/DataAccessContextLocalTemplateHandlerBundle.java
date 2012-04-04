@@ -50,11 +50,7 @@ public class DataAccessContextLocalTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
+     * Creates a bundle for creating DataAccessContextLocal files.
      */
     public DataAccessContextLocalTemplateHandlerBundle()
     {

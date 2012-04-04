@@ -92,15 +92,15 @@ public class TemplateHandlerBundle
      */
     public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
     {
-        if (isTemplateHandlingEnabled())
-        {
-            final int t_iLength = (bundles != null) ? bundles.length : 0;
-        
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-            {
-                @Nullable TemplateHandlerBundle t_Bundle = bundles[t_iIndex];
+        final int t_iLength = (bundles != null) ? bundles.length : 0;
 
-                if  (t_Bundle != null)
+        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        {
+            @Nullable TemplateHandlerBundle t_Bundle = bundles[t_iIndex];
+
+            if  (t_Bundle != null)
+            {
+                if (isTemplateHandlingEnabled(retrieveTemplateName(t_Bundle.getClass().getName())))
                 {
                     immutableAddHandler(t_Bundle);
                 }
@@ -140,9 +140,21 @@ public class TemplateHandlerBundle
     {
         return
             isTemplateHandlingEnabled(
+                retrieveTemplateName(getClass().getName()));
+    }
+
+    /**
+     * Checks whether given template is enabled or not.
+     * @param templateName the template name.
+     * @return such behavior.
+     */
+    protected final boolean isTemplateHandlingEnabled(@NotNull final String templateName)
+    {
+        return
+            isTemplateHandlingEnabled(
                 System.getProperty(TEMPLATES_DISABLED),
                 System.getProperty(TEMPLATES_ENABLED),
-                retrieveTemplateName(getClass().getName()));
+                templateName);
     }
 
     /**
@@ -171,16 +183,24 @@ public class TemplateHandlerBundle
 
         boolean t_bExplicitlyEnabled = false;
 
+        String[] t_astrEnabled = null;
+
         if (templatesEnabled != null)
         {
-            String[] t_astrEnabled = templatesEnabled.split(",");
+            t_astrEnabled = templatesEnabled.split(",");
 
             t_bExplicitlyEnabled = Arrays.asList(t_astrEnabled).contains(handlerName);
+        }
+        else
+        {
+            t_astrEnabled = new String[0];
         }
 
         if (!t_bExplicitlyEnabled)
         {
-            if ("*".equals(templatesDisabled))
+            if (   ("*".equals(templatesDisabled))
+                || (t_astrEnabled.length > 1)) // explicitly-enabled templates imply
+                // the others are disabled implicitly.
             {
                 result = false;
             }
