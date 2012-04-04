@@ -1017,7 +1017,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             throw
                 new QueryJBuildException(
-                    "Cannot retrieve database metadata",
+                    "cannot.retrieve.database.metadata",
                     exception);
         }
 
@@ -1125,7 +1125,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     public int retrieveDatabaseMajorVersion(@NotNull final Map parameters)
     {
-        return (Integer) parameters.get(DATABASE_MAJOR_VERSION);
+        int result = -1;
+
+        Integer t_iMajorVersion = (Integer) parameters.get(DATABASE_MAJOR_VERSION);
+
+        if (t_iMajorVersion != null)
+        {
+            result = t_iMajorVersion;
+        }
+
+        return result;
     }
 
     /**
@@ -1146,7 +1155,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     public int retrieveDatabaseMinorVersion(@NotNull final Map parameters)
     {
-        return (Integer) parameters.get(DATABASE_MINOR_VERSION);
+        int result = -1;
+
+        Integer t_iMinorVersion = (Integer) parameters.get(DATABASE_MINOR_VERSION);
+
+        if (t_iMinorVersion != null)
+        {
+            result = t_iMinorVersion;
+        }
+
+        return result;
     }
 
     /**
