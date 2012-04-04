@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -35,7 +34,10 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.AbstractTemplate;
+
+/*
+ * Importing some jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**

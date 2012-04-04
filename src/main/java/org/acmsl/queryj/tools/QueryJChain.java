@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.templates.dao.DAOBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
@@ -2004,7 +2005,7 @@ public class QueryJChain
 
             //result.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            //result.add(new DAOBundle(generateMock, generateXML));
+            result.add(new DAOBundle(generateMock, generateXML));
 
             result.add(new ValueObjectTemplateHandlerBundle());
 

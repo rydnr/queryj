@@ -44,6 +44,11 @@ import org.acmsl.queryj.tools.handlers.CompositeQueryJCommandHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Arrays;
+
 /**
  * Bundles a pair of template build and writing handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -52,6 +57,16 @@ public class TemplateHandlerBundle
     extends    CompositeQueryJCommandHandler
     implements TemplateHandler
 {
+    /**
+     * The system property prefix to disable concrete (or all, with *) template handlers.
+     */
+    public static final String TEMPLATES_DISABLED = "queryj.templates.disabled";
+
+    /**
+     * The system property to enable concrete (or all, with * or missing property) template handlers.
+     */
+    public static final String TEMPLATES_ENABLED = "queryj.templates.enabled";
+
     /**
      * Builds a bundle with given handlers.
      * @param buildHandler the template build handler.
@@ -63,8 +78,11 @@ public class TemplateHandlerBundle
         @NotNull final TemplateBuildHandler buildHandler,
         @NotNull final TemplateWritingHandler writingHandler)
     {
-        immutableAddHandler(buildHandler);
-        immutableAddHandler(writingHandler);
+        if (isTemplateHandlingEnabled())
+        {
+            immutableAddHandler(buildHandler);
+            immutableAddHandler(writingHandler);
+        }
     }
 
     /**
@@ -74,15 +92,18 @@ public class TemplateHandlerBundle
      */
     public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
     {
-        final int t_iLength = (bundles != null) ? bundles.length : 0;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        if (isTemplateHandlingEnabled())
         {
-            @Nullable TemplateHandlerBundle t_Bundle = bundles[t_iIndex];
-
-            if  (t_Bundle != null)
+            final int t_iLength = (bundles != null) ? bundles.length : 0;
+        
+            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
-                immutableAddHandler(t_Bundle);
+                @Nullable TemplateHandlerBundle t_Bundle = bundles[t_iIndex];
+
+                if  (t_Bundle != null)
+                {
+                    immutableAddHandler(t_Bundle);
+                }
             }
         }
     }
@@ -109,5 +130,68 @@ public class TemplateHandlerBundle
     private void immutableAddHandler(final TemplateHandler handler)
     {
         super.addHandler(handler);
+    }
+
+    /**
+     * Checks whether this template bundle is enabled or not.
+     * @return such behavior.
+     */
+    protected final boolean isTemplateHandlingEnabled()
+    {
+        return
+            isTemplateHandlingEnabled(
+                System.getProperty(TEMPLATES_DISABLED),
+                System.getProperty(TEMPLATES_ENABLED),
+                retrieveTemplateName(getClass().getName()));
+    }
+
+    /**
+     * Retrieves the template name for given class name.
+     * @param handlerName the handler name.
+     * @return the template name, by removing trailing "TemplateHandlerBundle"
+     */
+    @NotNull
+    protected final String retrieveTemplateName(@NotNull final String handlerName)
+    {
+        return handlerName.replaceAll("TemplateHandlerBundle$", "").replaceAll(".*\\.", "");
+    }
+    /**
+     * Checks whether this template bundle is enabled or not.
+     * @param templatesDisabled the environment property for disabled templates.
+     * @param templatesEnabled the environment property for enabled templates.
+     * @param handlerName the handler name.
+     * @return such behavior.
+     */
+    protected final boolean isTemplateHandlingEnabled(
+        @Nullable final String templatesDisabled,
+        @Nullable final String templatesEnabled,
+        @NotNull final String handlerName)
+    {
+        boolean result = true;
+
+        boolean t_bExplicitlyEnabled = false;
+
+        if (templatesEnabled != null)
+        {
+            String[] t_astrEnabled = templatesEnabled.split(",");
+
+            t_bExplicitlyEnabled = Arrays.asList(t_astrEnabled).contains(handlerName);
+        }
+
+        if (!t_bExplicitlyEnabled)
+        {
+            if ("*".equals(templatesDisabled))
+            {
+                result = false;
+            }
+            else if (templatesDisabled != null)
+            {
+                String[] t_astrDisabled = templatesDisabled.split(",");
+
+                result = !Arrays.asList(t_astrDisabled).contains(handlerName);
+            }
+        }
+
+        return result;
     }
 }
