@@ -68,10 +68,10 @@ public class ResultSetExtractorTemplateWritingHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a <code>ResultSetExtractorTemplateWritingHandler</code>
+     * Creates a {@link ResultSetExtractorTemplateWritingHandler}
      * instance..
      */
-    public ResultSetExtractorTemplateWritingHandler() {};
+    public ResultSetExtractorTemplateWritingHandler() {}
 
     /**
      * Handles given information.
@@ -127,7 +127,7 @@ public class ResultSetExtractorTemplateWritingHandler
     }
 
     /**
-     * Writes the <code>ResultSetExtractor</code> templates.
+     * Writes the {@link ResultSetExtractorTemplate} templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param charset the file encoding.

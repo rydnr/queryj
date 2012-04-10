@@ -136,11 +136,22 @@ public class TemplateHandlerBundle
      * Checks whether this template bundle is enabled or not.
      * @return such behavior.
      */
-    protected final boolean isTemplateHandlingEnabled()
+    protected boolean isTemplateHandlingEnabled()
     {
-        return
-            isTemplateHandlingEnabled(
-                retrieveTemplateName(getClass().getName()));
+        boolean result = (this instanceof CompositeQueryJCommandHandler);
+
+        if (!result)
+        {
+            result =
+                isTemplateHandlingEnabled(
+                    retrieveTemplateName(getClass().getName()));
+        }
+        else
+        {
+            int a = -5; // for debugging purposes
+        }
+
+        return result;
     }
 
     /**
@@ -190,6 +201,8 @@ public class TemplateHandlerBundle
             t_astrEnabled = templatesEnabled.split(",");
 
             t_bExplicitlyEnabled = Arrays.asList(t_astrEnabled).contains(handlerName);
+
+            result = t_bExplicitlyEnabled;
         }
         else
         {
@@ -210,6 +223,12 @@ public class TemplateHandlerBundle
 
                 result = !Arrays.asList(t_astrDisabled).contains(handlerName);
             }
+        }
+
+        if (result)
+        {
+            // for debugging purposes
+            int a = -5;
         }
 
         return result;
