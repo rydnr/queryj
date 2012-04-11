@@ -178,6 +178,7 @@ public class TemplateHandlerBundle
     {
         return handlerName.replaceAll("TemplateHandlerBundle$", "").replaceAll(".*\\.", "");
     }
+
     /**
      * Checks whether this template bundle is enabled or not.
      * @param templatesDisabled the environment property for disabled templates.

@@ -62,6 +62,7 @@ import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 
@@ -81,15 +82,25 @@ public abstract class BasePerTableTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * An empty <code>BasePerTableTemplate</code> array.
+     * An empty {@link BasePerTableTemplate} array.
      */
     protected static final BasePerTableTemplate[] EMPTY_BASEPERTABLETEMPLATE_ARRAY =
         new BasePerTableTemplate[0];
 
     /**
-     * Creates a <code>BasePerTableTemplateBuildHandler</code> instance.
+     * The system property prefix to disable generation for concrete (or all, with *) tables.
      */
-    public BasePerTableTemplateBuildHandler() {};
+    public static final String TABLES_DISABLED = "queryj.tables.disabled";
+
+    /**
+     * The system property to enable generation for concrete (or all, with * or missing property) tables.
+     */
+    public static final String TABLES_ENABLED = "queryj.tables.enabled";
+
+    /**
+     * Creates a {@ BasePerTableTemplateBuildHandler} instance.
+     */
+    public BasePerTableTemplateBuildHandler() {}
 
     /**
      * Handles given information.
@@ -225,26 +236,29 @@ public abstract class BasePerTableTemplateBuildHandler
         {
             t_strTableName = tableTemplates[t_iIndex].getTableName();
 
-            t_Template =
-                createTemplate(
-                    templateFactory,
-                    t_strTableName,
-                    metadataManager,
-                    customSqlProvider,
-                    retrievePackage(
-                        t_strTableName, engineName, parameters),
-                    engineName,
-                    engineVersion,
-                    quote,
-                    projectPackage,
-                    repository,
-                    header,
-                    implementMarkerInterfaces,
-                    parameters);
-
-            if  (t_Template != null)
+            if (isGenerationAllowedForTable(t_strTableName))
             {
-                t_cTemplates.add(t_Template);
+                t_Template =
+                    createTemplate(
+                        templateFactory,
+                        t_strTableName,
+                        metadataManager,
+                        customSqlProvider,
+                        retrievePackage(
+                            t_strTableName, engineName, parameters),
+                        engineName,
+                        engineVersion,
+                        quote,
+                        projectPackage,
+                        repository,
+                        header,
+                        implementMarkerInterfaces,
+                        parameters);
+
+                if  (t_Template != null)
+                {
+                    t_cTemplates.add(t_Template);
+                }
             }
         }
 
@@ -536,4 +550,76 @@ public abstract class BasePerTableTemplateBuildHandler
     {
         return "..static-contents-for-table-" + tableName + "..";
     }
+
+    /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isGenerationAllowedForTable(@NotNull final String tableName)
+    {
+        return
+            isGenerationAllowedForTable(
+                System.getProperty(TABLES_DISABLED),
+                System.getProperty(TABLES_ENABLED),
+                tableName);
+    }
+
+    /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param tablesDisabled the environment property for disabled tables.
+     * @param tablesEnabled the environment property for enabled tables.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     * @return such behavior.
+     */
+    protected final boolean isGenerationAllowedForTable(
+        @Nullable final String tablesDisabled,
+        @Nullable final String tablesEnabled,
+        @NotNull final String tableName)
+    {
+        boolean result = true;
+
+        boolean t_bExplicitlyEnabled = false;
+
+        String[] t_astrEnabled = null;
+
+        if (tablesEnabled != null)
+        {
+            t_astrEnabled = tablesEnabled.split(",");
+
+            t_bExplicitlyEnabled = Arrays.asList(t_astrEnabled).contains(tableName);
+
+            result = t_bExplicitlyEnabled;
+        }
+        else
+        {
+            t_astrEnabled = new String[0];
+        }
+
+        if (!t_bExplicitlyEnabled)
+        {
+            if (   ("*".equals(tablesDisabled))
+                || (t_astrEnabled.length > 1)) // explicitly-enabled tables imply
+            // the others are disabled implicitly.
+            {
+                result = false;
+            }
+            else if (tablesDisabled != null)
+            {
+                String[] t_astrDisabled = tablesDisabled.split(",");
+
+                result = !Arrays.asList(t_astrDisabled).contains(tableName);
+            }
+        }
+
+        if (result)
+        {
+            // for debugging purposes
+            int a = -5;
+        }
+
+        return result;
+    }
+
 }
