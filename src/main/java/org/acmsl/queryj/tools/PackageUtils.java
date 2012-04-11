@@ -1923,8 +1923,8 @@ public class PackageUtils
         final boolean useSubFolders)
     {
         return
-            retrieveDAOFolder(
-                    parentFolder, packageName, engineName, useSubFolders);
+            retrieveRdbFolder(
+                    parentFolder, packageName, useSubFolders);
     }
 
     /**
