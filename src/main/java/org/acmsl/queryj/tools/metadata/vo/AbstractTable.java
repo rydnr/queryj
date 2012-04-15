@@ -41,7 +41,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Abstract logicless implementation of <code>Table</code> interface.
+ * Abstract logic-less implementation of {@link Table} interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractTable
@@ -53,7 +53,7 @@ public abstract class AbstractTable
     private String m__strName;
     
     /**
-     * Creates an <code>AbstractTable</code> with the following
+     * Creates an {@link AbstractTable} with the following
      * information.
      * @param name the name.
      */

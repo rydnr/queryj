@@ -294,7 +294,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
@@ -337,8 +337,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * Creates the template with given parameters.
      * @param templateFactory the template factory.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the{@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -395,7 +395,7 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Checks whether given table contains static values or not.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -412,8 +412,8 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Checks whether given table contains static values or not.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @return such information.
      * @precondition tableName != null
      * @precondition metadataManager != null
@@ -433,7 +433,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * Checks whether given table contains static values or not.
      * @param parameters the parameter map.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the decorator factory.
      * @return such information.
      * @precondition parameters != null
@@ -484,9 +484,9 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Checks whether given table contains static values or not.
      * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the decorator factory.
-     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return such information.
      * @throws SQLException if the operation fails.
      * @precondition tableName != null

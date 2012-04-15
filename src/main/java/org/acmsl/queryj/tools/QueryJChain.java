@@ -52,6 +52,7 @@ import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOTemplateHandle
 import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
@@ -1995,7 +1996,7 @@ public class QueryJChain
             result.add(new RepositoryDAOTemplateHandlerBundle());
             result.add(new RepositoryDAOFactoryTemplateHandlerBundle());
 
-            //result.add(new TableTemplateHandlerBundle());
+            result.add(new TableTemplateHandlerBundle());
 
             //result.add(new TableRepositoryTemplateHandlerBundle());
 

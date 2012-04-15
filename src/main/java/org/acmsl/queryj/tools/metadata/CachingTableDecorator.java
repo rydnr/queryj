@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -49,8 +48,8 @@ public class CachingTableDecorator
     extends  AbstractTableDecorator
 {
     /**
-     * Creates a <code>CachingTableDecorator</code> with the
-     * <code>Table</code> to decorate.
+     * Creates a {@link CachingTableDecorator} with the
+     * {@link Table} to decorate.
      * @param table the table.
      * @param metadataManager the metadata manager.
      * @precondition table != null
@@ -63,7 +62,7 @@ public class CachingTableDecorator
     }
 
     /**
-     * Creates a <code>CachingTableDecorator</code> with the following
+     * Creates a {@link CachingTableDecorator} with the following
      * information.
      * @param name the name.
      * @param metadataManager the metadata manager.

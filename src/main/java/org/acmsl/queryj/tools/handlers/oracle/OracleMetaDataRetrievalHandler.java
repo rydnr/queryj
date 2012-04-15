@@ -117,11 +117,11 @@ public class OracleMetaDataRetrievalHandler
      * @param disableTableExtraction if the table metadata should not
      * be extracted.
      * @param lazyTableExtraction if the table metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param disableProcedureExtraction if the procedure metadata should not
      * be extracted.
      * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted inmediately.
+     * be extracted immediately.
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
@@ -165,6 +165,7 @@ public class OracleMetaDataRetrievalHandler
             if (result != null)
             {
                 result.retrieveMetadata();
+                storeTableNames(result.getTableNames(), parameters);
             }
         }
         catch  (@NotNull final RuntimeException exception)

@@ -83,7 +83,7 @@ public class OracleMetadataManager
     implements  OracleTableRepository
 {
     /**
-     * Creates an empty <code>OracleMetadataManager</code>.
+     * Creates an empty {@link OracleMetadataManager}.
      */
     protected OracleMetadataManager()
     {
@@ -91,7 +91,7 @@ public class OracleMetadataManager
     }
 
     /**
-     * Creates an <code>OracleMetadataManager</code>. using given information.
+     * Creates an {@link OracleMetadataManager} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table

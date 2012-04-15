@@ -145,6 +145,7 @@ public class DatabaseMetaDataCacheReadingHandler
                 if (result != null)
                 {
                     storeMetadataManager(result, parameters);
+                    storeTableNames(result.getTableNames(), parameters);
                     result.setMetaData(retrieveDatabaseMetaData(parameters));
                     storeAlreadyDoneFlag(parameters);
 

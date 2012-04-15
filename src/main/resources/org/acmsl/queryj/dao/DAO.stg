@@ -405,8 +405,13 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
         + "WHERE "
+<if(input.pk_attributes)>
 <input.pk_attributes:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
+<else>
+<input.attributes:{attr |
+        +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
+<endif>
 
      /**
       * The SQL to delete.
@@ -415,8 +420,13 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
           "DELETE "
         + "FROM <input.table_name_uppercased> "
         + "WHERE "
+<if(input.pk_attributes)>
 <input.pk_attributes:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
+<else>
+<input.attributes:{attr |
+        +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
+<endif>
 
       /**
        * The SQL to insert.
@@ -425,13 +435,23 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
           "INSERT "
         + "INTO <input.table_name_uppercased> "
         + "( "
+<if(input.non_readonly_attributes)>
 <input.non_readonly_attributes:{attr|
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
+<else>
+<input.attributes:{attr|
+        +   "<attr.nameUppercased>}; separator=", \"\n"> "
+<endif>
         + ") "
         + "VALUES "
         + "( "
+<if(input.non_readonly_attributes)>
 <input.non_readonly_attributes:{attr|
         +   "?}; separator=", \"\n"> "
+<else>
+<input.attributes:{attr|
+        +   "?}; separator=", \"\n"> "
+<endif>
         + ")";
 
     <input.foreign_keys:delete_by_fk_sql(foreignKey=it, input=input); separator="\n\n">
@@ -472,14 +492,6 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 }; separator="\n\n">
                
-<<<<<<< HEAD
-=======
-    <input.custom_results:resultset_extractor_constants(
-      crseid=it.id,
-      crseidCapitalized=it.idCapitalized,
-      crseidNormalizedUppercased=it.idNormalizedUppercased); separator="\n\n">
-
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
     /**
      * Builds a \<code><input.class_name>\</code> instance
      * with given data source.
@@ -651,11 +663,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                             query, daoListener),
                         new <input.vo_name>PkStatementSetter(
                             <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-<<<<<<< HEAD
                         new <input.vo_name>ResultSetExtractor(daoListener),
-=======
-                        new <input.vo_name>Extractor(getDAOListener()),
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
                         this));
     }
 
@@ -1331,13 +1339,9 @@ t_mMap =
         transactionTemplate.execute(
             new QueryTransactionCallback(
                 "<query>",
-<<<<<<< HEAD
                 new <nameCapitalized><table.voName>ResultSetExtractor(
                 "<nameLowercased>",
                 getDAOListener()),
-=======
-                new <input.vo_name>PkExtractor(getDAOListener()),
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
                 this));
 
 <nativeType> <nameLowercased> =

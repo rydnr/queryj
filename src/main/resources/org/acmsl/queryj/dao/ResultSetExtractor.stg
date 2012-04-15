@@ -163,11 +163,8 @@ classImpl(input, table, parent) ::= <<
  */
 public class <input.vo_name>ResultSetExtractor
     extends     <input.tr_name_capitalized>ResultSetExtractor
-<<<<<<< HEAD
-=======
     implements  ResultSetExtractor,
-//                <input.tr_name_capitalized>TableRepository
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
+<!                <input.tr_name_capitalized>TableRepository !>
 {
 <if(input.clobHandling)>
     <indirect_template(name=input.clobHandling+"Extractor", input=input, extra1=table, extra2=parent)>
@@ -215,7 +212,6 @@ public <input.vo_name>ResultSetExtractor(
  * @throws DataAccessException with information about any
  * custom exception.
  <precondition_notnull("resultSet")>
-<<<<<<< HEAD
  */
 protected Object extractData(
     final ResultSet resultSet,
@@ -245,12 +241,6 @@ protected Object extractData(
     final ResultSet resultSet,
     final <input.tr_name_capitalized>DAOListener daoListener,
     final <input.vo_name>ValueObjectFactory factory)
-=======
- */
-public Object extractData(
-    final ResultSet resultSet,
-    final <input.tr_name_capitalized>DAOListener daoListener)
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
   throws  SQLException,
           DataAccessException
 {
@@ -344,13 +334,9 @@ private boolean m__bSelectForUpdateMode;
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update\</code> (required to perform some operations
  * such as \<b>insert\</b>s), or not.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
  */
-<<<<<<< HEAD
 public <input.vo_name>ResultSetExtractor(
-=======
-protected <input.vo_name>ResultSetExtractor(
->>>>>>> 102dbc8... Added a new template: \!BaseResultSetExtractor. refs #85
     final boolean selectForUpdateMode,
     final <input.tr_name_capitalized>DAOListener daoListener)
 {
@@ -366,7 +352,7 @@ protected <input.vo_name>ResultSetExtractor(
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update\</code> (required to perform some operations
  * such as \<b>insert\</b>s), or not.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
  */
 public <input.vo_name>ResultSetExtractor(
     <input.lob_attributes:attribute_method_declaration(attr=it);

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -76,12 +75,12 @@ public class DAOTemplate
     private Collection m__cStaticValues;
 
     /**
-     * Builds a <code>DAOTemplate</code> using given information.
+     * Builds a {@link DAOTemplate} using given information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
@@ -121,11 +120,11 @@ public class DAOTemplate
     }
 
     /**
-     * Builds a <code>DAOTemplate</code> using given information.
+     * Builds a {@link DAOTemplate} using given information.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param engineVersion the engine version.

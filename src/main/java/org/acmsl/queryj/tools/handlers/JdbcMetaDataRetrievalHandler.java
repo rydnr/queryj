@@ -33,10 +33,6 @@
  */
 package org.acmsl.queryj.tools.handlers;
 
-/*
- * Importing some project classes.
- */
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /**
  * Extracts metadata information from JDBC-compliant databases.
@@ -47,10 +43,10 @@ public class JdbcMetaDataRetrievalHandler
 {
     /**
      * Checks whether the database vendor matches this handler.
-     * @param product the product name.
-     * @param version the product version.
-     * @param major the major version number.
-     * @param minor the minor version number.
+     * @param productName the product name.
+     * @param productVersion the product version.
+     * @param majorVersion the major version number.
+     * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
      * @precondition product != null
      */

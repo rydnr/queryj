@@ -721,7 +721,7 @@ public abstract class BasePerTableTemplate
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @precondition input != null
      * @precondition tableName != null
      * @precondition engineName != null

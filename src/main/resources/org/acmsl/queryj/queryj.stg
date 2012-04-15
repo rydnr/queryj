@@ -125,6 +125,14 @@ precondition_instanceof(name, className) ::= <<
 * @precondition <name> instanceof <className>
 >>
 
+precondition(expression) ::= <<
+<!
+  Writes the Javadoc precondition for given expression.
+  @param expression the expression
+!>
+* @precondition <expression>
+>>
+
 attribute_javadoc(name) ::= <<
 <!
   Writes the Javadoc for a attribute parameter.

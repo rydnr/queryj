@@ -76,7 +76,7 @@ public class MetadataUtils
                Utils
 {
     /**
-     * An empty <code>String</code> array.
+     * An empty {@link String} array.
      */
     public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
@@ -100,7 +100,7 @@ public class MetadataUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected MetadataUtils() {};
+    protected MetadataUtils() {}
 
     /**
      * Retrieves a {@link MetadataUtils} instance.

@@ -1279,24 +1279,24 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @Nullable MetadataManager result =
             retrieveMetadataManager(parameters);
 
-        if  (result == null) 
+        String[] t_astrTableNames = retrieveTableNames(parameters);
+
+        if  (result == null)
         {
             result =
                 buildMetadataManager(
                     parameters,
-                    (String[]) parameters.get(TABLE_NAMES),
-                    (String[]) parameters.get(PROCEDURE_NAMES),
+                    t_astrTableNames,
+                    retrieveProcedureNames(parameters),
                     disableTableExtraction,
                     lazyTableExtraction,
                     disableProcedureExtraction,
                     lazyProcedureExtraction,
                     retrieveDatabaseMetaData(parameters),
-                    (String)
-                    parameters.get(
-                        ParameterValidationHandler.JDBC_CATALOG),
-                    (String)
-                    parameters.get(
-                        ParameterValidationHandler.JDBC_SCHEMA));
+                    retrieveCatalog(parameters),
+                    retrieveSchema(parameters));
+
+
         }
 
         if  (result != null)
@@ -1304,6 +1304,12 @@ public abstract class DatabaseMetaDataRetrievalHandler
             try
             {
                 result.retrieveMetadata();
+
+                if (   (t_astrTableNames == null)
+                    || (t_astrTableNames.length == 0))
+                {
+                    storeTableNames(result.getTableNames(), parameters);
+                }
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -1455,6 +1461,30 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
+     * Retrieves the table names from the attribute map.
+     * @param parameters the parameter map.
+     * @return the table names.
+     * @precondition parameters != null
+     */
+    @Nullable
+    protected String[] retrieveTableNames(@NotNull final Map parameters)
+    {
+        return (String[]) parameters.get(TABLE_NAMES);
+    }
+
+    /**
+     * Retrieves the procedure names from the attribute map.
+     * @param parameters the parameter map.
+     * @return the procedure names.
+     * @precondition parameters != null
+     */
+    @Nullable
+    protected String[] retrieveProcedureNames(@NotNull final Map parameters)
+    {
+        return (String[]) parameters.get(PROCEDURE_NAMES);
+    }
+
+    /**
      * Stores the database metadata manager in the attribute map.
      * @param metadataManager the metadata manager.
      * @param parameters the parameter map.
@@ -1465,6 +1495,30 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final MetadataManager metadataManager, @NotNull final Map parameters)
     {
         parameters.put(METADATA_MANAGER, metadataManager);
+    }
+
+    /**
+     * Retrieves the JDBC catalog from the attribute map.
+     * @param parameters the parameter map.
+     * @return the catalog.
+     * @precondition parameters != null
+     */
+    @Nullable
+    protected String retrieveCatalog(@NotNull final Map parameters)
+    {
+        return (String) parameters.get(ParameterValidationHandler.JDBC_CATALOG);
+    }
+
+    /**
+     * Retrieves the JDBC schema from the attribute map.
+     * @param parameters the parameter map.
+     * @return the schema.
+     * @precondition parameters != null
+     */
+    @Nullable
+    protected String retrieveSchema(@NotNull final Map parameters)
+    {
+        return (String) parameters.get(ParameterValidationHandler.JDBC_SCHEMA);
     }
 
     /**

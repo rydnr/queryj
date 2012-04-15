@@ -55,16 +55,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 /**
- * Builds <code>BaseValueObjectTemplate</code> instances using database metadata.
+ * Builds {@link org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplate} instances using database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseValueObjectTemplateBuildHandler
     extends  BasePerTableTemplateBuildHandler
 {
     /**
-     * Creates a <code>BaseValueObjectTemplateBuildHandler</code> instance.
+     * Creates a {@link BaseValueObjectTemplateBuildHandler} instance.
      */
-    public BaseValueObjectTemplateBuildHandler() {};
+    public BaseValueObjectTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
@@ -81,7 +81,7 @@ public class BaseValueObjectTemplateBuildHandler
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
      * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null

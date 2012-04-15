@@ -49,7 +49,7 @@ import org.acmsl.commons.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Decorates <code>Table</code> instances to provide required alternate
+ * Decorates {@link Table} instances to provide required alternate
  * representations of the information stored therein.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
@@ -68,8 +68,8 @@ public abstract class AbstractTableDecorator
     private MetadataManager m__MetadataManager;
 
     /**
-     * Creates an <code>AbstractTableDecorator</code> with the
-     * <code>Table</code> to decorate.
+     * Creates an {@link AbstractTableDecorator} with the
+     * {@link Table} to decorate.
      * @param table the table.
      * @param metadataManager the metadata manager.
      * @precondition table != null
@@ -84,7 +84,7 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Creates an <code>AbstractTableDecorator</code> with the following
+     * Creates an {@link AbstractTableDecorator} with the following
      * information.
      * @param name the name.
      * @param metadataManager the metadata manager.

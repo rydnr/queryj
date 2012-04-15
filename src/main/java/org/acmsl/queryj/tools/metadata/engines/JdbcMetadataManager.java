@@ -63,7 +63,7 @@ public class JdbcMetadataManager
     implements MetadataManager
 {
     /**
-     * Creates an empty <code>JdbcMetadataManager</code> instance..
+     * Creates an empty {@link JdbcMetadataManager} instance.
      */
     public JdbcMetadataManager()
     {
@@ -71,7 +71,7 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Creates a {link JdbcMetadataManager} using given information.
+     * Creates a {@link JdbcMetadataManager} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -120,7 +120,7 @@ public class JdbcMetadataManager
     }
 
     /**
-     * Creates a <code>JdbcMetadataManager</code> using given information.
+     * Creates a {@link JdbcMetadataManager} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.
