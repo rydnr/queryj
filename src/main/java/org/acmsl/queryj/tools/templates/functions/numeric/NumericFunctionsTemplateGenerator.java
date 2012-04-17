@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,8 +37,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
-import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateFactory;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -47,29 +45,25 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate numeric function repositories according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class NumericFunctionsTemplateGenerator
+public class NumericFunctionsTemplateGenerator<T extends NumericFunctionsTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  NumericFunctionsTemplateFactory,
                 Singleton
 {
@@ -93,12 +87,9 @@ public class NumericFunctionsTemplateGenerator
         @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (t_TemplateMappingManager != null)
-        {
-            t_TemplateMappingManager.addDefaultTemplateFactoryClass(
-                TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
-                this.getClass().getName());
-        }
+        t_TemplateMappingManager.addDefaultTemplateFactoryClass(
+            TemplateMappingManager.NUMERIC_FUNCTIONS_TEMPLATE,
+            this.getClass().getName());
     }
 
     /**
@@ -229,65 +220,11 @@ public class NumericFunctionsTemplateGenerator
     }
 
     /**
-     * Writes a numeric functions template to disk.
-     * @param numericFunctionsTemplate the numeric functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition numericFunctionsTemplate != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final NumericFunctionsTemplate numericFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            numericFunctionsTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a numeric functions template to disk.
-     * @param numericFunctionsTemplate the numeric functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition numericFunctionsTemplate != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final NumericFunctionsTemplate numericFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "NumericFunctions.java",
-                numericFunctionsTemplate.generate(),
-                charset);
-        }
+        return "NumericFunctions.java";
     }
 }

@@ -78,7 +78,7 @@ public class CustomValueObjectTemplateBuildHandler
     /**
      * Creates a CustomValueObjectTemplateBuildHandler.
      */
-    public CustomValueObjectTemplateBuildHandler() {};
+    public CustomValueObjectTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.

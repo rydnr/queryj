@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,8 +36,6 @@ package org.acmsl.queryj.tools.templates.functions.time.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator;
 
@@ -46,24 +43,20 @@ import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGene
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate time function repositories according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleTimeFunctionsTemplateGenerator
-    extends  TimeFunctionsTemplateGenerator
+public class OracleTimeFunctionsTemplateGenerator<T extends OracleTimeFunctionsTemplate>
+    extends  TimeFunctionsTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -81,10 +74,10 @@ public class OracleTimeFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public OracleTimeFunctionsTemplateGenerator() {};
+    public OracleTimeFunctionsTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>OracleTimeFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link OracleTimeFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -102,6 +95,7 @@ public class OracleTimeFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
         @Nullable final String packageName,
@@ -128,15 +122,5 @@ public class OracleTimeFunctionsTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

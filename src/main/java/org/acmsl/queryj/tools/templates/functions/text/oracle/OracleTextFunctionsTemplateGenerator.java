@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,36 +35,26 @@ package org.acmsl.queryj.tools.templates.functions.text.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.text.oracle
-    .OracleTextFunctionsTemplate;
-
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate Oracle's text function repositories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleTextFunctionsTemplateGenerator
-    extends  TextFunctionsTemplateGenerator
+public class OracleTextFunctionsTemplateGenerator<T extends OracleTextFunctionsTemplate>
+    extends  TextFunctionsTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -83,7 +72,7 @@ public class OracleTextFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public OracleTextFunctionsTemplateGenerator() {};
+    public OracleTextFunctionsTemplateGenerator() {}
 
     /**
      * Retrieves a OracleTextFunctionsTemplateGenerator instance.
@@ -104,6 +93,7 @@ public class OracleTextFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public TextFunctionsTemplate createTextFunctionsTemplate(
         @Nullable final String packageName,
@@ -130,15 +120,5 @@ public class OracleTextFunctionsTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

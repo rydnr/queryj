@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,36 +35,35 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
-import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.Locale;
 
 /**
  * Is able to generate FkStatementSetter templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class FkStatementSetterTemplateGenerator
+public class FkStatementSetterTemplateGenerator<T extends FkStatementSetterTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  FkStatementSetterTemplateFactory,
                 Singleton
 {
@@ -84,7 +82,7 @@ public class FkStatementSetterTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected FkStatementSetterTemplateGenerator() {};
+    protected FkStatementSetterTemplateGenerator() {}
 
     /**
      * Retrieves a FkStatementSetterTemplateGenerator instance.
@@ -150,112 +148,65 @@ public class FkStatementSetterTemplateGenerator
     }
 
     /**
-     * Writes a FkStatementSetter template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final FkStatementSetterTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            template,
-            outputDir,
-            charset,
-            template.getForeignKey());
+        return
+            retrieveTemplateFileName(
+                template.getForeignKey(),
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
     }
 
     /**
-     * Writes a FkStatementSetter template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param foreignKey the foreign key.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition foreignKey != null
-     */
-    public void write(
-        @NotNull final FkStatementSetterTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final ForeignKey foreignKey)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            foreignKey.getSourceTableName(),
-            foreignKey.getTargetTableName(),
-            StringUtils.getInstance(),
-            EnglishGrammarUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a FkStatementSetterCreator template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param sourceTableName the source table name.
-     * @param targetTableName the target table name.
+     * Retrieves given template's file name.
+     * @param foreignKey the {@link ForeignKey} instance.
      * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
-     * instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition sourceTableName != null
-     * @precondition targetTableName != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition fileUtils != null
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return such name.
      */
-    protected void write(
-        @NotNull final FkStatementSetterTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final String sourceTableName,
-        @NotNull final String targetTableName,
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final ForeignKey foreignKey,
         @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        boolean folderCreated = outputDir.mkdirs();
+        return
+            retrieveTemplateFileName(
+                foreignKey.getSourceTableName(),
+                foreignKey.getTargetTableName(),
+                stringUtils,
+                englishGrammarUtils);
+    }
 
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + stringUtils.capitalize(
-                    englishGrammarUtils.getSingular(
-                        sourceTableName.toLowerCase()),
-                    '_')
-                + "By"
-                + stringUtils.capitalize(
-                    englishGrammarUtils.getSingular(
-                        targetTableName.toLowerCase()),
-                    '_')
-                + "StatementSetter.java",
-                template.generate(),
-                charset);
-        }
+    /**
+     * Retrieves given template's file name.
+     *
+     * @param sourceTable the source table.
+     * @param targetTable the target table.
+     * @param stringUtils the {@link org.acmsl.commons.utils.StringUtils} instance.
+     * @param englishGrammarUtils the {@link org.acmsl.commons.utils.EnglishGrammarUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final String sourceTable,
+        @NotNull final String targetTable,
+        @NotNull final StringUtils stringUtils,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+    {
+        return
+              stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      sourceTable.toLowerCase(Locale.US)),
+                  '_')
+            + "By"
+            + stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      targetTable.toLowerCase(Locale.US)),
+                  '_')
+            + "StatementSetter.java";
     }
 }

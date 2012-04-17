@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -43,7 +42,7 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.tools.templates.TemplateGenerator;
 
 /*
  * Importing Jetbrains annotations.
@@ -65,12 +64,12 @@ import java.util.Map;
  * Writes <i>per-custom-result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomResultTemplateWritingHandler
+public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePerCustomResultTemplate>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
-     * Creates a <code>BasePerCustomResultTemplateWritingHandler</code>
+     * Creates a {@link BasePerCustomResultTemplateWritingHandler}
      * instance.
      */
     public BasePerCustomResultTemplateWritingHandler() {}
@@ -86,7 +85,12 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
+        DatabaseMetaData t_Metadata = retrieveDatabaseMetaData(parameters);
+
+        if (t_Metadata != null)
+        {
+            writeTemplates(parameters, t_Metadata);
+        }
 
         return false;
     }
@@ -153,8 +157,8 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @precondition parameters != null
      */
     protected void writeTemplates(
-        @Nullable final BasePerCustomResultTemplate[] templates,
-        @NotNull final BasePerCustomResultTemplateGenerator templateGenerator,
+        @Nullable final T[] templates,
+        @NotNull final TemplateGenerator<T> templateGenerator,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final String engineName,
@@ -164,7 +168,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         int t_iCount = (templates != null) ? templates.length : 0;
 
-        @Nullable BasePerCustomResultTemplate t_Template;
+        @Nullable T t_Template;
 
         try
         {
@@ -175,15 +179,26 @@ public abstract class BasePerCustomResultTemplateWritingHandler
 
                 if  (t_Template != null)
                 {
-                    templateGenerator.write(
-                        t_Template,
-                        retrieveOutputDir(
-                            t_Template.getResult(),
-                            customSqlProvider,
-                            metadataManager,
-                            engineName,
-                            parameters),
-                        charset);
+                    Result t_Result = t_Template.getResult();
+
+                    if (t_Result != null)
+                    {
+                        File t_OutputDir =
+                            retrieveOutputDir(
+                                t_Result,
+                                customSqlProvider,
+                                metadataManager,
+                                engineName,
+                                parameters);
+
+                        if (t_OutputDir != null)
+                        {
+                            templateGenerator.write(
+                                t_Template,
+                                t_OutputDir,
+                                charset);
+                        }
+                    }
                 }
             }
         }
@@ -199,7 +214,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
-    protected abstract BasePerCustomResultTemplateGenerator retrieveTemplateGenerator();
+    protected abstract TemplateGenerator<T> retrieveTemplateGenerator();
 
     /**
      * Retrieves the templates from the attribute map.
@@ -208,7 +223,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
      * @throws QueryJBuildException if the template retrieval process if faulty.
      */
     @NotNull
-    protected abstract BasePerCustomResultTemplate[] retrieveTemplates(
+    protected abstract T[] retrieveTemplates(
         final Map parameters)
       throws  QueryJBuildException;
 

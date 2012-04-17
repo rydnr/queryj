@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,11 +37,9 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
@@ -51,27 +48,23 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Is able to generate ConfigurationProperties implementations according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class ConfigurationPropertiesTemplateGenerator
+public class ConfigurationPropertiesTemplateGenerator<T extends ConfigurationPropertiesTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator,
+                BasePerRepositoryTemplateGenerator<T>,
                 Singleton
 {
     /**
@@ -89,7 +82,7 @@ public class ConfigurationPropertiesTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected ConfigurationPropertiesTemplateGenerator() {};
+    protected ConfigurationPropertiesTemplateGenerator() {}
 
     /**
      * Retrieves a {@link ConfigurationPropertiesTemplateGenerator}
@@ -150,81 +143,25 @@ public class ConfigurationPropertiesTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
+        return retrieveTemplateFileName(template, DAOChooserTemplateUtils.getInstance());
     }
 
     /**
-     * Writes a ConfigurationProperties template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template instanceof ConfigurationPropertiesTemplate
-     * @precondition outputDir != null
+     * Retrieves given template's file name.
+     * @param template the template.
+     * @param utils the {@link DAOChooserTemplateUtils} instance.
+     * @return such name.
      */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    protected String retrieveTemplateFileName(@NotNull final T template, @NotNull final DAOChooserTemplateUtils utils)
     {
-        write(
-            template,
-            template.getRepositoryName(),
-            outputDir,
-            charset,
-            DAOChooserTemplateUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a ConfigurationProperties template to disk.
-     * @param template template to write.
-     * @param repository the repository.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param daoChooserTemplateUtils the {@link DAOChooserTemplateUtils}
-     * instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template instanceof ConfigurationPropertiesTemplate
-     * @precondition repository != null
-     * @precondition outputDir != null
-     * @precondition daoChooserTemplateUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final String repository,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final DAOChooserTemplateUtils daoChooserTemplateUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + daoChooserTemplateUtils.retrievePropertiesFileName(
-                    repository.toLowerCase()),
-                template.generate(),
-                charset);
-        }
+        return
+            utils.retrievePropertiesFileName(
+                template.getRepositoryName().toLowerCase(Locale.US));
     }
 }

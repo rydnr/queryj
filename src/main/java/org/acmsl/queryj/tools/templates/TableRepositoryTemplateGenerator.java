@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,18 +37,18 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -64,9 +63,10 @@ import java.util.Collection;
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TableRepositoryTemplateGenerator
+public class TableRepositoryTemplateGenerator<T extends TableRepositoryTemplate>
+    extends  AbstractTemplateGenerator<T>
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator,
+                BasePerRepositoryTemplateGenerator<T>,
                 Singleton
 {
     /**
@@ -84,7 +84,7 @@ public class TableRepositoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected TableRepositoryTemplateGenerator() {};
+    protected TableRepositoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link TableRepositoryTemplateGenerator} instance.
@@ -107,7 +107,7 @@ public class TableRepositoryTemplateGenerator
      * @param repositoryName the name of the repository.
      * @param tables the tables.
      * @param header the header.
-     * @oaram jmx whether to support JMX.
+     * @param jmx whether to support JMX.
      * @return a template.
      */
     @NotNull
@@ -138,13 +138,28 @@ public class TableRepositoryTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
+        return retrieveTemplateFileName(template, TableRepositoryTemplateUtils.getInstance());
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param template the template.
+     * @param tableRepositoryTemplateUtils the {@link TableRepositoryTemplateUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final T template, @NotNull final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
+    {
+        return
+            tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
+                template.getRepositoryName())
+            + ".java";
     }
 
     /**

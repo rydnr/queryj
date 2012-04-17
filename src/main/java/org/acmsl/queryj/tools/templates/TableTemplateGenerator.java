@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,32 +37,24 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TableTemplateGenerator
+public class TableTemplateGenerator<T extends TableTemplate>
+    extends  AbstractTemplateGenerator<T>
     implements  TableTemplateFactory,
                 Singleton
 {
@@ -82,7 +73,7 @@ public class TableTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected TableTemplateGenerator() {};
+    protected TableTemplateGenerator() {}
 
     /**
      * Retrieves a {@link TableTemplateGenerator} instance.
@@ -141,77 +132,25 @@ public class TableTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
+        return retrieveTemplateFileName(template, TableTemplateUtils.getInstance());
     }
 
     /**
-     * Writes a table template to disk.
-     * @param tableTemplate the table template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
-     */
-    public void write(
-        @NotNull final TableTemplate tableTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            tableTemplate,
-            outputDir,
-            charset,
-            FileUtils.getInstance(),
-            TableTemplateUtils.getInstance());
-    }
-
-    /**
-     * Writes a table template to disk.
-     * @param tableTemplate the table template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param fileUtils the {@link FileUtils} instance.
+     * Retrieves the template's file name.
+     * @param template the template.
      * @param tableTemplateUtils the {@link TableTemplateUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
-     * @precondition fileUtils != null
-     * @precondition tableTemplateUtils != null
+     * @return such file name.
      */
-    protected void write(
-        @NotNull final TableTemplate tableTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final FileUtils fileUtils,
-        @NotNull final TableTemplateUtils tableTemplateUtils)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final T template, @NotNull final TableTemplateUtils tableTemplateUtils)
     {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + tableTemplateUtils.retrieveTableClassName(
-                    tableTemplate.getTableName())
-                + ".java",
-                tableTemplate.generate(),
-                charset);
-        }
+        return
+            tableTemplateUtils.retrieveTableClassName(template.getTableName()) + ".java";
     }
 }

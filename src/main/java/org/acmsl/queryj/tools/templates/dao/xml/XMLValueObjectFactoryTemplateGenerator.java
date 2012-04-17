@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -35,37 +34,34 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.dao.xml.XMLValueObjectFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.xml
-    .XMLValueObjectFactoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.Locale;
 
 /**
  * Is able to generate XML value object factories according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class XMLValueObjectFactoryTemplateGenerator
+public class XMLValueObjectFactoryTemplateGenerator<T extends XMLValueObjectFactoryTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  XMLValueObjectFactoryTemplateFactory,
                 Singleton
 {
@@ -84,7 +80,7 @@ public class XMLValueObjectFactoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected XMLValueObjectFactoryTemplateGenerator() {};
+    protected XMLValueObjectFactoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link XMLValueObjectFactoryTemplateGenerator} instance.
@@ -127,85 +123,37 @@ public class XMLValueObjectFactoryTemplateGenerator
                 getDecoratorFactory());
     }
 
+
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
+        return
+            retrieveTemplateFileName(
+                template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
-     * Writes a value object factory template to disk.
-     * @param template the value object factory template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     */
-    public void write(
-        @NotNull final XMLValueObjectFactoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            EnglishGrammarUtils.getInstance(),
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a value object factory template to disk.
-     * @param template the value object factory template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * Retrieves given template's file name.
+     * @param template the template.
      * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition englishGrammarUtils != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return such name.
      */
-    protected void write(
-        @NotNull final XMLValueObjectFactoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final T template,
         @NotNull final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "XML"
-                + stringUtils.capitalize(
-                    englishGrammarUtils.getSingular(
-                        template.getTableTemplate().getTableName().toLowerCase()),
-                    '_')
-                + "ValueObjectFactory.java",
-                template.generate(),
-                charset);
-        }
+        return
+              "XML"
+            + stringUtils.capitalize(
+                  englishGrammarUtils.getSingular(
+                      template.getTableTemplate().getTableName().toLowerCase(Locale.US)),
+                  '_')
+            + "ValueObjectFactory.java";
     }
 }

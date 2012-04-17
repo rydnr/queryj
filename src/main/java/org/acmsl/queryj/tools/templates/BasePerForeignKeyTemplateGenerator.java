@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -33,34 +32,11 @@
  */
 package org.acmsl.queryj.tools.templates;
 
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 /**
  * Represents entities able to write per-fk templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerForeignKeyTemplateGenerator
+public interface BasePerForeignKeyTemplateGenerator<N extends BasePerForeignKeyTemplate>
+    extends   TemplateGenerator<N>
 {
-    /**
-     * Writes a per-fk template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        final BasePerForeignKeyTemplate template,
-        final File outputDir,
-        final Charset charset)
-      throws  IOException;
 }

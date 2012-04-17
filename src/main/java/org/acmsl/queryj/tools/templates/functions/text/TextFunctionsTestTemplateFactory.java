@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,8 +37,10 @@ package org.acmsl.queryj.tools.templates.functions.text;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.TemplateFactory;
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplate;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -57,6 +58,7 @@ public interface TextFunctionsTestTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the file header.
      * @return a template.
      */
     @Nullable
@@ -65,5 +67,6 @@ public interface TextFunctionsTestTemplateFactory
         final String testedPackageName,
         final String engineName,
         final String engineVersion,
-        final String quote);
+        final String quote,
+        final String header);
 }

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,38 +36,26 @@ package org.acmsl.queryj.tools.templates.functions.text.mysql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.text.mysql
-    .MySQLTextFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-
 /**
- * Is able to generate the JUnit classes to test the Database's text functions.
+ * Is able to generate the JUnit classes to test MySQL text functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLTextFunctionsTestTemplateGenerator
-    extends  TextFunctionsTestTemplateGenerator
+public class MySQLTextFunctionsTestTemplateGenerator<T extends  MySQLTextFunctionsTestTemplate>
+    extends  TextFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -86,10 +73,10 @@ public class MySQLTextFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLTextFunctionsTestTemplateGenerator() {};
+    public MySQLTextFunctionsTestTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>TextFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link TextFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -109,6 +96,7 @@ public class MySQLTextFunctionsTestTemplateGenerator
      * @return a template.
      * invalid.
      */
+    @Override
     @Nullable
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
         @Nullable final String packageName,
@@ -137,15 +125,5 @@ public class MySQLTextFunctionsTestTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

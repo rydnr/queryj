@@ -140,7 +140,8 @@ public class SystemFunctionsTestTemplateBuildHandler
                     testedPackage,
                     metadata.getDatabaseProductName(),
                     metadata.getDatabaseProductVersion(),
-                    fixQuote(metadata.getIdentifierQuoteString()));
+                    fixQuote(metadata.getIdentifierQuoteString()),
+                    retrieveHeader(parameters));
 
             Collection t_cFunctions =
                 stringUtils.tokenize(metadata.getSystemFunctions(), ",");

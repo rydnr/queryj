@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,9 +37,7 @@ package org.acmsl.queryj.tools.templates.functions.time;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
-import org.acmsl.queryj.tools.templates.functions.time
-    .TimeFunctionsTemplateFactory;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -48,20 +45,15 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,7 +62,8 @@ import org.jetbrains.annotations.Nullable;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TimeFunctionsTemplateGenerator
+public class TimeFunctionsTemplateGenerator<T extends TimeFunctionsTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  TimeFunctionsTemplateFactory,
                 Singleton
 {
@@ -94,12 +87,9 @@ public class TimeFunctionsTemplateGenerator
         @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (t_TemplateMappingManager != null)
-        {
-            t_TemplateMappingManager.addDefaultTemplateFactoryClass(
-                TemplateMappingManager.TIME_FUNCTIONS_TEMPLATE,
-                getClass().getName());
-        }
+        t_TemplateMappingManager.addDefaultTemplateFactoryClass(
+            TemplateMappingManager.TIME_FUNCTIONS_TEMPLATE,
+            getClass().getName());
     }
 
     /**
@@ -154,47 +144,6 @@ public class TimeFunctionsTemplateGenerator
             engineName,
             engineVersion,
             templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        final String engineName, final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the {@link TemplateMappingManager}
-     * instance.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        final String engineName,
-        final String engineVersion,
-        @NotNull final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getTemplateFactoryClass(
-                TemplateMappingManager.TIME_FUNCTIONS_TEMPLATE,
-                engineName,
-                engineVersion);
     }
 
     /**
@@ -264,6 +213,7 @@ public class TimeFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the file header.
      * @return a template.
      * @precondition packageName != null
      * @precondition engineName != null
@@ -274,7 +224,8 @@ public class TimeFunctionsTemplateGenerator
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
     {
         @Nullable TimeFunctionsTemplate result = null;
 
@@ -307,72 +258,19 @@ public class TimeFunctionsTemplateGenerator
                     packageName,
                     engineName,
                     engineVersion,
-                    quote);
+                    quote,
+                    header);
         }
 
         return result;
     }
 
     /**
-     * Writes a time functions template to disk.
-     * @param timeFunctionsTemplate the time functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition timeFunctionsTemplate != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final TimeFunctionsTemplate timeFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            timeFunctionsTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a time functions template to disk.
-     * @param timeFunctionsTemplate the time functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition timeFunctionsTemplate != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final TimeFunctionsTemplate timeFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "TimeFunctions.java",
-                timeFunctionsTemplate.generate(),
-                charset);
-        }
+        return "TimeFunctionsTemplate.java";
     }
 }

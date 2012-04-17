@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -28,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate the JUnit classes to test MySQL's
+ * Description: Is able to generate the JUnit classes to test MySQL
  *              numeric functions.
  *
  */
@@ -37,30 +36,26 @@ package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.numeric.mysql
-    .MySQLNumericFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Is able to generate the JUnit classes to test the Database's numeric functions.
+ * Is able to generate the JUnit classes to test the MySQL numeric functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLNumericFunctionsTestTemplateGenerator
-    extends  NumericFunctionsTestTemplateGenerator
+public class MySQLNumericFunctionsTestTemplateGenerator<T extends MySQLNumericFunctionsTestTemplate>
+    extends  NumericFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -78,7 +73,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLNumericFunctionsTestTemplateGenerator() {};
+    public MySQLNumericFunctionsTestTemplateGenerator() {}
 
     /**
      * Retrieves a <code>MySQLNumericFunctionsTestTemplateGenerator</code> instance.
@@ -101,6 +96,7 @@ public class MySQLNumericFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public NumericFunctionsTestTemplate createNumericFunctionsTestTemplate(
         @Nullable final String packageName,
@@ -129,15 +125,5 @@ public class MySQLNumericFunctionsTestTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

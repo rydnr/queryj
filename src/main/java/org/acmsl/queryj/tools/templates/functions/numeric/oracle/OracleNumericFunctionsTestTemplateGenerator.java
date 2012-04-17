@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,21 +36,17 @@ package org.acmsl.queryj.tools.templates.functions.numeric.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTestTemplateGenerator;
-
-import org.acmsl.queryj.tools.templates.functions.numeric.oracle
-    .OracleNumericFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,8 +54,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate the JUnit classes to test the Database's numeric functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleNumericFunctionsTestTemplateGenerator
-    extends  NumericFunctionsTestTemplateGenerator
+public class OracleNumericFunctionsTestTemplateGenerator<T extends OracleNumericFunctionsTestTemplate>
+    extends  NumericFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -78,7 +73,7 @@ public class OracleNumericFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public OracleNumericFunctionsTestTemplateGenerator() {};
+    public OracleNumericFunctionsTestTemplateGenerator() {}
 
     /**
      * Retrieves a <code>OracleNumericFunctionsTestTemplateGenerator</code> instance.
@@ -128,15 +123,5 @@ public class OracleNumericFunctionsTestTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

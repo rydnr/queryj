@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,34 +36,27 @@ package org.acmsl.queryj.tools.templates.functions.time.mysql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
-import org.acmsl.queryj.tools.templates.functions.time
-    .TimeFunctionsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate time function repositories according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLTimeFunctionsTemplateGenerator
-    extends  TimeFunctionsTemplateGenerator
+public class MySQLTimeFunctionsTemplateGenerator<T extends MySQLTimeFunctionsTemplate>
+    extends  TimeFunctionsTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -82,10 +74,10 @@ public class MySQLTimeFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLTimeFunctionsTemplateGenerator() {};
+    public MySQLTimeFunctionsTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>MySQLTimeFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link MySQLTimeFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -103,6 +95,7 @@ public class MySQLTimeFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public TimeFunctionsTemplate createTimeFunctionsTemplate(
         @Nullable final String packageName,
@@ -129,15 +122,5 @@ public class MySQLTimeFunctionsTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

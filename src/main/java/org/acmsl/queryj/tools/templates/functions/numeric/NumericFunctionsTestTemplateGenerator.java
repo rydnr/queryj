@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,12 +37,7 @@ package org.acmsl.queryj.tools.templates.functions.numeric;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTestTemplateFactory;
-
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -51,20 +45,15 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,7 +61,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate the JUnit classes to test the Database's numeric functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class NumericFunctionsTestTemplateGenerator
+public class NumericFunctionsTestTemplateGenerator<T extends NumericFunctionsTestTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  NumericFunctionsTestTemplateFactory,
                 Singleton
 {
@@ -91,7 +81,7 @@ public class NumericFunctionsTestTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected NumericFunctionsTestTemplateGenerator() {};
+    protected NumericFunctionsTestTemplateGenerator() {}
 
     /**
      * Retrieves a {@link NumericFunctionsTestTemplateGenerator} instance.
@@ -117,8 +107,7 @@ public class NumericFunctionsTestTemplateGenerator
         @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (   (t_MappingManager     != null)
-             && (engineName           != null)
+        if  (   (engineName           != null)
              && (templateFactoryClass != null))
         {
             t_MappingManager.addTemplateFactoryClass(
@@ -127,34 +116,6 @@ public class NumericFunctionsTestTemplateGenerator
                 engineVersion,
                 templateFactoryClass);
         }
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        @Nullable String engineName, String engineVersion)
-    {
-        @Nullable String result = null;
-
-        @NotNull TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager != null)
-             && (engineName       != null))
-        {
-            result =
-                t_MappingManager.getTemplateFactoryClass(
-                    TemplateMappingManager.NUMERIC_FUNCTIONS_TEST_TEMPLATE,
-                    engineName,
-                    engineVersion);
-        }
-
-        return result;
     }
 
     /**
@@ -174,27 +135,24 @@ public class NumericFunctionsTestTemplateGenerator
         @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (t_MappingManager != null)
-        {
-            @Nullable Object t_TemplateFactory =
-                t_MappingManager.getTemplateFactory(
-                    TemplateMappingManager.NUMERIC_FUNCTIONS_TEST_TEMPLATE,
-                    engineName,
-                    engineVersion);
+        @Nullable Object t_TemplateFactory =
+            t_MappingManager.getTemplateFactory(
+                TemplateMappingManager.NUMERIC_FUNCTIONS_TEST_TEMPLATE,
+                engineName,
+                engineVersion);
 
-            if  (t_TemplateFactory != null)
+        if  (t_TemplateFactory != null)
+        {
+            if  (!(t_TemplateFactory instanceof NumericFunctionsTestTemplateFactory))
             {
-                if  (!(t_TemplateFactory instanceof NumericFunctionsTestTemplateFactory))
-                {
-                    throw
-                        new QueryJBuildException(
-                            "invalid.numeric.function.test.template.factory");
-                }
-                else 
-                {
-                    result =
-                        (NumericFunctionsTestTemplateFactory) t_TemplateFactory;
-                }
+                throw
+                    new QueryJBuildException(
+                        "invalid.numeric.function.test.template.factory");
+            }
+            else
+            {
+                result =
+                    (NumericFunctionsTestTemplateFactory) t_TemplateFactory;
             }
         }
 
@@ -217,7 +175,6 @@ public class NumericFunctionsTestTemplateGenerator
      * @param javadoc the class Javadoc.
      * @param classDefinition the class definition.
      * @param classStart the class start.
-     * @param testFunctionMethod the test function method.
      * @param classConstructor the class constructor.
      * @param memberAccessors the member accessors.
      * @param setUpTearDownMethods the setUp and tearDown methods.
@@ -379,63 +336,11 @@ public class NumericFunctionsTestTemplateGenerator
     }
 
     /**
-     * Writes a numeric functions test template to disk.
-     * @param numericFunctionsTestTemplate the numeric functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final NumericFunctionsTestTemplate numericFunctionsTestTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            numericFunctionsTestTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a numeric functions test template to disk.
-     * @param numericFunctionsTestTemplate the numeric functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition numericFunctionsTestTemplate != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final NumericFunctionsTestTemplate numericFunctionsTestTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "NumericFunctionsTest.java",
-                numericFunctionsTestTemplate.generate(),
-                charset);
-        }
+        return "NumericFunctionsTest.java";
     }
 }

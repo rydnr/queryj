@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,37 +37,37 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.CustomResultSetExtractorTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
  * Writes ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomResultSetExtractorTemplateWritingHandler
-    extends  BasePerCustomResultTemplateWritingHandler
+public class CustomResultSetExtractorTemplateWritingHandler<T extends CustomResultSetExtractorTemplate>
+    extends  BasePerCustomResultTemplateWritingHandler<T>
 {
     /**
-     * Creates a <code>CustomResultSetExtractorTemplateWritingHandler</code>
+     * Creates a {@link CustomResultSetExtractorTemplateWritingHandler}
      * instance.
      */
-    public CustomResultSetExtractorTemplateWritingHandler() {};
+    public CustomResultSetExtractorTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -76,7 +75,7 @@ public class CustomResultSetExtractorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
+    protected TemplateGenerator<T> retrieveTemplateGenerator()
     {
         return CustomResultSetExtractorTemplateGenerator.getInstance();
     }
@@ -88,11 +87,11 @@ public class CustomResultSetExtractorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerCustomResultTemplate[] retrieveTemplates(
+    protected T[] retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (BasePerCustomResultTemplate[])
+            (T[])
                 parameters.get(
                     TemplateMappingManager
                         .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
@@ -109,13 +108,13 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * using a different package naming scheme.
      * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return such folder.
      */
     @NotNull
     @Override
     protected File retrieveOutputDir(
-        final Result result,
+        final Result resultElement,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         @NotNull final File projectFolder,

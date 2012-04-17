@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -39,15 +38,16 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -62,7 +62,8 @@ import java.nio.charset.Charset;
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class ProcedureRepositoryTemplateGenerator
+public class ProcedureRepositoryTemplateGenerator<T extends ProcedureRepositoryTemplate>
+    extends  AbstractTemplateGenerator<T>
     implements  ProcedureRepositoryTemplateFactory,
                 Singleton
 {
@@ -81,10 +82,10 @@ public class ProcedureRepositoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected ProcedureRepositoryTemplateGenerator() {};
+    protected ProcedureRepositoryTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>ProcedureRepositoryTemplateGenerator</code> instance.
+     * Retrieves a {@link ProcedureRepositoryTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -100,7 +101,6 @@ public class ProcedureRepositoryTemplateGenerator
      * @param metadataTypeManager the metadata type manager instance.
      * @param header the header.
      * @return such template.
-     * @throws IOException if the file cannot be created.
      * @precondition packageName != null
      * @precondition repository != null
      * @precondition metadataTypeManager != null
@@ -122,74 +122,60 @@ public class ProcedureRepositoryTemplateGenerator
     }
 
     /**
-     * Writes a procedure repository template to disk.
-     * @param procedureRepositoryTemplate the procedure repository to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final ProcedureRepositoryTemplate procedureRepositoryTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            procedureRepositoryTemplate,
-            outputDir,
-            charset,
-            ProcedureRepositoryTemplateUtils.getInstance(),
-            FileUtils.getInstance());
+        return retrieveTemplateFileName(template, ProcedureRepositoryTemplateUtils.getInstance());
     }
 
     /**
-     * Writes a procedure repository template to disk.
-     * @param procedureRepositoryTemplate the procedure repository to write.
+     * Retrieves given template's file name.
+     * @param template the template.
+     * @param procedureRepositoryTemplateUtils the {@link ProcedureRepositoryTemplateUtils} instance.
+     * @return such name.
+     */
+    protected String retrieveTemplateFileName(
+        @NotNull final T template, @NotNull final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils)
+    {
+       return
+            procedureRepositoryTemplateUtils.retrieveProcedureRepositoryClassName(
+                    template.getRepository());
+    }
+
+    /**
+     * Writes a table template to disk.
+     * @param template the table template to write.
+     * @param fileName the template's file name.
      * @param outputDir the output folder.
      * @param charset the file encoding.
-     * @param procedureRepositoryTemplateUtils the
-     * <code>ProcedureRepositoryTemplateUtils</code> instance.
-     * @param fileUtils the <code>FileUtils</code> instance.
+     * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
-     * @precondition procedureRepositoryTemplate != null
+     * @precondition tableTemplate != null
      * @precondition outputDir != null
-     * @precondition procedureRepositoryTemplateUtils != null
      * @precondition fileUtils != null
+     * @precondition tableTemplateUtils != null
      */
+    @Override
     protected void write(
-        @NotNull final ProcedureRepositoryTemplate procedureRepositoryTemplate,
+        @NotNull final T template,
+        @NotNull final String fileName,
         @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final ProcedureRepositoryTemplateUtils procedureRepositoryTemplateUtils,
+        @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils)
-      throws  IOException
+        throws  IOException
     {
-        if  (!procedureRepositoryTemplate.isEmpty())
+        if  (!template.isEmpty())
         {
             @NotNull File t_FinalOutputDir =
                 new File(
                       outputDir.getAbsolutePath()
                     + File.separator
                     + fileUtils.packageToPath(
-                          procedureRepositoryTemplate.getPackageName()));
+                          template.getPackageName()));
 
-            if (t_FinalOutputDir.mkdirs())
-            {
-                fileUtils.writeFile(
-                        t_FinalOutputDir.getAbsolutePath()
-                    + File.separator
-                    + procedureRepositoryTemplateUtils
-                    .retrieveProcedureRepositoryClassName(
-                        procedureRepositoryTemplate.getRepository()),
-                    procedureRepositoryTemplate.generate(),
-                    charset);
-            }
-            else
-            {
-                throw
-                    new IOException(
-                        "Cannot create output dir: " + outputDir);
-            }
+            super.write(template, fileName, t_FinalOutputDir, charset, fileUtils);
         }
     }
 }

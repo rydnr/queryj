@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,12 +37,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTestTemplateFactory;
-
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -51,20 +45,15 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,7 +61,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate the JUnit classes to test the Database's system functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class SystemFunctionsTestTemplateGenerator
+public class SystemFunctionsTestTemplateGenerator<T extends SystemFunctionsTestTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  SystemFunctionsTestTemplateFactory,
                 Singleton
 {
@@ -91,7 +81,7 @@ public class SystemFunctionsTestTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected SystemFunctionsTestTemplateGenerator() {};
+    protected SystemFunctionsTestTemplateGenerator() {}
 
     /**
      * Retrieves a {@link SystemFunctionsTestTemplateGenerator} instance.
@@ -117,8 +107,7 @@ public class SystemFunctionsTestTemplateGenerator
         @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (   (t_MappingManager     != null)
-             && (engineName           != null)
+        if  (   (engineName           != null)
              && (templateFactoryClass != null))
         {
             t_MappingManager.addTemplateFactoryClass(
@@ -127,34 +116,6 @@ public class SystemFunctionsTestTemplateGenerator
                 engineVersion,
                 templateFactoryClass);
         }
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        @Nullable final String engineName, final String engineVersion)
-    {
-        @Nullable String result = null;
-
-        @NotNull TemplateMappingManager t_MappingManager =
-            TemplateMappingManager.getInstance();
-
-        if  (   (t_MappingManager != null)
-             && (engineName       != null))
-        {
-            result =
-                t_MappingManager.getTemplateFactoryClass(
-                    TemplateMappingManager.SYSTEM_FUNCTIONS_TEST_TEMPLATE,
-                    engineName,
-                    engineVersion);
-        }
-
-        return result;
     }
 
     /**
@@ -174,26 +135,23 @@ public class SystemFunctionsTestTemplateGenerator
         @NotNull TemplateMappingManager t_MappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (t_MappingManager != null)
-        {
-            @Nullable Object t_TemplateFactory =
-                t_MappingManager.getTemplateFactory(
-                    TemplateMappingManager.SYSTEM_FUNCTIONS_TEST_TEMPLATE,
-                    engineName,
-                    engineVersion);
+        @Nullable Object t_TemplateFactory =
+            t_MappingManager.getTemplateFactory(
+                TemplateMappingManager.SYSTEM_FUNCTIONS_TEST_TEMPLATE,
+                engineName,
+                engineVersion);
 
-            if  (t_TemplateFactory != null)
+        if  (t_TemplateFactory != null)
+        {
+            if  (!(t_TemplateFactory instanceof SystemFunctionsTestTemplateFactory))
             {
-                if  (!(t_TemplateFactory instanceof SystemFunctionsTestTemplateFactory))
-                {
-                    throw
-                        new QueryJBuildException(
-                            "invalid.system.function.test.template.factory");
-                }
-                else 
-                {
-                    result = (SystemFunctionsTestTemplateFactory) t_TemplateFactory;
-                }
+                throw
+                    new QueryJBuildException(
+                        "invalid.system.function.test.template.factory");
+            }
+            else
+            {
+                result = (SystemFunctionsTestTemplateFactory) t_TemplateFactory;
             }
         }
 
@@ -207,6 +165,7 @@ public class SystemFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the file header.
      * @return a template.
      */
     @Nullable
@@ -215,7 +174,8 @@ public class SystemFunctionsTestTemplateGenerator
         final String testedPackageName,
         @Nullable final String engineName,
         @Nullable final String engineVersion,
-        @Nullable final String quote)
+        @Nullable final String quote,
+        final String header)
     {
         @Nullable SystemFunctionsTestTemplate result = null;
 
@@ -254,7 +214,8 @@ public class SystemFunctionsTestTemplateGenerator
                         testedPackageName,
                         engineName,
                         engineVersion,
-                        quote);
+                        quote,
+                        header);
             }
         }
 
@@ -262,61 +223,11 @@ public class SystemFunctionsTestTemplateGenerator
     }
 
     /**
-     * Writes a system functions test template to disk.
-     * @param systemFunctionsTestTemplate the system functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            systemFunctionsTestTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a system functions test template to disk.
-     * @param systemFunctionsTestTemplate the system functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final SystemFunctionsTestTemplate systemFunctionsTestTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "SystemFunctionsTest.java",
-                systemFunctionsTestTemplate.generate(),
-                charset);
-        }
+        return "SystemFunctionsTest.java";
     }
 }

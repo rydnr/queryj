@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,33 +36,24 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplate;
-import org.acmsl.queryj.tools.templates.dao.QueryPreparedStatementCreatorTemplateFactory;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate QueryPreparedStatementCreator templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class QueryPreparedStatementCreatorTemplateGenerator
+public class QueryPreparedStatementCreatorTemplateGenerator<T extends QueryPreparedStatementCreatorTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  QueryPreparedStatementCreatorTemplateFactory,
                 Singleton
 {
@@ -82,7 +72,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected QueryPreparedStatementCreatorTemplateGenerator() {};
+    protected QueryPreparedStatementCreatorTemplateGenerator() {}
 
     /**
      * Retrieves a {@link QueryPreparedStatementCreatorTemplateGenerator}
@@ -112,71 +102,11 @@ public class QueryPreparedStatementCreatorTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
-    }
-
-    /**
-     * Writes a QueryPreparedStatementCreator template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     */
-    public void write(
-        @NotNull final QueryPreparedStatementCreatorTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a QueryPreparedStatementCreator template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final QueryPreparedStatementCreatorTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "QueryPreparedStatementCreator.java",
-                template.generate(),
-                charset);
-        }
+        return "QueryPreparedStatementCreator.java";
     }
 }

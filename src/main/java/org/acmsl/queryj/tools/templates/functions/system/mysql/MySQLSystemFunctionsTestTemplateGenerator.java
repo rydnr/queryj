@@ -67,8 +67,8 @@ import java.io.IOException;
  * Is able to generate the JUnit classes to test the Database's system functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLSystemFunctionsTestTemplateGenerator
-    extends  SystemFunctionsTestTemplateGenerator
+public class MySQLSystemFunctionsTestTemplateGenerator<T extends MySQLSystemFunctionsTestTemplate>
+    extends  SystemFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -86,10 +86,10 @@ public class MySQLSystemFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLSystemFunctionsTestTemplateGenerator() {};
+    public MySQLSystemFunctionsTestTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>MySQLSystemFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link MySQLSystemFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -108,6 +108,7 @@ public class MySQLSystemFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public SystemFunctionsTestTemplate createSystemFunctionsTestTemplate(
         @Nullable final String packageName,

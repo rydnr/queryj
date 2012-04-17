@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -33,34 +32,11 @@
  */
 package org.acmsl.queryj.tools.templates;
 
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-
 /**
  * Represents entities able to write per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerRepositoryTemplateGenerator
+public interface BasePerRepositoryTemplateGenerator<N extends BasePerRepositoryTemplate>
+    extends TemplateGenerator<N>
 {
-    /**
-     * Writes a per-repository template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        final BasePerRepositoryTemplate template,
-        final File outputDir,
-        final Charset charset)
-      throws  IOException;
 }

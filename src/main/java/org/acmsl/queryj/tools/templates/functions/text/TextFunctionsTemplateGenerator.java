@@ -38,12 +38,7 @@ package org.acmsl.queryj.tools.templates.functions.text;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTemplateFactory;
-
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -51,20 +46,15 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +63,8 @@ import org.jetbrains.annotations.Nullable;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TextFunctionsTemplateGenerator
+public class TextFunctionsTemplateGenerator<T extends TextFunctionsTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  TextFunctionsTemplateFactory,
                 Singleton
 {
@@ -97,12 +88,9 @@ public class TextFunctionsTemplateGenerator
         @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (t_TemplateMappingManager != null)
-        {
-            t_TemplateMappingManager.addDefaultTemplateFactoryClass(
-                TemplateMappingManager.TEXT_FUNCTIONS_TEMPLATE,
-                this.getClass().getName());
-        }
+        t_TemplateMappingManager.addDefaultTemplateFactoryClass(
+            TemplateMappingManager.TEXT_FUNCTIONS_TEMPLATE,
+            this.getClass().getName());
     }
 
     /**
@@ -157,47 +145,6 @@ public class TextFunctionsTemplateGenerator
             engineName,
             engineVersion,
             templateFactoryClass);
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        final String engineName, final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param templateMappingManager the {@link TemplateMappingManager}
-     * instance.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        final String engineName,
-        final String engineVersion,
-        @NotNull final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getTemplateFactoryClass(
-                TemplateMappingManager.TEXT_FUNCTIONS_TEMPLATE,
-                engineName,
-                engineVersion);
     }
 
     /**
@@ -267,6 +214,7 @@ public class TextFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the header.
      * @return a template.
      * @precondition packageName != null
      * @precondition engineName != null
@@ -277,7 +225,8 @@ public class TextFunctionsTemplateGenerator
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
     {
         @Nullable TextFunctionsTemplate result = null;
 
@@ -310,72 +259,19 @@ public class TextFunctionsTemplateGenerator
                     packageName,
                     engineName,
                     engineVersion,
-                    quote);
+                    quote,
+                    header);
         }
 
         return result;
     }
 
     /**
-     * Writes a text functions template to disk.
-     * @param textFunctionsTemplate the text functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition textFunctionsTemplate != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final TextFunctionsTemplate textFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            textFunctionsTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a text functions template to disk.
-     * @param textFunctionsTemplate the text functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition textFunctionsTemplate != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final TextFunctionsTemplate textFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "TextFunctions.java",
-                textFunctionsTemplate.generate(),
-                charset);
-        }
+        return "TextFunctions.java";
     }
 }

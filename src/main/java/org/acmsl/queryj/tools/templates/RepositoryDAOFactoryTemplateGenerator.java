@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,37 +36,33 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
-import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Collection;
 
 /**
  * Is able to generate the repository DAO factory implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class RepositoryDAOFactoryTemplateGenerator
+public class RepositoryDAOFactoryTemplateGenerator<T extends RepositoryDAOFactoryTemplate>
+    extends  AbstractTemplateGenerator<T>
     implements  RepositoryDAOFactoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator,
+                BasePerRepositoryTemplateGenerator<T>,
                 Singleton
 {
     /**
@@ -85,7 +80,7 @@ public class RepositoryDAOFactoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected RepositoryDAOFactoryTemplateGenerator() {};
+    protected RepositoryDAOFactoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link RepositoryDAOFactoryTemplateGenerator} instance.
@@ -140,75 +135,27 @@ public class RepositoryDAOFactoryTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
+        return retrieveTemplateFileName(template, DecorationUtils.getInstance());
     }
 
     /**
-     * Writes a table repository template to disk.
-     * @param template the table repository template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            DecorationUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-            
-    /**
-     * Writes a table repository template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
+     * Retrieves given template's file name.
+     * @param template the template.
      * @param decorationUtils the {@link DecorationUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition decorationUtils != null
-     * @precondition fileUtils != null
+     * @return such name.
      */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final DecorationUtils decorationUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final T template, @NotNull final DecorationUtils decorationUtils)
     {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + template.getEngineName()
-                + decorationUtils.capitalize(template.getRepositoryName())
-                + "DAOFactory.java",
-                template.generate(),
-                charset);
-        }
+        return
+              template.getEngineName()
+            + decorationUtils.capitalize(template.getRepositoryName())
+            + "DAOFactory.java";
     }
 }

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,21 +35,17 @@ package org.acmsl.queryj.tools.templates.functions.numeric.mysql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.numeric.mysql
-    .MySQLNumericFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,8 +53,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate MySQL's numeric function repositories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLNumericFunctionsTemplateGenerator
-    extends  NumericFunctionsTemplateGenerator
+public class MySQLNumericFunctionsTemplateGenerator<T extends MySQLNumericFunctionsTemplate>
+    extends  NumericFunctionsTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -77,7 +72,7 @@ public class MySQLNumericFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLNumericFunctionsTemplateGenerator() {};
+    public MySQLNumericFunctionsTemplateGenerator() {}
 
     /**
      * Retrieves a <code>MySQLNumericFunctionsTemplateGenerator</code> instance.
@@ -98,6 +93,7 @@ public class MySQLNumericFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public NumericFunctionsTemplate createNumericFunctionsTemplate(
         @Nullable final String packageName,
@@ -124,15 +120,5 @@ public class MySQLNumericFunctionsTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

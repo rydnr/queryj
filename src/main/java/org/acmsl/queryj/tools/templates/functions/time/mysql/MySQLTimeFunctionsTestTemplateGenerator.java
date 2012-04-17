@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,38 +36,26 @@ package org.acmsl.queryj.tools.templates.functions.time.mysql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.time.mysql
-    .MySQLTimeFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.time
-    .TimeFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.time
-    .TimeFunctionsTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate the JUnit classes to test the Database's time functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLTimeFunctionsTestTemplateGenerator
-    extends  TimeFunctionsTestTemplateGenerator
+public class MySQLTimeFunctionsTestTemplateGenerator<T extends MySQLTimeFunctionsTestTemplate>
+    extends  TimeFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -86,10 +73,10 @@ public class MySQLTimeFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLTimeFunctionsTestTemplateGenerator() {};
+    public MySQLTimeFunctionsTestTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>TimeFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link TimeFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -109,6 +96,7 @@ public class MySQLTimeFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public TimeFunctionsTestTemplate createTimeFunctionsTestTemplate(
         @Nullable final String packageName,
@@ -137,15 +125,5 @@ public class MySQLTimeFunctionsTestTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

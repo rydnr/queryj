@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,12 +37,7 @@ package org.acmsl.queryj.tools.templates.functions.system;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTemplateFactory;
-
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -51,20 +45,15 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,7 +62,8 @@ import org.jetbrains.annotations.Nullable;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class SystemFunctionsTemplateGenerator
+public class SystemFunctionsTemplateGenerator<T extends SystemFunctionsTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  SystemFunctionsTemplateFactory,
                 Singleton
 {
@@ -97,12 +87,9 @@ public class SystemFunctionsTemplateGenerator
         @NotNull TemplateMappingManager t_TemplateMappingManager =
             TemplateMappingManager.getInstance();
 
-        if  (t_TemplateMappingManager != null)
-        {
-            t_TemplateMappingManager.addDefaultTemplateFactoryClass(
-                TemplateMappingManager.SYSTEM_FUNCTIONS_TEMPLATE,
-                getClass().getName());
-        }
+        t_TemplateMappingManager.addDefaultTemplateFactoryClass(
+            TemplateMappingManager.SYSTEM_FUNCTIONS_TEMPLATE,
+            getClass().getName());
     }
 
     /**
@@ -120,13 +107,11 @@ public class SystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param templateFactoryClass the template factory.
-     * @precondition engineName != null
-     * @preocndition templateFactoryClass != null
      */
     public void addTemplateFactoryClass(
-        final String engineName,
+        @NotNull final String engineName,
         final String engineVersion,
-        final String templateFactoryClass)
+        @NotNull final String templateFactoryClass)
     {
         addTemplateFactoryClass(
             engineName,
@@ -142,14 +127,11 @@ public class SystemFunctionsTemplateGenerator
      * @param templateFactoryClass the template factory.
      * @param templateMappingManager the {@link TemplateMappingManager}
      * instance.
-     * @precondition engineName != null
-     * @preocndition templateFactoryClass != null
-     * @precondition templateMappingManager != null
      */
     protected void addTemplateFactoryClass(
-        final String engineName,
+        @NotNull final String engineName,
         final String engineVersion,
-        final String templateFactoryClass,
+        @NotNull final String templateFactoryClass,
         @NotNull final TemplateMappingManager templateMappingManager)
     {
         templateMappingManager.addTemplateFactoryClass(
@@ -160,58 +142,15 @@ public class SystemFunctionsTemplateGenerator
     }
 
     /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @precondition engineName != null
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        final String engineName, final String engineVersion)
-    {
-        return
-            getTemplateFactoryClass(
-                engineName,
-                engineVersion,
-                TemplateMappingManager.getInstance());
-    }
-
-    /**
-     * Retrieves the template factory class.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @return the template factory class name.
-     * @param templateMappingManager the {@link TemplateMappingManager}
-     * instance.
-     * @return the template factory class name.
-     * @preocndition engineName != null
-     * @precondition templateMappingManager != null
-     */
-    @Nullable
-    protected String getTemplateFactoryClass(
-        final String engineName,
-        final String engineVersion,
-        @NotNull final TemplateMappingManager templateMappingManager)
-    {
-        return
-            templateMappingManager.getTemplateFactoryClass(
-                TemplateMappingManager.SYSTEM_FUNCTIONS_TEMPLATE,
-                engineName,
-                engineVersion);
-    }
-
-    /**
      * Retrieves the template factory instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
-     * @preocndition engineName != null
      */
     @Nullable
     protected SystemFunctionsTemplateFactory getTemplateFactory(
-        final String engineName, final String engineVersion)
+        @NotNull final String engineName, final String engineVersion)
       throws  QueryJBuildException
     {
         return
@@ -229,12 +168,10 @@ public class SystemFunctionsTemplateGenerator
      * instance.
      * @return the template factory class name.
      * @throws QueryJBuildException if the factory class is invalid.
-     * @preocndition engineName != null
-     * @precondition templateMappingManager != null
      */
     @Nullable
     protected SystemFunctionsTemplateFactory getTemplateFactory(
-        final String engineName,
+        @NotNull final String engineName,
         final String engineVersion,
         @NotNull final TemplateMappingManager templateMappingManager)
       throws  QueryJBuildException
@@ -270,6 +207,7 @@ public class SystemFunctionsTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the file header.
      * @return a template.
      * @precondition packageName != null
      * @precondition engineName != null
@@ -281,7 +219,8 @@ public class SystemFunctionsTemplateGenerator
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
     {
         @Nullable SystemFunctionsTemplate result = null;
 
@@ -314,72 +253,19 @@ public class SystemFunctionsTemplateGenerator
                     packageName,
                     engineName,
                     engineVersion,
-                    quote);
+                    quote,
+                    header);
         }
 
         return result;
     }
 
     /**
-     * Writes a system functions template to disk.
-     * @param systemFunctionsTemplate the system functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition systemFunctionsTemplate != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final SystemFunctionsTemplate systemFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-        throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            systemFunctionsTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a system functions template to disk.
-     * @param systemFunctionsTemplate the system functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtls} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition systemFunctionsTemplate != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final SystemFunctionsTemplate systemFunctionsTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "SystemFunctions.java",
-                systemFunctionsTemplate.generate(),
-                charset);
-        }
+        return "SystemFunctions.java";
     }
 }

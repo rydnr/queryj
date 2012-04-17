@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,35 +40,28 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate custom ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectTemplateGenerator
+public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  BasePerCustomResultTemplateFactory,
-                BasePerCustomResultTemplateGenerator,
                 Singleton
 {
     /**
@@ -87,7 +79,7 @@ public class CustomValueObjectTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomValueObjectTemplateGenerator() {};
+    protected CustomValueObjectTemplateGenerator() {}
 
     /**
      * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
@@ -203,28 +195,20 @@ public class CustomValueObjectTemplateGenerator
 
         String[] t_astrTableNames = metadataManager.getTableNames();
 
-        int t_iCount =
-            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-
-        String t_strTableName;
         String t_strVoClassName;
 
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for (String t_strTableName : t_astrTableNames)
         {
-            t_strTableName = t_astrTableNames[t_iIndex];
-
-            if  (t_strTableName != null)
+            if (t_strTableName != null)
             {
                 t_strVoClassName =
                     valueObjectTemplateGenerator.getVoClassName(
                         t_strTableName);
 
-                if  (   (t_strVoClassName != null)
-                     && (   (t_strVoClassName.equals(className)))
-                         || ((t_strVoClassName + "ValueObject").equals(
-                                 className))
-                         || ((className + "ValueObject").equals(
-                                 t_strVoClassName)))
+                if (   (t_strVoClassName != null)
+                    && ((t_strVoClassName.equals(className)))
+                    || ((t_strVoClassName + "ValueObject").equals(className))
+                    || ((className + "ValueObject").equals(t_strVoClassName)))
                 {
                     result = true;
                     break;
@@ -242,9 +226,9 @@ public class CustomValueObjectTemplateGenerator
      * @precondition fqcn != null
      */
     @Nullable
-    public String extractClassName(final String fqdn)
+    public String extractClassName(@NotNull final String fqcn)
     {
-        return extractClassName(fqdn, PackageUtils.getInstance());
+        return extractClassName(fqcn, PackageUtils.getInstance());
     }
 
     /**
@@ -257,75 +241,19 @@ public class CustomValueObjectTemplateGenerator
      */
     @Nullable
     protected String extractClassName(
-        final String fqdn, @NotNull final PackageUtils packageUtils)
+        final String fqcn, @NotNull final PackageUtils packageUtils)
     {
-        return packageUtils.extractClassName(fqdn);
+        return packageUtils.extractClassName(fqcn);
     }
 
     /**
-     * Writes a custom resultset extractor template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final BasePerCustomResultTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull T template)
     {
-        write(
-            template,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            EnglishGrammarUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a ValueObjectCreator template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
-     * instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final BasePerCustomResultTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + extractClassName(template.getResult().getClassValue())
-                + ".java",
-                template.generate(),
-                charset);
-        }
+        return
+            extractClassName(template.getResult().getClassValue())
+            + ".java";
     }
 }

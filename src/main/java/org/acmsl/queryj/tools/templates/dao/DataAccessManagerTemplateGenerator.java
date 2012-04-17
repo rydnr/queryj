@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,12 +37,10 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplate;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
@@ -52,27 +49,27 @@ import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
-import java.nio.charset.Charset;
 
 /**
  * Is able to generate DataAccessManager implementations according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DataAccessManagerTemplateGenerator
+public class
+    DataAccessManagerTemplateGenerator<T extends DataAccessManagerTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator,
+                BasePerRepositoryTemplateGenerator<T>,
                 Singleton
 {
     /**
@@ -89,7 +86,7 @@ public class DataAccessManagerTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DataAccessManagerTemplateGenerator() {};
+    protected DataAccessManagerTemplateGenerator() {}
 
     /**
      * Retrieves a {@link DataAccessManagerTemplateGenerator}
@@ -150,13 +147,14 @@ public class DataAccessManagerTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
+        return
+              capitalize(template.getRepositoryName())
+            + "DataAccessManager.java";
     }
 
     /**
@@ -182,73 +180,5 @@ public class DataAccessManagerTemplateGenerator
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
-    }
-
-    /**
-     * Writes a DataAccessManager template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template instanceof DataAccessManagerTemplate
-     * @precondition outputDir != null
-     */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            template.getRepositoryName(),
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a DataAccessManager template to disk.
-     * @param template template to write.
-     * @param repository the repository.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template instanceof DataAccessManagerTemplate
-     * @precondition repository != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        final String repository,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + capitalize(template.getRepositoryName())
-                + "DataAccessManager.java",
-                template.generate(),
-                charset);
-        }
     }
 }

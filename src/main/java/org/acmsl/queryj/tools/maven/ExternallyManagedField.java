@@ -95,7 +95,7 @@ public class ExternallyManagedField
      * Returns the name.
      * @return such value.
      */
-    protected String getName()
+    public String getName()
     {
         return immutableGetName();
     }
@@ -131,7 +131,7 @@ public class ExternallyManagedField
      * Returns the table name.
      * @return such value.
      */
-    protected String getTableName()
+    public String getTableName()
     {
         return immutableGetTableName();
     }
@@ -167,7 +167,7 @@ public class ExternallyManagedField
      * Returns the keyword.
      * @return such value.
      */
-    protected String getKeyword() 
+    public String getKeyword()
     {
         return immutableGetKeyword();
     }
@@ -203,7 +203,7 @@ public class ExternallyManagedField
      * Returns the retrieval query.
      * @return such value.
      */
-    protected String getRetrievalQuery()
+    public String getRetrievalQuery()
     {
         return immutableGetRetrievalQuery();
     }

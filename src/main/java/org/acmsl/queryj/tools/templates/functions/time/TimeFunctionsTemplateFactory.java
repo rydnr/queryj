@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,8 +35,11 @@ package org.acmsl.queryj.tools.templates.functions.time;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.TemplateFactory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -53,6 +55,7 @@ public interface TimeFunctionsTemplateFactory
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the file header.
      * @return a template.
      */
     @Nullable
@@ -60,5 +63,6 @@ public interface TimeFunctionsTemplateFactory
         final String packageName,
         final String engineName,
         final String engineVersion,
-        final String quote);
+        final String quote,
+        final String header);
 }

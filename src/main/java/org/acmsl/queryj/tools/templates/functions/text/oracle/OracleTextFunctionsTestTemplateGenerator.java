@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,38 +36,26 @@ package org.acmsl.queryj.tools.templates.functions.text.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.text.oracle
-    .OracleTextFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate the JUnit classes to test the Database's text functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleTextFunctionsTestTemplateGenerator
-    extends  TextFunctionsTestTemplateGenerator
+public class OracleTextFunctionsTestTemplateGenerator<T extends OracleTextFunctionsTestTemplate>
+    extends  TextFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -86,10 +73,10 @@ public class OracleTextFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public OracleTextFunctionsTestTemplateGenerator() {};
+    public OracleTextFunctionsTestTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>OracleTextFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link OracleTextFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -108,6 +95,7 @@ public class OracleTextFunctionsTestTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public TextFunctionsTestTemplate createTextFunctionsTestTemplate(
         @Nullable final String packageName,
@@ -136,15 +124,5 @@ public class OracleTextFunctionsTestTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

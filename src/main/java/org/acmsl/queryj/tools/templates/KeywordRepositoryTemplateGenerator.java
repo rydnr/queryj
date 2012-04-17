@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,36 +37,29 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate keyword repositories template according to
  * keyword definition.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class KeywordRepositoryTemplateGenerator
+public class KeywordRepositoryTemplateGenerator<T extends KeywordRepositoryTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  KeywordRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator,
+                BasePerRepositoryTemplateGenerator<T>,
                 Singleton
 {
     /**
@@ -85,7 +77,7 @@ public class KeywordRepositoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected KeywordRepositoryTemplateGenerator() {};
+    protected KeywordRepositoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link KeywordRepositoryTemplateGenerator} instance.
@@ -104,9 +96,8 @@ public class KeywordRepositoryTemplateGenerator
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
-     * @param engineName the engine name.
      * @param repositoryName the name of the repository.
-     * @param tables the tables.
+     * @param engineName the engine name.
      * @param header the header.
      * @return a template.
      */
@@ -135,75 +126,26 @@ public class KeywordRepositoryTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
+    public String retrieveTemplateFileName(@NotNull final T template) {
+        return retrieveTemplateFileName(template, DecorationUtils.getInstance());
     }
 
     /**
-     * Writes a keyword repository template to disk.
-     * @param template the keyword repository to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            DecorationUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a keyword repository template to disk.
-     * @param template the keyword repository to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
+     * Retrieves given template's file name.
+     *
+     * @param template the template.
      * @param decorationUtils the {@link DecorationUtils} instance.
-     * @param fileutils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition decorationUtils != null
-     * @precondition fileUtils != null
+     * @return such name.
      */
-    protected void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final DecorationUtils decorationUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
+    @NotNull
+    protected String retrieveTemplateFileName(@NotNull final T template, @NotNull final DecorationUtils decorationUtils)
     {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + decorationUtils.capitalize(
-                    template.getRepositoryName())
-                + "KeywordRepository.java",
-                template.generate(),
-                charset);
-        }
+        return
+            decorationUtils.capitalize(
+                template.getRepositoryName())
+            + "KeywordRepository.java";
     }
 }

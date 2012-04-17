@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,21 +35,17 @@ package org.acmsl.queryj.tools.templates.functions.numeric.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.numeric
-    .NumericFunctionsTemplateGenerator;
-
-import org.acmsl.queryj.tools.templates.functions.numeric.oracle
-    .OracleNumericFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,8 +53,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate Oracle's numeric function repositories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleNumericFunctionsTemplateGenerator
-    extends  NumericFunctionsTemplateGenerator
+public class OracleNumericFunctionsTemplateGenerator<T extends OracleNumericFunctionsTemplate>
+    extends  NumericFunctionsTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -77,10 +72,10 @@ public class OracleNumericFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public OracleNumericFunctionsTemplateGenerator() {};
+    public OracleNumericFunctionsTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>OracleNumericFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link OracleNumericFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -124,15 +119,5 @@ public class OracleNumericFunctionsTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

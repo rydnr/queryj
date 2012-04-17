@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,44 +35,37 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.CustomResultUtils;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplateGenerator;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
  * Writes ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectImplTemplateWritingHandler
-    extends  CustomValueObjectTemplateWritingHandler
+public class CustomValueObjectImplTemplateWritingHandler<T extends CustomValueObjectImplTemplate>
+    extends  CustomValueObjectTemplateWritingHandler<T>
 {
     /**
      * Creates a CustomValueObjectImplTemplateWritingHandler.
      */
-    public CustomValueObjectImplTemplateWritingHandler() {};
+    public CustomValueObjectImplTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -81,7 +73,7 @@ public class CustomValueObjectImplTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
+    protected TemplateGenerator<T> retrieveTemplateGenerator()
     {
         return CustomValueObjectImplTemplateGenerator.getInstance();
     }
@@ -94,12 +86,12 @@ public class CustomValueObjectImplTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerCustomResultTemplate[] retrieveTemplates(
+    protected T[] retrieveTemplates(
         @NotNull final Map parameters)
         throws  BuildException
     {
         return
-            (BasePerCustomResultTemplate[])
+            (T[])
                 parameters.get(
                     TemplateMappingManager.CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES);
     }

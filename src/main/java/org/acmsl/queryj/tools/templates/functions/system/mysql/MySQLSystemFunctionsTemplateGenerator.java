@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,38 +35,26 @@ package org.acmsl.queryj.tools.templates.functions.system.mysql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.system.mysql
-    .MySQLSystemFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplate;
+import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate MySQL's system function repositories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLSystemFunctionsTemplateGenerator
-    extends  SystemFunctionsTemplateGenerator
+public class MySQLSystemFunctionsTemplateGenerator<T extends MySQLSystemFunctionsTemplate>
+    extends  SystemFunctionsTemplateGenerator<T>
     implements Singleton
 {
     /**
@@ -85,10 +72,10 @@ public class MySQLSystemFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLSystemFunctionsTemplateGenerator() {};
+    public MySQLSystemFunctionsTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>MySQLSystemFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link MySQLSystemFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -106,6 +93,7 @@ public class MySQLSystemFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public SystemFunctionsTemplate createSystemFunctionsTemplate(
         @Nullable final String packageName,
@@ -132,15 +120,5 @@ public class MySQLSystemFunctionsTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

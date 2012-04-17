@@ -33,22 +33,13 @@
 package org.acmsl.queryj.tools.maven;
 
 /*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
-
-/*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.tools.ant.QueryJTask;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
+import org.acmsl.queryj.tools.ant.QueryJTask;
 
 /*
  * Importing some Maven classes.
@@ -63,13 +54,27 @@ import org.apache.maven.plugin.logging.Log;
  */
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
+
+/*
+ * Importing some Jetbrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Properties;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * Executes QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @goal queryj
+ * @execute phase="generate-sources"
  */
 public class QueryJMojo
     extends AbstractMojo
@@ -86,116 +91,118 @@ public class QueryJMojo
      * @parameter property="driver" @required
      */
     private String m__strDriver;
-    
+
     /**
      * The url.
      * @parameter property="url" @required
      */
     private String m__strUrl;
-    
+
     /**
      * The user name.
      * @parameter property="username" @required
      */
     private String m__strUsername;
-    
+
     /**
      * The password.
      * @parameter property="password" @required
      */
     private String m__strPassword;
-    
+
     /**
      * The catalog.
      * @parameter property="catalog"
      */
     private String catalog;
-    
+
     /**
      * The schema.
      * @parameter property="schema" @required
      */
     private String schema;
-    
+
     /**
      * The repository.
      * @parameter property="repository" @required
      */
     private String m__strRepository;
-    
+
     /**
      * The package name.
      * @parameter property="packageName" @required
      */
     private String m__strPackageName;
-    
+
     /**
      * The output directory.
-     * @parameter property="outputDir" 
+     * @parameter property="outputDir"
      */
     private File m__OutputDir;
-    
+
     /**
      * The data source.
      * @parameter property="jndiDataSource"
      */
     private String m__strJndiDataSource;
-    
+
     /**
      * The sql xml file.
      * @parameter property="sqlXmlFile"
      */
     private File m__SqlXmlFile;
-    
+
     /**
      * The customized sql model.
      * @parameter property="customSqlModel"
      */
     private String m__strCustomSqlModel;
-    
+
     /**
      * The xml dao implementation flag.
      * @parameter property="generateXmlDAOImplementation"
      */
     private Boolean m__bGenerateXmlDAOImplementation = Boolean.FALSE;
-    
+
     /**
      * The mock dao implementation flag.
      * @parameter property="generateMockDAOImplementation"
      */
     private Boolean m__bGenerateMockDAOImplementation = Boolean.FALSE;
-    
+
     /**
      * The test generation flag.
      * @parameter property="generateTests"
      */
     private Boolean m__bGenerateTests = Boolean.FALSE;
-    
+
     /**
      * The header file.
      * @parameter property="headerFile"
      */
     private File m__HeaderFile;
-    
+
     /**
      * The extract functions flag.
      * @parameter property="extractFunctions"
      */
     private Boolean m__bExtractFunctions = Boolean.FALSE;
-    
+
     /**
      * The extract procedures flag.
      * @parameter property="extractProcedures"
      */
     private Boolean m__bExtractProcedures = Boolean.FALSE;
-    
+
     /**
      * The list of external managed fields
+     * @parameter
      */
     private ExternallyManagedField[] m__aExternallyManagedFields;
     // @&& parameter property="externallyManagedFields"
-    
+
     /**
+     * The grammar bundle file.
      * @parameter
      */
     private ExternallyManagedField[] externallyManagedFields;
@@ -215,6 +222,7 @@ public class QueryJMojo
 
     /**
      * The list of tables.
+     * @parameter
      */
     private Table[] m__aTables;
     // @*** parameter property="tables"
@@ -287,7 +295,7 @@ public class QueryJMojo
     {
         return m__strUrl;
     }
-    
+
     /**
      * Returns the url.
      * @return such value.
@@ -319,16 +327,16 @@ public class QueryJMojo
      * Returns the user name.
      * @return such value.
      */
-    protected final String immutableGetUsername() 
+    protected final String immutableGetUsername()
     {
         return m__strUsername;
     }
-    
+
     /**
      * Returns the user name.
      * @return such value.
      */
-    protected String getUsername() 
+    protected String getUsername()
     {
         return immutableGetUsername();
     }
@@ -359,7 +367,7 @@ public class QueryJMojo
     {
         return m__strPassword;
     }
-    
+
     /**
      * Returns the password.
      * @return such value.
@@ -395,7 +403,7 @@ public class QueryJMojo
     {
         return catalog;
     }
-    
+
     /**
      * Returns the catalog.
      * @return such value.
@@ -431,7 +439,7 @@ public class QueryJMojo
     {
         return schema;
     }
-    
+
     /**
      * Returns the schema.
      * @return such value, or an empty string if not initialized.
@@ -474,7 +482,7 @@ public class QueryJMojo
     {
         return m__strRepository;
     }
-    
+
     /**
      * Returns the repository.
      * @return such value, or an empty string if not initialized.
@@ -517,7 +525,7 @@ public class QueryJMojo
     {
         return m__strPackageName;
     }
-    
+
     /**
      * Returns the package name.
      * @return such value.
@@ -553,7 +561,7 @@ public class QueryJMojo
     {
         return m__OutputDir;
     }
-    
+
     /**
      * Returns the output directory.
      * @return such directory.
@@ -589,7 +597,7 @@ public class QueryJMojo
     {
         return m__strJndiDataSource;
     }
-    
+
     /**
      * Returns the JNDI location of the data source.
      * @return such value.
@@ -625,7 +633,7 @@ public class QueryJMojo
     {
         return m__SqlXmlFile;
     }
-    
+
     /**
      * Return the sql xml file.
      * @return such file.
@@ -661,7 +669,7 @@ public class QueryJMojo
     {
         return m__strCustomSqlModel;
     }
-    
+
     /**
      * Returns the custom sql model.
      * @return such value.
@@ -697,7 +705,7 @@ public class QueryJMojo
     {
         return m__bGenerateXmlDAOImplementation;
     }
-    
+
     /**
      * Indicates if xml dao must be generated.
      * @return such condition.
@@ -706,7 +714,7 @@ public class QueryJMojo
     {
         return immutableGetGenerateXmlDAOImplementation();
     }
-    
+
     /**
      * Specifies whether to generate a Mock-based DAO implementation.
      * @param flag such condition.
@@ -733,7 +741,7 @@ public class QueryJMojo
     {
         return m__bGenerateMockDAOImplementation;
     }
-    
+
     /**
      * Indicates if mock dao must be generated.
      * @return such condition.
@@ -769,7 +777,7 @@ public class QueryJMojo
     {
         return m__bGenerateTests;
     }
-    
+
     /**
      * Indicates if tests must be generated.
      * @return such condition.
@@ -805,7 +813,7 @@ public class QueryJMojo
     {
         return m__HeaderFile;
     }
-    
+
     /**
      * Returns the header file.
      * @return such file.
@@ -841,7 +849,7 @@ public class QueryJMojo
     {
         return m__bExtractFunctions;
     }
-    
+
     /**
      * Indicates if functions must be extracted.
      * @return such condition.
@@ -850,7 +858,7 @@ public class QueryJMojo
     {
         return immutableGetExtractFunctions();
     }
-    
+
     /**
      * Specifies whether database procedures must be generated.
      * @param flag such condition.
@@ -877,7 +885,7 @@ public class QueryJMojo
     {
         return m__bExtractProcedures;
     }
-    
+
     /**
      * Indicates if procedures must be extracted.
      * @return such condition.
@@ -916,7 +924,7 @@ public class QueryJMojo
 //        return m__aExternallyManagedFields;
         return externallyManagedFields;
     }
-    
+
     /**
      * Returns the externally managed fields.
      * @return such fields.
@@ -952,7 +960,7 @@ public class QueryJMojo
     {
         return m__strGrammarbundle;
     }
-    
+
     /**
      * Returns the grammar bundle.
      * @return such resource.
@@ -1028,7 +1036,7 @@ public class QueryJMojo
     {
         return m__aTables;
     }
-    
+
     /**
      * Returns the tables.
      * @return such information.
@@ -1140,14 +1148,14 @@ public class QueryJMojo
             {
                 log.warn("Cannot create output folder: " + outputDir);
             }
-        
-            //execute task  
+
+            //execute task
             task = buildTask(log);
 
             if  (task != null)
             {
                 log.info("Running QueryJ " + version);
-        
+
                 task.execute();
 
                 running = true;
@@ -1216,7 +1224,7 @@ public class QueryJMojo
 
         @NotNull Path path = new Path(project);
         result.setClasspath(path);
-        
+
         log.debug("Catalog: " + getCatalog());
         result.setCatalog(getCatalog());
 
@@ -1258,7 +1266,7 @@ public class QueryJMojo
         log.debug("Generate tests? " + getGenerateTests());
         result.setGenerateTests(
             "" + getGenerateTests());
-        
+
         log.debug("Custom SQL model: " + getCustomSqlModel());
         result.setCustomSqlModel(getCustomSqlModel());
 
@@ -1267,7 +1275,7 @@ public class QueryJMojo
 
         log.debug("Header file: " + getHeaderFile());
         result.setHeaderfile(getHeaderFile());
-        
+
         log.debug("Extract functions? " + getExtractFunctions());
         result.setExtractFunctions(
             "" + getExtractFunctions());
@@ -1275,8 +1283,9 @@ public class QueryJMojo
         log.debug("Extract procedures? " + getExtractProcedures());
         result.setExtractProcedures(
             "" + getExtractProcedures());
-        
+
         log.debug("Grammar bundle: " + getGrammarbundle());
+
         result.setGrammarbundle(getGrammarbundle());
 
         log.debug("Output subfolders: " + getUseOutputSubfolders());
@@ -1299,7 +1308,7 @@ public class QueryJMojo
 
         return result;
     }
-    
+
     /**
      * Builds the external managed fields list.
      * @param task the task.
@@ -1316,19 +1325,19 @@ public class QueryJMojo
 
         if  (count > 0)
         {
-            element = 
+            element =
                 (AntExternallyManagedFieldsElement) task.createDynamicElement(
                     "externally-managed-fields");
-            
+
             for (int index = 0; index < count; index++)
             {
                 field = array[index];
 
                 if  (field != null)
                 {
-                    fieldElement = 
+                    fieldElement =
                         (AntFieldElement) element.createDynamicElement("field");
-                
+
                     fieldElement.setDynamicAttribute("name", field.getName());
 
                     fieldElement.setDynamicAttribute(
@@ -1343,7 +1352,7 @@ public class QueryJMojo
             }
         }
     }
-    
+
     /**
      * Builds the table list.
      * @param task the task.
@@ -1363,18 +1372,18 @@ public class QueryJMojo
 
         if  (count > 0)
         {
-            element = 
+            element =
                 (AntTablesElement) task.createDynamicElement("tables");
-            
+
             for (int index = 0; index < count; index++)
             {
                 table = array[index];
 
-                tableElement = 
+                tableElement =
                     (AntTableElement) element.createDynamicElement("table");
-                
+
                 tableElement.setDynamicAttribute("name", table.getName());
-                
+
                 fields = table.getFields();
 
                 fieldCount = (fields == null) ? 0 : fields.size();
@@ -1385,7 +1394,7 @@ public class QueryJMojo
 
                     if  (field != null)
                     {
-                        fieldElement = 
+                        fieldElement =
                             (AntFieldElement) tableElement.createDynamicElement("field");
                         fieldElement.setDynamicAttribute(
                             "name", field.getName());

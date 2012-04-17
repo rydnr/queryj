@@ -36,13 +36,8 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.DefaultThemeConstants;
-import org.acmsl.queryj.tools.templates.InvalidTemplateException;
-import org.acmsl.queryj.tools.templates.STUtils;
-import org.acmsl.queryj.tools.templates.Template;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -286,7 +281,7 @@ public abstract class AbstractTemplate
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param factory the {@link DecoratorFactory} instance.
      */
     protected final void immutableSetDecoratorFactory(
         final DecoratorFactory factory)
@@ -296,7 +291,7 @@ public abstract class AbstractTemplate
 
     /**
      * Specifies the decorator factory.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param factory the {@link DecoratorFactory} instance.
      */
     protected void setDecoratorFactory(
         final DecoratorFactory factory)
@@ -496,13 +491,11 @@ public abstract class AbstractTemplate
     /**
      * Formats given date.
      * @param date the date.
-     * @param formatter the formatter.
+     * @param format the formatter.
      * @return the formatted date.
-     * @precondition date != null
-     * @precondition formatter != null
      */
     protected String createTimestamp(
-        final Date date, final String format)
+        @NotNull final Date date, @NotNull final String format)
     {
         return new SimpleDateFormat(format).format(date);
     }
@@ -674,7 +667,7 @@ public abstract class AbstractTemplate
         if  (   (t_Log != null)
              && (t_ClassLoaderUtils != null))
         {
-            @NotNull StringBuffer t_sbMessage = new StringBuffer();
+            @NotNull StringBuilder t_sbMessage = new StringBuilder();
 
             String t_strAntlrLocation =
                 t_ClassLoaderUtils.findLocation(

@@ -37,21 +37,17 @@ package org.acmsl.queryj.tools.templates.functions.system.oracle;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.system.oracle
-    .OracleSystemFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTestTemplate;
-
-import org.acmsl.queryj.tools.templates.functions.system
-    .SystemFunctionsTestTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplate;
+import org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,8 +55,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate the JUnit classes to test Oracle database system functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleSystemFunctionsTestTemplateGenerator
-    extends  SystemFunctionsTestTemplateGenerator
+public class OracleSystemFunctionsTestTemplateGenerator<T extends OracleSystemFunctionsTestTemplate>
+    extends  SystemFunctionsTestTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -78,10 +74,10 @@ public class OracleSystemFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public OracleSystemFunctionsTestTemplateGenerator() {};
+    public OracleSystemFunctionsTestTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>OracleSystemFunctionsTestTemplateGenerator</code> instance.
+     * Retrieves a {@link OracleSystemFunctionsTestTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -128,15 +124,5 @@ public class OracleSystemFunctionsTestTemplateGenerator
         }
 
         return result;
-    }
-
-    /**
-     * Retrieves the decorator factory.
-     * @return such instance.
-     */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return CachingDecoratorFactory.getInstance();
     }
 }

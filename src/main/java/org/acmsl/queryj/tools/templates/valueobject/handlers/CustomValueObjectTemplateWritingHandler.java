@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,14 +37,11 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -53,7 +49,10 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.apache.tools.ant.Project;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,20 +60,19 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /**
  * Writes ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectTemplateWritingHandler
+public class CustomValueObjectTemplateWritingHandler<T extends CustomValueObjectTemplate>
     extends  BasePerCustomResultTemplateWritingHandler
 {
     /**
      * Creates a CustomValueObjectTemplateWritingHandler.
      */
-    public CustomValueObjectTemplateWritingHandler() {};
+    public CustomValueObjectTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -82,7 +80,7 @@ public class CustomValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerCustomResultTemplateGenerator retrieveTemplateGenerator()
+    protected TemplateGenerator<T> retrieveTemplateGenerator()
     {
         return CustomValueObjectTemplateGenerator.getInstance();
     }
@@ -95,19 +93,19 @@ public class CustomValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerCustomResultTemplate[] retrieveTemplates(
+    protected T[] retrieveTemplates(
         @NotNull final Map parameters)
         throws  BuildException
     {
         return
-            (BasePerCustomResultTemplate[])
+            (T[])
                 parameters.get(
                     TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param resultElement the result element.
+     * @param result the result element.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.
      * @param projectFolder the project folder.
@@ -116,7 +114,7 @@ public class CustomValueObjectTemplateWritingHandler
      * using a different package naming scheme.
      * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      */
@@ -147,7 +145,7 @@ public class CustomValueObjectTemplateWritingHandler
      * @param projectOutputDir the project output dir.
      * @param projectPackage the project package.
      * @param useSubfolders whether to use subfolders or not.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return such folder.
      * @throws BuildException if the output-dir retrieval process if faulty.
      * @precondition projectOutputDir != null

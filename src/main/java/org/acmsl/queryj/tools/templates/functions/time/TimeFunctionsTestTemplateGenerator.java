@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,31 +37,23 @@ package org.acmsl.queryj.tools.templates.functions.time;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.functions.time
-    .TimeFunctionsTestTemplate;
-import org.acmsl.queryj.tools.templates.functions.time
-    .TimeFunctionsTestTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-
-/*
- * Importing some JDK classes.
- */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,7 +61,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate the JUnit classes to test the Database's time functions.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TimeFunctionsTestTemplateGenerator
+public class TimeFunctionsTestTemplateGenerator<T extends TimeFunctionsTestTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  TimeFunctionsTestTemplateFactory,
                 Singleton
 {
@@ -89,7 +81,7 @@ public class TimeFunctionsTestTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public TimeFunctionsTestTemplateGenerator() {};
+    public TimeFunctionsTestTemplateGenerator() {}
 
     /**
      * Retrieves a {@link TimeFunctionsTestTemplateGenerator} instance.
@@ -171,6 +163,7 @@ public class TimeFunctionsTestTemplateGenerator
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the identifier quote string.
+     * @param header the file header.
      * @return a template.
      * @precondition packageName != null
      * @precondition engineName != null
@@ -183,7 +176,8 @@ public class TimeFunctionsTestTemplateGenerator
         final String testedPackageName,
         final String engineName,
         final String engineVersion,
-        final String quote)
+        final String quote,
+        final String header)
     {
         @Nullable TimeFunctionsTestTemplate result = null;
 
@@ -216,72 +210,19 @@ public class TimeFunctionsTestTemplateGenerator
                     testedPackageName,
                     engineName,
                     engineVersion,
-                    quote);
+                    quote,
+                    header);
         }
 
         return result;
     }
 
     /**
-     * Writes a time functions test template to disk.
-     * @param template the time functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final TimeFunctionsTestTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            template,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a time functions test template to disk.
-     * @param timeFunctionsTestTemplate the time functions template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final TimeFunctionsTestTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + "TimeFunctionsTest.java",
-                template.generate(),
-                charset);
-        }
+        return "TimeFunctionsTest.java";
     }
 }

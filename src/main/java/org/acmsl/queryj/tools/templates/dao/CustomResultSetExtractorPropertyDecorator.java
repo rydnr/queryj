@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -58,7 +57,7 @@ public class CustomResultSetExtractorPropertyDecorator
     private String m__strCachedJavaTypeCapitalized;
 
     /**
-     * Creates a <code>CustomResultSetExtractorPropertyDecorator</code> to
+     * Creates a {@link CustomResultSetExtractorPropertyDecorator} to
      * decorate given property.
      * @param property the property to decorate.
      * @precondition property != null

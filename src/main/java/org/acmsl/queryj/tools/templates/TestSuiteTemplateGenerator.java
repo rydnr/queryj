@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,31 +36,24 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Is able to generate the JUnit suite to execute the generated test cases.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TestSuiteTemplateGenerator
+public class TestSuiteTemplateGenerator<T extends TestSuiteTemplate>
+    extends  AbstractTemplateGenerator<T>
     implements  TestSuiteTemplateFactory,
                 Singleton
 {
@@ -80,7 +72,7 @@ public class TestSuiteTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected TestSuiteTemplateGenerator() {};
+    protected TestSuiteTemplateGenerator() {}
 
     /**
      * Retrieves a {@link TestSuiteTemplateGenerator} instance.
@@ -97,7 +89,7 @@ public class TestSuiteTemplateGenerator
      * @param packageName the package name.
      * @param suiteName the suite name.
      * @param header the header.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @return a template.
      * @precondition packageName != null
      * @precondition suiteName != null
@@ -107,14 +99,14 @@ public class TestSuiteTemplateGenerator
         final String packageName,
         final String suiteName,
         final String header,
-        final boolean useSubfolders)
+        final boolean useSubFolders)
     {
         return
             createTestSuiteTemplate(
                 packageName,
                 suiteName,
                 header,
-                useSubfolders,
+                useSubFolders,
                 PackageUtils.getInstance());
     }
 
@@ -123,7 +115,7 @@ public class TestSuiteTemplateGenerator
      * @param packageName the package name.
      * @param suiteName the suite name.
      * @param header the header.
-     * @param useSubfolders whether to use subfolders.
+     * @param useSubFolders whether to use sub folders.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return a template.
      * @precondition packageName != null
@@ -135,7 +127,7 @@ public class TestSuiteTemplateGenerator
         final String packageName,
         final String suiteName,
         final String header,
-        final boolean useSubfolders,
+        final boolean useSubFolders,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -144,81 +136,16 @@ public class TestSuiteTemplateGenerator
                 getDecoratorFactory(),
                 packageName,
                 packageUtils.retrieveBaseTestSuitePackage(
-                    packageName, useSubfolders),
+                    packageName, useSubFolders),
                 suiteName);
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        return CachingDecoratorFactory.getInstance();
-    }
-
-    /**
-     * Writes a test suite template to disk.
-     * @param testSuiteTemplate the suite template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition testSuiteTemplate != null
-     * @precondition outputDir != null
-     */
-    public void write(
-        @NotNull final TestSuiteTemplate testSuiteTemplate,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            testSuiteTemplate,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            FileUtils.getInstance());
-    }
-
-    /**
-     * Writes a test suite template to disk.
-     * @param testSuiteTemplate the suite template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition testSuiteTemplate != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition fileUtils != null
-     */
-    protected void write(
-        @NotNull final TestSuiteTemplate testSuiteTemplate,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + testSuiteTemplate.getSuiteName()
-                + "Suite.java",
-                testSuiteTemplate.generate(),
-                charset);
-        }
+        return template.getSuiteName() + "Suite.java";
     }
 }

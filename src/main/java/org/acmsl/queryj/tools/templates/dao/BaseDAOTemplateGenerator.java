@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
@@ -49,16 +49,16 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Collection;
 
 /**
@@ -66,9 +66,10 @@ import java.util.Collection;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseDAOTemplateGenerator
+public class BaseDAOTemplateGenerator<T extends BaseDAOTemplate>
+    extends AbstractTemplateGenerator<T>
     implements  BasePerTableTemplateFactory,
-                BasePerTableTemplateGenerator,
+                BasePerTableTemplateGenerator<T>,
                 Singleton
 {
     /**
@@ -222,74 +223,34 @@ public class BaseDAOTemplateGenerator
     }
 
     /**
-     * Writes a BaseDAO template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition template instanceof BaseDAOTemplate
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    public void write(
-        @NotNull final BasePerTableTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
-        write(
-            template,
-            outputDir,
-            charset,
-            StringUtils.getInstance(),
-            EnglishGrammarUtils.getInstance(),
-            FileUtils.getInstance());
+        return
+            retrieveTemplateFileName(
+                template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
-     * Writes a BaseDAO template to disk.
-     * @param template template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
+     * Retrieves given template's file name.
+     * @param template the template.
      * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
-     * instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template instanceof BaseDAOTemplate
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition fileUtils != null
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return such name.
      */
-    protected void write(
-        @NotNull final BasePerTableTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
+    @NotNull
+    protected String retrieveTemplateFileName(
+        @NotNull final T template,
         @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + stringUtils.capitalize(
-                    englishGrammarUtils.getSingular(
-                        template.getTableName().toLowerCase()),
-                    '_')
-                + "DAO.java",
-                template.generate(),
-                charset);
-        }
+        return
+            stringUtils.capitalize(
+                englishGrammarUtils.getSingular(
+                    template.getTableName().toLowerCase()),
+                '_')
+                + "DAO.java";
     }
 }

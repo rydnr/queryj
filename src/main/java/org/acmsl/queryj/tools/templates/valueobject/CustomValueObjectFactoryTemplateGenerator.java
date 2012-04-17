@@ -38,37 +38,26 @@ package org.acmsl.queryj.tools.templates.valueobject;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate custom ValueObjectFactory templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectFactoryTemplateGenerator
-    extends     CustomValueObjectTemplateGenerator
+public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObjectFactoryTemplate>
+    extends     CustomValueObjectTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -86,7 +75,7 @@ public class CustomValueObjectFactoryTemplateGenerator
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomValueObjectFactoryTemplateGenerator() {};
+    protected CustomValueObjectFactoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
@@ -154,48 +143,14 @@ public class CustomValueObjectFactoryTemplateGenerator
     }
 
     /**
-     * Writes a ValueObjectCreator template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
-     * instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition fileUtils != null
+     * {@inheritDoc}
      */
     @Override
-    protected void write(
-        @NotNull final BasePerCustomResultTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        final StringUtils stringUtils,
-        final EnglishGrammarUtils englishGrammarUtils,
-        @NotNull final FileUtils fileUtils)
-      throws  IOException
+    @NotNull
+    public String retrieveTemplateFileName(@NotNull T template)
     {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + extractClassName(template.getResult().getClassValue())
-                + "ValueObjectFactory.java",
-                template.generate(),
-                charset);
-        }
+        return
+              extractClassName(template.getResult().getClassValue())
+            + "ValueObjectFactory.java";
     }
 }

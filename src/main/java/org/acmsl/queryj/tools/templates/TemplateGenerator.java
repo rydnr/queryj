@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,44 +23,53 @@
 
  ******************************************************************************
  *
- * Filename: BasePerCustomResultTemplateGenerator.java
+ * Filename: AbstractTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Represents entities able to create per-custom result
- *             templates.
+ * Description: Marker for template generators.
  *
  */
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.io.IOException;
+import java.io.File;
 import java.nio.charset.Charset;
 
 /**
- * Represents entities able to write per-custom result templates.
+ * Marker for template generators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerCustomResultTemplateGenerator
+public interface TemplateGenerator<T extends Template>
 {
     /**
-     * Writes a per-custom result template to disk.
-     * @param template the template to write.
+     * Retrieves given template's file name.
+     * @param template the template.
+     * @return such name.
+     */
+    @NotNull
+    String retrieveTemplateFileName(@NotNull final T template);
+
+    /**
+     * Writes a table template to disk.
+     * @param template the table template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
+     * @precondition tableTemplate != null
+     * @precondition outputDir != null
      */
-    public void write(
-        final BasePerCustomResultTemplate template,
-        final File outputDir,
-        final Charset charset)
-      throws  IOException;
+    void write(
+        @NotNull final T template,
+        @NotNull final File outputDir,
+        @NotNull final Charset charset)
+        throws  IOException;
 }

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,34 +37,26 @@ package org.acmsl.queryj.tools.templates.functions.text.mysql;
  */
 import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.functions.text.mysql
-    .MySQLTextFunctionsTemplate;
-
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTemplateGenerator;
+import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate MySQL's text function repositories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MySQLTextFunctionsTemplateGenerator
-    extends  TextFunctionsTemplateGenerator
+public class MySQLTextFunctionsTemplateGenerator<T extends MySQLTextFunctionsTemplate>
+    extends  TextFunctionsTemplateGenerator<T>
     implements  Singleton
 {
     /**
@@ -83,10 +74,10 @@ public class MySQLTextFunctionsTemplateGenerator
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public MySQLTextFunctionsTemplateGenerator() {};
+    public MySQLTextFunctionsTemplateGenerator() {}
 
     /**
-     * Retrieves a <code>MySQLTextFunctionsTemplateGenerator</code> instance.
+     * Retrieves a {@link MySQLTextFunctionsTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
@@ -104,6 +95,7 @@ public class MySQLTextFunctionsTemplateGenerator
      * @param header the header.
      * @return a template.
      */
+    @Override
     @Nullable
     public TextFunctionsTemplate createTextFunctionsTemplate(
         @Nullable final String packageName,
