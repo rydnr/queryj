@@ -105,7 +105,8 @@ public class BaseRepositoryDAOTemplate
      * @return such instance.
      */
     @Nullable
-    protected StringTemplateGroup retrieveGroup()
+    @Override
+    public StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/BaseRepositoryDAO.stg");
     }

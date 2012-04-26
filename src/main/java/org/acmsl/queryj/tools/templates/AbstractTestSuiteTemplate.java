@@ -38,9 +38,17 @@ package org.acmsl.queryj.tools.templates;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.AbstractTemplate;
-import org.acmsl.queryj.tools.templates.TestTemplate;
+
+/*
+ * Importing some StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -392,5 +400,17 @@ public abstract class AbstractTestSuiteTemplate
     protected String buildHeader(final String testPackageName)
     {
         return "Generating TestSuiteTemplate for package " + testPackageName;
+    }
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
     }
 }

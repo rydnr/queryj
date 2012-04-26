@@ -1,5 +1,4 @@
-/*
-                        QueryJ
+/*                        QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -58,7 +57,9 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
 
 /**
@@ -68,6 +69,35 @@ import java.nio.charset.Charset;
 public abstract class AbstractTemplateGenerator<N extends Template>
     implements TemplateGenerator<N>
 {
+    /**
+     * Whether to enable template caching.
+     */
+    public static final boolean CACHING = true;
+
+    /**
+     * Serializes given template.
+     * @param template the template.
+     * @param outputFilePath the output file path.
+     */
+    protected void serializeTemplate(@NotNull final N template, @NotNull final String outputFilePath)
+    {
+        try
+        {
+            ObjectOutputStream t_osCache =
+                new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
+
+            t_osCache.writeObject(template);
+        }
+        catch (@NotNull IOException cannotSerialize)
+        {
+            @NotNull final Log t_Log =
+                UniqueLogFactory.getLog(
+                    AbstractTemplateGenerator.class);
+
+            t_Log.warn("Cannot serialize template " + outputFilePath, cannotSerialize);
+        }
+    }
+
     /**
      * Writes a table template to disk.
      * @param template the table template to write.
@@ -121,6 +151,10 @@ public abstract class AbstractTemplateGenerator<N extends Template>
                 + File.separator
                 + fileName;
 
+        if (CACHING)
+        {
+            serializeTemplate(template, t_strOutputFile + ".ser");
+        }
         String t_strFileContents = template.generate();
 
         if  (!"".equals(t_strFileContents))

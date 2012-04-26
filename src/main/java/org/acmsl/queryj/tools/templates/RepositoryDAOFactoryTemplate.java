@@ -217,8 +217,9 @@ public class RepositoryDAOFactoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
+    @Override
     @Nullable
-    protected StringTemplateGroup retrieveGroup()
+    public StringTemplateGroup retrieveGroup()
     {
         return
             retrieveGroup(

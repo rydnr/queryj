@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -60,7 +59,7 @@ import java.util.Collection;
  * Is able to generate the repository DAO interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryDAOTemplate>
+public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryDAOFactoryTemplate>
     extends     AbstractTemplateGenerator<T>
     implements  DefaultBasePerRepositoryTemplateFactory,
                 BasePerRepositoryTemplateGenerator<T>,
@@ -146,6 +145,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryD
     /**
      * Retrieves the template's file name.
      * @param template the template.
+     * @param decorationUtils the {@link DecorationUtils} instance.
      * @return the template's file name.
      */
     @NotNull

@@ -114,8 +114,9 @@ public class CustomBaseValueObjectTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @Nullable
-    protected StringTemplateGroup retrieveGroup()
+    @NotNull
+    @Override
+    public StringTemplateGroup retrieveGroup()
     {
         return
             retrieveGroup(

@@ -37,23 +37,27 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Is able to create abstract base JDBC DAO.
@@ -207,5 +211,17 @@ public class JdbcDAOTemplate
         t_sbResult.append(classEnd);
 
         return t_sbResult.toString();
+    }
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
     }
 }

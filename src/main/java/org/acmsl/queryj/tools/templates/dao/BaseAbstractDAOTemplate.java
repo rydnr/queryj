@@ -199,8 +199,9 @@ public class BaseAbstractDAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @Nullable
-    protected StringTemplateGroup retrieveGroup()
+    @NotNull
+    @Override
+    public StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/dao/BaseAbstractDAO.stg");
     }

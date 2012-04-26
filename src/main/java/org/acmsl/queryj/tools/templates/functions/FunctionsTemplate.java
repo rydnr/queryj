@@ -48,6 +48,7 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some Apache Commons-Logging classes.
  */
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.apache.commons.logging.Log;
 
 /*
@@ -892,7 +893,7 @@ public abstract class FunctionsTemplate
     /**
      * Checks whether given map is already filled with specific
      * template mappings.
-     * @param mapping the mapping table.
+     * @param mappings the mapping table.
      * @return <code>true</code> if the map contains the specific
      * mapping entries for this template.
      */
@@ -983,14 +984,14 @@ public abstract class FunctionsTemplate
 
     /**
      * Creates the special function mappings.
-     * @param mapping the initial mapping.
+     * @param mappings the initial mapping.
      * @return the updated mapping.
      */
     protected abstract Map fillUpSpecialMappings(Map mappings);
 
     /**
      * Creates the special function mappings' return types.
-     * @param mapping the initial mapping.
+     * @param mappings the initial mapping.
      * @return the updated mapping.
      */
     protected abstract Map fillUpSpecialMappingsReturnTypes(Map mappings);
@@ -1268,5 +1269,17 @@ public abstract class FunctionsTemplate
         }
 
         return t_sbResult.toString();
+    }
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
     }
 }

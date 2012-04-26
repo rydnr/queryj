@@ -389,7 +389,8 @@ public class KeywordRepositoryTemplate
      * @return such instance.
      */
     @Nullable
-    protected StringTemplateGroup retrieveGroup()
+    @Override
+    public StringTemplateGroup retrieveGroup()
     {
         return retrieveGroup("/org/acmsl/queryj/sql/KeywordRepository.stg");
     }

@@ -328,6 +328,13 @@ public abstract class AbstractTemplate
 
     /**
      * Retrieves the string template group.
+     * @return such instance.
+     */
+    @Nullable
+    public abstract StringTemplateGroup retrieveGroup();
+
+    /**
+     * Retrieves the string template group.
      * @param path the path.
      * @return such instance.
      * @precondition path != null

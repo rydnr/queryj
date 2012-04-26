@@ -39,29 +39,25 @@ package org.acmsl.queryj.tools.templates.dao.mock;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.AbstractTestTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TestTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing some StringTemplate classes.
  */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains the subtemplates for creating JUnit tests to ensure
@@ -1137,5 +1133,17 @@ public abstract class AbstractMockDAOTestTemplate
         return
               "Generating MockDAOTest for "
             + tableTemplate.getTableName() + ".";
+    }
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
     }
 }

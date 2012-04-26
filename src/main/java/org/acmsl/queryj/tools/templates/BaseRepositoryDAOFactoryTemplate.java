@@ -104,7 +104,9 @@ public class BaseRepositoryDAOFactoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    protected StringTemplateGroup retrieveGroup()
+    @Override
+    @NotNull
+    public StringTemplateGroup retrieveGroup()
     {
         return
             retrieveGroup(

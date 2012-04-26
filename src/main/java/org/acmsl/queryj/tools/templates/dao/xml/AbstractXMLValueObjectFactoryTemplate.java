@@ -35,7 +35,17 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate value object factories according to
@@ -753,5 +763,17 @@ public abstract class AbstractXMLValueObjectFactoryTemplate
         return
               "Generating XML DAO Factory for "
             + tableTemplate.getTableName() + ".";
+    }
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
     }
 }

@@ -41,7 +41,17 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
+
+/*
+ * Importing StringTemplate classes.
+ */
+import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains the subtemplates used to create xml DAO implementations for each
@@ -1011,7 +1021,7 @@ public abstract class AbstractXMLDAOTemplate
 
     /**
      * Specifies the build-key pk declaration.
-     * @param buildKeyPkdeclaration such declaration.
+     * @param buildKeyPkDeclaration such declaration.
      */
     protected void setBuildKeyPkdeclaration(
         String buildKeyPkDeclaration)
@@ -1253,7 +1263,7 @@ public abstract class AbstractXMLDAOTemplate
 
     /**
      * Specifies the find-by-primary-key pk declaration.
-     * @param findByPrimaryKeyPkdeclaration such declaration.
+     * @param findByPrimaryKeyPkDeclaration such declaration.
      */
     protected void setFindByPrimaryKeyPkdeclaration(
         String findByPrimaryKeyPkDeclaration)
@@ -1285,7 +1295,7 @@ public abstract class AbstractXMLDAOTemplate
 
     /**
      * Specifies the find-by-primary-key pk filter values.
-     * @param findByPrimaryKeyPkfilterValues such filter values.
+     * @param findByPrimaryKeyPkFilterValues such filter values.
      */
     protected void setFindByPrimaryKeyPkfilterValues(
         String findByPrimaryKeyPkFilterValues)
@@ -1598,7 +1608,7 @@ public abstract class AbstractXMLDAOTemplate
 
     /**
      * Specifies the delete pk declaration.
-     * @param deletePkdeclaration such declaration.
+     * @param deletePkDeclaration such declaration.
      */
     protected void setDeletePkdeclaration(
         String deletePkDeclaration)
@@ -1689,7 +1699,7 @@ public abstract class AbstractXMLDAOTemplate
 
     /**
      * Specifies the delete with FK PK declaration.
-     * @param deleteWithFkPkdeclaration such declaration.
+     * @param deleteWithFkPkDeclaration such declaration.
      */
     protected void setDeleteWithFkPkdeclaration(
         String deleteWithFkPkDeclaration)
@@ -1889,6 +1899,18 @@ public abstract class AbstractXMLDAOTemplate
     protected String buildHeader()
     {
         return buildHeader(getTableTemplate());
+    }
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
     }
 
     /**

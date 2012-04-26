@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+import org.antlr.stringtemplate.StringTemplateGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,11 +113,25 @@ public class ProcedureRepositoryTemplate
             DEFAULT_CLASS_END);
     }
 
+
+    /**
+     * Retrieves the string template group.
+     *
+     * @return such instance.
+     */
+    @Override
+    @Nullable
+    public StringTemplateGroup retrieveGroup()
+    {
+        return null;
+    }
+
     /**
      * Retrieves the source code of the generated procedure repository.
      * @param header the header.
      * @return such source code.
      */
+    @Override
     protected String generateOutput(final String header)
     {
         return

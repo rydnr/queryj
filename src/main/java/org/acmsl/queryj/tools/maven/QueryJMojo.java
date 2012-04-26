@@ -198,20 +198,14 @@ public class QueryJMojo
      * The list of external managed fields
      * @parameter
      */
-    private ExternallyManagedField[] m__aExternallyManagedFields;
-    // @&& parameter property="externallyManagedFields"
-
-    /**
-     * The grammar bundle file.
-     * @parameter
-     */
     private ExternallyManagedField[] externallyManagedFields;
 
     /**
      * The grammar bundle file.
+     * @parameter property="grammarbundle"
      */
     private String m__strGrammarbundle;
-    //* @&& parameter property="grammarbundle"
+
 
     /**
      * Whether to use <code>main</code> and <code>test</code> subfolders
@@ -902,7 +896,6 @@ public class QueryJMojo
     protected final void immutableSetExternallyManagedFields(
         final ExternallyManagedField[] fields)
     {
-        m__aExternallyManagedFields = fields;
         externallyManagedFields = fields;
     }
 
