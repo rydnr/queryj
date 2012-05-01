@@ -41,7 +41,6 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 
 /*
@@ -61,25 +60,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTemplate>
     extends AbstractTemplateGenerator<T>
-    implements  BasePerCustomResultTemplateFactory,
+    implements  BasePerCustomResultTemplateFactory<T>,
                 Singleton
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
-     */
-    private static class CustomValueObjectTemplateGeneratorSingletonContainer
-    {
-        /**
-         * The actual singleton.
-         */
-        public static final CustomValueObjectTemplateGenerator SINGLETON =
-            new CustomValueObjectTemplateGenerator();
-    }
-
-    /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomValueObjectTemplateGenerator() {}
+    public CustomValueObjectTemplateGenerator() {}
 
     /**
      * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
@@ -88,7 +75,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
     @NotNull
     public static CustomValueObjectTemplateGenerator getInstance()
     {
-        return CustomValueObjectTemplateGeneratorSingletonContainer.SINGLETON;
+        return new CustomValueObjectTemplateGenerator();
     }
 
     /**
@@ -111,7 +98,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * @precondition repositoryName != null
      */
     @Nullable
-    public BasePerCustomResultTemplate createTemplate(
+    public T createTemplate(
         @NotNull final Result customResult,
         final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -122,13 +109,14 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
         final String repositoryName,
         final String header)
     {
-        @Nullable BasePerCustomResultTemplate result = null;
+        @Nullable T result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
                  metadataManager))
         {
             result =
+                (T)
                 new CustomValueObjectTemplate(
                     customResult,
                     customSqlProvider,
@@ -149,6 +137,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @Override
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
@@ -165,7 +154,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * @precondition metadataManager != null
      */
     protected boolean isStandard(
-        final String className, @NotNull final MetadataManager metadataManager)
+        @NotNull final String className, @NotNull final MetadataManager metadataManager)
     {
         return
             isStandard(
@@ -187,7 +176,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * @precondition valueObjectTemplateGenerator != null
      */
     protected boolean isStandard(
-        final String className,
+        @NotNull final String className,
         @NotNull final MetadataManager metadataManager,
         @NotNull final ValueObjectTemplateGenerator valueObjectTemplateGenerator)
     {
@@ -250,7 +239,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template)
+    public String retrieveTemplateFileName(@NotNull final  T template)
     {
         return
             extractClassName(template.getResult().getClassValue())

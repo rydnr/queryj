@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -67,7 +66,7 @@ import java.util.Map;
  * Builds all templates to generate sources for each custom result.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomResultTemplateBuildHandler
+public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerCustomResultTemplate, TF extends BasePerCustomResultTemplateFactory<T>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
@@ -100,6 +99,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
@@ -205,7 +205,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
-    protected abstract BasePerCustomResultTemplateFactory retrieveTemplateFactory();
+    protected abstract TF retrieveTemplateFactory();
 
     /**
      * Builds the templates.
@@ -232,27 +232,25 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerCustomResultTemplateFactory templateFactory,
-        final String projectPackage,
-        final String repository,
-        final String header,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @Nullable final String quote,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
         @Nullable final Result[] resultElements)
       throws  QueryJBuildException
     {
-        boolean result = false;
-
         int t_iLength = (resultElements != null) ? resultElements.length : 0;
 
-        @NotNull Collection t_cTemplates = new ArrayList();
+        @NotNull Collection<T> t_cTemplates = new ArrayList<T>();
 
         @Nullable Result t_ResultElement = null;
 
-        @Nullable BasePerCustomResultTemplate t_Template = null;
+        @Nullable T t_Template = null;
 
         try
         {
@@ -295,7 +293,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         }
 
         storeTemplates(
-            (BasePerCustomResultTemplate[])
+            (T[])
             t_cTemplates.toArray(
                 EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY),
             parameters);
@@ -314,10 +312,10 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String engineName,
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String engineName,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
@@ -343,12 +341,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     protected abstract String retrievePackage(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils);
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils);
 
     /**
      * Stores the template collection in given attribute map.
@@ -358,7 +356,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition parameters != null
      */
     protected abstract void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, final Map parameters);
+        @NotNull final T[] templates, @NotNull final Map parameters);
 
     /**
      * Retrieves the foreign keys.

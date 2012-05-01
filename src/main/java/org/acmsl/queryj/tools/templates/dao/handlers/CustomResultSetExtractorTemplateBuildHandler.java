@@ -36,31 +36,26 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -70,26 +65,19 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomResultSetExtractorTemplateBuildHandler
-    extends  BasePerCustomResultTemplateBuildHandler
+    extends  BasePerCustomResultTemplateBuildHandler<CustomResultSetExtractorTemplate, CustomResultSetExtractorTemplateGenerator>
 {
-    /**
-     * An empty template array.
-     */
-    protected static final CustomResultSetExtractorTemplate[]
-        EMPTY_CUSTOMRESULTSETEXTRACTOR_TEMPLATE_ARRAY =
-            new CustomResultSetExtractorTemplate[0];
-
     /**
      * Creates a CustomResultSetExtractorTemplateBuildHandler.
      */
-    public CustomResultSetExtractorTemplateBuildHandler() {};
+    public CustomResultSetExtractorTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
+    protected CustomResultSetExtractorTemplateGenerator retrieveTemplateFactory()
     {
         return CustomResultSetExtractorTemplateGenerator.getInstance();
     }
@@ -97,19 +85,20 @@ public class CustomResultSetExtractorTemplateBuildHandler
     /**
      * Retrieves the package name.
      * @param customResult the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the database metadata manager.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
      */
+    @Override
     protected String retrievePackage(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final String engineName,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -125,13 +114,14 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @precondition parameters != null
      */
     protected void storeTemplates(
-        @Nullable final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
+        @Nullable final CustomResultSetExtractorTemplate[] templates, @NotNull final Map parameters)
     {
-        @NotNull Collection t_cFilteredTemplates = new ArrayList();
+        @NotNull final Collection<CustomResultSetExtractorTemplate> t_cFilteredTemplates =
+            new ArrayList<CustomResultSetExtractorTemplate>();
         
         int t_iCount = (templates != null) ? templates.length : 0;
 
-        @Nullable BasePerCustomResultTemplate t_Template;
+        @Nullable CustomResultSetExtractorTemplate t_Template;
         
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
@@ -146,7 +136,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
         parameters.put(
             TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES,
             t_cFilteredTemplates.toArray(
-                EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY));
+                new CustomResultSetExtractorTemplate[t_iCount]));
     }
 
     /**
@@ -176,9 +166,9 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * Checks whether the template matches the filter consisting of
      * finding out if there's any custom sql defined for the custom result.
      * @param resultElement the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
      * @return <code>true</code> in such case.
      * @precondition resultElement != null
      * @precondition customSqlProvider != null

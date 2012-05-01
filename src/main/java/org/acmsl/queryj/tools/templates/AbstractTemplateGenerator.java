@@ -83,6 +83,22 @@ public abstract class AbstractTemplateGenerator<N extends Template>
     {
         try
         {
+            @NotNull final File outputFile = new File(outputFilePath);
+            @NotNull final File baseFolder = outputFile.getParentFile();
+
+            if (!baseFolder.exists())
+            {
+                if (!baseFolder.mkdirs())
+                {
+                    throw new IOException(baseFolder + " does not exist and cannot be created");
+                }
+            }
+
+            if (!baseFolder.canWrite())
+            {
+                throw new IOException(baseFolder + " is not writable");
+            }
+
             ObjectOutputStream t_osCache =
                 new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
 
@@ -94,7 +110,9 @@ public abstract class AbstractTemplateGenerator<N extends Template>
                 UniqueLogFactory.getLog(
                     AbstractTemplateGenerator.class);
 
-            t_Log.warn("Cannot serialize template " + outputFilePath, cannotSerialize);
+            t_Log.warn(
+                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize.getMessage() + ")",
+                cannotSerialize);
         }
     }
 

@@ -39,7 +39,6 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -61,34 +60,12 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
     implements  Singleton
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Default constructor.
      */
-    private static class CustomValueObjectFactoryTemplateGeneratorSingletonContainer
-    {
-        /**
-         * The actual singleton.
-         */
-        public static final CustomValueObjectFactoryTemplateGenerator SINGLETON =
-            new CustomValueObjectFactoryTemplateGenerator();
-    }
+    public CustomValueObjectFactoryTemplateGenerator() {}
 
     /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected CustomValueObjectFactoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static CustomValueObjectTemplateGenerator getInstance()
-    {
-        return CustomValueObjectFactoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * Generates a CustomValueObject template.
+     * Generates a CustomValueObjectFactory template.
      * @param customResult the custom result.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the database metadata manager.
@@ -108,9 +85,9 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
      */
     @Nullable
     @Override
-    public BasePerCustomResultTemplate createTemplate(
+    public T createTemplate(
         @NotNull final Result customResult,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         final String packageName,
         final String engineName,
@@ -119,7 +96,7 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
         final String repositoryName,
         final String header)
     {
-        @Nullable BasePerCustomResultTemplate result = null;
+        @Nullable CustomValueObjectFactoryTemplate result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
@@ -139,7 +116,7 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
                     repositoryName);
         }
 
-        return result;
+        return (T) result;
     }
 
     /**

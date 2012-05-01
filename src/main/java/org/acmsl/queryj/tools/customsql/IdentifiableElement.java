@@ -33,11 +33,17 @@
  */
 package org.acmsl.queryj.tools.customsql;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.io.Serializable;
+
 /**
  * Represents <i>identifiable</i> elements.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface IdentifiableElement
+    extends Serializable
 {
     /**
      * Retrieves the <i>id</i> value.

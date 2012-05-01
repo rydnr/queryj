@@ -57,6 +57,8 @@ import org.acmsl.commons.patterns.Command;
 /*
  * Importing some Ant classes.
  */
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,8 +86,9 @@ public class CustomValueObjectFactoryTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @Override
     @NotNull
-    protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
+    protected CustomValueObjectTemplateGenerator<CustomValueObjectTemplate> retrieveTemplateFactory()
     {
         return CustomValueObjectFactoryTemplateGenerator.getInstance();
     }
@@ -97,8 +100,9 @@ public class CustomValueObjectFactoryTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @Override
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final CustomValueObjectTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_FACTORY_TEMPLATES,

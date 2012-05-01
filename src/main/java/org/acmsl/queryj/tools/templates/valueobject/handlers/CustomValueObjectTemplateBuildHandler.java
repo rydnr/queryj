@@ -72,8 +72,8 @@ import java.util.Map;
  * Builds custom ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectTemplateBuildHandler
-    extends  BasePerCustomResultTemplateBuildHandler
+public class CustomValueObjectTemplateBuildHandler<T extends CustomValueObjectTemplate, TF extends CustomValueObjectTemplateGenerator<T>>
+    extends  BasePerCustomResultTemplateBuildHandler<T, TF>
 {
     /**
      * Creates a CustomValueObjectTemplateBuildHandler.
@@ -81,25 +81,19 @@ public class CustomValueObjectTemplateBuildHandler
     public CustomValueObjectTemplateBuildHandler() {}
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
-    protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
+    @Override
+    @NotNull
+    protected TF retrieveTemplateFactory()
     {
-        return CustomValueObjectTemplateGenerator.getInstance();
+        return (TF) new CustomValueObjectTemplateGenerator<CustomValueObjectTemplate>();
     }
 
     /**
-     * Retrieves the package name.
-     * @param customResult the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the database metadata manager.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * {@inheritDoc}
      */
+    @Override
     protected String retrievePackage(
         final Result customResult,
         final CustomSqlProvider customSqlProvider,
@@ -115,36 +109,14 @@ public class CustomValueObjectTemplateBuildHandler
     }
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final T[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES,
             templates);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
-     */
-    protected String retrievePackage(
-        final String projectPackage,
-        @NotNull final PackageUtils packageUtils)
-      throws  BuildException
-    {
-        return
-            packageUtils.retrieveValueObjectPackage(
-                projectPackage);
     }
 }

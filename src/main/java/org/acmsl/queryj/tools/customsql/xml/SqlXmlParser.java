@@ -113,7 +113,7 @@ public class SqlXmlParser
     /**
      * The input stream.
      */
-    private InputStream m__isInput;
+    private transient InputStream m__isInput;
 
     /**
      * The class loader.
@@ -226,7 +226,7 @@ public class SqlXmlParser
     /**
      * Loads the information from the XML resource.
      * @param digester the Digester instance.
-     * @param stream the input stream.
+     * @param input the input stream.
      * @return the information.
      * @throws QueryJBuildException if the information cannot be read.
      * @precondition (stream != null)

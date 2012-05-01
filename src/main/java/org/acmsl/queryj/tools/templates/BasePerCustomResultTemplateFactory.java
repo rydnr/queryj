@@ -51,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
  * Represents entities able to create per-<i>custom result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerCustomResultTemplateFactory
+public interface BasePerCustomResultTemplateFactory<T>
     extends  Factory
 {
     /**
@@ -65,9 +65,10 @@ public interface BasePerCustomResultTemplateFactory
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @return the template.
      */
     @Nullable
-    public BasePerCustomResultTemplate createTemplate(
+    public T createTemplate(
         final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,

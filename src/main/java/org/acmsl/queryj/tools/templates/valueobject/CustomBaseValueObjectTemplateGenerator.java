@@ -60,31 +60,9 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
     implements  Singleton
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Default constructor.
      */
-    private static class CustomBaseValueObjectTemplateGeneratorSingletonContainer
-    {
-        /**
-         * The actual singleton.
-         */
-        public static final CustomBaseValueObjectTemplateGenerator SINGLETON =
-            new CustomBaseValueObjectTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected CustomBaseValueObjectTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static CustomValueObjectTemplateGenerator getInstance()
-    {
-        return CustomBaseValueObjectTemplateGeneratorSingletonContainer.SINGLETON;
-    }
+    public CustomBaseValueObjectTemplateGenerator() {}
 
     /**
      * Generates a CustomValueObject template.
@@ -107,7 +85,7 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
      */
     @Override
     @Nullable
-    public BasePerCustomResultTemplate createTemplate(
+    public T createTemplate(
         @NotNull final Result customResult,
         final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -138,7 +116,7 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
                     repositoryName);
         }
 
-        return result;
+        return (T) result;
     }
 
     /**
@@ -146,7 +124,7 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template)
+    public String retrieveTemplateFileName(@NotNull final T template)
     {
         return
               "Abstract"

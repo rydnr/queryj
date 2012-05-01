@@ -36,9 +36,6 @@ package org.acmsl.queryj.tools.customsql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 
 /*
@@ -47,6 +44,10 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+
+/*
+ * Importing some JetBrains classes.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,7 +179,7 @@ public class CustomResultUtils
      * included in the DAO layer associated to a concrete table.
      * @param resultElement the result.
      * @param tableName the table name.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return <code>true</code> if it should be included.
      * @precondition resultElement != null
      * @precondition tableName != null
@@ -292,9 +293,9 @@ public class CustomResultUtils
     }
 
     /**
-     * Retrieves all <code>SqlElement</code> instances associated to
+     * Retrieves all {@link SqlElement} instances associated to
      * given result id.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param resultId the result id.
      * @return such elements.
      * @precondition sqlProvider != null
@@ -342,12 +343,10 @@ public class CustomResultUtils
     }
 
     /**
-     * Retrieves all <code>Result</code> instances of given type.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * Retrieves all {@link Result} instances of given type.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param type the type.
      * @return such elements.
-     * @precondition sqlProvider != null
-     * @precondition type != null
      */
     @NotNull
     public Result[] retrieveResultsByType(
@@ -378,11 +377,10 @@ public class CustomResultUtils
     }
 
     /**
-     * Retrieves all <code>SqlElement</code> instances of given type.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * Retrieves all {@link SqlElement} instances of given type.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param type the type.
      * @return such elements.
-     * @precondition type != null
      */
     @NotNull
     public SqlElement[] retrieveSqlElementsByType(
@@ -424,10 +422,10 @@ public class CustomResultUtils
     }
 
     /**
-     * Finds all <code>SqlElement</code> instances associated to given
+     * Finds all {@link SqlElement} instances associated to given
      * result element.
      * @param resultId such id.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return all such entities.
      * @precondition resultId != null
      * @precondition customSqlProvider != null
@@ -544,7 +542,7 @@ public class CustomResultUtils
      * @return the cached entry, or <code>null</code> if it's not cached.
      * @precondition key != null
      */
-    @NotNull
+    @Nullable
     protected String retrieveCachedEntry(final String key)
     {
         return retrieveCachedEntry(CACHE, key);

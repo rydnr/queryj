@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -55,36 +54,14 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate custom ValueObjectImpl templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectImplTemplateGenerator<T extends CustomValueObjectImplTemplate>
-    extends  CustomValueObjectTemplateGenerator<T>
+public class CustomValueObjectImplTemplateGenerator
+    extends  CustomValueObjectTemplateGenerator<CustomValueObjectImplTemplate>
     implements  Singleton
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new generator.
      */
-    private static class CustomValueObjectImplTemplateGeneratorSingletonContainer
-    {
-        /**
-         * The actual singleton.
-         */
-        public static final CustomValueObjectImplTemplateGenerator SINGLETON =
-            new CustomValueObjectImplTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected CustomValueObjectImplTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link CustomValueObjectTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static CustomValueObjectTemplateGenerator getInstance()
-    {
-        return CustomValueObjectImplTemplateGeneratorSingletonContainer.SINGLETON;
-    }
+    public CustomValueObjectImplTemplateGenerator() {}
 
     /**
      * Generates a CustomValueObject template.
@@ -105,8 +82,9 @@ public class CustomValueObjectImplTemplateGenerator<T extends CustomValueObjectI
      * @precondition basePackageName != null
      * @precondition repositoryName != null
      */
+    @Override
     @Nullable
-    public BasePerCustomResultTemplate createTemplate(
+    public CustomValueObjectImplTemplate createTemplate(
         @NotNull final Result customResult,
         final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -117,7 +95,7 @@ public class CustomValueObjectImplTemplateGenerator<T extends CustomValueObjectI
         final String repositoryName,
         final String header)
     {
-        @Nullable BasePerCustomResultTemplate result = null;
+        @Nullable CustomValueObjectImplTemplate result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
@@ -145,7 +123,7 @@ public class CustomValueObjectImplTemplateGenerator<T extends CustomValueObjectI
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template)
+    public String retrieveTemplateFileName(@NotNull CustomValueObjectImplTemplate template)
     {
         return
             extractClassName(template.getResult().getClassValue())

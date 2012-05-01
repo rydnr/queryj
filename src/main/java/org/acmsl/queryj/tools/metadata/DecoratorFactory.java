@@ -40,18 +40,22 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -59,13 +63,14 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface DecoratorFactory
-    extends  Factory
+    extends  Factory,
+             Serializable
 {
     /**
-     * Creates an <code>AttributeDecorator</code> for given
+     * Creates an {@link AttributeDecorator} for given
      * attribute instance.
      * @param attribute the attribute.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated attribute for the concrete template.
      */
     @NotNull
@@ -73,10 +78,10 @@ public interface DecoratorFactory
         final Attribute attribute, final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>PropertyDecorator</code> for given
+     * Creates a {@link PropertyDecorator} for given
      * property instance.
      * @param property the property.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated property for the concrete template.
      */
     @NotNull
@@ -84,11 +89,11 @@ public interface DecoratorFactory
         final Property property, final MetadataManager metadataManager);
 
     /**
-     * Creates a <code>ResultDecorator</code> for given
+     * Creates a {@link ResultDecorator} for given
      * result instance.
      * @param result the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorated result for the concrete template.
      */
     @NotNull

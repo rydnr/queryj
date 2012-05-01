@@ -35,25 +35,14 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing JetBrains annotations.
  */
-import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
-import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
-import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
-import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
-import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
-import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -62,6 +51,7 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface CustomSqlProvider
+    extends Serializable
 {
     /**
      * Retrieves the custom sql element collection.

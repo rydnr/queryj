@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,36 +35,23 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
-import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Command;
 
 /*
  * Importing some Ant classes.
  */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -84,8 +70,9 @@ public class CustomBaseValueObjectTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
+    @Override
     @NotNull
-    protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
+    protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
     {
         return CustomBaseValueObjectTemplateGenerator.getInstance();
     }
@@ -97,8 +84,9 @@ public class CustomBaseValueObjectTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @Override
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
+        final CustomValueObjectTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES,

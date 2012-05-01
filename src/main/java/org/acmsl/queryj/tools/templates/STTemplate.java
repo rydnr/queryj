@@ -1,5 +1,4 @@
-//;-*- mode: java -*-
-/*
+package org.acmsl.queryj.tools.templates;/*
                         QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
@@ -22,46 +21,34 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
 
- *****************************************************************************
+ ******************************************************************************
  *
- * Filename: Row.java
+ * Filename: STTemplate.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents 'row' entities in the metadata model.
+ * Description: StringTemplate-specific templates.
+ *
+ * Date: 4/30/12
+ * Time: 4:40 PM
  *
  */
-package org.acmsl.queryj.tools.metadata.vo;
 
 /*
- * Importing JDK classes.
+ * Importing some StringTemplate classes.
  */
-import java.io.Serializable;
-import java.util.Collection;
+import org.antlr.stringtemplate.StringTemplateGroup;
 
-/**
- * Represents <i>row</i> entities in the metadata model.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+/*
+ * <a href="http://www.stringtemplate.org>StringTemplate</a>-specific templates.
+ * @author <a href="mailto:chous@acm-sl.org">chous</a>
  */
-public interface Row
-    extends  java.lang.Comparable,
-             Serializable
+public interface STTemplate
+    extends  Template
 {
     /**
-     * Retrieves the attribute name.
-     * @return such name.
+     * Retrieves the template group.
+     * @return such group.
      */
-    public String getName();
-
-    /**
-     * Retrieves the table name.
-     * @return such information.
-     */
-    public String getTableName();
-
-    /**
-     * Retrieves the attributes.
-     * @return such information.
-     */
-    public Collection getAttributes();
+    public StringTemplateGroup retrieveGroup();
 }

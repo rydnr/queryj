@@ -60,8 +60,8 @@ import java.util.Map;
  * Writes ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomResultSetExtractorTemplateWritingHandler<T extends CustomResultSetExtractorTemplate>
-    extends  BasePerCustomResultTemplateWritingHandler<T>
+public class CustomResultSetExtractorTemplateWritingHandler
+    extends  BasePerCustomResultTemplateWritingHandler<CustomResultSetExtractorTemplate>
 {
     /**
      * Creates a {@link CustomResultSetExtractorTemplateWritingHandler}
@@ -75,7 +75,7 @@ public class CustomResultSetExtractorTemplateWritingHandler<T extends CustomResu
      */
     @NotNull
     @Override
-    protected TemplateGenerator<T> retrieveTemplateGenerator()
+    protected TemplateGenerator<CustomResultSetExtractorTemplate> retrieveTemplateGenerator()
     {
         return CustomResultSetExtractorTemplateGenerator.getInstance();
     }
@@ -87,11 +87,11 @@ public class CustomResultSetExtractorTemplateWritingHandler<T extends CustomResu
      */
     @NotNull
     @Override
-    protected T[] retrieveTemplates(
+    protected CustomResultSetExtractorTemplate[] retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (T[])
+            (CustomResultSetExtractorTemplate[])
                 parameters.get(
                     TemplateMappingManager
                         .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);

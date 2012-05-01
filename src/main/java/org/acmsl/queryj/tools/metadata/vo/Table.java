@@ -33,12 +33,18 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.io.Serializable;
+
 /**
  * Represents <i>table</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Table
-    extends  java.lang.Comparable
+    extends  java.lang.Comparable,
+             Serializable
 {
     /**
      * Retrieves the table name.

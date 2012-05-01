@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,36 +35,18 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplateGenerator;
-import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -73,21 +54,22 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectImplTemplateBuildHandler
-    extends  CustomValueObjectTemplateBuildHandler
+    extends  CustomValueObjectTemplateBuildHandler<CustomValueObjectImplTemplate, CustomValueObjectImplTemplateGenerator>
 {
     /**
      * Creates a CustomValueObjectImplTemplateBuildHandler.
      */
-    public CustomValueObjectImplTemplateBuildHandler() {};
+    public CustomValueObjectImplTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
      * @return such instance.
      */
+    @Override
     @NotNull
-    protected BasePerCustomResultTemplateFactory retrieveTemplateFactory()
+    protected CustomValueObjectImplTemplateGenerator retrieveTemplateFactory()
     {
-        return CustomValueObjectImplTemplateGenerator.getInstance();
+        return new CustomValueObjectImplTemplateGenerator();
     }
 
     /**
@@ -97,8 +79,9 @@ public class CustomValueObjectImplTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @Override
     protected void storeTemplates(
-        final BasePerCustomResultTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final CustomValueObjectImplTemplate[] templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES,

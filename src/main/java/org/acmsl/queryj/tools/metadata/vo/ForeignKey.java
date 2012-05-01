@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing JDK classes.
  */
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
@@ -43,7 +44,8 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface ForeignKey
-    extends  java.lang.Comparable
+    extends  java.lang.Comparable,
+             Serializable
 {
     /**
      * Retrieves the source table name.

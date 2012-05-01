@@ -39,7 +39,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 
@@ -58,9 +57,9 @@ import org.jetbrains.annotations.NotNull;
  * Is able to generate custom ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomResultSetExtractorTemplateGenerator<T extends CustomResultSetExtractorTemplate>
-    extends  AbstractTemplateGenerator<T>
-    implements  BasePerCustomResultTemplateFactory,
+public class CustomResultSetExtractorTemplateGenerator
+    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate>
+    implements  BasePerCustomResultTemplateFactory<CustomResultSetExtractorTemplate>,
                 Singleton
 {
     /**
@@ -111,7 +110,7 @@ public class CustomResultSetExtractorTemplateGenerator<T extends CustomResultSet
      * @precondition repositoryName != null
      */
     @NotNull
-    public BasePerCustomResultTemplate createTemplate(
+    public CustomResultSetExtractorTemplate createTemplate(
         final Result customResult,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
@@ -150,7 +149,7 @@ public class CustomResultSetExtractorTemplateGenerator<T extends CustomResultSet
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final CustomResultSetExtractorTemplate template)
     {
         return retrieveTemplateFileName(template, StringUtils.getInstance());
     }
@@ -162,7 +161,7 @@ public class CustomResultSetExtractorTemplateGenerator<T extends CustomResultSet
      * @return the file name.
      */
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final CustomResultSetExtractorTemplate template,
         @NotNull final StringUtils stringUtils)
     {
         return

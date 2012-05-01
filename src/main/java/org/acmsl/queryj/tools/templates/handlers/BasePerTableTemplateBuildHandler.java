@@ -324,7 +324,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * any reason.
      * @precondition parameters != null
      */
-    @NotNull
+    @Nullable
     protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
@@ -515,7 +515,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      * @precondition tableName != null
      */
-    @NotNull
+    @Nullable
     protected Collection retrieveCachedStaticContent(
         @NotNull final Map parameters, final String tableName)
     {
