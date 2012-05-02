@@ -1,9 +1,8 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2001-today Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  ******************************************************************************
  *
@@ -40,30 +44,27 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.QueryJException;
 
 /*
- * Importing some jetbrains annotations.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.Serializable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 /**
  * Manages the information provided by database metadata, using plain JDBC.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:chous@acm-sl.org"
+           >Jose San Leandro</a>
  */
 public interface MetadataManager
-    extends Serializable
 {
     /**
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */
-    @NotNull
     public String getName();
 
     /**
@@ -80,20 +81,12 @@ public interface MetadataManager
      * Retrieves the database meta data.
      * @return such information.
      */
-    @NotNull
     public DatabaseMetaData getMetaData();
-
-    /**
-     * Specifies the 'live' database metadata.
-     * @param metaData the {@link DatabaseMetaData} instance in case the manager has been cached.
-     */
-    public void setMetaData(@NotNull DatabaseMetaData metaData);
 
     /**
      * Retrieves the table names.
      * @return such names.
      */
-    @NotNull
     public String[] getTableNames();
 
     /**
@@ -102,15 +95,14 @@ public interface MetadataManager
      * @param tableComment the table comment.
      */
     public void addTableComment(
-        @NotNull final String tableName, @NotNull final String tableComment);
+        final String tableName, final String tableComment);
 
     /**
      * Retrieves the table comments.
      * @param tableName the table name.
      * @return the table comment.
      */
-    @NotNull
-    public String getTableComment(@NotNull final String tableName);
+    public String getTableComment(final String tableName);
 
     /**
      * Adds the column names of given table.
@@ -118,16 +110,21 @@ public interface MetadataManager
      * @param columnNames the column names.
      */
     public void addColumnNames(
-        @NotNull final String tableName,
-        @NotNull final String[] columnNames);
+        final String tableName, final String[] columnNames);
 
     /**
      * Retrieves the column names.
      * @param tableName the table name.
      * @return the column names.
      */
-    @NotNull
-    public String[] getColumnNames(@NotNull final String tableName);
+    public String[] getColumnNames(final String tableName);
+
+    /**
+     * Retrieves all column names, including the parents' if any.
+     * @param tableName the table name.
+     * @return the column names.
+     */
+    public String[] getAllColumnNames(final String tableName);
 
     /**
      * Retrieves the column type.
@@ -137,7 +134,7 @@ public interface MetadataManager
      * @see java.sql.Types
      */
     public int getColumnType(
-        @NotNull String tableName, @NotNull String columnName);
+        final String tableName, final String columnName);
     
     /**
      * Adds a column type.
@@ -146,18 +143,18 @@ public interface MetadataManager
      * @param columnType the column type.
      */
     public void addColumnType(
-        @NotNull String tableName,
-        @NotNull String columnName,
+        final String tableName,
+        final String columnName,
         final int columnType);
 
     /**
-     * Retrieves whether the attribute allows null values.
+     * Retrieves the allow null.
      * @param tableName the table name.
-     * @param columnName the column name.
-     * @return such condition.
+     * @param allowName the allow name.
+     * @return the allow null.
      */
     public boolean allowsNull(
-        @NotNull String tableName, @NotNull String columnName);
+        final String tableName, final String allowName);
     
     /**
      * Retrieves the allow null.
@@ -166,7 +163,7 @@ public interface MetadataManager
      * @return the allow null.
      */
     public boolean allowsNull(
-        @NotNull String tableName, @NotNull String[] allowNames);
+        final String tableName, final String[] allowNames);
 
     /**
      * Retrieves whether given attribute allows nulls.
@@ -175,7 +172,7 @@ public interface MetadataManager
      * @return such information.
      */
     public boolean getAllowNull(
-        @NotNull String tableName, @NotNull String attributeName);
+        final String tableName, final String attributeName);
 
     /**
      * Retrieves whether given attributes allow nulls.
@@ -184,7 +181,7 @@ public interface MetadataManager
      * @return such information.
      */
     public boolean getAllowNull(
-        @NotNull String tableName, @NotNull String[] attributeNames);
+        final String tableName, final String[] attributeNames);
 
     /**
      * Adds a null flag.
@@ -193,32 +190,39 @@ public interface MetadataManager
      * @param flag the flag.
      */
     public void addAllowNull(
-        @NotNull String tableName,
-        @NotNull String columnName,
+        final String tableName,
+        final String columnName,
         final boolean flag);
 
+    /**
+     * Retrieves the column comment.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return the column comment.
+     */
+    public String getColumnComment(
+        final String tableName, final String columnName);
+    
     /**
      * Adds a primary key.
      * @param tableName the table name.
      * @param columnName the column name.
      */
-    public void addPrimaryKey(
-        @NotNull String tableName, @NotNull String columnName);
+    public void addPrimaryKey(final String tableName, final String columnName);
 
     /**
      * Retrieves the number of columns building the primary key.
      * @param tableName the table name.
      * @return the primary keys.
      */
-    public int getPrimaryKeyColumnCount(@NotNull String tableName);
+    public int getPrimaryKeyColumnCount(final String tableName);
     
     /**
      * Retrieves the primary key.
      * @param tableName the table name.
      * @return the primary key.
      */
-    @NotNull
-    public String[] getPrimaryKey(@NotNull String tableName);
+    public String[] getPrimaryKey(final String tableName);
 
     /**
      * Checks whether given field belongs to the primary key or not.
@@ -228,7 +232,20 @@ public interface MetadataManager
      * concrete row.
      */
     public boolean isPartOfPrimaryKey(
-        @NotNull String tableName, @NotNull String fieldName);
+        final String tableName, final String fieldName);
+
+    /**
+     * Checks whether given field belongs to the primary key or not.
+     * @param tableName the table name.
+     * @param fieldNames the field names.
+     * @param parentTableName the parent table name.
+     * @return <code>true</code> if such field is part of what dentifies a
+     * concrete row.
+     */
+    public boolean pointsToPrimaryKey(
+        final String tableName,
+        final String[] fieldNames,
+        final String parentTableName);
 
     /**
      * Adds a foreign key.
@@ -238,18 +255,17 @@ public interface MetadataManager
      * @param refColumnNames the referred column names.
      */
     public void addForeignKey(
-        @NotNull String tableName,
-        @NotNull final String[] columnNames,
-        @NotNull final String refTableName,
-        @NotNull final String[] refColumnNames);
+        final String tableName,
+        final String[] columnNames,
+        final String refTableName,
+        final String[] refColumnNames);
 
     /**
-     * Retrieves the tables referring to given table's.
+     * Retrieves the tables refering to given table's.
      * @param tableName the table name.
      * @return such tables.
      */
-    @NotNull
-    public String[] getReferringTables(@NotNull final String tableName);
+    public String[] getReferingTables(final String tableName);
     
     /**
      * Retrieves the foreign keys of given table.
@@ -265,29 +281,27 @@ public interface MetadataManager
      *   {foreign-keyN-attribute1,..foreign-keyN-attributeN}
      * ..
      * [referredTableNameN]
-     *   {foreign-keyM-attribute1,..foreign-keyM-attributeN}
+     *   {foreign-key1-attribute1,..foreign-key1-attributeN}
      * ..
      * [referredTableNameN]
-     *   {foreign-keyM-attribute1,..foreign-keyM-attributeN}
+     *   {foreign-keyN-attribute1,..foreign-keyN-attributeN}
      * </pre>
      */
-    @NotNull
-    public String[][] getForeignKeys(@NotNull final String tableName);
+    public String[][] getForeignKeys(final String tableName);
 
     /**
      * Checks whether given table contains foreign keys.
      * @param tableName the table name.
      * @return <code>true</code> in such case.
      */
-    public boolean containsForeignKeys(@NotNull final String tableName);
+    public boolean containsForeignKeys(final String tableName);
 
     /**
      * Retrieves the tables referred by given table's foreign keys.
      * @param tableName the table name.
      * @return such tables.
      */
-    @NotNull
-    public String[] getReferredTables(@NotNull final String tableName);
+    public String[] getReferredTables(final String tableName);
 
     /**
      * Retrieves the field of given table that points to a field on the referred one.
@@ -295,9 +309,8 @@ public interface MetadataManager
      * @param refTableName the referred table name.
      * @return such field.
      */
-    @NotNull
     public String[][] getForeignKeys(
-        @NotNull final String tableName, @NotNull String refTableName);
+        final String tableName, String refTableName);
 
     /**
      * Retrieves the table referred by given foreign key.
@@ -305,10 +318,8 @@ public interface MetadataManager
      * @param foreignKey the foreign key.
      * @return the referred table name.
      */
-    @Nullable
     public String getReferredTable(
-        @NotNull final String tableName,
-        @NotNull final String[] foreignKey);
+        final String tableName, final String[] foreignKey);
     
     /**
      * Retrieves the field of referred table pointed by a field on the
@@ -317,9 +328,8 @@ public interface MetadataManager
      * @param refTableName the referred table name.
      * @return such field.
      */
-    @NotNull
     public String[][] getReferredKeys(
-        @NotNull final String tableName, @NotNull String refTableName);
+        final String tableName, String refTableName);
 
     /**
      * Annotates a externally-managed field.
@@ -327,7 +337,7 @@ public interface MetadataManager
      * @param columnName the column name.
      */
     public void addExternallyManagedField(
-        @NotNull final String tableName, @NotNull final String columnName);
+        final String tableName, final String columnName);
 
     /**
      * Annotates a externally-managed field.
@@ -336,9 +346,9 @@ public interface MetadataManager
      * @param keyword the keyword.
      */
     public void addExternallyManagedField(
-        @NotNull final String tableName,
-        @NotNull final String columnName,
-        @NotNull final String keyword);
+        final String tableName,
+        final String columnName,
+        final String keyword);
 
     /**
      * Annotates a externally-managed field.
@@ -348,19 +358,17 @@ public interface MetadataManager
      * @param query the retrieval query.
      */
     public void addExternallyManagedField(
-        @NotNull final String tableName,
-        @NotNull final String columnName,
-        @NotNull final String keyword,
-        @NotNull final String query);
+        final String tableName,
+        final String columnName,
+        final String keyword,
+        final String query);
     
     /**
      * Retrieves the externally-managed fields.
      * @param tableName the table name.
      * @return the externally-managed fields of such table.
      */
-    @NotNull
-    public String[] getExternallyManagedFields(
-        @NotNull final String tableName);
+    public String[] getExternallyManagedFields(final String tableName);
 
     /**
      * Checks whether given field is externally managed or not.
@@ -369,7 +377,7 @@ public interface MetadataManager
      * @return <code>true</code> if such field is managed externally.
      */
     public boolean isManagedExternally(
-        @NotNull final String tableName, @NotNull String fieldName);
+        final String tableName, String fieldName);
 
     /**
      * Retrieves the keyword used to create new values of given field.
@@ -378,9 +386,7 @@ public interface MetadataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
-    @Nullable
-    public String getKeyword(
-        @NotNull final String tableName, @NotNull String fieldName);
+    public String getKeyword(final String tableName, String fieldName);
 
     /**
      * Retrieves the keyword used to create new values of given field.
@@ -389,15 +395,13 @@ public interface MetadataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
-    @Nullable
     public String getExternallyManagedFieldRetrievalQuery(
-        @NotNull final String tableName, @NotNull String fieldName);
+        final String tableName, String fieldName);
     
     /**
      * Retrieves the procedures metadata.
      * @return such metadata.
      */
-    @NotNull
     public ProcedureMetadata[] getProceduresMetadata();
 
     /**
@@ -405,24 +409,21 @@ public interface MetadataManager
      * @param procedure the procedure.
      * @return the parameters metadata.
      */
-    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
-        @NotNull final ProcedureMetadata procedure);
+        final ProcedureMetadata procedure);
 
     /**
      * Retrieves the parameters of given procedure.
      * @param procedureName the procedure name.
      * @return the parameters metadata.
      */
-    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
-        @NotNull final String procedureName);
+        final String procedureName);
 
     /**
      * Retrieves the type manager.
      * @return such instance.
      */
-    @NotNull
     public MetadataTypeManager getMetadataTypeManager();
 
     /**
@@ -432,14 +433,90 @@ public interface MetadataManager
     public boolean requiresCustomClobHandling();
 
     /**
-     * Checks whether the engine requires specific BLOB handling.
-     * @return <code>true</code> in such case.
+     * Retrieves the parent table in the ISA relationship, if any.
+     * @param table the table.
+     * @return the parent's table name, or <code>null</code> otherwise.
      */
-    public boolean requiresCustomBlobHandling();
+    public String getParentTable(final String table);
 
     /**
-     * Checks whether the engine requires specific CLOB handling.
+     * Retrieves whether the engine is case sensitive or not.
+     * @return such information.
+     */
+    public boolean isCaseSensitive();
+
+    /**
+     * Retrieves whether given column is marked as <b>read-only</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
      * @return <code>true</code> in such case.
      */
-    public boolean requiresCustomLobHandling();
+    public boolean isReadOnly(
+        final String tableName, final String columnName);
+
+    /**
+     * Retrieves whether given column is marked as <b>bool</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isBoolean(
+        final String tableName, final String columnName);
+
+    /**
+     * Retrieves the symbol for <code>true</code> values, in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     */
+    public String getBooleanTrue(
+        final String tableName, final String columnName);
+
+    /**
+     * Retrieves the symbol for <code>false</code> values, in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     */
+    public String getBooleanFalse(
+        final String tableName, final String columnName);
+
+    /**
+     * Retrieves the symbol for <code>null</code> values, in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     */
+    public String getBooleanNull(
+        final String tableName, final String columnName);
+
+    /**
+     * Retrieves whether given table is static or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableStatic(final String table);
+
+    /**
+     * Retrieves whether given table is decorated or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableDecorated(final String table);
+
+    /**
+     * Retrieves the referring tables.
+     * @param tableName the table name.
+     * @return the list of referring tables to given table.
+     */
+    public String[] getReferringTables(@NotNull final String tableName);
+
+    /**
+     * Specifies the database metadata to use, in case of offline use.
+     * @param metaData the {@link DatabaseMetaData} instance.
+     */
+    public void setMetaData(@NotNull final DatabaseMetaData metaData);
 }

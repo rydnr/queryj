@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,32 +37,19 @@ package org.acmsl.queryj.tools.customsql.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.xml.SqlXmlParser;
-import org.acmsl.queryj.tools.customsql.xml.SqlXmlParserFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.QueryJException;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Commons-Logging classes.
- */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -123,7 +109,7 @@ public class CustomSqlProvisioningHandler
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition customSqlProvider != null
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
@@ -185,7 +171,8 @@ public class CustomSqlProvisioningHandler
                             t_strAttributeName),
                         metadataManager.allowsNull(
                             t_strTableName,
-                            t_strAttributeName)));
+                            t_strAttributeName),
+                        metadataManager.isBoolean(t_strTableName, t_strAttributeName)));
 
                 t_cResultData.add(t_strPropertyName);
             }

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,29 +36,30 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
- * Decorates <code>ForeignKey</code> instances to provide required alternate
+ * Decorates {@link ForeignKey} instances to provide required alternate
  * representations of the information stored therein.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractForeignKeyDecorator
-    extends AbstractForeignKey
-    implements  ForeignKeyDecorator
+    extends ForeignKeyDecorator
 {
     /**
      * The decorated instance.
@@ -96,7 +96,7 @@ public abstract class AbstractForeignKeyDecorator
      */
     protected AbstractForeignKeyDecorator(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull)
     {

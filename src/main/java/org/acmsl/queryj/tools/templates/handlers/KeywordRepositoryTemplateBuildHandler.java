@@ -92,7 +92,7 @@ public class KeywordRepositoryTemplateBuildHandler
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the metadata type manager.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param factory the template factory.
+     * @param templateFactory the template factory.
      * @param packageName the package name.
      * @param projectPackage the base package.
      * @param repository the repository.
@@ -145,7 +145,7 @@ public class KeywordRepositoryTemplateBuildHandler
 
             @Nullable Collection t_cFieldElements = null;
 
-            @NotNull AntExternallyManagedFieldsElement
+            @Nullable AntExternallyManagedFieldsElement
                 t_ExternallyManagedFieldsElement =
                     retrieveExternallyManagedFieldsElement(parameters);
 
@@ -169,7 +169,7 @@ public class KeywordRepositoryTemplateBuildHandler
                     while  (   (t_itFieldIterator != null)
                             && (t_itFieldIterator.hasNext()))
                     {
-                        @NotNull AntFieldElement t_Field =
+                        @Nullable AntFieldElement t_Field =
                             (AntFieldElement) t_itFieldIterator.next();
 
                         if  (t_Field != null)
@@ -181,6 +181,9 @@ public class KeywordRepositoryTemplateBuildHandler
                                     t_Field.getKeyword(),
                                     t_MetadataTypeManager.getQueryJFieldType(
                                         metadataManager.getColumnType(
+                                            t_Field.getTableName(),
+                                            t_Field.getName()),
+                                        metadataManager.isBoolean(
                                             t_Field.getTableName(),
                                             t_Field.getName())));
                             }

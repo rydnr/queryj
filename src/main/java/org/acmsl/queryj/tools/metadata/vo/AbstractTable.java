@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +20,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  *****************************************************************************
  *
@@ -37,12 +42,16 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.Table;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
+ 
 /**
- * Abstract logic-less implementation of {@link Table} interface.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Abstract logicless implementation of <code>Table</code> interface.
+ * @author <a href="mailto:chous@acm-sl.org"
+ *         >Jose San Leandro</a>
  */
 public abstract class AbstractTable
     implements Table
@@ -51,15 +60,57 @@ public abstract class AbstractTable
      * The name.
      */
     private String m__strName;
-    
+
     /**
-     * Creates an {@link AbstractTable} with the following
+     * The primary key attributes.
+     */
+    private List m__lPrimaryKey;
+
+    /**
+     * The attribute list.
+     */
+    private List m__lAttributes;
+
+    /**
+     * The parent table, if any.
+     */
+    private Table m__ParentTable;
+
+    /**
+     * Flag indicating whether the table is static.
+     */
+    private boolean m__bStatic;
+
+    /**
+     * Whether the value-object for the table is decorated.
+     */
+    private boolean m__bVoDecorated;
+
+    /**
+     * Creates an <code>AbstractTable</code> with the following
      * information.
      * @param name the name.
+     * @param primaryKey the primary key attributes.
+     * @param attributes the attributes.
+     * @param parentTable the parent table, if any.
+     * @param isStatic whether the table is static.
+     * @param voDecorated whether the value-object for the table
+     * is decorated.
      */
-    protected AbstractTable(final String name)
+    protected AbstractTable(
+        final String name,
+        final List primaryKey,
+        final List attributes,
+        final Table parentTable,
+        final boolean isStatic,
+        final boolean voDecorated)
     {
         immutableSetName(name);
+        immutableSetPrimaryKey(primaryKey);
+        immutableSetAttributes(attributes);
+        immutableSetParentTable(parentTable);
+        immutableSetStatic(isStatic);
+        immutableSetVoDecorated(voDecorated);
     }
     
     /**
@@ -90,95 +141,157 @@ public abstract class AbstractTable
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
+     * Specifies the primary key attributes.
+     * @param attrs the primary key attributes.
+     */
+    protected final void immutableSetPrimaryKey(final List attrs)
+    {
+        m__lPrimaryKey = attrs;
+    }
+
+    /**
+     * Specifies the primary key attributes.
+     * @param attrs the primary key attributes.
+     */
+    protected void setPrimaryKey(final List attrs)
+    {
+        immutableSetPrimaryKey(attrs);
+    }
+
+    /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    protected final List immutableGetPrimaryKey()
+    {
+        return m__lPrimaryKey;
+    }
+
+    /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    public List getPrimaryKey()
+    {
+        return immutableGetPrimaryKey();
+    }
+
+    /**
+     * Specifies the attributes.
+     * @param attrs the attributes.
+     */
+    protected final void immutableSetAttributes(final List attrs)
+    {
+        m__lAttributes = attrs;
+    }
+
+    /**
+     * Specifies the attributes.
+     * @param attrs the attributes.
+     */
+    protected void setAttributes(final List attrs)
+    {
+        immutableSetAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such list.
+     */
+    protected final List immutableGetAttributes()
+    {
+        return m__lAttributes;
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such list.
+     */
+    public List getAttributes()
+    {
+        return immutableGetAttributes();
+    }
+
+    /**
+     * Specifies the parent table.
+     * @param parentTable the parent table.
+     */
+    protected final void immutableSetParentTable(final Table parentTable)
+    {
+        m__ParentTable = parentTable;
+    }
+
+    /**
+     * Specifies the parent table.
+     * @param parentTable the parent table.
+     */
+    protected void setParentTable(final Table parentTable)
+    {
+        immutableSetParentTable(parentTable);
+    }
+
+    /**
+     * Retrieves the parent table.
+     * @return such table.
+     */
+    public Table getParentTable()
+    {
+        return m__ParentTable;
+    }
+
+    /**
+     * Specifies whether the table is static or not.
+     * @param flag such flag.
+     */
+    protected final void immutableSetStatic(final boolean flag)
+    {
+        m__bStatic = flag;
+    }
+
+    /**
+     * Specifies whether the table is static or not.
+     * @param flag such flag.
+     */
+    protected void setStatic(final boolean flag)
+    {
+        immutableSetStatic(flag);
+    }
+
+    /**
+     * Retrieves whether the table is static or not.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isStatic()
+    {
+        return m__bStatic;
+    }
+
+    /**
+     * Specifies whether the value-object for the table
+     * is decorated.
+     * @param flag such flag.
+     */
+    protected final void immutableSetVoDecorated(final boolean flag)
+    {
+        m__bVoDecorated = flag;
+    }
+
+    /**
+     * Specifies whether the value-object for the table
+     * is decorated.
+     * @param flag such flag.
+     */
+    protected void setVoDecorated(final boolean flag)
+    {
+        immutableSetVoDecorated(flag);
+    }
+
+    /**
+     * Retrieves whether the value-object for the table is decorated.
      * @return such information.
      */
-    public String toString()
+    public boolean isVoDecorated()
     {
-        return
-            new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .append("name", getName())
-                .toString();
-    }
-
-    /**
-     * Retrieves the hash code associated to this instance.
-     * @return such information.
-     */
-    public int hashCode()
-    {
-        return
-            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006159, 836073109)
-                .append(getName())
-                .toHashCode();
-    }
-
-    /**
-     * Checks whether given object is semantically equal to this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     */
-    public boolean equals(final Object object)
-    {
-        boolean result = false;
-
-        if  (object instanceof Table)
-        {
-            @NotNull final Table t_OtherInstance = (Table) object;
-
-            result =
-                new org.apache.commons.lang.builder.EqualsBuilder()
-                    .appendSuper(super.equals(t_OtherInstance))
-                    .append(
-                        getName(),
-                        t_OtherInstance.getName())
-                .isEquals();
-        }
-
-        return result;
-    }
-
-    /**
-     * Compares given object with this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
-     */
-    public int compareTo(final Object object)
-        throws  ClassCastException
-    {
-        int result = 1;
-
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof Table)
-        {
-            @NotNull final Table t_OtherInstance = (Table) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getName(),
-                    t_OtherInstance.getName())
-                .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
-        }
-
-        return result;
+        return m__bVoDecorated;
     }
 }

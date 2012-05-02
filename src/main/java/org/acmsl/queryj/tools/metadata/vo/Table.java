@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +20,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  *****************************************************************************
  *
@@ -36,20 +41,49 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing some JDK classes.
  */
-import java.io.Serializable;
-
+import java.util.List;
+ 
 /**
  * Represents <i>table</i> entities in the metadata model.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:chous@acm-sl.org"
+ *         >Jose San Leandro</a>
  */
 public interface Table
-    extends  java.lang.Comparable,
-             Serializable
 {
     /**
      * Retrieves the table name.
      * @return such name.
      */
     public String getName();
-}
 
+    /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    public List getPrimaryKey();
+
+    /**
+     * Retrieves the attributes.
+     * @return such list.
+     */
+    public List getAttributes();
+
+    /**
+     * Retrieves the parent table.
+     * @return such table.
+     */
+    public Table getParentTable();
+
+    /**
+     * Retrieves whether the table contains static values or not.
+     * @return <tt>true</tt> in such case.
+     */
+    public boolean isStatic();
+    
+    /**
+     * Retrieves whether the value object for the table is
+     * decorated or not.
+     * @return such information.
+     */
+    public boolean isVoDecorated();
+}

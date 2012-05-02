@@ -36,32 +36,16 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
-import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
-import org.acmsl.queryj.tools.customsql.Sql;
-import org.acmsl.queryj.tools.metadata.AttributeDecorator;
-import org.acmsl.queryj.tools.metadata.CachingResultDecorator;
-import org.acmsl.queryj.tools.metadata.CachingSqlDecorator;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
-import org.acmsl.queryj.tools.metadata.ResultDecorator;
-import org.acmsl.queryj.tools.metadata.SqlDecorator;
 import org.acmsl.queryj.tools.metadata.TableDecorator;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
-import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
-import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -87,9 +71,8 @@ import java.util.List;
 import java.util.Map;
 
 /*
- * Importing Apache Commons Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -698,7 +681,7 @@ public abstract class BasePerTableTemplate
         input.put("base_dao_package_name",  baseDAOPackageName);
 
         // Check for CLOB stuff.
-        if  (   (metadataManager.requiresCustomLobHandling())
+        if  (   (metadataManager.requiresCustomClobHandling())
              && (containsLobs(
                      tableName, metadataManager, metadataTypeManager)))
         {
@@ -1008,9 +991,15 @@ public abstract class BasePerTableTemplate
                     staticAttributeType,
                     staticAttributeType,
                     tableName,
+                    metadataManager.getTableComment(tableName),
                     managedExternally,
                     allowsNull,
-                    null),
+                    null,
+                    metadataManager.isReadOnly(tableName, staticAttributeName),
+                    metadataManager.isBoolean(tableName, staticAttributeName),
+                    metadataManager.getBooleanTrue(tableName, staticAttributeName),
+                    metadataManager.getBooleanFalse(tableName, staticAttributeName),
+                    metadataManager.getBooleanNull(tableName, staticAttributeName)),
                 metadataManager));
     }
 
@@ -1270,7 +1259,7 @@ public abstract class BasePerTableTemplate
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (metadataTypeManager.isLob(
+            if  (metadataTypeManager.isClob(
                      metadataManager.getColumnType(
                          tableName,
                          t_astrColumnNames[t_iIndex])))
@@ -1337,8 +1326,7 @@ public abstract class BasePerTableTemplate
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
         return
-            metaLanguageUtils.retrieveStaticAttribute(
-                tableName, metadataManager);
+            metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName));
     }
 
     /**

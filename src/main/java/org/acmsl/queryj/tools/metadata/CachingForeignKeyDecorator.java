@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,14 +36,17 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Adds a simple caching mechanism while decorating <code>ForeignKey</code>
@@ -93,7 +95,7 @@ public class CachingForeignKeyDecorator
      */
      protected CachingForeignKeyDecorator(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull)
     {

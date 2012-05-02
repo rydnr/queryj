@@ -179,7 +179,7 @@ public class <input.vo_name>PkStatementSetter
       separator="\n\n">
 
     /**
-     * Creates a \<code><input.vo_name>PkStatementSetter\</code>
+     * Creates a \{@link <input.vo_name>PkStatementSetter}
      * instance.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
@@ -196,7 +196,7 @@ public class <input.vo_name>PkStatementSetter
     <input.pk_attributes:attribute_accessor(attr=it); separator="\n\n">
 
     /**
-     * Specifies the values on given \<code>PreparedStatement\</code>
+     * Specifies the values on given \{@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
@@ -212,7 +212,7 @@ public class <input.vo_name>PkStatementSetter
     }
 
     /**
-     * Specifies the values on given \<code>PreparedStatement\</code>
+     * Specifies the values on given \{@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">

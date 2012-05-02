@@ -132,6 +132,11 @@ public abstract class DatabaseMetaDataRetrievalHandler
     public static final String DATABASE_MINOR_VERSION = "database.minor.version";
 
     /**
+     * The entry key for case sensitivity.
+     */
+    public static final String CASE_SENSITIVE = "database.case.sensitive";
+
+    /**
      * Creates a {@link DatabaseMetaDataRetrievalHandler} instance.
      */
     public DatabaseMetaDataRetrievalHandler() {}
@@ -618,6 +623,34 @@ public abstract class DatabaseMetaDataRetrievalHandler
         boolean result = false;
 
         storeMetadata(metaData, parameters);
+
+        boolean t_bCaseSensitive = false;
+
+        try
+        {
+            t_bCaseSensitive =
+                   metaData.storesLowerCaseIdentifiers()
+                || metaData.storesLowerCaseQuotedIdentifiers()
+                || metaData.storesMixedCaseIdentifiers()
+                || metaData.storesMixedCaseQuotedIdentifiers()
+                || metaData.storesUpperCaseIdentifiers()
+                || metaData.storesUpperCaseQuotedIdentifiers();
+        }
+        catch (@NotNull final SQLException cannotCheckCaseSensitivity)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot check whether the database engine is case sensitive or not.",
+                    cannotCheckCaseSensitivity);
+            }
+        }
+
+        storeCaseSensitive(t_bCaseSensitive, parameters);
 
         @Nullable AntTablesElement t_TablesElement = null;
 
@@ -1294,7 +1327,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     lazyProcedureExtraction,
                     retrieveDatabaseMetaData(parameters),
                     retrieveCatalog(parameters),
-                    retrieveSchema(parameters));
+                    retrieveSchema(parameters),
+                    retrieveCaseSensitive(parameters));
 
 
         }
@@ -1329,6 +1363,26 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
+     * Retrieves whether the database engine is case sensitive or not.
+     * @param parameters the parameters.
+     * @return <code>true</code> in such case.
+     */
+    public boolean retrieveCaseSensitive(@NotNull final Map parameters)
+    {
+        return (Boolean) parameters.get(CASE_SENSITIVE);
+    }
+
+    /**
+     * Retrieves whether the database engine is case sensitive or not.
+     * @param parameters the parameters.
+     * @return <code>true</code> in such case.
+     */
+    public void storeCaseSensitive(final boolean caseSensitive, @NotNull final Map parameters)
+    {
+        parameters.put(CASE_SENSITIVE, caseSensitive);
+    }
+
+    /**
      * Builds a database metadata manager.
      * @param tableNames the table names.
      * @param procedureNames the procedure names.
@@ -1343,6 +1397,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param caseSensitive whether the engine is case sensitive or not.
      * @return the metadata manager instance.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
@@ -1359,7 +1414,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final boolean lazyProcedureExtraction,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @NotNull final String schema)
+        @NotNull final String schema,
+        final boolean caseSensitive)
       throws  QueryJBuildException
     {
         MetadataManager result;
@@ -1376,7 +1432,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     lazyProcedureExtraction,
                     metaData,
                     catalog,
-                    schema);
+                    schema,
+                    caseSensitive);
         }
         catch  (@NotNull final RuntimeException exception)
         {

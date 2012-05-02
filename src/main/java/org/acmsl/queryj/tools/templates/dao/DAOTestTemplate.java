@@ -592,11 +592,16 @@ public class DAOTestTemplate
                         tableTemplate.getTableName(),
                         t_astrColumnNames[t_iColumnIndex]);
 
+                boolean t_bIsBool =
+                    metadataManager.isBoolean(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
                 if  (   (t_bAllowsNull)
                      && (metadataTypeManager.isPrimitive(t_iColumnType)))
                 {
                     t_strType =
-                        metadataTypeManager.getObjectType(t_iColumnType);
+                        metadataTypeManager.getObjectType(t_iColumnType, t_bIsBool);
 
                     t_Formatter =
                         t_TestNullableParametersValuesFormatter;

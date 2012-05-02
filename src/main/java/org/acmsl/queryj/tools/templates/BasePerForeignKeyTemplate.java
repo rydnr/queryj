@@ -38,15 +38,11 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.ResultDecorator;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
-import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL classes.
@@ -67,14 +63,11 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 /*
- * Importing Apache Commons Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -265,7 +258,6 @@ public abstract class BasePerForeignKeyTemplate
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage.
      * @param timestamp the timestamp.
-     * @param className the class name of the DAO.
      * @param tableRepositoryName the table repository.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -645,8 +637,10 @@ public abstract class BasePerForeignKeyTemplate
                         tableName, columnNames[t_iIndex]);
             }
 
+            boolean t_bIsBool = metadataManager.isBoolean(tableName, columnNames[t_iIndex]);
+
             String t_strFieldType =
-                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
+                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
 
             boolean t_bManagedExternally =
                 metadataManager.isManagedExternally(
@@ -660,10 +654,16 @@ public abstract class BasePerForeignKeyTemplate
                         t_strNativeType,
                         t_strFieldType,
                         tableName,
+                        metadataManager.getTableComment(tableName),
                         t_bManagedExternally,
                         t_bAllowsNull,
-                        columnValues[t_iIndex]),
-                    metadataManager));
+                        columnValues[t_iIndex],
+                        metadataManager.isReadOnly(tableName, columnNames[t_iIndex]),
+                    metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
+                    metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
+                    metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
+                    metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
+                metadataManager));
         }
 
         return result;

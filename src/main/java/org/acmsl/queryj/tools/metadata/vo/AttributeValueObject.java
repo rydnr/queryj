@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -33,11 +32,6 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
-
 /**
  * Value-object implementation of <code>Attribute</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -63,9 +57,15 @@ public final class AttributeValueObject
         final String nativeType,
         final String fieldType,
         final String tableName,
+        final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value)
+        final String value,
+        final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull)
     {
         super(
             name,
@@ -73,9 +73,15 @@ public final class AttributeValueObject
             nativeType,
             fieldType,
             tableName,
+            comment,
             managedExternally,
             allowsNull,
-            value);
+            value,
+            readOnly,
+            isBool,
+            booleanTrue,
+            booleanFalse,
+            booleanNull);
     }
 }
 

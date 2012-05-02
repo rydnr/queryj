@@ -232,10 +232,10 @@ public <cs.resultClass> <cs.nameUncapitalized>(
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param preparedStatementCreatorFactory the
- * \<code>PreparedStatementCreatorFactory\</code> instance
+ * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
  * @param params the query parameters.
- * @param dataSource the \<code>DataSource\<code> instance.
+ * @param dataSource the {@link DataSource{@link  instance.
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("preparedStatementCreatorFactory")>
@@ -273,10 +273,10 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param preparedStatementCreatorFactory the
- * \<code>PreparedStatementCreatorFactory\</code> instance
+ * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
  * @param params the query parameters.
- * @param transactionManager the \<code>PlatformTransactionManager\<code>
+ * @param transactionManager the {@link PlatformTransactionManager{@link 
  * instance.
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
@@ -319,10 +319,10 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @param preparedStatementCreatorFactory the
- * \<code>PreparedStatementCreatorFactory\</code> instance
+ * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
  * @param params the query parameters.
- * @param transactionTemplate the \<code>TransactionTemplate\<code>
+ * @param transactionTemplate the {@link TransactionTemplate{@link 
  * instance.
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
@@ -549,31 +549,31 @@ inner_transaction_callbacks(daoName, voName, clobHandling) ::= <<
 !>
 /**
  * Transaction callback implementation to perform
- * \<code>JdbcTemplate.update(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+ * {@link JdbcTemplate#update(PreparedStatementCreator, PreparedStatementSetter)}.
  */
 protected static class AbstractTransactionCallback
     implements TransactionCallback
 {
     /**
-     * The \<code>PreparedStatementCreator\</code>.
+     * The {@link PreparedStatementCreator}.
      */
     private PreparedStatementCreator m__PreparedStatementCreator;
 
     /**
-     * The \<code>PreparedStatementSetter\</code>.
+     * The {@link PreparedStatementSetter}.
      */
     private PreparedStatementSetter m__PreparedStatementSetter;
 
     /**
-     * The \<code><daoName>DAO\</code>.
+     * The {@link <daoName>DAO}.
      */
     private <daoName>DAO m__<daoName>DAO;
 
     /**
      * Creates a transaction callback.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      */
     public AbstractTransactionCallback(
         final PreparedStatementCreator creator,
@@ -586,7 +586,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the \<code>PreparedStatementCreator\</code> instance.
+     * Specifies the {@link PreparedStatementCreator} instance.
      * @param creator such instance.
      */
     private void immutableSetPreparedStatementCreator(
@@ -596,7 +596,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the \<code>PreparedStatementCreator\</code> instance.
+     * Specifies the {@link PreparedStatementCreator} instance.
      * @param creator such instance.
      */
     protected void setPreparedStatementCreator(
@@ -606,7 +606,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Retrieves the \<code>PreparedStatementCreator\</code> instance.
+     * Retrieves the {@link PreparedStatementCreator} instance.
      * @return such instance.
      */
     public PreparedStatementCreator getPreparedStatementCreator()
@@ -615,7 +615,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the \<code>PreparedStatementSetter\</code> instance.
+     * Specifies the {@link PreparedStatementSetter} instance.
      * @param setter such instance.
      */
     private void immutableSetPreparedStatementSetter(
@@ -625,7 +625,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the \<code>PreparedStatementSetter\</code> instance.
+     * Specifies the {@link PreparedStatementSetter} instance.
      * @param setter such instance.
      */
     protected void setPreparedStatementSetter(
@@ -635,7 +635,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Retrieves the \<code>PreparedStatementSetter\</code> instance.
+     * Retrieves the {@link PreparedStatementSetter} instance.
      * @return such instance.
      */
     public PreparedStatementSetter getPreparedStatementSetter()
@@ -644,7 +644,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the \<code><daoName>DAO\</code> instance.
+     * Specifies the {@link <daoName>DAO} instance.
      * @param dao the DAO instance.
      */
     private void immutableSet<daoName>DAO(final <daoName>DAO dao)
@@ -653,7 +653,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Specifies the \<code><daoName>DAO\</code> instance.
+     * Specifies the {@link <daoName>DAO} instance.
      * @param dao the DAO instance.
      */
     protected void set<daoName>DAO(final <daoName>DAO dao)
@@ -662,7 +662,7 @@ protected static class AbstractTransactionCallback
     }
 
     /**
-     * Retrieves the \<code><daoName>DAO\</code> instance.
+     * Retrieves the {@link <daoName>DAO} instance.
      * @return such DAO.
      */
     public <daoName>DAO get<daoName>DAO()
@@ -688,10 +688,10 @@ protected static class AbstractTransactionCallback
     /**
      * Executes the transactional operation.
      * @param status the transaction status.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
-     * @return \<code>null\</code> in either case (this method is meant
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param dao the {@link <daoName>DAO} instance.
+     * @return {@link null} in either case (this method is meant
      * to be overriden by subclasses, but cannot be defined \<i>abstract\</i>
      * since the inner class is \<i>static\</i>.
      */
@@ -707,16 +707,16 @@ protected static class AbstractTransactionCallback
 
 /**
  * Transaction callback implementation to perform
- * \<code>JdbcTemplate.update(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+ * {@link JdbcTemplate#update(PreparedStatementCreator, PreparedStatementSetter)}.
  */
 protected static class UpdateTransactionCallback
     extends AbstractTransactionCallback
 {
     /**
      * Creates a transaction callback.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      */
     public UpdateTransactionCallback(
         final PreparedStatementCreator creator,
@@ -729,9 +729,9 @@ protected static class UpdateTransactionCallback
     /**
      * Executes the transactional operation.
      * @param status the transaction status.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
     protected Object doInTransaction(
@@ -746,7 +746,7 @@ protected static class UpdateTransactionCallback
 
 /**
  * Transaction callback implementation to perform
- * \<code>JdbcTemplate.query(PreparedStatementCreator, PreparedStatementSetter)\</code>.
+ * {@link JdbcTemplate.query(PreparedStatementCreator, PreparedStatementSetter)}.
  */
 protected static class QueryTransactionCallback
     extends AbstractTransactionCallback
@@ -757,15 +757,15 @@ protected static class QueryTransactionCallback
     private String m__strSQL;
 
     /**
-     * The \<code>ResultSetExtractor\</code>.
+     * The {@link ResultSetExtractor}.
      */
     private ResultSetExtractor m__ResultSetExtractor;
 
     /**
      * Creates a transaction callback.
      * @param sql the SQL sentence.
-     * @param extractor the \<code>ResultSetExtractor\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param extractor the {@link ResultSetExtractor} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      */
     public QueryTransactionCallback(
         final String sql,
@@ -779,10 +779,10 @@ protected static class QueryTransactionCallback
 
     /**
      * Creates a transaction callback.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param extractor the \<code>ResultSetExtractor\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param extractor the {@link ResultSetExtractor} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      */
     public QueryTransactionCallback(
         final PreparedStatementCreator creator,
@@ -822,7 +822,7 @@ protected static class QueryTransactionCallback
     }
 
     /**
-     * Specifies the \<code>ResultSetExtractor\</code> instance.
+     * Specifies the {@link ResultSetExtractor} instance.
      * @param extractor such instance.
      */
     private void immutableSetResultSetExtractor(
@@ -832,7 +832,7 @@ protected static class QueryTransactionCallback
     }
 
     /**
-     * Specifies the \<code>ResultSetExtractor\</code> instance.
+     * Specifies the {@link ResultSetExtractor} instance.
      * @param extractor such instance.
      */
     protected void setResultSetExtractor(
@@ -842,7 +842,7 @@ protected static class QueryTransactionCallback
     }
 
     /**
-     * Retrieves the \<code>ResultSetExtractor\</code> instance.
+     * Retrieves the {@link ResultSetExtractor} instance.
      * @return such instance.
      */
     public ResultSetExtractor getResultSetExtractor()
@@ -853,9 +853,9 @@ protected static class QueryTransactionCallback
     /**
      * Executes the transactional operation.
      * @param status the transaction status.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
     protected Object doInTransaction(
@@ -877,11 +877,11 @@ protected static class QueryTransactionCallback
     /**
      * Executes the transactional operation.
      * @param status the transaction status.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
      * @param sql the sql (optional).
-     * @param extractor the \<code>ResultSetExtractor\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param extractor the {@link ResultSetExtractor} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      * @result the transaction result.
      */
     protected Object doInTransaction(
@@ -911,7 +911,7 @@ protected static class QueryTransactionCallback
 <if(voName)>
 /**
  * Transaction callback implementation to perform a
- * \<i>select for update\</code>.
+ * \<i>select for update}.
  */
 protected static class SelectForUpdateTransactionCallback
     extends QueryTransactionCallback
@@ -925,10 +925,10 @@ protected static class SelectForUpdateTransactionCallback
 
     /**
      * Creates a transaction callback.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param extractor the \<code>ResultSetExtractor\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code>
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param extractor the {@link ResultSetExtractor} instance.
+     * @param dao the {@link <daoName>DAO}
      * instance.
      */
     public SelectForUpdateTransactionCallback(
@@ -986,8 +986,8 @@ protected static class SelectForUpdateTransactionCallback
     /**
      * Executes the transactional operation.
      * @param status the transaction status.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param dao the \<code><daoName>DAO\</code> instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
     protected Object doInTransaction(

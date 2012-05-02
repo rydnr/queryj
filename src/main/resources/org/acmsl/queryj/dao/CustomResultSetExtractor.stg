@@ -160,7 +160,7 @@ public class <result.idCapitalized>Extractor
     extends  <input.tr_name_capitalized>ResultSetExtractor
 {
     /**
-     * Constructs a new \<code><result.idCapitalized>Extractor\</code>.
+     * Constructs a new \{@link <result.idCapitalized>Extractor}.
      * @param daoListener the dao listener.
      */
     public <result.idCapitalized>Extractor(
@@ -173,12 +173,12 @@ public class <result.idCapitalized>Extractor
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
 <if(result.multiple)>
-     * @return the \<i><input.className>\</i> instances or \<code>null\</code>
+     * @return the \<i><input.className>\</i> instances or \{@link null}
      * if the operation returned no data.
 <else>
-     * @return the \<i><input.className>\</i> instance or \<code>null\</code>
+     * @return the \<i><input.className>\</i> instance or \{@link null}
      * if the operation returned no data.
 <endif>
 
@@ -204,16 +204,16 @@ public class <result.idCapitalized>Extractor
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
 <if(!result.implicitProperty)>
      * @param factory the value object factory.
 <endif>
 
 <if(result.multiple)>
-     * @return the \<i><input.className>\</i> instances or \<code>null\</code>
+     * @return the \<i><input.className>\</i> instances or \{@link null}
      * if the operation returned no data.
 <else>
-     * @return the \<i><input.className>\</i> instance or \<code>null\</code>
+     * @return the \<i><input.className>\</i> instance or \{@link null}
      * if the operation returned no data.
 <endif>
      * if the operation returned no data.

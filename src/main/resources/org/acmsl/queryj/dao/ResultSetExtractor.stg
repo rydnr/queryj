@@ -193,7 +193,7 @@ defaultExtractorImpl(input, table, parent) ::= <<
  @param parent the parent.
 !>
 /**
- * Constructs a new \<code><input.vo_name>ResultSetExtractor\</code>.
+ * Constructs a new \{@link <input.vo_name>ResultSetExtractor}.
  * @param daoListener the dao listener.
  */
 public <input.vo_name>ResultSetExtractor(
@@ -205,9 +205,9 @@ public <input.vo_name>ResultSetExtractor(
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
- * @return the \<code><input.vo_name>\</code> or
- * \<code>null\</code> if the operation returned no data.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * @return the \{@link <input.vo_name>} or
+ * \{@link null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.
@@ -229,9 +229,9 @@ protected Object extractData(
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
- * @return the \<code><input.vo_name>\</code> or
- * \<code>null\</code> if the operation returned no data.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * @return the \{@link <input.vo_name>} or
+ * \{@link null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.
@@ -329,10 +329,10 @@ oracle8ExtractorImpl(input, table, parent) ::= <<
 private boolean m__bSelectForUpdateMode;
 
 /**
- * Creates a Oracle-based \<code>ResultSetExtractor\</code>
+ * Creates a Oracle-based \{@link ResultSetExtractor}
  * to extract <input.vo_name> information, managing LOB stuff.
  * @param selectForUpdateMode whether the result set is the result of
- * the \<i>select for update\</code> (required to perform some operations
+ * the \<i>select for update} (required to perform some operations
  * such as \<b>insert\</b>s), or not.
  * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
  */
@@ -345,12 +345,12 @@ public <input.vo_name>ResultSetExtractor(
 }
 
 /**
- * Creates a Oracle-based \<code>ResultSetExtractor\</code>
+ * Creates a Oracle-based \{@link ResultSetExtractor}
  * to extract <input.vo_name> information, managing LOB stuff.
  <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
    separator=",\n">
  * @param selectForUpdateMode whether the result set is the result of
- * the \<i>select for update\</code> (required to perform some operations
+ * the \<i>select for update} (required to perform some operations
  * such as \<b>insert\</b>s), or not.
  * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
  */
@@ -365,9 +365,9 @@ public <input.vo_name>ResultSetExtractor(
 }
 
 /**
- * Creates a Oracle-based \<code>ResultSetExtractor\</code>
+ * Creates a Oracle-based \{@link ResultSetExtractor}
  * to extract <input.vo_name> information, managing LOB stuff.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
  */
 public <input.vo_name>ResultSetExtractor(
     final <input.tr_name_capitalized>DAOListener daoListener)
@@ -411,9 +411,9 @@ public boolean getSelectForUpdateMode()
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
- * @return the \<code><input.vo_name>\</code> or
- * \<code>null\</code> if the operation returned no data.
+ * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * @return the \{@link <input.vo_name>} or
+ * \{@link null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.
@@ -437,15 +437,15 @@ protected Object extractData(
 /**
  * Extracts \<i><input.vo_name>\</i> information from given result set.
  * @param resultSet the result set.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
  <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
    separator="\n">
  * @param selectForUpdate whether the operation is a
  * \<i>select for update\</i>.
- * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+ * @param factory the \{@link <input.vo_name>ValueObjectFactory}
  * instance.
- * @return the \<code><input.vo_name>\</code> or
- * \<code>null\</code> if the operation returned no data.
+ * @return the \{@link <input.vo_name>} or
+ * \{@link null} if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.

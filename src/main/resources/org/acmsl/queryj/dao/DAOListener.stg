@@ -116,7 +116,7 @@ public interface <input.tr_name_capitalized>DAOListener
 
     /**
      * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param jdbcTemplate the actual \{@link <input.tr_name_capitalized>JdbcTemplate}.
      * @param connectionCallback the connection callback.
      */
     public void connectionRetrieved(
@@ -125,7 +125,7 @@ public interface <input.tr_name_capitalized>DAOListener
 
     /**
      * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param jdbcTemplate the actual \{@link <input.tr_name_capitalized>JdbcTemplate}.
      * @param connectionCallback the connection callback.
      */
     public void connectionReleased(
@@ -134,7 +134,7 @@ public interface <input.tr_name_capitalized>DAOListener
 
     /**
      * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param jdbcTemplate the actual \{@link <input.tr_name_capitalized>JdbcTemplate}.
      * @param statementCallback the statement callback.
      */
     public void connectionRetrieved(
@@ -143,7 +143,7 @@ public interface <input.tr_name_capitalized>DAOListener
 
     /**
      * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param jdbcTemplate the actual \{@link <input.tr_name_capitalized>JdbcTemplate}.
      * @param statementCallback the statement callback.
      */
     public void connectionReleased(
@@ -152,7 +152,7 @@ public interface <input.tr_name_capitalized>DAOListener
 
     /**
      * Receives notifications whenever a statement is created.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param jdbcTemplate the actual \{@link <input.tr_name_capitalized>JdbcTemplate}.
      * @param preparedStatementCreator the statement creator.
      */
     public void statementCreated(
@@ -161,7 +161,7 @@ public interface <input.tr_name_capitalized>DAOListener
 
     /**
      * Receives notifications whenever a statement is released.
-     * @param jdbcTemplate the actual \<code><input.tr_name_capitalized>JdbcTemplate\</code>.
+     * @param jdbcTemplate the actual \{@link <input.tr_name_capitalized>JdbcTemplate}.
      * @param preparedStatementCreator the statement creator.
      */
     public void statementReleased(

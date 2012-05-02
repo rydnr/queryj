@@ -110,26 +110,7 @@ public class OracleMetaDataRetrievalHandler
     }
 
     /**
-     * Builds a database metadata manager.
-     * @param parameters the command parameters.
-     * @param tableNames the table names.
-     * @param procedureNames the procedure names.
-     * @param disableTableExtraction if the table metadata should not
-     * be extracted.
-     * @param lazyTableExtraction if the table metadata should not
-     * be extracted immediately.
-     * @param disableProcedureExtraction if the procedure metadata should not
-     * be extracted.
-     * @param lazyProcedureExtraction if the procedure metadata should not
-     * be extracted immediately.
-     * @param metaData the database metadata.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @return the metadata manager instance.
-     * @throws org.apache.tools.ant.BuildException whenever the required
-     * parameters are not present or valid.
-     * @precondition parameters != null
-     * @precondition metaData != null
+     * {@inheritDoc}
      */
     @Override
     @Nullable
@@ -143,7 +124,8 @@ public class OracleMetaDataRetrievalHandler
         final boolean lazyProcedureExtraction,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @Nullable final String schema)
+        @Nullable final String schema,
+        final boolean caseSensitive)
         throws  BuildException
     {
         @Nullable MetadataManager result = null;
@@ -160,7 +142,8 @@ public class OracleMetaDataRetrievalHandler
                     lazyProcedureExtraction,
                     metaData,
                     catalog,
-                    schema);
+                    schema,
+                    caseSensitive);
 
             if (result != null)
             {

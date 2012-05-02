@@ -1,8 +1,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2001-today  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -19,7 +19,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  ******************************************************************************
  *
@@ -36,8 +41,11 @@ package org.acmsl.queryj.tools.metadata.engines;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.QueryJException;
 
 /*
@@ -49,33 +57,30 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
-
-/*
- * Importing some jetbrains annotations.
- */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.Serializable;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
  * Manages the information provided by database metadata.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:chous@acm-sl.org"
+           >Jose San Leandro</a>
  */
 public abstract class AbstractJdbcMetadataManager
-    implements Serializable
+    implements MetadataManager
 {
     /**
      * An empty String array.
@@ -88,9 +93,19 @@ public abstract class AbstractJdbcMetadataManager
     protected final int[] EMPTY_INT_ARRAY = new int[0];
 
     /**
+     * An empty integer array.
+     */
+    protected final Integer[] EMPTY_INTEGER_ARRAY = new Integer[0];
+
+    /**
      * An empty boolean array.
      */
-    protected final boolean[] EMPTY_BOOLEAN_ARRAY = new boolean[0];
+    protected final boolean[] EMPTY_BOOL_ARRAY = new boolean[0];
+
+    /**
+     * An empty boolean array.
+     */
+    protected final Boolean[] EMPTY_BOOLEAN_ARRAY = new Boolean[0];
 
     /**
      * An empty array of String arrays.
@@ -98,13 +113,13 @@ public abstract class AbstractJdbcMetadataManager
     protected final String[][] EMPTY_ARRAY_OF_STRING_ARRAYS = new String[0][0];
 
     /**
-     * An empty array of {@link ProcedureMetadata} instances.
+     * An empty array of <code>ProcedureMetadata</code> instances.
      */
     protected final ProcedureMetadata[] EMPTY_PROCEDURE_METADATA_ARRAY =
         new ProcedureMetadata[0];
     
     /**
-     * An empty array of {@link ProcedureParameterMetadata} instances.
+     * An empty array of <code>ProcedureParameterMetadata</code> instances.
      */
     protected final ProcedureParameterMetadata[]
         EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY =
@@ -113,7 +128,12 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The database metadata.
      */
-    private transient DatabaseMetaData m__MetaData;
+    private DatabaseMetaData m__MetaData;
+
+    /**
+     * The metadata extraction listener.
+     */
+    private MetadataExtractionListener m__MetadataExtractionListener;
 
     /**
      * The catalog.
@@ -149,6 +169,26 @@ public abstract class AbstractJdbcMetadataManager
      * The comments of each table.
      */
     private Map m__mTableComments;
+
+    /**
+     * The comments of each column.
+     */
+    private Map m__mColumnComments;
+
+    /**
+     * The boolean nature of each column.
+     */
+    private Map m__mColumnBools;
+
+    /**
+     * The static tables.
+     */
+    private Map m__mStaticTables;
+
+    /**
+     * The decorated tables.
+     */
+    private Map m__mDecoratedTables;
 
     /**
      * The tables' primary keys information.
@@ -209,11 +249,20 @@ public abstract class AbstractJdbcMetadataManager
     private boolean m__bLazyProcedureExtraction;
 
     /**
-     * Creates an empty {@link AbstractJdbcMetadataManager} instance.
+     * Whether the engine is case sensitive.
      */
-    protected AbstractJdbcMetadataManager()
+    private boolean m__bCaseSensitive = false;
+
+    /**
+     * Creates an empty <code>AbstractJdbcMetadataManager</code> instance.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
+     */
+    protected AbstractJdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener)
     {
-        @NotNull Map t_UniqueMap = new HashMap();
+        immutableSetMetadataExtractionListener(metadataExtractionListener);
+        Map t_UniqueMap = new HashMap();
         immutableSetColumnNames(t_UniqueMap);
         immutableSetColumnTypes(t_UniqueMap);
         immutableSetAllowNulls(t_UniqueMap);
@@ -222,11 +271,17 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetForeignKeys(t_UniqueMap);
         immutableSetExternallyManagedFields(t_UniqueMap);
         immutableSetTableComments(t_UniqueMap);
+        immutableSetColumnComments(t_UniqueMap);
+        immutableSetColumnBools(t_UniqueMap);
+        immutableSetStaticTables(t_UniqueMap);
+        immutableSetDecoratedTables(t_UniqueMap);
     }
 
     /**
      * Creates an <code>AbstractJdbcMetadataManager</code> using given
      * information.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -242,6 +297,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param caseSensitive whether the engine is case sensitive or not.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -250,19 +306,21 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition metaData != null
      */
     protected AbstractJdbcMetadataManager(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @Nullable final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final boolean caseSensitive)
       throws  SQLException,
               QueryJException
     {
-        this();
+        this(metadataExtractionListener);
         immutableSetTableNames(tableNames);
         immutableSetProcedureNames(procedureNames);
         immutableSetDisableTableExtraction(disableTableExtraction);
@@ -272,10 +330,49 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetMetaData(metaData);
         immutableSetCatalog(catalog);
         immutableSetSchema(schema);
+        immutableSetCaseSensitive(caseSensitive);
+    }
+
+    /**
+     * Specifies the case sensitiveness.
+     * @param caseSensitive whether the engine is case sensitive.
+     */
+    protected final void immutableSetCaseSensitive(final boolean caseSensitive)
+    {
+        this.m__bCaseSensitive = caseSensitive;
+    }
+
+    /**
+     * Specifies the case sensitiveness.
+     * @param caseSensitive whether the engine is case sensitive.
+     */
+    protected void setCaseSensitive(final boolean caseSensitive)
+    {
+        immutableSetCaseSensitive(caseSensitive);
+    }
+
+    /**
+     * Retrieves the case sensitiveness.
+     * @return whether the engine is case sensitive.
+     */
+    protected boolean immutableIsCaseSensitive()
+    {
+        return m__bCaseSensitive;
+    }
+
+    /**
+     * Retrieves the case sensitiveness.
+     * @return whether the engine is case sensitive.
+     */
+    public boolean isCaseSensitive()
+    {
+        return immutableIsCaseSensitive();
     }
 
     /**
      * Retrieves the metadata.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -296,18 +393,21 @@ public abstract class AbstractJdbcMetadataManager
      * occurs.
      */
     protected void retrieveMetadata(
+        final MetadataExtractionListener metadataExtractionListener,
         final String[] tableNames,
         final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema)
       throws  SQLException,
               QueryJException
     {
+        immutableSetMetadataExtractionListener(metadataExtractionListener);
+
         if  (   (!disableTableExtraction)
              && (!lazyTableExtraction))
         {
@@ -315,20 +415,55 @@ public abstract class AbstractJdbcMetadataManager
                 tableNames,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                metadataExtractionListener);
 
-            extractPrimaryKeys(metaData, catalog, schema);
-            extractForeignKeys(metaData, catalog, schema);
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.primaryKeyExtractionStarted();
+            }
+
+            extractPrimaryKeys(
+                metaData, catalog, schema, metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.allPrimaryKeysExtracted();
+            }
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.foreignKeyExtractionStarted();
+            }
+
+            extractForeignKeys(
+                metaData, catalog, schema, metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.allForeignKeysExtracted();
+            }
         }
 
         if  (   (!disableProcedureExtraction)
              && (!lazyProcedureExtraction))
         {
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.procedureExtractionStarted();
+            }
+
             extractProcedureMetadata(
                 procedureNames,
                 metaData,
                 catalog,
-                schema);
+                schema,
+                metadataExtractionListener);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.allProceduresExtracted();
+            }
         }
     }
 
@@ -357,6 +492,35 @@ public abstract class AbstractJdbcMetadataManager
     public DatabaseMetaData getMetaData()
     {
         return m__MetaData;
+    }
+
+    /**
+     * Specifies the metadata extraction listener.
+     * @param listener such listener.
+     */
+    protected final void immutableSetMetadataExtractionListener(
+        final MetadataExtractionListener listener)
+    {
+        m__MetadataExtractionListener = listener;
+    }
+
+    /**
+     * Specifies the metadata extraction listener.
+     * @param listener such listener.
+     */
+    protected void setMetadataExtractionListener(
+        final MetadataExtractionListener listener)
+    {
+        immutableSetMetadataExtractionListener(listener);
+    }
+
+    /**
+     * Retrieves the metadata extraction listener.
+     * @return such listener.
+     */
+    public MetadataExtractionListener getMetadataExtractionListener()
+    {
+        return m__MetadataExtractionListener;
     }
 
     /**
@@ -558,7 +722,6 @@ public abstract class AbstractJdbcMetadataManager
      * Retrieves the table names.
      * @return such names.
      */
-    @NotNull
     public String[] getTableNames()
     {
         return clone(immutableGetTableNames());
@@ -592,6 +755,114 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Specifies the column comments.
+     * @param comments such comments.
+     */
+    protected final void immutableSetColumnComments(final Map comments)
+    {
+        m__mColumnComments = comments;
+    }
+
+    /**
+     * Specifies the column comments.
+     * @param comments such comments.
+     */
+    protected void setColumnComments(final Map comments)
+    {
+        immutableSetColumnComments(comments);
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @return such comments.
+     */
+    protected Map getColumnComments()
+    {
+        return m__mColumnComments;
+    }
+
+    /**
+     * Specifies the column bools.
+     * @param bools such bools.
+     */
+    protected final void immutableSetColumnBools(final Map bools)
+    {
+        m__mColumnBools = bools;
+    }
+
+    /**
+     * Specifies the column bools.
+     * @param bools such bools.
+     */
+    protected void setColumnBools(final Map bools)
+    {
+        immutableSetColumnBools(bools);
+    }
+
+    /**
+     * Retrieves the column bools.
+     * @return such bools.
+     */
+    protected Map getColumnBools()
+    {
+        return m__mColumnBools;
+    }
+ 
+    /**
+     * Specifies the static tables.
+     * @param tables such tables.
+     */
+    protected final void immutableSetStaticTables(final Map tables)
+    {
+        m__mStaticTables = tables;
+    }
+
+    /**
+     * Specifies the static tables.
+     * @param tables such tables.
+     */
+    protected void setStaticTables(final Map tables)
+    {
+        immutableSetStaticTables(tables);
+    }
+
+    /**
+     * Retrieves the static tables.
+     * @return such tables.
+     */
+    protected Map getStaticTables()
+    {
+        return m__mStaticTables;
+    }
+ 
+    /**
+     * Specifies the decorated tables.
+     * @param tables such tables.
+     */
+    protected final void immutableSetDecoratedTables(final Map tables)
+    {
+        m__mDecoratedTables = tables;
+    }
+
+    /**
+     * Specifies the decorated tables.
+     * @param tables such tables.
+     */
+    protected void setDecoratedTables(final Map tables)
+    {
+        immutableSetDecoratedTables(tables);
+    }
+
+    /**
+     * Retrieves the decorated tables.
+     * @return such tables.
+     */
+    protected Map getDecoratedTables()
+    {
+        return m__mDecoratedTables;
+    }
+ 
+    /**
      * Adds the comments of given table.
      * @param tableName the table name.
      * @param tableComment the table comment.
@@ -616,7 +887,7 @@ public abstract class AbstractJdbcMetadataManager
     protected void addTableComment(
         final String tableName,
         final String tableComment,
-        @NotNull final Map map)
+        final Map map)
     {
         map.put(buildTableCommentKey(tableName), tableComment);
     }
@@ -627,7 +898,6 @@ public abstract class AbstractJdbcMetadataManager
      * @return the table comment.
      * @precondition tableName != null
      */
-    @NotNull
     public String getTableComment(final String tableName)
     {
         return
@@ -642,12 +912,99 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition tableComments != null
      */
-    @NotNull
     protected String getTableComment(
-        final String tableName, @NotNull final Map tableComments)
+        final String tableName, final Map tableComments)
     {
         return
             (String) tableComments.get(buildTableCommentKey(tableName));
+    }
+
+    /**
+     * Adds the comments of given column.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnComment the column comment.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnComment != null
+     */
+    public void addColumnComment(
+        final String tableName,
+        final String columnName,
+        final String columnComment)
+    {
+        addColumnComment(
+            tableName, columnName, columnComment, getColumnComments());
+    }
+
+    /**
+     * Adds the comments of given column.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnComment the column comment.
+     * @param map the map.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnComment != null
+     * @precondition map != null
+     */
+    protected void addColumnComment(
+        final String tableName,
+        final String columnName,
+        final String columnComment,
+        final Map map)
+    {
+        map.put(
+            buildColumnCommentKey(tableName, columnName), columnComment);
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return the column comment.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    public String getColumnComment(
+        final String tableName, final String columnName)
+    {
+        return
+            getColumnComment(tableName, columnName, getColumnComments());
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnComments the column comments.
+     * @return the column comment.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnComments != null
+     */
+    protected String getColumnComment(
+        final String tableName,
+        final String columnName,
+        final Map columnComments)
+    {
+        String result =
+            (String)
+                columnComments.get(
+                    buildColumnCommentKey(tableName, columnName));
+
+        if  (result == null)
+        {
+            String parentTable = getParentTable(tableName);
+            
+            if  (parentTable != null)
+            {
+                result =
+                    getColumnComment(parentTable, columnName, columnComments);
+            }
+        }
+        
+        return result;
     }
 
     /**
@@ -703,7 +1060,7 @@ public abstract class AbstractJdbcMetadataManager
     protected void addColumnNames(
         final String tableName,
         final String[] columnNames,
-        @NotNull final Map map)
+        final Map map)
     {
         map.put(buildKey(tableName), columnNames);
     }
@@ -714,7 +1071,6 @@ public abstract class AbstractJdbcMetadataManager
      * @return the column names.
      * @precondition tableName != null
      */
-    @NotNull
     public String[] getColumnNames(final String tableName)
     {
         return getColumnNames(tableName, getColumnNames());
@@ -728,13 +1084,69 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition columnNames != null
      */
-    @NotNull
     protected String[] getColumnNames(
-        final String tableName, @NotNull final Map columnNames)
+        final String tableName, final Map columnNames)
     {
         return (String[]) columnNames.get(buildKey(tableName));
     }
 
+    /**
+     * Retrieves all column names, including parents'.
+     * @param tableName the table name.
+     * @return the column names.
+     * @precondition tableName != null
+     */
+    public String[] getAllColumnNames(final String tableName)
+    {
+        return getAllColumnNames(tableName, getColumnNames());
+    }
+    
+    /**
+     * Retrieves the column names.
+     * @param tableName the table name.
+     * @param columnNames the column names.
+     * @return the column names.
+     * @precondition tableName != null
+     * @precondition columnNames != null
+     */
+    protected String[] getAllColumnNames(
+        final String tableName, final Map columnNames)
+    {
+        String[] result;
+        
+        String parentTable = getParentTable(tableName);
+        
+        if  (parentTable != null)
+        {
+            Collection aux = new ArrayList();
+            
+            aux.addAll(
+                Arrays.asList(
+                    getAllColumnNames(parentTable, columnNames)));
+
+            aux.addAll(
+                Arrays.asList(
+                    getColumnNames(tableName, columnNames)));
+            
+            aux = removeDuplicates(aux);
+
+            result = new String[aux.size()];
+        
+            aux.toArray(result);
+        }
+        else
+        {
+            result = getColumnNames(tableName, columnNames);
+        }
+
+        if  (result == null)
+        {
+            result = new String[0];
+        }
+        
+        return result;
+    }
+    
     /**
      * Specifies the column types.
      * @param map the column types map.
@@ -793,7 +1205,7 @@ public abstract class AbstractJdbcMetadataManager
     protected int getColumnType(
         final String tableName,
         final String columnName,
-        @NotNull final Map columnTypes)
+        final Map columnTypes)
     {
         int result = -1;
 
@@ -804,6 +1216,16 @@ public abstract class AbstractJdbcMetadataManager
              && (t_Result instanceof Integer))
         {
             result = ((Integer) t_Result).intValue();
+        }
+        else
+        {
+            String parentTable = getParentTable(tableName);
+            
+            if  (parentTable != null)
+            {
+                result =
+                    getColumnType(parentTable, columnName, columnTypes);
+            }
         }
         
         return result;
@@ -842,11 +1264,11 @@ public abstract class AbstractJdbcMetadataManager
         final String tableName,
         final String columnName,
         final int columnType,
-        @NotNull final Map columnTypes)
+        final Map columnTypes)
     {
         columnTypes.put(
             buildKey(tableName, columnName),
-            Integer.valueOf(columnType));
+            new Integer(columnType));
     }
 
     /**
@@ -879,102 +1301,131 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowName the allow name.
+     * @param columnName the column name.
      * @return the allow null.
+     * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowName != null
+     * @precondition columnName != null
      */
     public boolean allowsNull(
-        final String tableName, final String allowName)
+        final String tableName, final String columnName)
     {
-        return getAllowNull(tableName, new String[] {allowName});
+        return getAllowNull(tableName, new String[] {columnName});
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowNames the allow names.
+     * @param columnNames the column names.
      * @return the allow null.
+     * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowNames != null
+     * @precondition columnNames != null
      */
     public boolean allowsNull(
-        final String tableName, final String[] allowNames)
+        final String tableName, final String[] columnNames)
     {
-        return getAllowNull(tableName, allowNames);
+        return getAllowNull(tableName, columnNames);
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowName the allow name.
+     * @param columnName the column name.
      * @return the allow null.
+     * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowName != null
+     * @precondition columnName != null
      */
     public boolean getAllowNull(
-        final String tableName, final String allowName)
+        final String tableName, final String columnName)
     {
-        return getAllowNull(tableName, new String[] {allowName});
+        return getAllowNull(tableName, new String[] {columnName});
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowNames the allow names.
+     * @param columnNames the column names.
      * @return the allow null.
+     * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowNames != null
+     * @precondition columnNames != null
      */
     public boolean getAllowNull(
-        final String tableName, final String[] allowNames)
+        final String tableName, final String[] columnNames)
     {
         return
             getAllowNull(
-                tableName, allowNames, getAllowNulls());
+                tableName, columnNames, getAllowNulls());
     }
 
     /**
      * Retrieves the allow null.
      * @param tableName the table name.
-     * @param allowNames the allow names.
+     * @param columnNames the column names.
      * @param allowNulls the allow nulls.
      * @return the allow null.
+     * @see java.sql.Types
      * @precondition tableName != null
-     * @precondition allowNames != null
+     * @precondition columnNames != null
      * @precondition allowNulls != null
      */
     protected boolean getAllowNull(
         final String tableName,
-        @Nullable final String[] allowNames,
-        @NotNull final Map allowNulls)
+        final String[] columnNames,
+        final Map allowNulls)
     {
         boolean result = false;
 
-        int t_iLength = (allowNames != null) ? allowNames.length : 0;
+        int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            Object t_Result =
-                allowNulls.get(
-                    buildAllowNullKey(
-                        tableName, allowNames[t_iIndex]));
-
-            if  (   (t_Result != null)
-                 && (t_Result instanceof Boolean))
-            {
-                result = ((Boolean) t_Result).booleanValue();
-
-                if  (!result)
-                {
-                    break;
-                }
-            }
+            result =
+                getOwnOrParentAllowNull(
+                    tableName, columnNames[t_iIndex], allowNulls);
         }
         
         return result;
     }
 
+    /**
+     * Checks whether a concrete column allows null or not.
+     * @param tableName the table name.
+     * @param columnName the concrete column name.
+     * @param allowNulls the map.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @preocndition columnNames != null
+     * @precondition allowNulls != null
+     */
+    protected boolean getOwnOrParentAllowNull(
+        final String tableName, final String columnName, final Map allowNulls)
+    {
+        boolean result = false;
+        
+        Object t_Result =
+            allowNulls.get(
+                buildAllowNullKey(tableName, columnName));
+
+        if  (t_Result instanceof Boolean)
+        {
+            result = ((Boolean) t_Result).booleanValue();
+        }
+        else
+        {
+            String parentTable = getParentTable(tableName);
+                
+            if  (parentTable != null)
+            {
+                result = getOwnOrParentAllowNull(parentTable, columnName, allowNulls);
+            }
+        }
+
+        return result;
+    }
+    
     /**
      * Adds a null flag.
      * @param tableName the table name.
@@ -1006,7 +1457,7 @@ public abstract class AbstractJdbcMetadataManager
         final String tableName,
         final String columnName,
         final boolean flag,
-        @NotNull final Map flags)
+        final Map flags)
     {
         flags.put(
             buildAllowNullKey(tableName, columnName),
@@ -1066,16 +1517,13 @@ public abstract class AbstractJdbcMetadataManager
     protected void addPrimaryKey(
         final String tableName,
         final String columnName,
-        @NotNull final Map primaryKeys)
+        final Map primaryKeys)
     {
-        logVerbose(
-            "Adding primary key: (" + tableName + "." + columnName + ")");
-
         primaryKeys.put(
             buildPkKey(tableName, columnName),
             columnName);
 
-        @NotNull Collection t_cPks =
+        Collection t_cPks =
             (Collection) primaryKeys.get(buildPkKey(tableName));
 
         if  (t_cPks == null)
@@ -1095,7 +1543,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     public int getPrimaryKeyColumnCount(final String tableName)
     {
-        @NotNull String[] t_astrPrimaryKey = getPrimaryKey(tableName);
+        String[] t_astrPrimaryKey = getPrimaryKey(tableName);
 
         return (t_astrPrimaryKey != null) ? t_astrPrimaryKey.length : 0;
     }
@@ -1106,7 +1554,6 @@ public abstract class AbstractJdbcMetadataManager
      * @return the primary key.
      * @precondition tableName != null
      */
-    @NotNull
     public String[] getPrimaryKey(final String tableName)
     {
         return getPrimaryKey(tableName, getPrimaryKeys());
@@ -1120,13 +1567,12 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition primaryKeys != null
      */
-    @NotNull
     protected String[] getPrimaryKey(
-        final String tableName, @NotNull final Map primaryKeys)
+        final String tableName, final Map primaryKeys)
     {
-        @NotNull String[] result = EMPTY_STRING_ARRAY;
+        String[] result = EMPTY_STRING_ARRAY;
 
-        @NotNull Collection t_cPk =
+        Collection t_cPk =
             (Collection) primaryKeys.get(buildPkKey(tableName));
 
         if  (t_cPk != null)
@@ -1147,7 +1593,7 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition fieldName != null
      */
     public boolean isPartOfPrimaryKey(
-        final String tableName, @NotNull final String fieldName)
+        final String tableName, final String fieldName)
     {
         return
             isPartOfPrimaryKey(
@@ -1162,7 +1608,7 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition fieldName != null
      */
     public boolean isPartOfPrimaryKey(
-        @NotNull final String fieldName, @Nullable final String[] primaryKey)
+        final String fieldName, final String[] primaryKey)
     {
         boolean result = false;
 
@@ -1176,6 +1622,123 @@ public abstract class AbstractJdbcMetadataManager
                 {
                     result = true;
 
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given field belongs to the primary key or not.
+     * @param tableName the table name.
+     * @param fieldNames the field names.
+     * @param parentTableName the parent table name.
+     * @return <code>true</code> if such field is part of what dentifies a
+     * concrete row.
+     */
+    public boolean pointsToPrimaryKey(
+        final String tableName,
+        final String[] fieldNames,
+        final String parentTableName)
+    {
+        return
+            pointsToPrimaryKey(
+                tableName,
+                fieldNames,
+                getForeignKeys(tableName, parentTableName),
+                isCaseSensitive());
+    }
+
+    /**
+     * Checks whether given field belongs to the primary key or not.
+     * @param tableName the table name.
+     * @param fieldNames the field names.
+     * @param foreignKeys the foreign keys key.
+     * @param caseSensitive whether case matters.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition fieldNames != null
+     * @precondition parentTableName != null
+     * @precondition parentPrimaryKey != null
+     */
+    public boolean pointsToPrimaryKey(
+        final String tableName,
+        final String[] fieldNames,
+        final String[][] foreignKeys,
+        final boolean caseSensitive)
+    {
+        boolean result = false;
+
+        int t_iFkCount = (foreignKeys != null) ? foreignKeys.length : 0;
+
+        String[] t_astrFk;
+        String t_strFkField;
+
+        for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+        {
+            result = false;
+
+            t_astrFk = foreignKeys[t_iFkIndex];
+
+            if  (matchFields(fieldNames, t_astrFk, caseSensitive))
+            {
+                result = true;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given field sets are equivalent.
+     * @param firstFields the first field set.
+     * @param secondFields the second field set.
+     * @param caseSensitive whether case matters.
+     * @return <code>true</code> in such case.
+     * @precondition firstFields != null
+     * @precondition secondFields != null
+     */
+    protected boolean matchFields(
+        final String[] firstFields,
+        final String[] secondFields,
+        final boolean caseSensitive)
+    {
+        boolean result = false;
+
+        int t_iFirstCount = (firstFields != null) ? firstFields.length : 0;
+        int t_iSecondCount = (secondFields != null) ? secondFields.length : 0;
+
+        if  (t_iFirstCount == t_iSecondCount)
+        {
+            for  (int t_iFirstIndex = 0;
+                      t_iFirstIndex < t_iFirstCount;
+                      t_iFirstIndex++)
+            {
+                for  (int t_iSecondIndex = 0;
+                          t_iSecondIndex < t_iSecondCount;
+                          t_iSecondIndex++)
+                {
+                    if  (   (caseSensitive)
+                         && (firstFields[t_iFirstIndex].equals(
+                                 secondFields[t_iSecondIndex])))
+                    {
+                        result = true;
+                        break;
+                    }
+                    else if  (   (!caseSensitive)
+                              && (firstFields[t_iFirstIndex].equalsIgnoreCase(
+                                      secondFields[t_iSecondIndex])))
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+
+                if  (!result)
+                {
                     break;
                 }
             }
@@ -1228,35 +1791,24 @@ public abstract class AbstractJdbcMetadataManager
         final String refTableName,
         final String[] refColumnNames)
     {
-        logVerbose(
-              "Adding foreign key: ("
-            + tableName
-            + ","
-            + concat(columnNames, ", ")
-            + ") -> ("
-            + refTableName
-            + ","
-            + concat(refColumnNames, ", ")
-            + ")");
-
         Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            @NotNull Object t_ReferringTablesKey = buildReferringTablesKey();
+            Object t_ReferingTablesKey = buildReferingTablesKey();
 
-            @NotNull Collection t_cReferringTables =
-                (Collection) t_mForeignKeys.get(t_ReferringTablesKey);
+            Collection t_cReferingTables =
+                (Collection) t_mForeignKeys.get(t_ReferingTablesKey);
 
-            if  (t_cReferringTables == null)
+            if  (t_cReferingTables == null)
             {
-                t_cReferringTables = new ArrayList();
-                t_mForeignKeys.put(t_ReferringTablesKey, t_cReferringTables);
+                t_cReferingTables = new ArrayList();
+                t_mForeignKeys.put(t_ReferingTablesKey, t_cReferingTables);
             }
 
-            if  (!t_cReferringTables.contains(tableName))
+            if  (!t_cReferingTables.contains(tableName))
             {
-                t_cReferringTables.add(tableName);
+                t_cReferingTables.add(tableName);
             }
 
             t_mForeignKeys.put(
@@ -1281,7 +1833,7 @@ public abstract class AbstractJdbcMetadataManager
                 buildRefFkKey(tableName, refTableName),
                 refColumnNames);
 
-            @NotNull Collection t_ReferredTables =
+            Collection t_ReferredTables =
                 (Collection)
                     t_mForeignKeys.get(buildFkKey(tableName));
 
@@ -1310,7 +1862,7 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition map != null
      */
     protected void annotateForeignKey(
-        final Object key, final String value, @NotNull final Map map)
+        final Object key, final String value, final Map map)
     {
         annotateForeignKey(key, new String[] { value }, map);
     }
@@ -1325,13 +1877,13 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition map != null
      */
     protected void annotateForeignKey(
-        final Object key, @Nullable final String[] values, @NotNull final Map map)
+        final Object key, final String[] values, final Map map)
     {
         Object t_Fks = map.get(key);
 
         synchronized(map)
         {
-            @NotNull String[][] t_aastrFks = EMPTY_ARRAY_OF_STRING_ARRAYS;
+            String[][] t_aastrFks = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
             if  (   (t_Fks == null)
                  && (values != null))
@@ -1345,7 +1897,7 @@ public abstract class AbstractJdbcMetadataManager
             }
             else if  (t_Fks instanceof String[][])
             {
-                @NotNull String[][] t_aastrCurrentFks = (String[][]) t_Fks;
+                String[][] t_aastrCurrentFks = (String[][]) t_Fks;
             
                 t_aastrFks =
                     new String[t_aastrCurrentFks.length + 1][values.length];
@@ -1365,45 +1917,44 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the tables referring to given table's.
+     * Retrieves the tables refering to given table's.
      * @param tableName the table name.
      * @return such tables.
      * @precondition tableName != null
      */
-    @NotNull
-    public String[] getReferringTables(@NotNull final String tableName)
+    public String[] getReferingTables(final String tableName)
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        Collection t_cResult = new ArrayList();
 
         Map t_mForeignKeys = getForeignKeys();
 
         if  (t_mForeignKeys != null) 
         {
-            @NotNull Collection t_cReferringTables =
+            Collection t_cReferingTables =
                 (Collection)
-                    t_mForeignKeys.get(buildReferringTablesKey());
+                    t_mForeignKeys.get(buildReferingTablesKey());
 
-            if  (t_cReferringTables != null)
+            if  (t_cReferingTables != null)
             {
-                Iterator t_itReferringTables = t_cReferringTables.iterator();
+                Iterator t_itReferingTables = t_cReferingTables.iterator();
 
-                if  (t_itReferringTables != null)
+                if  (t_itReferingTables != null)
                 {
-                    @Nullable String[] t_astrReferredTables = null;
+                    String[] t_astrReferredTables = null;
 
-                    @Nullable String t_strReferringTable = null;
+                    String t_strReferingTable = null;
 
-                    while  (t_itReferringTables.hasNext())
+                    while  (t_itReferingTables.hasNext())
                     {
-                        t_strReferringTable =
-                            (String) t_itReferringTables.next();
+                        t_strReferingTable =
+                            (String) t_itReferingTables.next();
 
                         t_astrReferredTables =
-                            getReferredTables(t_strReferringTable);
+                            getReferredTables(t_strReferingTable);
 
                         if  (t_astrReferredTables != null)
                         {
-                            @Nullable String t_strCurrentTable = null;
+                            String t_strCurrentTable = null;
 
                             for  (int t_iIndex = 0;
                                       t_iIndex < t_astrReferredTables.length;
@@ -1416,7 +1967,7 @@ public abstract class AbstractJdbcMetadataManager
                                      && (tableName.equalsIgnoreCase(
                                              t_strCurrentTable)))
                                 {
-                                    t_cResult.add(t_strReferringTable);
+                                    t_cResult.add(t_strReferingTable);
                                 }
                             }
                         }
@@ -1434,21 +1985,20 @@ public abstract class AbstractJdbcMetadataManager
      * @return its foreign keys.
      * @precondition tableName != null
      */
-    @Nullable
     public String[][] getForeignKeys(final String tableName)
     {
-        @Nullable String[][] result = null;
+        String[][] result;
         
-        @NotNull Collection t_cResult = new ArrayList();
+        Collection t_cResult = new ArrayList();
 
-        @NotNull String[] t_astrReferredTables = getReferredTables(tableName);
+        String[] t_astrReferredTables = getReferredTables(tableName);
 
         int t_iLength =
             (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
         
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            @NotNull String[][] t_aastrFks =
+            String[][] t_aastrFks =
                 getForeignKeys(
                     tableName, t_astrReferredTables[t_iIndex]);
 
@@ -1485,7 +2035,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         boolean result = false;
 
-        @Nullable String[][] t_aastrForeignKeys = getForeignKeys(tableName);
+        String[][] t_aastrForeignKeys = getForeignKeys(tableName);
 
         result =
             (   (t_aastrForeignKeys != null)
@@ -1500,10 +2050,9 @@ public abstract class AbstractJdbcMetadataManager
      * @return such tables.
      * @precondition tableName != null
      */
-    @NotNull
     public String[] getReferredTables(final String tableName)
     {
-        @Nullable Collection t_cResult = null;
+        Collection t_cResult = null;
 
         Map t_mForeignKeys = getForeignKeys();
 
@@ -1531,11 +2080,10 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition refTableName != null
      */
-    @NotNull
     public String[][] getForeignKeys(
         final String tableName, String refTableName)
     {
-        @NotNull String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
+        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
         Map t_mForeignKeys = getForeignKeys();
 
@@ -1565,11 +2113,10 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition foreignKey != null
      */
-    @Nullable
     public String getReferredTable(
         final String tableName, final String[] foreignKey)
     {
-        @Nullable String result = null;
+        String result = null;
 
         Map t_mForeignKeys = getForeignKeys();
 
@@ -1593,11 +2140,10 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition refTableName != null
      */
-    @NotNull
     public String[][] getReferredKeys(
         final String tableName, String refTableName)
     {
-        @NotNull String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
+        String[][] result = EMPTY_ARRAY_OF_STRING_ARRAYS;
 
         Map t_mForeignKeys = getForeignKeys();
 
@@ -1691,11 +2237,6 @@ public abstract class AbstractJdbcMetadataManager
 
         if  (t_mExternallyManagedFields != null) 
         {
-            logVerbose(
-                  "Adding externally-managed field:"
-                + tableName + "." + columnName
-                + "-" + keyword);
-
             t_mExternallyManagedFields.put(
                 buildExternallyManagedFieldKey(tableName, columnName),
                 buildExternallyManagedFieldValue(keyword));
@@ -1706,7 +2247,7 @@ public abstract class AbstractJdbcMetadataManager
                 buildExternallyManagedFieldRetrievalQueryValue(
                     query));
 
-            @NotNull Collection t_cExternallyManagedTableFields =
+            Collection t_cExternallyManagedTableFields =
                 (Collection)
                     t_mExternallyManagedFields.get(
                         buildExternallyManagedFieldKey(tableName));
@@ -1728,11 +2269,10 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @return the externally-managed fields of such table.
      */
-    @NotNull
     public String[] getExternallyManagedFields(
-        @Nullable final String tableName)
+        final String tableName)
     {
-        @NotNull String[] result = EMPTY_STRING_ARRAY;
+        String[] result = EMPTY_STRING_ARRAY;
 
         if  (tableName != null)
         {
@@ -1741,7 +2281,7 @@ public abstract class AbstractJdbcMetadataManager
 
             if  (t_mExternallyManagedFields != null)
             {
-                @NotNull Collection t_cExternallyManagedFields =
+                Collection t_cExternallyManagedFields =
                     (Collection)
                         t_mExternallyManagedFields.get(
                             buildExternallyManagedFieldKey(
@@ -1765,14 +2305,14 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> if such field is managed externally.
      */
     public boolean isManagedExternally(
-        @Nullable final String tableName, @Nullable final String fieldName)
+        final String tableName, String fieldName)
     {
         boolean result = false;
 
         if  (   (tableName != null)
              && (fieldName != null))
         {
-            @NotNull String[] t_astrExternallyManagedFields =
+            String[] t_astrExternallyManagedFields =
                 getExternallyManagedFields(tableName);
 
             if  (t_astrExternallyManagedFields != null)
@@ -1804,11 +2344,10 @@ public abstract class AbstractJdbcMetadataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
-    @Nullable
     public String getKeyword(
-        @Nullable final String tableName, @Nullable final String fieldName)
+        final String tableName, String fieldName)
     {
-        @Nullable String result = null;
+        String result = null;
 
         Map t_mExternallyManagedFields = getExternallyManagedFields();
 
@@ -1816,7 +2355,7 @@ public abstract class AbstractJdbcMetadataManager
              && (fieldName != null)
              && (t_mExternallyManagedFields != null))
         {
-            @NotNull Collection t_cExternallyManagedTableFields =
+            Collection t_cExternallyManagedTableFields =
                 (Collection)
                     t_mExternallyManagedFields.get(
                         buildExternallyManagedFieldKey(tableName));
@@ -1826,16 +2365,24 @@ public abstract class AbstractJdbcMetadataManager
                 Iterator t_itFieldIterator =
                     t_cExternallyManagedTableFields.iterator();
 
-                while  (   (t_itFieldIterator != null)
-                        && (t_itFieldIterator.hasNext()))
+                if  (t_itFieldIterator != null)
                 {
-                    Object t_Field = t_itFieldIterator.next();
+                    String t_strField;
 
-                    result =
-                          ""
-                        + t_mExternallyManagedFields.get(
-                              buildExternallyManagedFieldKey(
-                                  tableName, t_Field));
+                    while  (t_itFieldIterator.hasNext())
+                    {
+                        t_strField = "" + t_itFieldIterator.next();
+
+                        if  (t_strField.equalsIgnoreCase(fieldName))
+                        {
+                            result =
+                                ""
+                                + t_mExternallyManagedFields.get(
+                                    buildExternallyManagedFieldKey(
+                                        tableName, t_strField));
+                            break;
+                        }
+                    }
                 }
             }
         }
@@ -1850,11 +2397,10 @@ public abstract class AbstractJdbcMetadataManager
      * @return such keyword, or <code>null</code> if such information is
      * unknown.
      */
-    @Nullable
     public String getExternallyManagedFieldRetrievalQuery(
-        @Nullable final String tableName, @Nullable String fieldName)
+        final String tableName, String fieldName)
     {
-        @Nullable String result = null;
+        String result = null;
 
         Map t_mExternallyManagedFields = getExternallyManagedFields();
 
@@ -1862,7 +2408,7 @@ public abstract class AbstractJdbcMetadataManager
              && (fieldName != null)
              && (t_mExternallyManagedFields != null))
         {
-            @NotNull Collection t_cExternallyManagedTableFields =
+            Collection t_cExternallyManagedTableFields =
                 (Collection)
                     t_mExternallyManagedFields.get(
                         buildExternallyManagedFieldKey(tableName));
@@ -1871,17 +2417,22 @@ public abstract class AbstractJdbcMetadataManager
             {
                 Iterator t_itFieldIterator =
                     t_cExternallyManagedTableFields.iterator();
-
+                String t_strField;                
                 while  (   (t_itFieldIterator != null)
                         && (t_itFieldIterator.hasNext()))
                 {
-                    Object t_Field = t_itFieldIterator.next();
+                
+                    t_strField = "" + t_itFieldIterator.next();
 
-                    result =
-                          ""
-                        + t_mExternallyManagedFields.get(
-                              buildExternallyManagedFieldRetrievalQueryKey(
-                                  tableName, t_Field));
+                    if  (t_strField.equalsIgnoreCase(fieldName))
+                    {
+                        result =
+                            ""
+                            + t_mExternallyManagedFields.get(
+                                buildExternallyManagedFieldRetrievalQueryKey(
+                                    tableName, t_strField));
+                        break;
+                    }
                 }
             }
         }
@@ -1949,7 +2500,6 @@ public abstract class AbstractJdbcMetadataManager
      * Retrieves the procedures metadata.
      * @return such metadata.
      */
-    @NotNull
     public ProcedureMetadata[] getProceduresMetadata()
     {
         return clone(immutableGetProceduresMetadata());
@@ -1990,7 +2540,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected void addProcedureParametersMetadata(
         final String procedureName,
-        @Nullable final ProcedureParameterMetadata[] parametersMetadata)
+        final ProcedureParameterMetadata[] parametersMetadata)
     {
         if  (parametersMetadata != null) 
         {
@@ -2012,9 +2562,8 @@ public abstract class AbstractJdbcMetadataManager
      * @return the parameters metadata.
      * @precondition procedure != null
      */
-    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
-        @NotNull final ProcedureMetadata procedure)
+        final ProcedureMetadata procedure)
     {
         return getProcedureParametersMetadata(procedure.getName());
     }
@@ -2024,11 +2573,10 @@ public abstract class AbstractJdbcMetadataManager
      * @param procedureName the procedure name.
      * @return the parameters metadata.
      */
-    @NotNull
     public ProcedureParameterMetadata[] getProcedureParametersMetadata(
-        @Nullable final String procedureName)
+        final String procedureName)
     {
-        @NotNull ProcedureParameterMetadata[] result =
+        ProcedureParameterMetadata[] result =
             EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
 
         if  (procedureName != null)
@@ -2053,8 +2601,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param key the object key.
      * @return the map key.
      */
-    @NotNull
-    protected Object buildKey(@Nullable final Object key)
+    protected Object buildKey(final Object key)
     {
         return ((key == null) ? "null" : key);
     }
@@ -2065,7 +2612,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildKey(
         final Object firstKey, final Object secondKey)
     {
@@ -2079,7 +2625,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param firstKey the first object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildPkKey(final Object firstKey)
     {
         return "[pk]!!" + buildKey(firstKey);
@@ -2091,7 +2636,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildPkKey(
         final Object firstKey, final Object secondKey)
     {
@@ -2104,7 +2648,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildPkKey(
         final Object firstKey, final Object secondKey, final Object thirdKey)
     {
@@ -2116,7 +2659,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param firstKey the first object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildFkKey(final Object firstKey)
     {
         return "[fk]!!" + buildKey(firstKey);
@@ -2128,11 +2670,10 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @Nullable
     protected Object buildFkKey(
         final Object firstKey, final Object secondKey)
     {
-        @Nullable Object result = null;
+        Object result = null;
         
         String secondPart = "" + secondKey;
         
@@ -2152,7 +2693,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildFkKey(
         final Object firstKey, final Object secondKey, final Object thirdKey)
     {
@@ -2167,14 +2707,13 @@ public abstract class AbstractJdbcMetadataManager
      * @param fourthKey the fourth key.
      * @return the map key.
      */
-    @Nullable
     protected Object buildFkKey(
         final Object firstKey,
         final Object secondKey,
         final Object thirdKey,
         final Object fourthKey)
     {
-        @Nullable Object result = null;
+        Object result = null;
         
         String fourthPart = "" + fourthKey;
         
@@ -2196,7 +2735,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildRefFkKey(
         final Object firstKey, final Object secondKey)
     {
@@ -2208,7 +2746,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param firstKey the first object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildExternallyManagedFieldKey(
         final Object firstKey)
     {
@@ -2221,7 +2758,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildExternallyManagedFieldKey(
         final Object firstKey, final Object secondKey)
     {
@@ -2236,7 +2772,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param firstKey the first object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildExternallyManagedFieldRetrievalQueryKey(
         final Object firstKey)
     {
@@ -2252,7 +2787,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param secondKey the second object key.
      * @return the map key.
      */
-    @NotNull
     protected Object buildExternallyManagedFieldRetrievalQueryKey(
         final Object firstKey, final Object secondKey)
     {
@@ -2266,11 +2800,10 @@ public abstract class AbstractJdbcMetadataManager
      * @param value the object.
      * @return the map value.
      */
-    @Nullable
     protected Object buildExternallyManagedFieldValue(
-        @Nullable final Object value)
+        final Object value)
     {
-        @Nullable Object result = "";
+        Object result = "";
 
         if  (value != null)
         {
@@ -2286,11 +2819,10 @@ public abstract class AbstractJdbcMetadataManager
      * @param value the object.
      * @return the map value.
      */
-    @Nullable
     protected Object buildExternallyManagedFieldRetrievalQueryValue(
-        @Nullable final Object value)
+        final Object value)
     {
-        @Nullable Object result = "";
+        Object result = "";
 
         if  (value != null)
         {
@@ -2306,7 +2838,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param second the second.
      * @return the map key.
      */
-    @NotNull
     protected Object buildAllowNullKey(
         final Object first, final Object second)
     {
@@ -2321,11 +2852,25 @@ public abstract class AbstractJdbcMetadataManager
      * @param tableName the table name.
      * @return the map key.
      */
-    @NotNull
     protected Object buildTableCommentKey(
         final Object tableName)
     {
         return "[table-comment]!!" + buildKey(tableName);
+    }
+
+    /**
+     * Builds a column comment key using given object.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return the map key.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    protected Object buildColumnCommentKey(
+        final Object tableName, final String columnName)
+    {
+        return
+            "[column-comment]!!" + buildKey(tableName) + buildKey(columnName);
     }
 
     /**
@@ -2334,63 +2879,121 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the
+     * <code>MetadataExtractionListener</code> instance.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     protected void extractTableMetadata(
         final String[] tableNames,
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
+        if  (metadataExtractionListener != null)
+        {
+            metadataExtractionListener.tableNamesExtractionStarted();
+        }
+
         String[] t_astrTableNames = tableNames;
 
         if  (   (t_astrTableNames == null)
              || (t_astrTableNames.length == 0))
         {
             t_astrTableNames =
-                getTableNames(metaData, catalog, schema);
+                getTableNames(
+                    metaData, catalog, schema, metadataExtractionListener);
+
+            setTableNames(t_astrTableNames);
         }
 
         int t_iLength =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-        setTableNames(t_astrTableNames);
+        if  (metadataExtractionListener != null)
+        {
+            metadataExtractionListener.tableNamesExtracted(t_iLength);
+        }
 
+        if  (metadataExtractionListener != null)
+        {
+            metadataExtractionListener.tableMetadataExtractionStarted();
+        }
+
+        String t_strTableName;
+        String t_strParentTable;
+        
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
-            @Nullable String t_strTableComment =
+            t_strTableName = t_astrTableNames[t_iIndex];
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.tableExtractionStarted(
+                    t_strTableName);
+
+                metadataExtractionListener.tableCommentExtractionStarted(
+                    t_strTableName);
+            }
+
+            String t_strTableComment =
                 getTableComment(
                     metaData,
                     catalog,
                     schema,
-                    t_astrTableNames[t_iIndex]);
+                    t_strTableName,
+                    metadataExtractionListener);
 
-            addTableComment(
-                t_astrTableNames[t_iIndex], t_strTableComment);
+            addTableComment(t_strTableName, t_strTableComment);
 
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnNamesExtractionStarted(
+                    t_strTableName);
+            }
+
+            t_strParentTable = getParentTable(t_strTableName);
+            
             String[] t_astrColumnNames =
                 getColumnNames(
                     metaData,
                     catalog,
                     schema,
-                    t_astrTableNames[t_iIndex]);
+                    t_strTableName,
+                    t_strParentTable,
+                    metadataExtractionListener);
 
-            addColumnNames(
-                t_astrTableNames[t_iIndex], t_astrColumnNames);
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnNamesExtracted(
+                    t_strTableName,
+                    (t_astrColumnNames != null)
+                    ? t_astrColumnNames.length : 0);
+            }
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnTypesExtractionStarted(
+                    t_strTableName);
+            }
 
             if  (t_astrColumnNames != null) 
             {
+                addColumnNames(t_strTableName, t_astrColumnNames);
+
                 int[] t_aiColumnTypes =
                     getColumnTypes(
                         metaData,
                         catalog,
                         schema,
-                        t_astrTableNames[t_iIndex],
-                        t_astrColumnNames.length);
+                        t_strTableName,
+                        t_strParentTable,
+                        t_astrColumnNames.length,
+                        metadataExtractionListener);
 
                 int t_iColumnLength =
                     (t_aiColumnTypes != null) ? t_aiColumnTypes.length : 0;
@@ -2400,9 +3003,57 @@ public abstract class AbstractJdbcMetadataManager
                           t_iColumnIndex++)
                 {
                     addColumnType(
-                        t_astrTableNames[t_iIndex],
+                        t_strTableName,
                         t_astrColumnNames[t_iColumnIndex],
                         t_aiColumnTypes[t_iColumnIndex]);
+                }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnTypesExtracted(
+                        t_strTableName);
+                }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnCommentsExtractionStarted(
+                        t_strTableName);
+                }
+
+                String[] t_astrColumnComments =
+                    getColumnComments(
+                        metaData,
+                        catalog,
+                        schema,
+                        t_strTableName,
+                        t_astrColumnNames,
+                        metadataExtractionListener);
+
+                t_iColumnLength =
+                    (t_astrColumnComments != null)
+                    ?  t_astrColumnComments.length
+                    :  0;
+                
+                for  (int t_iColumnIndex = 0;
+                          t_iColumnIndex < t_iColumnLength;
+                          t_iColumnIndex++)
+                {
+                    addColumnComment(
+                        t_strTableName,
+                        t_astrColumnNames[t_iColumnIndex],
+                        t_astrColumnComments[t_iColumnIndex]);
+                }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnCommentsExtracted(
+                        t_strTableName);
+                }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnNullablesExtractionStarted(
+                        t_strTableName);
                 }
 
                 boolean[] t_abAllowNull =
@@ -2410,14 +3061,16 @@ public abstract class AbstractJdbcMetadataManager
                         metaData,
                         catalog,
                         schema,
-                        t_astrTableNames[t_iIndex],
-                        t_astrColumnNames.length);
+                        t_strTableName,
+                        t_strParentTable,
+                        t_astrColumnNames.length,
+                        metadataExtractionListener);
 
-                int t_iAllowNullLength =
+                t_iColumnLength =
                     (t_abAllowNull != null) ? t_abAllowNull.length : 0;
                 
                 for  (int t_iColumnIndex = 0;
-                          t_iColumnIndex < t_iAllowNullLength;
+                          t_iColumnIndex < t_iColumnLength;
                           t_iColumnIndex++)
                 {
                     addAllowNull(
@@ -2425,6 +3078,18 @@ public abstract class AbstractJdbcMetadataManager
                         t_astrColumnNames[t_iColumnIndex],
                         t_abAllowNull[t_iColumnIndex]);
                 }
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener.columnNullablesExtracted(
+                        t_strTableName);
+                }
+            }
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.tableExtracted(
+                    t_strTableName);
             }
         }        
     }
@@ -2435,15 +3100,17 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
     protected void extractProcedureMetadata(
         final String[] procedureNames,
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -2452,7 +3119,8 @@ public abstract class AbstractJdbcMetadataManager
         if  (t_astrProcedureNames == null) 
         {
             t_astrProcedureNames =
-                getProcedureNames(metaData, catalog, schema);
+                getProcedureNames(
+                    metaData, catalog, schema, metadataExtractionListener);
         }
 
         setProcedureNames(t_astrProcedureNames);
@@ -2467,11 +3135,19 @@ public abstract class AbstractJdbcMetadataManager
                     metaData,
                     catalog,
                     schema,
-                    t_astrProcedureNames[t_iIndex]);
+                    t_astrProcedureNames[t_iIndex],
+                    metadataExtractionListener);
 
             addProcedureParametersMetadata(
                 t_astrProcedureNames[t_iIndex],
                 t_aProcedureParametersMetadata);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.procedureExtracted(
+                    t_astrProcedureNames[t_iIndex],
+                    t_aProcedureParametersMetadata);
+            }
         }        
     }
 
@@ -2480,20 +3156,22 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
      */
     protected String[] getTableNames(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         String[] result;
 
-        @Nullable ResultSet t_rsTables = null;
+        ResultSet t_rsTables = null;
 
         try 
         {
@@ -2506,7 +3184,7 @@ public abstract class AbstractJdbcMetadataManager
                         null,
                         new String[]{ "TABLE" });
             }
-            catch  (@NotNull final SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -2514,9 +3192,9 @@ public abstract class AbstractJdbcMetadataManager
                         sqlException);
             }
 
-            result = extractTableNames(t_rsTables);
+            result = extractTableNames(t_rsTables, metadataExtractionListener);
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the table names.",
@@ -2524,7 +3202,7 @@ public abstract class AbstractJdbcMetadataManager
 
             throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
+        catch  (final QueryJException queryjException)
         {
             throw queryjException;
         }
@@ -2547,16 +3225,24 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Extracts the table names from given result set.
      * @param resultSet the result set with the table information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected String[] extractTableNames(
-        @NotNull final ResultSet resultSet)
+        final ResultSet resultSet,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractStringFields(resultSet, "TABLE_NAME");
+        return
+            extractStringFields(
+                resultSet,
+                "TABLE_NAME",
+                null,
+                null
+                // TODO //metadataExtractionListener,
+                )[0];
     }
 
     /**
@@ -2565,21 +3251,37 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
      * @precondition metaData != null
      */
     protected String[] getColumnNames(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final String parentTable,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
-        String[] result;
+        Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    getColumnNames(
+                        metaData,
+                        catalog,
+                        schema,
+                        parentTable,
+                        getParentTable(parentTable),
+                        metadataExtractionListener)));
+        }
+        
         try 
         {
             ResultSet t_rsColumns =
@@ -2589,11 +3291,14 @@ public abstract class AbstractJdbcMetadataManager
                     tableName,
                     null);
 
-            result = extractColumnNames(t_rsColumns);
+            result.addAll(
+                Arrays.asList(
+                    extractColumnNames(
+                        t_rsColumns, tableName, metadataExtractionListener)));
 
             t_rsColumns.close();
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the column names.",
@@ -2602,60 +3307,77 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
-        return result;
+        return (String[]) result.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    @NotNull
     protected String[] extractColumnNames(
-        @NotNull final ResultSet resultSet, @NotNull final Field field)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
-            extractColumnNames(resultSet, field.toSimplifiedString());
+            extractColumnNames(
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
+     * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      */
-    @NotNull
     protected String[] extractColumnNames(
-        @NotNull final ResultSet resultSet)
+        final ResultSet resultSet,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractColumnNames(resultSet, "COLUMN_NAME");
+        return
+            extractColumnNames(
+                resultSet, "COLUMN_NAME", table, metadataExtractionListener);
     }
 
     /**
      * Extracts the column names from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected String[] extractColumnNames(
-        @NotNull final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractStringFields(resultSet, fieldName);
+        return
+            extractStringFields(
+                resultSet,
+                fieldName,
+                null,
+                null)[0];
+//TODO                metadataExtractionListener)[0];
     }
 
     /**
@@ -2664,21 +3386,41 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
      */
     protected int[] getColumnTypes(
-        @Nullable final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName,
-        final int size)
+        final String parentTable,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
-        @NotNull int[] result = EMPTY_INT_ARRAY;
+        Collection result = new ArrayList();
+        
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toIntegerArray(
+                            getColumnTypes(
+                                metaData,
+                                catalog,
+                                schema,
+                                parentTable,
+                                getParentTable(parentTable),
+                                -1,
+                                metadataExtractionListener))));
+        }
 
         try 
         {
@@ -2691,12 +3433,20 @@ public abstract class AbstractJdbcMetadataManager
                         tableName,
                         null);
 
-                result = extractColumnTypes(t_rsColumns, size);
+                result.addAll(
+                    Arrays.asList(
+                        (Object[])
+                            toIntegerArray(
+                                extractColumnTypes(
+                                    t_rsColumns,
+                                    tableName,
+                                    size,
+                                    metadataExtractionListener))));
 
                 t_rsColumns.close();
             }
         }
-        catch  (SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the column types.",
@@ -2705,70 +3455,165 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
 
-        return result;
+        return toIntArray((Integer[]) result.toArray(EMPTY_INTEGER_ARRAY));
+    }
+
+    /**
+     * Retrieves the column comments from given table name.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @param columnNames the column names, or null if not available.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @return the list of all column comments.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if any other error occurs.
+     */
+    protected String[] getColumnComments(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final String[] columnNames,
+        final MetadataExtractionListener metadataExtractionListener)
+      throws  SQLException,
+              QueryJException
+    {
+        Collection result = new ArrayList();
+        
+        try 
+        {
+            if  (metaData != null) 
+            {
+                int t_iCount =
+                    (columnNames != null) ? columnNames.length : 0;
+
+                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                {
+                    result.add(
+                        getColumnComment(
+                            metaData,
+                            catalog,
+                            schema,
+                            tableName,
+                            columnNames[t_iIndex],
+                            metadataExtractionListener));
+                }
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            logWarn(
+                "Cannot retrieve the column comment.",
+                sqlException);
+
+            throw sqlException;
+        }
+
+        return (String[]) result.toArray(EMPTY_STRING_ARRAY);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected int[] extractColumnTypes(
-        @NotNull final ResultSet resultSet, @NotNull final Field field)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
-            extractColumnTypes(resultSet, field.toSimplifiedString());
+            extractColumnTypes(
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
+     * @param table the table.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
-    @NotNull
     protected int[] extractColumnTypes(
-        @NotNull final ResultSet resultSet, final int size)
+        final ResultSet resultSet,
+        final String table,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractColumnTypes(resultSet, "DATA_TYPE", size);
+        return
+            extractColumnTypes(
+                resultSet,
+                "DATA_TYPE",
+                table,
+                size,
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      */
     protected int[] extractColumnTypes(
-        @NotNull final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractColumnTypes(resultSet, fieldName, -1);
+        return
+            extractColumnTypes(
+                resultSet, fieldName, table, -1, metadataExtractionListener);
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected int[] extractColumnTypes(
-        @NotNull final ResultSet resultSet, final String fieldName, final int size)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractIntFields(resultSet, fieldName, size);
+        return
+            toIntArray(
+                extractIntFields(
+                    resultSet,
+                    fieldName,
+                    table,
+                    null,
+                    size)[0]);
+                    // TODO metadataExtractionListener)[0]);
     }
 
     /**
@@ -2777,23 +3622,43 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param parentTable the parent table, if any.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all column names.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
      */
     protected boolean[] getAllowNulls(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName,
-        final int size)
+        final String parentTable,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
-        boolean[] result;
+        Collection result = new ArrayList();
 
+        if  (parentTable != null)
+        {
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                       toBooleanArray(
+                           getAllowNulls(
+                               metaData,
+                               catalog,
+                               schema,
+                               parentTable,
+                               getParentTable(parentTable),
+                               -1,
+                               metadataExtractionListener))));
+        }
+                    
         try 
         {
             ResultSet t_rsColumns =
@@ -2803,11 +3668,19 @@ public abstract class AbstractJdbcMetadataManager
                     tableName,
                     null);
 
-            result = extractAllowNull(t_rsColumns, size);
+            result.addAll(
+                Arrays.asList(
+                    (Object[])
+                        toBooleanArray(
+                            extractAllowNull(
+                                t_rsColumns,
+                                tableName,
+                                size,
+                                metadataExtractionListener))));
             
             t_rsColumns.close();
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the null flag.",
@@ -2816,77 +3689,124 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_BOOLEAN_ARRAY;
-        }
-
-        return result;
+        return toBoolArray((Boolean[]) result.toArray(EMPTY_BOOLEAN_ARRAY));
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
+     * @param nameField the name field.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flag.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
     protected boolean[] extractAllowNull(
-        @NotNull final ResultSet resultSet, @NotNull final Field field)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final Field nameField,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
-            extractAllowNull(resultSet, field.toSimplifiedString());
+            extractAllowNull(
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                nameField.toSimplifiedString(),
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
+     * @param table the table name.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
-    @NotNull
     protected boolean[] extractAllowNull(
-        @NotNull final ResultSet resultSet, final int size)
+        final ResultSet resultSet,
+        final String table,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, "NULLABLE", size);
+        return
+            extractAllowNull(
+                resultSet,
+                "NULLABLE",
+                table,
+                "COLUMN_NAME",
+                size,
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table name.
+     * @param nameField the name field.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      */
     protected boolean[] extractAllowNull(
-        @NotNull final ResultSet resultSet, final String fieldName)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final String nameField,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        return extractAllowNull(resultSet, fieldName, -1);
+        return
+            extractAllowNull(
+                resultSet,
+                fieldName,
+                table,
+                nameField,
+                -1,
+                metadataExtractionListener);
     }
 
     /**
      * Extracts the null flag from given result set.
      * @param resultSet the result set with the column information.
      * @param fieldName the field name.
+     * @param table the table name.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of null flags.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected boolean[] extractAllowNull(
-        @NotNull final ResultSet resultSet, final String fieldName, final int size)
+        final ResultSet resultSet,
+        final String fieldName,
+        final String table,
+        final String nameField,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        @NotNull boolean[] result =  EMPTY_BOOLEAN_ARRAY;
+        boolean[] result =  EMPTY_BOOL_ARRAY;
 
-        @NotNull int[] t_iFlags = extractIntFields(resultSet, fieldName, size);
+        String[][] t_astrExtractedValues =
+            extractIntFields(
+                resultSet,
+                fieldName,
+                table,
+                nameField,
+                size);
+                // TODO metadataExtractionListener);
+
+        int[] t_iFlags = toIntArray(t_astrExtractedValues[0]);
 
         int t_iLength = (t_iFlags != null) ? t_iFlags.length : 0;
 
@@ -2911,6 +3831,7 @@ public abstract class AbstractJdbcMetadataManager
                 default:
                     result[t_iIndex] = true;
                     break;
+
             }
         }
 
@@ -2922,21 +3843,23 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure names.
      * @throws SQLException if the database operation fails.
      */
-    @NotNull
     protected String[] getProcedureNames(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
-        @NotNull String[] result = EMPTY_STRING_ARRAY;
+        String[] result = EMPTY_STRING_ARRAY;
 
-        @NotNull ProcedureMetadata[] t_aProceduresMetadata =
-            getProceduresMetadata(metaData, catalog, schema);
+        ProcedureMetadata[] t_aProceduresMetadata =
+            getProceduresMetadata(
+                metaData, catalog, schema, metadataExtractionListener);
 
         int t_iLength =
             (t_aProceduresMetadata != null) ? t_aProceduresMetadata.length : 0;
@@ -2961,30 +3884,31 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure metadata.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
      */
-    @NotNull
     protected ProcedureMetadata[] getProceduresMetadata(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
-        @NotNull ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
+        ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
 
-        @Nullable ResultSet t_rsProcedures = null;
+        ResultSet t_rsProcedures = null;
 
         try 
         {
             try 
             {
                 t_rsProcedures =
-                    metaData.getProcedures(catalog, schema,null);
+                    metaData.getProcedures(catalog, schema, null);
             }
-            catch  (@NotNull final SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -2992,16 +3916,18 @@ public abstract class AbstractJdbcMetadataManager
                         sqlException);
             }
 
-            result = extractProceduresMetadata(t_rsProcedures);
+            result =
+                extractProceduresMetadata(
+                    t_rsProcedures, metadataExtractionListener);
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "cannot.retrieve.database.procedure.names",
                 sqlException);
 //            throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
+        catch  (final QueryJException queryjException)
         {
             logWarn(
                 "cannot.retrieve.database.procedure.names",
@@ -3022,26 +3948,38 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * Extracts the procedures' metadata from given result set.
      * @param resultSet the result set with the procedure information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of procedure metadata.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected ProcedureMetadata[] extractProceduresMetadata(
-        @NotNull final ResultSet resultSet)
+        final ResultSet resultSet,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        @NotNull ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
+        ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
 
-        @NotNull List t_lProcedureList = new ArrayList();
+        List t_lProcedureList = new ArrayList();
 
-        while  (resultSet.next()) 
+        if  (resultSet.next())
         {
-            t_lProcedureList.add(
-                new ProcedureMetadata(
-                    resultSet.getString("PROCEDURE_NAME"),
-                    (int) resultSet.getShort("PROCEDURE_TYPE"),
-                    resultSet.getString("REMARKS")));
+            String t_strName;
+            int t_iType;
+            String t_strComment;
+
+            while  (resultSet.next()) 
+            {
+                t_strName = resultSet.getString("PROCEDURE_NAME");
+                t_iType = (int) resultSet.getShort("PROCEDURE_TYPE");
+                t_strComment = resultSet.getString("REMARKS");
+
+                t_lProcedureList.add(
+                    new ProcedureMetadata(t_strName, t_iType, t_strComment));
+
+                metadataExtractionListener.procedureMetadataExtracted(
+                    t_strName, t_iType, t_strComment);
+            }
         }
 
         result = (ProcedureMetadata[]) t_lProcedureList.toArray(result);
@@ -3055,22 +3993,27 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param procedureName the procedure name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure parameter names.
      * @throws SQLException if the database operation fails.
      */
-    @NotNull
     protected String[] getProcedureParameterNames(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String procedureName)
+        final String procedureName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        @NotNull String[] result = EMPTY_STRING_ARRAY;
+        String[] result = EMPTY_STRING_ARRAY;
 
         ProcedureParameterMetadata[] t_aProcedureParametersMetadata =
             getProcedureParametersMetadata(
-                metaData, catalog, schema, procedureName);
+                metaData,
+                catalog,
+                schema,
+                procedureName,
+                metadataExtractionListener);
 
         int t_iLength =
             (t_aProcedureParametersMetadata != null)
@@ -3099,15 +4042,17 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param procedureName the procedure name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all procedure parameter names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
      */
     protected ProcedureParameterMetadata[] getProcedureParametersMetadata(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String procedureName)
+        final String procedureName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         ProcedureParameterMetadata[] result;
@@ -3123,11 +4068,11 @@ public abstract class AbstractJdbcMetadataManager
 
             result =
                 extractProcedureParametersMetadata(
-                    t_rsProcedureParameters);
+                    t_rsProcedureParameters, metadataExtractionListener);
 
             t_rsProcedureParameters.close();
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the procedure parameter names.",
@@ -3148,30 +4093,60 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts the procedure parameter metadata from given result set.
      * @param resultSet the result set with the procedure parameter
      * information.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of procedure parameter metadata.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected ProcedureParameterMetadata[] extractProcedureParametersMetadata(
-        @NotNull final ResultSet resultSet)
+        final ResultSet resultSet,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
-        @NotNull ProcedureParameterMetadata[] result =
+        ProcedureParameterMetadata[] result =
             EMPTY_PROCEDURE_PARAMETER_METADATA_ARRAY;
 
-        @NotNull List t_lProcedureParameterList = new ArrayList();
+        List t_lProcedureParameterList = new ArrayList();
 
-        while  (resultSet.next()) 
+        if  (resultSet.next())
         {
-            t_lProcedureParameterList.add(
-                new ProcedureParameterMetadata(
-                    resultSet.getString("COLUMN_NAME"),
-                    (int) resultSet.getShort("COLUMN_TYPE"),
-                    resultSet.getString("REMARKS"),
-                    resultSet.getInt("DATA_TYPE"),
-                    resultSet.getInt("LENGTH"),
-                    (int) resultSet.getShort("NULLABLE")));
+            String t_strColumnName;
+            int t_iColumnType;
+            String t_strComment;
+            int t_iDataType;
+            int t_iLength;
+            int t_iNullable;
+            
+            while  (resultSet.next()) 
+            {
+                t_strColumnName = resultSet.getString("COLUMN_NAME");
+                t_iColumnType = (int) resultSet.getShort("COLUMN_TYPE");
+                t_strComment = resultSet.getString("REMARKS");
+                t_iDataType = resultSet.getInt("DATA_TYPE");
+                t_iLength = resultSet.getInt("LENGTH");
+                t_iNullable = (int) resultSet.getShort("NULLABLE");
+                
+                t_lProcedureParameterList.add(
+                    new ProcedureParameterMetadata(
+                        t_strColumnName,
+                        t_iColumnType,
+                        t_strComment,
+                        t_iDataType,
+                        t_iLength,
+                        t_iNullable));
+
+                if  (metadataExtractionListener != null)
+                {
+                    metadataExtractionListener
+                        .procedureParameterMetadataExtracted(
+                            t_strColumnName,
+                            t_iColumnType,
+                            t_strComment,
+                            t_iDataType,
+                            t_iLength,
+                            t_iNullable);
+                }
+            }
         }
 
         result =
@@ -3180,67 +4155,141 @@ public abstract class AbstractJdbcMetadataManager
 
         return result;
     }
-    
+
     /**
      * Extracts concrete field from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @return the list of field values.
+     * @return the list of field values (position 0), and the field names (1).
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    @NotNull
-    protected String[] extractStringFields(
-        @NotNull final ResultSet resultSet, @NotNull final Field field)
+    protected String[][] extractStringFields(final ResultSet resultSet, final Field field)
         throws  SQLException
+    {
+        return extractStringFields(resultSet, field.toSimplifiedString());
+    }
+
+    /**
+     * Extracts concrete field from given result set.
+     * @param resultSet the result set with the table information.
+     * @param field the field name.
+     * @return the list of field values (position 0), and the field names (1).
+     * @throws SQLException if the database operation fails.
+     * @precondition resultSet != null
+     * @precondition field != null
+     */
+    protected String[][] extractStringFields(final ResultSet resultSet, final String field)
+        throws  SQLException
+    {
+        return extractStringFields(resultSet, field, (String) null, (String) null);
+    }
+
+    /**
+     * Extracts concrete field from given result set.
+     * @param resultSet the result set with the table information.
+     * @param field the field name.
+     * @param table the table name.
+     * @param nameField the name field.
+     * @return the list of field values (position 0), and the field names (1).
+     * @throws SQLException if the database operation fails.
+     * @precondition resultSet != null
+     * @precondition field != null
+     */
+    protected String[][] extractStringFields(
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final Field nameField)
+      throws  SQLException
     {
         return
             extractStringFields(
-                resultSet, field.toSimplifiedString());
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                (nameField != null) ? nameField.toSimplifiedString() : null);
     }
 
     /**
      * Extracts fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @return the list of field values.
+     * @param table the table name.
+     * @param nameField the name field.
+     * @return the list of field values (position 0), and the field names (1).
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    @NotNull
-    protected String[] extractStringFields(
-        @NotNull final ResultSet resultSet, final String field)
+    protected String[][] extractStringFields(
+        final ResultSet resultSet,
+        final String field,
+        final String table,
+        final String nameField)
       throws  SQLException
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        String[][] result = new String[2][0];
+
+        Collection t_cFields = new ArrayList();
+
+        boolean t_bExtractNames = (nameField != null);
+        Collection t_cNames = null;
+
+        if  (t_bExtractNames)
+        {
+            t_cNames = new ArrayList();
+        }
 
         while  (resultSet.next()) 
         {
-            t_cResult.add(resultSet.getString(field));
+            t_cFields.add(resultSet.getString(field));
+
+            if  (t_bExtractNames)
+            {
+                t_cNames.add(resultSet.getString(nameField));
+            }
         }
 
-        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+        result[0] = new String[t_cFields.size()];
+        t_cFields.toArray(result[0]);
+
+        if  (t_bExtractNames)
+        {
+            result[1] = new String[t_cNames.size()];
+            t_cNames.toArray(result[1]);
+        }
+
+        return result;
     }
 
     /**
      * Extracts the column types from given result set.
      * @param resultSet the result set with the column information.
      * @param field the field.
+     * @param table the table.
      * @param size the number of fields to extract.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of column types.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    @NotNull
     protected int[] extractColumnTypes(
-        @NotNull final ResultSet resultSet, @NotNull final Field field, final int size)
+        final ResultSet resultSet,
+        final Field field,
+        final String table,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException
     {
         return
             extractColumnTypes(
-                resultSet, field.toSimplifiedString(), size);
+                resultSet,
+                field.toSimplifiedString(),
+                table,
+                size,
+                metadataExtractionListener);
     }
 
     /**
@@ -3248,49 +4297,59 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
      */
     protected void extractPrimaryKeys(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         try 
         {
-            @NotNull String[] t_astrTableNames = getTableNames();
+            String[] t_astrTableNames = getTableNames();
+
+            String t_strTableName;
 
             int t_iLength =
                 (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-            
+
             for  (int t_iTableIndex = 0;
                       t_iTableIndex < t_iLength;
                       t_iTableIndex++)
             {
+                t_strTableName = t_astrTableNames[t_iTableIndex];
+
                 ResultSet t_rsPrimaryKeys =
                     metaData.getPrimaryKeys(
-                        catalog,
-                        schema,
-                        t_astrTableNames[t_iTableIndex]);
-
-                while  (   (t_rsPrimaryKeys != null)
-                        && (t_rsPrimaryKeys.next()))
-                {
-                    addPrimaryKey(
-                        t_astrTableNames[t_iTableIndex],
-                        t_rsPrimaryKeys.getString("COLUMN_NAME"));
-                }
+                        catalog, schema, t_strTableName);
 
                 if  (t_rsPrimaryKeys != null)
                 {
+                    while  (t_rsPrimaryKeys.next())
+                    {
+                        addPrimaryKey(
+                            t_strTableName,
+                            t_rsPrimaryKeys.getString("COLUMN_NAME"));
+                    }
+
+                    if  (metadataExtractionListener != null)
+                    {
+                        metadataExtractionListener.primaryKeyExtracted(
+                            t_strTableName,
+                            getPrimaryKey(t_strTableName));
+                    }
+
                     t_rsPrimaryKeys.close();
                 }
             }
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the primary keys.",
@@ -3305,20 +4364,24 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaData the database metadata.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
      */
     protected void extractForeignKeys(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         try 
         {
-            @NotNull String[] t_astrTableNames = getTableNames();
+            String[] t_astrTableNames = getTableNames();
+
+            String t_strTableName;
 
             int t_iLength =
                 (t_astrTableNames != null) ? t_astrTableNames.length : 0;
@@ -3327,65 +4390,74 @@ public abstract class AbstractJdbcMetadataManager
                       t_iTableIndex < t_iLength;
                       t_iTableIndex++)
             {
-                ResultSet t_rsForeignKeys =
-                    metaData.getImportedKeys(
-                        catalog,
-                        schema,
-                        t_astrTableNames[t_iTableIndex]);
+                t_strTableName = t_astrTableNames[t_iTableIndex];
 
-                @Nullable String t_strFkTableName = null;
-                @Nullable String t_strPreviousFkTableName = null;
-                @NotNull Collection t_cPkColumnNames = new ArrayList();
-                @NotNull Collection t_cFkColumnNames = new ArrayList();
+                ResultSet t_rsForeignKeys =
+                    metaData.getImportedKeys(catalog, schema, t_strTableName);
+
+                String t_strFkTableName = null;
+                String t_strPreviousFkTableName = null;
+                Collection t_cPkColumnNames = new ArrayList();
+                Collection t_cFkColumnNames = new ArrayList();
 
                 int t_iPkColumnCount =
-                    getPrimaryKeyColumnCount(
-                        t_astrTableNames[t_iTableIndex]);
+                    getPrimaryKeyColumnCount(t_strTableName);
                 
                 int t_iIndex = 0;
 
-                while  (   (t_rsForeignKeys != null)
-                        && (t_rsForeignKeys.next()))
-                {
-                    t_strFkTableName =
-                        t_rsForeignKeys.getString("FKTABLE_NAME");
-
-                    if  (   (   (t_strFkTableName == null)
-                             || (!t_strFkTableName.equals(
-                                     t_strPreviousFkTableName)))
-                         || (t_iIndex == t_iPkColumnCount))
-                    {
-                        addForeignKey(
-                            t_astrTableNames[t_iTableIndex],
-                            (String[])
-                                t_cPkColumnNames.toArray(EMPTY_STRING_ARRAY),
-                            t_strPreviousFkTableName,
-                            (String[])
-                                t_cFkColumnNames.toArray(EMPTY_STRING_ARRAY));
-
-                        t_cPkColumnNames = new ArrayList();
-                        t_cFkColumnNames = new ArrayList();
-                        t_iIndex = 0;
-                    }
-
-                    t_cPkColumnNames.add(
-                        t_rsForeignKeys.getString("PKCOLUMN_NAME"));
-                    
-                    t_cFkColumnNames.add(
-                        t_rsForeignKeys.getString("FKCOLUMN_NAME"));
-
-                    t_strPreviousFkTableName = t_strFkTableName;
-
-                    t_iIndex++;
-                }
-
                 if  (t_rsForeignKeys != null)
                 {
+                    while  (t_rsForeignKeys.next())
+                    {
+                        t_strFkTableName =
+                            t_rsForeignKeys.getString("FKTABLE_NAME");
+
+                        if  (   (   (t_strFkTableName == null)
+                                 || (!t_strFkTableName.equals(
+                                         t_strPreviousFkTableName)))
+                             || (t_iIndex == t_iPkColumnCount))
+                        {
+                            addForeignKey(
+                                t_strTableName,
+                                (String[])
+                                    t_cPkColumnNames.toArray(
+                                        EMPTY_STRING_ARRAY),
+                                t_strPreviousFkTableName,
+                                (String[])
+                                    t_cFkColumnNames.toArray(
+                                        EMPTY_STRING_ARRAY));
+
+                            t_cPkColumnNames = new ArrayList();
+                            t_cFkColumnNames = new ArrayList();
+                            t_iIndex = 0;
+
+                            if  (metadataExtractionListener != null)
+                            {
+                                metadataExtractionListener.foreignKeyExtracted(
+                                    t_strTableName,
+                                    t_strFkTableName,
+                                    (String[])
+                                        t_cPkColumnNames.toArray(
+                                            EMPTY_STRING_ARRAY));
+                            }
+                        }
+
+                        t_cPkColumnNames.add(
+                            t_rsForeignKeys.getString("PKCOLUMN_NAME"));
+                    
+                        t_cFkColumnNames.add(
+                            t_rsForeignKeys.getString("FKCOLUMN_NAME"));
+
+                        t_strPreviousFkTableName = t_strFkTableName;
+
+                        t_iIndex++;
+                    }
+
                     t_rsForeignKeys.close();
                 }
             }
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             logWarn(
                 "Cannot retrieve the foreign keys.",
@@ -3401,22 +4473,23 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the catalog.
      * @param schema the schema.
      * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      * @precondition metaData != null
      */
-    @Nullable
     protected String getTableComment(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         String result = "";
 
-        @Nullable ResultSet t_rsTables = null;
+        ResultSet t_rsTables = null;
 
         try 
         {
@@ -3429,7 +4502,7 @@ public abstract class AbstractJdbcMetadataManager
                         tableName,
                         new String[]{ "TABLE" });
             }
-            catch  (@NotNull final SQLException sqlException)
+            catch  (final SQLException sqlException)
             {
                 throw
                     new QueryJException(
@@ -3437,13 +4510,19 @@ public abstract class AbstractJdbcMetadataManager
                         sqlException);
             }
 
-            result = extractTableComment(t_rsTables);
+            result = extractComment(t_rsTables);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.tableCommentExtracted(
+                    tableName, result);
+            }
         }
-        catch  (@NotNull final SQLException sqlException)
+        catch  (final SQLException sqlException)
         {
             throw sqlException;
         }
-        catch  (@NotNull final QueryJException queryjException)
+        catch  (final QueryJException queryjException)
         {
             throw queryjException;
         }
@@ -3459,14 +4538,84 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Extracts the table comment from given result set.
+     * Retrieves the column comments.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @return the list of all table names.
+     * @throws SQLException if the database operation fails.
+     * @precondition metaData != null
+     */
+    protected String getColumnComment(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final String tableName,
+        final String columnName,
+        final MetadataExtractionListener metadataExtractionListener)
+      throws  SQLException,
+              QueryJException
+    {
+        String result = "";
+
+        ResultSet t_rsColumns = null;
+
+        try 
+        {
+            try 
+            {
+                t_rsColumns =
+                    metaData.getColumns(
+                        catalog,
+                        schema,
+                        tableName,
+                        columnName);
+            }
+            catch  (final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.database.table.names",
+                        sqlException);
+            }
+
+            result = extractComment(t_rsColumns);
+
+            if  (metadataExtractionListener != null)
+            {
+                metadataExtractionListener.columnCommentExtracted(
+                    tableName, columnName, result);
+            }
+        }
+        catch  (final SQLException sqlException)
+        {
+            throw sqlException;
+        }
+        catch  (final QueryJException queryjException)
+        {
+            throw queryjException;
+        }
+        finally 
+        {
+            if  (t_rsColumns != null)
+            {
+                t_rsColumns.close();
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Extracts the comment from given result set.
      * @param resultSet the result set with the table information.
      * @return the list of column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
-    protected String extractTableComment(
-        @NotNull final ResultSet resultSet)
+    protected String extractComment(final ResultSet resultSet)
       throws  SQLException
     {
         String result = "";
@@ -3483,47 +4632,64 @@ public abstract class AbstractJdbcMetadataManager
      * Extracts concrete integer fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
-     * @return the list of field values.
+     * @param table the table.
+     * @param nameField the column identifying the column names.
+     * @return the list of field values, plus the column names.
      * @throws SQLException if the database operation fails.
      */
-    @NotNull
-    protected int[] extractIntFields(
-        @NotNull final ResultSet resultSet, final String field)
-        throws  SQLException
+    protected String[][] extractIntFields(
+        final ResultSet resultSet,
+        final String field,
+        final String table,
+        final String nameField)
+      throws  SQLException
     {
-        return extractIntFields(resultSet, field, -1);
+        return extractIntFields(resultSet, field, table, nameField, -1);
     }
 
     /**
      * Extracts concrete integer fields from given result set.
      * @param resultSet the result set with the table information.
      * @param field the field name.
+     * @param table the table.
+     * @param nameField the column identifying the column names.
      * @param size the number of fields to extract.
-     * @return the list of field values.
+     * @return the list of field values, plus the column names.
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      * @precondition field != null
      */
-    @NotNull
-    protected int[] extractIntFields(
-        @NotNull final ResultSet resultSet,
+    protected String[][] extractIntFields(
+        final ResultSet resultSet,
         final String field,
+        final String table,
+        final String nameField,
         final int size)
       throws  SQLException
     {
-        @NotNull int[] result = EMPTY_INT_ARRAY;
+        String[][] result = new String[2][0];
 
         boolean t_bBounded = (size > 0);
 
-        @Nullable Collection<Integer> t_cResult = null;
+        Collection t_cResult = null;
+
+        boolean t_bExtractNames = (nameField != null);
+
+        Collection t_cNames = null;
 
         if  (t_bBounded)
         {
-            result = new int[size];
+            result[0] = new String[size];
+
+            if  (t_bExtractNames)
+            {
+                result[1] = new String[size];
+            }
         }
         else
         {
-            t_cResult = new ArrayList<Integer>();
+            t_cResult = new ArrayList();
+            t_cNames = new ArrayList();
         }
             
         int t_iCounter = 0;
@@ -3536,7 +4702,12 @@ public abstract class AbstractJdbcMetadataManager
 
             if  (t_bBounded)
             {
-                result[t_iCounter] = t_iCurrentRecord;
+                result[0][t_iCounter] = "" + t_iCurrentRecord;
+
+                if  (t_bExtractNames)
+                {
+                    result[1][t_iCounter] = resultSet.getString(nameField);
+                }
 
                 if  (t_iCounter == size - 1)
                 {
@@ -3547,25 +4718,30 @@ public abstract class AbstractJdbcMetadataManager
             }
             else
             {
-                t_cResult.add(Integer.valueOf(t_iCurrentRecord));
+                t_cResult.add(new Integer(t_iCurrentRecord));
+                t_cNames.add(resultSet.getString(nameField));
             }
         }
 
         if  (!t_bBounded)
         {
-            result = new int[t_cResult.size()];
+            result[0] = new String[t_cResult.size()];
 
             t_iCounter = 0;
 
-            Iterator<Integer> t_itResults = t_cResult.iterator();
+            Iterator t_itResults = t_cResult.iterator();
 
             if  (t_itResults != null)
             {
                 while  (t_itResults.hasNext())
                 {
-                    result[t_iCounter++] = t_itResults.next().intValue();
+                    result[0][t_iCounter++] =
+                        "" + ((Integer) t_itResults.next()).intValue();
                 }
             }
+
+            result[1] = new String[t_cNames.size()];
+            t_cNames.toArray(result[1]);
         }
 
         return result;
@@ -3575,8 +4751,7 @@ public abstract class AbstractJdbcMetadataManager
      * Builds a key to store the referring tables.
      * @return such key.
      */
-    @NotNull
-    protected String buildReferringTablesKey()
+    protected String buildReferingTablesKey()
     {
         return ".|_|referring_|_tables|_|.,";
     }
@@ -3589,7 +4764,6 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition tableName != null
      * @precondition foreignKey != null.
      */
-    @NotNull
     protected String buildRefTableKey(
         final String tableName, final String[] foreignKey)
     {
@@ -3640,9 +4814,9 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition separator != null
      */
     protected String concat(
-        @Nullable final String[] values, final String separator)
+        final String[] values, final String separator)
     {
-        @NotNull StringBuffer result = new StringBuffer();
+        StringBuffer result = new StringBuffer();
 
         int t_iLength = (values != null) ? values.length : 0;
 
@@ -3674,7 +4848,7 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition start < values.length
      */
     protected boolean anythingElseToConcatenate(
-        @Nullable final String[] values, final int start)
+        final String[] values, final int start)
     {
         boolean result = false;
 
@@ -3698,10 +4872,9 @@ public abstract class AbstractJdbcMetadataManager
      * @return the cloned array.
      * @precondition array != null
      */
-    @NotNull
-    protected ProcedureMetadata[] clone(@Nullable final ProcedureMetadata[] array)
+    protected ProcedureMetadata[] clone(final ProcedureMetadata[] array)
     {
-        @NotNull ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
+        ProcedureMetadata[] result = EMPTY_PROCEDURE_METADATA_ARRAY;
 
         int t_iCount = (array != null) ? array.length : 0;
 
@@ -3724,10 +4897,9 @@ public abstract class AbstractJdbcMetadataManager
      * @return the cloned array.
      * @precondition array != null
      */
-    @NotNull
-    protected String[] clone(@Nullable final String[] array)
+    protected String[] clone(final String[] array)
     {
-        @NotNull String[] result = EMPTY_STRING_ARRAY;
+        String[] result = EMPTY_STRING_ARRAY;
 
         int t_iCount = (array != null) ? array.length : 0;
 
@@ -3743,4 +4915,716 @@ public abstract class AbstractJdbcMetadataManager
 
         return result;
     }
+
+    /**
+     * Retrieves the parent table in the ISA relationship, if any.
+     * @param table the table.
+     * @return the parent's table name, or <code>null</code> otherwise.
+     */
+    public String getParentTable(final String table)
+    {
+        return getParentTable(table, MetaLanguageUtils.getInstance());
+    }
+    
+    /**
+     * Retrieves the parent table in the ISA relationship, if any.
+     * @param table the table.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return the parent's table name, or <code>null</code> otherwise.
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getParentTable(
+        final String table, final MetaLanguageUtils metaLanguageUtils)
+    {
+        String result = null;
+        
+        String t_strTableComment = getTableComment(table);
+        
+        if  (t_strTableComment != null)
+        {
+            result =
+                metaLanguageUtils.retrieveDeclaredParent(t_strTableComment);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves whether given column is marked as <b>read-only</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isReadOnly(
+        final String tableName, final String columnName)
+    {
+        return
+            isReadOnly(
+                tableName, columnName, MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given column is marked as <b>read-only</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isReadOnly(
+        final String tableName,
+        final String columnName,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        boolean result = false;
+        
+        String t_strColumnComment = getColumnComment(tableName, columnName);
+        
+        if  (t_strColumnComment != null)
+        {
+            result = metaLanguageUtils.retrieveColumnReadOnly(t_strColumnComment);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves whether given column is marked as <b>bool</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isBoolean(
+        final String tableName, final String columnName)
+    {
+        return
+            isBoolean(
+                tableName,
+                columnName,
+                getColumnBools(),
+                isCaseSensitive(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given column is marked as <b>bool</b> or not.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return <code>true</code> in such case.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isBoolean(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final boolean isCaseSensitive,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        boolean result = false;
+
+        String[] t_astrBooleanSymbols =
+            getBooleanSymbols(
+                tableName,
+                columnName,
+                columnBools,
+                isCaseSensitive,
+                metaLanguageUtils);
+
+        result =
+            (   (getBooleanTrue(t_astrBooleanSymbols) != null)
+             || (getBooleanFalse(t_astrBooleanSymbols) != null)
+             || (getBooleanNull(t_astrBooleanSymbols) != null));
+
+        return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    public String getBooleanTrue(
+        final String tableName, final String columnName)
+    {
+        return
+            getBooleanTrue(
+                tableName,
+                columnName,
+                getColumnBools(),
+                isCaseSensitive(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getBooleanTrue(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final boolean isCaseSensitive,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            getBooleanTrue(
+                getBooleanSymbols(
+                    tableName,
+                    columnName,
+                    columnBools,
+                    isCaseSensitive,
+                    metaLanguageUtils));
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values in
+     * boolean attributes.
+     * @param booleanSymbols the boolean symbols.
+     * @return such symbol.
+     */
+    protected String getBooleanTrue(final String[] booleanSymbols)
+    {
+        String result = null;
+        
+        if  (   (booleanSymbols != null)
+             && (booleanSymbols.length > 0))
+        {
+            result = booleanSymbols[0];
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    public String getBooleanFalse(
+        final String tableName, final String columnName)
+    {
+        return
+            getBooleanFalse(
+                tableName,
+                columnName,
+                getColumnBools(),
+                isCaseSensitive(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getBooleanFalse(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final boolean isCaseSensitive,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            getBooleanFalse(
+                getBooleanSymbols(
+                    tableName,
+                    columnName,
+                    columnBools,
+                    isCaseSensitive,
+                    metaLanguageUtils));
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values in
+     * boolean attributes.
+     * @param booleanSymbols the boolean symbols.
+     * @return such symbol.
+     */
+    protected String getBooleanFalse(final String[] booleanSymbols)
+    {
+        String result = null;
+        
+        if  (   (booleanSymbols != null)
+             && (booleanSymbols.length > 1))
+        {
+            result = booleanSymbols[1];
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    public String getBooleanNull(
+        final String tableName, final String columnName)
+    {
+        return
+            getBooleanNull(
+                tableName,
+                columnName,
+                getColumnBools(),
+                isCaseSensitive(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values in
+     * boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbol.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String getBooleanNull(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final boolean isCaseSensitive,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        return
+            getBooleanNull(
+                getBooleanSymbols(
+                    tableName,
+                    columnName,
+                    columnBools,
+                    isCaseSensitive,
+                    metaLanguageUtils));
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values in
+     * boolean attributes.
+     * @param booleanSymbols the boolean symbols.
+     * @return such symbol.
+     */
+    protected String getBooleanNull(final String[] booleanSymbols)
+    {
+        String result = null;
+        
+        if  (   (booleanSymbols != null)
+             && (booleanSymbols.length > 2))
+        {
+            result = booleanSymbols[2];
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the symbols in boolean attributes.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param columnBools the column boolean information.
+     * @param isCaseSensitive if the engine is case-sensitive.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return such symbols.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     * @precondition columnBools != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected String[] getBooleanSymbols(
+        final String tableName,
+        final String columnName,
+        final Map columnBools,
+        final boolean isCaseSensitive,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        String[] result =
+            (String[])
+                columnBools.get(
+                    buildColumnBoolsKey(
+                        tableName, columnName, isCaseSensitive));
+
+        if  (result == null)
+        {
+            String t_strColumnComment =
+                getColumnComment(tableName, columnName);
+        
+            if  (t_strColumnComment != null)
+            {
+                result =
+                    metaLanguageUtils.retrieveColumnBool(
+                        t_strColumnComment);
+
+                if  (result == null)
+                {
+                    result = new String[0];
+                }
+
+                columnBools.put(
+                    buildColumnBoolsKey(
+                        tableName, columnName, isCaseSensitive),
+                    result);
+            }
+        }
+    
+        return result;
+    }
+
+    /**
+     * Builds a key for the column boolean information.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param isCaseSensitive whether the engine is case sensitive.
+     * @return such key.
+     * @precondition tableName != null
+     * @precondition columnName != null
+     */
+    protected Object buildColumnBoolsKey(
+        final String tableName,
+        final String columnName,
+        final boolean isCaseSensitive)
+    {
+        Locale t_Locale = Locale.getDefault();
+
+        return
+              "[[column-bools]]"
+            + tableName.toLowerCase(t_Locale)
+            + "-"
+            + columnName.toLowerCase(t_Locale)
+            + "]";
+    }
+
+    /**
+     * Retrieves whether given table is static or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableStatic(final String table)
+    {
+        return
+            isTableStatic(
+                table,
+                getStaticTables(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given table is static or not.
+     * @param table the table.
+     * @param staticTables the static tables map.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return <code>true</code> in such case.
+     * @precondition table != null
+     * @precondition staticTables != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isTableStatic(
+        final String table,
+        final Map staticTables,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        Boolean result =
+            (Boolean)
+                staticTables.get(
+                    buildTableStaticKey(table));
+
+        if  (result == null)
+        {
+            String t_strTableComment = getTableComment(table);
+        
+            if  (t_strTableComment != null)
+            {
+                result =
+                    (metaLanguageUtils.isStatic(
+                        t_strTableComment))
+                    ?  Boolean.TRUE
+                    :  Boolean.FALSE;
+
+                staticTables.put(
+                    buildTableStaticKey(table),
+                    result);
+            }
+        }
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+        
+        return result.booleanValue();
+    }
+
+    /**
+     * Builds the key to store whether a concrete table is static
+     * or not.
+     * @param table the table.
+     * @return the key.
+     * @precondition table != null
+     */
+    protected Object buildTableStaticKey(
+        final String table)
+    {
+        Locale t_Locale = Locale.getDefault();
+
+        return "[[table-static]]" + table.toLowerCase(t_Locale);
+    }
+
+    /**
+     * Retrieves whether given table is decorated or not.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isTableDecorated(final String table)
+    {
+        return
+            isTableDecorated(
+                table,
+                getDecoratedTables(),
+                MetaLanguageUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether given table is decorated or not.
+     * @param table the table.
+     * @param decoratedTables the decorated tables map.
+     * @param metaLanguageUtils the <code>MetaLanguageUtils</code>
+     * instance.
+     * @return <code>true</code> in such case.
+     * @precondition table != null
+     * @precondition decoratedTables != null
+     * @precondition metaLanguageUtils != null
+     */
+    protected boolean isTableDecorated(
+        final String table,
+        final Map decoratedTables,
+        final MetaLanguageUtils metaLanguageUtils)
+    {
+        Boolean result =
+            (Boolean)
+                decoratedTables.get(
+                    buildTableDecoratedKey(table));
+
+        if  (result == null)
+        {
+            String t_strTableComment = getTableComment(table);
+        
+            if  (t_strTableComment != null)
+            {
+                result =
+                    (metaLanguageUtils.retrieveTableDecorator(
+                        t_strTableComment))
+                    ?  Boolean.TRUE
+                    :  Boolean.FALSE;
+
+                decoratedTables.put(
+                    buildTableDecoratedKey(table),
+                    result);
+            }
+        }
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+        
+        return result.booleanValue();
+    }
+
+    /**
+     * Builds the key to store whether a concrete table is decorated
+     * or not.
+     * @param table the table.
+     * @return the key.
+     * @precondition table != null
+     */
+    protected Object buildTableDecoratedKey(
+        final String table)
+    {
+        Locale t_Locale = Locale.getDefault();
+
+        return "[[table-decorated]]" + table.toLowerCase(t_Locale);
+    }
+
+    /**
+     * Converts given array to integer.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected int[] toIntArray(final Object[] array)
+    {
+        int[] result =
+            (array == null) ? EMPTY_INT_ARRAY : new int[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            try
+            {
+                result[t_iIndex] = Integer.parseInt("" + array[t_iIndex]);
+            }
+            catch  (final NumberFormatException numberFormatException)
+            {
+                // skipping the whole stuff
+                result = EMPTY_INT_ARRAY;
+                break;
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Converts given array to integer.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected Integer[] toIntegerArray(final int[] array)
+    {
+        Integer[] result =
+            (array == null) ? EMPTY_INTEGER_ARRAY : new Integer[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result[t_iIndex] = new Integer(array[t_iIndex]);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Converts given array to boolean.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected boolean[] toBoolArray(final Object[] array)
+    {
+        boolean[] result =
+            (array == null) ? EMPTY_BOOL_ARRAY : new boolean[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result[t_iIndex] = Boolean.valueOf("" + array[t_iIndex]).booleanValue();
+        }
+        
+        return result;
+    }
+
+    /**
+     * Converts given array to boolean.
+     * @param array the array to convert.
+     * @return the converted array.
+     * @precondition array != null
+     */
+    protected Boolean[] toBooleanArray(final boolean[] array)
+    {
+        Boolean[] result = (array == null) ? EMPTY_BOOLEAN_ARRAY : new Boolean[array.length];
+
+        int t_iCount = result.length;
+        
+        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        {
+            result[t_iIndex] = Boolean.valueOf(array[t_iIndex]);
+        }
+        
+        return result;
+    }
+
+    /**
+     * Removes the duplicates found in given collection.
+     * @param collection such collection.
+     * @return the trimmed collection.
+     * @precondition collection != null
+     */
+    protected Collection removeDuplicates(final Collection collection)
+    {
+        Collection result = new ArrayList();
+        
+        Iterator iterator = (collection != null) ? collection.iterator() : null;
+        
+        if  (iterator != null)
+        {
+            Object item;
+            
+            while  (iterator.hasNext())
+            {
+                item = iterator.next();
+                
+                if  (!result.contains(item))
+                {
+                    result.add(item);
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    /**
+     * Retrieves the referring tables.
+     *
+     * @param tableName the table name.
+     * @return the list of referring tables to given table.
+     */
+    @NotNull
+    public String[] getReferringTables(@NotNull final String tableName)
+    {
+        // TODO
+        return new String[0];
+    }
+
 }

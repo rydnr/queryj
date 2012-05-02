@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,9 +36,12 @@ package org.acmsl.queryj.tools.metadata.engines.mysql;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
-import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.QueryJException;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -55,14 +57,6 @@ import java.sql.SQLException;
 public class MySQL4xMetadataManager
     extends  JdbcMetadataManager
 {
-    /**
-     * Creates an empty <code>MySQL4xMetadataManager</code>.
-     */
-    protected MySQL4xMetadataManager()
-    {
-        super();
-    }
-
     /**
      * Creates a <code>MySQL4xMetadataManager</code>, using given information.
      * @param tableNames explicitly specified table names.
@@ -80,6 +74,7 @@ public class MySQL4xMetadataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param caseSensitive whether the database engine is case sensitive or not.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -93,7 +88,8 @@ public class MySQL4xMetadataManager
         final boolean lazyProcedureExtraction,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final boolean caseSensitive)
         throws  SQLException,
                 QueryJException
     {
@@ -106,35 +102,8 @@ public class MySQL4xMetadataManager
             lazyProcedureExtraction,
             metaData,
             catalog,
-            schema);
-    }
-
-    /**
-     * Creates a <code>MySQL4xMetadataManager</code> using given information.
-     * @param tableNames explicitly specified table names.
-     * @param procedureNames explicitly specified procedure names.
-     * @param metaData the database meta data.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
-     */
-    public MySQL4xMetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
-        throws  SQLException,
-                QueryJException
-    {
-        super(
-            tableNames,
-            procedureNames,
-            metaData,
-            catalog,
-            schema);
+            schema,
+            caseSensitive);
     }
 
     /**

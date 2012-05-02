@@ -437,13 +437,13 @@ public class ProcedureRepositoryTemplate
                                     {
                                         metadataTypeManager.getObjectType(
                                             t_aProcedureParametersMetadata[
-                                                t_iIndex].getDataType()),
+                                                t_iIndex].getDataType(), false),
                                         t_aProcedureParametersMetadata[
                                             t_iIndex].getName().toLowerCase(),
                                         stringUtils.capitalize(
                                             metadataTypeManager.getObjectType(
                                                 t_aProcedureParametersMetadata[
-                                                    t_iIndex].getDataType()),
+                                                    t_iIndex].getDataType(), false),
                                             '_'),
                                         Integer.valueOf(t_iIndex + 1)
                                     }));
@@ -521,7 +521,7 @@ public class ProcedureRepositoryTemplate
                         ));
 
                 @Nullable String t_strReturnType =
-                    metadataTypeManager.getProcedureResultType(t_iReturnType);
+                    metadataTypeManager.getProcedureResultType(t_iReturnType, false);
 
                 @NotNull MessageFormat t_ProcedureBodyFormatter =
                     new MessageFormat(procedureBody);
@@ -534,7 +534,7 @@ public class ProcedureRepositoryTemplate
                             t_ProcedureMetadata.getName().toLowerCase(),
                             t_sbParametersDeclaration.toString(),
                             metadataTypeManager.getProcedureDefaultValue(
-                                t_iReturnType),
+                                t_iReturnType, false),
                             t_ProcedureSentenceFormatter.format(
                                 new Object[]
                                 {

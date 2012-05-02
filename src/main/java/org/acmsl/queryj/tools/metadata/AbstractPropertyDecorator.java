@@ -208,9 +208,10 @@ public abstract class AbstractPropertyDecorator
     protected String getJavaType(
         final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
+        // TODO: support boolean properties.
         return
             metadataTypeManager.getObjectType(
-                metadataTypeManager.getJavaType(type));
+                metadataTypeManager.getJavaType(type), false);
     }
 
     /**

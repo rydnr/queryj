@@ -493,10 +493,10 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 }; separator="\n\n">
                
     /**
-     * Builds a \<code><input.class_name>\</code> instance
+     * Builds a \{@link <input.class_name>} instance
      * with given data source.
      * @param dataSource the required data source.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
      <precondition_notnull("dataSource")>
      <precondition_notnull("daoListener")>
      */
@@ -515,13 +515,13 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
     /**
-     * Retrieves \<code><input.vo_name>\</code> information
+     * Retrieves \{@link <input.vo_name>} information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <if(table.voDecorated)>
-     * @return the \<code><input.vo_name>Decorator\</code> matching given
+     * @return the \{@link <input.vo_name>Decorator} matching given
 <else>
-     * @return the \<code><input.vo_name>\</code> matching given
+     * @return the \{@link <input.vo_name>} matching given
 <endif>
 
      * primary key.
@@ -543,15 +543,15 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Retrieves \<code><input.vo_name>\</code> information
+     * Retrieves \{@link <input.vo_name>} information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
-     * @param dataSource the \<code>DataSource\</code> instance.
+     * @param dataSource the \{@link DataSource} instance.
 <if(table.voDecorated)>
-     * @return the \<code><input.vo_name>Decorator\</code> matching given
+     * @return the \{@link <input.vo_name>Decorator} matching given
 <else>
-     * @return the \<code><input.vo_name>\</code> matching given
+     * @return the \{@link <input.vo_name>} matching given
 <endif>
 
      * primary key.
@@ -576,16 +576,16 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Retrieves \<code><input.vo_name>\</code> information
+     * Retrieves \{@link <input.vo_name>} information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
-     * @param transactionManager the \<code>PlatformTransactionManager\</code>
+     * @param transactionManager the \{@link PlatformTransactionManager}
      * instance.
 <if(table.voDecorated)>
-     * @return the \<code><input.vo_name>Decorator\</code> matching given
+     * @return the \{@link <input.vo_name>Decorator} matching given
 <else>
-     * @return the \<code><input.vo_name>\</code> matching given
+     * @return the \{@link <input.vo_name>} matching given
 <endif>
 
      * primary key.
@@ -621,17 +621,17 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Retrieves \<code><input.vo_name>\</code> information
+     * Retrieves \{@link <input.vo_name>} information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
-     * @param transactionTemplate the \<code>TransactionTemplate\</code>
+     * @param transactionTemplate the \{@link TransactionTemplate}
      * instance.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
 <if(table.voDecorated)>
-     * @return the \<code><input.vo_class_name>Decorator\</code> matching given
+     * @return the \{@link <input.vo_class_name>Decorator} matching given
 <else>
-     * @return the \<code><input.vo_class_name>\</code> matching given
+     * @return the \{@link <input.vo_class_name>} matching given
 <endif>
 
      * primary key.
@@ -682,7 +682,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
       isPrimitive=it.primitive)>
 
     /**
-     * Updates \<code><input.vo_name>\</code> information.
+     * Updates \{@link <input.vo_name>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
@@ -717,7 +717,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Updates \<code><input.vo_name>\</code> information.
+     * Updates \{@link <input.vo_name>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
@@ -725,7 +725,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param dataSource the \<code>DataSource\<code> instance.
+     * @param dataSource the \{@link DataSource\{@link  instance.
 <if(parent)>
      * @param dataAccessManager the \<tt><input.tr_name_capitalized>DataAccessManager\</tt> instance.
 <endif>
@@ -765,7 +765,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Updates \<code><input.vo_name>\</code> information.
+     * Updates \{@link <input.vo_name>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
@@ -773,7 +773,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * @param transactionManager the \{@link PlatformTransactionManager\{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
@@ -820,7 +820,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Updates \<code><input.vo_name>\</code> information.
+     * Updates \{@link <input.vo_name>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
@@ -828,13 +828,13 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * @param transactionManager the \{@link PlatformTransactionManager\{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
 <endif>
 
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      <precondition_notnull("query")>
@@ -896,7 +896,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information.
+     * Deletes \{@link <input.vo_name>} information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     protected void deleteNoFk(
@@ -915,10 +915,10 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information.
+     * Deletes \{@link <input.vo_name>} information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param dataSource the \<code>DataSource\<code> instance.
+     * @param dataSource the \{@link DataSource\{@link  instance.
 <if(parent)>
      * @param dataAccessManager the \<tt><input.tr_name_capitalized>DataAccessManager\</tt> instance.
 <endif>
@@ -954,10 +954,10 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information.
+     * Deletes \{@link <input.vo_name>} information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param transactionManager the \<code>PlatformTransactionManager\<code>
+     * @param transactionManager the \{@link PlatformTransactionManager\{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
@@ -993,16 +993,16 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information.
+     * Deletes \{@link <input.vo_name>} information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param transactionTemplate the \<code>TransactionTemplate\<code>
+     * @param transactionTemplate the \{@link TransactionTemplate\{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
 <endif>
 
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
      <precondition_notnull("query")>
      <precondition_notnull("transactionTemplate")>
 <if(parent)>
@@ -1035,7 +1035,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information.
+     * Deletes \{@link <input.vo_name>} information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
@@ -1068,7 +1068,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         extends  <input.tr_name_capitalized>ResultSetExtractor
     {
         /**
-         * Constructs a new \<code><input.vo_name>ResultSetExtractor\</code>.
+         * Constructs a new \{@link <input.vo_name>ResultSetExtractor}.
          * @param daoListener the dao listener.
          */
         public <input.vo_name>PkResultSetExtractor(
@@ -1081,8 +1081,8 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         /**
          * Extracts \<i><input.vo_name>\</i> information from given result set.
          * @param resultSet the result set.
-         * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
-         * @return the \<code><input.vo_name>\</code> or \<code>null\</code>
+         * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+         * @return the \{@link <input.vo_name>} or \{@link null}
          * if the operation returned no data.
          * @throws SQLException intercepted by \<i>Spring\</i>.
          * @throws DataAccessException with information about any
@@ -1125,8 +1125,8 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
     /**
      * Executes the update method on JdbcTemplate class.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
+     * @param creator the \{@link PreparedStatementCreator} instance.
+     * @param setter the \{@link PreparedStatementSetter} instance.
      */
     public int update(
         final PreparedStatementCreator creator,
@@ -1137,9 +1137,9 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
     /**
      * Executes the query method on JdbcTemplate class.
-     * @param creator the \<code>PreparedStatementCreator\</code> instance.
-     * @param setter the \<code>PreparedStatementSetter\</code> instance.
-     * @param extractor the \<code>ResultSetExtractor\</code> instance.
+     * @param creator the \{@link PreparedStatementCreator} instance.
+     * @param setter the \{@link PreparedStatementSetter} instance.
+     * @param extractor the \{@link ResultSetExtractor} instance.
      */
     public Object query(
         final PreparedStatementCreator creator,
@@ -1238,7 +1238,7 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
  <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<code><voName>\</code> instance.
+ * @return the \{@link <voName>} instance.
  */
 public <voName> findConstantByPk(
   <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
@@ -1435,7 +1435,7 @@ jdbcInsert(input, table, parent) ::= <<
  @param input the input.
  !>
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1466,7 +1466,7 @@ public void insert(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1475,7 +1475,7 @@ public void insert(
 <endif>
 
  * @param query the query to insert the values.
- * @param dataSource the \<code>DataSource\</code> instance.
+ * @param dataSource the \{@link DataSource} instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
  <precondition_notnull("dataSource")>
@@ -1506,7 +1506,7 @@ protected void insert(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1519,7 +1519,7 @@ protected void insert(
  * @param dataAccessManager the \<tt\><input.tr_name_capitalized>DataAccessManager\</tt\> instance.
 <endif>
 
- * @param transactionManager the \<code>PlatformTransactionManager\</code>
+ * @param transactionManager the \{@link PlatformTransactionManager}
  * instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
@@ -1561,7 +1561,7 @@ protected void insert(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1570,13 +1570,13 @@ protected void insert(
 <endif>
 
  * @param query the query to insert the values.
- * @param transactionTemplate the \<code>TransactionTemplate\</code>
+ * @param transactionTemplate the \{@link TransactionTemplate}
  * instance.
 <if(parent)>
  * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
 <endif>
 
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
  <precondition_notnull("transactionTemplate")>
@@ -1638,7 +1638,7 @@ protected void insert(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \<code><input.vo_name>\</code> instance.
+ * \{@link <input.vo_name>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1677,7 +1677,7 @@ public <input.vo_name> create(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \<code><input.vo_name>\</code> instance.
+ * \{@link <input.vo_name>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1687,7 +1687,7 @@ public <input.vo_name> create(
 
  * @param query the query required to insert given information.
  * @param dataSource the data source.
- * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+ * @param factory the \{@link <input.vo_name>ValueObjectFactory}
  * instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
@@ -1729,7 +1729,7 @@ protected <input.vo_name> create(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \<code><input.vo_name>\</code> instance.
+ * \{@link <input.vo_name>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1738,13 +1738,13 @@ protected <input.vo_name> create(
 <endif>
 
  * @param query the query required to insert given information.
- * @param transactionManager the \<code>PlatformTransactionManager\</code>
+ * @param transactionManager the \{@link PlatformTransactionManager}
  * instance.
 <if(parent)>
  * @param dataAccessManager the \<tt\><input.tr_name_capitalized>DataAccessManager\</tt\> instance.
 <endif>
 
- * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+ * @param factory the \{@link <input.vo_name>ValueObjectFactory}
  * instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("query")>
@@ -1798,7 +1798,7 @@ protected <input.vo_name> create(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \<code><input.vo_name>\</code> instance.
+ * \{@link <input.vo_name>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1807,15 +1807,15 @@ protected <input.vo_name> create(
 <endif>
 
  * @param query the query required to insert given information.
- * @param transactionTemplate the \<code>TransactionTemplate\<code>
+ * @param transactionTemplate the \{@link TransactionTemplate\{@link 
  * instance.
- * @param factory the \<code><input.vo_name>ValueObjectFactory\</code>
+ * @param factory the \{@link <input.vo_name>ValueObjectFactory}
  * instance.
 <if(parent)>
  * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
 <endif>
 
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
  * @throws DataAccessException if the operation fails.
  <precondition_notnull("transactionTemplate")>
 <if(parent)>
@@ -1915,7 +1915,7 @@ oracle8Insert(input) ::= <<
   @param input the input.
 !>
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1943,7 +1943,7 @@ public void insert(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -1980,7 +1980,7 @@ public <input.vo_name> create(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -2020,7 +2020,7 @@ protected <input.vo_name> create(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -2068,7 +2068,7 @@ protected <input.vo_name> create(
 }
 
 /**
- * Persists \<code><input.vo_name>\</code> information.
+ * Persists \{@link <input.vo_name>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
@@ -2077,7 +2077,7 @@ protected <input.vo_name> create(
 <endif>
 
  * @param transactionTemplate the transaction template.
- * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+ * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
@@ -2262,7 +2262,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
     private String m__strFieldName;
 
     /**
-     * Constructs a new \<code><nameCapitalized><table.voName>ResultSetExtractor\</code>.
+     * Constructs a new \{@link <nameCapitalized><table.voName>ResultSetExtractor}.
      * @param daoListener the dao listener.
      */
     public <nameCapitalized><table.voName>ResultSetExtractor(
@@ -2304,8 +2304,8 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
     /**
      * Extracts \<i><table.voName>.<nameCapitalized>\</i> information from given result set.
      * @param resultSet the result set.
-     * @param daoListener the \<code><trNameCapitalized>DAOListener\</code> instance.
-     * @return the \<code><table.voName>\</code> or \<code>null\</code>
+     * @param daoListener the \{@link <trNameCapitalized>DAOListener} instance.
+     * @return the \{@link <table.voName>} or \{@link null}
      * if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      * @throws DataAccessException with information about any
@@ -2329,8 +2329,8 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * Extracts \<i><table.voName>\</i> information from given result set.
      * @param resultSet the result set.
      * @param fieldName the field name.
-     * @param daoListener the \<code><trNameCapitalized>DAOListener\</code> instance.
-     * @return the \<code><table.voName>\</code> or \<code>null\</code>
+     * @param daoListener the \{@link <trNameCapitalized>DAOListener} instance.
+     * @return the \{@link <table.voName>} or \{@link null}
      * if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      * @throws DataAccessException with information about any

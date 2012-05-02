@@ -35,41 +35,18 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.Condition;
-import org.acmsl.queryj.Field;
-import org.acmsl.queryj.Query;
-import org.acmsl.queryj.QueryFactory;
 import org.acmsl.queryj.QueryJException;
-import org.acmsl.queryj.QueryResultSet;
-import org.acmsl.queryj.SelectQuery;
-import org.acmsl.queryj.tools.metadata.engines.oracle.OracleTableRepository;
-import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
- * Importing Commons-Logging classes.
- */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Manages the information metadata stored in an Oracle8 database.
@@ -78,14 +55,6 @@ import java.util.Map;
 public class Oracle8MetadataManager
     extends  OracleMetadataManager
 {
-    /**
-     * Creates an empty <code>Oracle8MetadataManager</code>.
-     */
-    protected Oracle8MetadataManager()
-    {
-        super();
-    }
-
     /**
      * Creates an <code>OracleMetadataManager</code>. using given information.
      * @param tableNames explicitly specified table names.
@@ -103,6 +72,7 @@ public class Oracle8MetadataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param caseSensitive whether the database engine is case sensitive.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -116,7 +86,8 @@ public class Oracle8MetadataManager
         final boolean lazyProcedureExtraction,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final boolean caseSensitive)
         throws  SQLException,
                 QueryJException
     {
@@ -129,35 +100,8 @@ public class Oracle8MetadataManager
             lazyProcedureExtraction,
             metaData,
             catalog,
-            schema);
-    }
-
-    /**
-     * Creates an <code>OracleMetadataManager</code> using given information.
-     * @param tableNames explicitly specified table names.
-     * @param procedureNames explicitly specified procedure names.
-     * @param metaData the database meta data.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
-     */
-    public Oracle8MetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
-        throws  SQLException,
-                QueryJException
-    {
-        super(
-            tableNames,
-            procedureNames,
-            metaData,
-            catalog,
-            schema);
+            schema,
+            caseSensitive);
     }
 
     /**

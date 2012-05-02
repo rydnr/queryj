@@ -37,12 +37,6 @@ package org.acmsl.queryj.tools.metadata;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.Property;
-import org.acmsl.queryj.tools.metadata.CachingAttributeDecorator;
-import org.acmsl.queryj.tools.metadata.CachingForeignKeyDecorator;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
@@ -53,6 +47,10 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -223,14 +221,14 @@ public class MetadataUtils
 		: 0,
 		t_iLength);
 
-        @Nullable Collection<Attribute> t_cAttributes = null;
+        @Nullable List<Attribute> t_lAttributes = null;
         @Nullable ForeignKey t_CurrentFk = null;
         @Nullable Attribute t_FirstAttribute = null;
         boolean t_bAllowsNullAsAWhole = false;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            t_cAttributes =
+            t_lAttributes =
                 buildAttributes(
                     t_aastrForeignKeys[t_iIndex],
                     tableName,
@@ -238,17 +236,17 @@ public class MetadataUtils
                     metadataTypeManager,
                     decoratorFactory);
 
-            if  (   (t_cAttributes != null)
-                 && (t_cAttributes.size() > 0))
+            if  (   (t_lAttributes != null)
+                 && (t_lAttributes.size() > 0))
             {
                 t_bAllowsNullAsAWhole =
-                    allowsNullAsAWhole(t_cAttributes);
+                    allowsNullAsAWhole(t_lAttributes);
 
                 t_CurrentFk =
                     new CachingForeignKeyDecorator(
                         new ForeignKeyValueObject(
                             t_astrReferredTables[t_iIndex],
-                            t_cAttributes,
+                            t_lAttributes,
                             tableName,
                             t_bAllowsNullAsAWhole));
 
@@ -518,7 +516,7 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> buildAttributes(
+    public List<Attribute> buildAttributes(
         @NotNull final String[] columnNames,
         final String tableName,
         @NotNull final MetadataManager metadataManager,
@@ -551,7 +549,7 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> buildAttributes(
+    public List<Attribute> buildAttributes(
         @NotNull final String[] columnNames,
         final String tableName,
         final boolean allowsNullAsAWhole,
@@ -586,7 +584,7 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> buildAttributes(
+    public List<Attribute> buildAttributes(
         final String[] columnNames,
         final String[] columnValues,
         final String tableName,
@@ -622,7 +620,7 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> buildAttributes(
+    public List<Attribute> buildAttributes(
         @NotNull final String[] columnNames,
         final String tableName,
         final Boolean allowsNullAsAWhole,
@@ -659,7 +657,7 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> buildAttributes(
+    public List<Attribute> buildAttributes(
         @Nullable final String[] columnNames,
         final String[] columnValues,
         final String tableName,
@@ -668,7 +666,7 @@ public class MetadataUtils
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull Collection<Attribute> result = new ArrayList<Attribute>();
+        @NotNull List<Attribute> result = new ArrayList<Attribute>();
 
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
@@ -694,8 +692,10 @@ public class MetadataUtils
                         tableName, columnNames[t_iIndex]);
             }
 
+            boolean t_bIsBool = metadataManager.isBoolean(tableName, columnNames[t_iIndex]);
+
             String t_strFieldType =
-                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
+                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
 
             boolean t_bManagedExternally =
                 metadataManager.isManagedExternally(
@@ -709,9 +709,15 @@ public class MetadataUtils
                         t_strNativeType,
                         t_strFieldType,
                         tableName,
+                        metadataManager.getTableComment(tableName),
                         t_bManagedExternally,
                         t_bAllowsNull,
-                        columnValues[t_iIndex]),
+                        columnValues[t_iIndex],
+                        metadataManager.isReadOnly(tableName, columnNames[t_iIndex]),
+                        metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
+                        metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
+                        metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
+                        metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
                     metadataManager));
         }
 

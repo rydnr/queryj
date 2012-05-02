@@ -70,24 +70,46 @@ public abstract class AbstractField
     private Collection m__cFieldFks;
 
     /**
-     * Creates an empty {@link AbstractField} instance.
-     */
-    public AbstractField() {}
-
-    /**
      * Creates an {@link AbstractField} with given information.
      * @param name the field name.
      * @param type the field type.
-     * @param pk whether it participates in the table's pk.
      * @param tableName the name of the table.
-     */
+     * @param pk whether it participates in the table's pk.
+          */
     public AbstractField(
         final String name,
-        final String type,
-        final boolean pk,
-        final String tableName)
+        final int type,
+        final String nativeType,
+        final String fieldType,
+        final String tableName,
+        final String comment,
+        final boolean managedExternally,
+        final boolean allowsNull,
+        final String value,
+        final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull,
+        final boolean pk)
     {
-        super(name, type, tableName, false);
+        //super(name, type, tableName, false);
+        super(
+            name,
+            type,
+            nativeType,
+            fieldType,
+            tableName,
+            comment,
+            managedExternally,
+            allowsNull,
+            value,
+            readOnly,
+            isBool,
+            booleanTrue,
+            booleanFalse,
+            booleanNull);
+
         immutableSetPk(pk);
     }
 
@@ -102,13 +124,40 @@ public abstract class AbstractField
      */
     public AbstractField(
         final String name,
-        final String type,
-        final boolean pk,
+        final int type,
+        final String nativeType,
+        final String fieldType,
         final String tableName,
+        final String comment,
+        final boolean managedExternally,
+        final boolean allowsNull,
+        final String value,
+        final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull,
+        final boolean pk,
         final String keyword,
         final String retrievalQuery)
     {
-        this(name, type, pk, tableName);
+        this(
+            name,
+            type,
+            nativeType,
+            fieldType,
+            tableName,
+            comment,
+            managedExternally,
+            allowsNull,
+            value,
+            readOnly,
+            isBool,
+            booleanTrue,
+            booleanFalse,
+            booleanNull,
+            pk);
+
         immutableSetKeyword(keyword);
         immutableSetRetrievalQuery(retrievalQuery);
     }

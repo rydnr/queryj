@@ -82,7 +82,7 @@ public class MySQL4xMetaDataRetrievalHandler
         final int majorVersion,
         final int minorVersion)
     {
-        boolean result = (productName.indexOf("MySQL") > -1);
+        boolean result = productName.contains("MySQL");
 
         if  (result)
         {
@@ -138,7 +138,8 @@ public class MySQL4xMetaDataRetrievalHandler
         final boolean lazyProcedureExtraction,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @NotNull String schema)
+        @NotNull final String schema,
+        final boolean caseSensitive)
         throws  QueryJBuildException
     {
         MetadataManager result;
@@ -155,12 +156,10 @@ public class MySQL4xMetaDataRetrievalHandler
                     lazyProcedureExtraction,
                     metaData,
                     catalog,
-                    schema);
+                    schema,
+                    caseSensitive);
 
-            if (result != null)
-            {
-                result.retrieveMetadata();
-            }
+            result.retrieveMetadata();
         }
         catch  (@NotNull final SQLException sqlException)
         {

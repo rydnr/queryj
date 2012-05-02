@@ -36,26 +36,28 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Abstract factory for template-specific decorators.
@@ -80,7 +82,7 @@ public class CachingDecoratorFactory
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CachingDecoratorFactory() {};
+    protected CachingDecoratorFactory() {}
 
     /**
      * Retrieves a <code>CachingDecoratorFactory</code> instance.
@@ -155,43 +157,6 @@ public class CachingDecoratorFactory
         return
             new CachingSqlDecorator(
                 sql, customSqlProvider, metadataManager);
-    }
-
-    /**
-     * Creates a <code>TableDecorator</code>.
-     * @param table the table.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return the decorated sql for the concrete template.
-     */
-    @NotNull
-    public TableDecorator createTableDecorator(
-        final String table, final MetadataManager metadataManager)
-    {
-        return new CachingTableDecorator(table, metadataManager);
-    }
-
-    /**
-     * Creates a <code>ForeignKeyDecorator</code>.
-     * @param sourceTableName the name of the source table.
-     * @param attributes the foreign key attributes.
-     * @param targetTableName the name of the target table.
-     * @param allowsNull whether the fk can be null as a whole.
-     * @return the decorator instance.
-     */
-    @NotNull
-    public ForeignKeyDecorator createDecorator(
-        final String sourceTableName,
-        final Collection attributes,
-        final String targetTableName,
-        final boolean allowsNull)
-    {
-        return
-            new CachingForeignKeyDecorator(
-                new ForeignKeyValueObject(
-                    sourceTableName,
-                    attributes,
-                    targetTableName,
-                    allowsNull));
     }
 
     /**
@@ -273,5 +238,92 @@ public class CachingDecoratorFactory
         }
 
         return result;
+    }
+
+    /**
+     * Creates an <code>ParameterDecorator</code> for given
+     * parameter instance.
+     *
+     * @param parameter       the parameter.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated attribute for the concrete template.
+     */
+    public ParameterDecorator createDecorator(final Parameter parameter, final MetadataManager metadataManager)
+    {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Creates a <code>PropertyDecorator</code> for given
+     * property instance.
+     *
+     * @param property          the property.
+     * @param result            the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager   the <code>MetadataManager</code> instance.
+     * @return the decorated property for the concrete template.
+     */
+    public PropertyDecorator createDecorator(final Property property, final Result result, final CustomSqlProvider
+        customSqlProvider, final MetadataManager metadataManager)
+    {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Creates a <code>TableDecorator</code>.
+     *
+     * @param table           the table name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated table for the concrete template.
+     */
+    public TableDecorator createTableDecorator(final String table, final MetadataManager metadataManager)
+    {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     *
+     * @param table           the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     */
+    public List decorateAttributes(final String table, final MetadataManager metadataManager)
+    {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     *
+     * @param table           the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     */
+    public List decoratePrimaryKey(final String table, final MetadataManager metadataManager)
+    {
+        // TODO
+        return null;
+    }
+
+    /**
+     * Creates a <code>ForeignKeyDecorator</code>.
+     *
+     * @param sourceTableName the name of the source table.
+     * @param attributes      the foreign key attributes.
+     * @param targetTableName the name of the target table.
+     * @param allowsNull      whether the fk can be null as a whole.
+     * @return the decorator instance.
+     */
+    @NotNull
+    public ForeignKeyDecorator createDecorator(final String sourceTableName, final List attributes, final String
+        targetTableName, final boolean allowsNull)
+    {
+        // TODO
+        return null;
     }
 }

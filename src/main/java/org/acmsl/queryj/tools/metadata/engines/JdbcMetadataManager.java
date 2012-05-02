@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -63,14 +64,6 @@ public class JdbcMetadataManager
     implements MetadataManager
 {
     /**
-     * Creates an empty {@link JdbcMetadataManager} instance.
-     */
-    public JdbcMetadataManager()
-    {
-        super();
-    }
-
-    /**
      * Creates a {@link JdbcMetadataManager} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
@@ -87,6 +80,7 @@ public class JdbcMetadataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param caseSensitive whether the engine is case sensitive.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -103,11 +97,13 @@ public class JdbcMetadataManager
         final boolean lazyProcedureExtraction,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final boolean caseSensitive)
       throws  SQLException,
               QueryJException
     {
         super(
+            null,
             tableNames,
             procedureNames,
             disableTableExtraction,
@@ -116,7 +112,8 @@ public class JdbcMetadataManager
             lazyProcedureExtraction,
             metaData,
             catalog,
-            schema);
+            schema,
+            caseSensitive);
     }
 
     /**
@@ -126,6 +123,7 @@ public class JdbcMetadataManager
      * @param metaData the database meta data.
      * @param catalog the database catalog.
      * @param schema the database schema.
+     * @param caseSensitive whether the database engine is case sensitive.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -138,7 +136,8 @@ public class JdbcMetadataManager
         final String[] procedureNames,
         final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final boolean caseSensitive)
       throws  SQLException,
               QueryJException
     {
@@ -151,7 +150,8 @@ public class JdbcMetadataManager
             false,
             metaData,
             catalog,
-            schema);
+            schema,
+            caseSensitive);
     }
 
     /**
@@ -165,6 +165,7 @@ public class JdbcMetadataManager
               QueryJException
     {
         retrieveMetadata(
+            getMetadataExtractionListener(),
             getTableNames(),
             getProcedureNames(),
             getDisableTableExtraction(),

@@ -44,7 +44,10 @@ import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Manager;
-import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,8 +55,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.sql.Types;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Provides the core methods when working with database metadata.
@@ -78,7 +79,7 @@ public class MySQL4xMetadataTypeManager
     /**
      * Creates an empty <code>MySQL4xMetadataTypeManager</code>.
      */
-    public MySQL4xMetadataTypeManager() {};
+    public MySQL4xMetadataTypeManager() {}
 
     /**
      * Retrieves a <code>MySQL4xMetadataTypeManager</code> instance.
@@ -93,12 +94,14 @@ public class MySQL4xMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the type represents boolean values.
      * @return the associated object type.
      */
+    @Override
     @Nullable
-    public String getSmartObjectType(final int dataType)
+    public String getSmartObjectType(final int dataType, final boolean isBool)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         switch (dataType)
         {
@@ -107,7 +110,7 @@ public class MySQL4xMetadataTypeManager
                 break;
 
             default:
-                result = super.getSmartObjectType(dataType);
+                result = super.getSmartObjectType(dataType, isBool);
                 break;
         }
 
@@ -117,12 +120,13 @@ public class MySQL4xMetadataTypeManager
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the type represents boolean values.
      * @return the associated object type.
      */
     @Nullable
-    public String getObjectType(final int dataType)
+    public String getObjectType(final int dataType, final boolean isBool)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         switch (dataType)
         {
@@ -131,7 +135,7 @@ public class MySQL4xMetadataTypeManager
                 break;
 
             default:
-                result = super.getObjectType(dataType);
+                result = super.getObjectType(dataType, isBool);
                 break;
         }
 

@@ -68,6 +68,14 @@ public class AntFieldElement
     private String m__strPk;
 
     /**
+     * Creates an empty {@link AntFieldElement}.
+     */
+    public AntFieldElement()
+    {
+        super(null, -1, null, null, null, null, false, false, null, false, false, null, null, null, false);
+    }
+
+    /**
      * Specifies if the field is a primary key.
      * @param pk such information.
      */

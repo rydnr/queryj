@@ -239,7 +239,7 @@ public abstract class <input.tr_name_capitalized>DAOFactory
     }
 
     /**
-     * Creates the \<code><input.tr_name_capitalized>DAO\</code> instance.
+     * Creates the \{@link <input.tr_name_capitalized>DAO} instance.
      * @return such DAO.
      */
     public abstract <input.tr_name_capitalized>DAO create<input.tr_name_capitalized>DAO();

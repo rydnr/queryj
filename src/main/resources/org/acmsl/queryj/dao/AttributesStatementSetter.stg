@@ -211,7 +211,7 @@ public class <input.vo_name>AttributesStatementSetter
     private boolean m__bSelectForUpdateOperation;
 
     /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
+     * Creates a \{@link <input.vo_name>AttributesStatementSetter}
      * instance.
 <if(parent)>
     <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
@@ -251,7 +251,7 @@ public class <input.vo_name>AttributesStatementSetter
     }
 <else>
     /**
-     * Creates a \<code><input.vo_name>AttributesStatementSetter\</code>
+     * Creates a \{@link <input.vo_name>AttributesStatementSetter}
      * instance.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased);
@@ -390,7 +390,7 @@ public class <input.vo_name>AttributesStatementSetter
 <endif>
 
     /**
-     * Specifies the values on given \<code>PreparedStatement\</code>
+     * Specifies the values on given \{@link PreparedStatement}
      * @param preparedStatement the prepared statement.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      <precondition_notnull("preparedStatement")>
@@ -420,7 +420,7 @@ public class <input.vo_name>AttributesStatementSetter
     }
 
     /**
-     * Specifies the values on given \<code>PreparedStatement\</code>
+     * Specifies the values on given \{@link PreparedStatement}
      * @param preparedStatement the prepared statement.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased);

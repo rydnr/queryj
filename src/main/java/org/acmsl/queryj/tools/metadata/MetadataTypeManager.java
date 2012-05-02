@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2002-2006  Jose San Leandro Armendariz
+                             chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -21,6 +21,11 @@
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  ******************************************************************************
  *
@@ -38,12 +43,11 @@ package org.acmsl.queryj.tools.metadata;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Manager;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some useful methods when working with database metadata.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:chous@acm-sl.org"
+ *         >Jose San Leandro</a>
  */
 public interface MetadataTypeManager
     extends  Manager
@@ -51,10 +55,8 @@ public interface MetadataTypeManager
     /**
      * Retrieves the native type of given data type.
      * @param dataType the data type.
-     * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
-    @Nullable
     public String getNativeType(final int dataType);
 
     /**
@@ -63,9 +65,32 @@ public interface MetadataTypeManager
      * @param allowsNull whether to allow null or not.
      * @return the associated native type.
      */
-    @Nullable
     public String getNativeType(
         final int dataType, final boolean allowsNull);
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType, final boolean allowsNull, final boolean isBool);
+
+    /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param allowsNull whether to allow null or not.
+     * @param isBool whether the attribute is marked as boolean.
+     * @param precision the precision.
+     * @return the associated native type.
+     */
+    public String getNativeType(
+        final int dataType,
+        final boolean allowsNull,
+        final boolean isBool,
+        final int precision);
 
     /**
      * Retrieves the native type of given data type.
@@ -75,18 +100,26 @@ public interface MetadataTypeManager
     public int getJavaType(final String dataType);
 
     /**
+     * Retrieves the native type of given data type.
+     * @param dataType the data type.
+     * @param precision the precision.
+     * @return the associated native type.
+     */
+    public int getJavaType(final String dataType, final int precision);
+
+    /**
      * Retrieves the QueryJ type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getQueryJFieldType(final int dataType);
+    public String getQueryJFieldType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @return the QueryJ type.
      */
-    @Nullable
     public String getStatementSetterFieldType(final int dataType);
 
     /**
@@ -100,9 +133,11 @@ public interface MetadataTypeManager
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether the field allows null or not.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the QueryJ type.
      */
-    public String getFieldType(final int dataType, final boolean allowsNull);
+    public String getFieldType(
+        final int dataType, final boolean allowsNull, final boolean isBool);
 
     /**
      * Retrieves the setter method name.
@@ -111,7 +146,6 @@ public interface MetadataTypeManager
      * @param paramName the parameter name.
      * @return the associated setter method name.
      */
-    @Nullable
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName);
 
@@ -121,16 +155,13 @@ public interface MetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
-    @Nullable
     public String getGetterMethod(final int dataType, final int paramIndex);
 
     /**
      * Retrieves the getter method name.
      * @param dataType the data type.
-     * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
-    @Nullable
     public String getGetterMethod(final int dataType);
 
     /**
@@ -139,71 +170,69 @@ public interface MetadataTypeManager
      * @param param the parameter.
      * @return the associated getter method name.
      */
-    @Nullable
     public String getGetterMethod(final int dataType, final String param);
 
     /**
      * Retrieves the result type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated result type.
      */
-    @Nullable
-    public String getProcedureResultType(final int dataType);
+    public String getProcedureResultType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the procedure's default value.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
-    @NotNull
-    public String getProcedureDefaultValue(final int dataType);
+    public String getProcedureDefaultValue(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    @Nullable
-    public String getObjectType(final int dataType);
+    public String getObjectType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    @NotNull
-    public String getObjectType(final String dataType);
+    public String getObjectType(final String dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    @Nullable
-    public String getSmartObjectType(final int dataType);
+    public String getSmartObjectType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the object type of given data type when retrieving information.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
-    @Nullable
-    public String getSmartObjectRetrievalType(final int dataType);
+    public String getSmartObjectRetrievalType(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the default value of given data type.
      * @param dataType the data type.
+     * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
-    @NotNull
-    public String getDefaultValue(final int dataType);
+    public String getDefaultValue(final int dataType, final boolean isBool);
 
     /**
      * Retrieves the constant name of given data type.
      * @param dataType the data type.
      * @return the associated constant name.
      */
-    @Nullable
     public String getConstantName(final int dataType);
 
     /**
@@ -231,12 +260,28 @@ public interface MetadataTypeManager
     public boolean isDate(final int dataType);
 
     /**
+     * Checks if given data type represents dates.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * date.
+     */
+    public boolean isDate(final String dataType);
+
+    /**
      * Checks if given data type represents timestamps.
      * @param dataType the data type.
      * @return <code>true</code> if such data type can be managed as a
      * timestamp.
      */
     public boolean isTimestamp(final int dataType);
+
+    /**
+     * Checks if given data type represents timestamps.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * timestamp.
+     */
+    public boolean isTimestamp(final String dataType);
 
     /**
      * Checks if given data type represents objects.
@@ -311,25 +356,9 @@ public interface MetadataTypeManager
     public boolean isBlob(final String dataType);
 
     /**
-     * Checks if given data type represents lobs.
-     * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as a
-     * lob.
-     */
-    public boolean isLob(final int dataType);
-
-    /**
-     * Checks if given data type represents lobs.
-     * @param dataType the data type.
-     * @return <code>true</code> if such data type can be managed as a
-     * lob.
-     */
-    public boolean isLob(final String dataType);
-
-    /**
      * Checks if given data type represents numbers smaller than int.
      * @param dataType the data type.
-     * @return <code>true</code> is fuch data type is smallint, tinyint
+     * @return <code>true</code> is such data type is smallint, tinyint
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final int dataType);
@@ -341,4 +370,19 @@ public interface MetadataTypeManager
      * or similar.
      */
     public boolean isNumberSmallerThanInt(final String dataType);
+
+    /**
+     * Checks if given data type represents numbers.
+     * @param dataType the data type.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isNumeric(final int dataType);
+
+    /**
+     * Checks if given data type represents numbers.
+     * @param dataType the data type.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isNumeric(final String dataType);
+
 }

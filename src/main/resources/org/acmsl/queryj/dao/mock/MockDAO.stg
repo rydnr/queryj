@@ -223,10 +223,10 @@ public abstract class Mock<table.voName>DAO
     }
 
     /**
-     * Retrieves \<code><input.vo_name>\</code> information
+     * Retrieves \{@link <input.vo_name>} information
      * filtering by its primary key.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @return the \<code><input.vo_name>\</code> matching given
+     * @return the \{@link <input.vo_name>} matching given
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
@@ -261,7 +261,7 @@ public abstract class Mock<table.voName>DAO
     /**
      * Fills up a \<code\><table.voName>\</code\> with the information provided.
      <input.all_but_externally_managed_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @return a \<code><table.voName>\</code\> filled up with the
+     * @return a \{@link <table.voName>\</code\> filled up with the
      * simulated persisted contents.
      */
     protected <table.voName> build<table.voName>(
@@ -285,7 +285,7 @@ public abstract class Mock<table.voName>DAO
     }
 
     /**
-     * Persists \<code><input.vo_name>\</code> information.
+     * Persists \{@link <input.vo_name>} information.
      <input.all_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
@@ -301,7 +301,7 @@ public abstract class Mock<table.voName>DAO
 
     /**
      * Inserts and retrieves the newly-inserted
-     * \<code><input.vo_name>\</code> instance.
+     * \{@link <input.vo_name>} instance.
      <input.all_but_externally_managed_attributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
@@ -341,7 +341,7 @@ public abstract class Mock<table.voName>DAO
     }
 
     /**
-     * Updates \<code><input.vo_name>\</code> information.
+     * Updates \{@link <input.vo_name>} information.
      <input.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
@@ -375,7 +375,7 @@ public abstract class Mock<table.voName>DAO
     }
 
     /**
-     * Deletes \<code><input.vo_name>\</code> information.
+     * Deletes \{@link <input.vo_name>} information.
      <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
@@ -541,7 +541,7 @@ static_table(
  * filtering by <attribute.name>.
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
- * @return the \<code><voName>\</code> instance.
+ * @return the \{@link <voName>} instance.
  <precondition_notnull(name=attribute.name)>
  */
 public <voName> findConstantBy<attribute.nameCapitalized>(
@@ -572,7 +572,7 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
  <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \<code><voName>\</code> instance.
+ * @return the \{@link <voName>} instance.
  */
 public <voName> findConstantByPk(
   <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)

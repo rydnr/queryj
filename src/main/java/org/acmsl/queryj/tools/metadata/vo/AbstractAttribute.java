@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +20,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  *****************************************************************************
  *
@@ -33,16 +38,12 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Abstract logicless implementation of <code>Attribute</code> interface.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Abstract logic-less implementation of {@link Attribute} interface.
+ * @author <a href="mailto:chous@acm-sl.org"
+ *         >Jose San Leandro</a>
  */
 public abstract class AbstractAttribute
     implements Attribute
@@ -73,6 +74,11 @@ public abstract class AbstractAttribute
     private String m__strTableName;
 
     /**
+     * The comment.
+     */
+    private String m__strComment;
+
+    /**
      * Whether the attribute is managed externally or not.
      */
     private boolean m__bManagedExternally;
@@ -88,28 +94,47 @@ public abstract class AbstractAttribute
     private String m__strValue;
 
     /**
-     * Creates an empty <code>AbstractAttribute</code> instance.
+     * Whether the attribute is marked as read-only.
      */
-    public AbstractAttribute() {}
+    private boolean m__bReadOnly = false;
 
     /**
-     * Creates an <code>AbstractAttribute</code> with the following
-     * information.
-     * @param name the name.
-     * @param nativeType the native type.
+     * Whether the attribute is marked as boolean.
+     */
+    private boolean m__bBoolean = false;
+
+    /**
+     * The symbol for <code>true</code> values in boolean attributes.
+     */
+    private String m__strBooleanTrue;
+
+    /**
+     * The symbol for <code>false</code> values in boolean attributes.
+     */
+    private String m__strBooleanFalse;
+
+    /**
+     * The symbol for <code>null</code> values in boolean attributes.
+     */
+    private String m__strBooleanNull;
+
+    /**
+     * The stack trace to know who created me.
+     */
+    private final StackTraceElement[] m__aStackTrace =
+        new RuntimeException("fake").getStackTrace();
+
+    /**
+     * Creates an <code>AbstractAttribute</code> with minimal information,
+     * allowing lazy-loading mechanisms for non-essential information.
      * @param tableName the table name.
-     * @param managedExternally whether the attribute is managed externally.
+     * @param name the name.
      */
     protected AbstractAttribute(
-        final String name,
-        final String nativeType,
-        final String tableName,
-        final boolean managedExternally)
+        final String tableName, final String name)
     {
-        immutableSetName(name);
-        immutableSetNativeType(nativeType);
         immutableSetTableName(tableName);
-        immutableSetManagedExternally(managedExternally);
+        immutableSetName(name);
     }
 
     /**
@@ -120,9 +145,15 @@ public abstract class AbstractAttribute
      * @param nativeType the native type.
      * @param fieldType the field type.
      * @param tableName the table name.
+     * @param comment the comment.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
+     * @param readOnly whether the attribute is marked as read-only.
+     * @param isBool whether the attribute is marked as boolean.
+     * @param booleanTrue the symbol for <code>true</code> values in boolean attributes.
+     * @param booleanFalse the symbol for <code>false</code> values in boolean attributes.
+     * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      */
     protected AbstractAttribute(
         final String name,
@@ -130,15 +161,29 @@ public abstract class AbstractAttribute
         final String nativeType,
         final String fieldType,
         final String tableName,
+        final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value)
+        final String value,
+        final boolean readOnly,
+        final boolean isBool,
+        final String booleanTrue,
+        final String booleanFalse,
+        final String booleanNull)
     {
-        this(name, nativeType, tableName, managedExternally);
+        this(tableName, name);
         immutableSetType(type);
+        immutableSetNativeType(nativeType);
         immutableSetFieldType(fieldType);
+        immutableSetComment(comment);
+        immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);
         immutableSetValue(value);
+        immutableSetReadOnly(readOnly);
+        immutableSetBoolean(isBool);
+        immutableSetBooleanTrue(booleanTrue);
+        immutableSetBooleanFalse(booleanFalse);
+        immutableSetBooleanNull(booleanNull);
     }
 
     /**
@@ -277,6 +322,33 @@ public abstract class AbstractAttribute
     }
 
     /**
+     * Specifies the comment.
+     * @param comment such comment.
+     */
+    protected final void immutableSetComment(final String comment)
+    {
+        m__strComment = comment;
+    }
+
+    /**
+     * Specifies the comment.
+     * @param comment such comment.
+     */
+    protected void setComment(final String comment)
+    {
+        immutableSetComment(comment);
+    }
+
+    /**
+     * Retrieves the attribute comment.
+     * @return such comment.
+     */
+    public String getComment()
+    {
+        return m__strComment;
+    }
+
+    /**
      * Specifies whether it's managed externally.
      * @param managedExternally such information.
      */
@@ -354,7 +426,10 @@ public abstract class AbstractAttribute
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the optional attribute's value, meaning
+     * it doesn't just describe the metadata, but also
+     * contains data.
+     * @return such information.
      */
     public String getValue()
     {
@@ -362,17 +437,147 @@ public abstract class AbstractAttribute
     }
 
     /**
-     * {@inheritDoc}
+     * Specifies whether the attribute is marked as read-only.
+     * @param flag such condition.
      */
-    public boolean isValueNull()
+    protected final void immutableSetReadOnly(final boolean flag)
     {
-        boolean result = false;
+        m__bReadOnly = flag;
+    }
 
-        String t_strValue = getValue();
+    /**
+     * Specifies whether the attribute is marked as read-only.
+     * @param flag such condition.
+     */
+    protected void setReadOnly(final boolean flag)
+    {
+        immutableSetReadOnly(flag);
+    }
 
-        result = (t_strValue == null);
+    /**
+     * Retrieves whether the attribute is marked as read-only.
+     * @return such condition.
+     */
+    public boolean isReadOnly()
+    {
+        return m__bReadOnly;
+    }
 
-        return result;
+    /**
+     * Specifies whether the attribute is marked as boolean.
+     * @param flag such condition.
+     */
+    protected final void immutableSetBoolean(final boolean flag)
+    {
+        m__bBoolean = flag;
+    }
+
+    /**
+     * Specifies whether the attribute is marked as boolean.
+     * @param flag such condition.
+     */
+    protected void setBoolean(final boolean flag)
+    {
+        immutableSetBoolean(flag);
+    }
+
+    /**
+     * Retrieves whether the attribute is marked as boolean.
+     * @return such condition.
+     */
+    public boolean isBoolean()
+    {
+        return m__bBoolean;
+    }
+
+    /**
+     * Specifies the symbol for <code>true</code> values.
+     * @param value such information.
+     */
+    protected final void immutableSetBooleanTrue(final String value)
+    {
+        m__strBooleanTrue = value;
+    }
+
+    /**
+     * Specifies the symbol for <code>true</code> values.
+     * @param value such information.
+     */
+    protected void setBooleanTrue(final String value)
+    {
+        immutableSetBooleanTrue(value);
+    }
+
+    /**
+     * Retrieves the symbol for <code>true</code> values.
+     * @return such information.
+     */
+    public String getBooleanTrue()
+    {
+        return m__strBooleanTrue;
+    }
+
+    /**
+     * Specifies the symbol for <code>false</code> values.
+     * @param value such information.
+     */
+    protected final void immutableSetBooleanFalse(final String value)
+    {
+        m__strBooleanFalse = value;
+    }
+
+    /**
+     * Specifies the symbol for <code>false</code> values.
+     * @param value such information.
+     */
+    protected void setBooleanFalse(final String value)
+    {
+        immutableSetBooleanFalse(value);
+    }
+
+    /**
+     * Retrieves the symbol for <code>false</code> values.
+     * @return such information.
+     */
+    public String getBooleanFalse()
+    {
+        return m__strBooleanFalse;
+    }
+
+    /**
+     * Specifies the symbol for <code>null</code> values.
+     * @param value such information.
+     */
+    protected final void immutableSetBooleanNull(final String value)
+    {
+        m__strBooleanNull = value;
+    }
+
+    /**
+     * Specifies the symbol for <code>null</code> values.
+     * @param value such information.
+     */
+    protected void setBooleanNull(final String value)
+    {
+        immutableSetBooleanNull(value);
+    }
+
+    /**
+     * Retrieves the symbol for <code>null</code> values.
+     * @return such information.
+     */
+    public String getBooleanNull()
+    {
+        return m__strBooleanNull;
+    }
+
+    /**
+     * Retrieves the stack trace when the attribute was created.
+     * @return such information.
+     */
+    protected StackTraceElement[] getStackTrace()
+    {
+        return m__aStackTrace;
     }
 
     /**
@@ -382,70 +587,6 @@ public abstract class AbstractAttribute
     public String toString()
     {
         return getName();
-    }
-
-    /**
-     * Retrieves the hash code associated to this instance.
-     * @return such information.
-     */
-    public int hashCode()
-    {
-        return
-            new org.apache.commons.lang.builder.HashCodeBuilder(-2052006167, 878128337)
-                .append(getName())
-                .append(getType())
-                .append(getNativeType())
-                .append(getFieldType())
-                .append(getTableName())
-                .append(getManagedExternally())
-                .append(getAllowsNull())
-                .append(getValue())
-                .toHashCode();
-    }
-
-    /**
-     * Checks whether given object is semantically equal to this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     */
-    public boolean equals(final Object object)
-    {
-        boolean result = false;
-
-        if  (object instanceof Attribute)
-        {
-            @NotNull final Attribute t_OtherInstance = (Attribute) object;
-
-            result =
-                new org.apache.commons.lang.builder.EqualsBuilder()
-                    .append(
-                        getName(),
-                        t_OtherInstance.getName())
-                    .append(
-                        getType(),
-                        t_OtherInstance.getType())
-                    .append(
-                        getNativeType(),
-                        t_OtherInstance.getNativeType())
-                    .append(
-                        getFieldType(),
-                        t_OtherInstance.getFieldType())
-                    .append(
-                        getTableName(),
-                        t_OtherInstance.getTableName())
-                    .append(
-                        getManagedExternally(),
-                        t_OtherInstance.getManagedExternally())
-                    .append(
-                        getAllowsNull(),
-                        t_OtherInstance.getAllowsNull())
-                    .append(
-                        getValue(),
-                        t_OtherInstance.getValue())
-                .isEquals();
-        }
-
-        return result;
     }
 
     /**
@@ -460,53 +601,60 @@ public abstract class AbstractAttribute
     {
         int result = 1;
 
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof Attribute)
+        if (   (this == object)
+            || (this.equals(object)))
+        {
+            result = 0;
+        }
+        else if  (object instanceof Attribute)
         {
             @NotNull final Attribute t_OtherInstance = (Attribute) object;
 
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getName(),
-                    t_OtherInstance.getName())
-                .append(
-                    getType(),
-                    t_OtherInstance.getType())
-                .append(
-                    getNativeType(),
-                    t_OtherInstance.getNativeType())
-                .append(
-                    getFieldType(),
-                    t_OtherInstance.getFieldType())
-                .append(
-                    getTableName(),
-                    t_OtherInstance.getTableName())
-                .append(
-                    getManagedExternally(),
-                    t_OtherInstance.getManagedExternally())
-                .append(
-                    getAllowsNull(),
-                    t_OtherInstance.getAllowsNull())
-                .append(
-                    getValue(),
-                    t_OtherInstance.getValue())
-                .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
+                    .append(
+                        getName(),
+                        t_OtherInstance.getName())
+                    .append(
+                        getType(),
+                        t_OtherInstance.getType())
+                    .append(
+                        getNativeType(),
+                        t_OtherInstance.getNativeType())
+                    .append(
+                        getFieldType(),
+                        t_OtherInstance.getFieldType())
+                     .append(
+                         getTableName(),
+                         t_OtherInstance.getTableName())
+                     .append(
+                         getComment(),
+                         t_OtherInstance.getComment())
+                     .append(
+                         getManagedExternally(),
+                         t_OtherInstance.getManagedExternally())
+                     .append(
+                         getAllowsNull(),
+                         t_OtherInstance.getAllowsNull())
+                     .append(
+                         getValue(),
+                         t_OtherInstance.getValue())
+                     .append(
+                         isReadOnly(),
+                         t_OtherInstance.isReadOnly())
+                     .append(
+                         isBoolean(),
+                         t_OtherInstance.isBoolean())
+                     .append(
+                         getBooleanTrue(),
+                         t_OtherInstance.getBooleanTrue())
+                     .append(
+                         getBooleanFalse(),
+                         t_OtherInstance.getBooleanFalse())
+                     .append(
+                         getBooleanNull(),
+                         t_OtherInstance.getBooleanNull())
+                    .toComparison();
         }
 
         return result;

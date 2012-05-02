@@ -43,7 +43,6 @@ import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.ResultSetFlagsElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
@@ -80,6 +79,10 @@ import java.util.Iterator;
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -905,8 +908,7 @@ public class DAOTemplateUtils
         return
             queryContents(
                 tableName,
-                metaLanguageUtils.retrieveStaticAttribute(
-                    tableName, metadataManager),
+                metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName)),
                 metadataUtils.retrieveAttributes(
                     tableName,
                     metadataManager,
@@ -953,7 +955,6 @@ public class DAOTemplateUtils
 
     /**
      * Queries the contents of given table.
-     * @param input the input.
      * @param tableName the table name.
      * @param staticAttributeName the name of the static attribute.
      * @param attributes the attributes.
@@ -1017,7 +1018,6 @@ public class DAOTemplateUtils
 
     /**
      * Queries the contents of given table.
-     * @param input the input.
      * @param tableName the table name.
      * @param staticAttributeName the static attribute name.
      * @param attributes the attributes.

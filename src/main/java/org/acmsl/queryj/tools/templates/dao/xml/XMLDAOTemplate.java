@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -49,6 +48,10 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -260,7 +263,6 @@ public class XMLDAOTemplate
      * @param deleteMethodSubtemplate the delete method subtemplate.
      * @param deletePkJavadoc the delete PK javadoc.
      * @param deletePkDeclaration the delete PK declaration.
-     * @param deleteFilterDeclaration the delete filter declaration.
      * @param deleteNoFkMethod the delete method.
      * @param deleteWithFkPkJavadoc the delete with FK PK javadoc.
      * @param deleteWithFkPkDeclaration the delete with FK PK declaration.
@@ -906,12 +908,14 @@ public class XMLDAOTemplate
                                 '_')),
                     }));
 
+            boolean t_bIsBool = metadataManager.isBoolean(t_strTableName, t_astrColumnNames[t_iColumnIndex]);
+
             if  (!t_bManagedExternally)
             {
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metadataTypeManager.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(t_iColumnType, t_bIsBool);
                 }
 
                 String t_strParameterDeclaration =

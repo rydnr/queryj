@@ -122,7 +122,7 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
     private <input.tr_name_capitalized>DAOListener m__DAOListener;
 
     /**
-     * Constructs a new \<code><input.tr_name_capitalized>ResultSetExtractor\</code>.
+     * Constructs a new \{@link <input.tr_name_capitalized>ResultSetExtractor}.
      * @param daoListener the dao listener.
      */
     public <input.tr_name_capitalized>ResultSetExtractor(
@@ -164,7 +164,7 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
      * Extracts information from given result set.
      * @param resultSet the result set.
      * @return the associated value-object, or
-     * \<code>null\</code> if the operation returned no data.
+     * \{@link null} if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i\>.
      * @throws DataAccessException with information about any
      * custom exception.
@@ -181,9 +181,9 @@ public abstract class <input.tr_name_capitalized>ResultSetExtractor
     /**
      * Extracts information from given result set.
      * @param resultSet the result set.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
      * @return the associated value-object, or
-     * \<code>null\</code> if the operation returned no data.
+     * \{@link null} if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i\>.
      * @throws DataAccessException with information about any
      * custom exception.

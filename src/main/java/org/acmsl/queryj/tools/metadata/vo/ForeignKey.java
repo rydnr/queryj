@@ -2,8 +2,8 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +20,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  *****************************************************************************
  *
@@ -36,16 +41,15 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing JDK classes.
  */
-import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents foreign keys.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:chous@acm-sl.org"
+ *         >Jose San Leandro</a>
  */
 public interface ForeignKey
-    extends  java.lang.Comparable,
-             Serializable
+    extends Comparable
 {
     /**
      * Retrieves the source table name.
@@ -57,7 +61,7 @@ public interface ForeignKey
      * Retrieves the attributes.
      * @return such information.
      */
-    public Collection getAttributes();
+    public List getAttributes();
     
     /**
      * Retrieves the target table name.

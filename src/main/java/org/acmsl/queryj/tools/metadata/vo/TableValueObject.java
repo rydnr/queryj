@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,9 +33,9 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
- * Importing project classes.
+ * Importing some JDK classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
+import java.util.List;
 
 /**
  * Value-object implementation of <code>Table</code> interface.
@@ -50,9 +49,21 @@ public final class TableValueObject
      * information.
      * @param name the name.
      */
-    public TableValueObject(final String name)
+    public TableValueObject(
+        final String name,
+        final List primaryKey,
+        final List attributes,
+        final Table parentTable,
+        final boolean isStatic,
+        final boolean voDecorated)
     {
-        super(name);
+        super(
+            name,
+            primaryKey,
+            attributes,
+            parentTable,
+            isStatic,
+            voDecorated);
     }
 }
 

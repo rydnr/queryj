@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -33,16 +32,15 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
- * Importing project classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Provides the common logic for foreign key implementations.
@@ -59,7 +57,7 @@ public abstract class AbstractForeignKey
     /**
      * The attributes.
      */
-    private Collection m__cAttributes;
+    private List m__lAttributes;
     
     /**
      * The target table name.
@@ -83,7 +81,7 @@ public abstract class AbstractForeignKey
      */
     protected AbstractForeignKey(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull)
     {
@@ -124,16 +122,16 @@ public abstract class AbstractForeignKey
      * Specifies the attributes.
      * @param attributes such attributes.
      */
-    protected final void immutableSetAttributes(final Collection attributes)
+    protected final void immutableSetAttributes(final List attributes)
     {
-        m__cAttributes = attributes;
+        m__lAttributes = attributes;
     }
     
     /**
      * Specifies the attributes.
      * @param attributes the attributes.
      */
-    protected void setAttributes(final Collection attributes)
+    protected void setAttributes(final List attributes)
     {
         immutableSetAttributes(attributes);
     }
@@ -142,9 +140,9 @@ public abstract class AbstractForeignKey
      * Retrieves the attributes.
      * @return such information.
      */
-    public Collection getAttributes()
+    public List getAttributes()
     {
-        return m__cAttributes;
+        return m__lAttributes;
     }
 
     /**
@@ -200,7 +198,6 @@ public abstract class AbstractForeignKey
     {
         return m__bAllowsNull;
     }
-
 
     /**
      * Provides a text representation of the information

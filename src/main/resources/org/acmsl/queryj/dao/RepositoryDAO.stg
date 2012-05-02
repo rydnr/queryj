@@ -185,8 +185,8 @@ public class <input.engine_name><input.tr_name_capitalized>DAO
     extends     <input.tr_name_capitalized>JdbcTemplate
     implements  <input.tr_name_capitalized>DAO
 {
+<if (input.custom_selects)>
       // custom selects
-
 <input.custom_selects:{sql|
 <if(!sql.dynamic)>
 <if(sql.splittedQuotedValue)>
@@ -198,16 +198,9 @@ public class <input.engine_name><input.tr_name_capitalized>DAO
 <endif>
 <endif>
 }; separator="\n\n">
+<endif>
 
-      // custom selects-for-update
-<input.custom_selects_for_update:{sql|
-<if(!sql.dynamic)>
-      /**
-       * The <sql.id> SQL.
-       */
-     public static final String <sql.idAsConstant>_SQL =
-         <sql.splittedQuotedValue; separator=" +\n">;}; separator="\n\n">
-               
+<if (input.custom_updates_or_inserts)>
       // custom updates or inserts
 <input.custom_updates_or_inserts:{sql|
 <if(!sql.dynamic)>
@@ -220,12 +213,13 @@ public class <input.engine_name><input.tr_name_capitalized>DAO
 <endif>
 <endif>
 }; separator="\n\n">
+<endif>
 
     /**
-     * Builds a \<code><input.engine_name><input.tr_name_capitalized>DAO\</code> instance
+     * Builds a {@link <input.engine_name><input.tr_name_capitalized>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
-     * @param daoListener the \<code><input.tr_name_capitalized>DAOListener\</code> instance.
+     * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
      <precondition_notnull("dataSource")>
      <precondition_notnull("daoListener")>
      */

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,19 +40,19 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.nio.charset.Charset;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Is able to generate value object factories according to
@@ -284,10 +283,13 @@ public class XMLValueObjectFactoryTemplate
                 @Nullable String t_strFieldType =
                     metadataTypeManager.getNativeType(t_iColumnType, t_bAllowsNull);
 
+                boolean t_bIsNull =
+                    metadataManager.isBoolean(tableTemplate.getTableName(), t_strField);
+
                 if  (t_bAllowsNull)
                 {
                     t_strFieldType =
-                        metadataTypeManager.getSmartObjectType(t_iColumnType);
+                        metadataTypeManager.getSmartObjectType(t_iColumnType, t_bIsNull);
                 }
 
                 t_sbFactoryMethodAttributeBuild.append(

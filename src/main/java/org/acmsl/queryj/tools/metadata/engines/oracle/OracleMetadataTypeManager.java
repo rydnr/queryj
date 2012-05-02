@@ -37,19 +37,15 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing Commons-Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,8 +53,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.sql.Types;
-import java.util.Map;
-import java.util.HashMap;
 
 /**
  * Customizes <code>JdbcMetadataTypeManager</code> for Oracle databases.
@@ -83,7 +77,7 @@ public class OracleMetadataTypeManager
     /**
      * Creates an empty <code>OracleMetadataTypeManager</code>.
      */
-    public OracleMetadataTypeManager() {};
+    public OracleMetadataTypeManager() {}
     
     /**
      * Retrieves an <code>OracleMetadataTypeManager</code> instance.
@@ -103,7 +97,7 @@ public class OracleMetadataTypeManager
      */
     public boolean isClob(final int dataType)
     {
-        boolean result = false;
+        boolean result;
 
         switch (dataType)
         {
@@ -129,7 +123,7 @@ public class OracleMetadataTypeManager
     public String getNativeType(
         final int dataType, final boolean allowsNull)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         switch  (dataType)
         {
@@ -149,11 +143,12 @@ public class OracleMetadataTypeManager
      * Retrieves the type of given data type.
      * @param dataType the data type.
      * @param allowsNull whether the field allows null or not.
+     * @param isBool whether the type represents boolean values.
      * @return the QueryJ type.
      */
-    public String getFieldType(final int dataType, final boolean allowsNull)
+    public String getFieldType(final int dataType, final boolean allowsNull, final boolean isBool)
     {
-        String result = "";
+        String result;
 
         switch  (dataType)
         {
@@ -162,7 +157,7 @@ public class OracleMetadataTypeManager
                 break;
 
             default:
-                result = super.getFieldType(dataType, allowsNull);
+                result = super.getFieldType(dataType, allowsNull, isBool);
                 break;
         }
 
@@ -177,7 +172,7 @@ public class OracleMetadataTypeManager
     @Nullable
     public String getStatementSetterFieldType(final int dataType)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         switch (dataType)
         {

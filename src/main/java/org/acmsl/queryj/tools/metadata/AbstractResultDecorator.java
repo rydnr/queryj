@@ -43,7 +43,6 @@ import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultElement;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing JDK classes.
@@ -406,7 +405,7 @@ public abstract class AbstractResultDecorator
                     {
                         result.add(
                             decoratorFactory.createDecorator(
-                                t_Property, metadataManager));
+                                t_Property, resultElement, customSqlProvider, metadataManager));
                     }
                     else
                     {

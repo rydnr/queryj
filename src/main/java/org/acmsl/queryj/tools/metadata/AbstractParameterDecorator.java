@@ -188,9 +188,10 @@ public abstract class AbstractParameterDecorator
     public String getObjectType(
         final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
+        // TODO; support boolean parameters
         return
             metadataTypeManager.getObjectType(
-                metadataTypeManager.getJavaType(type));
+                metadataTypeManager.getJavaType(type), false);
     }
 
     /**

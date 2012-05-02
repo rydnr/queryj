@@ -1,9 +1,8 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
-                              chous@acm-sl.org
+                        chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -20,7 +19,12 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
     Thanks to ACM S.L. for distributing this library under the GPL license.
-    Contact info: jose.sanleandro@acm-sl.com
+    Contact info: chous@acm-sl.org
+    Postal Address: c/Playa de Lagoa, 1
+                    Urb. Valdecabanas
+                    Boadilla del monte
+                    28660 Madrid
+                    Spain
 
  ******************************************************************************
  *
@@ -37,6 +41,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
@@ -55,48 +60,59 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Abstract factory for template-specific decorators.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * @author <a href="mailto:chous@acm-sl.org"
+ *         >Jose San Leandro</a>
  */
 public interface DecoratorFactory
-    extends  Factory,
-             Serializable
+    extends  Factory
 {
     /**
-     * Creates an {@link AttributeDecorator} for given
+     * Creates an <code>AttributeDecorator</code> for given
      * attribute instance.
      * @param attribute the attribute.
-     * @param metadataManager the {@link MetadataManager} instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
-    @NotNull
     public AttributeDecorator createDecorator(
         final Attribute attribute, final MetadataManager metadataManager);
 
     /**
-     * Creates a {@link PropertyDecorator} for given
-     * property instance.
-     * @param property the property.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @return the decorated property for the concrete template.
+     * Creates an <code>ParameterDecorator</code> for given
+     * parameter instance.
+     * @param parameter the parameter.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated attribute for the concrete template.
      */
-    @NotNull
-    public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager);
+    public ParameterDecorator createDecorator(
+        final Parameter parameter, final MetadataManager metadataManager);
 
     /**
-     * Creates a {@link ResultDecorator} for given
+     * Creates a <code>PropertyDecorator</code> for given
+     * property instance.
+     * @param property the property.
+     * @param result the result.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated property for the concrete template.
+     */
+    public PropertyDecorator createDecorator(
+        final Property property,
+        final Result result,
+        final CustomSqlProvider customSqlProvider,
+        final MetadataManager metadataManager);
+
+    /**
+     * Creates a <code>ResultDecorator</code> for given
      * result instance.
      * @param result the custom result.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated result for the concrete template.
      */
-    @NotNull
     public ResultDecorator createDecorator(
         final Result result,
         final CustomSqlProvider customSqlProvider,
@@ -109,7 +125,6 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
      */
-    @NotNull
     public SqlDecorator createDecorator(
         final Sql sql,
         final CustomSqlProvider customSqlProvider,
@@ -121,8 +136,25 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated table for the concrete template.
      */
-    @NotNull
     public TableDecorator createTableDecorator(
+        final String table, final MetadataManager metadataManager);
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     */
+    public List decorateAttributes(
+        final String table, final MetadataManager metadataManager);
+
+    /**
+     * Retrieves the decorated list of attributes of given table.
+     * @param table the table.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the attribute list
+     */
+    public List decoratePrimaryKey(
         final String table, final MetadataManager metadataManager);
 
     /**
@@ -136,7 +168,7 @@ public interface DecoratorFactory
     @NotNull
     public ForeignKeyDecorator createDecorator(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull);
 }

@@ -99,7 +99,7 @@ public class STUtils
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
-     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * @param errorListener the {@link StringTemplateErrorListener}
      * instance.
      * @return such instance.
      * @precondition path != null
@@ -131,16 +131,12 @@ public class STUtils
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param theme the theme.
-     * @param errorListener the <code>StringTemplateErrorListener</code>
-     * instance.
+     * @param errorListener the {@link StringTemplateErrorListener} instance.
      * @return such instance.
-     * @precondition path != null
-     * @precondition theme != null
      */
     @Nullable
     protected StringTemplateGroup retrieveGroup(
-        final String path, final StringTemplateErrorListener errorListener)
+        @NotNull final String path, @NotNull final StringTemplateErrorListener errorListener)
     {
         @Nullable StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
         
@@ -156,20 +152,17 @@ public class STUtils
     /**
      * Retrieves the string template group.
      * @param path the path.
-     * @param theme the theme.
-     * @param errorListener the <code>StringTemplateErrorListener</code>
+     * @param errorListener the {@link StringTemplateErrorListener}
      * instance.
      * @return such instance.
-     * @precondition path != null
-     * @precondition theme != null
      */
     @Nullable
     protected StringTemplateGroup retrieveUncachedGroup(
-        final String path, final StringTemplateErrorListener errorListener)
+        @NotNull final String path, @NotNull final StringTemplateErrorListener errorListener)
     {
         @Nullable StringTemplateGroup result = null;
 
-        InputStream t_Input = STUtils.class.getResourceAsStream(path);
+        @NotNull InputStream t_Input = STUtils.class.getResourceAsStream(path);
 
         result =
             new StringTemplateGroup(

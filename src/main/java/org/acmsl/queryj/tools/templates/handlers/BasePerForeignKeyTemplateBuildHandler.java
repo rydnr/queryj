@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,7 +37,6 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -51,18 +49,21 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,7 +88,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     /**
      * Creates a <code>BasePerForeignKeyTemplateBuildHandler</code> instance.
      */
-    public BasePerForeignKeyTemplateBuildHandler() {};
+    public BasePerForeignKeyTemplateBuildHandler() {}
 
     /**
      * Handles given information.
@@ -168,7 +169,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param quote the quote character.
      * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param templateFactory the {@link BasePerForeignKeyTemplateFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
@@ -372,7 +373,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull ForeignKey[] result = (ForeignKey[]) parameters.get(FOREIGN_KEYS);
+        @Nullable ForeignKey[] result = (ForeignKey[]) parameters.get(FOREIGN_KEYS);
 
         if  (result == null)
         {
@@ -390,7 +391,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
             result =
                 (ForeignKey[])
-                    t_cForeignKeys.toArray(EMPTY_FOREIGNKEY_ARRAY);
+                    t_cForeignKeys.toArray(new ForeignKey[t_iLength]);
+        }
+
+        if (result == null)
+        {
+            result = EMPTY_FOREIGNKEY_ARRAY;
         }
 
         return result;
@@ -510,7 +516,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     {
         @Nullable ForeignKey result = null;
 
-        @NotNull Collection t_cAttributes = new ArrayList();
+        @NotNull List t_lAttributes = new ArrayList();
 
         int t_iAttributeLength = (attributes != null) ? attributes.length : 0;
 
@@ -532,7 +538,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
             if  (t_Attribute != null)
             {
-                t_cAttributes.add(t_Attribute);
+                t_lAttributes.add(t_Attribute);
 
                 if  (   (!t_bAllowsNull)
                      && (t_Attribute.getAllowsNull()))
@@ -544,7 +550,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         result =
             new ForeignKeyValueObject(
-                sourceTable, t_cAttributes, targetTable, t_bAllowsNull);
+                sourceTable, t_lAttributes, targetTable, t_bAllowsNull);
 
         return result;
     }
@@ -579,9 +585,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         boolean t_bAllowsNull =
             metadataManager.allowsNull(tableName, attributeName);
-        
+
+        boolean t_bIsBool =
+            metadataManager.isBoolean(tableName, attributeName);
+
         String t_strFieldType =
-            metadataTypeManager.getFieldType(t_iType, t_bAllowsNull);
+            metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
 
         boolean t_bManagedExternally =
             metadataManager.isManagedExternally(tableName, attributeName);
@@ -594,11 +603,17 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     t_strNativeType,
                     t_strFieldType,
                     tableName,
+                    metadataManager.getTableComment(tableName),
                     t_bManagedExternally,
                     t_bAllowsNull,
-                    null), // value
+                    null, // value
+                    metadataManager.isReadOnly(tableName, attributeName),
+                    metadataManager.isBoolean(tableName, attributeName),
+                    metadataManager.getBooleanTrue(tableName, attributeName),
+                    metadataManager.getBooleanFalse(tableName, attributeName),
+                    metadataManager.getBooleanNull(tableName, attributeName)),
                 metadataManager);
-        
+
         return result;
     }
 }

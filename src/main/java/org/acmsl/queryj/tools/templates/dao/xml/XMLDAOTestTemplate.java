@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,29 +39,24 @@ package org.acmsl.queryj.tools.templates.dao.xml;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.TestTemplate;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Template for creating JUnit tests to ensure generated XML DAOs
@@ -515,6 +509,11 @@ public class XMLDAOTestTemplate
 
                 @NotNull MessageFormat t_Formatter = t_TestParametersValuesFormatter;
 
+                boolean t_bIsBool =
+                    metadataManager.isBoolean(
+                        tableTemplate.getTableName(),
+                        t_astrColumnNames[t_iColumnIndex]);
+
                 if  (   (t_bAllowsNull)
                      && (metadataTypeManager.isPrimitive(t_iColumnType)))
                 {
@@ -524,7 +523,7 @@ public class XMLDAOTestTemplate
                     t_aParams =
                         new Object[]
                         {
-                            metadataTypeManager.getSmartObjectType(t_iColumnType),
+                            metadataTypeManager.getSmartObjectType(t_iColumnType, t_bIsBool),
                             t_strTestValue.toUpperCase()
                         };
                 }

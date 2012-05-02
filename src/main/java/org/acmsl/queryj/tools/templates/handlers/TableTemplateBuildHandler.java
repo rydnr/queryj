@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,18 +36,18 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -262,7 +261,10 @@ public class TableTemplateBuildHandler
                         t_aTableTemplates[t_iTableIndex].addFieldType(
                             t_astrColumnNames[t_iColumnIndex],
                             t_MetadataTypeManager.getQueryJFieldType(
-                                t_iColumnType));
+                                t_iColumnType,
+                                metadataManager.isBoolean(
+                                    t_astrTableNames[t_iTableIndex],
+                                    t_astrColumnNames[t_iColumnIndex])));
                     }
                 }
             }

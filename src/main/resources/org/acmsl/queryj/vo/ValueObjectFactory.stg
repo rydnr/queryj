@@ -145,7 +145,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a \<code\><input.vo_name>ValueObject} instance.
 <if(parent)>
      <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
@@ -153,9 +153,9 @@ public class <input.vo_name>ValueObjectFactory
 <endif>
 
 <if(table.voDecorated)>
-     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+     * @return the new \{@link <input.vo_name>Decorated} instance.
 <else>
-     * @return the new \<code><input.vo_name>\</code> instance.
+     * @return the new \{@link <input.vo_name>} instance.
 <endif>
 
      */
@@ -195,7 +195,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a \<code\><input.vo_name>ValueObject} instance.
 <if(parent)>
      <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
@@ -203,9 +203,9 @@ public class <input.vo_name>ValueObjectFactory
 <endif>
 
 <if(table.voDecorated)>
-     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+     * @return the new \{@link <input.vo_name>Decorated} instance.
 <else>
-     * @return the new \<code><input.vo_name>\</code> instance.
+     * @return the new \{@link <input.vo_name>} instance.
 <endif>
 
      */
@@ -237,7 +237,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a \<code\><input.vo_name>ValueObject} instance.
 <if(parent)>
      <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
@@ -245,9 +245,9 @@ public class <input.vo_name>ValueObjectFactory
 <endif>
 
 <if(table.voDecorated)>
-     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+     * @return the new \{@link <input.vo_name>Decorated} instance.
 <else>
-     * @return the new \<code><input.vo_name>\</code> instance.
+     * @return the new \{@link <input.vo_name>} instance.
 <endif>
 
      */
@@ -278,7 +278,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a \<code\><input.vo_name>ValueObject} instance.
 <if(parent)>
      <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
@@ -286,9 +286,9 @@ public class <input.vo_name>ValueObjectFactory
 <endif>
 
 <if(table.voDecorated)>
-     * @return the new \<code><input.vo_name>Decorated\</code> instance.
+     * @return the new \{@link <input.vo_name>Decorated} instance.
 <else>
-     * @return the new \<code><input.vo_name>\</code> instance.
+     * @return the new \{@link <input.vo_name>} instance.
 <endif>
 
      */

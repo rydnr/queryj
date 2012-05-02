@@ -465,10 +465,11 @@ public class CustomSqlValidationHandler
             }
             else
             {
+                // TODO: support boolean properties/parameters
                 t_strType =
                     metadataTypeManager.getObjectType(
                         metadataTypeManager.getJavaType(
-                            t_Parameter.getType()));
+                            t_Parameter.getType()), false);
 
                 t_Type =
                     retrieveType(t_strType, t_Parameter.getType());

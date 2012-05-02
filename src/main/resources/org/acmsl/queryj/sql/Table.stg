@@ -187,7 +187,7 @@ public class <input.table_name_capitalized>Table
     }
 
     /**
-     * Retrieves a \<code><input.table_name_capitalized>Table\</code> instance.
+     * Retrieves a \{@link <input.table_name_capitalized>Table} instance.
      * @param alias the desired table alias.
      * @return such instance.
      */
@@ -219,7 +219,7 @@ public class <input.table_name_capitalized>Table
     }
 
     /**
-     * Retrieves a \<code><input.table_name_capitalized>Table\</code> instance.
+     * Retrieves a \{@link <input.table_name_capitalized>Table} instance.
      * @return such instance.
      */
 <if(parent)>
@@ -243,7 +243,7 @@ public class <input.table_name_capitalized>Table
 
 <if(input.attributes)>
     /**
-     * Retrieves \<code>all\</code> fields
+     * Retrieves \{@link all} fields
      * It's equivalent to a star in a query.
      * @return such fields.
      */
@@ -257,7 +257,7 @@ public class <input.table_name_capitalized>Table
     }
 <else>
     /**
-     * Retrieves \<code>all\</code> fields, which in these case is an empty
+     * Retrieves \{@link all} fields, which in these case is an empty
      * set.
      * @return such fields.
      */

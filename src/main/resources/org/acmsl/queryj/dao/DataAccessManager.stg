@@ -165,7 +165,7 @@ dao_attribute_declaration(table) ::= <<
  @param table the table.
 !>
 /**
- * The \<code><table.voName>DAO\</code> reference (cached whereas Manager
+ * The \{@link <table.voName>DAO} reference (cached whereas Manager
  * instance is not garbage collected).
  */
 private <table.voName>DAO m__<table.voName>DAO;
@@ -177,7 +177,7 @@ repository_dao_attribute_declaration(repositoryCapitalized) ::= <<
  @param repositoryCapitalized the repository, capitalized.
 !>
 /**
- * The \<code><repositoryCapitalized>DAO\</code> reference (cached whereas Manager
+ * The \{@link <repositoryCapitalized>DAO} reference (cached whereas Manager
  * instance is not garbage collected).
  */
 private <repositoryCapitalized>DAO m__<repositoryCapitalized>DAO;
@@ -189,7 +189,7 @@ dao_methods(table) ::= <<
  @param table the table.
 !>
 /**
- * Specifies the new \<code><table.voName>DAO\</code> reference to keep.
+ * Specifies the new \{@link <table.voName>DAO} reference to keep.
  * @param dao the new DAO.
  */
 protected void set<table.voName>DAOReference(final <table.voName>DAO dao)
@@ -198,7 +198,7 @@ protected void set<table.voName>DAOReference(final <table.voName>DAO dao)
 }
 
 /**
- * Retrieves the existing \<code><table.voName>DAO\</code> reference.
+ * Retrieves the existing \{@link <table.voName>DAO} reference.
  * @return a DAO instance for accessing <table.name> information.
  */
 protected <table.voName>DAO get<table.voName>DAOReference()
@@ -207,7 +207,7 @@ protected <table.voName>DAO get<table.voName>DAOReference()
 }
 
 /**
- * Retrieves a \<code><table.voName>DAO\</code>.
+ * Retrieves a \{@link <table.voName>DAO}.
  * @return a DAO instance for accessing <table.name> information.
  */
 public <table.voName>DAO get<table.voName>DAO()
@@ -238,7 +238,7 @@ repository_dao_methods(repository, repositoryCapitalized) ::= <<
  @param repositoryCapitalized the repository, capitalized.
 !>
 /**
- * Specifies the new \<code><repositoryCapitalized>DAO\</code> reference to keep.
+ * Specifies the new \{@link <repositoryCapitalized>DAO} reference to keep.
  * @param dao the new DAO.
  */
 protected void set<repositoryCapitalized>DAOReference(final <repositoryCapitalized>DAO dao)
@@ -247,7 +247,7 @@ protected void set<repositoryCapitalized>DAOReference(final <repositoryCapitaliz
 }
 
 /**
- * Retrieves the existing \<code><repositoryCapitalized>DAO\</code> reference.
+ * Retrieves the existing \{@link <repositoryCapitalized>DAO} reference.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
 protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
@@ -256,7 +256,7 @@ protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
 }
 
 /**
- * Retrieves a \<code><repositoryCapitalized>DAO\</code>.
+ * Retrieves a \{@link <repositoryCapitalized>DAO}.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
 public <repositoryCapitalized>DAO get<repositoryCapitalized>DAO()

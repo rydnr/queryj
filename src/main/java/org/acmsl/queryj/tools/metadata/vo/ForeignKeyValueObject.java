@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,14 +33,9 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-
-/*
  * Importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Models foreign keys.
@@ -62,7 +56,7 @@ public class ForeignKeyValueObject
      */
     public ForeignKeyValueObject(
         final String sourceTableName,
-        final Collection attributes,
+        final List attributes,
         final String targetTableName,
         final boolean allowsNull)
     {
