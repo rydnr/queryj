@@ -37,24 +37,22 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,12 +60,12 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler<ValueObjectTemplate, ValueObjectTemplateGenerator>
 {
     /**
      * Creates a <code>ValueObjectTemplateWritingHandler</code> instance.
      */
-    public ValueObjectTemplateWritingHandler() {};
+    public ValueObjectTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -75,25 +73,27 @@ public class ValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected ValueObjectTemplateGenerator retrieveTemplateGenerator()
     {
         return ValueObjectTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
+     * @throws org.acmsl.queryj.tools.QueryJBuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
+    @SuppressWarnings("unechecked")
+    protected List<ValueObjectTemplate> retrieveTemplates(
         @NotNull final Map parameters)
-      throws  BuildException
+        throws QueryJBuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<ValueObjectTemplate>)
                 parameters.get(
                     TemplateMappingManager.VALUE_OBJECT_TEMPLATES);
     }
@@ -109,23 +109,23 @@ public class ValueObjectTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      * @precondition projectFolder != null
      * @precondition projectPackage != null
      * @precondition engineName != null
      * @precondition packageUtils != null
      */
-    @Nullable
+    @NotNull
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String tableName,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             packageUtils.retrieveValueObjectFolder(

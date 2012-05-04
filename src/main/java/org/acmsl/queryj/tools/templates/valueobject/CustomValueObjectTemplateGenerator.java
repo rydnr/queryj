@@ -58,9 +58,9 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate custom ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  BasePerCustomResultTemplateFactory<T>,
+public class CustomValueObjectTemplateGenerator
+    extends AbstractTemplateGenerator<CustomValueObjectTemplate>
+    implements  BasePerCustomResultTemplateFactory<CustomValueObjectTemplate>,
                 Singleton
 {
     /**
@@ -98,25 +98,24 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * @precondition repositoryName != null
      */
     @Nullable
-    public T createTemplate(
+    public CustomValueObjectTemplate createTemplate(
         @NotNull final Result customResult,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header)
     {
-        @Nullable T result = null;
+        @Nullable CustomValueObjectTemplate result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
                  metadataManager))
         {
             result =
-                (T)
                 new CustomValueObjectTemplate(
                     customResult,
                     customSqlProvider,
@@ -214,7 +213,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * @return the class name.
      * @precondition fqcn != null
      */
-    @Nullable
+    @NotNull
     public String extractClassName(@NotNull final String fqcn)
     {
         return extractClassName(fqcn, PackageUtils.getInstance());
@@ -228,9 +227,9 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * @precondition fqcn != null
      * @precondition packageUtils != null
      */
-    @Nullable
+    @NotNull
     protected String extractClassName(
-        final String fqcn, @NotNull final PackageUtils packageUtils)
+        @NotNull final String fqcn, @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.extractClassName(fqcn);
     }
@@ -239,7 +238,7 @@ public class CustomValueObjectTemplateGenerator<T extends CustomValueObjectTempl
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final  T template)
+    public String retrieveTemplateFileName(@NotNull final  CustomValueObjectTemplate template)
     {
         return
             extractClassName(template.getResult().getClassValue())

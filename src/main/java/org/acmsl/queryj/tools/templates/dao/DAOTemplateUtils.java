@@ -245,7 +245,7 @@ public class DAOTemplateUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOTemplateUtils() {};
+    protected DAOTemplateUtils() {}
 
     /**
      * Retrieves a DAOTemplateUtils instance.
@@ -896,9 +896,9 @@ public class DAOTemplateUtils
      * @precondition metaLanguageUtils != null
      * @precondition metadataUtils != null
      */
-    @Nullable
+    @NotNull
     public Collection queryContents(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final MetaLanguageUtils metaLanguageUtils,
@@ -933,11 +933,11 @@ public class DAOTemplateUtils
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
-    @Nullable
-    public Collection queryContents(
-        final String tableName,
+    @NotNull
+    public Collection<Row> queryContents(
+        @NotNull final String tableName,
         @NotNull final String staticAttributeName,
-        final Collection attributes,
+        @NotNull final Collection<Attribute> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  SQLException
@@ -972,18 +972,18 @@ public class DAOTemplateUtils
      * @precondition decoratorFactory != null
      * @precondition metaData != null
      */
-    @Nullable
-    protected Collection queryContents(
-        final String tableName,
+    @NotNull
+    protected Collection<Row> queryContents(
+        @NotNull final String tableName,
         @NotNull final String staticAttributeName,
-        final Collection attributes,
+        @NotNull final Collection<Attribute> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DatabaseMetaData metaData)
       throws  SQLException
     {
-        @Nullable Collection result = null;
+        @Nullable Collection<Row> result = null;
 
         try
         {
@@ -1010,7 +1010,7 @@ public class DAOTemplateUtils
 
         if  (result == null)
         {
-            result = new ArrayList();
+            result = new ArrayList<Row>();
         }
 
         return result;
@@ -1038,10 +1038,10 @@ public class DAOTemplateUtils
      * @precondition connection != null
      */
     @NotNull
-    protected Collection queryContents(
-        final String tableName,
+    protected Collection<Row> queryContents(
+        @NotNull final String tableName,
         @NotNull final String staticAttributeName,
-        @Nullable final Collection attributes,
+        @NotNull final Collection<Attribute> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -1049,7 +1049,7 @@ public class DAOTemplateUtils
         @NotNull final Connection connection)
       throws  SQLException
     {
-        @NotNull Collection result = new ArrayList();
+        @NotNull Collection<Row> result = new ArrayList<Row>();
 
         Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
         
@@ -1206,11 +1206,11 @@ public class DAOTemplateUtils
      * @precondition names.length == values.length
      */
     protected void reorderAttributes(
-        @Nullable final Collection attributes,
-        final String[] names,
-        final String[] values)
+        @Nullable final Collection<Attribute> attributes,
+        @NotNull final String[] names,
+        @NotNull final String[] values)
     {
-        @Nullable Iterator t_itAttributeIterator =
+        @Nullable Iterator<Attribute> t_itAttributeIterator =
             (attributes != null) ? attributes.iterator() : null;
 
         if  (t_itAttributeIterator != null)
@@ -1226,25 +1226,19 @@ public class DAOTemplateUtils
 
             while  (t_itAttributeIterator.hasNext())
             {
-                t_Item = t_itAttributeIterator.next();
+                t_CurrentAttribute = (Attribute) t_itAttributeIterator.next();
 
-                if  (t_Item instanceof Attribute)
+                t_iPosition =
+                    retrieveAttributeIndex(t_CurrentAttribute.getName(), names);
+
+                if  (   (t_iPosition >= 0)
+                     && (t_iPosition < t_iCount))
                 {
-                    t_CurrentAttribute = (Attribute) t_Item;
-
-                    t_iPosition =
-                        retrieveAttributeIndex(
-                            t_CurrentAttribute.getName(), names);
-
-                    if  (   (t_iPosition >= 0)
-                         && (t_iPosition < t_iCount))
-                    {
-                        t_astrAuxNames[t_iIndex] = names[t_iPosition];
-                        t_astrAuxValues[t_iIndex] = values[t_iPosition];
-                    }
-
-                    t_iIndex++;
+                    t_astrAuxNames[t_iIndex] = names[t_iPosition];
+                    t_astrAuxValues[t_iIndex] = values[t_iPosition];
                 }
+
+                t_iIndex++;
             }
 
             copyArray(t_astrAuxNames, names);
@@ -1287,7 +1281,7 @@ public class DAOTemplateUtils
      * @precondition target != null
      * @precondition source.length <= target.length
      */
-    protected void copyArray(@Nullable final String[] source, final String[] target)
+    protected void copyArray(@Nullable final String[] source, @NotNull final String[] target)
     {
         int t_iCount = (source != null) ? source.length : 0;
 

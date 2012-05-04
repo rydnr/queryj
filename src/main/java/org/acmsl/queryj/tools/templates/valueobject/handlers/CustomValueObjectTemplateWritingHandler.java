@@ -35,39 +35,34 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Writes ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectTemplateWritingHandler<T extends CustomValueObjectTemplate>
-    extends  BasePerCustomResultTemplateWritingHandler
+public class CustomValueObjectTemplateWritingHandler
+    extends  BasePerCustomResultTemplateWritingHandler<CustomValueObjectTemplate>
 {
     /**
      * Creates a CustomValueObjectTemplateWritingHandler.
@@ -75,12 +70,11 @@ public class CustomValueObjectTemplateWritingHandler<T extends CustomValueObject
     public CustomValueObjectTemplateWritingHandler() {}
 
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected TemplateGenerator<T> retrieveTemplateGenerator()
+    protected CustomValueObjectTemplateGenerator retrieveTemplateGenerator()
     {
         return CustomValueObjectTemplateGenerator.getInstance();
     }
@@ -89,22 +83,24 @@ public class CustomValueObjectTemplateWritingHandler<T extends CustomValueObject
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @throws BuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override
-    protected T[] retrieveTemplates(
+    @SuppressWarnings("unchecked")
+    protected List<CustomValueObjectTemplate> retrieveTemplates(
         @NotNull final Map parameters)
-        throws  BuildException
+        throws QueryJBuildException
     {
         return
-            (T[])
+            (List<CustomValueObjectTemplate>)
                 parameters.get(
                     TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
+     *
+     *
      * @param result the result element.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.
@@ -114,23 +110,23 @@ public class CustomValueObjectTemplateWritingHandler<T extends CustomValueObject
      * using a different package naming scheme.
      * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @param packageUtils the {@link PackageUtils} instance.
+     * @param packageUtils the {@link org.acmsl.queryj.tools.PackageUtils} instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process fails
      */
-    @Nullable
+    @NotNull
     @Override
     protected File retrieveOutputDir(
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             retrieveOutputDir(
@@ -147,18 +143,18 @@ public class CustomValueObjectTemplateWritingHandler<T extends CustomValueObject
      * @param useSubfolders whether to use subfolders or not.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
+     * @throws QueryJBuildException if the output-dir retrieval process fails.
      * @precondition projectOutputDir != null
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
-    @Nullable
+    @NotNull
     protected File retrieveOutputDir(
         @NotNull final File projectOutputDir,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
+      throws  QueryJBuildException
     {
         return
             packageUtils.retrieveValueObjectFolder(

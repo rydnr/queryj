@@ -60,28 +60,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Builds all templates to generate sources for each custom result.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerCustomResultTemplate, TF extends BasePerCustomResultTemplateFactory<T>>
+public abstract class BasePerCustomResultTemplateBuildHandler
+    <T extends BasePerCustomResultTemplate,
+     TF extends BasePerCustomResultTemplateFactory<T>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
-    /**
-     * A cached empty Result array.
-     */
-    public static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
-
-    /**
-     * A cached empty BasePerCustomResultTemplate array.
-     */
-    public static final BasePerCustomResultTemplate[]
-        EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY =
-            new BasePerCustomResultTemplate[0];
-
     /**
      * The key for storing the custom RESULT in the parameter map.
      */
@@ -117,16 +108,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
      * @precondition metaData != null
      */
     protected void buildTemplates(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @Nullable final DatabaseMetaData metaData)
       throws  QueryJBuildException
     {
         try
         {
             buildTemplates(
                 parameters,
-                metaData.getDatabaseProductName(),
-                retrieveDatabaseProductVersion(metaData),
-                fixQuote(metaData.getIdentifierQuoteString()));
+                (metaData != null) ? metaData.getDatabaseProductName() : "",
+                (metaData != null) ? metaData.getDatabaseProductVersion() : "");
         }
         catch  (@NotNull final SQLException sqlException)
         {
@@ -142,24 +132,20 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      * @precondition engineName != null
-     * @precondition quote != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
         final String engineName,
-        final String engineVersion,
-        final String quote)
+        final String engineVersion)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
             engineName,
             engineVersion,
-            quote,
             retrieveMetadataManager(parameters),
             retrieveCustomSqlProvider(parameters));
     }
@@ -169,7 +155,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom RESULT provider.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -181,7 +166,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
         @NotNull final Map parameters,
         final String engineName,
         final String engineVersion,
-        final String quote,
         final MetadataManager metadataManager,
         final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
@@ -190,15 +174,13 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
             parameters,
             engineName,
             engineVersion,
-            quote,
             metadataManager,
             customSqlProvider,
             retrieveTemplateFactory(),
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
-            retrieveCustomResult(
-                parameters, customSqlProvider, metadataManager));
+            retrieveCustomResult(parameters, customSqlProvider));
     }
 
     /**
@@ -212,7 +194,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom result provider.
      * @param templateFactory the template factory.
@@ -234,7 +215,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
         @NotNull final Map parameters,
         @NotNull final String engineName,
         @NotNull final String engineVersion,
-        @Nullable final String quote,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -246,42 +226,44 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
     {
         int t_iLength = (resultElements != null) ? resultElements.length : 0;
 
-        @NotNull Collection<T> t_cTemplates = new ArrayList<T>();
+        @NotNull List<T> t_lTemplates = new ArrayList<T>();
 
-        @Nullable Result t_ResultElement = null;
+        @Nullable Result t_ResultElement;
 
-        @Nullable T t_Template = null;
+        @Nullable T t_Template;
 
         try
         {
             for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
             {
-                t_ResultElement = resultElements[t_iIndex];
-
-                t_Template =
-                    templateFactory.createTemplate(
-                        t_ResultElement,
-                        customSqlProvider,
-                        metadataManager,
-                        retrievePackage(
-                            t_ResultElement,
-                            customSqlProvider,
-                            metadataManager,
-                            engineName,
-                            parameters),
-                        engineName,
-                        engineVersion,
-                        projectPackage,
-                        repository,
-                        header);
-
-                if  (t_Template != null)
+                if (resultElements != null)
                 {
-                    t_cTemplates.add(t_Template);
-                }
-                else
-                {
-                    int a = -5;
+                    t_ResultElement = resultElements[t_iIndex];
+
+                    if (t_ResultElement != null)
+                    {
+                        t_Template =
+                            templateFactory.createTemplate(
+                                t_ResultElement,
+                                customSqlProvider,
+                                metadataManager,
+                                retrievePackage(
+                                    t_ResultElement,
+                                    customSqlProvider,
+                                    metadataManager,
+                                    engineName,
+                                    parameters),
+                                engineName,
+                                engineVersion,
+                                projectPackage,
+                                repository,
+                                header);
+
+                        if  (t_Template != null)
+                        {
+                            t_lTemplates.add(t_Template);
+                        }
+                    }
                 }
             }
         }
@@ -292,11 +274,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
                     "Cannot create template", queryjException);
         }
 
-        storeTemplates(
-            (T[])
-            t_cTemplates.toArray(
-                EMPTY_BASEPERCUSTOMRESULTTEMPLATE_ARRAY),
-            parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -338,7 +316,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
      * @param projectPackage the project package.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
-     * @throws QueryJBuildException if the package retrieval process if faulty.
      */
     protected abstract String retrievePackage(
         @NotNull final Result customResult,
@@ -356,65 +333,51 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
      * @precondition parameters != null
      */
     protected abstract void storeTemplates(
-        @NotNull final T[] templates, @NotNull final Map parameters);
+        @NotNull final List<T> templates, @NotNull final Map parameters);
 
     /**
      * Retrieves the foreign keys.
      * @param parameters the parameter map.
      * @param customSqlProvider the custom RESULT provider.
-     * @param metadataManager the database metadata manager.
      * @return such templates.
      * @throws QueryJBuildException if the templates cannot be retrieved for any
      * reason.
      * @precondition parameters != null
      * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     protected Result[] retrieveCustomResult(
         @NotNull final Map parameters,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
     {
         @Nullable Result[] result = (Result[]) parameters.get(CUSTOM_RESULT);
 
         if  (result == null)
         {
-            result =
-                retrieveCustomResultElements(
-                    customSqlProvider, metadataManager);
+            result = retrieveCustomResultElements(customSqlProvider);
         }
 
-        if (result == null)
-        {
-            result = EMPTY_RESULT_ARRAY;
-        }
-        else
-        {
-            parameters.put(CUSTOM_RESULT, result);
-        }
+
+        parameters.put(CUSTOM_RESULT, result);
 
         return result;
     }
 
     /**
-     * Retrieves the custom RESULT elements.
+     * Retrieves the custom result elements.
      * @param customSqlProvider the custom RESULT provider.
-     * @param metadataManager the database metadata manager.
-     * @return such foreign keys.
-     * @precondition metadataManager != null
+     * @return such result elements.
      */
     @NotNull
     protected Result[] retrieveCustomResultElements(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        @NotNull Collection<Result> t_cResult = new ArrayList<Result>();
 
         @Nullable Collection t_cCollection =
-            (customSqlProvider != null)
-            ? customSqlProvider.getCollection() : null;
+            customSqlProvider.getCollection();
 
         if  (t_cCollection != null)
         {
@@ -422,7 +385,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
 
             if  (t_itElements != null)
             {
-                @Nullable Object t_Item = null;
+                @Nullable Object t_Item;
 
                 while  (t_itElements.hasNext())
                 {
@@ -430,12 +393,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler<T extends BasePerC
 
                     if  (t_Item instanceof Result)
                     {
-                        t_cResult.add(t_Item);
+                        t_cResult.add((Result) t_Item);
                     }
                 }
             }
         }
 
-        return (Result[]) t_cResult.toArray(EMPTY_RESULT_ARRAY);
+        return t_cResult.toArray(new Result[t_cResult.size()]);
     }
 }

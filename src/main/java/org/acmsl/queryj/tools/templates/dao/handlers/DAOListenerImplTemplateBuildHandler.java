@@ -56,13 +56,15 @@ import org.acmsl.queryj.tools.PackageUtils;
  * Importing some Apache Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -77,6 +79,7 @@ public class DAOListenerImplTemplateBuildHandler
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
+    @Override
     @NotNull
     protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
     {
@@ -154,6 +157,7 @@ public class DAOListenerImplTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @Override
     protected String retrievePackage(
         @NotNull final String engineName,
         final String projectPackage,
@@ -171,6 +175,8 @@ public class DAOListenerImplTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
         final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {

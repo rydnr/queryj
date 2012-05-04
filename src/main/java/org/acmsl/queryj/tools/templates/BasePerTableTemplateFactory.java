@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,19 +37,23 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents entities able to create per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerTableTemplateFactory
+public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
     extends  Factory
 {
     /**
@@ -70,16 +73,16 @@ public interface BasePerTableTemplateFactory
      * @return a template.
      */
     @Nullable
-    public BasePerTableTemplate createTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
+    public T createTemplate(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces);
 }

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,21 +36,21 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.BaseValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,7 +58,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseValueObjectTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler
+    extends BasePerTableTemplateBuildHandler<BaseValueObjectTemplate, BaseValueObjectTemplateGenerator>
 {
     /**
      * Creates a {@link BaseValueObjectTemplateBuildHandler} instance.
@@ -71,9 +70,9 @@ public class BaseValueObjectTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected BaseValueObjectTemplateGenerator retrieveTemplateFactory()
     {
-        return BaseValueObjectTemplateGenerator.getInstance();
+        return new BaseValueObjectTemplateGenerator();
     }
 
     /**
@@ -81,18 +80,19 @@ public class BaseValueObjectTemplateBuildHandler
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the {@link PackageUtils} instance.
+     * @param packageUtils the {@link org.acmsl.queryj.tools.PackageUtils} instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected String retrievePackage(
-        final String tableName,
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
+        throws QueryJBuildException
     {
         return
             packageUtils.retrieveValueObjectPackage(projectPackage);
@@ -105,8 +105,9 @@ public class BaseValueObjectTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<BaseValueObjectTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.BASE_VALUE_OBJECT_TEMPLATES, templates);

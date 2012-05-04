@@ -128,7 +128,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The database metadata.
      */
-    private DatabaseMetaData m__MetaData;
+    private transient DatabaseMetaData m__MetaData;
 
     /**
      * The metadata extraction listener.

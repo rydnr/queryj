@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -55,8 +54,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate custom BaseValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObjectTemplate>
-    extends  CustomValueObjectTemplateGenerator<T>
+public class CustomBaseValueObjectTemplateGenerator
+    extends  CustomValueObjectTemplateGenerator
     implements  Singleton
 {
     /**
@@ -85,18 +84,18 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
      */
     @Override
     @Nullable
-    public T createTemplate(
+    public CustomValueObjectTemplate createTemplate(
         @NotNull final Result customResult,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header)
     {
-        @Nullable BasePerCustomResultTemplate result = null;
+        @Nullable CustomBaseValueObjectTemplate result = null;
 
         if  (!isStandard(
                  extractClassName(customResult.getClassValue()),
@@ -116,7 +115,7 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
                     repositoryName);
         }
 
-        return (T) result;
+        return result;
     }
 
     /**
@@ -124,7 +123,7 @@ public class CustomBaseValueObjectTemplateGenerator<T extends CustomBaseValueObj
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final CustomValueObjectTemplate template)
     {
         return
               "Abstract"

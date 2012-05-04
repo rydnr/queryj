@@ -113,15 +113,15 @@ public class FkStatementSetterTemplateGenerator<T extends FkStatementSetterTempl
      */
     @NotNull
     public BasePerForeignKeyTemplate createTemplate(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header)
     {
         return
             new FkStatementSetterTemplate(

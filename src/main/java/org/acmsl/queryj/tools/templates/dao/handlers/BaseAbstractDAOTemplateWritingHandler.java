@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,17 +36,22 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.BaseAbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseAbstractDAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,7 +59,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseAbstractDAOTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler<BaseAbstractDAOTemplate, BaseAbstractDAOTemplateGenerator>
 {
     /**
      * Creates a {@link BaseAbstractDAOTemplateWritingHandler} instance.
@@ -68,23 +72,25 @@ public class BaseAbstractDAOTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected BaseAbstractDAOTemplateGenerator retrieveTemplateGenerator()
     {
         return BaseAbstractDAOTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
-        @NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected List<BaseAbstractDAOTemplate> retrieveTemplates(
+        @NotNull final Map parameters) throws BuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<BaseAbstractDAOTemplate>)
                 parameters.get(
                     TemplateMappingManager.BASE_ABSTRACT_DAO_TEMPLATES);
     }
@@ -109,11 +115,11 @@ public class BaseAbstractDAOTemplateWritingHandler
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String tableName,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

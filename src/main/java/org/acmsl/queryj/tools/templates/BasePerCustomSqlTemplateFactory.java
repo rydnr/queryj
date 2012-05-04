@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents entities able to create per-<i>custom sql</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerCustomSqlTemplateFactory
+public interface BasePerCustomSqlTemplateFactory<T extends BasePerCustomSqlTemplate>
     extends  Factory
 {
     /**
@@ -68,7 +68,7 @@ public interface BasePerCustomSqlTemplateFactory
      * @param header the file header.
      */
     @NotNull
-    public BasePerCustomSqlTemplate createTemplate(
+    public T createTemplate(
         final SqlElement sql,
         final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,

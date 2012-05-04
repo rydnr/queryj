@@ -180,6 +180,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
         if  (    (!alreadyDone)
               && (checkVendor(metaData, parameters)))
         {
+            analyzeMetaData(metaData, parameters);
+
             result =
                 /*
                 handle(
@@ -192,6 +194,37 @@ public abstract class DatabaseMetaDataRetrievalHandler
         }
 
         return result;
+    }
+
+    protected void analyzeMetaData(final DatabaseMetaData metaData, final Map parameters)
+    {
+        boolean t_bCaseSensitive = false;
+
+        try
+        {
+            t_bCaseSensitive =
+                metaData.storesLowerCaseIdentifiers()
+                || metaData.storesLowerCaseQuotedIdentifiers()
+                || metaData.storesMixedCaseIdentifiers()
+                || metaData.storesMixedCaseQuotedIdentifiers()
+                || metaData.storesUpperCaseIdentifiers()
+                || metaData.storesUpperCaseQuotedIdentifiers();
+        }
+        catch (@NotNull final SQLException cannotCheckCaseSensitivity)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot check whether the database engine is case sensitive or not.",
+                    cannotCheckCaseSensitivity);
+            }
+        }
+
+        storeCaseSensitive(t_bCaseSensitive, parameters);
     }
 
     /**
@@ -623,34 +656,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
         boolean result = false;
 
         storeMetadata(metaData, parameters);
-
-        boolean t_bCaseSensitive = false;
-
-        try
-        {
-            t_bCaseSensitive =
-                   metaData.storesLowerCaseIdentifiers()
-                || metaData.storesLowerCaseQuotedIdentifiers()
-                || metaData.storesMixedCaseIdentifiers()
-                || metaData.storesMixedCaseQuotedIdentifiers()
-                || metaData.storesUpperCaseIdentifiers()
-                || metaData.storesUpperCaseQuotedIdentifiers();
-        }
-        catch (@NotNull final SQLException cannotCheckCaseSensitivity)
-        {
-            Log t_Log =
-                UniqueLogFactory.getLog(
-                    DatabaseMetaDataRetrievalHandler.class);
-
-            if  (t_Log != null)
-            {
-                t_Log.error(
-                    "Cannot check whether the database engine is case sensitive or not.",
-                    cannotCheckCaseSensitivity);
-            }
-        }
-
-        storeCaseSensitive(t_bCaseSensitive, parameters);
 
         @Nullable AntTablesElement t_TablesElement = null;
 
@@ -1369,7 +1374,16 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     public boolean retrieveCaseSensitive(@NotNull final Map parameters)
     {
-        return (Boolean) parameters.get(CASE_SENSITIVE);
+        boolean result = false;
+
+        Boolean t_bCaseSensitive = (Boolean) parameters.get(CASE_SENSITIVE);
+
+        if (t_bCaseSensitive != null)
+        {
+            result = t_bCaseSensitive;
+        }
+
+        return result;
     }
 
     /**

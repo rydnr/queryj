@@ -51,7 +51,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents entities able to create per-<i>foreign key</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerForeignKeyTemplateFactory
+public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTemplate>
     extends  Factory
 {
     /**
@@ -67,16 +67,16 @@ public interface BasePerForeignKeyTemplateFactory
      * @param header the header.
      */
     @NotNull
-    public BasePerForeignKeyTemplate createTemplate(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header);
+    public T createTemplate(
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header);
 
     /**
      * Retrieves the decorator factory for each template.

@@ -39,7 +39,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -59,10 +58,10 @@ import org.jetbrains.annotations.NotNull;
  * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class ValueObjectImplTemplateGenerator<T extends ValueObjectImplTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  BasePerTableTemplateFactory,
-                BasePerTableTemplateGenerator<T>,
+public class ValueObjectImplTemplateGenerator
+    extends AbstractTemplateGenerator<ValueObjectImplTemplate>
+    implements  BasePerTableTemplateFactory<ValueObjectImplTemplate>,
+                BasePerTableTemplateGenerator<ValueObjectImplTemplate>,
                 Singleton
 {
     /**
@@ -117,17 +116,17 @@ public class ValueObjectImplTemplateGenerator<T extends ValueObjectImplTemplate>
      * @precondition repositoryName != null
      */
     @NotNull
-    public BasePerTableTemplate createTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
+    public ValueObjectImplTemplate createTemplate(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces)
     {
         return
@@ -150,6 +149,7 @@ public class ValueObjectImplTemplateGenerator<T extends ValueObjectImplTemplate>
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return VODecoratorFactory.getInstance();
@@ -159,7 +159,8 @@ public class ValueObjectImplTemplateGenerator<T extends ValueObjectImplTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template) {
+    public String retrieveTemplateFileName(@NotNull ValueObjectImplTemplate template)
+    {
         return
             retrieveTemplateFileName(
                 template,
@@ -179,16 +180,16 @@ public class ValueObjectImplTemplateGenerator<T extends ValueObjectImplTemplate>
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final ValueObjectImplTemplate template,
         @NotNull final ValueObjectTemplateGenerator generator,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
-        generator.getVoClassName(
+            generator.getVoClassName(
                 template.getTableName(),
                 englishGrammarUtils,
                 stringUtils)
-                + "ValueObject.java";
+            + "ValueObject.java";
     }
 }

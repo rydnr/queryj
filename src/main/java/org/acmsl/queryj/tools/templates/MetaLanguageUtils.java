@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.antlr.PerCommentLexer;
 import org.acmsl.queryj.tools.antlr.PerCommentParser;
 
@@ -55,7 +56,6 @@ import org.acmsl.commons.utils.StringValidator;
 /*
  * Importing some ANTLR 3 classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -64,6 +64,10 @@ import org.antlr.runtime.RecognitionException;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*

@@ -47,7 +47,6 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
@@ -70,10 +69,10 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class DAOListenerImplTemplateGenerator<T extends DAOListenerImplTemplate>
-    extends AbstractTemplateGenerator<T>
+public class DAOListenerImplTemplateGenerator
+    extends AbstractTemplateGenerator<DAOListenerImplTemplate>
     implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+                BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate>,
                 Singleton
 {
     /**
@@ -91,7 +90,7 @@ public class DAOListenerImplTemplateGenerator<T extends DAOListenerImplTemplate>
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOListenerImplTemplateGenerator() {}
+    public DAOListenerImplTemplateGenerator() {}
 
     /**
      * Retrieves a DAOListenerTemplateGenerator instance.
@@ -119,7 +118,7 @@ public class DAOListenerImplTemplateGenerator<T extends DAOListenerImplTemplate>
 //     * @throws QueryJException if the input values are invalid.
      */
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
+    public DAOListenerImplTemplate createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
@@ -151,7 +150,7 @@ public class DAOListenerImplTemplateGenerator<T extends DAOListenerImplTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final DAOListenerImplTemplate template)
     {
         return retrieveTemplateFileName(template, DecorationUtils.getInstance());
     }
@@ -163,7 +162,8 @@ public class DAOListenerImplTemplateGenerator<T extends DAOListenerImplTemplate>
      * @return such name.
      */
     @NotNull
-    protected String retrieveTemplateFileName(@NotNull final T template, @NotNull final DecorationUtils decorationUtils)
+    protected String retrieveTemplateFileName(
+        @NotNull final DAOListenerImplTemplate  template, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(template.getRepositoryName())

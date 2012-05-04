@@ -47,8 +47,6 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,18 +56,22 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,15 +80,11 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerTableTemplateBuildHandler
-    extends    AbstractQueryJCommandHandler
+       <T extends BasePerTableTemplate,
+        TF extends BasePerTableTemplateFactory<T>>
+    extends AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
-    /**
-     * An empty {@link BasePerTableTemplate} array.
-     */
-    protected static final BasePerTableTemplate[] EMPTY_BASEPERTABLETEMPLATE_ARRAY =
-        new BasePerTableTemplate[0];
-
     /**
      * The system property prefix to disable generation for concrete (or all, with *) tables.
      */
@@ -182,7 +180,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * Retrieves the template factory.
      * @return such instance.
      */
-    protected abstract BasePerTableTemplateFactory retrieveTemplateFactory();
+    protected abstract TF retrieveTemplateFactory();
 
     /**
      * Builds the template.
@@ -211,61 +209,68 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerTableTemplateFactory templateFactory,
-        final String projectPackage,
-        final String repository,
-        final String header,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
         int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
 
-        @NotNull Collection t_cTemplates = new ArrayList();
+        @NotNull List<T> t_lTemplates = new ArrayList<T>();
 
-        @Nullable BasePerTableTemplate t_Template;
+        @Nullable T t_Template;
 
         String t_strTableName;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
-            t_strTableName = tableTemplates[t_iIndex].getTableName();
+            @Nullable TableTemplate t_TableTemplate = null;
 
-            if (isGenerationAllowedForTable(t_strTableName))
+            if (tableTemplates != null)
             {
-                t_Template =
-                    createTemplate(
-                        templateFactory,
-                        t_strTableName,
-                        metadataManager,
-                        customSqlProvider,
-                        retrievePackage(
-                            t_strTableName, engineName, parameters),
-                        engineName,
-                        engineVersion,
-                        quote,
-                        projectPackage,
-                        repository,
-                        header,
-                        implementMarkerInterfaces,
-                        parameters);
+                t_TableTemplate = tableTemplates[t_iIndex];
+            }
 
-                if  (t_Template != null)
+            if (t_TableTemplate != null)
+            {
+                t_strTableName = t_TableTemplate.getTableName();
+
+                if (isGenerationAllowedForTable(t_strTableName))
                 {
-                    t_cTemplates.add(t_Template);
+                    t_Template =
+                        createTemplate(
+                            templateFactory,
+                            t_strTableName,
+                            metadataManager,
+                            customSqlProvider,
+                            retrievePackage(
+                                t_strTableName, engineName, parameters),
+                            engineName,
+                            engineVersion,
+                            quote,
+                            projectPackage,
+                            repository,
+                            header,
+                            implementMarkerInterfaces,
+                            parameters);
+
+                    if  (t_Template != null)
+                    {
+                        t_lTemplates.add(t_Template);
+                    }
                 }
             }
         }
 
-        storeTemplates(
-            (BasePerTableTemplate[])
-                t_cTemplates.toArray(EMPTY_BASEPERTABLETEMPLATE_ARRAY),
-            parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -278,7 +283,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected String retrievePackage(
-        final String tableName, final String engineName, @NotNull final Map parameters)
+        @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -291,20 +296,22 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Retrieves the package name.
+     *
+     *
+     *
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the {@link PackageUtils} instance.
+     * @param packageUtils the {@link org.acmsl.queryj.tools.PackageUtils} instance.
      * @return the package name.
-     * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
     protected abstract String retrievePackage(
-        final String tableName,
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils);
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils) throws QueryJBuildException;
 
     /**
      * Stores the template collection in given attribute map.
@@ -314,7 +321,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      */
     protected abstract void storeTemplates(
-        final BasePerTableTemplate[] templates, final Map parameters);
+        @NotNull final List<T> templates, @NotNull final Map parameters);
 
     /**
      * Retrieves the table templates.
@@ -334,47 +341,36 @@ public abstract class BasePerTableTemplateBuildHandler
     }
 
     /**
-     * Creates the template with given parameters.
-     * @param templateFactory the template factory.
+     * Creates a template with required information.
+     * @param templateFactory the {@link BasePerTableTemplateFactory} instance.
      * @param tableName the table name.
-     * @param metadataManager the{@link MetadataManager} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @param projectPackage the project package.
+     * @param engineName the database engine name.
+     * @param engineVersion the database engine version.
+     * @param quote the quote identifier.
+     * @param projectPackage the project's base package.
      * @param repository the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param parameters the parameters.
-     * @return the template.
-     * @throws QueryJBuildException if the template cannot be created.
-     * @precondition templateFactory != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition engineName != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition parameters != null
+     * @param header the custom file header.
+     * @param implementMarkerInterfaces whether to use marker interface or not.
+     * @param parameters the parameter map.
      */
     @Nullable
-    protected BasePerTableTemplate createTemplate(
-        @NotNull final BasePerTableTemplateFactory templateFactory,
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String projectPackage,
-        final String repository,
-        final String header,
+    protected T createTemplate(
+        @NotNull final TF templateFactory,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -401,8 +397,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition metadataManager != null
      */
     protected boolean isStaticTable(
-        final String tableName,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
         return
             isStaticTable(
@@ -420,7 +415,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition metaLanguageUtils != null
      */
     protected boolean isStaticTable(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
@@ -444,9 +439,9 @@ public abstract class BasePerTableTemplateBuildHandler
     @Nullable
     protected Collection retrieveStaticContent(
         @NotNull final Map parameters,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         @Nullable Collection result =
             retrieveCachedStaticContent(parameters, tableName);
@@ -461,7 +456,11 @@ public abstract class BasePerTableTemplateBuildHandler
                         metadataManager,
                         decoratorFactory,
                         DAOTemplateUtils.getInstance());
-                storeCachedStaticContent(result, parameters, tableName);
+
+                if (result != null)
+                {
+                    storeCachedStaticContent(result, parameters, tableName);
+                }
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -496,9 +495,9 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     @Nullable
     protected Collection retrieveStaticContent(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  SQLException
     {
@@ -517,7 +516,7 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     @Nullable
     protected Collection retrieveCachedStaticContent(
-        @NotNull final Map parameters, final String tableName)
+        @NotNull final Map parameters, @NotNull final String tableName)
     {
         return (Collection) parameters.get(buildStaticContentKey(tableName));
     }
@@ -531,10 +530,11 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition parameters != null
      * @precondition tableName != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeCachedStaticContent(
-        final Collection contents,
+        @NotNull final Collection contents,
         @NotNull final Map parameters,
-        final String tableName)
+        @NotNull final String tableName)
     {
         parameters.put(buildStaticContentKey(tableName), contents);
     }
@@ -546,7 +546,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @precondition tableName != null
      */
     @NotNull
-    protected Object buildStaticContentKey(final String tableName)
+    protected Object buildStaticContentKey(@NotNull final String tableName)
     {
         return "..static-contents-for-table-" + tableName + "..";
     }
@@ -571,7 +571,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tablesEnabled the environment property for enabled tables.
      * @param tableName the table name.
      * @return <code>true</code> in such case.
-     * @return such behavior.
      */
     protected final boolean isGenerationAllowedForTable(
         @Nullable final String tablesDisabled,
@@ -582,7 +581,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
         boolean t_bExplicitlyEnabled = false;
 
-        String[] t_astrEnabled = null;
+        @NotNull String[] t_astrEnabled;
 
         if (tablesEnabled != null)
         {
@@ -613,13 +612,6 @@ public abstract class BasePerTableTemplateBuildHandler
             }
         }
 
-        if (result)
-        {
-            // for debugging purposes
-            int a = -5;
-        }
-
         return result;
     }
-
 }

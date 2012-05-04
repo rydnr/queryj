@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -58,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,19 +113,20 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @Override
     protected void storeTemplates(
-        @Nullable final CustomResultSetExtractorTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<CustomResultSetExtractorTemplate> templates, @NotNull final Map parameters)
     {
         @NotNull final Collection<CustomResultSetExtractorTemplate> t_cFilteredTemplates =
             new ArrayList<CustomResultSetExtractorTemplate>();
         
-        int t_iCount = (templates != null) ? templates.length : 0;
+        int t_iCount = (templates != null) ? templates.size() : 0;
 
         @Nullable CustomResultSetExtractorTemplate t_Template;
         
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            t_Template = templates[t_iIndex];
+            t_Template = templates.get(t_iIndex);
             
             if  (matchesSqlFilter(t_Template))
             {

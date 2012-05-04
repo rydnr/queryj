@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,14 +36,24 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,6 +65,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,13 +73,19 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerTableTemplateWritingHandler
+    <T extends BasePerTableTemplate, TG extends BasePerTableTemplateGenerator<T>>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
+     * The database product name entry.
+     */
+    public static final String PRODUCT_NAME = "L.:ProductName::.@";
+
+    /**
      * Creates a <code>BasePerTableTemplateWritingHandler</code> instance.
      */
-    public BasePerTableTemplateWritingHandler() {};
+    public BasePerTableTemplateWritingHandler() {}
 
     /**
      * Handles given information.
@@ -82,36 +98,9 @@ public abstract class BasePerTableTemplateWritingHandler
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
+        writeTemplates(parameters, retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)));
 
         return false;
-    }
-
-    /**
-     * Writes the templates.
-     * @param parameters the parameters.
-     * @param metadata the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metadata != null
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metadata)
-      throws  QueryJBuildException
-    {
-        try
-        {
-            writeTemplates(
-                parameters, metadata.getDatabaseProductName());
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                      "Cannot retrieve database product name, "
-                    + "version or quote string",
-                    sqlException);
-        }
     }
 
     /**
@@ -123,7 +112,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition engineName != null
      */
     protected void writeTemplates(
-        @NotNull final Map parameters, final String engineName)
+        @NotNull final Map parameters, @NotNull final String engineName)
       throws  QueryJBuildException
     {
         writeTemplates(
@@ -147,24 +136,17 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition templateGenerator != null
      */
     protected void writeTemplates(
-        @Nullable final BasePerTableTemplate[] templates,
-        final String engineName,
+        @NotNull final List<T> templates,
+        @NotNull final String engineName,
         @NotNull final Map parameters,
-        final Charset charset,
-        @NotNull final BasePerTableTemplateGenerator templateGenerator)
+        @NotNull final Charset charset,
+        @NotNull final TG templateGenerator)
       throws  QueryJBuildException
     {
         try 
         {
-            int t_iCount =
-                (templates != null) ? templates.length : 0;
-
-            @Nullable BasePerTableTemplate t_Template;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            for  (T t_Template : templates)
             {
-                t_Template = templates[t_iIndex];
-
                 if  (t_Template != null)
                 {
                     templateGenerator.write(
@@ -189,17 +171,61 @@ public abstract class BasePerTableTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
-    protected abstract BasePerTableTemplateGenerator retrieveTemplateGenerator();
+    @NotNull
+    protected abstract TG retrieveTemplateGenerator();
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process if faulty.
      */
-    protected abstract BasePerTableTemplate[] retrieveTemplates(
-        final Map parameters)
-      throws  QueryJBuildException;
+    @NotNull
+    protected abstract List<T> retrieveTemplates(@NotNull final Map parameters)
+        throws QueryJBuildException;
+
+    /**
+     * Retrieves the database product name.
+     * @param parameters the parameter map.
+     * @param metadata the database metadata.
+     * @return the product name.
+     */
+    @SuppressWarnings("unchecked")
+    public String retrieveProductName(@NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
+    {
+        @Nullable String result = (String) parameters.get(PRODUCT_NAME);
+
+        if (   (result == null)
+            && (metadata != null))
+        {
+            try
+            {
+                result = metadata.getDatabaseProductName();
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                Log t_Log = UniqueLogFactory.getLog(BasePerTableTemplateWritingHandler.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.warn(
+                        "Cannot retrieve database product name, "
+                        + "version or quote string",
+                        sqlException);
+                }
+            }
+        }
+
+        if (result == null)
+        {
+            result = "";
+        }
+
+        parameters.put(PRODUCT_NAME, result);
+
+        return result;
+    }
 
     /**
      * Retrieves the output dir from the attribute map.
@@ -210,9 +236,9 @@ public abstract class BasePerTableTemplateWritingHandler
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
      * @precondition parameters != null
      */
-    @Nullable
+    @NotNull
     protected File retrieveOutputDir(
-        final String tableName, final String engineName, @NotNull final Map parameters)
+        @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
@@ -230,7 +256,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * Retrieves the output dir from the attribute map.
      * @param projectFolder the project folder.
      * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
+     * @param useSubFolders whether to use sub-folders for tests, or
      * using a different package naming scheme.
      * @param tableName the table name.
      * @param engineName the engine name.
@@ -242,14 +268,14 @@ public abstract class BasePerTableTemplateWritingHandler
      * @precondition parameters != null
      * @precondition packageUtils != null
      */
-    @Nullable
+    @NotNull
     protected abstract File retrieveOutputDir(
-        final File projectFolder,
-        final String projectPackage,
-        final boolean useSubfolders,
-        final String tableName,
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final File projectFolder,
+        @NotNull final String projectPackage,
+        final boolean useSubFolders,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
       throws  QueryJBuildException;
 }

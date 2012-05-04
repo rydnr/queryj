@@ -37,9 +37,8 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.xml.XmlDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XmlDAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -53,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,12 +60,12 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class XmlDAOFactoryTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler<XmlDAOFactoryTemplate, XmlDAOFactoryTemplateGenerator>
 {
     /**
      * Creates a <code>XmlDAOFactoryTemplateWritingHandler</code> instance.
      */
-    public XmlDAOFactoryTemplateWritingHandler() {};
+    public XmlDAOFactoryTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -74,25 +73,27 @@ public class XmlDAOFactoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected XmlDAOFactoryTemplateGenerator retrieveTemplateGenerator()
     {
         return XmlDAOFactoryTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
+    @SuppressWarnings("unchecked")
+    protected List<XmlDAOFactoryTemplate> retrieveTemplates(
         @NotNull final Map parameters)
-      throws  BuildException
+        throws BuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<XmlDAOFactoryTemplate>)
                 parameters.get(
                     TemplateMappingManager.XML_DAO_FACTORY_TEMPLATES);
     }
@@ -118,11 +119,11 @@ public class XmlDAOFactoryTemplateWritingHandler
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String tableName,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {

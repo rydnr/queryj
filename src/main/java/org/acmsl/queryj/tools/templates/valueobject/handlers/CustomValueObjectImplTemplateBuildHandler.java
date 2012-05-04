@@ -35,9 +35,14 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -47,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,7 +60,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectImplTemplateBuildHandler
-    extends  CustomValueObjectTemplateBuildHandler<CustomValueObjectImplTemplate, CustomValueObjectImplTemplateGenerator>
+    extends  CustomValueObjectTemplateBuildHandler
 {
     /**
      * Creates a CustomValueObjectImplTemplateBuildHandler.
@@ -62,26 +68,22 @@ public class CustomValueObjectImplTemplateBuildHandler
     public CustomValueObjectImplTemplateBuildHandler() {}
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
-    protected CustomValueObjectImplTemplateGenerator retrieveTemplateFactory()
+    protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
     {
         return new CustomValueObjectImplTemplateGenerator();
     }
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        @NotNull final CustomValueObjectImplTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<CustomValueObjectTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES,

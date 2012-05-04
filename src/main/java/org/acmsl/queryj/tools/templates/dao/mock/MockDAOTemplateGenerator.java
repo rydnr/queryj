@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.dao.mock;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 
@@ -63,10 +62,10 @@ import java.util.Locale;
  * Is able to generate mock DAO implementations.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class MockDAOTemplateGenerator<T extends MockDAOTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  BasePerTableTemplateFactory,
-                BasePerTableTemplateGenerator<T>,
+public class MockDAOTemplateGenerator
+    extends AbstractTemplateGenerator<MockDAOTemplate>
+    implements  BasePerTableTemplateFactory<MockDAOTemplate>,
+                BasePerTableTemplateGenerator<MockDAOTemplate>,
                 Singleton
 {
     /**
@@ -121,17 +120,17 @@ public class MockDAOTemplateGenerator<T extends MockDAOTemplate>
      * @precondition repositoryName != null
      */
     @NotNull
-    public BasePerTableTemplate createTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String mockPackageName,
-        final String repositoryName,
-        final String header,
+    public MockDAOTemplate createTemplate(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String mockPackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces)
     {
         return
@@ -154,7 +153,7 @@ public class MockDAOTemplateGenerator<T extends MockDAOTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final MockDAOTemplate template)
     {
         return
             retrieveTemplateFileName(
@@ -170,16 +169,16 @@ public class MockDAOTemplateGenerator<T extends MockDAOTemplate>
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final MockDAOTemplate template,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
               "Mock"
             + stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    template.getTableName().toLowerCase(Locale.US)),
-                '_')
+                  englishGrammarUtils.getSingular(
+                      template.getTableName().toLowerCase(Locale.US)),
+                  '_')
             + "DAO.java";
     }
 }

@@ -84,31 +84,7 @@ public class DAOListenerTemplateBuildHandler
     }
 
     /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
-     * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param header the header.
-//     * @param jmx whether to support JMX or not.
-     * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition packageName != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
+     * {@inheritDoc}
      */
     @Override
     protected boolean createTemplate(
@@ -154,6 +130,7 @@ public class DAOListenerTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @Override
     protected String retrievePackage(
         @NotNull final String engineName,
         final String projectPackage,
@@ -171,6 +148,7 @@ public class DAOListenerTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @Override
     protected void storeTemplate(
         final BasePerRepositoryTemplate template, @NotNull final Map parameters)
     {

@@ -54,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,41 +88,31 @@ public class CustomResultSetExtractorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomResultSetExtractorTemplate[] retrieveTemplates(
+    @SuppressWarnings("unchecked")
+    protected List<CustomResultSetExtractorTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (CustomResultSetExtractorTemplate[])
+            (List<CustomResultSetExtractorTemplate>)
                 parameters.get(
                     TemplateMappingManager
                         .CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param resultElement the result element.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the metadata manager.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return such folder.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
     protected File retrieveOutputDir(
-        final Result resultElement,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
+        @NotNull final Result resultElement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
         @NotNull final String engineName,
-        final Map parameters,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

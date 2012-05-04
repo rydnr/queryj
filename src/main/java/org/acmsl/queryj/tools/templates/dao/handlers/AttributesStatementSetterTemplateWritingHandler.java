@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,17 +36,22 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,6 +60,8 @@ import java.util.Map;
  */
 public class AttributesStatementSetterTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
+                 <AttributesStatementSetterTemplate,
+                     AttributesStatementSetterTemplateGenerator>
 {
     /**
      * Creates a AttributesStatementSetterTemplateWritingHandler.
@@ -68,23 +74,25 @@ public class AttributesStatementSetterTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected AttributesStatementSetterTemplateGenerator retrieveTemplateGenerator()
     {
         return AttributesStatementSetterTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
-        @NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected List<AttributesStatementSetterTemplate> retrieveTemplates(
+        @NotNull final Map parameters) throws BuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<AttributesStatementSetterTemplate>)
                 parameters.get(
                     TemplateMappingManager
                         .ATTRIBUTES_STATEMENT_SETTER_TEMPLATES);
@@ -111,11 +119,11 @@ public class AttributesStatementSetterTemplateWritingHandler
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
         @NotNull final String tableName,
         @NotNull final String engineName,
-        final Map parameters,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

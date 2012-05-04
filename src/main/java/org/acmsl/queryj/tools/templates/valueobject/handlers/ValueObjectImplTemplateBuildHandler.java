@@ -37,21 +37,21 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,19 +59,19 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectImplTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler<ValueObjectImplTemplate, ValueObjectImplTemplateGenerator>
 {
     /**
      * Creates a <code>ValueObjectImplTemplateBuildHandler</code> instance.
      */
-    public ValueObjectImplTemplateBuildHandler() {};
+    public ValueObjectImplTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected ValueObjectImplTemplateGenerator retrieveTemplateFactory()
     {
         return ValueObjectImplTemplateGenerator.getInstance();
     }
@@ -83,16 +83,17 @@ public class ValueObjectImplTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
+     * @throws QueryJBuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected String retrievePackage(
-        final String tableName,
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
+        throws QueryJBuildException
     {
         return
             packageUtils.retrieveValueObjectImplPackage(projectPackage);
@@ -105,8 +106,9 @@ public class ValueObjectImplTemplateBuildHandler
      * @precondition templates != null
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<ValueObjectImplTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.VALUE_OBJECT_IMPL_TEMPLATES, templates);

@@ -37,9 +37,8 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -47,14 +46,17 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -62,12 +64,12 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectFactoryTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler<ValueObjectFactoryTemplate, ValueObjectFactoryTemplateGenerator>
 {
     /**
      * Creates a <code>ValueObjectFactoryTemplateWritingHandler</code> instance.
      */
-    public ValueObjectFactoryTemplateWritingHandler() {};
+    public ValueObjectFactoryTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -75,25 +77,26 @@ public class ValueObjectFactoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected ValueObjectFactoryTemplateGenerator retrieveTemplateGenerator()
     {
         return ValueObjectFactoryTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
-        @NotNull final Map parameters)
-      throws  BuildException
+    @SuppressWarnings("unchecked")
+    protected List<ValueObjectFactoryTemplate> retrieveTemplates(@NotNull final Map parameters)
+        throws BuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<ValueObjectFactoryTemplate>)
                 parameters.get(
                     TemplateMappingManager.VALUE_OBJECT_FACTORY_TEMPLATES);
     }
@@ -115,15 +118,15 @@ public class ValueObjectFactoryTemplateWritingHandler
      * @precondition engineName != null
      * @precondition packageUtils != null
      */
-    @Nullable
+    @NotNull
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String tableName,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {

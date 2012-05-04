@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -55,8 +54,8 @@ import org.jetbrains.annotations.Nullable;
  * Is able to generate custom ValueObjectFactory templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObjectFactoryTemplate>
-    extends     CustomValueObjectTemplateGenerator<T>
+public class CustomValueObjectFactoryTemplateGenerator
+    extends  CustomValueObjectTemplateGenerator
     implements  Singleton
 {
     /**
@@ -85,16 +84,16 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
      */
     @Nullable
     @Override
-    public T createTemplate(
+    public CustomValueObjectTemplate createTemplate(
         @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header)
     {
         @Nullable CustomValueObjectFactoryTemplate result = null;
 
@@ -116,7 +115,7 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
                     repositoryName);
         }
 
-        return (T) result;
+        return result;
     }
 
     /**
@@ -124,7 +123,7 @@ public class CustomValueObjectFactoryTemplateGenerator<T extends CustomValueObje
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template)
+    public String retrieveTemplateFileName(@NotNull CustomValueObjectTemplate template)
     {
         return
               extractClassName(template.getResult().getClassValue())

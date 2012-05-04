@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,17 +36,22 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -55,12 +59,12 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler<DAOTemplate, DAOTemplateGenerator>
 {
     /**
      * Creates a <code>DAOTemplateWritingHandler</code> instance.
      */
-    public DAOTemplateWritingHandler() {};
+    public DAOTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -68,23 +72,25 @@ public class DAOTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected DAOTemplateGenerator retrieveTemplateGenerator()
     {
         return DAOTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
-        @NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected List<DAOTemplate> retrieveTemplates(
+        @NotNull final Map parameters) throws BuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<DAOTemplate>)
                 parameters.get(TemplateMappingManager.DAO_TEMPLATES);
     }
 
@@ -108,11 +114,11 @@ public class DAOTemplateWritingHandler
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final String engineName,
-        final Map parameters,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

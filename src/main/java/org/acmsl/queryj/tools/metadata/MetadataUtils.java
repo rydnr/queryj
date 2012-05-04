@@ -271,7 +271,7 @@ public class MetadataUtils
      */
     @NotNull
     public Collection retrieveAttributes(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -299,7 +299,7 @@ public class MetadataUtils
      */
     @NotNull
     public Collection<Attribute> retrieveExternallyManagedAttributes(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -518,7 +518,7 @@ public class MetadataUtils
     @NotNull
     public List<Attribute> buildAttributes(
         @NotNull final String[] columnNames,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -551,7 +551,7 @@ public class MetadataUtils
     @NotNull
     public List<Attribute> buildAttributes(
         @NotNull final String[] columnNames,
-        final String tableName,
+        @NotNull final String tableName,
         final boolean allowsNullAsAWhole,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -585,9 +585,9 @@ public class MetadataUtils
      */
     @NotNull
     public List<Attribute> buildAttributes(
-        final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
+        @NotNull final String[] columnNames,
+        @NotNull final String[] columnValues,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -622,8 +622,8 @@ public class MetadataUtils
     @NotNull
     public List<Attribute> buildAttributes(
         @NotNull final String[] columnNames,
-        final String tableName,
-        final Boolean allowsNullAsAWhole,
+        @NotNull final String tableName,
+        @Nullable final Boolean allowsNullAsAWhole,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -658,9 +658,9 @@ public class MetadataUtils
      */
     @NotNull
     public List<Attribute> buildAttributes(
-        @Nullable final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
+        @NotNull final String[] columnNames,
+        @NotNull final String[] columnValues,
+        @NotNull final String tableName,
         @Nullable final Boolean allowsNullAsAWhole,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -771,7 +771,7 @@ public class MetadataUtils
      */
     public boolean allowsNullAsAWhole(
         @Nullable final String[] columnNames,
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager)
     {
         boolean result = false;
@@ -803,8 +803,9 @@ public class MetadataUtils
      * @precondition metadataManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     public ForeignKey[] retrieveForeignKeys(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
@@ -828,8 +829,9 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected ForeignKey[] retrieveFks(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -870,9 +872,10 @@ public class MetadataUtils
      * @precondition metadataTypeManager != null
      * @precondition decoratorFactory != null
      */
+    @NotNull
     protected ForeignKey[] retrieveForeignKeys(
-        final String sourceTableName,
-        final String targetTableName,
+        @NotNull final String sourceTableName,
+        @NotNull final String targetTableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -908,7 +911,7 @@ public class MetadataUtils
                     t_bAllowsNullAsAWhole));
         }
 
-        return result.toArray(EMPTY_FOREIGNKEY_ARRAY);
+        return result.toArray(new ForeignKey[result.size()]);
     }
 
     /**
@@ -925,7 +928,7 @@ public class MetadataUtils
      */
     @NotNull
     public Collection<Attribute> retrieveLobAttributes(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -953,7 +956,7 @@ public class MetadataUtils
      */
     @NotNull
     public Collection<Attribute> retrieveAllButLobAttributes(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -982,7 +985,7 @@ public class MetadataUtils
      */
     @NotNull
     protected Collection<Attribute> retrieveLobAttributes(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         final boolean includeLob,

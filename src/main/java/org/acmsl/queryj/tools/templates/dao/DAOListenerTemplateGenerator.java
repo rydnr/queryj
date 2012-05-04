@@ -46,7 +46,6 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
@@ -117,7 +116,7 @@ public class DAOListenerTemplateGenerator<T extends DAOListenerTemplate>
      * @return a template.
      */
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
+    public T createTemplate(
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager,
         final CustomSqlProvider customSqlProvider,
@@ -130,6 +129,7 @@ public class DAOListenerTemplateGenerator<T extends DAOListenerTemplate>
         final boolean jmx)
     {
         return
+            (T)
             new DAOListenerTemplate(
                 metadataManager,
                 metadataTypeManager,

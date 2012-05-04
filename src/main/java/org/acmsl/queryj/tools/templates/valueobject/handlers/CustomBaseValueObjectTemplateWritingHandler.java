@@ -35,15 +35,15 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.TemplateGenerator;
-import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplate;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some Ant classes.
  */
-import org.apache.tools.ant.BuildException;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,14 +53,15 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
  * Writes ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomBaseValueObjectTemplateWritingHandler<T extends CustomBaseValueObjectTemplate>
-    extends  CustomValueObjectTemplateWritingHandler<T>
+public class CustomBaseValueObjectTemplateWritingHandler
+    extends  CustomValueObjectTemplateWritingHandler
 {
     /**
      * Creates a CustomBaseValueObjectTemplateWritingHandler.
@@ -73,7 +74,7 @@ public class CustomBaseValueObjectTemplateWritingHandler<T extends CustomBaseVal
      */
     @NotNull
     @Override
-    protected TemplateGenerator<T> retrieveTemplateGenerator()
+    protected CustomValueObjectTemplateGenerator retrieveTemplateGenerator()
     {
         return CustomBaseValueObjectTemplateGenerator.getInstance();
     }
@@ -82,16 +83,17 @@ public class CustomBaseValueObjectTemplateWritingHandler<T extends CustomBaseVal
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @throws BuildException if the template retrieval process if faulty.
+     * @throws QueryJBuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override
-    protected T[] retrieveTemplates(
+    @SuppressWarnings("unchecked")
+    protected List<CustomValueObjectTemplate> retrieveTemplates(
         @NotNull final Map parameters)
-        throws  BuildException
+        throws QueryJBuildException
     {
         return
-            (T[])
+            (List<CustomValueObjectTemplate>)
                 parameters.get(
                     TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES);
     }

@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -63,10 +62,10 @@ import java.util.Locale;
  * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseDAOFactoryTemplateGenerator<T extends BaseDAOFactoryTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  BasePerTableTemplateFactory,
-                BasePerTableTemplateGenerator<T>,
+public class BaseDAOFactoryTemplateGenerator
+    extends AbstractTemplateGenerator<BaseDAOFactoryTemplate>
+    implements  BasePerTableTemplateFactory<BaseDAOFactoryTemplate>,
+                BasePerTableTemplateGenerator<BaseDAOFactoryTemplate>,
                 Singleton
 {
     /**
@@ -121,17 +120,17 @@ public class BaseDAOFactoryTemplateGenerator<T extends BaseDAOFactoryTemplate>
      * @precondition repositoryName != null
      */
     @NotNull
-    public BasePerTableTemplate createTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
+    public BaseDAOFactoryTemplate createTemplate(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces)
     {
         return
@@ -154,7 +153,7 @@ public class BaseDAOFactoryTemplateGenerator<T extends BaseDAOFactoryTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final BaseDAOFactoryTemplate template)
     {
         return retrieveTemplateFileName(template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
@@ -168,7 +167,7 @@ public class BaseDAOFactoryTemplateGenerator<T extends BaseDAOFactoryTemplate>
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final BaseDAOFactoryTemplate template,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

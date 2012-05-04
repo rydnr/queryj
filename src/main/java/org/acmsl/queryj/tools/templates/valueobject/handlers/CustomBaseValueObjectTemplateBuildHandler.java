@@ -37,10 +37,6 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  */
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 
@@ -52,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,26 +64,22 @@ public class CustomBaseValueObjectTemplateBuildHandler
     public CustomBaseValueObjectTemplateBuildHandler() {}
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
     protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
     {
-        return CustomBaseValueObjectTemplateGenerator.getInstance();
+        return new CustomBaseValueObjectTemplateGenerator();
     }
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final CustomValueObjectTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<CustomValueObjectTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES,

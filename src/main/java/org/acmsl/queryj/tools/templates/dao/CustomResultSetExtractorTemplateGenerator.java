@@ -111,15 +111,15 @@ public class CustomResultSetExtractorTemplateGenerator
      */
     @NotNull
     public CustomResultSetExtractorTemplate createTemplate(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header)
     {
         return
             new CustomResultSetExtractorTemplate(

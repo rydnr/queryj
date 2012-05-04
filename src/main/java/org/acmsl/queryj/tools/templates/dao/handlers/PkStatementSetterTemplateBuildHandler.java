@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,16 +36,21 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -54,40 +58,35 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class PkStatementSetterTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler<PkStatementSetterTemplate, PkStatementSetterTemplateGenerator>
 {
     /**
      * Creates a <code>PkStatementSetterTemplateBuildHandler</code>
      * instance.
      */
-    public PkStatementSetterTemplateBuildHandler() {};
+    public PkStatementSetterTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected PkStatementSetterTemplateGenerator retrieveTemplateFactory()
     {
         return PkStatementSetterTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param tableName the table name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition tableName != null
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @Override
+    @NotNull
     protected String retrievePackage(
         @NotNull final String tableName,
         @NotNull final String engineName,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
+      throws QueryJBuildException
     {
         return
             packageUtils.retrievePkStatementSetterPackage(
@@ -97,14 +96,12 @@ public class PkStatementSetterTemplateBuildHandler
     }
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<PkStatementSetterTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.PK_STATEMENT_SETTER_TEMPLATES,

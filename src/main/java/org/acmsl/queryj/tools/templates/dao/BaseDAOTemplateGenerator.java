@@ -40,7 +40,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -66,10 +65,10 @@ import java.util.Collection;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseDAOTemplateGenerator<T extends BaseDAOTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  BasePerTableTemplateFactory,
-                BasePerTableTemplateGenerator<T>,
+public class BaseDAOTemplateGenerator
+    extends AbstractTemplateGenerator<BaseDAOTemplate>
+    implements  BasePerTableTemplateFactory<BaseDAOTemplate>,
+                BasePerTableTemplateGenerator<BaseDAOTemplate>,
                 Singleton
 {
     /**
@@ -124,17 +123,17 @@ public class BaseDAOTemplateGenerator<T extends BaseDAOTemplate>
      * @precondition repositoryName != null
      */
     @NotNull
-    public BasePerTableTemplate createTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
+    public BaseDAOTemplate createTemplate(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces)
     {
         return
@@ -181,19 +180,19 @@ public class BaseDAOTemplateGenerator<T extends BaseDAOTemplate>
      * @precondition staticValues != null
      */
     @NotNull
-    public BasePerTableTemplate createTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
+    public BaseDAOTemplate createTemplate(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
-        final Collection staticValues)
+        @NotNull final Collection staticValues)
     {
         return
             new BaseDAOTemplate(
@@ -226,7 +225,7 @@ public class BaseDAOTemplateGenerator<T extends BaseDAOTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final BaseDAOTemplate template)
     {
         return
             retrieveTemplateFileName(
@@ -242,7 +241,7 @@ public class BaseDAOTemplateGenerator<T extends BaseDAOTemplate>
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final BaseDAOTemplate template,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

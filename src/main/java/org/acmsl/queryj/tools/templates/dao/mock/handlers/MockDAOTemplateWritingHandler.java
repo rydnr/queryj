@@ -37,9 +37,8 @@ package org.acmsl.queryj.tools.templates.dao.mock.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.mock.MockDAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
@@ -53,6 +52,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,12 +60,12 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class MockDAOTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler
+    extends  BasePerTableTemplateWritingHandler<MockDAOTemplate, MockDAOTemplateGenerator>
 {
     /**
      * Creates a <code>MockDAOTemplateWritingHandler</code> instance.
      */
-    public MockDAOTemplateWritingHandler() {};
+    public MockDAOTemplateWritingHandler() {}
 
     /**
      * Retrieves the template generator.
@@ -73,25 +73,27 @@ public class MockDAOTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator()
+    protected MockDAOTemplateGenerator retrieveTemplateGenerator()
     {
         return MockDAOTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
      * @return the template.
      * @throws BuildException if the template retrieval process if faulty.
      */
     @NotNull
     @Override
-    protected BasePerTableTemplate[] retrieveTemplates(
+    @SuppressWarnings("unchecked")
+    protected List<MockDAOTemplate> retrieveTemplates(
         @NotNull final Map parameters)
-      throws  BuildException
+        throws BuildException
     {
         return
-            (BasePerTableTemplate[])
+            (List<MockDAOTemplate>)
                 parameters.get(TemplateMappingManager.MOCK_DAO_TEMPLATES);
     }
 
@@ -116,11 +118,11 @@ public class MockDAOTemplateWritingHandler
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String tableName,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
       throws  BuildException
     {

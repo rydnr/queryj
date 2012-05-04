@@ -36,44 +36,37 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.commons.patterns.Command;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Builds custom ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class CustomValueObjectTemplateBuildHandler<T extends CustomValueObjectTemplate, TF extends CustomValueObjectTemplateGenerator<T>>
-    extends  BasePerCustomResultTemplateBuildHandler<T, TF>
+public class CustomValueObjectTemplateBuildHandler
+    extends  BasePerCustomResultTemplateBuildHandler<CustomValueObjectTemplate, CustomValueObjectTemplateGenerator>
 {
     /**
      * Creates a CustomValueObjectTemplateBuildHandler.
@@ -85,21 +78,22 @@ public class CustomValueObjectTemplateBuildHandler<T extends CustomValueObjectTe
      */
     @Override
     @NotNull
-    protected TF retrieveTemplateFactory()
+    protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
     {
-        return (TF) new CustomValueObjectTemplateGenerator<CustomValueObjectTemplate>();
+        return new CustomValueObjectTemplateGenerator();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     protected String retrievePackage(
-        final Result customResult,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String engineName,
-        final String projectPackage,
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
       throws BuildException
     {
@@ -112,8 +106,9 @@ public class CustomValueObjectTemplateBuildHandler<T extends CustomValueObjectTe
      * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        @NotNull final T[] templates, @NotNull final Map parameters)
+        @NotNull final List<CustomValueObjectTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_TEMPLATES,

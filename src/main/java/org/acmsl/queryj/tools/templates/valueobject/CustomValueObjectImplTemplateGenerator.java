@@ -55,7 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectImplTemplateGenerator
-    extends  CustomValueObjectTemplateGenerator<CustomValueObjectImplTemplate>
+    extends  CustomValueObjectTemplateGenerator
     implements  Singleton
 {
     /**
@@ -84,16 +84,16 @@ public class CustomValueObjectImplTemplateGenerator
      */
     @Override
     @Nullable
-    public CustomValueObjectImplTemplate createTemplate(
+    public CustomValueObjectTemplate createTemplate(
         @NotNull final Result customResult,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header)
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header)
     {
         @Nullable CustomValueObjectImplTemplate result = null;
 
@@ -123,7 +123,7 @@ public class CustomValueObjectImplTemplateGenerator
      */
     @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull CustomValueObjectImplTemplate template)
+    public String retrieveTemplateFileName(@NotNull CustomValueObjectTemplate template)
     {
         return
             extractClassName(template.getResult().getClassValue())

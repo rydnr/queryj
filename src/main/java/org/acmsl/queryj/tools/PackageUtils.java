@@ -2031,7 +2031,7 @@ public class PackageUtils
     @NotNull
     public String extractClassName(@NotNull final String fqdn)
     {
-        String result = null;
+        @Nullable String result = null;
 
         String[] t_astrPieces = split(fqdn, ".");
 
@@ -2041,6 +2041,11 @@ public class PackageUtils
         {
             assert t_astrPieces != null;
             result = t_astrPieces[t_iCount - 1];
+        }
+
+        if (result == null)
+        {
+            result = "";
         }
 
         return result;

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -40,11 +39,14 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.BaseAbstractDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseAbstractDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -59,7 +62,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseAbstractDAOTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler
+    extends  BasePerTableTemplateBuildHandler<BaseAbstractDAOTemplate, BaseAbstractDAOTemplateGenerator>
 {
     /**
      * Creates a {@link BaseAbstractDAOTemplateBuildHandler}> instance.
@@ -67,111 +70,76 @@ public class BaseAbstractDAOTemplateBuildHandler
     public BaseAbstractDAOTemplateBuildHandler() {}
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
+    @Override
     @NotNull
-    protected BasePerTableTemplateFactory retrieveTemplateFactory()
+    protected BaseAbstractDAOTemplateGenerator retrieveTemplateFactory()
     {
         return BaseAbstractDAOTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param tableName the table name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @Override
+    @NotNull
     protected String retrievePackage(
-        final String tableName,
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
+      throws QueryJBuildException
     {
         return
             packageUtils.retrieveBaseAbstractDAOPackage(projectPackage);
     }
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final BasePerTableTemplate[] templates, @NotNull final Map parameters)
+        @NotNull final List<BaseAbstractDAOTemplate> templates, @NotNull final Map parameters)
     {
-        parameters.put(
-            TemplateMappingManager.BASE_ABSTRACT_DAO_TEMPLATES, templates);
+        parameters.put(TemplateMappingManager.BASE_ABSTRACT_DAO_TEMPLATES, templates);
     }
 
     /**
-     * Creates the template with given parameters.
-     * @param templateFactory the template factory.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @param projectPackage the project package.
-     * @param repository the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param parameters the parameters.
-     * @return the template.
-     * @throws QueryJBuildException if the template cannot be created.
-     * @precondition templateFactory != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition engineName != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
     @Nullable
-    protected BasePerTableTemplate createTemplate(
-        @NotNull final BasePerTableTemplateFactory templateFactory,
-        final String tableName,
+    protected BaseAbstractDAOTemplate createTemplate(
+        @NotNull final BaseAbstractDAOTemplateGenerator templateFactory,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String projectPackage,
-        final String repository,
-        final String header,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {        
-        @Nullable BasePerTableTemplate result;
+        @Nullable BaseAbstractDAOTemplate result = null;
 
-        if  (   (templateFactory instanceof BaseAbstractDAOTemplateGenerator)
-             && (isStaticTable(tableName, metadataManager)))
+        if  (isStaticTable(tableName, metadataManager))
         {
-            @NotNull BaseAbstractDAOTemplateGenerator t_Generator =
-                (BaseAbstractDAOTemplateGenerator) templateFactory;
-
             @Nullable Collection t_cStaticValues =
                 retrieveStaticContent(
                     parameters,
                     tableName,
                     metadataManager,
-                    t_Generator.getDecoratorFactory());
+                    templateFactory.getDecoratorFactory());
 
             result =
-                t_Generator.createTemplate(
+                templateFactory.createTemplate(
                     tableName,
                     metadataManager,
                     customSqlProvider,
@@ -184,24 +152,6 @@ public class BaseAbstractDAOTemplateBuildHandler
                     header,
                     implementMarkerInterfaces,
                     t_cStaticValues);
-        }
-        else
-        {
-            result =
-                super.createTemplate(
-                    templateFactory,
-                    tableName,
-                    metadataManager,
-                    customSqlProvider,
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    projectPackage,
-                    repository,
-                    header,
-                    implementMarkerInterfaces,
-                    parameters);
         }
 
         return result;
