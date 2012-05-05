@@ -38,11 +38,14 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplate;
 import org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -55,35 +58,30 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessManagerTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<DataAccessManagerTemplate, DataAccessManagerTemplateGenerator>
 {
     /**
      * Creates a <code>DataAccessManagerTemplateBuildHandler</code> instance.
      */
-    public DataAccessManagerTemplateBuildHandler() {};
+    public DataAccessManagerTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    protected DataAccessManagerTemplateGenerator retrieveTemplateFactory()
     {
         return DataAccessManagerTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -97,8 +95,9 @@ public class DataAccessManagerTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final DataAccessManagerTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DATA_ACCESS_MANAGER_TEMPLATE,

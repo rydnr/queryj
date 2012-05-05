@@ -49,20 +49,21 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate the repository DAO factory implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class RepositoryDAOFactoryTemplateGenerator<T extends RepositoryDAOFactoryTemplate>
-    extends  AbstractTemplateGenerator<T>
-    implements  RepositoryDAOFactoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class RepositoryDAOFactoryTemplateGenerator
+    extends  AbstractTemplateGenerator<RepositoryDAOFactoryTemplate>
+    implements  BasePerRepositoryTemplateFactory<RepositoryDAOFactoryTemplate>,
+                BasePerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate>,
                 Singleton
 {
     /**
@@ -93,31 +94,21 @@ public class RepositoryDAOFactoryTemplateGenerator<T extends RepositoryDAOFactor
     }
 
     /**
-     * Generates a <i>per-repository</i> template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param engineName the engine name.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param tables the tables.
-     * @param header the header.
-     * @return a template.
+     * {@inheritDoc}
      */
-    @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final String jndiDataSource,
-        final Collection tables,
-        final String header)
+    @Nullable
+    public RepositoryDAOFactoryTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new RepositoryDAOFactoryTemplate(
@@ -127,18 +118,18 @@ public class RepositoryDAOFactoryTemplateGenerator<T extends RepositoryDAOFactor
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                packageName,
+                repository,
                 engineName,
-                jndiDataSource,
-                tables);
+                jndiLocation,
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final RepositoryDAOFactoryTemplate template)
     {
         return retrieveTemplateFileName(template, DecorationUtils.getInstance());
     }
@@ -151,7 +142,7 @@ public class RepositoryDAOFactoryTemplateGenerator<T extends RepositoryDAOFactor
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final RepositoryDAOFactoryTemplate template, @NotNull final DecorationUtils decorationUtils)
     {
         return
               template.getEngineName()

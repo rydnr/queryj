@@ -37,12 +37,16 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -55,63 +59,50 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ConfigurationPropertiesTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler<ConfigurationPropertiesTemplate, ConfigurationPropertiesTemplateGenerator>
 {
     /**
      * Creates a <code>ConfigurationPropertiesTemplateWritingHandler</code>
      * instance.
      */
-    public ConfigurationPropertiesTemplateWritingHandler() {};
+    public ConfigurationPropertiesTemplateWritingHandler() {}
 
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected ConfigurationPropertiesTemplateGenerator retrieveTemplateGenerator()
     {
         return ConfigurationPropertiesTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the templates from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
+     * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
-    protected BasePerRepositoryTemplate retrieveTemplate(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected ConfigurationPropertiesTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
-            (BasePerRepositoryTemplate)
+            (ConfigurationPropertiesTemplate)
                 parameters.get(
                     TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @precondition projectFolder != null
-     * @precondition projectPackage != null
-     * @precondition engineName != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
     @Override
     protected File retrieveOutputDir(
-        final File projectFolder,
-        final String projectPackage,
+        @NotNull final File projectFolder,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return projectFolder;
     }

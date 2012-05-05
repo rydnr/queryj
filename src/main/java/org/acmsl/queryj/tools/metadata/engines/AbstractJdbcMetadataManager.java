@@ -1268,7 +1268,7 @@ public abstract class AbstractJdbcMetadataManager
     {
         columnTypes.put(
             buildKey(tableName, columnName),
-            new Integer(columnType));
+            Integer.valueOf(columnType));
     }
 
     /**
@@ -4718,7 +4718,7 @@ public abstract class AbstractJdbcMetadataManager
             }
             else
             {
-                t_cResult.add(new Integer(t_iCurrentRecord));
+                t_cResult.add(Integer.valueOf(t_iCurrentRecord));
                 t_cNames.add(resultSet.getString(nameField));
             }
         }
@@ -5537,7 +5537,7 @@ public abstract class AbstractJdbcMetadataManager
         
         for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
         {
-            result[t_iIndex] = new Integer(array[t_iIndex]);
+            result[t_iIndex] = Integer.valueOf(array[t_iIndex]);
         }
         
         return result;

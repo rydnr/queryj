@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -50,15 +49,17 @@ import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 /*
  * Importing some StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate DAO listeners.
@@ -83,18 +84,19 @@ public class DAOListenerImplTemplate
      * @param engineName the engine name.
      * @param tables the tables.
      */
+    @SuppressWarnings("unused")
     public DAOListenerImplTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
         final boolean jmx,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final String packageName,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String engineName,
+        @NotNull final List<String> tables)
     {
         super(
             metadataManager,
@@ -115,6 +117,7 @@ public class DAOListenerImplTemplate
      * @return such key.
      */
     @NotNull
+    @SuppressWarnings("unused")
     protected Object buildTemplateCacheKey()
     {
         return "//DAOListenerImplTemplate//";

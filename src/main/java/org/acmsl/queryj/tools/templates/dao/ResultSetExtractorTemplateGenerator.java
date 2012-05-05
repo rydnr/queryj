@@ -61,8 +61,8 @@ import java.util.Locale;
  * Is able to generate ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class ResultSetExtractorTemplateGenerator<T extends ResultSetExtractorTemplate>
-    extends AbstractTemplateGenerator<T>
+public class ResultSetExtractorTemplateGenerator
+    extends AbstractTemplateGenerator<ResultSetExtractorTemplate>
     implements  ResultSetExtractorTemplateFactory,
                 Singleton
 {
@@ -93,41 +93,20 @@ public class ResultSetExtractorTemplateGenerator<T extends ResultSetExtractorTem
     }
 
     /**
-     * Creates a {@link ResultSetExtractorTemplate} using given
-     * information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @return such template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * {@inheritDoc}
      */
     @NotNull
     public ResultSetExtractorTemplate createResultSetExtractorTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces)
     {
         return
@@ -160,7 +139,7 @@ public class ResultSetExtractorTemplateGenerator<T extends ResultSetExtractorTem
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final ResultSetExtractorTemplate template)
     {
         return
             retrieveTemplateFileName(
@@ -177,7 +156,7 @@ public class ResultSetExtractorTemplateGenerator<T extends ResultSetExtractorTem
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final ResultSetExtractorTemplate template,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

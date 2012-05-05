@@ -41,12 +41,16 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -60,53 +64,44 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class BaseResultSetExtractorTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler<BaseResultSetExtractorTemplate, BaseResultSetExtractorTemplateGenerator>
 {
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
+    @Override
+    protected BaseResultSetExtractorTemplateGenerator retrieveTemplateGenerator()
     {
         return BaseResultSetExtractorTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the template from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
+     * {@inheritDoc}
      */
-    @NotNull
-    protected BasePerRepositoryTemplate retrieveTemplate(
+    @Nullable
+    @Override
+    @SuppressWarnings("unchecked")
+    protected BaseResultSetExtractorTemplate retrieveTemplate(
         @NotNull final Map parameters)
     {
         return
-            (BasePerRepositoryTemplate)
+            (BaseResultSetExtractorTemplate)
                 parameters.get(
                     TemplateMappingManager.BASE_RESULTSET_EXTRACTOR_TEMPLATE);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubFolders whether to use sub folders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
+    @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubFolders,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

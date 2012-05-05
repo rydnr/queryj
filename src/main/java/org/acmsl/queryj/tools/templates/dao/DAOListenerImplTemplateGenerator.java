@@ -41,18 +41,18 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some jetBrains annotations.
@@ -62,7 +62,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate DAO listeners from templates.
@@ -71,8 +71,8 @@ import java.util.Collection;
  */
 public class DAOListenerImplTemplateGenerator
     extends AbstractTemplateGenerator<DAOListenerImplTemplate>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate>,
+    implements  BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate>,
+                BasePerRepositoryTemplateFactory<DAOListenerImplTemplate>,
                 Singleton
 {
     /**
@@ -88,7 +88,7 @@ public class DAOListenerImplTemplateGenerator
     }
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Default constructor.
      */
     public DAOListenerImplTemplateGenerator() {}
 
@@ -103,33 +103,22 @@ public class DAOListenerImplTemplateGenerator
     }
 
     /**
-     * Generates a <i>per-repository</i> DAO listener template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param engineName the engine name.
-     * @param repositoryName the name of the repository.
-     * @param tables the tables.
-     * @param header the header.
-     * @param jmx whether to support JMX or not.
-     * @return a template.
-//     * @throws QueryJException if the input values are invalid.
+     * {@inheritDoc}
      */
     @NotNull
+    @SuppressWarnings("unused")
     public DAOListenerImplTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
-//      throws  QueryJException
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new DAOListenerImplTemplate(
@@ -140,10 +129,10 @@ public class DAOListenerImplTemplateGenerator
                 jmx,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**

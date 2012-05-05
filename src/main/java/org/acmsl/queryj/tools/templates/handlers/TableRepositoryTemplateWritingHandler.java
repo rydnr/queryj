@@ -37,12 +37,13 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,57 +58,44 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableRepositoryTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler<TableRepositoryTemplate, TableRepositoryTemplateGenerator>
 {
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected TableRepositoryTemplateGenerator retrieveTemplateGenerator()
     {
         return TableRepositoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the template from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
+     * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
-    protected BasePerRepositoryTemplate retrieveTemplate(
+    @SuppressWarnings("unchecked")
+    protected TableRepositoryTemplate retrieveTemplate(
         @NotNull final Map parameters)
     {
         return
-            (BasePerRepositoryTemplate)
+            (TableRepositoryTemplate)
                 parameters.get(
                     TemplateMappingManager.TABLE_REPOSITORY_TEMPLATE);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

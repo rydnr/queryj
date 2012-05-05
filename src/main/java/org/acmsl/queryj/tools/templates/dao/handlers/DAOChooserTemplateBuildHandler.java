@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -54,35 +55,31 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOChooserTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<DAOChooserTemplate, DAOChooserTemplateGenerator>
 {
     /**
      * Creates a DAOChooserTemplateBuildHandler.
      */
-    public DAOChooserTemplateBuildHandler() {};
+    public DAOChooserTemplateBuildHandler() {}
 
     /**
      * Retrieves the template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    protected DAOChooserTemplateGenerator retrieveTemplateFactory()
     {
         return DAOChooserTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @Override
+    @NotNull
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveDAOChooserPackage(projectPackage);
@@ -95,8 +92,10 @@ public class DAOChooserTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final DAOChooserTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DAO_CHOOSER_TEMPLATE,

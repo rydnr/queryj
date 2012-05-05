@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -42,9 +41,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplate;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -52,116 +49,72 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /*
  * Importing some Commons-Collection classes.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds the Spring DAO declaration file.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessContextLocalTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator>
 {
     /**
      * Creates a <code>DataAccessContextLocalTemplateBuildHandler</code>
      * instance.
      */
-    public DataAccessContextLocalTemplateBuildHandler() {};
+    public DataAccessContextLocalTemplateBuildHandler() {}
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    @Override
+    protected DataAccessContextLocalTemplateGenerator retrieveTemplateFactory()
     {
         return DataAccessContextLocalTemplateGenerator.getInstance();
     }
 
     /**
-     * Uses the factory to create the template.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param factory the template factory.
-     * @param packageName the package name.
-     * @param projectPackage the base package.
-     * @param repository the repository.
-     * @param engineName the engine name.
-     * @param tableNames the table names.
-     * @param header the header.
-     * @return the template.
-     * @throws QueryJBuildException on invalid input.
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition engineName != null
-     * @precondition tableNames != null
-     * @precondition factory != null
+     * {@inheritDoc}
      */
-    @Nullable
-    protected BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String engineName,
-        final String header,
-        final Collection tableNames,
+    @NotNull
+    protected DataAccessContextLocalTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DataAccessContextLocalTemplateGenerator templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        @NotNull final List<String> tableNames,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        @Nullable BasePerRepositoryTemplate result = null;
-
-        if  (templateFactory instanceof DataAccessContextLocalTemplateFactory)
-        {
-            result =
-                ((DataAccessContextLocalTemplateFactory) templateFactory)
-                    .createTemplate(
-                        metadataManager,
-                        metadataTypeManager,
-                        customSqlProvider,
-                        packageName,
-                        projectPackage,
-                        repository,
-                        engineName,
-                        retrieveJNDILocation(parameters),
-                        tableNames,
-                        header);
-        }
-        else
-        {
-            Log t_Log =
-                UniqueLogFactory.getLog(
-                    BasePerRepositoryTemplateBuildHandler.class);
-
-            if  (t_Log != null)
-            {
-                t_Log.warn(
-                      "Unexpected BasePerRepository factory. "
-                    + "Expecting DataAccessContextLocalTemplateFactory.");
-            }
-        }
-
-        return result;
+        return
+            templateFactory.createTemplate(
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
+                packageName,
+                projectPackage,
+                repository,
+                engineName,
+                header,
+                retrieveJmx(parameters),
+                tableNames,
+                retrieveJNDILocation(parameters));
     }
 
     /**
@@ -175,9 +128,9 @@ public class DataAccessContextLocalTemplateBuildHandler
      */
     @NotNull
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils)
     {
         return "";
     }
@@ -189,24 +142,13 @@ public class DataAccessContextLocalTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final DataAccessContextLocalTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DATAACCESSCONTEXTLOCAL_TEMPLATE,
             template);
-    }
-
-    /**
-     * Retrieves the JNDI location from the attribute map.
-     * @param parameters the parameter map.
-     * @return the location.
-     * @precondition parameters != null
-     */
-    @NotNull
-    protected String retrieveJNDILocation(@NotNull final Map parameters)
-    {
-        return
-            (String) parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
     }
 }

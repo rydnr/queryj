@@ -72,17 +72,17 @@ public interface DAOTestTemplateFactory
      */
     @NotNull
     public DAOTestTemplate createDAOTestTemplate(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String daoPackageName,
-        final String valueObjectPackageName,
-        final String jdbcDriver,
-        final String jdbcUrl,
-        final String jdbcUsername,
-        final String jdbcPassword,
-        final String header);
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String daoPackageName,
+        @NotNull final String valueObjectPackageName,
+        @NotNull final String jdbcDriver,
+        @NotNull final String jdbcUrl,
+        @NotNull final String jdbcUsername,
+        @NotNull final String jdbcPassword,
+        @NotNull final String header);
 } 

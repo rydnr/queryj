@@ -56,7 +56,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -73,24 +72,17 @@ public class CustomResultSetExtractorTemplateBuildHandler
     public CustomResultSetExtractorTemplateBuildHandler() {}
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
+    @Override
     protected CustomResultSetExtractorTemplateGenerator retrieveTemplateFactory()
     {
         return CustomResultSetExtractorTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param customResult the custom result.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param metadataManager the database metadata manager.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return the package name.
+     * {@inheritDoc}
      */
     @Override
     protected String retrievePackage(
@@ -107,37 +99,27 @@ public class CustomResultSetExtractorTemplateBuildHandler
     }
 
     /**
-     * Stores the template collection in given attribute map.
-     * @param templates the templates.
-     * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
         @NotNull final List<CustomResultSetExtractorTemplate> templates, @NotNull final Map parameters)
     {
-        @NotNull final Collection<CustomResultSetExtractorTemplate> t_cFilteredTemplates =
+        @NotNull final List<CustomResultSetExtractorTemplate> t_lFilteredTemplates =
             new ArrayList<CustomResultSetExtractorTemplate>();
         
-        int t_iCount = (templates != null) ? templates.size() : 0;
-
-        @Nullable CustomResultSetExtractorTemplate t_Template;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for  (CustomResultSetExtractorTemplate t_Template : templates)
         {
-            t_Template = templates.get(t_iIndex);
-            
             if  (matchesSqlFilter(t_Template))
             {
-                t_cFilteredTemplates.add(t_Template);
+                t_lFilteredTemplates.add(t_Template);
             }
         }
         
         parameters.put(
             TemplateMappingManager.CUSTOM_RESULTSET_EXTRACTOR_TEMPLATES,
-            t_cFilteredTemplates.toArray(
-                new CustomResultSetExtractorTemplate[t_iCount]));
+            t_lFilteredTemplates);
     }
 
     /**
@@ -182,7 +164,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        boolean result = false;
+        boolean result;
 
         @Nullable String t_strTable =
             customResultUtils.retrieveTable(

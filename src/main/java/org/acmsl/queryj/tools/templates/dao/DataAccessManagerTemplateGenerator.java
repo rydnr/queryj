@@ -41,9 +41,8 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,18 +57,17 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate DataAccessManager implementations according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class
-    DataAccessManagerTemplateGenerator<T extends DataAccessManagerTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class DataAccessManagerTemplateGenerator
+    extends AbstractTemplateGenerator<DataAccessManagerTemplate>
+    implements  BasePerRepositoryTemplateGenerator<DataAccessManagerTemplate>,
+                BasePerRepositoryTemplateFactory<DataAccessManagerTemplate>,
                 Singleton
 {
     /**
@@ -100,37 +98,22 @@ public class
     }
 
     /**
-     * Generates a DataAccessManager template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param engineName the engine name.
-     * @param tables the table names.
-     * @param header the file preamble.
-     * @param jmx whether to support JMX.
-     * @return a template.
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition engineName != null
-     * @precondition tables != null
+     * {@inheritDoc}
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
+    public DataAccessManagerTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new DataAccessManagerTemplate(
@@ -140,17 +123,17 @@ public class
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final DataAccessManagerTemplate template)
     {
         return
               capitalize(template.getRepositoryName())
@@ -163,6 +146,7 @@ public class
      * @return the capitalized value.
      * @precondition value != null
      */
+    @NotNull
     protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
@@ -176,6 +160,7 @@ public class
      * @precondition value != null
      * @precondition decorationUtils != null
      */
+    @NotNull
     protected String capitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {

@@ -40,7 +40,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
@@ -56,16 +56,16 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate dataAccessContext-local.xml templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DataAccessContextLocalTemplateGenerator<T extends DataAccessContextLocalTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  DataAccessContextLocalTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class DataAccessContextLocalTemplateGenerator
+    extends AbstractTemplateGenerator<DataAccessContextLocalTemplate>
+    implements BasePerRepositoryTemplateFactory<DataAccessContextLocalTemplate>,
+                BasePerRepositoryTemplateGenerator<DataAccessContextLocalTemplate>,
                 Singleton
 {
     /**
@@ -96,40 +96,22 @@ public class DataAccessContextLocalTemplateGenerator<T extends DataAccessContext
     }
 
     /**
-     * Generates a {@link DataAccessContextLocalTemplate DataAccessContextLocal template}.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param engineName the engine name.
-     * @param jndiLocation the JNDI location.
-     * @param tables the table names.
-     * @param header the header.
-     * @return a template.
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition engineName != null
-     * @precondition jndiLocation != null
-     * @precondition tables != null
+     * {@inheritDoc}
      */
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final String jndiLocation,
-        final Collection tables,
-        final String header)
+    @SuppressWarnings("unused")
+    public DataAccessContextLocalTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new DataAccessContextLocalTemplate(
@@ -139,18 +121,18 @@ public class DataAccessContextLocalTemplateGenerator<T extends DataAccessContext
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
                 jndiLocation,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final DataAccessContextLocalTemplate template)
     {
         return "dataAccessContext-local.xml.sample";
     }

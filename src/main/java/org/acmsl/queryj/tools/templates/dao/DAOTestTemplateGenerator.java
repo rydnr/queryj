@@ -63,8 +63,8 @@ import java.util.Locale;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DAOTestTemplateGenerator<T extends DAOTestTemplate>
-    extends AbstractTemplateGenerator<T>
+public class DAOTestTemplateGenerator
+    extends AbstractTemplateGenerator<DAOTestTemplate>
     implements  DAOTestTemplateFactory,
                 Singleton
 {
@@ -96,49 +96,23 @@ public class DAOTestTemplateGenerator<T extends DAOTestTemplate>
     }
 
     /**
-     * Generates a DAO test template.
-     * @param tableTemplate the table template.
-     * @param metadataManager the metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param daoPackageName the DAO's package name.
-     * @param valueObjectPackageName the value object's package name.
-     * @param jdbcDriver the JDBC driver.
-     * @param jdbcUrl the JDBC URL.
-     * @param jdbcUsername the JDBC username.
-     * @param jdbcPassword the JDBC password.
-     * @param header the header.
-     * @return a template.
-     * @precondition tableTemplate != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition quote != null
-     * @precondition daoPackageName != null
-     * @precondition valueObjectPackageName != null
-     * @precondition jdbcDriver != null
-     * @precondition jdbcUrl != null
-     * @precondition jdbcUserName != null
-     * @precondition jdbcPassword != null
+     * {@inheritDoc
      */
     @NotNull
     public DAOTestTemplate createDAOTestTemplate(
-        final TableTemplate tableTemplate,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String daoPackageName,
-        final String valueObjectPackageName,
-        final String jdbcDriver,
-        final String jdbcUrl,
-        final String jdbcUsername,
-        final String jdbcPassword,
-        final String header)
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String daoPackageName,
+        @NotNull final String valueObjectPackageName,
+        @NotNull final String jdbcDriver,
+        @NotNull final String jdbcUrl,
+        @NotNull final String jdbcUsername,
+        @NotNull final String jdbcPassword,
+        @NotNull final String header)
     {
         return
             new DAOTestTemplate(
@@ -162,7 +136,7 @@ public class DAOTestTemplateGenerator<T extends DAOTestTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template)
+    public String retrieveTemplateFileName(@NotNull final DAOTestTemplate template)
     {
         return
             retrieveTemplateFileName(
@@ -178,7 +152,7 @@ public class DAOTestTemplateGenerator<T extends DAOTestTemplate>
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final DAOTestTemplate template,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

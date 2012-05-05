@@ -46,8 +46,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
@@ -63,17 +62,17 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate BaseResultSetExtractor implementations.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
-public class BaseResultSetExtractorTemplateGenerator<T extends BaseResultSetExtractorTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class BaseResultSetExtractorTemplateGenerator
+    extends AbstractTemplateGenerator<BaseResultSetExtractorTemplate>
+    implements  BasePerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate>,
+                BasePerRepositoryTemplateFactory<BaseResultSetExtractorTemplate>,
                 Singleton
 {
     /**
@@ -89,9 +88,9 @@ public class BaseResultSetExtractorTemplateGenerator<T extends BaseResultSetExtr
     }
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Default constructor.
      */
-    protected BaseResultSetExtractorTemplateGenerator() {}
+    public BaseResultSetExtractorTemplateGenerator() {}
 
     /**
      * Retrieves a {@link BaseResultSetExtractorTemplateGenerator} instance.
@@ -104,32 +103,22 @@ public class BaseResultSetExtractorTemplateGenerator<T extends BaseResultSetExtr
     }
 
     /**
-     * Generates a <i>PreparedStatementCreator</i> template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param engineName the engine name.
-     * @param repositoryName the name of the repository.
-     * @param tables the tables.
-     * @param header the header.
-     * @param jmx whether to support JMX or not.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
-    //      throws  QueryJException
+    @SuppressWarnings("unused")
+    public BaseResultSetExtractorTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new BaseResultSetExtractorTemplate(
@@ -140,17 +129,18 @@ public class BaseResultSetExtractorTemplateGenerator<T extends BaseResultSetExtr
                 jmx,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                packageName,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull T template) {
+    public String retrieveTemplateFileName(@NotNull BaseResultSetExtractorTemplate template)
+    {
         return retrieveTemplateFileName(template, DecorationUtils.getInstance());
     }
 
@@ -162,7 +152,7 @@ public class BaseResultSetExtractorTemplateGenerator<T extends BaseResultSetExtr
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final BaseResultSetExtractorTemplate template, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(template.getRepositoryName())

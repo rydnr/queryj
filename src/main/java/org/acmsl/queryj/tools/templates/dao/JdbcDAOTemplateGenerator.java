@@ -51,8 +51,8 @@ import org.jetbrains.annotations.NotNull;
  * Is able to generate JdbcDAO implementations.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class JdbcDAOTemplateGenerator<T extends JdbcDAOTemplate>
-    extends AbstractTemplateGenerator<T>
+public class JdbcDAOTemplateGenerator
+    extends AbstractTemplateGenerator<JdbcDAOTemplate>
     implements  JdbcDAOTemplateFactory,
                 Singleton
 {
@@ -84,15 +84,11 @@ public class JdbcDAOTemplateGenerator<T extends JdbcDAOTemplate>
     }
 
     /**
-     * Generates a JDBC DAO template.
-     * @param packageName the package name.
-     * @param header the header.
-     * @return a template.
-     * @precondition packageName != null
+     * {@inheritDoc}
      */
     @NotNull
     public JdbcDAOTemplate createJdbcDAOTemplate(
-        final String packageName, final String header)
+        @NotNull final String packageName, @NotNull final String header)
     {
         return new JdbcDAOTemplate(header, getDecoratorFactory(), packageName);
     }
@@ -101,7 +97,7 @@ public class JdbcDAOTemplateGenerator<T extends JdbcDAOTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final JdbcDAOTemplate template)
     {
         return "JdbcDAO.java";
     }

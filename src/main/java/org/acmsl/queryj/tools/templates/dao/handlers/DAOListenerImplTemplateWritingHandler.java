@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -42,18 +41,16 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerImplTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -67,58 +64,43 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOListenerImplTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler<DAOListenerImplTemplate, DAOListenerImplTemplateGenerator>
 {
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected DAOListenerImplTemplateGenerator retrieveTemplateGenerator()
     {
         return DAOListenerImplTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the template from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
+     * {@inheritDoc}
      */
-    @NotNull
-    protected BasePerRepositoryTemplate retrieveTemplate(
-        @NotNull final Map parameters)
-      throws  BuildException
+    @Nullable
+    @Override
+    @SuppressWarnings("unchecked")
+    protected DAOListenerImplTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
-            (BasePerRepositoryTemplate)
+            (DAOListenerImplTemplate)
                 parameters.get(
-                    TemplateMappingManager.DAO_LISTENER_TEMPLATE);
+                    TemplateMappingManager.DAO_LISTENER_IMPL_TEMPLATE);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
+    @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
         @NotNull final String engineName,
-        final Map parameters,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveDAOListenerImplFolder(

@@ -41,12 +41,15 @@ import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,84 +65,53 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<RepositoryDAOTemplate, RepositoryDAOTemplateGenerator>
 {
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    protected RepositoryDAOTemplateGenerator retrieveTemplateFactory()
     {
         return RepositoryDAOTemplateGenerator.getInstance();
     }
 
     /**
-     * Builds the template.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
-     * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param header the header.
-     * @param tableTemplates the table templates.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition packageName != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
+     * {@inheritDoc}
      */
     @Override
-    protected boolean createTemplate(
+    protected void buildTemplate(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @NotNull final String engineName,
         @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String header,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final RepositoryDAOTemplateGenerator templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean jmx,
-        final TableTemplate[] tableTemplates)
+        @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
-        boolean result = false;
-
         if  (definesRepositoryScopedSql(
                  customSqlProvider,
                  getAllowEmptyRepositoryDAOSetting(parameters)))
         {
-            result =
-                super.createTemplate(
-                    parameters,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    metadataManager,
-                    customSqlProvider,
-                    templateFactory,
-                    projectPackage,
-                    packageName,
-                    repository,
-                    header,
-                    jmx,
-                    tableTemplates);
+            super.buildTemplate(
+                parameters,
+                engineName,
+                metadataManager,
+                customSqlProvider,
+                templateFactory,
+                projectPackage,
+                packageName,
+                repository,
+                header,
+                jmx,
+                tableTemplates);
         }
-
-        return result;
     }
     
     /**
@@ -151,9 +123,10 @@ public class RepositoryDAOTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected String retrievePackage(
         @NotNull final String engineName,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -168,8 +141,9 @@ public class RepositoryDAOTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final RepositoryDAOTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.REPOSITORY_DAO_TEMPLATE,
@@ -233,11 +207,15 @@ public class RepositoryDAOTemplateBuildHandler
      */
     protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map parameters)
     {
-        @NotNull Boolean t_Result =
+        boolean result;
+
+        @Nullable Boolean t_Result =
             (Boolean)
                 parameters.get(
                     ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);
 
-        return (t_Result != null) ? t_Result.booleanValue() : false;
+        result = (t_Result != null) && t_Result;
+
+        return result;
     }
 }

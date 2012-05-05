@@ -52,9 +52,8 @@ public interface QueryPreparedStatementCreatorTemplateFactory
      * @param packageName the package name.
      * @param header the header.
      * @return a template.
-     * @throws QueryJException if the input values are invalid.
      */
     @NotNull
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
-        final String packageName, final String header);
+        @NotNull final String packageName, @NotNull final String header);
 }

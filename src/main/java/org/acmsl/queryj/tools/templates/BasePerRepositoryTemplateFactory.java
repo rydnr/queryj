@@ -37,12 +37,55 @@ package org.acmsl.queryj.tools.templates;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
 
 /**
  * Represents entities able to create per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerRepositoryTemplateFactory
+public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTemplate>
     extends  Factory
 {
+    /**
+     * Creates a {@link T} instance with given information.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param projectPackage the project's base package.
+     * @param packageName the package name.
+     * @param repository the repository name.
+     * @param engineName the database engine name.
+     * @param header the file header.
+     * @param jmx whether to enable JMX.
+     * @param tableNames the list of table names.
+     * @param jndiLocation the JNDI location of the data source.
+     * @return the new template.
+     */
+    @Nullable
+    public T createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation);
+
 }

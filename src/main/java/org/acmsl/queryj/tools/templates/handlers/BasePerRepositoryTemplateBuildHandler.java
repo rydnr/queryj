@@ -47,7 +47,6 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -55,17 +54,13 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /*
- * Importing some Commons-Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,13 +70,14 @@ import org.jetbrains.annotations.Nullable;
  *         >Jose San Leandro</a>
  */
 public abstract class BasePerRepositoryTemplateBuildHandler
+    <T extends BasePerRepositoryTemplate, TF extends BasePerRepositoryTemplateFactory<T>>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
     /**
      * Creates a {@link BasePerRepositoryTemplateBuildHandler} instance.
      */
-    public BasePerRepositoryTemplateBuildHandler() {};
+    public BasePerRepositoryTemplateBuildHandler() {}
 
     /**
      * Handles given command.
@@ -107,24 +103,25 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        return
-            createTemplate(
-                    parameters,
-                    retrieveMetadataManager(parameters),
-                    retrieveCustomSqlProvider(parameters),
-                    retrieveTemplateFactory(),
-                    retrieveProjectPackage(parameters),
-                    retrieveTableRepositoryName(parameters),
-                    retrieveHeader(parameters),
-                    retrieveJmx(parameters),
-                    retrieveTableTemplates(parameters));
+        buildTemplate(
+            parameters,
+            retrieveMetadataManager(parameters),
+            retrieveCustomSqlProvider(parameters),
+            retrieveTemplateFactory(),
+            retrieveProjectPackage(parameters),
+            retrieveTableRepositoryName(parameters),
+            retrieveHeader(parameters),
+            retrieveJmx(parameters),
+            retrieveTableTemplates(parameters));
+
+        return false;
     }
 
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
-    protected abstract BasePerRepositoryTemplateFactory retrieveTemplateFactory();
+    protected abstract TF retrieveTemplateFactory();
 
     /**
      * Handles given information.
@@ -137,53 +134,37 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param header the header.
      * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition packageName != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
      */
-    protected boolean createTemplate(
+    protected void buildTemplate(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String repository,
-        final String header,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean jmx,
-        final TableTemplate[] tableTemplates)
+        @NotNull final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
-        return
-           createTemplate(
-                   parameters,
-                   retrieveDatabaseProductName(metadataManager.getMetaData()),
-                   retrieveDatabaseProductVersion(metadataManager.getMetaData()),
-                   retrieveDatabaseIdentifierQuoteString(metadataManager.getMetaData()),
-                   metadataManager,
-                   customSqlProvider,
-                   templateFactory,
-                   projectPackage,
-                   repository,
-                   header,
-                   jmx,
-                   tableTemplates);
-
+        buildTemplate(
+            parameters,
+            retrieveDatabaseProductName(metadataManager.getMetaData()),
+            metadataManager,
+            customSqlProvider,
+            templateFactory,
+            projectPackage,
+            repository,
+            header,
+            jmx,
+            tableTemplates);
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
@@ -192,56 +173,39 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param header the header.
      * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition packageName != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
      */
-    protected boolean createTemplate(
+    protected void buildTemplate(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+        @NotNull final String engineName,
         @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String repository,
-        final String header,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean jmx,
-        final TableTemplate[] tableTemplates)
+        @NotNull final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
-        return
-            createTemplate(
-                    parameters,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    metadataManager,
-                    customSqlProvider,
-                    templateFactory,
-                    projectPackage,
-                    retrievePackage(engineName, parameters),
-                    repository,
-                    header,
-                    jmx,
-                    tableTemplates);
+        buildTemplate(
+            parameters,
+            engineName,
+            metadataManager,
+            customSqlProvider,
+            templateFactory,
+            projectPackage,
+            retrievePackage(engineName, parameters),
+            repository,
+            header,
+            jmx,
+            tableTemplates);
     }
 
     /**
      * Handles given information.
      * @param parameters the parameters.
      * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
@@ -251,46 +215,42 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param header the header.
      * @param jmx whether to support JMX or not.
      * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition packageName != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
      */
-    protected boolean createTemplate(
-        final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
+    protected void buildTemplate(
+        @NotNull final Map parameters,
+        @NotNull final String engineName,
         @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String header,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String header,
         final boolean jmx,
         @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
-        boolean result = false;
+        @NotNull List<String> t_lTableNames = new ArrayList<String>();
 
-        @NotNull Collection t_cTableNames = new ArrayList();
-
-        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        if (tableTemplates != null)
         {
-            t_cTableNames.add(tableTemplates[t_iIndex].getTableName());
+            String t_strTableName;
+            for (TableTemplate t_TableTemplate : tableTemplates)
+            {
+                if (t_TableTemplate != null)
+                {
+                    t_strTableName = t_TableTemplate.getTableName();
+
+                    if (t_strTableName != null)
+                    {
+                        t_lTableNames.add(t_strTableName);
+                    }
+                }
+            }
         }
 
-        @Nullable BasePerRepositoryTemplate t_Template =
+        @Nullable T t_Template =
             createTemplate(
                 metadataManager,
                 metadataManager.getMetadataTypeManager(),
@@ -302,12 +262,13 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 engineName,
                 header,
                 jmx,
-                t_cTableNames,
-                parameters);
+                t_lTableNames,
+                retrieveJNDILocation(parameters));
 
-        storeTemplate(t_Template, parameters);
-
-        return result;
+        if (t_Template != null)
+        {
+            storeTemplate(t_Template, parameters);
+        }
     }
 
     /**
@@ -324,61 +285,38 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param header the header.
      * @param jmx whether to support JMX or not.
      * @param tableNames the table names.
-     * @param parameters the parameters.
      * @return the template.
      * @throws QueryJBuildException on invalid input.
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition engineName != null
-     * @precondition tableNames != null
-     * @precondition factory != null
      */
     @Nullable
-    protected BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String engineName,
-        final String header,
+    protected T createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
         final boolean jmx,
-        final Collection tableNames,
-        final Map parameters)
+        @NotNull final List<String> tableNames,
+        @NotNull String jndiLocation)
       throws  QueryJBuildException
     {
-        @Nullable BasePerRepositoryTemplate result = null;
-
-        if  (templateFactory instanceof DefaultBasePerRepositoryTemplateFactory)
-        {
-            result =
-                ((DefaultBasePerRepositoryTemplateFactory) templateFactory)
-                    .createTemplate(
-                        metadataManager,
-                        metadataTypeManager,
-                        customSqlProvider,
-                        packageName,
-                        projectPackage,
-                        repository,
-                        engineName,
-                        tableNames,
-                        header,
-                        jmx);
-        }
-        else
-        {
-            LogFactory.getLog(BasePerRepositoryTemplateBuildHandler.class).warn(
-                  "Unexpected BasePerRepository factory. Forgot overriding build handler's "
-                + "createTemplate(..) ?");
-        }
-
-        return result;
+        return
+            templateFactory.createTemplate(
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
+                projectPackage,
+                packageName,
+                repository,
+                engineName,
+                header,
+                jmx,
+                tableNames,
+                jndiLocation);
     }
 
     /**
@@ -388,8 +326,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return the package name.
      * @precondition parameters != null
      */
+    @NotNull
     protected String retrievePackage(
-        final String engineName, @NotNull final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -407,10 +346,11 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     protected abstract String retrievePackage(
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils);
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils);
 
     /**
      * Stores the template in given attribute map.
@@ -420,7 +360,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @precondition parameters != null
      */
     protected abstract void storeTemplate(
-        final BasePerRepositoryTemplate template, final Map parameters);
+        @NotNull final T template, @NotNull final Map parameters);
 
     /**
      * Retrieves the table templates.
@@ -428,11 +368,19 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return such templates.
      * @precondition parameters != null
      */
-    @Nullable
+    @NotNull
+    @SuppressWarnings("unchecked")
     protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
     {
-        return
+        TableTemplate[] result =
             (TableTemplate[])
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
+
+        if (result == null)
+        {
+            result = new TableTemplate[0];
+        }
+
+        return result;
     }
 }

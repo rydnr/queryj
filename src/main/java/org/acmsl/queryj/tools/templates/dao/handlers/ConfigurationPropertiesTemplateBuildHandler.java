@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -55,7 +56,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ConfigurationPropertiesTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<ConfigurationPropertiesTemplate, ConfigurationPropertiesTemplateGenerator>
 {
     /**
      * Creates a <code>ConfigurationPropertiesTemplateBuildHandler</code>
@@ -64,42 +65,35 @@ public class ConfigurationPropertiesTemplateBuildHandler
     public ConfigurationPropertiesTemplateBuildHandler() {};
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    @Override
+    protected ConfigurationPropertiesTemplateGenerator retrieveTemplateFactory()
     {
         return ConfigurationPropertiesTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
     @NotNull
+    @Override
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils)
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils)
     {
         return "";
     }
 
     /**
-     * Stores the template in given attribute map.
-     * @param template the template.
-     * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final ConfigurationPropertiesTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE,

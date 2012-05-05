@@ -40,12 +40,15 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -60,30 +63,26 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class BaseResultSetExtractorTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<BaseResultSetExtractorTemplate, BaseResultSetExtractorTemplateGenerator>
 {
     /**
-     * Retrieves the {@link BaseResultSetExtractorTemplateGenerator} instance.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    @Override
+    protected BaseResultSetExtractorTemplateGenerator retrieveTemplateFactory()
     {
         return BaseResultSetExtractorTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
+    @Override
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -92,14 +91,12 @@ public class BaseResultSetExtractorTemplateBuildHandler
     }
 
     /**
-     * Stores the template in given attribute map.
-     * @param template the template.
-     * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final BaseResultSetExtractorTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.BASE_RESULTSET_EXTRACTOR_TEMPLATE,

@@ -39,7 +39,6 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -62,8 +61,8 @@ import java.util.Locale;
  * Is able to generate FkStatementSetter templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class FkStatementSetterTemplateGenerator<T extends FkStatementSetterTemplate>
-    extends AbstractTemplateGenerator<T>
+public class FkStatementSetterTemplateGenerator
+    extends AbstractTemplateGenerator<FkStatementSetterTemplate>
     implements  FkStatementSetterTemplateFactory,
                 Singleton
 {
@@ -95,24 +94,10 @@ public class FkStatementSetterTemplateGenerator<T extends FkStatementSetterTempl
     }
 
     /**
-     * Creates a FkStatementSetter template.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @return a template.
-     * @precondition foreignKey != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition repositoryName != null
+     * {@inheritDoc}
      */
     @NotNull
-    public BasePerForeignKeyTemplate createTemplate(
+    public FkStatementSetterTemplate createTemplate(
         @NotNull final ForeignKey foreignKey,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
@@ -151,7 +136,7 @@ public class FkStatementSetterTemplateGenerator<T extends FkStatementSetterTempl
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final FkStatementSetterTemplate template)
     {
         return
             retrieveTemplateFileName(

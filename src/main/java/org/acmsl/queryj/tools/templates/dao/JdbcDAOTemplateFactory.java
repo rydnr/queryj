@@ -59,5 +59,5 @@ public interface JdbcDAOTemplateFactory
      */
     @NotNull
     public JdbcDAOTemplate createJdbcDAOTemplate(
-        final String packageName, final String header);
+        @NotNull final String packageName, @NotNull final String header);
 }

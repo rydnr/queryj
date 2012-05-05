@@ -414,11 +414,11 @@ public abstract class AbstractQueryJCommandHandler
      * @return such information, or null if the vendor complains.
      * @precondition metadata != null
      */
-    @Nullable
+    @NotNull
     protected String retrieveDatabaseProductName(
-            @NotNull final DatabaseMetaData metadata)
+        @NotNull final DatabaseMetaData metadata)
     {
-        @Nullable String result = null;
+        @NotNull String result = "";
 
         try
         {
@@ -470,40 +470,6 @@ public abstract class AbstractQueryJCommandHandler
                     + "its version via "
                     + "java.sql.DatabaseMetaData.getDatabaseProductVersion()",
                     throwable);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the database identifier quote string.
-     * @param metadata the {@link DatabaseMetaData} instance.
-     * @return such information.
-     * @precondition parameters != null
-     */
-    @Nullable
-    protected String retrieveDatabaseIdentifierQuoteString(
-        @NotNull final DatabaseMetaData metadata)
-    {
-        @Nullable String result = null;
-
-        try
-        {
-            result = metadata.getIdentifierQuoteString();
-        }
-        catch  (@NotNull final Throwable throwable)
-        {
-            Log t_Log =
-                    UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
-
-            if  (t_Log != null)
-            {
-                t_Log.info(
-                        "Database vendor complained when queried about "
-                      + "its version via "
-                      + "java.sql.DatabaseMetaData.getIdentifierQuoteString()",
-                      throwable);
             }
         }
 
@@ -598,6 +564,27 @@ public abstract class AbstractQueryJCommandHandler
         if (exceptionToThrow != null)
         {
             throw exceptionToThrow;
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Retrieves the JNDI location from the attribute map.
+     * @param parameters the parameter map.
+     * @return the location.
+     * @precondition parameters != null
+     */
+    @NotNull
+    @SuppressWarnings("unchecked")
+    protected String retrieveJNDILocation(@NotNull final Map parameters)
+    {
+        String result = (String) parameters.get(ParameterValidationHandler.JNDI_DATASOURCES);
+
+        if (result == null)
+        {
+            result = "";
         }
 
         return result;

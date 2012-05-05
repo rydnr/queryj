@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,28 +40,20 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
- * Importing some Apache Ant classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -71,14 +62,14 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOListenerTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<DAOListenerTemplate, DAOListenerTemplateGenerator>
 {
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    protected DAOListenerTemplateGenerator retrieveTemplateFactory()
     {
         return DAOListenerTemplateGenerator.getInstance();
     }
@@ -86,54 +77,11 @@ public class DAOListenerTemplateBuildHandler
     /**
      * {@inheritDoc}
      */
-    @Override
-    protected boolean createTemplate(
-        final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String header,
-        final boolean jmx,
-        final TableTemplate[] tableTemplates)
-      throws  QueryJBuildException
-    {
-        return
-            super.createTemplate(
-                    parameters,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    metadataManager,
-                    customSqlProvider,
-                    templateFactory,
-                    projectPackage,
-                    packageName,
-                    repository,
-                    header,
-                    jmx,
-                    tableTemplates);
-    }
-    
-    /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
-     */
+    @NotNull
     @Override
     protected String retrievePackage(
         @NotNull final String engineName,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -142,15 +90,12 @@ public class DAOListenerTemplateBuildHandler
     }
 
     /**
-     * Stores the template in given attribute map.
-     * @param template the template.
-     * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
     @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final DAOListenerTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DAO_LISTENER_TEMPLATE,

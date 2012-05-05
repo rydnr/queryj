@@ -237,7 +237,7 @@ public class LazyAttribute
         if  (result == null)
         {
             result =
-                new Integer(
+                Integer.valueOf(
                     retrieveType(
                         getTableName(),
                         getName(),

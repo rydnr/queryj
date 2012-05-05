@@ -41,9 +41,8 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,17 +57,17 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate DAOChooser instances according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DAOChooserTemplateGenerator<T extends DAOChooserTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class DAOChooserTemplateGenerator
+    extends AbstractTemplateGenerator<DAOChooserTemplate>
+    implements  BasePerRepositoryTemplateGenerator<DAOChooserTemplate>,
+                BasePerRepositoryTemplateFactory<DAOChooserTemplate>,
                 Singleton
 {
     /**
@@ -83,9 +82,9 @@ public class DAOChooserTemplateGenerator<T extends DAOChooserTemplate>
     }
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Default constructor.
      */
-    protected DAOChooserTemplateGenerator() {}
+    public DAOChooserTemplateGenerator() {}
 
     /**
      * Retrieves a {@link DAOChooserTemplateGenerator} instance.
@@ -98,37 +97,22 @@ public class DAOChooserTemplateGenerator<T extends DAOChooserTemplate>
     }
 
     /**
-     * Generates a {@link DAOChooserTemplate}.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param engineName the engine name.
-     * @param tables the table names.
-     * @param header the header.
-     * @param jmx whether to support JMX.
-     * @return a template.
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition engineName != null
-     * @precondition tables != null
+     * {@inheritDoc}
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
+    public DAOChooserTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new DAOChooserTemplate(
@@ -138,17 +122,17 @@ public class DAOChooserTemplateGenerator<T extends DAOChooserTemplate>
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final DAOChooserTemplate template)
     {
         return capitalize(template.getRepositoryName()) + "DAOChooser.java";
     }

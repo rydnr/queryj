@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,21 +40,11 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
-
-/*
- * Importing some Apache Ant classes.
- */
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JetBrains annotations.
@@ -73,7 +62,7 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOListenerImplTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<DAOListenerImplTemplate, DAOListenerImplTemplateGenerator>
 {
     /**
      * Retrieves the per-repository template factory.
@@ -81,86 +70,25 @@ public class DAOListenerImplTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    protected DAOListenerImplTemplateGenerator retrieveTemplateFactory()
     {
         return DAOListenerImplTemplateGenerator.getInstance();
     }
 
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
-     * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param packageName the package name.
-     * @param repository the repository.
-     * @param header the header.
-     * @param jmx whether to support JMX or not.
-     * @param tableTemplates the table templates.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition packageName != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
-     */
-    @Override
-    protected boolean createTemplate(
-        final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        @NotNull final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String header,
-        final boolean jmx,
-        final TableTemplate[] tableTemplates)
-      throws  QueryJBuildException
-    {
-        return
-            super.createTemplate(
-                    parameters,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    metadataManager,
-                    customSqlProvider,
-                    templateFactory,
-                    projectPackage,
-                    packageName,
-                    repository,
-                    header,
-                    jmx,
-                    tableTemplates);
-    }
-    
     /**
      * Retrieves the package name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
-     * @throws BuildException if the package retrieval process if faulty.
      * @precondition projectPackage != null
      * @precondition packageUtils != null
      */
+    @NotNull
     @Override
     protected String retrievePackage(
         @NotNull final String engineName,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -178,7 +106,7 @@ public class DAOListenerImplTemplateBuildHandler
     @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final DAOListenerImplTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DAO_LISTENER_IMPL_TEMPLATE,

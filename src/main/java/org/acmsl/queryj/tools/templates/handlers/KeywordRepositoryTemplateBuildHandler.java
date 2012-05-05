@@ -43,10 +43,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -61,12 +58,12 @@ import org.acmsl.commons.utils.StringValidator;
  */
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /*
- * Importing some Commons-Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,85 +72,60 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class KeywordRepositoryTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<KeywordRepositoryTemplate, KeywordRepositoryTemplateGenerator>
 {
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    @Override
+    protected KeywordRepositoryTemplateGenerator retrieveTemplateFactory()
     {
         return KeywordRepositoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Uses the factory to create the template.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param templateFactory the template factory.
-     * @param packageName the package name.
-     * @param projectPackage the base package.
-     * @param repository the repository.
-     * @param engineName the engine name.
-     * @param tableNames the table names.
-     * @param header the header.
-     * @return the template.
-     * @throws QueryJBuildException on invalid input.
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition engineName != null
-     * @precondition tableNames != null
-     * @precondition factory != null
+     * {@inheritDoc}
      */
     @Nullable
-    protected BasePerRepositoryTemplate createTemplate(
+    protected KeywordRepositoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String engineName,
-        final String header,
-        final Collection tableNames,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final KeywordRepositoryTemplateGenerator templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        @NotNull final List<String> tableNames,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        @Nullable KeywordRepositoryTemplate result = null;
+        @Nullable KeywordRepositoryTemplate result =
+            templateFactory.createTemplate(
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
+                packageName,
+                projectPackage,
+                repository,
+                engineName,
+                header,
+                retrieveJmx(parameters),
+                tableNames,
+                retrieveJNDILocation(parameters));
 
-        if  (templateFactory instanceof KeywordRepositoryTemplateFactory)
+        if (result != null)
         {
-            result =
-                (KeywordRepositoryTemplate)
-                    ((KeywordRepositoryTemplateFactory) templateFactory)
-                        .createTemplate(
-                            metadataManager,
-                            metadataTypeManager,
-                            customSqlProvider,
-                            packageName,
-                            projectPackage,
-                            repository,
-                            engineName,
-                            header);
+            @Nullable Collection t_cFieldElements;
 
-            @Nullable Collection t_cFieldElements = null;
-
-            @Nullable AntExternallyManagedFieldsElement
-                t_ExternallyManagedFieldsElement =
-                    retrieveExternallyManagedFieldsElement(parameters);
+            @Nullable AntExternallyManagedFieldsElement t_ExternallyManagedFieldsElement =
+                retrieveExternallyManagedFieldsElement(parameters);
 
             if  (t_ExternallyManagedFieldsElement != null)
             {
-                MetadataTypeManager t_MetadataTypeManager =
-                    metadataManager.getMetadataTypeManager();
-
                 StringValidator t_StringValidator =
                     StringValidator.getInstance();
                 
@@ -174,12 +146,11 @@ public class KeywordRepositoryTemplateBuildHandler
 
                         if  (t_Field != null)
                         {
-                            if  (!t_StringValidator.isEmpty(
-                                     t_Field.getKeyword()))
+                            if  (!t_StringValidator.isEmpty(t_Field.getKeyword()))
                             {
                                 result.addKeyword(
                                     t_Field.getKeyword(),
-                                    t_MetadataTypeManager.getQueryJFieldType(
+                                    metadataTypeManager.getQueryJFieldType(
                                         metadataManager.getColumnType(
                                             t_Field.getTableName(),
                                             t_Field.getName()),
@@ -192,12 +163,6 @@ public class KeywordRepositoryTemplateBuildHandler
                 }
             }
         }
-        else
-        {
-            LogFactory.getLog(BasePerRepositoryTemplateBuildHandler.class).warn(
-                  "Unexpected BasePerRepository factory. "
-                + "Expecting KeywordRepositoryTemplateFactory.");
-        }
 
         return result;
     }
@@ -209,9 +174,10 @@ public class KeywordRepositoryTemplateBuildHandler
      * @return the externally-managed-fields information.
      * @precondition parameters != null
      */
-    @NotNull
-    protected AntExternallyManagedFieldsElement
-        retrieveExternallyManagedFieldsElement(@NotNull final Map parameters)
+    @Nullable
+    @SuppressWarnings("unchecked")
+    protected AntExternallyManagedFieldsElement retrieveExternallyManagedFieldsElement(
+        @NotNull final Map parameters)
     {
         return
             (AntExternallyManagedFieldsElement)
@@ -220,33 +186,26 @@ public class KeywordRepositoryTemplateBuildHandler
     }
 
     /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
+    @Override
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveKeywordRepositoryPackage(
-                projectPackage);
+            packageUtils.retrieveKeywordRepositoryPackage(projectPackage);
     }
 
     /**
-     * Stores the template in given attribute map.
-     * @param template the template.
-     * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
+     * {@inheritDoc
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final KeywordRepositoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.KEYWORD_REPOSITORY_TEMPLATE,

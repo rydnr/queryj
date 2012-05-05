@@ -57,16 +57,16 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TableRepositoryTemplateGenerator<T extends TableRepositoryTemplate>
-    extends  AbstractTemplateGenerator<T>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class TableRepositoryTemplateGenerator
+    extends  AbstractTemplateGenerator<TableRepositoryTemplate>
+    implements  BasePerRepositoryTemplateGenerator<TableRepositoryTemplate>,
+                BasePerRepositoryTemplateFactory<TableRepositoryTemplate>,
                 Singleton
 {
     /**
@@ -82,9 +82,9 @@ public class TableRepositoryTemplateGenerator<T extends TableRepositoryTemplate>
     }
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Default constructor.
      */
-    protected TableRepositoryTemplateGenerator() {}
+    public TableRepositoryTemplateGenerator() {}
 
     /**
      * Retrieves a {@link TableRepositoryTemplateGenerator} instance.
@@ -97,31 +97,22 @@ public class TableRepositoryTemplateGenerator<T extends TableRepositoryTemplate>
     }
 
     /**
-     * Generates a <i>per-repository</i> template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param engineName the engine name.
-     * @param repositoryName the name of the repository.
-     * @param tables the tables.
-     * @param header the header.
-     * @param jmx whether to support JMX.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
+    @SuppressWarnings("unused")
+    public TableRepositoryTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new TableRepositoryTemplate(
@@ -131,17 +122,17 @@ public class TableRepositoryTemplateGenerator<T extends TableRepositoryTemplate>
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final TableRepositoryTemplate template)
     {
         return retrieveTemplateFileName(template, TableRepositoryTemplateUtils.getInstance());
     }
@@ -154,7 +145,8 @@ public class TableRepositoryTemplateGenerator<T extends TableRepositoryTemplate>
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template, @NotNull final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
+        @NotNull final TableRepositoryTemplate template,
+        @NotNull final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
     {
         return
             tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(

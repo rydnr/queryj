@@ -40,20 +40,23 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.DefaultBasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -61,10 +64,10 @@ import java.util.Locale;
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class ConfigurationPropertiesTemplateGenerator<T extends ConfigurationPropertiesTemplate>
-    extends AbstractTemplateGenerator<T>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class ConfigurationPropertiesTemplateGenerator
+    extends AbstractTemplateGenerator<ConfigurationPropertiesTemplate>
+    implements  BasePerRepositoryTemplateGenerator<ConfigurationPropertiesTemplate>,
+                BasePerRepositoryTemplateFactory<ConfigurationPropertiesTemplate>,
                 Singleton
 {
     /**
@@ -96,37 +99,22 @@ public class ConfigurationPropertiesTemplateGenerator<T extends ConfigurationPro
     }
 
     /**
-     * Generates a {@link ConfigurationPropertiesTemplate} template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param engineName the engine name.
-     * @param tables the table names.
-     * @param header the header.
-     * @param jmx whether to support JMX.
-     * @return a template.
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition engineName != null
-     * @precondition tables != null
+     * {@inheritDoc}
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
+    public ConfigurationPropertiesTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new ConfigurationPropertiesTemplate(
@@ -136,17 +124,17 @@ public class ConfigurationPropertiesTemplateGenerator<T extends ConfigurationPro
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final ConfigurationPropertiesTemplate template)
     {
         return retrieveTemplateFileName(template, DAOChooserTemplateUtils.getInstance());
     }
@@ -158,7 +146,8 @@ public class ConfigurationPropertiesTemplateGenerator<T extends ConfigurationPro
      * @return such name.
      */
     @NotNull
-    protected String retrieveTemplateFileName(@NotNull final T template, @NotNull final DAOChooserTemplateUtils utils)
+    protected String retrieveTemplateFileName(
+        @NotNull final ConfigurationPropertiesTemplate template, @NotNull final DAOChooserTemplateUtils utils)
     {
         return
             utils.retrievePropertiesFileName(

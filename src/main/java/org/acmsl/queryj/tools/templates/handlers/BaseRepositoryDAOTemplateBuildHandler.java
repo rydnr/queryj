@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,11 +35,14 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplate;
 import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -53,44 +55,38 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOTemplateBuildHandler
-    extends  RepositoryDAOTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator>
 {
     /**
-     * Retrieves the per-repository template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    @Override
+    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateFactory()
     {
         return BaseRepositoryDAOTemplateGenerator.getInstance();
     }
     
     /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
+    @NotNull
+    @Override
     protected String retrievePackage(
-        final String engineName,
-        final String projectPackage,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return packageUtils.retrieveBaseRepositoryDAOPackage(projectPackage);
     }
 
     /**
-     * Stores the template in given attribute map.
-     * @param template the template.
-     * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final BaseRepositoryDAOTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE,

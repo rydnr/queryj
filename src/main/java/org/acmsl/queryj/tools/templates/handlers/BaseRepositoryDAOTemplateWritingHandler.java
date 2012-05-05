@@ -37,12 +37,13 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplate;
 import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,57 +58,44 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator>
 {
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateGenerator()
     {
         return BaseRepositoryDAOTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the template from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
+     * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
-    protected BasePerRepositoryTemplate retrieveTemplate(
+    @SuppressWarnings("unchecked")
+    protected BaseRepositoryDAOTemplate retrieveTemplate(
         @NotNull final Map parameters)
     {
         return
-            (BasePerRepositoryTemplate)
+            (BaseRepositoryDAOTemplate)
                 parameters.get(
                     TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

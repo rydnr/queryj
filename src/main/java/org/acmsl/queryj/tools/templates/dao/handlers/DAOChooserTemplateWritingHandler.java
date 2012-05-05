@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,11 +36,14 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,61 +58,47 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOChooserTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
+    extends  BasePerRepositoryTemplateWritingHandler<DAOChooserTemplate, DAOChooserTemplateGenerator>
 {
     /**
      * Creates a <code>DAOChooserTemplateWritingHandler</code> instance.
      */
-    public DAOChooserTemplateWritingHandler() {};
+    public DAOChooserTemplateWritingHandler() {}
 
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BasePerRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected DAOChooserTemplateGenerator retrieveTemplateGenerator()
     {
         return DAOChooserTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the templates from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
+     * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
-    protected BasePerRepositoryTemplate retrieveTemplate(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected DAOChooserTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
-            (BasePerRepositoryTemplate)
+            (DAOChooserTemplate)
                 parameters.get(TemplateMappingManager.DAO_CHOOSER_TEMPLATE);
     }
  
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @precondition projectFolder != null
-     * @precondition projectPackage != null
-     * @precondition engineName != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
     @Override
     protected File retrieveOutputDir(
         @NotNull final File projectFolder,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final Map parameters,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return

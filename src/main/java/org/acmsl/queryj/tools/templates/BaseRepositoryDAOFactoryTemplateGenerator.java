@@ -53,16 +53,16 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate the repository DAO interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryDAOFactoryTemplate>
-    extends     AbstractTemplateGenerator<T>
-    implements  DefaultBasePerRepositoryTemplateFactory,
-                BasePerRepositoryTemplateGenerator<T>,
+public class BaseRepositoryDAOFactoryTemplateGenerator
+    extends     AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate>
+    implements  BasePerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate>,
+                BasePerRepositoryTemplateFactory<BaseRepositoryDAOFactoryTemplate>,
                 Singleton
 {
     /**
@@ -93,31 +93,22 @@ public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryD
     }
 
     /**
-     * Generates a {@link BaseRepositoryDAOFactoryTemplate} template.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param engineName the engine name.
-     * @param repositoryName the name of the repository.
-     * @param tables the tables.
-     * @param header the header.
-     * @param jmx whether to support JMX.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
-    public BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables,
-        final String header,
-        final boolean jmx)
+    @SuppressWarnings("unused")
+    public BaseRepositoryDAOFactoryTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         return
             new BaseRepositoryDAOFactoryTemplate(
@@ -127,17 +118,17 @@ public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryD
                 header,
                 getDecoratorFactory(),
                 packageName,
-                basePackageName,
-                repositoryName,
+                projectPackage,
+                repository,
                 engineName,
-                tables);
+                tableNames);
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final BaseRepositoryDAOFactoryTemplate template)
     {
         return retrieveTemplateFileName(template, DecorationUtils.getInstance());
     }
@@ -150,7 +141,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator<T extends BaseRepositoryD
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final BaseRepositoryDAOFactoryTemplate template, @NotNull final DecorationUtils decorationUtils)
     {
         return
               decorationUtils.capitalize(template.getRepositoryName())

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,31 +37,22 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /*
- * Importing some Apache Commons-Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,119 +61,61 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplateBuildHandler
-    extends  RepositoryDAOTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler<RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator>
 {
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
     @NotNull
-    protected BasePerRepositoryTemplateFactory retrieveTemplateFactory()
+    protected RepositoryDAOFactoryTemplateGenerator retrieveTemplateFactory()
     {
         return RepositoryDAOFactoryTemplateGenerator.getInstance();
     }
     
     /**
-     * Uses the factory to create the template.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param factory the template factory.
-     * @param packageName the package name.
-     * @param projectPackage the base package.
-     * @param repository the repository.
-     * @param engineName the engine name.
-     * @param tableNames the table names.
-     * @param header the header.
-     * @return the template.
-     * @throws QueryJBuildException on invalid input.
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition engineName != null
-     * @precondition tableNames != null
-     * @precondition factory != null
+     * {@inheritDoc}
      */
     @Nullable
-    protected BasePerRepositoryTemplate createTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerRepositoryTemplateFactory templateFactory,
-        final String projectPackage,
-        final String packageName,
-        final String repository,
-        final String engineName,
-        final String header,
-        final Collection tableNames,
-        @NotNull final Map parameters)
+    @Override
+    protected RepositoryDAOFactoryTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final RepositoryDAOFactoryTemplateGenerator templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String packageName,
+        @NotNull final String repository,
+        @NotNull final String engineName,
+        @NotNull final String header,
+        final boolean jmx,
+        @NotNull final List<String> tableNames,
+        @NotNull String jndiLocation)
       throws  QueryJBuildException
     {
-        @Nullable BasePerRepositoryTemplate result = null;
-
-        if  (templateFactory instanceof RepositoryDAOFactoryTemplateFactory)
-        {
-            result =
-                ((RepositoryDAOFactoryTemplateFactory) templateFactory)
-                    .createTemplate(
-                        metadataManager,
-                        metadataTypeManager,
-                        customSqlProvider,
-                        packageName,
-                        projectPackage,
-                        repository,
-                        engineName,
-                        retrieveJNDIDataSource(parameters),
-                        tableNames,
-                        header);
-        }
-        else
-        {
-            Log t_Log = UniqueLogFactory.getLog(
-                RepositoryDAOFactoryTemplateBuildHandler.class);
-
-            if  (t_Log != null)
-            {
-                t_Log.warn(
-                    "Unexpected RepositoryDAOFactory template factory.");
-            }
-        }
-
-        return result;
+        return
+            templateFactory.createTemplate(
+                metadataManager,
+                metadataTypeManager,
+                customSqlProvider,
+                packageName,
+                projectPackage,
+                repository,
+                engineName,
+                header,
+                jmx,
+                tableNames,
+                jndiLocation);
     }
 
     /**
-     * Retrieves the JNDI location of the data source from the attribute map.
-     * @param parameters the parameter map.
-     * @return the JNDI location.
-     * @precondition parameters != null
+     * {@inheritDoc}
      */
     @NotNull
-    protected String retrieveJNDIDataSource(@NotNull final Map parameters)
-    {
-        return
-            (String)
-                parameters.get(
-                    ParameterValidationHandler.JNDI_DATASOURCES);
-    }
-
-    /**
-     * Retrieves the package name.
-     * @param engineName the engine name.
-     * @param projectPackage the project package.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return the package name.
-     * @throws QueryJBuildException if the package retrieval process if faulty.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
-     */
+    @Override
     protected String retrievePackage(
         @NotNull final String engineName,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -198,8 +130,10 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * @precondition template != null
      * @precondition parameters != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void storeTemplate(
-        final BasePerRepositoryTemplate template, @NotNull final Map parameters)
+        @NotNull final RepositoryDAOFactoryTemplate template, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.REPOSITORY_DAO_FACTORY_TEMPLATE,

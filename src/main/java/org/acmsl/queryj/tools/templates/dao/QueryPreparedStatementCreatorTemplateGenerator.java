@@ -52,8 +52,8 @@ import org.jetbrains.annotations.NotNull;
  * Is able to generate QueryPreparedStatementCreator templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class QueryPreparedStatementCreatorTemplateGenerator<T extends QueryPreparedStatementCreatorTemplate>
-    extends AbstractTemplateGenerator<T>
+public class QueryPreparedStatementCreatorTemplateGenerator
+    extends AbstractTemplateGenerator<QueryPreparedStatementCreatorTemplate>
     implements  QueryPreparedStatementCreatorTemplateFactory,
                 Singleton
 {
@@ -86,15 +86,11 @@ public class QueryPreparedStatementCreatorTemplateGenerator<T extends QueryPrepa
     }
 
     /**
-     * Generates a QueryPreparedStatementCreator template.
-     * @param packageName the package name.
-     * @param header the header.
-     * @return a template.
-     * @precondition packageName != null
+     * {@inheritDoc}
      */
     @NotNull
     public QueryPreparedStatementCreatorTemplate createQueryPreparedStatementCreatorTemplate(
-        final String packageName, final String header)
+        @NotNull final String packageName, @NotNull final String header)
     {
         return
             new QueryPreparedStatementCreatorTemplate(
@@ -105,7 +101,7 @@ public class QueryPreparedStatementCreatorTemplateGenerator<T extends QueryPrepa
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final QueryPreparedStatementCreatorTemplate template)
     {
         return "QueryPreparedStatementCreator.java";
     }
