@@ -34,10 +34,8 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.customsql.AbstractIdElement;
-import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -107,7 +105,7 @@ public abstract class AbstractResult
 
     /**
      * Specifies the &lt;property-ref&gt; elements.
-     * @param propertyRefs such elements.
+     * @param collection such elements.
      */
     protected final void immutableSetPropertyRefs(final Collection collection)
     {
@@ -116,7 +114,7 @@ public abstract class AbstractResult
 
     /**
      * Specifies the &lt;property-ref&gt; elements.
-     * @param propertyRefs such elements.
+     * @param collection such elements.
      */
     protected void setPropertyRefs(final Collection collection)
     {

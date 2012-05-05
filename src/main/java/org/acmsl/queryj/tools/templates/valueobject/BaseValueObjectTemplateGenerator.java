@@ -164,29 +164,29 @@ public class BaseValueObjectTemplateGenerator
         return
             retrieveTemplateFileName(
                 template,
-                ValueObjectTemplateGenerator.getInstance(),
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
+                EnglishGrammarUtils.getInstance(),
+                ValueObjectUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
      * @param template the template.
-     * @param voTemplateGenerator the {@link ValueObjectTemplateGenerator} instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final BaseValueObjectTemplate template,
-        @NotNull final ValueObjectTemplateGenerator voTemplateGenerator,
         @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return
               "Abstract"
-            + voTemplateGenerator.getVoClassName(
+            + valueObjectUtils.getVoClassName(
                   template.getTableName(),
                   englishGrammarUtils,
                   stringUtils)

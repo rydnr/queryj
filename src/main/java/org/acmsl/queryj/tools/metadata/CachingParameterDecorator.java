@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.ParameterDecorator;
@@ -89,7 +90,7 @@ public class CachingParameterDecorator
      * @precondition metadataTypeManager != null
      */
     public CachingParameterDecorator(
-        @NotNull final ParameterElement parameter,
+        @NotNull final Parameter parameter,
         final MetadataTypeManager metadataTypeManager)
     {
         super(parameter, metadataTypeManager);

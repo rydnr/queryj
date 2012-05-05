@@ -35,15 +35,15 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +62,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomBaseValueObjectTemplateWritingHandler
-    extends  CustomValueObjectTemplateWritingHandler
+    extends BasePerCustomResultTemplateWritingHandler<CustomBaseValueObjectTemplate>
 {
     /**
      * Creates a CustomBaseValueObjectTemplateWritingHandler.
@@ -74,9 +75,9 @@ public class CustomBaseValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomValueObjectTemplateGenerator retrieveTemplateGenerator()
+    protected CustomBaseValueObjectTemplateGenerator retrieveTemplateGenerator()
     {
-        return CustomBaseValueObjectTemplateGenerator.getInstance();
+        return new CustomBaseValueObjectTemplateGenerator();
     }
 
     /**
@@ -88,13 +89,36 @@ public class CustomBaseValueObjectTemplateWritingHandler
     @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected List<CustomValueObjectTemplate> retrieveTemplates(
+    protected List<CustomBaseValueObjectTemplate> retrieveTemplates(
         @NotNull final Map parameters)
         throws QueryJBuildException
     {
         return
-            (List<CustomValueObjectTemplate>)
+            (List<CustomBaseValueObjectTemplate>)
                 parameters.get(
                     TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    protected File retrieveOutputDir(
+        @NotNull final Result resultElement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final File projectFolder,
+        @NotNull final String projectPackage,
+        final boolean useSubFolders,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
+        throws  QueryJBuildException
+    {
+        return
+            packageUtils.retrieveBaseValueObjectFolder(
+                projectFolder, projectPackage, useSubFolders);
+    }
+
 }

@@ -96,7 +96,7 @@ public class CustomValueObjectDecoratorFactory
      */
     @NotNull
     public PropertyDecorator createDecorator(
-        final Property property, final MetadataManager metadataManager)
+        @NotNull final Property property, @NotNull final MetadataManager metadataManager)
     {
         return
             new CustomValueObjectPropertyDecorator(property, metadataManager);

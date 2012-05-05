@@ -39,15 +39,12 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some Ant classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.tools.ant.BuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -81,18 +78,12 @@ public class ValueObjectImplTemplateWritingHandler
     }
 
     /**
-     * Retrieves the templates from the attribute map.
-     *
-     * @param parameters the parameter map.
-     * @return the template.
-     * @throws BuildException if the template retrieval process if faulty.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected List<ValueObjectImplTemplate> retrieveTemplates(
-        @NotNull final Map parameters)
-        throws BuildException
+    protected List<ValueObjectImplTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
             (List<ValueObjectImplTemplate>)
@@ -101,21 +92,7 @@ public class ValueObjectImplTemplateWritingHandler
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param tableName the table name.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @throws BuildException if the output-dir retrieval process if faulty.
-     * @precondition projectFolder != null
-     * @precondition projectPackage != null
-     * @precondition engineName != null
-     * @precondition packageUtils != null
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -127,7 +104,6 @@ public class ValueObjectImplTemplateWritingHandler
         @NotNull final String engineName,
         @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
-      throws  BuildException
     {
         return
             packageUtils.retrieveValueObjectImplFolder(

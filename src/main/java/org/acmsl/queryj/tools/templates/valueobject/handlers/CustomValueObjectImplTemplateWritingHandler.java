@@ -35,18 +35,15 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectImplTemplateGenerator;
-import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-
-/*
- * Importing some Ant classes.
- */
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
-import org.apache.tools.ant.BuildException;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +62,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectImplTemplateWritingHandler
-    extends  CustomValueObjectTemplateWritingHandler
+    extends BasePerCustomResultTemplateWritingHandler<CustomValueObjectImplTemplate>
 {
     /**
      * Creates a CustomValueObjectImplTemplateWritingHandler.
@@ -76,9 +74,9 @@ public class CustomValueObjectImplTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomValueObjectTemplateGenerator retrieveTemplateGenerator()
+    protected CustomValueObjectImplTemplateGenerator retrieveTemplateGenerator()
     {
-        return CustomValueObjectImplTemplateGenerator.getInstance();
+        return new CustomValueObjectImplTemplateGenerator();
     }
 
     /**
@@ -87,13 +85,65 @@ public class CustomValueObjectImplTemplateWritingHandler
     @NotNull
     @Override
     @SuppressWarnings("unchecked")
-    protected List<CustomValueObjectTemplate> retrieveTemplates(
+    protected List<CustomValueObjectImplTemplate> retrieveTemplates(
         @NotNull final Map parameters)
         throws QueryJBuildException
     {
         return
-            (List<CustomValueObjectTemplate>)
+            (List<CustomValueObjectImplTemplate>)
                 parameters.get(
                     TemplateMappingManager.CUSTOM_VALUE_OBJECT_IMPL_TEMPLATES);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    protected File retrieveOutputDir(
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final File projectFolder,
+        @NotNull final String projectPackage,
+        final boolean useSubfolders,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
+        throws  QueryJBuildException
+    {
+        return
+            retrieveOutputDir(
+                projectFolder,
+                projectPackage,
+                useSubfolders,
+                packageUtils);
+    }
+
+    /**
+     * Retrieves the output dir from the attribute map.
+     * @param projectOutputDir the project output dir.
+     * @param projectPackage the project package.
+     * @param useSubfolders whether to use subfolders or not.
+     * @param packageUtils the {@link PackageUtils} instance.
+     * @return such folder.
+     * @throws QueryJBuildException if the output-dir retrieval process fails.
+     * @precondition projectOutputDir != null
+     * @precondition projectPackage != null
+     * @precondition packageUtils != null
+     */
+    @NotNull
+    protected File retrieveOutputDir(
+        @NotNull final File projectOutputDir,
+        @NotNull final String projectPackage,
+        final boolean useSubfolders,
+        @NotNull final PackageUtils packageUtils)
+        throws  QueryJBuildException
+    {
+        return
+            packageUtils.retrieveValueObjectFolder(
+                projectOutputDir,
+                projectPackage,
+                useSubfolders);
     }
 }

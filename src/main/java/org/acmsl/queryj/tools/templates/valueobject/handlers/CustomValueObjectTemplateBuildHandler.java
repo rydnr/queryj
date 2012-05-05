@@ -51,11 +51,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some Ant classes.
- */
-import org.apache.tools.ant.BuildException;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.List;
@@ -95,7 +90,6 @@ public class CustomValueObjectTemplateBuildHandler
         @NotNull final String engineName,
         @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
-      throws BuildException
     {
         return
             packageUtils.retrieveValueObjectPackage(

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -57,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -65,6 +65,7 @@ import java.util.List;
  */
 public class CachingDecoratorFactory
     implements  DecoratorFactory,
+                Serializable,
                 Singleton
 {
     /**
@@ -133,8 +134,8 @@ public class CachingDecoratorFactory
     @NotNull
     public ResultDecorator createDecorator(
         @NotNull final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
         return
             new CachingResultDecorator(
@@ -151,8 +152,8 @@ public class CachingDecoratorFactory
     @NotNull
     public SqlDecorator createDecorator(
         @NotNull final Sql sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
         return
             new CachingSqlDecorator(
@@ -251,7 +252,7 @@ public class CachingDecoratorFactory
     public ParameterDecorator createDecorator(final Parameter parameter, final MetadataManager metadataManager)
     {
         // TODO
-        return null;
+        return new CachingParameterDecorator(parameter, metadataManager.getMetadataTypeManager());
     }
 
     /**
@@ -264,11 +265,12 @@ public class CachingDecoratorFactory
      * @param metadataManager   the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
+    @NotNull
     public PropertyDecorator createDecorator(final Property property, final Result result, final CustomSqlProvider
         customSqlProvider, final MetadataManager metadataManager)
     {
         // TODO
-        return null;
+        return new CachingPropertyDecorator(property, metadataManager);
     }
 
     /**
@@ -323,7 +325,6 @@ public class CachingDecoratorFactory
     public ForeignKeyDecorator createDecorator(final String sourceTableName, final List attributes, final String
         targetTableName, final boolean allowsNull)
     {
-        // TODO
-        return null;
+        return new ForeignKeyDecorator(sourceTableName, attributes, targetTableName, allowsNull);
     }
 }

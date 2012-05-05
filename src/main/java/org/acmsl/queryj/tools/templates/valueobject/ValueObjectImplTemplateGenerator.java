@@ -92,28 +92,7 @@ public class ValueObjectImplTemplateGenerator
     }
 
     /**
-     * Creates a {@link ValueObjectImplTemplate} using given
-     * information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @return the fresh new template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * {@inheritDoc}
      */
     @NotNull
     public ValueObjectImplTemplate createTemplate(
@@ -146,10 +125,10 @@ public class ValueObjectImplTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
+    @Override
     public DecoratorFactory getDecoratorFactory()
     {
         return VODecoratorFactory.getInstance();
@@ -164,29 +143,28 @@ public class ValueObjectImplTemplateGenerator
         return
             retrieveTemplateFileName(
                 template,
-                ValueObjectTemplateGenerator.getInstance(),
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
+                EnglishGrammarUtils.getInstance(),
+                ValueObjectUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     *
      * @param template the template.
-     * @param generator the {@link ValueObjectTemplateGenerator} instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final ValueObjectImplTemplate template,
-        @NotNull final ValueObjectTemplateGenerator generator,
         @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return
-            generator.getVoClassName(
+            valueObjectUtils.getVoClassName(
                 template.getTableName(),
                 englishGrammarUtils,
                 stringUtils)

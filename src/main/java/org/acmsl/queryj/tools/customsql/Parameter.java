@@ -78,4 +78,11 @@ public interface Parameter
      * @return such value.
      */
     public String getType();
+
+    /**
+     * Retrieves the validation value.
+     * @return such value.
+     */
+    public String getValidationValue();
+
 }

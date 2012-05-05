@@ -87,7 +87,7 @@ public class ValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    @SuppressWarnings("unechecked")
+    @SuppressWarnings("unchecked")
     protected List<ValueObjectTemplate> retrieveTemplates(
         @NotNull final Map parameters)
         throws QueryJBuildException

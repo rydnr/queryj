@@ -39,7 +39,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 
@@ -133,105 +132,62 @@ public class CustomValueObjectTemplateGenerator
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * Checks whether given class name corresponds to a standard ValueObject or not.
+     * @param className the class name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return <code>true</code> if the class name is associated to a standard value object.
+     */
+    protected boolean isStandard(@NotNull final String className, @NotNull final MetadataManager metadataManager)
+    {
+        return isStandard(className, metadataManager, ValueObjectUtils.getInstance());
+
+    }
+
+    /**
+     * Checks whether given class name corresponds to a standard ValueObject or not.
+     * @param className the class name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
+     * @return <code>true</code> if the class name is associated to a standard value object.
+     */
+    protected boolean isStandard(
+        @NotNull final String className,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final ValueObjectUtils valueObjectUtils)
+    {
+        return valueObjectUtils.isStandard(className, metadataManager);
+
+    }
+
+    /**
+     * Extracts the class name.
+     * @param classValue the class value.
+     */
+    @NotNull
+    protected String extractClassName(@NotNull final String classValue)
+    {
+        return extractClassName(classValue, ValueObjectUtils.getInstance());
+    }
+
+    /**
+     * Extracts the class name.
+     * @param classValue the class value.
+     */
+    @NotNull
+    protected String extractClassName(
+        @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
+    {
+        return valueObjectUtils.extractClassName(classValue);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return CustomValueObjectDecoratorFactory.getInstance();
-    }
-
-    /**
-     * Checks whether the given class name corresponds to
-     * a standard value object or not.
-     * @param className the class name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @return <code>true</code> in such case.
-     * @precondition className != null
-     * @precondition metadataManager != null
-     */
-    protected boolean isStandard(
-        @NotNull final String className, @NotNull final MetadataManager metadataManager)
-    {
-        return
-            isStandard(
-                className,
-                metadataManager,
-                ValueObjectTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Checks whether the given class name corresponds to
-     * a standard value object or not.
-     * @param className the class name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param valueObjectTemplateGenerator the
-     * {@link ValueObjectTemplateGenerator} instance.
-     * @return <code>true</code> in such case.
-     * @precondition className != null
-     * @precondition metadataManager != null
-     * @precondition valueObjectTemplateGenerator != null
-     */
-    protected boolean isStandard(
-        @NotNull final String className,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final ValueObjectTemplateGenerator valueObjectTemplateGenerator)
-    {
-        boolean result = false;
-
-        String[] t_astrTableNames = metadataManager.getTableNames();
-
-        String t_strVoClassName;
-
-        for (String t_strTableName : t_astrTableNames)
-        {
-            if (t_strTableName != null)
-            {
-                t_strVoClassName =
-                    valueObjectTemplateGenerator.getVoClassName(
-                        t_strTableName);
-
-                if (   (t_strVoClassName != null)
-                    && ((t_strVoClassName.equals(className)))
-                    || ((t_strVoClassName + "ValueObject").equals(className))
-                    || ((className + "ValueObject").equals(t_strVoClassName)))
-                {
-                    result = true;
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Extracts the class name of given fully-qualified class.
-     * @param fqcn such information.
-     * @return the class name.
-     * @precondition fqcn != null
-     */
-    @NotNull
-    public String extractClassName(@NotNull final String fqcn)
-    {
-        return extractClassName(fqcn, PackageUtils.getInstance());
-    }
-
-    /**
-     * Extracts the class name of given fully-qualified class.
-     * @param fqcn such information.
-     * @param packageUtils the {@link PackageUtils} instance.
-     * @return the class name.
-     * @precondition fqcn != null
-     * @precondition packageUtils != null
-     */
-    @NotNull
-    protected String extractClassName(
-        @NotNull final String fqcn, @NotNull final PackageUtils packageUtils)
-    {
-        return packageUtils.extractClassName(fqcn);
     }
 
     /**

@@ -164,29 +164,29 @@ public class ValueObjectFactoryTemplateGenerator
         return
             retrieveTemplateFileName(
                 template,
-                ValueObjectTemplateGenerator.getInstance(),
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
+                EnglishGrammarUtils.getInstance(),
+                ValueObjectUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
      *
      * @param template the template.
-     * @param generator the {@link ValueObjectTemplateGenerator} instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final ValueObjectFactoryTemplate template,
-        @NotNull final ValueObjectTemplateGenerator generator,
         @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return
-            generator.getVoClassName(
+            valueObjectUtils.getVoClassName(
                 template.getTableName(),
                 englishGrammarUtils,
                 stringUtils)

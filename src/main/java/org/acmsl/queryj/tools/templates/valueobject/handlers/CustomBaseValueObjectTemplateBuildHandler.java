@@ -35,10 +35,14 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,7 +60,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomBaseValueObjectTemplateBuildHandler
-    extends  CustomValueObjectTemplateBuildHandler
+    extends BasePerCustomResultTemplateBuildHandler<CustomBaseValueObjectTemplate, CustomBaseValueObjectTemplateGenerator>
 {
     /**
      * Creates a CustomBaseValueObjectTemplateBuildHandler.
@@ -68,7 +72,7 @@ public class CustomBaseValueObjectTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
+    protected CustomBaseValueObjectTemplateGenerator retrieveTemplateFactory()
     {
         return new CustomBaseValueObjectTemplateGenerator();
     }
@@ -79,10 +83,28 @@ public class CustomBaseValueObjectTemplateBuildHandler
     @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        @NotNull final List<CustomValueObjectTemplate> templates, @NotNull final Map parameters)
+        @NotNull final List<CustomBaseValueObjectTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_BASE_VALUE_OBJECT_TEMPLATES,
             templates);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    protected String retrievePackage(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils)
+    {
+        return
+            packageUtils.retrieveValueObjectPackage(
+                projectPackage);
     }
 }

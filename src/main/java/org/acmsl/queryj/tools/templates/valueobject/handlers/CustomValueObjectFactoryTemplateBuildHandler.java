@@ -35,18 +35,18 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
+import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectFactoryTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplate;
-
-/*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.valueobject.CustomValueObjectTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -60,7 +60,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectFactoryTemplateBuildHandler
-    extends  CustomValueObjectTemplateBuildHandler
+    extends BasePerCustomResultTemplateBuildHandler<CustomValueObjectFactoryTemplate, CustomValueObjectFactoryTemplateGenerator>
 {
     /**
      * Creates a CustomValueObjectFactoryTemplateBuildHandler.
@@ -72,7 +72,7 @@ public class CustomValueObjectFactoryTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
+    protected CustomValueObjectFactoryTemplateGenerator retrieveTemplateFactory()
     {
         return new CustomValueObjectFactoryTemplateGenerator();
     }
@@ -81,9 +81,25 @@ public class CustomValueObjectFactoryTemplateBuildHandler
      * {@inheritDoc}
      */
     @Override
+    @NotNull
+    protected String retrievePackage(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils)
+    {
+        return packageUtils.retrieveValueObjectPackage(projectPackage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        @NotNull final List<CustomValueObjectTemplate> templates, @NotNull final Map parameters)
+        @NotNull final List<CustomValueObjectFactoryTemplate> templates, @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.CUSTOM_VALUE_OBJECT_FACTORY_TEMPLATES,

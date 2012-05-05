@@ -111,7 +111,7 @@ public abstract class AbstractTemplateGenerator<N extends Template>
                     AbstractTemplateGenerator.class);
 
             t_Log.warn(
-                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize.getMessage() + ")",
+                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
                 cannotSerialize);
         }
     }

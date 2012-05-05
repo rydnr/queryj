@@ -98,21 +98,7 @@ public class CustomValueObjectTemplateWritingHandler
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     *
-     *
-     * @param result the result element.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the metadata manager.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the {@link org.acmsl.queryj.tools.PackageUtils} instance.
-     * @return such folder.
-     * @throws QueryJBuildException if the output-dir retrieval process fails
+     * {@inheritDoc}
      */
     @NotNull
     @Override

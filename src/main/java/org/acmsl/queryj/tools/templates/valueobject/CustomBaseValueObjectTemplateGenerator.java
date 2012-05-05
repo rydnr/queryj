@@ -47,6 +47,8 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,8 +57,9 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomBaseValueObjectTemplateGenerator
-    extends  CustomValueObjectTemplateGenerator
-    implements  Singleton
+    extends AbstractTemplateGenerator<CustomBaseValueObjectTemplate>
+    implements BasePerCustomResultTemplateFactory<CustomBaseValueObjectTemplate>,
+               Singleton
 {
     /**
      * Default constructor.
@@ -64,27 +67,10 @@ public class CustomBaseValueObjectTemplateGenerator
     public CustomBaseValueObjectTemplateGenerator() {}
 
     /**
-     * Generates a CustomValueObject template.
-     * @param customResult the custom result.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @return the new template.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * {@inheritDoc}
      */
-    @Override
     @Nullable
-    public CustomValueObjectTemplate createTemplate(
+    public CustomBaseValueObjectTemplate createTemplate(
         @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -121,13 +107,61 @@ public class CustomBaseValueObjectTemplateGenerator
     /**
      * {@inheritDoc}
      */
-    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final CustomValueObjectTemplate template)
+    public String retrieveTemplateFileName(@NotNull final CustomBaseValueObjectTemplate template)
     {
         return
               "Abstract"
             + extractClassName(template.getResult().getClassValue())
             + "ValueObject.java";
+    }
+
+    /**
+     * Checks whether given class name corresponds to a standard ValueObject or not.
+     * @param className the class name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return <code>true</code> if the class name is associated to a standard value object.
+     */
+    protected boolean isStandard(@NotNull final String className, @NotNull final MetadataManager metadataManager)
+    {
+        return isStandard(className, metadataManager, ValueObjectUtils.getInstance());
+
+    }
+
+    /**
+     * Checks whether given class name corresponds to a standard ValueObject or not.
+     * @param className the class name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
+     * @return <code>true</code> if the class name is associated to a standard value object.
+     */
+    protected boolean isStandard(
+        @NotNull final String className,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final ValueObjectUtils valueObjectUtils)
+    {
+        return valueObjectUtils.isStandard(className, metadataManager);
+
+    }
+
+    /**
+     * Extracts the class name.
+     * @param classValue the class value.
+     */
+    @NotNull
+    protected String extractClassName(@NotNull final String classValue)
+    {
+        return extractClassName(classValue, ValueObjectUtils.getInstance());
+    }
+
+    /**
+     * Extracts the class name.
+     * @param classValue the class value.
+     */
+    @NotNull
+    protected String extractClassName(
+        @NotNull final String classValue, @NotNull final ValueObjectUtils valueObjectUtils)
+    {
+        return valueObjectUtils.extractClassName(classValue);
     }
 }

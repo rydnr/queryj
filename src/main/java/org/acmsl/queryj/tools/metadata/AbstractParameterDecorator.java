@@ -38,7 +38,10 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.customsql.Parameter;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,7 +71,7 @@ public abstract class AbstractParameterDecorator
      * @precondition metadataTypeManager != null
      */
     public AbstractParameterDecorator(
-        @NotNull final ParameterElement parameter,
+        @NotNull final Parameter parameter,
         final MetadataTypeManager metadataTypeManager)
     {
         super(
@@ -97,6 +100,7 @@ public abstract class AbstractParameterDecorator
      * Specifies the parameter to decorate.
      * @param parameter the parameter.
      */
+    @SuppressWarnings("unused")
     protected void setParameter(final Parameter parameter)
     {
         immutableSetParameter(parameter);
@@ -125,6 +129,7 @@ public abstract class AbstractParameterDecorator
      * Specifies the metadata type manager.
      * @param metadataTypeManager such instance.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
         final MetadataTypeManager metadataTypeManager)
     {
@@ -364,19 +369,17 @@ public abstract class AbstractParameterDecorator
      */
     public boolean equals(final Object object)
     {
-        return equals(getParameter(), object);
-    }
+        boolean result = false;
 
-    /**
-     * Checks whether given object is semantically equal to given instance.
-     * @param parameter the decorated parameter.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @precondition parameter != null
-     */
-    protected boolean equals(@NotNull final Parameter parameter, final Object object)
-    {
-        return parameter.equals(object);
+        Parameter parameter = getParameter();
+
+        if (   (parameter != null)
+            && (object instanceof Parameter))
+        {
+            result = parameter.equals(object);
+        }
+
+        return result;
     }
 
     /**
@@ -401,6 +404,7 @@ public abstract class AbstractParameterDecorator
      * object prevents it from being compared to this Object.
      * @precondition parameter != null
      */
+    @SuppressWarnings("unchecked")
     protected int compareTo(@NotNull final Parameter parameter, final Object object)
         throws  ClassCastException
     {

@@ -156,43 +156,6 @@ public class ValueObjectTemplateGenerator
     }
 
     /**
-     * Retrieves the class name of the value object associated to
-     * given table name.
-     * @param tableName the table name.
-     * @return the class name.
-     */
-    public String getVoClassName(@NotNull final String tableName)
-    {
-        return
-            getVoClassName(
-                tableName,
-                EnglishGrammarUtils.getInstance(),
-                StringUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the class name of the value object associated to
-     * given table name.
-     * @param tableName the table name.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils}
-     * instance.
-     * @param stringUtils the {@link StringUtils} instance.
-     * @return the class name.
-     * @precondition englishGrammarUtils != null
-     * @precondition stringUtils != null
-     */
-    protected String getVoClassName(
-        @NotNull final String tableName,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils,
-        @NotNull final StringUtils stringUtils)
-    {
-        return
-            stringUtils.capitalize(
-                englishGrammarUtils.getSingular(tableName.toLowerCase()),
-                '_');
-    }
-
-    /**
      * {@inheritDoc}
      */
     @NotNull
@@ -202,7 +165,8 @@ public class ValueObjectTemplateGenerator
             retrieveTemplateFileName(
                 template,
                 StringUtils.getInstance(),
-                EnglishGrammarUtils.getInstance());
+                EnglishGrammarUtils.getInstance(),
+                ValueObjectUtils.getInstance());
     }
 
     /**
@@ -211,16 +175,18 @@ public class ValueObjectTemplateGenerator
      * @param template the template.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final ValueObjectTemplate template,
         @NotNull final StringUtils stringUtils,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return
-            getVoClassName(
+            valueObjectUtils.getVoClassName(
                 template.getTableName(),
                 englishGrammarUtils,
                 stringUtils)

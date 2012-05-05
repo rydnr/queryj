@@ -254,8 +254,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
 
     /**
      * Retrieves the output dir from the attribute map.
-     *
-     *
      * @param resultElement the result element.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the metadata manager.

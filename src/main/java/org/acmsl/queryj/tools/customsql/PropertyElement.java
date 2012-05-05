@@ -34,9 +34,8 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,6 +98,7 @@ public class PropertyElement
      * Specifies whether the property is nullable or not.
      * @param flag such condition.
      */
+    @SuppressWarnings("unused")
     protected void setNullable(final boolean flag)
     {
         immutableSetNullable(flag);
@@ -207,5 +207,15 @@ public class PropertyElement
         }
 
         return result;
+    }
+
+    /**
+     * Retrieves the validation value.
+     *
+     * @return such value.
+     */
+    public String getValidationValue()
+    {
+        return null;
     }
 }
