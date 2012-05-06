@@ -61,6 +61,8 @@ import java.util.Collection;
 public class TableRepositoryTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 59071924084056204L;
+
     /**
      * Builds a <code>TableRepositoryTemplate</code> using given
      * information.

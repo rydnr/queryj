@@ -55,6 +55,7 @@ import java.util.Collection;
 public class CachingRowDecorator
     extends  AbstractRowDecorator
 {
+    private static final long serialVersionUID = 7506582704616898824L;
     /**
      * The cached normalized uppercased name.
      */

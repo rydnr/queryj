@@ -37,8 +37,11 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.AttributeDecorator;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -660,7 +663,7 @@ public class CachingAttributeDecorator
             setCachedIsClob(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -705,7 +708,7 @@ public class CachingAttributeDecorator
             setCachedIsString(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -750,7 +753,7 @@ public class CachingAttributeDecorator
             setCachedIsDate(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -1013,6 +1016,7 @@ public class CachingAttributeDecorator
      * number smaller than an int.
      * @return such condition.
      */
+    @SuppressWarnings("unused")
     public boolean getNumberSmallerThanInt()
     {
         Boolean result = getCachedNumberSmallerThanInt();
@@ -1027,7 +1031,7 @@ public class CachingAttributeDecorator
             setCachedNumberSmallerThanInt(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -1122,6 +1126,147 @@ public class CachingAttributeDecorator
             result = 0;
         }
 
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        CachingAttributeDecorator that = (CachingAttributeDecorator) o;
+
+        if (m__bCachedIsClob != null ? !m__bCachedIsClob.equals(that.m__bCachedIsClob) : that.m__bCachedIsClob != null)
+        {
+            return false;
+        }
+        if (m__bCachedIsDate != null ? !m__bCachedIsDate.equals(that.m__bCachedIsDate) : that.m__bCachedIsDate != null)
+        {
+            return false;
+        }
+        if (m__bCachedIsPrimitive != null ? !m__bCachedIsPrimitive.equals(that.m__bCachedIsPrimitive)
+                                          : that.m__bCachedIsPrimitive != null)
+        {
+            return false;
+        }
+        if (m__bCachedIsString != null ? !m__bCachedIsString.equals(that.m__bCachedIsString)
+                                       : that.m__bCachedIsString != null)
+        {
+            return false;
+        }
+        if (m__bCachedNumberSmallerThanInt != null ? !m__bCachedNumberSmallerThanInt
+            .equals(that.m__bCachedNumberSmallerThanInt) : that.m__bCachedNumberSmallerThanInt != null)
+        {
+            return false;
+        }
+        if (m__strCachedGetterMethod != null ? !m__strCachedGetterMethod.equals(that.m__strCachedGetterMethod)
+                                             : that.m__strCachedGetterMethod != null)
+        {
+            return false;
+        }
+        if (m__strCachedJavaName != null ? !m__strCachedJavaName.equals(that.m__strCachedJavaName)
+                                         : that.m__strCachedJavaName != null)
+        {
+            return false;
+        }
+        if (m__strCachedJavaType != null ? !m__strCachedJavaType.equals(that.m__strCachedJavaType)
+                                         : that.m__strCachedJavaType != null)
+        {
+            return false;
+        }
+        if (m__strCachedNameCapitalized != null ? !m__strCachedNameCapitalized.equals(that.m__strCachedNameCapitalized)
+                                                : that.m__strCachedNameCapitalized != null)
+        {
+            return false;
+        }
+        if (m__strCachedNameLowercased != null ? !m__strCachedNameLowercased.equals(that.m__strCachedNameLowercased)
+                                               : that.m__strCachedNameLowercased != null)
+        {
+            return false;
+        }
+        if (m__strCachedNameUncapitalized != null ? !m__strCachedNameUncapitalized
+            .equals(that.m__strCachedNameUncapitalized) : that.m__strCachedNameUncapitalized != null)
+        {
+            return false;
+        }
+        if (m__strCachedNameUppercased != null ? !m__strCachedNameUppercased.equals(that.m__strCachedNameUppercased)
+                                               : that.m__strCachedNameUppercased != null)
+        {
+            return false;
+        }
+        if (m__strCachedObjectType != null ? !m__strCachedObjectType.equals(that.m__strCachedObjectType)
+                                           : that.m__strCachedObjectType != null)
+        {
+            return false;
+        }
+        if (m__strCachedQuery != null ? !m__strCachedQuery.equals(that.m__strCachedQuery)
+                                      : that.m__strCachedQuery != null)
+        {
+            return false;
+        }
+        if (m__strCachedQueryJFieldType != null ? !m__strCachedQueryJFieldType.equals(that.m__strCachedQueryJFieldType)
+                                                : that.m__strCachedQueryJFieldType != null)
+        {
+            return false;
+        }
+        if (m__strCachedStatementSetterFieldType != null ? !m__strCachedStatementSetterFieldType
+            .equals(that.m__strCachedStatementSetterFieldType) : that.m__strCachedStatementSetterFieldType != null)
+        {
+            return false;
+        }
+        if (m__strCachedTableNameNormalizedLowercased != null ? !m__strCachedTableNameNormalizedLowercased
+            .equals(that.m__strCachedTableNameNormalizedLowercased)
+                                                              : that.m__strCachedTableNameNormalizedLowercased != null)
+        {
+            return false;
+        }
+        if (m__strCachedTableNameUppercased != null ? !m__strCachedTableNameUppercased
+            .equals(that.m__strCachedTableNameUppercased) : that.m__strCachedTableNameUppercased != null)
+        {
+            return false;
+        }
+        return !(m__strCachedUncapitalizedTableName != null ? !m__strCachedUncapitalizedTableName
+            .equals(that.m__strCachedUncapitalizedTableName) : that.m__strCachedUncapitalizedTableName != null);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = m__strCachedNameUppercased != null ? m__strCachedNameUppercased.hashCode() : 0;
+        result = 31 * result + (m__strCachedNameCapitalized != null ? m__strCachedNameCapitalized.hashCode() : 0);
+        result = 31 * result + (m__strCachedNameUncapitalized != null ? m__strCachedNameUncapitalized.hashCode() : 0);
+        result = 31 * result + (m__strCachedNameLowercased != null ? m__strCachedNameLowercased.hashCode() : 0);
+        result =
+            31 * result + (m__strCachedUncapitalizedTableName != null ? m__strCachedUncapitalizedTableName.hashCode()
+                                                                      : 0);
+        result = 31 * result + (m__strCachedVoName != null ? m__strCachedVoName.hashCode() : 0);
+        result = 31 * result + (m__strCachedJavaName != null ? m__strCachedJavaName.hashCode() : 0);
+        result = 31 * result + (m__strCachedGetterMethod != null ? m__strCachedGetterMethod.hashCode() : 0);
+        result = 31 * result + (m__bCachedIsPrimitive != null ? m__bCachedIsPrimitive.hashCode() : 0);
+        result = 31 * result + (m__strCachedObjectType != null ? m__strCachedObjectType.hashCode() : 0);
+        result = 31 * result + (m__bCachedIsClob != null ? m__bCachedIsClob.hashCode() : 0);
+        result = 31 * result + (m__bCachedIsString != null ? m__bCachedIsString.hashCode() : 0);
+        result = 31 * result + (m__bCachedIsDate != null ? m__bCachedIsDate.hashCode() : 0);
+        result = 31 * result + (m__strCachedQuery != null ? m__strCachedQuery.hashCode() : 0);
+        result = 31 * result + (m__strCachedQueryJFieldType != null ? m__strCachedQueryJFieldType.hashCode() : 0);
+        result =
+            31 * result + (m__strCachedStatementSetterFieldType != null ? m__strCachedStatementSetterFieldType
+                .hashCode()
+                                                                        : 0);
+        result =
+            31 * result + (m__strCachedTableNameUppercased != null ? m__strCachedTableNameUppercased.hashCode() : 0);
+        result =
+            31 * result + (m__strCachedTableNameNormalizedLowercased != null ? m__strCachedTableNameNormalizedLowercased
+                .hashCode() : 0);
+        result = 31 * result + (m__bCachedNumberSmallerThanInt != null ? m__bCachedNumberSmallerThanInt.hashCode() : 0);
+        result = 31 * result + (m__strCachedJavaType != null ? m__strCachedJavaType.hashCode() : 0);
         return result;
     }
 }

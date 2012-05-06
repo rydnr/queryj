@@ -40,6 +40,8 @@ package org.acmsl.queryj.tools.metadata.vo;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+
 /**
  * Abstract logic-less implementation of {@link Attribute} interface.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -226,6 +228,7 @@ public abstract class AbstractAttribute
      * Specifies the type.
      * @param type such information.
      */
+    @SuppressWarnings("unused")
     protected void setType(final int type)
     {
         immutableSetType(type);
@@ -280,6 +283,7 @@ public abstract class AbstractAttribute
      * Specifies the field type.
      * @param fieldType such information.
      */
+    @SuppressWarnings("unused")
     protected void setFieldType(final String fieldType)
     {
         immutableSetFieldType(fieldType);
@@ -334,6 +338,7 @@ public abstract class AbstractAttribute
      * Specifies the comment.
      * @param comment such comment.
      */
+    @SuppressWarnings("unused")
     protected void setComment(final String comment)
     {
         immutableSetComment(comment);
@@ -362,6 +367,7 @@ public abstract class AbstractAttribute
      * Specifies whether it's managed externally.
      * @param managedExternally such information.
      */
+    @SuppressWarnings("unused")
     protected void setManagedExternally(final boolean managedExternally)
     {
         immutableSetManagedExternally(managedExternally);
@@ -389,6 +395,7 @@ public abstract class AbstractAttribute
      * Specifies whether the attribute allows null values or not.
      * @param allowsNull such information.
      */
+    @SuppressWarnings("unused")
     protected void setAllowsNull(final boolean allowsNull)
     {
         immutableSetAllowsNull(allowsNull);
@@ -420,6 +427,7 @@ public abstract class AbstractAttribute
      * contains data.
      * @param value such information.
      */
+    @SuppressWarnings("unused")
     protected void setValue(final String value)
     {
         immutableSetValue(value);
@@ -449,6 +457,7 @@ public abstract class AbstractAttribute
      * Specifies whether the attribute is marked as read-only.
      * @param flag such condition.
      */
+    @SuppressWarnings("unused")
     protected void setReadOnly(final boolean flag)
     {
         immutableSetReadOnly(flag);
@@ -476,6 +485,7 @@ public abstract class AbstractAttribute
      * Specifies whether the attribute is marked as boolean.
      * @param flag such condition.
      */
+    @SuppressWarnings("unused")
     protected void setBoolean(final boolean flag)
     {
         immutableSetBoolean(flag);
@@ -503,6 +513,7 @@ public abstract class AbstractAttribute
      * Specifies the symbol for <code>true</code> values.
      * @param value such information.
      */
+    @SuppressWarnings("unused")
     protected void setBooleanTrue(final String value)
     {
         immutableSetBooleanTrue(value);
@@ -530,6 +541,7 @@ public abstract class AbstractAttribute
      * Specifies the symbol for <code>false</code> values.
      * @param value such information.
      */
+    @SuppressWarnings("unused")
     protected void setBooleanFalse(final String value)
     {
         immutableSetBooleanFalse(value);
@@ -557,6 +569,7 @@ public abstract class AbstractAttribute
      * Specifies the symbol for <code>null</code> values.
      * @param value such information.
      */
+    @SuppressWarnings("unused")
     protected void setBooleanNull(final String value)
     {
         immutableSetBooleanNull(value);
@@ -575,6 +588,7 @@ public abstract class AbstractAttribute
      * Retrieves the stack trace when the attribute was created.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     protected StackTraceElement[] getStackTrace()
     {
         return m__aStackTrace;
@@ -657,6 +671,105 @@ public abstract class AbstractAttribute
                     .toComparison();
         }
 
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        AbstractAttribute that = (AbstractAttribute) o;
+
+        if (m__bAllowsNull != that.m__bAllowsNull)
+        {
+            return false;
+        }
+        if (m__bBoolean != that.m__bBoolean)
+        {
+            return false;
+        }
+        if (m__bManagedExternally != that.m__bManagedExternally)
+        {
+            return false;
+        }
+        if (m__bReadOnly != that.m__bReadOnly)
+        {
+            return false;
+        }
+        if (m__iType != that.m__iType)
+        {
+            return false;
+        }
+        if (!Arrays.equals(m__aStackTrace, that.m__aStackTrace))
+        {
+            return false;
+        }
+        if (m__strBooleanFalse != null ? !m__strBooleanFalse.equals(that.m__strBooleanFalse)
+                                       : that.m__strBooleanFalse != null)
+        {
+            return false;
+        }
+        if (m__strBooleanNull != null ? !m__strBooleanNull.equals(that.m__strBooleanNull)
+                                      : that.m__strBooleanNull != null)
+        {
+            return false;
+        }
+        if (m__strBooleanTrue != null ? !m__strBooleanTrue.equals(that.m__strBooleanTrue)
+                                      : that.m__strBooleanTrue != null)
+        {
+            return false;
+        }
+        if (m__strComment != null ? !m__strComment.equals(that.m__strComment) : that.m__strComment != null)
+        {
+            return false;
+        }
+        if (m__strFieldType != null ? !m__strFieldType.equals(that.m__strFieldType) : that.m__strFieldType != null)
+        {
+            return false;
+        }
+        if (m__strName != null ? !m__strName.equals(that.m__strName) : that.m__strName != null)
+        {
+            return false;
+        }
+        if (m__strNativeType != null ? !m__strNativeType.equals(that.m__strNativeType) : that.m__strNativeType != null)
+        {
+            return false;
+        }
+        if (m__strTableName != null ? !m__strTableName.equals(that.m__strTableName) : that.m__strTableName != null)
+        {
+            return false;
+        }
+
+        return !(m__strValue != null ? !m__strValue.equals(that.m__strValue) : that.m__strValue != null);
+
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = m__strName != null ? m__strName.hashCode() : 0;
+        result = 31 * result + m__iType;
+        result = 31 * result + (m__strNativeType != null ? m__strNativeType.hashCode() : 0);
+        result = 31 * result + (m__strFieldType != null ? m__strFieldType.hashCode() : 0);
+        result = 31 * result + (m__strTableName != null ? m__strTableName.hashCode() : 0);
+        result = 31 * result + (m__strComment != null ? m__strComment.hashCode() : 0);
+        result = 31 * result + (m__bManagedExternally ? 1 : 0);
+        result = 31 * result + (m__bAllowsNull ? 1 : 0);
+        result = 31 * result + (m__strValue != null ? m__strValue.hashCode() : 0);
+        result = 31 * result + (m__bReadOnly ? 1 : 0);
+        result = 31 * result + (m__bBoolean ? 1 : 0);
+        result = 31 * result + (m__strBooleanTrue != null ? m__strBooleanTrue.hashCode() : 0);
+        result = 31 * result + (m__strBooleanFalse != null ? m__strBooleanFalse.hashCode() : 0);
+        result = 31 * result + (m__strBooleanNull != null ? m__strBooleanNull.hashCode() : 0);
+        result = 31 * result + (m__aStackTrace != null ? Arrays.hashCode(m__aStackTrace) : 0);
         return result;
     }
 }

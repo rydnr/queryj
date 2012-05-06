@@ -104,6 +104,7 @@ public class MySQLTimeFunctionsTemplate
             "Long",
             "Calendar"
         };
+    private static final long serialVersionUID = -4864230184970077463L;
 
     /**
      * Builds a MySQLTimeFunctionsTemplate using given information.

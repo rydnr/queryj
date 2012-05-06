@@ -76,6 +76,7 @@ public class MySQLSystemFunctionsTemplate
             "String",
             "Long"
         };
+    private static final long serialVersionUID = 6747153568429903165L;
 
     /**
      * Builds a MySQLSystemFunctionsTemplate using given information.

@@ -67,6 +67,8 @@ public class JdbcDAOTemplate
     extends  AbstractJdbcDAOTemplate
     implements JdbcDAOTemplateDefaults
 {
+    private static final long serialVersionUID = -5352835365193694100L;
+
     /**
      * Builds a JdbcDAOTemplate using given information.
      * @param header the header.

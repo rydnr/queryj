@@ -101,6 +101,7 @@ public class OracleNumericFunctionsTemplate
             "Int",
             "Long"
         };
+    private static final long serialVersionUID = 4127957139576593734L;
 
     /**
      * Builds a <code>OracleNumericFunctionsTemplate</code>

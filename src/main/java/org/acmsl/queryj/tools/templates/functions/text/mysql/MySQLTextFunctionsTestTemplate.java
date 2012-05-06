@@ -55,6 +55,8 @@ import java.util.Map;
 public class MySQLTextFunctionsTestTemplate
     extends  TextFunctionsTestTemplate
 {
+    private static final long serialVersionUID = -2892048405327163649L;
+
     /**
      * Builds a MySQLTextFunctionsTestTemplate using given information.
      * @param header the header.

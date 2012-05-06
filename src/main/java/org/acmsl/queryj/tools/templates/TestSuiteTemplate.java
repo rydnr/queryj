@@ -59,6 +59,8 @@ public class TestSuiteTemplate
     extends  AbstractTestSuiteTemplate
     implements  TestSuiteTemplateDefaults
 {
+    private static final long serialVersionUID = -8408648049844550906L;
+
     /**
      * Builds a TestSuiteTemplate using given information.
      * @param header the header.

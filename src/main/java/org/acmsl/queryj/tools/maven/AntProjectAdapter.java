@@ -2183,7 +2183,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#log(String, int)}.
+     * @see {@link Project#log(String)}.
      * @param message the message.
      * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
      * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
@@ -2199,12 +2199,7 @@ public class AntProjectAdapter
             case MSG_WARN:
                 log.warn(message);
                 break;
-            case MSG_INFO:
-                log.info(message);
-                break;
             case MSG_VERBOSE:
-                log.debug(message);
-                break;
             case MSG_DEBUG:
                 log.debug(message);
                 break;
@@ -2224,7 +2219,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project.log(String, Throwable, int)}.
+     * @see {@link Log.log(String, Throwable)}.
      * @param message the message.
      * @param throwable the error.
      * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
@@ -2242,12 +2237,7 @@ public class AntProjectAdapter
             case MSG_WARN:
                 log.warn(message, throwable);
                 break;
-            case MSG_INFO:
-                log.info(message, throwable);
-                break;
             case MSG_VERBOSE:
-                log.debug(message, throwable);
-                break;
             case MSG_DEBUG:
                 log.debug(message, throwable);
                 break;

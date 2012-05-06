@@ -184,6 +184,7 @@ public class LazyAttribute
      * Specifies the metadata type manager.
      * @param metadataTypeManager such instance.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
         final MetadataTypeManager metadataTypeManager)
     {
@@ -237,16 +238,15 @@ public class LazyAttribute
         if  (result == null)
         {
             result =
-                Integer.valueOf(
-                    retrieveType(
-                        getTableName(),
-                        getName(),
-                        getMetadataManager()));
+                retrieveType(
+                    getTableName(),
+                    getName(),
+                    getMetadataManager());
 
             setCachedType(result);
         }
 
-        return result.intValue();
+        return result;
     }
 
     /**
@@ -504,7 +504,7 @@ public class LazyAttribute
             setCachedManagedExternally(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -574,7 +574,7 @@ public class LazyAttribute
             setCachedAllowsNull(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -627,6 +627,7 @@ public class LazyAttribute
      * Retrieves whether the attribute is read-only or not.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public boolean getReadOnly()
     {
         Boolean result = getCachedReadOnly();
@@ -644,7 +645,7 @@ public class LazyAttribute
             setCachedReadOnly(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -697,6 +698,7 @@ public class LazyAttribute
      * Retrieves whether the attribute is marked as boolean or not.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public boolean getBoolean()
     {
         Boolean result = getCachedBoolean();
@@ -714,7 +716,7 @@ public class LazyAttribute
             setCachedBoolean(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -943,6 +945,7 @@ public class LazyAttribute
      *
      * @return <code>true</code> if the value is null.
      */
+    @SuppressWarnings("unused")
     public boolean isValueNull()
     {
         return getValue() == null;
@@ -1013,6 +1016,106 @@ public class LazyAttribute
             }
         }
 
+        return result;
+    }
+
+    @Override
+    public boolean equals(final Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        if (!super.equals(o))
+        {
+            return false;
+        }
+
+        LazyAttribute that = (LazyAttribute) o;
+
+        if (m__CachedAllowsNull != null ? !m__CachedAllowsNull.equals(that.m__CachedAllowsNull)
+                                        : that.m__CachedAllowsNull != null)
+        {
+            return false;
+        }
+        if (m__CachedBoolean != null ? !m__CachedBoolean.equals(that.m__CachedBoolean) : that.m__CachedBoolean != null)
+        {
+            return false;
+        }
+        if (m__CachedManagedExternally != null ? !m__CachedManagedExternally.equals(that.m__CachedManagedExternally)
+                                               : that.m__CachedManagedExternally != null)
+        {
+            return false;
+        }
+        if (m__CachedNativeType != null ? !m__CachedNativeType.equals(that.m__CachedNativeType)
+                                        : that.m__CachedNativeType != null)
+        {
+            return false;
+        }
+        if (m__CachedReadOnly != null ? !m__CachedReadOnly.equals(that.m__CachedReadOnly)
+                                      : that.m__CachedReadOnly != null)
+        {
+            return false;
+        }
+        if (m__CachedType != null ? !m__CachedType.equals(that.m__CachedType) : that.m__CachedType != null)
+        {
+            return false;
+        }
+        if (m__MetadataManager != null ? !m__MetadataManager.equals(that.m__MetadataManager)
+                                       : that.m__MetadataManager != null)
+        {
+            return false;
+        }
+        if (m__MetadataTypeManager != null ? !m__MetadataTypeManager.equals(that.m__MetadataTypeManager)
+                                           : that.m__MetadataTypeManager != null)
+        {
+            return false;
+        }
+        if (m__strCachedBooleanFalse != null ? !m__strCachedBooleanFalse.equals(that.m__strCachedBooleanFalse)
+                                             : that.m__strCachedBooleanFalse != null)
+        {
+            return false;
+        }
+        if (m__strCachedBooleanNull != null ? !m__strCachedBooleanNull.equals(that.m__strCachedBooleanNull)
+                                            : that.m__strCachedBooleanNull != null)
+        {
+            return false;
+        }
+        if (m__strCachedBooleanTrue != null ? !m__strCachedBooleanTrue.equals(that.m__strCachedBooleanTrue)
+                                            : that.m__strCachedBooleanTrue != null)
+        {
+            return false;
+        }
+        if (m__strCachedComment != null ? !m__strCachedComment.equals(that.m__strCachedComment)
+                                        : that.m__strCachedComment != null)
+        {
+            return false;
+        }
+        return !(m__strCachedFieldType != null ? !m__strCachedFieldType.equals(that.m__strCachedFieldType)
+                                               : that.m__strCachedFieldType != null);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = super.hashCode();
+        result = 31 * result + (m__CachedType != null ? m__CachedType.hashCode() : 0);
+        result = 31 * result + (m__CachedNativeType != null ? m__CachedNativeType.hashCode() : 0);
+        result = 31 * result + (m__strCachedFieldType != null ? m__strCachedFieldType.hashCode() : 0);
+        result = 31 * result + (m__strCachedComment != null ? m__strCachedComment.hashCode() : 0);
+        result = 31 * result + (m__CachedManagedExternally != null ? m__CachedManagedExternally.hashCode() : 0);
+        result = 31 * result + (m__CachedAllowsNull != null ? m__CachedAllowsNull.hashCode() : 0);
+        result = 31 * result + (m__CachedReadOnly != null ? m__CachedReadOnly.hashCode() : 0);
+        result = 31 * result + (m__CachedBoolean != null ? m__CachedBoolean.hashCode() : 0);
+        result = 31 * result + (m__strCachedBooleanTrue != null ? m__strCachedBooleanTrue.hashCode() : 0);
+        result = 31 * result + (m__strCachedBooleanFalse != null ? m__strCachedBooleanFalse.hashCode() : 0);
+        result = 31 * result + (m__strCachedBooleanNull != null ? m__strCachedBooleanNull.hashCode() : 0);
+        result = 31 * result + (m__MetadataManager != null ? m__MetadataManager.hashCode() : 0);
+        result = 31 * result + (m__MetadataTypeManager != null ? m__MetadataTypeManager.hashCode() : 0);
         return result;
     }
 }

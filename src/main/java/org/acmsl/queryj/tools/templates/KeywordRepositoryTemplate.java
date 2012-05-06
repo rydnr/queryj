@@ -72,6 +72,7 @@ import java.util.Map;
 public class KeywordRepositoryTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 543188035734451487L;
     /**
      * The keywords list.
      */

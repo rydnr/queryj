@@ -58,6 +58,8 @@ public class FkStatementSetterDecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton
 {
+    private static final long serialVersionUID = 3719641553317640136L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

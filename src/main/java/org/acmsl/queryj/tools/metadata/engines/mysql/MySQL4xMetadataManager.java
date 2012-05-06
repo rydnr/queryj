@@ -57,6 +57,8 @@ import java.sql.SQLException;
 public class MySQL4xMetadataManager
     extends  JdbcMetadataManager
 {
+    private static final long serialVersionUID = -9087872657546547720L;
+
     /**
      * Creates a <code>MySQL4xMetadataManager</code>, using given information.
      * @param tableNames explicitly specified table names.

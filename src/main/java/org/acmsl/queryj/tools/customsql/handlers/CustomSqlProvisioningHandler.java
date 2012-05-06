@@ -50,8 +50,6 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -59,16 +57,20 @@ import java.util.Map;
  * the need to manually specify elements derived from the model.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public class CustomSqlProvisioningHandler
     extends  AbstractQueryJCommandHandler
 {
     /**
      * Creates a <code>CustomSqlProvisioningHandler</code> instance.
      */
-    public CustomSqlProvisioningHandler() {};
+    @SuppressWarnings("unused")
+    public CustomSqlProvisioningHandler() {}
 
     /**
      * Handles given parameters.
+     *
+     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -133,48 +135,48 @@ public class CustomSqlProvisioningHandler
         String t_strAttributeName;
         String t_strPropertyName;
         int t_iAttributeCount;
-        Collection t_cResultData;
 
         for  (int t_iTableIndex = 0;
                   t_iTableIndex < t_iTableCount;
                   t_iTableIndex++)
         {
-            t_strTableName = t_astrTableNames[t_iTableIndex];
-            t_strResultName = buildResultName(t_strTableName);
-
-            t_astrAttributeNames =
-                metadataManager.getColumnNames(t_strTableName);
-
-            t_iAttributeCount =
-                (t_astrAttributeNames != null)
-                ?  t_astrAttributeNames.length
-                :  0;
-
-            t_cResultData = new ArrayList();
-
-            for  (int t_iAttributeIndex = 0;
-                      t_iAttributeIndex < t_iAttributeCount;
-                      t_iAttributeIndex++)
+            if (t_astrTableNames != null)
             {
-                t_strAttributeName =
-                    t_astrAttributeNames[t_iAttributeIndex];
+                t_strTableName = t_astrTableNames[t_iTableIndex];
 
-                t_strPropertyName =
-                    buildPropertyName(t_strAttributeName);
+                t_astrAttributeNames =
+                    metadataManager.getColumnNames(t_strTableName);
 
-                customSqlProvider.addProperty(
-                    t_strPropertyName,
-                    t_strTableName,
-                    metadataTypeManager.getFieldType(
-                        metadataManager.getColumnType(
+                t_iAttributeCount =
+                    (t_astrAttributeNames != null)
+                    ?  t_astrAttributeNames.length
+                    :  0;
+
+                for  (int t_iAttributeIndex = 0;
+                          t_iAttributeIndex < t_iAttributeCount;
+                          t_iAttributeIndex++)
+                {
+                    if (t_astrAttributeNames != null)
+                    {
+                        t_strAttributeName =
+                            t_astrAttributeNames[t_iAttributeIndex];
+
+                        t_strPropertyName =
+                            buildPropertyName(t_strAttributeName);
+
+                        customSqlProvider.addProperty(
+                            t_strPropertyName,
                             t_strTableName,
-                            t_strAttributeName),
-                        metadataManager.allowsNull(
-                            t_strTableName,
-                            t_strAttributeName),
-                        metadataManager.isBoolean(t_strTableName, t_strAttributeName)));
-
-                t_cResultData.add(t_strPropertyName);
+                            metadataTypeManager.getFieldType(
+                                metadataManager.getColumnType(
+                                    t_strTableName,
+                                    t_strAttributeName),
+                                metadataManager.allowsNull(
+                                    t_strTableName,
+                                    t_strAttributeName),
+                                metadataManager.isBoolean(t_strTableName, t_strAttributeName)));
+                    }
+                }
             }
         }
 

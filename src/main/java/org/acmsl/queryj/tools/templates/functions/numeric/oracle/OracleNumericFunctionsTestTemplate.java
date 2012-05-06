@@ -59,6 +59,8 @@ import java.util.Map;
 public class OracleNumericFunctionsTestTemplate
     extends  NumericFunctionsTestTemplate
 {
+    private static final long serialVersionUID = 469117972348144356L;
+
     /**
      * Builds an <code>OracleNumericFunctionsTestTemplate</code>
      *  using given information.

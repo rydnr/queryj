@@ -56,6 +56,7 @@ public class PropertyElement
     extends  AbstractParameterElement
     implements  Property
 {
+    private static final long serialVersionUID = -6387934586093006533L;
     /**
      * Whether the property allows nulls or not.
      */

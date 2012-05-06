@@ -51,6 +51,7 @@ import org.jetbrains.annotations.Nullable;
 public class CustomResultSetExtractorPropertyDecorator
     extends  CachingPropertyDecorator
 {
+    private static final long serialVersionUID = 3352072015467667634L;
     /**
      * The cached Java type, capitalized.
      */

@@ -100,6 +100,7 @@ import org.jetbrains.annotations.Nullable;
 public class SqlXmlParser
     implements  CustomSqlProvider
 {
+    private static final long serialVersionUID = 4622172516611441363L;
     /**
      * The complete sql.xml contents.
      */
@@ -118,7 +119,7 @@ public class SqlXmlParser
     /**
      * The class loader.
      */
-    private ClassLoader m__ClassLoader;
+    private transient ClassLoader m__ClassLoader;
 
     /**
      * Creates a SqlXmlParser with given input stream.

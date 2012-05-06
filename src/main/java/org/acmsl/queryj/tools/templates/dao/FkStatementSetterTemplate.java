@@ -57,6 +57,8 @@ import org.jetbrains.annotations.Nullable;
 public class FkStatementSetterTemplate
     extends  BasePerForeignKeyTemplate
 {
+    private static final long serialVersionUID = 7887168844018582237L;
+
     /**
      * Builds a <code>FkStatementSetterTemplate</code> using given
      * information.

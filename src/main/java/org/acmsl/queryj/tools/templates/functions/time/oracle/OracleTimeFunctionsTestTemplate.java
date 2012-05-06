@@ -58,6 +58,8 @@ import java.util.Map;
 public class OracleTimeFunctionsTestTemplate
     extends  TimeFunctionsTestTemplate
 {
+    private static final long serialVersionUID = -4552979236716341319L;
+
     /**
      * Builds an OracleTimeFunctionsTestTemplate using given information.
      * @param header the header.

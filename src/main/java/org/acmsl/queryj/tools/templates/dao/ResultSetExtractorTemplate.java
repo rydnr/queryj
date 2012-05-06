@@ -63,6 +63,8 @@ import java.util.Map;
 public class ResultSetExtractorTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = -1298718907920446761L;
+
     /**
      * Builds a <code>ResultSetExtractorTemplate</code> using given
      * information.

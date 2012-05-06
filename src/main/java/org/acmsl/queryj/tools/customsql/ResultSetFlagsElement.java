@@ -101,6 +101,7 @@ public class ResultSetFlagsElement
      * <i>holdability</i> attribute.
      */
     public static final String CLOSE_CURSORS_AT_COMMIT = "CLOSE_CURSORS_AT_COMMIT";
+    private static final long serialVersionUID = 864474291474631746L;
 
     /**
      * The <i>type</i> attribute.

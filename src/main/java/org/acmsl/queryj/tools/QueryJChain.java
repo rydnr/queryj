@@ -287,7 +287,7 @@ public class QueryJChain
     /**
      * Creates a {@link QueryJChain} instance.
      */
-    public QueryJChain() {};
+    public QueryJChain() {}
 
     /**
      * Creates a {@link QueryJChain} with given information.
@@ -333,6 +333,7 @@ public class QueryJChain
      * forms of the table names.
      * @param encoding the file encoding.
      */
+    @SuppressWarnings("unused")
     public QueryJChain(
         final File settings,
         final String driver,
@@ -404,6 +405,7 @@ public class QueryJChain
      * Specifies the properties.
      * @param settings such settings.
      */
+    @SuppressWarnings("unused")
     public void setSettings(final Properties settings)
     {
         immutableSetSettings(settings);
@@ -968,6 +970,7 @@ public class QueryJChain
      * Retrieves the "outputdirsubfolders" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getOutputdirsubfoldersFlag()
     {
         return m__bOutputdirsubfolders;
@@ -1120,6 +1123,7 @@ public class QueryJChain
      * Retrieves the "extract-procedures" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getExtractProceduresFlag()
     {
         return m__bExtractProcedures;
@@ -1197,6 +1201,7 @@ public class QueryJChain
      * Retrieves the "extract-functions" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getExtractFunctionsFlag()
     {
         return m__bExtractFunctions;
@@ -1481,6 +1486,7 @@ public class QueryJChain
      * Retrieves the "generate-tests" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getGenerateTestsFlag()
     {
         return m__bGenerateTests;
@@ -1561,6 +1567,7 @@ public class QueryJChain
      * Retrieves the "allow-empty-repository-dao" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getAllowEmptyRepositoryDAOFlag()
     {
         return m__bAllowEmptyRepositoryDAO;
@@ -1640,6 +1647,7 @@ public class QueryJChain
      * Retrieves the "implement-marker-interfaces" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getImplementMarkerInterfacesFlag()
     {
         return m__bImplementMarkerInterfaces;
@@ -1768,6 +1776,7 @@ public class QueryJChain
      * Retrieves the "disable-custom-sql-validation" flag.
      * @return such flag.
      */
+    @SuppressWarnings("unused")
     protected boolean getDisableCustomSqlValidationFlag()
     {
         return m__bDisableCustomSqlValidation;
@@ -1968,68 +1977,66 @@ public class QueryJChain
         final boolean generateMock,
         final boolean generateXML)
     {
-        Chain result = chain;
-
-        if  (result != null)
+        if  (chain != null)
         {
-            result.add(new ParameterValidationHandler());
+            chain.add(new ParameterValidationHandler());
 
-            result.add(new JdbcConnectionOpeningHandler());
-            result.add(new CustomSqlProviderRetrievalHandler());
+            chain.add(new JdbcConnectionOpeningHandler());
+            chain.add(new CustomSqlProviderRetrievalHandler());
 
-            result.add(new DatabaseMetaDataCacheReadingHandler());
+            chain.add(new DatabaseMetaDataCacheReadingHandler());
 
-            result.add(new MySQL4xMetaDataRetrievalHandler());
-            result.add(new OracleMetaDataRetrievalHandler());
-            result.add(new JdbcMetaDataRetrievalHandler());
-            result.add(new CustomSqlValidationHandler());
+            chain.add(new MySQL4xMetaDataRetrievalHandler());
+            chain.add(new OracleMetaDataRetrievalHandler());
+            chain.add(new JdbcMetaDataRetrievalHandler());
+            chain.add(new CustomSqlValidationHandler());
 
-            result.add(new DatabaseMetaDataCacheWritingHandler());
+            chain.add(new DatabaseMetaDataCacheWritingHandler());
 
-            result.add(new DatabaseMetaDataLoggingHandler());
+            chain.add(new DatabaseMetaDataLoggingHandler());
 
-            result.add(new ExternallyManagedFieldsRetrievalHandler());
+            chain.add(new ExternallyManagedFieldsRetrievalHandler());
 
-            result.add(new BaseRepositoryDAOTemplateHandlerBundle());
-            result.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
+            chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
+            chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
 
-            result.add(new RepositoryDAOTemplateHandlerBundle());
-            result.add(new RepositoryDAOFactoryTemplateHandlerBundle());
+            chain.add(new RepositoryDAOTemplateHandlerBundle());
+            chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
 
-            result.add(new TableTemplateHandlerBundle());
+            chain.add(new TableTemplateHandlerBundle());
 
-            //result.add(new TableRepositoryTemplateHandlerBundle());
+            //chain.add(new TableRepositoryTemplateHandlerBundle());
 
-            //result.add(new FunctionsBundle());
+            //chain.add(new FunctionsBundle());
 
-            //result.add(new ProcedureRepositoryTemplateHandlerBundle());
+            //chain.add(new ProcedureRepositoryTemplateHandlerBundle());
 
-            //result.add(new KeywordRepositoryTemplateHandlerBundle());
+            //chain.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            result.add(new DAOBundle(generateMock, generateXML));
+            chain.add(new DAOBundle(generateMock, generateXML));
 
-            result.add(new ValueObjectTemplateHandlerBundle());
+            chain.add(new ValueObjectTemplateHandlerBundle());
 
-            result.add(new ValueObjectFactoryTemplateHandlerBundle());
+            chain.add(new ValueObjectFactoryTemplateHandlerBundle());
 
-            result.add(new BaseValueObjectTemplateHandlerBundle());
+            chain.add(new BaseValueObjectTemplateHandlerBundle());
 
-            result.add(new ValueObjectImplTemplateHandlerBundle());
+            chain.add(new ValueObjectImplTemplateHandlerBundle());
 
-            result.add(new CustomValueObjectTemplateHandlerBundle());
+            chain.add(new CustomValueObjectTemplateHandlerBundle());
 
-            result.add(new CustomBaseValueObjectTemplateHandlerBundle());
+            chain.add(new CustomBaseValueObjectTemplateHandlerBundle());
 
-            result.add(new CustomValueObjectImplTemplateHandlerBundle());
+            chain.add(new CustomValueObjectImplTemplateHandlerBundle());
 
-            result.add(new CustomValueObjectFactoryTemplateHandlerBundle());
+            chain.add(new CustomValueObjectFactoryTemplateHandlerBundle());
 
-            result.add(new TestSuiteTemplateHandlerBundle());
+            chain.add(new TestSuiteTemplateHandlerBundle());
 
-            result.add(new JdbcConnectionClosingHandler());
+            chain.add(new JdbcConnectionClosingHandler());
         }
 
-        return result;
+        return chain;
     }
 
     /**
@@ -2104,40 +2111,35 @@ public class QueryJChain
     protected QueryJCommand buildCommandFromSettingsIfPossible(
         @NotNull final QueryJCommand command, final Properties settings)
     {
-        @NotNull QueryJCommand result = command;
+        mapAttributes(
+            command.getAttributeMap(),
+            getDriver(settings),
+            getUrl(settings),
+            getUsername(settings),
+            getPassword(settings),
+            getCatalog(settings),
+            getSchema(settings),
+            getRepository(settings),
+            getPackage(settings),
+            getOutputdir(settings),
+            getHeaderfile(settings),
+            getOutputdirsubfoldersFlag(settings),
+            getExtractTablesFlag(settings),
+            getExtractProceduresFlag(settings),
+            getExtractFunctionsFlag(settings),
+            getJndiDataSource(settings),
+            getGenerateMockDAOImplementationFlag(settings),
+            getGenerateXMLDAOImplementationFlag(settings),
+            getGenerateTestsFlag(settings),
+            getAllowEmptyRepositoryDAOFlag(settings),
+            getImplementMarkerInterfacesFlag(settings),
+            getCustomSqlModel(settings),
+            getDisableCustomSqlValidationFlag(settings),
+            getSqlXmlFile(settings),
+            getGrammarbundle(settings),
+            getEncoding(settings));
 
-        if  (result != null)
-        {
-            mapAttributes(
-                command.getAttributeMap(),
-                getDriver(settings),
-                getUrl(settings),
-                getUsername(settings),
-                getPassword(settings),
-                getCatalog(settings),
-                getSchema(settings),
-                getRepository(settings),
-                getPackage(settings),
-                getOutputdir(settings),
-                getHeaderfile(settings),
-                getOutputdirsubfoldersFlag(settings),
-                getExtractTablesFlag(settings),
-                getExtractProceduresFlag(settings),
-                getExtractFunctionsFlag(settings),
-                getJndiDataSource(settings),
-                getGenerateMockDAOImplementationFlag(settings),
-                getGenerateXMLDAOImplementationFlag(settings),
-                getGenerateTestsFlag(settings),
-                getAllowEmptyRepositoryDAOFlag(settings),
-                getImplementMarkerInterfacesFlag(settings),
-                getCustomSqlModel(settings),
-                getDisableCustomSqlValidationFlag(settings),
-                getSqlXmlFile(settings),
-                getGrammarbundle(settings),
-                getEncoding(settings));
-        }
-
-        return result;
+        return command;
     }
                 
     /**
@@ -2166,7 +2168,7 @@ public class QueryJChain
      * @param allowEmptyRepositoryDAO whether to generate a repository
      * DAO even tough it'll contain no custom queries..
      * @param implementMarkerInterfaces whether to make some generated 
-     * sources implement <code>org.acmsl.commons.patterns</code> <i>Marker</i>
+     * sources implement <code></code>org.acmsl.commons.patterns</code> <i>Marker</i>
      * interfaces.
      * @param customSqlModel the format of the custom SQL file.
      * @param disableCustomSqlValidation whether to disable custom sql
@@ -2177,6 +2179,7 @@ public class QueryJChain
      * @param encoding the encoding.
      * @precondition attributes != null
      */
+    @SuppressWarnings("unchecked")
     protected void mapAttributes(
         @Nullable final Map attributes,
         @Nullable final String driver,

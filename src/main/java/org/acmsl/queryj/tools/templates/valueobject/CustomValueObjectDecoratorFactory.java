@@ -59,6 +59,8 @@ public class CustomValueObjectDecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton
 {
+    private static final long serialVersionUID = -7370390537561619710L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

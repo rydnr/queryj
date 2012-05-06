@@ -67,6 +67,8 @@ import java.util.Collection;
 public class DAOListenerTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 6193504232518508768L;
+
     /**
      * Builds a {@link DAOListenerTemplate} using given
      * information.

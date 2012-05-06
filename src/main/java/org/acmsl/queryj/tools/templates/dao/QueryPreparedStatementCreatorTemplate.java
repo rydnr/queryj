@@ -56,6 +56,8 @@ public class QueryPreparedStatementCreatorTemplate
     extends  AbstractQueryPreparedStatementCreatorTemplate
     implements  QueryPreparedStatementCreatorTemplateDefaults
 {
+    private static final long serialVersionUID = -8333244847638667166L;
+
     /**
      * Builds a <code>QueryPreparedStatementCreatorTemplate</code>
      * using given information.

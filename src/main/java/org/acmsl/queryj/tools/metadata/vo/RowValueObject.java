@@ -50,6 +50,8 @@ import java.util.Collection;
 public class RowValueObject
     extends  AbstractRow
 {
+    private static final long serialVersionUID = -1296713765073878556L;
+
     /**
      * Creates a <code>RowValueObject</code> with the following
      * information.

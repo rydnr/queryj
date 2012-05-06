@@ -69,6 +69,7 @@ import java.util.Map;
 public class DAOTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = 8937585277018883623L;
     /**
      * The static contents.
      */

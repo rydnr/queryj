@@ -68,6 +68,8 @@ public class CachingDecoratorFactory
                 Serializable,
                 Singleton
 {
+    private static final long serialVersionUID = 8153087339399077188L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

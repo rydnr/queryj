@@ -70,6 +70,8 @@ public class JdbcMetadataTypeManager
                 Singleton,
                 Serializable
 {
+    private static final long serialVersionUID = 560475071137483642L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
@@ -466,9 +468,6 @@ public class JdbcMetadataTypeManager
                 case Types.BINARY:
                 case Types.VARBINARY:
                 case Types.LONGVARBINARY:
-                    result = "String";
-                    break;
-
                 case Types.CLOB:
                     result = "String";
                     break;
@@ -684,9 +683,6 @@ public class JdbcMetadataTypeManager
                     break;
 
                 case Types.BIT:
-                    result = "Integer";
-                    break;
-
                 case Types.TINYINT:
                 case Types.SMALLINT:
                 case Types.INTEGER:
@@ -789,9 +785,6 @@ public class JdbcMetadataTypeManager
                     break;
 
                 case Types.BIT:
-                    result = "Integer";
-                    break;
-
                 case Types.TINYINT:
                 case Types.SMALLINT:
                 case Types.INTEGER:
@@ -855,9 +848,6 @@ public class JdbcMetadataTypeManager
                     break;
 
                 case Types.BIT:
-                    result = "Integer";
-                    break;
-
                 case Types.TINYINT:
                 case Types.SMALLINT:
                 case Types.INTEGER:

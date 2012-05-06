@@ -63,6 +63,8 @@ import java.util.Map;
 public class XmlDAOFactoryTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = -1375106503241200698L;
+
     /**
      * Builds a <code>XmlDAOFactoryTemplate</code> using given
      * information.

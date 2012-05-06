@@ -58,6 +58,7 @@ import java.util.Collection;
 public class CachingResultDecorator
     extends  AbstractResultDecorator
 {
+    private static final long serialVersionUID = -381471036464860260L;
     /**
      * The cached normalized id.
      */

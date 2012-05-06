@@ -34,17 +34,10 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing JDK classes.
- */
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Models &lt;connection-flags&gt; elements in <i>custom-sql</i> models, which
@@ -64,6 +57,7 @@ public class ConnectionFlagsElement
     extends  AbstractIdElement
     implements  ConnectionFlags
 {
+    private static final long serialVersionUID = 7483005190203528643L;
     /**
      * The <i>transactionisolation</i> attribute.
      */
@@ -221,4 +215,6 @@ public class ConnectionFlagsElement
 
         return result;
     }
+
+
 }

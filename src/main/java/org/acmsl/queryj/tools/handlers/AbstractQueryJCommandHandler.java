@@ -84,7 +84,7 @@ public abstract class AbstractQueryJCommandHandler
      * @return <code>true</code> if the chain should be stopped.
      * @precondition command != null
      */
-    public boolean handle(final Command command)
+    public boolean handle(@NotNull final Command command)
     {
         boolean result = false;
 
@@ -136,12 +136,14 @@ public abstract class AbstractQueryJCommandHandler
 
     /**
      * Handles given parameters.
+     *
+     *
      * @param parameters the parameters.
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected abstract boolean handle(final Map parameters)
+    protected abstract boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException;
 
     /**
@@ -177,8 +179,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @Nullable
-    protected DatabaseMetaData retrieveDatabaseMetaData(
-        @NotNull final Map parameters)
+    protected DatabaseMetaData retrieveDatabaseMetaData(@NotNull final Map parameters)
       throws QueryJBuildException
     {
         @Nullable DatabaseMetaData result =
@@ -218,8 +219,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @NotNull
-    protected MetadataManager retrieveMetadataManager(
-        @NotNull final Map parameters)
+    protected MetadataManager retrieveMetadataManager(@NotNull final Map parameters)
     {
         return
             (MetadataManager)
@@ -306,7 +306,8 @@ public abstract class AbstractQueryJCommandHandler
      * @param quote the quote.
      * @return the correct one.
      */
-    public static String fixQuote(final String quote)
+    @NotNull
+    public static String fixQuote(@NotNull final String quote)
     {
         String result = quote;
 
@@ -330,8 +331,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @NotNull
-    public static CustomSqlProvider retrieveCustomSqlProvider(
-        @NotNull final Map parameters)
+    public static CustomSqlProvider retrieveCustomSqlProvider(@NotNull final Map parameters)
     {
         return
             (CustomSqlProvider)
@@ -392,8 +392,7 @@ public abstract class AbstractQueryJCommandHandler
      * @return such condition.
      * @precondition parameters != null
      */
-    protected boolean retrieveImplementMarkerInterfaces(
-        @NotNull final Map parameters)
+    protected boolean retrieveImplementMarkerInterfaces(@NotNull final Map parameters)
     {
         Boolean result =
             (Boolean)

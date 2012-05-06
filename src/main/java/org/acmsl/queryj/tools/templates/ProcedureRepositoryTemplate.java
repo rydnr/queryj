@@ -69,6 +69,8 @@ public class ProcedureRepositoryTemplate
     extends  AbstractProcedureRepositoryTemplate
     implements  ProcedureRepositoryTemplateDefaults
 {
+    private static final long serialVersionUID = 1538609668496295602L;
+
     /**
      * Builds a <code>ProcedureRepositoryTemplate</code> using given
      * information.

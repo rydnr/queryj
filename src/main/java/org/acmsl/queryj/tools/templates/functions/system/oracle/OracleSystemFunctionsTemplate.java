@@ -67,6 +67,7 @@ public class OracleSystemFunctionsTemplate
      * The field types.
      */
     static final String[] FIELD_TYPES = new String[] { "String", "Long" };
+    private static final long serialVersionUID = 4198357428008239063L;
 
     /**
      * Builds a OracleSystemFunctionsTemplate using given information.

@@ -69,6 +69,8 @@ public class XMLDAOTemplate
     extends  AbstractXMLDAOTemplate
     implements  XMLDAOTemplateDefaults
 {
+    private static final long serialVersionUID = -568295465587957472L;
+
     /**
      * Builds a <code>XMLDAOTemplate</code> using given information.
      * @param tableTemplate the table template.

@@ -80,6 +80,8 @@ import java.util.Map;
 public class ConfigurationPropertiesTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = -4951603298977943791L;
+
     /**
      * Builds a <code>ConfigurationPropertiesTemplate</code> using given
      * information.

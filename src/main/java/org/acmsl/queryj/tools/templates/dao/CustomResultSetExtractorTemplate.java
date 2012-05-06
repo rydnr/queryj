@@ -67,6 +67,8 @@ import java.util.Map;
 public class CustomResultSetExtractorTemplate
     extends   BasePerCustomResultTemplate
 {
+    private static final long serialVersionUID = 9130292102465717049L;
+
     /**
      * Builds a <code>CustomResultSetExtractorTemplate</code> using
      * information.

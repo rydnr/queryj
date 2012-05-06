@@ -56,6 +56,8 @@ import java.util.Map;
 public class OracleTextFunctionsTestTemplate
     extends  TextFunctionsTestTemplate
 {
+    private static final long serialVersionUID = 8065744341291598110L;
+
     /**
      * Builds a <code>OracleTextFunctionsTestTemplate</code>
      * using given information.

@@ -37,10 +37,8 @@ package org.acmsl.queryj.tools.customsql.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.Property;
@@ -51,7 +49,6 @@ import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.handlers.JdbcConnectionOpeningHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
@@ -59,7 +56,6 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.ConversionUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -129,6 +125,8 @@ public class CustomSqlValidationHandler
 
     /**
      * Handles given information.
+     *
+     *
      * @param parameters the parameters.
      * @return <code>true</code> in case the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.

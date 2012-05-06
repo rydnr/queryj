@@ -75,6 +75,7 @@ public class OracleTextFunctionsTemplate
      * The field types.
      */
     static final String[] FIELD_TYPES = new String[] { "String", "Int" };
+    private static final long serialVersionUID = 1571285160271628283L;
 
     /**
      * Builds a OracleTextFunctionsTemplate using given information.

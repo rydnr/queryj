@@ -80,6 +80,8 @@ import java.util.Map;
 public class DAOChooserTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 7102196328163453291L;
+
     /**
      * Builds a <code>DAOChooserTemplate</code> using given
      * information.

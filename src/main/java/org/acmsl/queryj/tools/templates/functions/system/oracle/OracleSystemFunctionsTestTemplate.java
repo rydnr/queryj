@@ -57,6 +57,8 @@ import java.util.Map;
 public class OracleSystemFunctionsTestTemplate
     extends  SystemFunctionsTestTemplate
 {
+    private static final long serialVersionUID = 4401937717131491599L;
+
     /**
      * Builds a SystemFunctionsTestTemplate using given information.
      * @param header the header.

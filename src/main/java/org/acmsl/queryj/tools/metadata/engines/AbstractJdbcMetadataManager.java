@@ -58,6 +58,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -259,7 +260,7 @@ public abstract class AbstractJdbcMetadataManager
      * <code>MetadataExtractionListener</code> instance.
      */
     protected AbstractJdbcMetadataManager(
-        final MetadataExtractionListener metadataExtractionListener)
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
     {
         immutableSetMetadataExtractionListener(metadataExtractionListener);
         Map t_UniqueMap = new HashMap();
@@ -306,16 +307,16 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition metaData != null
      */
     protected AbstractJdbcMetadataManager(
-        final MetadataExtractionListener metadataExtractionListener,
-        final String[] tableNames,
-        final String[] procedureNames,
+        @Nullable final MetadataExtractionListener metadataExtractionListener,
+        @NotNull final String[] tableNames,
+        @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
         final boolean caseSensitive)
       throws  SQLException,
               QueryJException
@@ -2874,7 +2875,25 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the desired metadata.
+     * Retrieves the table names.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if an error, which is identified by QueryJ,
+     * occurs.
+     */
+    public void extractTableMetadata()
+        throws  SQLException,
+        QueryJException
+    {
+        extractTableMetadata(
+            getTableNames(),
+            getMetaData(),
+            getCatalog(),
+            getSchema(),
+            getMetadataExtractionListener());
+    }
+
+    /**
+     * Retrieves the table names.
      * @param tableNames optionally specified table names.
      * @param metaData the metadata.
      * @param catalog the catalog.
@@ -3824,9 +3843,6 @@ public abstract class AbstractJdbcMetadataManager
                     break;
 
                 case  DatabaseMetaData.columnNullable:
-                    result[t_iIndex] = true;
-                    break;
-
                 case  DatabaseMetaData.columnNullableUnknown:
                 default:
                     result[t_iIndex] = true;

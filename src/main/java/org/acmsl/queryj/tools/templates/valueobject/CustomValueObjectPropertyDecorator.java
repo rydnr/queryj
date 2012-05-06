@@ -51,6 +51,8 @@ import org.jetbrains.annotations.NotNull;
 public class CustomValueObjectPropertyDecorator
     extends  CachingPropertyDecorator
 {
+    private static final long serialVersionUID = 794019849503648501L;
+
     /**
      * Creates a <code>CustomResultSetExtractorPropertyDecorator</code> to
      * decorate given property.

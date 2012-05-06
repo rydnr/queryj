@@ -50,6 +50,7 @@ import org.jetbrains.annotations.Nullable;
 public class CachingPropertyDecorator
     extends  AbstractPropertyDecorator
 {
+    private static final long serialVersionUID = -3484708648329474308L;
     /**
      * The cached Java type.
      */

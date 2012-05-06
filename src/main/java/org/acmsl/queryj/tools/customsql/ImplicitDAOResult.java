@@ -54,6 +54,7 @@ import java.util.Collection;
 public class ImplicitDAOResult
     extends  AbstractResult
 {
+    private static final long serialVersionUID = -8715430319121603602L;
     /**
      * The <i>DAO</i> attribute.
      */

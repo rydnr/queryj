@@ -92,6 +92,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
     /**
      * Handles given information.
+     *
+     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -377,21 +379,17 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         if  (result == null)
         {
-            @NotNull Collection t_cForeignKeys = new ArrayList();
+            @NotNull Collection<ForeignKey> t_cForeignKeys = new ArrayList<ForeignKey>();
             
             @NotNull ForeignKey[] t_aFks =
                 retrieveForeignKeys(metadataManager, decoratorFactory);
 
-            int t_iLength = (t_aFks != null) ? t_aFks.length : 0;
-            
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+            for  (ForeignKey t_ForeignKey : t_aFks)
             {
-                t_cForeignKeys.add(t_aFks[t_iIndex]);
+                t_cForeignKeys.add(t_ForeignKey);
             }
 
-            result =
-                (ForeignKey[])
-                    t_cForeignKeys.toArray(new ForeignKey[t_iLength]);
+            result = t_cForeignKeys.toArray(new ForeignKey[t_aFks.length]);
         }
 
         if (result == null)
@@ -417,76 +415,85 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     {
         @NotNull ForeignKey[] result = EMPTY_FOREIGNKEY_ARRAY;
 
-        @Nullable Collection t_cResult = null;
+        @Nullable Collection<ForeignKey> t_cResult = null;
 
         String[] t_astrTableNames = metadataManager.getTableNames();
 
         int t_iTableLength =
             (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-        @Nullable String t_strSourceTable = null;
-        @Nullable String[] t_astrReferredTables = null;
-        int t_iReferredTableLength = 0;
+        @Nullable String t_strSourceTable;
+        @Nullable String[] t_astrReferredTables;
+        int t_iReferredTableLength;
         @Nullable String[][] t_aastrForeignKeys;
-        int t_iForeignKeyLength = 0;
-        @Nullable String t_strReferredTable = null;
+        int t_iForeignKeyLength;
+        @Nullable String t_strReferredTable;
         
         for  (int t_iTableIndex = 0;
                   t_iTableIndex < t_iTableLength;
                   t_iTableIndex++)
         {
-            t_strSourceTable = t_astrTableNames[t_iTableIndex];
-
-            t_astrReferredTables =
-                metadataManager.getReferringTables(t_strSourceTable);
-
-            t_iReferredTableLength =
-                (t_astrReferredTables != null)
-                ?  t_astrReferredTables.length
-                :  0;
-
-            t_strReferredTable = null;
-            t_aastrForeignKeys = null;
-            
-            for  (int t_iReferredTableIndex = 0;
-                      t_iReferredTableIndex < t_iReferredTableLength;
-                      t_iReferredTableIndex++)
+            if (t_astrTableNames != null)
             {
-                t_strReferredTable =
-                    t_astrReferredTables[t_iReferredTableIndex];
+                t_strSourceTable = t_astrTableNames[t_iTableIndex];
 
-                t_aastrForeignKeys =
-                    metadataManager.getReferredKeys(
-                        t_strSourceTable, t_strReferredTable);
-
-                if  (t_cResult == null)
+                if (t_strSourceTable != null)
                 {
-                    t_cResult = new ArrayList();
-                }
+                    t_astrReferredTables =
+                        metadataManager.getReferringTables(t_strSourceTable);
 
-                t_iForeignKeyLength =
-                    (t_aastrForeignKeys != null)
-                    ?  t_aastrForeignKeys.length
-                    :  0;
-                
-                for  (int t_iForeignKeyIndex = 0;
-                          t_iForeignKeyIndex < t_iForeignKeyLength;
-                          t_iForeignKeyIndex++)
-                {
-                    t_cResult.add(
-                        buildForeignKey(
-                            t_aastrForeignKeys[t_iForeignKeyIndex],
-                            t_strSourceTable,
-                            t_strReferredTable,
-                            metadataManager,
-                            decoratorFactory));
+                    t_iReferredTableLength =
+                        (t_astrReferredTables != null)
+                        ?  t_astrReferredTables.length
+                        :  0;
+
+                    for  (int t_iReferredTableIndex = 0;
+                              t_iReferredTableIndex < t_iReferredTableLength;
+                              t_iReferredTableIndex++)
+                    {
+                        if (t_astrReferredTables != null)
+                        {
+                            t_strReferredTable =
+                                t_astrReferredTables[t_iReferredTableIndex];
+
+                            t_aastrForeignKeys =
+                                metadataManager.getReferredKeys(
+                                    t_strSourceTable, t_strReferredTable);
+
+                            if  (t_cResult == null)
+                            {
+                                t_cResult = new ArrayList<ForeignKey>();
+                            }
+
+                            t_iForeignKeyLength =
+                                (t_aastrForeignKeys != null)
+                                ?  t_aastrForeignKeys.length
+                                :  0;
+
+                            for  (int t_iForeignKeyIndex = 0;
+                                      t_iForeignKeyIndex < t_iForeignKeyLength;
+                                      t_iForeignKeyIndex++)
+                            {
+                                if (t_aastrForeignKeys != null)
+                                {
+                                    t_cResult.add(
+                                        buildForeignKey(
+                                            t_aastrForeignKeys[t_iForeignKeyIndex],
+                                            t_strSourceTable,
+                                            t_strReferredTable,
+                                            metadataManager,
+                                            decoratorFactory));
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
 
         if  (t_cResult != null)
         {
-            result = (ForeignKey[]) t_cResult.toArray(EMPTY_FOREIGNKEY_ARRAY);
+            result = t_cResult.toArray(new ForeignKey[t_cResult.size()]);
         }
 
         return result;
@@ -514,36 +521,39 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @Nullable ForeignKey result = null;
+        @Nullable ForeignKey result;
 
-        @NotNull List t_lAttributes = new ArrayList();
+        @NotNull List<Attribute> t_lAttributes = new ArrayList<Attribute>();
 
         int t_iAttributeLength = (attributes != null) ? attributes.length : 0;
 
         MetadataTypeManager t_TypeManager =
             metadataManager.getMetadataTypeManager();
 
-        @Nullable Attribute t_Attribute = null;
+        @Nullable Attribute t_Attribute;
         boolean t_bAllowsNull = false;
 
         for  (int t_iIndex = 0; t_iIndex < t_iAttributeLength; t_iIndex++)
         {
-            t_Attribute =
-                buildAttribute(
-                    attributes[t_iIndex],
-                    sourceTable,
-                    metadataManager,
-                    t_TypeManager,
-                    decoratorFactory);
-
-            if  (t_Attribute != null)
+            if (attributes != null)
             {
-                t_lAttributes.add(t_Attribute);
+                t_Attribute =
+                    buildAttribute(
+                        attributes[t_iIndex],
+                        sourceTable,
+                        metadataManager,
+                        t_TypeManager,
+                        decoratorFactory);
 
-                if  (   (!t_bAllowsNull)
-                     && (t_Attribute.getAllowsNull()))
+                if  (t_Attribute != null)
                 {
-                    t_bAllowsNull = true;
+                    t_lAttributes.add(t_Attribute);
+
+                    if  (   (!t_bAllowsNull)
+                         && (t_Attribute.getAllowsNull()))
+                    {
+                        t_bAllowsNull = true;
+                    }
                 }
             }
         }
@@ -577,7 +587,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @Nullable Attribute result = null;
+        @Nullable Attribute result;
 
         int t_iType = metadataManager.getColumnType(tableName, attributeName);
 

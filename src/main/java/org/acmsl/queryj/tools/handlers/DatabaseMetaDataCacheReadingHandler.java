@@ -35,12 +35,15 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing jetbrains annotations.
  */
+import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.io.File;
 import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -115,7 +119,39 @@ public class DatabaseMetaDataCacheReadingHandler
         @NotNull final Map parameters, @Nullable final MetadataManager metadataManager)
         throws  QueryJBuildException
     {
-        // NO-OP implementation to avoid metadata extraction.
+        // We only need the table names, if they're not extracted already.
+        if (metadataManager != null)
+        {
+            String[] t_astrTableNames = metadataManager.getTableNames();
+
+            if (   (t_astrTableNames == null)
+                || (t_astrTableNames.length == 0))
+            {
+                try
+                {
+                    metadataManager.extractTableMetadata();
+                }
+                catch (@NotNull final SQLException cannotExtractTableMetadata)
+                {
+                    Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
+
+                    if (t_Log != null)
+                    {
+                        t_Log.warn("Cannot extract table metadata", cannotExtractTableMetadata);
+                    }
+                }
+                catch (@NotNull final QueryJException otherError)
+                {
+                    Log t_Log = UniqueLogFactory.getLog(DatabaseMetaDataCacheReadingHandler.class);
+
+                    if (t_Log != null)
+                    {
+                        t_Log.warn("Cannot extract table metadata", otherError);
+                    }
+                }
+            }
+        }
+
         return false;
     }
 

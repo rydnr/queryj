@@ -78,6 +78,7 @@ import java.util.Map;
 public class DataAccessContextLocalTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 1456110852254779514L;
     /**
      * The JNDI location.
      */

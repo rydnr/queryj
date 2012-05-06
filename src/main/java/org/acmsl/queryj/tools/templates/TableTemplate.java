@@ -65,6 +65,7 @@ import java.util.Map;
 public class TableTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = -1114015521191407454L;
     /**
      * The field list.
      */

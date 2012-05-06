@@ -38,13 +38,9 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.handlers
-    .DAOFactoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.jetbrains.annotations.NotNull;
@@ -81,6 +77,8 @@ public class DAOFactoryTemplateWritingHandler
 
     /**
      * Handles given parameters.
+     *
+     *
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.

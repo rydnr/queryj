@@ -52,6 +52,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 public class ParameterElement
     extends  AbstractParameterElement
 {
+    private static final long serialVersionUID = 106725100966627608L;
     /**
      * The validation value.
      */

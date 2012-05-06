@@ -70,6 +70,8 @@ import java.util.Map;
 public class DAOFactoryTemplate
      extends AbstractDAOFactoryTemplate
 {
+    private static final long serialVersionUID = -836140578744901008L;
+
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
      * @param header the header.

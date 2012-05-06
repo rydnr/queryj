@@ -50,6 +50,8 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 public class ParameterRefElement
     extends  AbstractIdElement
 {
+    private static final long serialVersionUID = 6158747761881841323L;
+
     /**
      * Creates a ParameterRefElement with given information.
      * @param id the <i>id</i> attribute.

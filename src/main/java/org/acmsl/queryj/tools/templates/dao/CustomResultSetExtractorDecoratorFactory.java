@@ -59,6 +59,8 @@ public class CustomResultSetExtractorDecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton
 {
+    private static final long serialVersionUID = 1470687956486903790L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

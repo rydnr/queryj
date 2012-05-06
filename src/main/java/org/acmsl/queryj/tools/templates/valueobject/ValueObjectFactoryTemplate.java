@@ -61,6 +61,8 @@ import java.util.Map;
 public class ValueObjectFactoryTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = 7516835891870197968L;
+
     /**
      * Builds a <code>ValueObjectFactoryTemplate</code> using given
      * information.

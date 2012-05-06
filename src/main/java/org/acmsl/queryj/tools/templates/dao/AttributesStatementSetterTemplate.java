@@ -57,6 +57,8 @@ import org.jetbrains.annotations.Nullable;
 public class AttributesStatementSetterTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = -702786604326883063L;
+
     /**
      * Builds a <code>AttributesStatementSetterTemplate</code> using given
      * information.

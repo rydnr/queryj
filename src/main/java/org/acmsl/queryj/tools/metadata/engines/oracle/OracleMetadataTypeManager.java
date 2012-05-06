@@ -62,6 +62,8 @@ public class OracleMetadataTypeManager
     extends  JdbcMetadataTypeManager
     implements  Singleton
 {
+    private static final long serialVersionUID = -5734188707115499051L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

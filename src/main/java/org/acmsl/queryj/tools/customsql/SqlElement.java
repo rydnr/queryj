@@ -63,6 +63,7 @@ public class SqlElement
     extends  AbstractIdElement
     implements Sql
 {
+    private static final long serialVersionUID = -7884918833943291505L;
     /**
      * The <i>dao</i> attribute.
      */

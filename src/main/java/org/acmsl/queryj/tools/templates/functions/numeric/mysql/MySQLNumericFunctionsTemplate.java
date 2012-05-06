@@ -99,6 +99,7 @@ public class MySQLNumericFunctionsTemplate
             "Int",
             "Long"
         };
+    private static final long serialVersionUID = -7434938260009656319L;
 
     /**
      * Builds a MySQLNumericFunctionsTemplate using given information.

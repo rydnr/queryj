@@ -68,6 +68,8 @@ public class XMLDAOTestTemplate
     extends  AbstractXMLDAOTestTemplate
     implements XMLDAOTestTemplateDefaults
 {
+    private static final long serialVersionUID = -3685414325159306203L;
+
     /**
      * Builds a <code>XMLDAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.

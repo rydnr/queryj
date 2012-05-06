@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.functions.numeric.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGenerator;
@@ -69,6 +68,8 @@ public class NumericFunctionsTemplateWritingHandler
 
     /**
      * Handles given parameters.
+     *
+     *
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.

@@ -138,20 +138,9 @@ public class TemplateHandlerBundle
      */
     protected boolean isTemplateHandlingEnabled()
     {
-        boolean result = (this instanceof CompositeQueryJCommandHandler);
-
-        if (!result)
-        {
-            result =
-                isTemplateHandlingEnabled(
-                    retrieveTemplateName(getClass().getName()));
-        }
-        else
-        {
-            int a = -5; // for debugging purposes
-        }
-
-        return result;
+        return
+            isTemplateHandlingEnabled(
+                retrieveTemplateName(getClass().getName()));
     }
 
     /**

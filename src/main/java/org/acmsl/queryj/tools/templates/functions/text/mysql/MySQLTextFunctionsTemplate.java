@@ -76,6 +76,7 @@ public class MySQLTextFunctionsTemplate
      */
     static final String[] FIELD_TYPES =
         new String[] { "String", "Int" };
+    private static final long serialVersionUID = -7790016971437523909L;
 
     /**
      * Builds a <code>MySQLTextFunctionsTemplate</code> using given

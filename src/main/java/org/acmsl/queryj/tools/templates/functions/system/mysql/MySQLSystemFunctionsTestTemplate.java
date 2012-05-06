@@ -56,6 +56,8 @@ import java.util.Map;
 public class MySQLSystemFunctionsTestTemplate
     extends  SystemFunctionsTestTemplate
 {
+    private static final long serialVersionUID = 2516537311916358798L;
+
     /**
      * Builds a <code>SystemFunctionsTestTemplate</code> using given 
      * information.

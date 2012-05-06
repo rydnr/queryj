@@ -92,6 +92,8 @@ import org.jetbrains.annotations.Nullable;
 public class BaseAbstractDAOTemplate
     extends  DAOTemplate
 {
+    private static final long serialVersionUID = -4140482830965840311L;
+
     /**
      * Builds a <code>BaseAbstractDAOTemplate</code> using given information.
      * @param tableName the table name.

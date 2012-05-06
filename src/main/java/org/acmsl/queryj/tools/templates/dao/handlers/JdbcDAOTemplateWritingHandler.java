@@ -38,9 +38,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
@@ -70,6 +68,8 @@ public class JdbcDAOTemplateWritingHandler
 
     /**
      * Handles given information.
+     *
+     *
      * @param parameters the parameters.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null

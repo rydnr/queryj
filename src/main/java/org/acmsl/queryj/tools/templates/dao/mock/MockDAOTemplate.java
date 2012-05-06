@@ -68,6 +68,8 @@ import org.jetbrains.annotations.Nullable;
 public class MockDAOTemplate
     extends  DAOTemplate
 {
+    private static final long serialVersionUID = -1427945662056321895L;
+
     /**
      * Builds a <code>MockDAOTemplate</code> using given information.
      * @param tableName the table name.

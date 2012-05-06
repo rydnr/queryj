@@ -66,6 +66,8 @@ import java.util.Collection;
 public class BaseResultSetExtractorTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 1432792006131595106L;
+
     /**
      * Builds a {@link BaseResultSetExtractorTemplate} using given information.
      * @param metadataManager the database metadata manager.

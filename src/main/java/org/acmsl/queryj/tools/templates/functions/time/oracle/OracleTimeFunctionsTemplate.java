@@ -105,6 +105,7 @@ public class OracleTimeFunctionsTemplate
             "Long",
             "Calendar"
         };
+    private static final long serialVersionUID = -1688632362365782906L;
 
     /**
      * Builds an OracleTimeFunctionsTemplate using given information.

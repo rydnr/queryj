@@ -92,21 +92,6 @@ public abstract class AbstractTemplate
             new StringTemplateErrorListener()
             {
                 /**
-                 * Receives a debug message.
-                 * @param message the debug message.
-                 */
-                public void debug(final String message)
-                {
-                    Log t_Log =
-                        UniqueLogFactory.getLog(AbstractTemplate.class);
-
-                    if  (t_Log != null)
-                    {
-                        t_Log.debug(message);
-                    }
-                }
-
-                /**
                  * Receives a warning message.
                  * @param message the warning message.
                  */

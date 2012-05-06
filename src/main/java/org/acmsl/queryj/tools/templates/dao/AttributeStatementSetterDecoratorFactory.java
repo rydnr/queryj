@@ -57,6 +57,8 @@ public class AttributeStatementSetterDecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton
 {
+    private static final long serialVersionUID = -5620983209011076923L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

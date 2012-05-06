@@ -60,6 +60,7 @@ import java.util.Collection;
 public class ResultElement
     extends  AbstractResult
 {
+    private static final long serialVersionUID = -1123144871258452499L;
     /**
      * The <i>class</i> attribute.
      */

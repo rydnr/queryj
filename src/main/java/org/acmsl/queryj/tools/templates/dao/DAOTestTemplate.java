@@ -72,6 +72,8 @@ public class DAOTestTemplate
     extends  AbstractDAOTestTemplate
     implements  DAOTestTemplateDefaults
 {
+    private static final long serialVersionUID = 4348375283103798227L;
+
     /**
      * Builds a <code>DAOTestTemplate</code> using given information.
      * @param tableTemplate the table template.

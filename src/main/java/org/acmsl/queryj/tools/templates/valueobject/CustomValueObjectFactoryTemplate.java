@@ -67,6 +67,8 @@ import java.util.Map;
 public class CustomValueObjectFactoryTemplate
     extends  CustomValueObjectTemplate
 {
+    private static final long serialVersionUID = -1424240157388443640L;
+
     /**
      * Builds a <code>CustomValueObjectTemplate</code> using
      * information.

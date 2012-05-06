@@ -63,6 +63,8 @@ import java.util.Map;
 public class MockDAOFactoryTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = -8051497311762365694L;
+
     /**
      * Builds a <code>MockDAOFactoryTemplate</code> using given
      * information.

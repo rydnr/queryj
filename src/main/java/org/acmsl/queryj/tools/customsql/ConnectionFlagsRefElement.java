@@ -52,6 +52,8 @@ import org.jetbrains.annotations.Nullable;
 public class ConnectionFlagsRefElement
     extends  AbstractIdElement
 {
+    private static final long serialVersionUID = 3311191419084681233L;
+
     /**
      * Creates a ConnectionFlagsRefElement with given information.
      * @param id the <i>id</i> attribute.

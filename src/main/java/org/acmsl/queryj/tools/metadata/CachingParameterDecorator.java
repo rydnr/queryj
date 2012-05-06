@@ -52,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
 public class CachingParameterDecorator
     extends  AbstractParameterDecorator
 {
+    private static final long serialVersionUID = -598058048217257284L;
     /**
      * The cached SQL type.
      */

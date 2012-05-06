@@ -37,23 +37,15 @@ package org.acmsl.queryj.tools.metadata.engines;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.Field;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
-import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
-import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Manages the information provided by database metadata, using plain JDBC.
@@ -63,6 +55,8 @@ public class JdbcMetadataManager
     extends AbstractJdbcMetadataManager
     implements MetadataManager
 {
+    private static final long serialVersionUID = 163877584229565647L;
+
     /**
      * Creates a {@link JdbcMetadataManager} using given information.
      * @param tableNames explicitly specified table names.

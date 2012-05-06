@@ -63,6 +63,8 @@ import java.util.Collection;
 public class DataAccessManagerTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = 312742748920573443L;
+
     /**
      * Builds a <code>DataAccessManagerTemplate</code> using given
      * information.

@@ -55,6 +55,8 @@ import java.sql.SQLException;
 public class Oracle8MetadataManager
     extends  OracleMetadataManager
 {
+    private static final long serialVersionUID = -2218526567706026084L;
+
     /**
      * Creates an <code>OracleMetadataManager</code>. using given information.
      * @param tableNames explicitly specified table names.

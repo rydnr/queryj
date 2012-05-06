@@ -41,6 +41,7 @@ import org.acmsl.queryj.QueryFactory;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.QueryResultSet;
 import org.acmsl.queryj.SelectQuery;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
@@ -80,6 +81,8 @@ public class OracleMetadataManager
     extends  JdbcMetadataManager
     implements  OracleTableRepository
 {
+    private static final long serialVersionUID = 7615952180554057335L;
+
     /**
      * Creates an {@link OracleMetadataManager} using given information.
      * @param tableNames explicitly specified table names.
@@ -141,6 +144,7 @@ public class OracleMetadataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
+    @SuppressWarnings("unused")
     public OracleMetadataManager(
         final String[] tableNames,
         final String[] procedureNames,
@@ -169,38 +173,31 @@ public class OracleMetadataManager
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
      */
+    @Override
     protected void extractPrimaryKeys(
         @NotNull final DatabaseMetaData metaData,
         final String catalog,
-        final String schema)
+        final String schema,
+        final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
         extractPrimaryKeys(
             metaData.getConnection(),
-            catalog,
-            schema,
-            getTableNames(metaData, catalog, schema),
+            getTableNames(metaData, catalog, schema, listener),
             QueryFactory.getInstance());
     }
 
     /**
      * Extracts the primary keys.
      * @param connection the database connection.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
      * @param tableNames the table names.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
-     * @precondition connection != null
-     * @precondition tableNames != null
-     * @precndition queryFactory != null
      */
     protected void extractPrimaryKeys(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
         @Nullable final String[] tableNames,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
@@ -288,11 +285,7 @@ public class OracleMetadataManager
                 }
             }
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            throw queryjException;
-        }
-        finally 
+        finally
         {
             try 
             {
@@ -331,35 +324,38 @@ public class OracleMetadataManager
     }
 
     /**
-     * Extracts the foreign keys.
-     * @param metaData the database metadata.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @throws SQLException if any kind of SQL exception occurs.
-     * @throws QueryJException if any other error occurs.
-     * @precondition metaData != null
+     * {@inheritDoc}
      */
+    @Override
     protected void extractForeignKeys(
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
-        // extractForeignKeys(
-        //     metaData.getConnection(),
-        //     catalog,
-        //     schema,
-        //     getTableNames(metaData, catalog, schema),
-        //     QueryFactory.getInstance(),
-        //     OracleTextFunctions.getInstance());
+        String[] t_astrTableNames = getTableNames();
+
+        if (   (t_astrTableNames == null)
+            || (t_astrTableNames.length == 0))
+        {
+            t_astrTableNames = getTableNames(metaData, catalog, schema, listener);
+        }
+
+        if (t_astrTableNames != null)
+        {
+            extractForeignKeys(
+                metaData.getConnection(),
+                t_astrTableNames,
+                QueryFactory.getInstance(),
+                OracleTextFunctions.getInstance());
+        }
     }
 
     /**
      * Extracts the foreign keys.
      * @param connection the database connection.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
      * @param tableNames the table names.
      * @param queryFactory the query factory.
      * @param textFunctions the {@link OracleTextFunctions} instance.
@@ -372,8 +368,216 @@ public class OracleMetadataManager
      */
     protected void extractForeignKeys(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
+        @NotNull final String[] tableNames,
+        @NotNull final QueryFactory queryFactory,
+        @NotNull final OracleTextFunctions textFunctions)
+        throws  SQLException,
+        QueryJException
+    {
+        @Nullable PreparedStatement t_PreparedStatement = null;
+
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+
+        int t_iLength = (tableNames != null) ? tableNames.length : 0;
+
+        ResultSet t_Results = null;
+
+        try
+        {
+            try
+            {
+                // select con.constraint_name,
+                //        rcol.table_name,
+                //        rcol.column_name,
+                //        con.table_name,
+                //        col.column_name
+                // from user_constraints con,
+                //      user_cons_columns col,
+                //      user_constraints rcon,
+                //      user_cons_columns rcol
+                // where rcon.constraint_type = 'R'
+                //   and rcon.r_constraint_name = con.constraint_name
+                //   and col.table_name = con.table_name
+                //   and col.constraint_name = con.constraint_name
+                //   and rcol.table_name = rcon.table_name
+                //   and rcol.constraint_name = rcon.constraint_name
+                //   and rcol.position = col.position
+                //   and upper(col.table_name) = ?
+
+                @NotNull StringBuilder t_sbSql =
+                    new StringBuilder("select rcol.table_name rcol_table_name, ");
+                t_sbSql.append("rcol.column_name rcol_column_name, ");
+                t_sbSql.append("con.table_name con_table_name, ");
+                t_sbSql.append("col.column_name col_column_name ");
+                t_sbSql.append("from user_constraints con, ");
+                t_sbSql.append("user_cons_columns col, ");
+                t_sbSql.append("user_constraints rcon, ");
+                t_sbSql.append("user_cons_columns rcol ");
+                t_sbSql.append("where rcon.constraint_type = 'R' ");
+                t_sbSql.append("and rcon.r_constraint_name = con.constraint_name ");
+                t_sbSql.append("and col.table_name = con.table_name ");
+                t_sbSql.append("and col.constraint_name = con.constraint_name ");
+                t_sbSql.append("and rcol.table_name = rcon.table_name ");
+                t_sbSql.append("and rcol.constraint_name = rcon.constraint_name ");
+                t_sbSql.append("and rcol.position = col.position ");
+                t_sbSql.append("and upper(col.table_name) in (");
+
+                @NotNull StringBuilder t_sbSqlLog =
+                    new StringBuilder(t_sbSql.toString());
+
+                int t_iIndex = 0;
+
+                for (String t_strTableName : tableNames)
+                {
+                    if (t_iIndex > 0)
+                    {
+                        t_sbSql.append(", ");
+                        t_sbSqlLog.append(", ");
+                    }
+                    t_iIndex++;
+                    t_sbSql.append("?");
+
+                    if (t_strTableName != null)
+                    {
+                        t_sbSqlLog.append("'");
+                        t_sbSqlLog.append(t_strTableName.toUpperCase(Locale.US));
+                        t_sbSqlLog.append("'");
+                    }
+                }
+                t_sbSql.append(")");
+                t_sbSqlLog.append(")");
+
+                t_Log.debug(t_sbSqlLog.toString());
+
+                @NotNull PreparedStatement t_Statement =
+                    connection.prepareStatement(t_sbSql.toString());
+
+                String t_strTableName;
+
+                for (t_iIndex = 1; t_iIndex <= t_iLength; t_iIndex++)
+                {
+                    t_strTableName = tableNames[t_iIndex - 1];
+
+                    if (t_strTableName != null)
+                    {
+                        t_Statement.setString(t_iIndex, t_strTableName.toUpperCase(Locale.US));
+                    }
+                }
+
+                t_Results = t_Statement.executeQuery();
+
+                if  (t_Results != null)
+                {
+                    @NotNull Collection<String> t_cOriginAttributes = new ArrayList<String>();
+                    @NotNull Collection<String> t_cDestinationAttributes = new ArrayList<String>();
+                    boolean t_bNewFk = true;
+                    @Nullable String t_strLastTable = null;
+                    @Nullable String t_strCurrentTable;
+                    @Nullable String t_strOriginTable = null;
+
+                    while  (t_Results.next())
+                    {
+                        t_strOriginTable = t_Results.getString("con_table_name");
+
+                        t_strCurrentTable = t_Results.getString("rcol_table_name");
+
+                        if  (t_strLastTable == null)
+                        {
+                            t_strLastTable = t_strCurrentTable;
+                        }
+
+                        t_bNewFk =
+                            !(t_strLastTable.equals(t_strCurrentTable));
+
+                        if  (t_bNewFk)
+                        {
+                            addForeignKey(
+                                t_strLastTable,
+                                t_cOriginAttributes.toArray(new String[t_cOriginAttributes.size()]),
+                                t_strOriginTable,
+                                t_cDestinationAttributes.toArray(new String[t_cDestinationAttributes.size()]));
+
+                            t_cOriginAttributes = new ArrayList<String>();
+                            t_cDestinationAttributes = new ArrayList<String>();
+                            t_strLastTable = t_strCurrentTable;
+                        }
+
+                        t_cOriginAttributes.add(t_Results.getString("rcol_column_name"));
+                        t_cDestinationAttributes.add(t_Results.getString("col_column_name"));
+                    }
+
+                    if  (!t_bNewFk)
+                    {
+                        addForeignKey(
+                            t_strLastTable,
+                            t_cOriginAttributes.toArray(new String[t_cOriginAttributes.size()]),
+                            t_strOriginTable,
+                            t_cDestinationAttributes.toArray(new String[t_cDestinationAttributes.size()]));
+                    }
+                }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.foreign.keys",
+                        sqlException);
+            }
+        }
+        finally
+        {
+            try
+            {
+                if  (t_Results != null)
+                {
+                    t_Results.close();
+                }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the result set.",
+                        sqlException);
+                }
+            }
+
+            try
+            {
+                if  (t_PreparedStatement != null)
+                {
+                    t_PreparedStatement.close();
+                }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the statement.",
+                        sqlException);
+                }
+            }
+        }
+    }
+
+    /**
+     * Extracts the foreign keys.
+     * @param connection the database connection.
+     * @param tableNames the table names.
+     * @param queryFactory the query factory.
+     * @param textFunctions the {@link OracleTextFunctions} instance.
+     * @throws SQLException if any kind of SQL exception occurs.
+     * @throws QueryJException if any other error occurs.
+     * @precondition connection != null
+     * @precondition tableNames != null
+     * @precondition queryFactory != null
+     * @precondition textFunctions != null
+     */
+    @SuppressWarnings("unused")
+    protected void newExtractForeignKeys(
+        @NotNull final Connection connection,
         @Nullable final String[] tableNames,
         @NotNull final QueryFactory queryFactory,
         @NotNull final OracleTextFunctions textFunctions)
@@ -390,142 +594,129 @@ public class OracleMetadataManager
         
         try
         {
-                try
+            try
+            {
+                // select con.constraint_name,
+                //        rcol.table_name,
+                //        rcol.column_name,
+                //        con.table_name,
+                //        col.column_name
+                // from user_constraints con,
+                //      user_cons_columns col,
+                //      user_constraints rcon,
+                //      user_cons_columns rcol
+                // where rcon.constraint_type = 'R'
+                //   and rcon.r_constraint_name = con.constraint_name
+                //   and col.table_name = con.table_name
+                //   and col.constraint_name = con.constraint_name
+                //   and rcol.table_name = rcon.table_name
+                //   and rcol.constraint_name = rcon.constraint_name
+                //   and rcol.position = col.position
+                //   and upper(col.table_name) = ?
+
+                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+
+                @Nullable OracleUserConstraintsTable CON =
+                    OracleUserConstraintsTable.getInstance("con");
+                @Nullable OracleUserConsColumnsTable COL =
+                    OracleUserConsColumnsTable.getInstance("col");
+                @Nullable OracleUserConstraintsTable RCON =
+                    OracleUserConstraintsTable.getInstance("rcon");
+                @Nullable OracleUserConsColumnsTable RCOL =
+                    OracleUserConsColumnsTable.getInstance("rcol");
+
+                t_Query.select(CON.CONSTRAINT_NAME);
+                t_Query.select(RCOL.TABLE_NAME);
+                t_Query.select(RCOL.COLUMN_NAME);
+                t_Query.select(CON.TABLE_NAME);
+                t_Query.select(COL.COLUMN_NAME);
+
+                t_Query.from(CON);
+                t_Query.from(COL);
+                t_Query.from(RCON);
+                t_Query.from(RCOL);
+
+                t_Query.where(
+                         RCON.CONSTRAINT_TYPE.equals("R")
+                    .and(RCON.R_CONSTRAINT_NAME.equals(
+                             CON.CONSTRAINT_NAME))
+                    .and(COL.TABLE_NAME.equals(CON.TABLE_NAME))
+                    .and(COL.CONSTRAINT_NAME.equals(CON.CONSTRAINT_NAME))
+                    .and(RCOL.TABLE_NAME.equals(RCON.TABLE_NAME))
+                    .and(RCOL.CONSTRAINT_NAME.equals(RCON.CONSTRAINT_NAME))
+                    .and(RCOL.POSITION.equals(COL.POSITION))
+                    .and(textFunctions.upper(COL.TABLE_NAME).in(t_iLength)));
+
+                t_PreparedStatement = t_Query.prepareStatement(connection);
+
+                t_Query.setStrings(
+                    textFunctions.upper(COL.TABLE_NAME).in(tableNames.length),
+                    toUpperCase(tableNames));
+
+                t_Results = (QueryResultSet) t_Query.executeQuery();
+
+                if  (t_Results != null)
                 {
-                    // select con.constraint_name,
-                    //        rcol.table_name,
-                    //        rcol.column_name,
-                    //        con.table_name,
-                    //        col.column_name
-                    // from user_constraints con,
-                    //      user_cons_columns col,
-                    //      user_constraints rcon,
-                    //      user_cons_columns rcol
-                    // where rcon.constraint_type = 'R'
-                    //   and rcon.r_constraint_name = con.constraint_name
-                    //   and col.table_name = con.table_name
-                    //   and col.constraint_name = con.constraint_name
-                    //   and rcol.table_name = rcon.table_name
-                    //   and rcol.constraint_name = rcon.constraint_name
-                    //   and rcol.position = col.position
-                    //   and upper(col.table_name) = ?
+                    @NotNull Collection<String> t_cOriginAttributes = new ArrayList<String>();
+                    @NotNull Collection<String> t_cDestinationAttributes = new ArrayList<String>();
+                    boolean t_bNewFk = true;
+                    @Nullable String t_strLastTable = null;
+                    @Nullable String t_strCurrentTable;
+                    @Nullable String t_strOriginTable = null;
 
-                    @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
-
-                    @Nullable OracleUserConstraintsTable CON =
-                        OracleUserConstraintsTable.getInstance("con");
-                    @Nullable OracleUserConsColumnsTable COL =
-                        OracleUserConsColumnsTable.getInstance("col");
-                    @Nullable OracleUserConstraintsTable RCON =
-                        OracleUserConstraintsTable.getInstance("rcon");
-                    @Nullable OracleUserConsColumnsTable RCOL =
-                        OracleUserConsColumnsTable.getInstance("rcol");
-
-                    t_Query.select(CON.CONSTRAINT_NAME);
-                    t_Query.select(RCOL.TABLE_NAME);
-                    t_Query.select(RCOL.COLUMN_NAME);
-                    t_Query.select(CON.TABLE_NAME);
-                    t_Query.select(COL.COLUMN_NAME);
-
-                    t_Query.from(CON);
-                    t_Query.from(COL);
-                    t_Query.from(RCON);
-                    t_Query.from(RCOL);
-
-                    t_Query.where(
-                             RCON.CONSTRAINT_TYPE.equals("R")
-                        .and(RCON.R_CONSTRAINT_NAME.equals(
-                                 CON.CONSTRAINT_NAME))
-                        .and(COL.TABLE_NAME.equals(CON.TABLE_NAME))
-                        .and(COL.CONSTRAINT_NAME.equals(CON.CONSTRAINT_NAME))
-                        .and(RCOL.TABLE_NAME.equals(RCON.TABLE_NAME))
-                        .and(RCOL.CONSTRAINT_NAME.equals(RCON.CONSTRAINT_NAME))
-                        .and(RCOL.POSITION.equals(COL.POSITION))
-                        .and(textFunctions.upper(COL.TABLE_NAME).in(tableNames.length)));
-
-                    t_PreparedStatement = t_Query.prepareStatement(connection);
-
-                    t_Query.setStrings(
-                        textFunctions.upper(COL.TABLE_NAME).in(tableNames.length),
-                        toUpperCase(tableNames));
-
-                    t_Results = (QueryResultSet) t_Query.executeQuery();
-
-                    if  (t_Results != null)
+                    while  (t_Results.next())
                     {
-                        @NotNull Collection t_cOriginAttributes = new ArrayList();
-                        @NotNull Collection t_cDestinationAttributes = new ArrayList();
-                        boolean t_bNewFk = true;
-                        @Nullable String t_strLastTable = null;
-                        @Nullable String t_strCurrentTable = null;
-                        @Nullable String t_strOriginTable = null;
+                        t_strOriginTable = t_Results.getString(COL.TABLE_NAME);
 
-                        while  (t_Results.next())
+                        t_strCurrentTable =
+                            t_Results.getString(RCOL.TABLE_NAME);
+
+                        if  (t_strLastTable == null)
                         {
-                            t_strOriginTable = t_Results.getString(COL.TABLE_NAME);
-
-                            t_strCurrentTable = 
-                                t_Results.getString(RCOL.TABLE_NAME);
-
-                            if  (t_strLastTable == null)
-                            {
-                                t_strLastTable = t_strCurrentTable;
-                            }
-
-                            t_bNewFk =
-                                !(t_strLastTable.equals(t_strCurrentTable));
-
-                            if  (t_bNewFk)
-                            {
-                                addForeignKey(
-                                    t_strLastTable,
-                                    (String[])
-                                        t_cOriginAttributes.toArray(
-                                            EMPTY_STRING_ARRAY),
-                                    t_strOriginTable,
-                                    (String[])
-                                        t_cDestinationAttributes.toArray(
-                                            EMPTY_STRING_ARRAY));
-
-                                t_cOriginAttributes = new ArrayList();
-                                t_cDestinationAttributes = new ArrayList();
-                                t_strLastTable = t_strCurrentTable;
-                            }
-
-                            t_cOriginAttributes.add(
-                                t_Results.getString(RCOL.COLUMN_NAME));
-                            t_cDestinationAttributes.add(
-                                t_Results.getString(COL.COLUMN_NAME));
+                            t_strLastTable = t_strCurrentTable;
                         }
 
-                        if  (!t_bNewFk)
+                        t_bNewFk =
+                            !(t_strLastTable.equals(t_strCurrentTable));
+
+                        if  (t_bNewFk)
                         {
                             addForeignKey(
                                 t_strLastTable,
-                                (String[])
-                                    t_cOriginAttributes.toArray(
-                                        EMPTY_STRING_ARRAY),
+                                t_cOriginAttributes.toArray(new String[t_cOriginAttributes.size()]),
                                 t_strOriginTable,
-                                (String[])
-                                    t_cDestinationAttributes.toArray(
-                                        EMPTY_STRING_ARRAY));
+                                t_cDestinationAttributes.toArray(new String[t_cDestinationAttributes.size()]));
+
+                            t_cOriginAttributes = new ArrayList<String>();
+                            t_cDestinationAttributes = new ArrayList<String>();
+                            t_strLastTable = t_strCurrentTable;
                         }
+
+                        t_cOriginAttributes.add(
+                            t_Results.getString(RCOL.COLUMN_NAME));
+                        t_cDestinationAttributes.add(
+                            t_Results.getString(COL.COLUMN_NAME));
+                    }
+
+                    if  (!t_bNewFk)
+                    {
+                        addForeignKey(
+                            t_strLastTable,
+                            t_cOriginAttributes.toArray(new String[t_cOriginAttributes.size()]),
+                            t_strOriginTable,
+                            t_cDestinationAttributes.toArray(new String[t_cDestinationAttributes.size()]));
                     }
                 }
-                catch  (@NotNull final SQLException sqlException)
-                {
-                    throw
-                        new QueryJException(
-                            "cannot.retrieve.foreign.keys",
-                            sqlException);
-                }
-//            }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.foreign.keys",
+                        sqlException);
+            }
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            throw queryjException;
-        }
-        finally 
+        finally
         {
             try 
             {
@@ -564,19 +755,15 @@ public class OracleMetadataManager
     }
 
     /**
-     * Retrieves the table names.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @return the list of all table names.
-     * @throws SQLException if the database operation fails.
-     * @precondition metaData != null
+     * {@inheritDoc}
      */
+    @Override
     protected String[] getTableNames(
         @NotNull final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema)
-      throws  SQLException,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener listener)
+    throws  SQLException,
               QueryJException
     {
         return
@@ -598,15 +785,17 @@ public class OracleMetadataManager
      * @precondition connection != null
      * @precondition queryFactory != null
      */
-    protected String[] getTableNames(
+    @SuppressWarnings("unused")
+    @NotNull
+    public String[] getTableNames(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
+        @Nullable final String catalog,
+        @Nullable final String schema,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
-        String[] result;
+        String[] result = EMPTY_STRING_ARRAY;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
         
@@ -638,7 +827,10 @@ public class OracleMetadataManager
                             sqlException);
             }
 
-            result = extractTableNames(t_Results);
+            if (t_Results != null)
+            {
+                result = extractTableNames(t_Results);
+            }
         }
         catch  (@NotNull final SQLException sqlException)
         {
@@ -735,19 +927,20 @@ public class OracleMetadataManager
      * @throws QueryJException if the any other error occurs.
      * @precondition metaData != null
      */
+    @Override
     protected String[] getColumnNames(
         @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final String parentTable,
+        final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
         return
             getColumnNames(
                 metaData.getConnection(),
-                catalog,
-                schema,
                 tableName,
                 QueryFactory.getInstance());
     }
@@ -755,8 +948,6 @@ public class OracleMetadataManager
     /**
      * Retrieves the column names from given table name.
      * @param connection the connection.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @param tableName the table name.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all column names.
@@ -767,13 +958,12 @@ public class OracleMetadataManager
      */
     protected String[] getColumnNames(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
         final String tableName,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
+        // TODO: column names from parent table.
         String[] result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -881,11 +1071,6 @@ public class OracleMetadataManager
             }
         }
 
-        if  (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
         return result;
     }
 
@@ -907,43 +1092,31 @@ public class OracleMetadataManager
     }
 
     /**
-     * Retrieves the column types from given table name.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @param tableName the table name.
-     * @param size the number of fields to extract.
-     * @return the list of all column types.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if any other error occurs.
-     * @precondition metaData != null
+     * {@inheritDoc}
      */
+    @Override
     protected int[] getColumnTypes(
-        @NotNull final DatabaseMetaData metaData,
+        final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName,
-        final int size)
+        final String parentTable,
+        final int size,
+        final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
         return
             getColumnTypes(
                 metaData.getConnection(),
-                catalog,
-                schema,
                 tableName,
-                size,
                 QueryFactory.getInstance());
     }
 
     /**
      * Retrieves the column types from given table name.
      * @param connection the connection.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @param tableName the table name.
-     * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
@@ -953,10 +1126,7 @@ public class OracleMetadataManager
      */
     protected int[] getColumnTypes(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
         final String tableName,
-        final int size,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
@@ -1092,6 +1262,7 @@ public class OracleMetadataManager
      * @throws SQLException if the database operation fails.
      * @precondition resultSet != null
      */
+    @SuppressWarnings("unused")
     protected int[] extractColumnTypes(
         @NotNull final ResultSet resultSet, final String fieldName)
         throws  SQLException
@@ -1117,23 +1288,15 @@ public class OracleMetadataManager
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  SQLException
     {
-        int[] result = EMPTY_INT_ARRAY;
+        int[] result;
 
         @NotNull String[] t_astrTypes = extractStringFields(resultSet, fieldName)[0];
 
-        int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
+        result = new int[t_astrTypes.length];
 
-        if  (t_iCount > 0)
+        for (int t_iIndex = 0; t_iIndex < t_astrTypes.length; t_iIndex++)
         {
-            result = new int[t_iCount];
-
-            for  (int t_iIndex = 0;
-                      t_iIndex < t_iCount;
-                      t_iIndex++) 
-            {
-                result[t_iIndex] =
-                    metadataTypeManager.getJavaType(t_astrTypes[t_iIndex]);
-            }
+            result[t_iIndex] = metadataTypeManager.getJavaType(t_astrTypes[t_iIndex]);
         }
 
         return result;
@@ -1151,32 +1314,29 @@ public class OracleMetadataManager
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
      */
+    @Override
     protected boolean[] getAllowNulls(
         @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
         final String tableName,
-        final int size)
+        final String parentTable,
+        final int size,
+        final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
         return
             getAllowNulls(
                 metaData.getConnection(),
-                catalog,
-                schema,
                 tableName,
-                size,
                 QueryFactory.getInstance());
     }
 
     /**
      * Retrieves whether the columns allow null values.
      * @param connection the connection.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @param tableName the table name.
-     * @param size the number of fields to extract.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the list of all column types.
      * @throws SQLException if the database operation fails.
@@ -1186,14 +1346,12 @@ public class OracleMetadataManager
      */
     protected boolean[] getAllowNulls(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
         final String tableName,
-        final int size,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
+        // TODO: use parent table
         boolean[] result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -1295,11 +1453,6 @@ public class OracleMetadataManager
             }
         }
 
-        if  (result == null)
-        {
-            result = new boolean[0];
-        }
-
         return result;
     }
 
@@ -1336,7 +1489,7 @@ public class OracleMetadataManager
 
         @NotNull String[] t_astrTypes = extractStringFields(resultSet, fieldName)[0];
 
-        int t_iCount = (t_astrTypes != null) ? t_astrTypes.length : 0;
+        int t_iCount = t_astrTypes.length;
 
         if  (t_iCount > 0)
         {
@@ -1371,20 +1524,20 @@ public class OracleMetadataManager
      * @precondition metaData != null
      * @precondition tableName != null
      */
+    @Override
     @Nullable
     protected String getTableComment(
         @NotNull final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
-        final String tableName)
+        final String tableName,
+        final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
         return
-            getTableComment (
+            getTableComment(
                 metaData.getConnection(),
-                catalog,
-                schema,
                 tableName,
                 QueryFactory.getInstance());
     }
@@ -1392,8 +1545,6 @@ public class OracleMetadataManager
     /**
      * Extracts the table comments.
      * @param connection the database connection.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
      * @param tableName the table name.
      * @param queryFactory the <code>QueryFactory</code> instance.
      * @return the table comments.
@@ -1401,18 +1552,17 @@ public class OracleMetadataManager
      * @throws QueryJException if any other error occurs.
      * @precondition connection != null
      * @precondition tableNames != null
-     * @precndition queryFactory != null
+     * @precondition queryFactory != null
      */
     @Nullable
     protected String getTableComment(
         @NotNull final Connection connection,
-        final String catalog,
-        final String schema,
         final String tableName,
         @NotNull final QueryFactory queryFactory)
       throws  SQLException,
               QueryJException
     {
+        // TODO: use listener
         @Nullable String result = "";
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
@@ -1447,10 +1597,9 @@ public class OracleMetadataManager
                 
                 t_rsResults = t_Query.executeQuery();
 
-                @Nullable String t_strComment = null;
+                @Nullable String t_strComment;
 
-                if  (   (t_rsResults != null)
-                        && (t_rsResults.next()))
+                if  (t_rsResults.next())
                 {
                     t_strComment =
                         t_rsResults.getString(
@@ -1481,11 +1630,7 @@ public class OracleMetadataManager
                         sqlException);
             }
         }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            throw queryjException;
-        }
-        finally 
+        finally
         {
             try 
             {
@@ -1575,22 +1720,22 @@ public class OracleMetadataManager
     {
         @NotNull final String[] result = new String[(values != null) ? values.length : 0];
 
-        int t_iCount = 0;
+        int t_iCount;
 
         if (values != null)
         {
             t_iCount = values.length;
-        }
 
-        @Nullable String value;
+            @Nullable String value;
 
-        for (int t_iIndex = 0 ; t_iIndex < t_iCount; t_iIndex++)
-        {
-            value = values[t_iIndex];
-
-            if (value != null)
+            for (int t_iIndex = 0 ; t_iIndex < t_iCount; t_iIndex++)
             {
-                result[t_iIndex] = value.toUpperCase(Locale.ENGLISH);
+                value = values[t_iIndex];
+
+                if (value != null)
+                {
+                    result[t_iIndex] = value.toUpperCase(Locale.ENGLISH);
+                }
             }
         }
 

@@ -58,6 +58,8 @@ public class VODecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton
 {
+    private static final long serialVersionUID = 6849535781573576719L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

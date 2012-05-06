@@ -38,37 +38,25 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
-import org.acmsl.queryj.tools.ant.AntTableElement;
-import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.utils.StringValidator;
 
 /*
  * Importing some Commons-Logging classes.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -87,6 +75,8 @@ public class ExternallyManagedFieldsRetrievalHandler
 
     /**
      * Handles given parameters.
+     *
+     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.

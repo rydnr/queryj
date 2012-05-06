@@ -61,6 +61,8 @@ import java.util.Collection;
 public class BaseRepositoryDAOTemplate
     extends  RepositoryDAOTemplate
 {
+    private static final long serialVersionUID = 5507947925897470278L;
+
     /**
      * Builds a <code>BaseRepositoryDAOTemplate</code> using given
      * information.

@@ -69,6 +69,7 @@ import java.util.Map;
 public class RepositoryDAOFactoryTemplate
     extends  RepositoryDAOTemplate
 {
+    private static final long serialVersionUID = -3330025097227634585L;
     /**
      * The datasource's JNDI location.
      */

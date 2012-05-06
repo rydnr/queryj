@@ -57,6 +57,8 @@ import java.util.Map;
 public class MySQLTimeFunctionsTestTemplate
     extends  TimeFunctionsTestTemplate
 {
+    private static final long serialVersionUID = -5553893699417409534L;
+
     /**
      * Builds a MySQLTimeFunctionsTestTemplate using given information.
      * @param header the header.

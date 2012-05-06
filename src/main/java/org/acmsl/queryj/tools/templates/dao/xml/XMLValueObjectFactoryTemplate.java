@@ -63,6 +63,8 @@ public class XMLValueObjectFactoryTemplate
     extends  AbstractXMLValueObjectFactoryTemplate
     implements  XMLValueObjectFactoryTemplateDefaults
 {
+    private static final long serialVersionUID = 3328713018421061995L;
+
     /**
      * Builds a {@link XMLValueObjectFactoryTemplate} using given information.
      * @param packageName the package name.

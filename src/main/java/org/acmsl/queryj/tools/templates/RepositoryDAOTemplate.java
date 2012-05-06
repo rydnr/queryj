@@ -71,6 +71,8 @@ import java.util.Map;
 public class RepositoryDAOTemplate
     extends  BasePerRepositoryTemplate
 {
+    private static final long serialVersionUID = -2154000859171671282L;
+
     /**
      * Builds a <code>RepositoryDAOTemplate</code> using given
      * information.

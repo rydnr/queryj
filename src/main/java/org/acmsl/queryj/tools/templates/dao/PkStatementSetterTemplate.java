@@ -57,6 +57,8 @@ import org.jetbrains.annotations.Nullable;
 public class PkStatementSetterTemplate
     extends  BasePerTableTemplate
 {
+    private static final long serialVersionUID = 6164381777944360318L;
+
     /**
      * Builds a <code>PkStatementSetterTemplate</code> using given
      * information.

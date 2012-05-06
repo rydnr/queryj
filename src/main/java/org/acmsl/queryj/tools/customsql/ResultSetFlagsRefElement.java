@@ -50,6 +50,8 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 public class ResultSetFlagsRefElement
     extends  AbstractIdElement
 {
+    private static final long serialVersionUID = 5242210262110643037L;
+
     /**
      * Creates a ResultSetFlagsRefElement with given information.
      * @param id the <i>id</i> attribute.

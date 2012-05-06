@@ -38,11 +38,9 @@ package org.acmsl.queryj.tools.templates.dao.xml.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.xml.XMLDAOTemplateGenerator;
-import org.acmsl.queryj.tools.templates.dao.xml.handlers.XMLDAOTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.jetbrains.annotations.NotNull;
@@ -71,6 +69,8 @@ public class XMLDAOTemplateWritingHandler
 
     /**
      * Handles given information.
+     *
+     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.

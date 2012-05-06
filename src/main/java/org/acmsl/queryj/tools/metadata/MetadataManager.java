@@ -80,6 +80,16 @@ public interface MetadataManager
               QueryJException;
 
     /**
+     * Retrieves the table names.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if an error, which is identified by QueryJ,
+     * occurs.
+     */
+    public void extractTableMetadata()
+        throws  SQLException,
+        QueryJException;
+
+    /**
      * Retrieves the database meta data.
      * @return such information.
      */

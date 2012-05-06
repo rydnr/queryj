@@ -77,6 +77,8 @@ public class MockDAOTestTemplate
     extends  AbstractMockDAOTestTemplate
     implements  MockDAOTestTemplateDefaults
 {
+    private static final long serialVersionUID = -1295122980195562736L;
+
     /**
      * Builds a DAOTestTemplate using given information.
      * @param tableTemplate the table template.

@@ -38,13 +38,10 @@ package org.acmsl.queryj.tools.templates.functions.text.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
-import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
-import org.acmsl.queryj.tools.templates.functions.text
-    .TextFunctionsTestTemplateFactory;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
@@ -83,6 +80,8 @@ public class TextFunctionsTestTemplateBuildHandler
 
     /**
      * Handles given parameters.
+     *
+     *
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.

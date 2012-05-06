@@ -58,6 +58,8 @@ public class DAODecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton
 {
+    private static final long serialVersionUID = -8731433519086125577L;
+
     /**
      * Singleton implemented to avoid the double-checked locking.
      */

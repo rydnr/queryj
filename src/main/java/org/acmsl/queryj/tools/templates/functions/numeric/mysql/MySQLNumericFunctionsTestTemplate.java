@@ -58,6 +58,8 @@ import java.util.Map;
 public class MySQLNumericFunctionsTestTemplate
     extends  NumericFunctionsTestTemplate
 {
+    private static final long serialVersionUID = 6890294277262544895L;
+
     /**
      * Builds a MySQLNumericFunctionsTestTemplate using given information.
      * @param header the header.
