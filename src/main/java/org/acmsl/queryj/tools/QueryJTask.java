@@ -48,7 +48,7 @@ import org.acmsl.queryj.tools.AntTablesElement;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProvisioningHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
-import org.acmsl.queryj.tools.handlers.BeanShellHandler;
+//import org.acmsl.queryj.tools.handlers.BeanShellHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataLoggingHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
@@ -1410,7 +1410,7 @@ public class QueryJTask
 
             result.add(new ExternallyManagedFieldsRetrievalHandler());
 
-            result.add(new BeanShellHandler());
+            //result.add(new BeanShellHandler());
 
             // generation phase
             result.add(new TableTemplateHandlerBundle());

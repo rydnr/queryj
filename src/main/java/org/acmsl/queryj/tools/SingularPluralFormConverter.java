@@ -22,14 +22,14 @@
     Thanks to ACM S.L. for distributing this library under the LGPL license.
     Contact info: jsr000@terra.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabanas
                     Boadilla del monte
 
  ******************************************************************************
  *
  * Filename: SingularPluralFormConverter.java
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendariz
  *
  * Description: Provides some grammar rules for converting plural and singular
  *              forms (using english rules by default).
@@ -64,7 +64,7 @@ import java.util.Map;
  * Description: Provides some grammar rules for converting plural and singular
  *              forms (using english rules by default).
  * @author <a href="mailto:chous@acm-sl.org"
- *         >Jose San Leandro Armendáriz</a>
+ *         >Jose San Leandro Armendariz</a>
  * @version $Revision$
  */
 public class SingularPluralFormConverter
