@@ -34,23 +34,18 @@
 package org.acmsl.queryj;
 
 /*
- * Importing project-specific classes.
- */
-import org.acmsl.queryj.DeleteQuery;
-import org.acmsl.queryj.InsertQuery;
-import org.acmsl.queryj.Query;
-import org.acmsl.queryj.SelectQuery;
-import org.acmsl.queryj.UpdateQuery;
-
-/*
  * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Has the responsiblity of knowing how to create queries.
+ * Has the responsibility of knowing how to create queries.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class QueryFactory
@@ -71,7 +66,7 @@ public class QueryFactory
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected QueryFactory() {};
+    protected QueryFactory() {}
 
     /**
      * Retrieves a <code>QueryFactory</code> instance.

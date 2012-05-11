@@ -240,8 +240,10 @@ public class CachingDecoratorFactory
             for (final String t_strColumnName : t_astrColumnNames)
             {
                 result.add(
-                    new LazyAttribute(
-                        table, t_strColumnName, metadataManager, metadataManager.getMetadataTypeManager()));
+                    new CachingAttributeDecorator(
+                        new LazyAttribute(
+                            table, t_strColumnName, metadataManager, metadataManager.getMetadataTypeManager()),
+                        metadataManager));
             }
         }
 

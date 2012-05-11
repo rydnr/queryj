@@ -822,7 +822,8 @@ public abstract class AbstractAttributeDecorator
     protected String getJavaType(
         final int type, final MetadataTypeManager metadataTypeManager)
     {
-        return metadataTypeManager.getObjectType(type, isBoolean());
+        return
+            retrieveJavaType(type, getMetadataManager(), getAllowsNull(), isBoolean());
     }
 
     /**
