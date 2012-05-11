@@ -182,12 +182,7 @@ public abstract class AbstractPropertyDecorator
 
     /**
      * Retrieves the Java type of the property.
-     * @param type the type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
      * @return such information.
-     * @precondition type != null
-     * @precondition metadataTypeManager != null
      */
     @Nullable
     public String getJavaType()
@@ -204,14 +199,15 @@ public abstract class AbstractPropertyDecorator
      * @precondition type != null
      * @precondition metadataTypeManager != null
      */
-    @Nullable
+    @NotNull
     protected String getJavaType(
         final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
+        int t_iJavaType = metadataTypeManager.getJavaType(type);
+
         // TODO: support boolean properties.
-        return
-            metadataTypeManager.getObjectType(
-                metadataTypeManager.getJavaType(type), false);
+        return metadataTypeManager.getFieldType(t_iJavaType, isNullable(), false);
+
     }
 
     /**

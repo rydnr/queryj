@@ -213,7 +213,7 @@ public class CustomResultUtils
             List<String> t_lResultsDisabled = Arrays.asList(resultsDisabled);
 
             if (   (t_lResultsDisabled.contains("*"))
-                || (resultsEnabled.length > 1)) // explicitly-enabled results imply
+                || (resultsEnabled.length > 0)) // explicitly-enabled results imply
             // the others are disabled implicitly.
             {
                 result = false;

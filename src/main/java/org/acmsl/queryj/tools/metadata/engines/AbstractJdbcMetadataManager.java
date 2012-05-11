@@ -3255,7 +3255,7 @@ public abstract class AbstractJdbcMetadataManager
             List<String> t_lTablesDisabled = Arrays.asList(tablesDisabled);
 
             if (   (t_lTablesDisabled.contains("*"))
-                || (tablesEnabled.length > 1)) // explicitly-enabled tables imply
+                || (tablesEnabled.length > 0)) // explicitly-enabled tables imply
             // the others are disabled implicitly.
             {
                 result = false;
