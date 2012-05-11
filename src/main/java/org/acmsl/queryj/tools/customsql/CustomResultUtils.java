@@ -55,9 +55,11 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -71,21 +73,34 @@ public class CustomResultUtils
     /**
      * An empty SqlElement array.
      */
-    public static final SqlElement[] EMPTY_SQLELEMENT_ARRAY =
-        new SqlElement[0];
+    public static final SqlElement[] EMPTY_SQLELEMENT_ARRAY = new SqlElement[0];
 
     /**
      * An empty Result array.
      */
-    public static final Result[] EMPTY_RESULT_ARRAY =
-        new Result[0];
+    public static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
+
+    /**
+     * An empty String array.
+     */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    /**
+     * The system property prefix to disable generation for concrete (or all, with *) custom results.
+     */
+    public static final String RESULTS_DISABLED = "queryj.customresults.disabled";
+
+    /**
+     * The system property to enable generation for concrete (or all, with * or missing property) custom results.
+     */
+    public static final String RESULTS_ENABLED = "queryj.customresults.enabled";
 
     /**
      * A map-based cache to improve performance when retrieving
      * singular and plural forms for tables, and to cache other
      * other data if needed.
      */
-    private static final Map CACHE = new HashMap();
+    private static final Map<String,String> CACHE = new HashMap<String,String>();
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -102,7 +117,7 @@ public class CustomResultUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected CustomResultUtils() {};
+    protected CustomResultUtils() {}
 
     /**
      * Retrieves a <code>CustomResultUtils</code> instance.
@@ -112,6 +127,104 @@ public class CustomResultUtils
     public static CustomResultUtils getInstance()
     {
         return CustomResultUtilsSingletonContainer.SINGLETON;
+    }
+    /**
+     * Checks whether the generation phase is enabled for given custom result.
+     * @param resultId the id of the custom result.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isGenerationAllowedForResult(@NotNull final String resultId)
+    {
+          return
+              isGenerationAllowedForResult(
+                  retrieveExplicitlyDisabledResults(),
+                  retrieveExplicitlyEnabledResults(),
+                  resultId);
+    }
+
+    /**
+     * Retrieves the explicitly enabled table names, via environment property. This means
+     * no other tables should be processed.
+     */
+    protected String[] retrieveExplicitlyEnabledResults()
+    {
+        return parseExplicitResults(System.getProperty(RESULTS_ENABLED));
+    }
+
+    /**
+     * Retrieves the explicitly disabled custom results, via environment property. This means
+     * no other custom results should be processed.
+     */
+    protected String[] retrieveExplicitlyDisabledResults()
+    {
+        return parseExplicitResults(System.getProperty(RESULTS_DISABLED));
+    }
+
+    /**
+     * Parses given environment property to find out whether some tables are
+     * explicitly specified.
+     * @param environmentProperty the environment property.
+     * @return the tables specified in given environment property.
+     */
+    @NotNull
+    protected String[] parseExplicitResults(@NotNull final String environmentProperty)
+    {
+        @NotNull String[] result = null;
+
+        if (environmentProperty != null)
+        {
+            result = environmentProperty.split(",");
+        }
+
+        if (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param resultsEnabled the explicitly-enabled tables.
+     * @param resultsDisabled the explicitly-disabled tables.
+     * @param resultId the id of the custom result.
+     * @return <code>true</code> in such case.
+     */
+    protected final boolean isGenerationAllowedForResult(
+        @Nullable final String[] resultsDisabled,
+        @Nullable final String[] resultsEnabled,
+        @NotNull final String resultId)
+    {
+        boolean result = true;
+
+        boolean t_bExplicitlyEnabled = false;
+
+        if (resultsEnabled != null)
+        {
+            t_bExplicitlyEnabled = Arrays.asList(resultsEnabled).contains(resultId);
+
+            result = t_bExplicitlyEnabled;
+        }
+
+        if (   (!t_bExplicitlyEnabled)
+            && (resultsDisabled != null))
+        {
+            List<String> t_lResultsDisabled = Arrays.asList(resultsDisabled);
+
+            if (   (t_lResultsDisabled.contains("*"))
+                || (resultsEnabled.length > 1)) // explicitly-enabled results imply
+            // the others are disabled implicitly.
+            {
+                result = false;
+            }
+            else if (resultsDisabled != null)
+            {
+                result = !t_lResultsDisabled.contains(resultId);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -130,45 +243,55 @@ public class CustomResultUtils
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable String result = null;
-
-        String[] t_astrTableNames = metadataManager.getTableNames();
-
-        int t_iTableCount =
-            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-
-        @Nullable SqlElement[] t_aSqlElements = null;
-
-        int t_iSqlCount = 0;
+        @Nullable String result = retrieveCachedEntry(resultElement.getId());
 
         boolean t_bBreakLoop = false;
-        String t_strDao;
 
-        for  (int t_iTableIndex = 0;
-                 (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
-                  t_iTableIndex++)
+        if (result == null)
         {
-            t_aSqlElements =
-                retrieveSqlElementsByResultId(
-                    customSqlProvider, resultElement.getId());
+            String[] t_astrTableNames = metadataManager.getTableNames();
 
-            t_iSqlCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
+            int t_iTableCount =
+                (t_astrTableNames != null) ? t_astrTableNames.length : 0;
 
-            for  (int t_iSqlIndex = 0;
-                      t_iSqlIndex < t_iSqlCount;
-                      t_iSqlIndex++)
+            @Nullable SqlElement[] t_aSqlElements = null;
+
+            int t_iSqlCount;
+
+            String t_strDao;
+
+            for  (int t_iTableIndex = 0;
+                  (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
+                  t_iTableIndex++)
             {
-                t_strDao = t_aSqlElements[t_iSqlIndex].getDao();
+                t_aSqlElements =
+                    retrieveSqlElementsByResultId(
+                        customSqlProvider, resultElement.getId());
 
-                if  (   (t_strDao != null)
-                     && (matches(
-                             t_astrTableNames[t_iTableIndex], t_strDao)))
+                t_iSqlCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
+
+                for  (int t_iSqlIndex = 0;
+                         t_iSqlIndex < t_iSqlCount;
+                         t_iSqlIndex++)
                 {
-                    result = t_astrTableNames[t_iTableIndex];
-                    t_bBreakLoop = true;
-                    break;
+                    t_strDao = t_aSqlElements[t_iSqlIndex].getDao();
+
+                    if  (   (t_strDao != null)
+                         && (matches(t_astrTableNames[t_iTableIndex], t_strDao)))
+                    {
+                        result = t_astrTableNames[t_iTableIndex];
+                        cacheEntry(resultElement.getId(), result);
+                        t_bBreakLoop = true;
+                        break;
+                    }
                 }
             }
+        }
+
+        if (   (result == null)
+            && (!t_bBreakLoop))
+        {
+            throw new IllegalArgumentException("Result " + resultElement.getId() + " does not match any table");
         }
 
         return result;
@@ -237,9 +360,6 @@ public class CustomResultUtils
      * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
      * instance.
      * @return <code>true</code> if they match.
-     * @precondition tableName != null
-     * @precondition daoId != null
-     * @precondition englishGrammarUtils != null
      */
     protected boolean matches(
         @NotNull final String tableName,
@@ -557,7 +677,7 @@ public class CustomResultUtils
      * @precondition key != null
      * @precondition value != null
      */
-    protected void cache(@NotNull final Map map, final String key, final String value)
+    protected void cache(@NotNull final Map<String,String> map, final String key, final String value)
     {
         map.put(key, value);
     }
@@ -571,9 +691,9 @@ public class CustomResultUtils
      * @precondition key != null
      */
     @NotNull
-    protected String retrieveCachedEntry(@NotNull final Map cache, final String key)
+    protected String retrieveCachedEntry(@NotNull final Map<String,String> cache, final String key)
     {
-        return (String) cache.get(key);
+        return cache.get(key);
     }
 
     /**
@@ -583,7 +703,7 @@ public class CustomResultUtils
      * @precondition cache != null
      * @precondition key != null
      */
-    protected void removeEntryFromCache(@NotNull final Map cache, final String key)
+    protected void removeEntryFromCache(@NotNull final Map<String,String> cache, final String key)
     {
         cache.remove(key);
     }

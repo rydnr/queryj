@@ -3171,6 +3171,105 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isGenerationAllowedForTable(@NotNull final String tableName)
+    {
+        return
+            isGenerationAllowedForTable(
+                retrieveExplicitlyEnabledTables(),
+                retrieveExplicitlyDisabledTables(),
+                tableName);
+    }
+
+    /**
+     * Retrieves the explicitly enabled table names, via environment property. This means
+     * no other tables should be processed.
+     */
+    public String[] retrieveExplicitlyEnabledTables()
+    {
+        return parseExplicitTables(System.getProperty(TABLES_ENABLED));
+    }
+
+    /**
+     * Retrieves the explicitly disabled table names, via environment property. This means
+     * no other tables should be processed.
+     */
+    public String[] retrieveExplicitlyDisabledTables()
+    {
+        return parseExplicitTables(System.getProperty(TABLES_DISABLED));
+    }
+
+    /**
+     * Parses given environment property to find out whether some tables are
+     * explicitly specified.
+     * @param environmentProperty the environment propery.
+     * @return the tables especified in given environment property.
+     */
+    @NotNull
+    protected String[] parseExplicitTables(@NotNull final String environmentProperty)
+    {
+        @NotNull String[] result = null;
+
+        if (environmentProperty != null)
+        {
+            result = environmentProperty.split(",");
+        }
+
+        if (result == null)
+        {
+            result = EMPTY_STRING_ARRAY;
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param tablesEnabled the explicitly-enabled tables.
+     * @param tablesDisabled the explicitly-disabled tables.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     */
+    protected final boolean isGenerationAllowedForTable(
+        @Nullable final String[] tablesDisabled,
+        @Nullable final String[] tablesEnabled,
+        @NotNull final String tableName)
+    {
+        boolean result = true;
+
+        boolean t_bExplicitlyEnabled = false;
+
+        if (tablesEnabled != null)
+        {
+            t_bExplicitlyEnabled = Arrays.asList(tablesEnabled).contains(tableName);
+
+            result = t_bExplicitlyEnabled;
+        }
+
+        if (   (!t_bExplicitlyEnabled)
+            && (tablesDisabled != null))
+        {
+            List<String> t_lTablesDisabled = Arrays.asList(tablesDisabled);
+
+            if (   (t_lTablesDisabled.contains("*"))
+                || (tablesEnabled.length > 1)) // explicitly-enabled tables imply
+            // the others are disabled implicitly.
+            {
+                result = false;
+            }
+            else if (tablesDisabled != null)
+            {
+                result = !Arrays.asList(tablesDisabled).contains(tableName);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the table names.
      * @param metaData the metadata.
      * @param catalog the catalog.
@@ -3181,6 +3280,34 @@ public abstract class AbstractJdbcMetadataManager
      * @precondition metaData != null
      */
     protected String[] getTableNames(
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+        QueryJException
+    {
+        @NotNull String[] result = retrieveExplicitlyEnabledTables();
+
+        if (result.length == 0)
+        {
+            result = extractTableNames(metaData,  catalog, schema, metadataExtractionListener);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table names.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @return the list of all table names.
+     * @throws SQLException if the database operation fails.
+     * @precondition metaData != null
+     */
+    protected String[] extractTableNames(
         final DatabaseMetaData metaData,
         final String catalog,
         final String schema,
@@ -4318,11 +4445,39 @@ public abstract class AbstractJdbcMetadataManager
      * @throws QueryJException if any other error occurs.
      * @precondition metaData != null
      */
+    protected final void extractPrimaryKeys(
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+        QueryJException
+    {
+        extractPrimaryKeys(
+            getTableNames(),
+            metaData,
+            catalog,
+            schema,
+            metadataExtractionListener);
+    }
+
+    /**
+     * Extracts the primary keys.
+     * @param tableNames the table names.
+     * @param metaData the database metadata.
+     * @param catalog the database catalog.
+     * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if any kind of SQL exception occurs.
+     * @throws QueryJException if any other error occurs.
+     * @precondition metaData != null
+     */
     protected void extractPrimaryKeys(
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final MetadataExtractionListener metadataExtractionListener)
+        @NotNull final String[] tableNames,
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {
@@ -4390,6 +4545,34 @@ public abstract class AbstractJdbcMetadataManager
         final String catalog,
         final String schema,
         final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+        QueryJException
+    {
+        extractForeignKeys(
+            getTableNames(),
+            metaData,
+            catalog,
+            schema,
+            metadataExtractionListener);
+    }
+
+    /**
+     * Extracts the foreign keys.
+     * @param tableNames the table names.
+     * @param metaData the database metadata.
+     * @param catalog the database catalog.
+     * @param schema the database schema.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if any kind of SQL exception occurs.
+     * @throws QueryJException if any other error occurs.
+     * @precondition metaData != null
+     */
+    protected void extractForeignKeys(
+        @NotNull final String[] tableNames,
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
       throws  SQLException,
               QueryJException
     {

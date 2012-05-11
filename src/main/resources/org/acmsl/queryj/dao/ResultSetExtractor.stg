@@ -163,7 +163,7 @@ classImpl(input, table, parent) ::= <<
  */
 public class <input.vo_name>ResultSetExtractor
     extends     <input.tr_name_capitalized>ResultSetExtractor
-    implements  ResultSetExtractor,
+    implements  ResultSetExtractor
 <!                <input.tr_name_capitalized>TableRepository !>
 {
 <if(input.clobHandling)>

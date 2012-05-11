@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -140,8 +141,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion)
+        @NotNull final String engineName,
+        @NotNull final String engineVersion)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -166,10 +167,10 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -182,7 +183,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
-            retrieveCustomResult(parameters, customSqlProvider));
+            retrieveCustomResult(parameters, customSqlProvider),
+            CustomResultUtils.getInstance());
     }
 
     /**
@@ -203,15 +205,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param repository the repository.
      * @param header the header.
      * @param resultElements the custom RESULT elements.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition resultElements != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
@@ -223,26 +218,22 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
-        @Nullable final Result[] resultElements)
+        @Nullable final Result[] resultElements,
+        @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
-        int t_iLength = (resultElements != null) ? resultElements.length : 0;
-
         @NotNull List<T> t_lTemplates = new ArrayList<T>();
-
-        @Nullable Result t_ResultElement;
 
         @Nullable T t_Template;
 
-        try
+        if (resultElements != null)
         {
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+            for  (Result t_ResultElement: resultElements)
             {
-                if (resultElements != null)
+                if (   (t_ResultElement != null)
+                    && (customResultUtils.isGenerationAllowedForResult(t_ResultElement.getId())))
                 {
-                    t_ResultElement = resultElements[t_iIndex];
-
-                    if (t_ResultElement != null)
+                    try
                     {
                         t_Template =
                             templateFactory.createTemplate(
@@ -266,14 +257,15 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                             t_lTemplates.add(t_Template);
                         }
                     }
+                    catch  (@NotNull final QueryJException queryjException)
+                    {
+                        throw
+                            new QueryJBuildException(
+                                "Cannot create template for result " + t_ResultElement.getId(),
+                                queryjException);
+                    }
                 }
             }
-        }
-        catch  (@NotNull final QueryJException queryjException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot create template", queryjException);
         }
 
         storeTemplates(t_lTemplates, parameters);

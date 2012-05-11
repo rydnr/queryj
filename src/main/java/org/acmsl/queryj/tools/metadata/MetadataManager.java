@@ -64,6 +64,16 @@ public interface MetadataManager
     extends Serializable
 {
     /**
+     * The system property prefix to disable generation for concrete (or all, with *) tables.
+     */
+    public static final String TABLES_DISABLED = "queryj.tables.disabled";
+
+    /**
+     * The system property to enable generation for concrete (or all, with * or missing property) tables.
+     */
+    public static final String TABLES_ENABLED = "queryj.tables.enabled";
+
+    /**
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */
@@ -531,4 +541,11 @@ public interface MetadataManager
      * @param metaData the {@link DatabaseMetaData} instance.
      */
     public void setMetaData(@NotNull final DatabaseMetaData metaData);
+
+    /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     */
+    boolean isGenerationAllowedForTable(@NotNull final String tableName);
 }

@@ -165,26 +165,21 @@ public class OracleMetadataManager
     }
 
     /**
-     * Extracts the primary keys.
-     * @param metaData the database metadata.
-     * @param catalog the database catalog.
-     * @param schema the database schema.
-     * @throws SQLException if any kind of SQL exception occurs.
-     * @throws QueryJException if any other error occurs.
-     * @precondition metaData != null
+     * {@inheritDoc}
      */
     @Override
     protected void extractPrimaryKeys(
+        @NotNull final String[] tableNames,
         @NotNull final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final MetadataExtractionListener listener)
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @Nullable final MetadataExtractionListener listener)
       throws  SQLException,
               QueryJException
     {
         extractPrimaryKeys(
             metaData.getConnection(),
-            getTableNames(metaData, catalog, schema, listener),
+            tableNames,
             QueryFactory.getInstance());
     }
 
@@ -328,6 +323,7 @@ public class OracleMetadataManager
      */
     @Override
     protected void extractForeignKeys(
+        @NotNull final String[] tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -758,7 +754,7 @@ public class OracleMetadataManager
      * {@inheritDoc}
      */
     @Override
-    protected String[] getTableNames(
+    protected String[] extractTableNames(
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -767,7 +763,7 @@ public class OracleMetadataManager
               QueryJException
     {
         return
-            getTableNames(
+            extractTableNames(
                 metaData.getConnection(),
                 catalog,
                 schema,
@@ -787,7 +783,7 @@ public class OracleMetadataManager
      */
     @SuppressWarnings("unused")
     @NotNull
-    public String[] getTableNames(
+    public String[] extractTableNames(
         @NotNull final Connection connection,
         @Nullable final String catalog,
         @Nullable final String schema,

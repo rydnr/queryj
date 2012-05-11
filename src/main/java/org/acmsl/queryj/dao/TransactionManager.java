@@ -277,7 +277,7 @@ public class TransactionManager
         if  (initialize)
         {
             // Enforcing connection is registered.
-            DataSourceUtils.getConnection(dataSource, true);
+            DataSourceUtils.getConnection(dataSource);
         }
 
         result = new DataSourceTransactionManager(dataSource);

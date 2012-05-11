@@ -86,16 +86,6 @@ public abstract class BasePerTableTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * The system property prefix to disable generation for concrete (or all, with *) tables.
-     */
-    public static final String TABLES_DISABLED = "queryj.tables.disabled";
-
-    /**
-     * The system property to enable generation for concrete (or all, with * or missing property) tables.
-     */
-    public static final String TABLES_ENABLED = "queryj.tables.enabled";
-
-    /**
      * Creates a {@ BasePerTableTemplateBuildHandler} instance.
      */
     public BasePerTableTemplateBuildHandler() {}
@@ -245,7 +235,7 @@ public abstract class BasePerTableTemplateBuildHandler
             {
                 t_strTableName = t_TableTemplate.getTableName();
 
-                if (isGenerationAllowedForTable(t_strTableName))
+                if (metadataManager.isGenerationAllowedForTable(t_strTableName))
                 {
                     t_Template =
                         createTemplate(
@@ -551,69 +541,5 @@ public abstract class BasePerTableTemplateBuildHandler
     protected Object buildStaticContentKey(@NotNull final String tableName)
     {
         return "..static-contents-for-table-" + tableName + "..";
-    }
-
-    /**
-     * Checks whether the generation phase is enabled for given table.
-     * @param tableName the table name.
-     * @return <code>true</code> in such case.
-     */
-    protected boolean isGenerationAllowedForTable(@NotNull final String tableName)
-    {
-        return
-            isGenerationAllowedForTable(
-                System.getProperty(TABLES_DISABLED),
-                System.getProperty(TABLES_ENABLED),
-                tableName);
-    }
-
-    /**
-     * Checks whether the generation phase is enabled for given table.
-     * @param tablesDisabled the environment property for disabled tables.
-     * @param tablesEnabled the environment property for enabled tables.
-     * @param tableName the table name.
-     * @return <code>true</code> in such case.
-     */
-    protected final boolean isGenerationAllowedForTable(
-        @Nullable final String tablesDisabled,
-        @Nullable final String tablesEnabled,
-        @NotNull final String tableName)
-    {
-        boolean result = true;
-
-        boolean t_bExplicitlyEnabled = false;
-
-        @NotNull String[] t_astrEnabled;
-
-        if (tablesEnabled != null)
-        {
-            t_astrEnabled = tablesEnabled.split(",");
-
-            t_bExplicitlyEnabled = Arrays.asList(t_astrEnabled).contains(tableName);
-
-            result = t_bExplicitlyEnabled;
-        }
-        else
-        {
-            t_astrEnabled = new String[0];
-        }
-
-        if (!t_bExplicitlyEnabled)
-        {
-            if (   ("*".equals(tablesDisabled))
-                || (t_astrEnabled.length > 1)) // explicitly-enabled tables imply
-            // the others are disabled implicitly.
-            {
-                result = false;
-            }
-            else if (tablesDisabled != null)
-            {
-                String[] t_astrDisabled = tablesDisabled.split(",");
-
-                result = !Arrays.asList(t_astrDisabled).contains(tableName);
-            }
-        }
-
-        return result;
     }
 }
