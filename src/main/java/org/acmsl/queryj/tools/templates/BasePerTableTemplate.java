@@ -205,18 +205,6 @@ public abstract class BasePerTableTemplate
      * @param metadataUtils the {@link MetadataUtils} instance.
      * @return such code.
      * @throws InvalidTemplateException if the generation process fails.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     * @precondition stringUtils != null
-     * @precondition defaultThemeUtils != null
-     * @precondition packageUtils != null
-     * @precondition stringValidator != null
-     * @precondition englishGrammarUtils != null
-     * @precondition daoTemplateUtils != null
-     * @precondition metaLanguageUtils != null
-     * @precondition metadataUtils != null
      */
     protected String generateOutput(
         @NotNull final String tableName,

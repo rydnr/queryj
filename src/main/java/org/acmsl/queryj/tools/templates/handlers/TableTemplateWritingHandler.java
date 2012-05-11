@@ -63,7 +63,7 @@ public class TableTemplateWritingHandler
     /**
      * Creates a TableTemplateWritingHandler.
      */
-    public TableTemplateWritingHandler() {};
+    public TableTemplateWritingHandler() {}
 
     /**
      * Handles given parameters.

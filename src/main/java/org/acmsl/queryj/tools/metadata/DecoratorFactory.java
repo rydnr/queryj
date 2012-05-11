@@ -55,6 +55,7 @@ import org.acmsl.commons.patterns.Factory;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -137,7 +138,7 @@ public interface DecoratorFactory
      * @return the decorated table for the concrete template.
      */
     public TableDecorator createTableDecorator(
-        final String table, final MetadataManager metadataManager);
+        final String  table, final MetadataManager metadataManager);
 
     /**
      * Retrieves the decorated list of attributes of given table.

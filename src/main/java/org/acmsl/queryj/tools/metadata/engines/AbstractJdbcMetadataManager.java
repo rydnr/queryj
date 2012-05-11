@@ -3234,8 +3234,8 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> in such case.
      */
     protected final boolean isGenerationAllowedForTable(
-        @Nullable final String[] tablesDisabled,
         @Nullable final String[] tablesEnabled,
+        @Nullable final String[] tablesDisabled,
         @NotNull final String tableName)
     {
         boolean result = true;

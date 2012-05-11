@@ -68,11 +68,6 @@ source(input) ::= <<
   ])>
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-//import org.acmsl.commons.patterns.ValueObject;
-
-/*
  * Importing some JDK classes.
  */
 import java.math.BigDecimal;
@@ -112,22 +107,21 @@ class_impl(input, table, parent) ::= <<
  * <[
       first_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public interface <input.vo_name>
 <if(parent)>
     extends  <parent.voName>
-<else>
-//    extends  ValueObject
 <endif>
 
 {
 <if(parent)> 
+// retrieving nonParentAttributes
     <table.nonParentAttributes:attribute_getter(attribute=it);
       separator="\n\n">
 <else>
+// retrieving attributes
     <table.attributes:attribute_getter(attribute=it);
       separator="\n\n">
 <endif>

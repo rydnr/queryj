@@ -125,7 +125,8 @@ public abstract class BasePerTableTemplateBuildHandler
                 parameters,
                 metaData.getDatabaseProductName(),
                 retrieveDatabaseProductVersion(metaData),
-                fixQuote(metaData.getIdentifierQuoteString()));
+                fixQuote(metaData.getIdentifierQuoteString()),
+                retrieveMetadataManager(parameters));
         }
         catch  (@NotNull final SQLException sqlException)
         {
@@ -141,16 +142,15 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param quote the quote character.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition quote != null
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote)
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
+        @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
         buildTemplate(
@@ -158,14 +158,14 @@ public abstract class BasePerTableTemplateBuildHandler
             engineName,
             engineVersion,
             quote,
-            retrieveMetadataManager(parameters),
+            metadataManager,
             retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
             retrieveImplementMarkerInterfaces(parameters),
-            retrieveTableTemplates(parameters));
+            metadataManager.getTableNames());
     }
 
     /**
@@ -188,16 +188,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
-     * @param tableTemplates the table templates.
+     * @param tableNames the table names.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition tableTemplates != null
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
@@ -211,30 +203,28 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
-        @Nullable final TableTemplate[] tableTemplates)
+        @Nullable final String[] tableNames)
       throws  QueryJBuildException
     {
-        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
+        int t_iLength = (tableNames != null) ? tableNames.length : 0;
 
-        @NotNull List<T> t_lTemplates = new ArrayList<T>();
+        List<T> t_lTemplates = new ArrayList<T>();
 
         @Nullable T t_Template;
 
-        String t_strTableName;
+        String t_strTableName = null;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
             @Nullable TableTemplate t_TableTemplate = null;
 
-            if (tableTemplates != null)
+            if (tableNames != null)
             {
-                t_TableTemplate = tableTemplates[t_iIndex];
+                t_strTableName = tableNames[t_iIndex];
             }
 
-            if (t_TableTemplate != null)
+            if (t_strTableName != null)
             {
-                t_strTableName = t_TableTemplate.getTableName();
-
                 if (metadataManager.isGenerationAllowedForTable(t_strTableName))
                 {
                     t_Template =

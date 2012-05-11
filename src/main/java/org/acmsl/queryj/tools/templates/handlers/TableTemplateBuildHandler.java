@@ -90,6 +90,7 @@ public class TableTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @Override
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
