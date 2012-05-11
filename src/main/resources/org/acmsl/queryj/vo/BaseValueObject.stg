@@ -107,8 +107,7 @@ class_impl(input, table, parent) ::= <<
  * <[
       first_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public abstract class Abstract<input.vo_name>ValueObject
@@ -128,7 +127,7 @@ public abstract class Abstract<input.vo_name>ValueObject
 
 
     /**
-     * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
+     * Creates a {@link Abstract<input.vo_name>ValueObject} instance.
 <if(parent)>
      <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
@@ -292,6 +291,7 @@ protected final void immutableSet<attribute.nameCapitalized>(final <attribute.ja
  * Specifies the \<i\><attribute.name>\</i\> value.
  * @param value such information.
  */
+@SuppressWarnings("unused")
 <if(attribute.allowsNull)>
 <if(attribute.boolean)>
 protected void set<attribute.nameCapitalized>(final Boolean value)

@@ -70,6 +70,7 @@ source(input) ::= <<
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Calendar;
@@ -112,7 +113,10 @@ class_impl(input, table, parent) ::= <<
  */
 public interface <input.vo_name>
 <if(parent)>
-    extends  <parent.voName>
+    extends  Serializable,
+             <parent.voName>
+<else>
+    extends  Serializable
 <endif>
 
 {
