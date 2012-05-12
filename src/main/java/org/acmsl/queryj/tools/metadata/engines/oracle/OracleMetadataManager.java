@@ -1737,4 +1737,152 @@ public class OracleMetadataManager
 
         return result;
     }
+
+
+    /**
+     * Retrieves the column comments.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param tableName the table name.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @return the list of all table names.
+     * @throws SQLException if the database operation fails.
+     * @precondition metaData != null
+     */
+    @Override
+    @Nullable
+    protected String getColumnComment(
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+        QueryJException
+    {
+        return
+            getColumnComment(
+                metaData.getConnection(),
+                tableName,
+                columnName,
+                metadataExtractionListener);
+    }
+
+    /**
+     * Retrieves the column comments.
+     * @param connection the connection.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metadataExtractionListener the {@link MetadataExtractionListener} instance.
+     * @return the list of all table names.
+     * @throws SQLException if the database operation fails.
+     */
+    @Nullable
+    protected String getColumnComment(
+        @NotNull final Connection connection,
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
+      throws  SQLException,
+              QueryJException
+    {
+        @Nullable String result = null;
+
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+
+        @Nullable ResultSet t_rsResults = null;
+
+        @Nullable PreparedStatement t_PreparedStatement = null;
+
+        try
+        {
+            try
+            {
+                @NotNull String t_strSql =
+                    "SELECT COMMENTS FROM  USER_COL_COMMENTS WHERE TABLE_NAME = ? AND COLUMN_NAME = ?";
+
+                if  (t_Log != null)
+                {
+                    t_Log.debug("query:" + t_strSql);
+                }
+
+                t_PreparedStatement = connection.prepareStatement(t_strSql);
+
+                t_PreparedStatement.setString(1, tableName);
+                t_PreparedStatement.setString(2, columnName);
+
+                t_rsResults = t_PreparedStatement.executeQuery();
+
+                @Nullable String t_strComment;
+
+                if  (t_rsResults.next())
+                {
+                    t_strComment = t_rsResults.getString(1);
+
+                    if  (t_strComment != null)
+                    {
+                        if  (t_Log != null)
+                        {
+                            t_Log.trace(
+                                "Comments for table "+ tableName
+                                + " = " + t_strComment);
+                        }
+                    }
+                    else
+                    {
+                        t_strComment = null;
+                    }
+
+                    result = t_strComment;
+                }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                throw
+                    new QueryJException(
+                        "cannot.retrieve.table.comments",
+                        sqlException);
+            }
+        }
+        finally
+        {
+            try
+            {
+                if  (t_rsResults != null)
+                {
+                    t_rsResults.close();
+                }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the result set.",
+                        sqlException);
+                }
+            }
+
+            try
+            {
+                if  (t_PreparedStatement != null)
+                {
+                    t_PreparedStatement.close();
+                }
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                if  (t_Log != null)
+                {
+                    t_Log.error(
+                        "Cannot close the statement.",
+                        sqlException);
+                }
+            }
+        }
+
+        return result;
+    }
 }

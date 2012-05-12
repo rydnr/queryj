@@ -85,7 +85,7 @@ public interface Attribute
      * Retrieves whether it allows null values or not.
      * @return such information.
      */
-    public boolean getAllowsNull();
+    public boolean isNullable();
 
     /**
      * Retrieves the optional attribute's value, meaning

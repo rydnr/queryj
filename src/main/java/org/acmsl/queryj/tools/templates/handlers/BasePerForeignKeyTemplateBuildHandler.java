@@ -550,7 +550,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     t_lAttributes.add(t_Attribute);
 
                     if  (   (!t_bAllowsNull)
-                         && (t_Attribute.getAllowsNull()))
+                         && (t_Attribute.isNullable()))
                     {
                         t_bAllowsNull = true;
                     }

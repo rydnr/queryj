@@ -182,7 +182,6 @@ attribute_declaration(attribute) ::= <<
 
  */
 private <type_checker(attribute=attribute)><attribute.type> m__<attribute.nameCapitalized>;
-
 >>
 
 attribute_javadoc(attribute) ::= <<

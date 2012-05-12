@@ -708,7 +708,7 @@ public class MetadataUtils
                         t_iType,
                         t_strNativeType,
                         tableName,
-                        metadataManager.getTableComment(tableName),
+                        metadataManager.getColumnComment(tableName, columnNames[t_iIndex]),
                         t_bManagedExternally,
                         t_bAllowsNull,
                         columnValues[t_iIndex],
@@ -746,7 +746,7 @@ public class MetadataUtils
                     t_CurrentAttribute = t_itAttributes.next();
 
                     if  (   (t_CurrentAttribute != null)
-                         && (t_CurrentAttribute.getAllowsNull()))
+                         && (t_CurrentAttribute.isNullable()))
                     {
                         result = true;
                         break;

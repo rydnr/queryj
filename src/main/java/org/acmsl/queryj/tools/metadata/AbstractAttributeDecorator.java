@@ -104,7 +104,7 @@ public abstract class AbstractAttributeDecorator
             attribute.getTableName(),
             attribute.getComment(),
             attribute.getManagedExternally(),
-            attribute.getAllowsNull(),
+            attribute.isNullable(),
             attribute.getValue(),
             attribute.isReadOnly(),
             attribute.isBoolean(),
@@ -811,7 +811,7 @@ public abstract class AbstractAttributeDecorator
         final int type, @NotNull final MetadataManager metadataManager)
     {
         return
-            retrieveType(type, metadataManager, getAllowsNull(), isBoolean());
+            retrieveType(type, metadataManager, isNullable(), isBoolean());
     }
 
     /**
@@ -826,7 +826,7 @@ public abstract class AbstractAttributeDecorator
             retrieveType(
                 getTypeId(),
                 getMetadataManager(),
-                getAllowsNull(),
+                isNullable(),
                 isBoolean());
     }
 

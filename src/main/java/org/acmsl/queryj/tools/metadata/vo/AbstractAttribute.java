@@ -610,8 +610,8 @@ public abstract class AbstractAttribute
                          getManagedExternally(),
                          t_OtherInstance.getManagedExternally())
                      .append(
-                         getAllowsNull(),
-                         t_OtherInstance.getAllowsNull())
+                         isNullable(),
+                         t_OtherInstance.isNullable())
                      .append(
                          getValue(),
                          t_OtherInstance.getValue())
@@ -719,7 +719,7 @@ public abstract class AbstractAttribute
         result = 31 * result + (m__strTableName != null ? m__strTableName.hashCode() : 0);
         result = 31 * result + (m__strComment != null ? m__strComment.hashCode() : 0);
         result = 31 * result + (m__bManagedExternally ? 1 : 0);
-        result = 31 * result + (m__bAllowsNull ? 1 : 0);
+        result = 31 * result + (m__bNullable ? 1 : 0);
         result = 31 * result + (m__strValue != null ? m__strValue.hashCode() : 0);
         result = 31 * result + (m__bReadOnly ? 1 : 0);
         result = 31 * result + (m__bBoolean ? 1 : 0);
