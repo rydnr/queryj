@@ -98,8 +98,7 @@ class(input, result) ::= <<
  * <[
       first_line_description(result=input.result)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public class <input.vo_name>ValueObjectFactory
@@ -132,7 +131,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a {@link <input.vo_name>} instance.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>(
@@ -146,7 +145,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a {@link <input.vo_name>ValueObject} instance.
+     * Creates a {@link <input.vo_name>} instance.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create<input.vo_name>ValueObject(
@@ -160,7 +159,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a {@link <input.vo_name>ValueObject} instance.
+     * Creates a {@link <input.vo_name>} instance.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> create(
@@ -174,7 +173,7 @@ public class <input.vo_name>ValueObjectFactory
     }
 
     /**
-     * Creates a {@link <input.vo_name>ValueObject} instance.
+     * Creates a {@link <input.vo_name>} instance.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
     public <input.vo_name> createValueObject(
@@ -194,7 +193,7 @@ property_javadoc(attribute) ::= <<
  Writes the Javadoc for given attribute.
  @param attribute the attribute.
 !>
-* @param <attribute.columnNameNormalizedUncapitalized> the \<i\><attribute.columnNameNormalizedCapitalized>\</i> value.
+* @param <attribute.columnNameNormalizedUncapitalized> the \<i\><attribute.columnName>\</i> value.
 >>
 
 property_method_declaration(attribute) ::= <<
@@ -202,10 +201,6 @@ property_method_declaration(attribute) ::= <<
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
-<if(attribute.nullable)>
-/* @Nullable */ final <attribute.objectType> <attribute.columnNameNormalizedUncapitalized>
-<else>
-/* @NotNull */ final <attribute.javaType> <attribute.columnNameNormalizedUncapitalized>
-<endif>
-
+<type_checker(attribute=attribute)>
+final <attribute.type> <attribute.columnNameNormalizedUncapitalized>
 >>
