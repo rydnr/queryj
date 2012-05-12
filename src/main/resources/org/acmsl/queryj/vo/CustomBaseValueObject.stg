@@ -98,8 +98,7 @@ class(input, result) ::= <<
  * <[
       first_line_description(result=input.result)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public abstract class Abstract<input.vo_name>ValueObject
@@ -109,7 +108,7 @@ public abstract class Abstract<input.vo_name>ValueObject
      separator="\n\n">
 
     /**
-     * Creates a \<code\>Abstract<input.vo_name>ValueObject\</code> instance.
+     * Creates an instance of {@link Abstract<input.vo_name>ValueObject}.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
     public Abstract<input.vo_name>ValueObject(
@@ -131,14 +130,10 @@ property_declaration(attribute) ::= <<
  @param attribute the attribute.
 !>
 /**
- * The \<i\><attribute.columnName>\</i\> value.
+ * The \<i\><attribute.columnName>\</i\> information.
  */
-<if(attribute.allowsNull)>
-private <attribute.objectType> m__<attribute.columnNameCapitalized>;
-<else>
-private <attribute.javaType> m__<attribute.columnNameCapitalized>;
-<endif>
-
+<type_checker(attribute=attribute)>
+private <attribute.type> m__<attribute.columnNameCapitalized>;
 >>
 
 property_javadoc(attribute) ::= <<
@@ -146,7 +141,7 @@ property_javadoc(attribute) ::= <<
  Writes the Javadoc for given attribute.
  @param attribute the attribute.
 !>
-* @param <attribute.columnNameNormalizedUncapitalized> the \<i\><attribute.columnNameNormalizedCapitalized>\</i> value.
+* @param <attribute.columnNameNormalizedUncapitalized> the \<i\><attribute.columnName>\</i> value.
 >>
 
 property_method_declaration(attribute) ::= <<
@@ -154,12 +149,7 @@ property_method_declaration(attribute) ::= <<
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
-<if(attribute.allowsNull)>
-final <attribute.objectType> <attribute.columnNameNormalizedUncapitalized>
-<else>
-final <attribute.javaType> <attribute.columnNameNormalizedUncapitalized>
-<endif>
-
+<type_checker(attribute=attribute)>final <attribute.type> <attribute.columnNameNormalizedUncapitalized>
 >>
 
 immutable_setter_call(attribute) ::= <<
@@ -178,6 +168,7 @@ property_accessors(attribute) ::= <<
  @param attribute the attribute.
 !>
 <property_setter(attribute=attribute)>
+
 <property_getter(attribute=attribute)>
 >>
 
@@ -190,12 +181,7 @@ property_setter(attribute) ::= <<
  * Specifies the \<i\><attribute.columnName>\</i\> value.
  * @param value such information.
  */
-<if(attribute.allowsNull)>
-protected final void immutableSet<attribute.columnNameCapitalized>(final <attribute.objectType> value)
-<else>
-protected final void immutableSet<attribute.columnNameCapitalized>(final <attribute.javaType> value)
-<endif>
-
+protected final void immutableSet<attribute.columnNameCapitalized>(<type_checker(attribute=attribute)>final <attribute.type> value)
 {
     m__<attribute.columnNameCapitalized> = value;
 }
@@ -205,12 +191,7 @@ protected final void immutableSet<attribute.columnNameCapitalized>(final <attrib
  * @param value such information.
  */
 @SuppressWarnings("unused")
-<if(attribute.allowsNull)>
-protected void set<attribute.columnNameCapitalized>(final <attribute.objectType> value)
-<else>
-protected void set<attribute.columnNameCapitalized>(final <attribute.javaType> value)
-<endif>
-
+protected void set<attribute.columnNameCapitalized>(<type_checker(attribute=attribute)>final <attribute.type> value)
 {
     immutableSet<attribute.columnNameCapitalized>(value);
 }
@@ -225,12 +206,8 @@ property_getter(attribute) ::= <<
  * Retrieves the \<i\><attribute.columnName>\</i\> value.
  * @return such information.
  */
-<if(attribute.allowsNull)>
-public <attribute.objectType> get<attribute.columnNameCapitalized>()
-<else>
-public <attribute.javaType> get<attribute.columnNameCapitalized>()
-<endif>
-
+<type_checker(attribute=attribute)>
+public <attribute.type> get<attribute.columnNameCapitalized>()
 {
     return m__<attribute.columnNameCapitalized>;
 }
