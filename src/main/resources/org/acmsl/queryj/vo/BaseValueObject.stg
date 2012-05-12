@@ -181,11 +181,7 @@ attribute_declaration(attribute) ::= <<
 <endif>
 
  */
-<if(attribute.boolean)>
-private <type_checker(attribute=attribute)><attribute.type> m__b<attribute.nameCapitalized>;
-<else>
 private <type_checker(attribute=attribute)><attribute.type> m__<attribute.nameCapitalized>;
-<endif>
 
 >>
 
@@ -236,12 +232,7 @@ attribute_setter(attribute) ::= <<
  */
 protected final void immutableSet<attribute.nameCapitalized>(<type_checker(attribute=attribute)>final <attribute.type> value)
 {
-<if(attribute.boolean)>
-    m__b<attribute.nameCapitalized> = value;
-<else>
     m__<attribute.nameCapitalized> = value;
-<endif>
-
 }
 
 /**
@@ -282,11 +273,7 @@ attribute_getter(attribute) ::= <<
 <type_checker(attribute=attribute)>
 public <attribute.type> get<attribute.nameCapitalized>()
 {
-<if(attribute.boolean)>
-    return m__b<attribute.nameCapitalized>;
-<else>
     return m__<attribute.nameCapitalized>;
-<endif>
 
 }
 >>

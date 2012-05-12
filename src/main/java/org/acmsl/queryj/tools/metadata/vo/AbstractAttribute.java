@@ -83,7 +83,7 @@ public abstract class AbstractAttribute
     /**
      * Whether the attribute allows null values or not.
      */
-    private boolean m__bAllowsNull = false;
+    private boolean m__bNullable = false;
 
     /**
      * The optional value.
@@ -171,7 +171,7 @@ public abstract class AbstractAttribute
         immutableSetType(type);
         immutableSetComment(comment);
         immutableSetManagedExternally(managedExternally);
-        immutableSetAllowsNull(allowsNull);
+        immutableIsNullable(allowsNull);
         immutableSetValue(value);
         immutableSetReadOnly(readOnly);
         immutableSetBoolean(isBool);
@@ -351,9 +351,9 @@ public abstract class AbstractAttribute
      * Specifies whether the attribute allows null values or not.
      * @param allowsNull such information.
      */
-    protected final void immutableSetAllowsNull(final boolean allowsNull)
+    protected final void immutableIsNullable(final boolean allowsNull)
     {
-        m__bAllowsNull = allowsNull;
+        m__bNullable = allowsNull;
     }
 
     /**
@@ -361,18 +361,18 @@ public abstract class AbstractAttribute
      * @param allowsNull such information.
      */
     @SuppressWarnings("unused")
-    protected void setAllowsNull(final boolean allowsNull)
+    protected void setIsNullable(final boolean allowsNull)
     {
-        immutableSetAllowsNull(allowsNull);
+        immutableIsNullable(allowsNull);
     }
 
     /**
      * Retrieves whether it allows null values or not.
      * @return such information.
      */
-    public boolean getAllowsNull()
+    public boolean isNullable()
     {
-        return m__bAllowsNull;
+        return m__bNullable;
     }
 
     /**
@@ -650,7 +650,7 @@ public abstract class AbstractAttribute
 
         @NotNull final AbstractAttribute that = (AbstractAttribute) o;
 
-        if (m__bAllowsNull != that.m__bAllowsNull)
+        if (m__bNullable != that.m__bNullable)
         {
             return false;
         }
