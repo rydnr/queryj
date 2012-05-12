@@ -134,7 +134,7 @@ public class <input.vo_name>ValueObjectFactory
      * Creates a {@link <input.vo_name>} instance.
      <result.properties:property_javadoc(attribute=it); separator="\n">
      */
-    public <input.vo_name> create<input.vo_name>(
+    public <input.vo_name> create(
         <result.properties:property_method_declaration(attribute=it);
           separator=",\n">)
     {
@@ -142,48 +142,6 @@ public class <input.vo_name>ValueObjectFactory
             new <input.vo_name>ValueObject(
                 <result.properties:{<it.columnNameNormalizedUncapitalized>};
                 separator=",\n">);
-    }
-
-    /**
-     * Creates a {@link <input.vo_name>} instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
-     */
-    public <input.vo_name> create<input.vo_name>ValueObject(
-        <result.properties:property_method_declaration(attribute=it);
-          separator=",\n">)
-    {
-        return
-            create<input.vo_name>(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
-                  separator=",\n">);
-    }
-
-    /**
-     * Creates a {@link <input.vo_name>} instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
-     */
-    public <input.vo_name> create(
-        <result.properties:property_method_declaration(attribute=it);
-          separator=",\n">)
-    {
-        return
-            create<input.vo_name>(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
-                  separator=",\n">);
-    }
-
-    /**
-     * Creates a {@link <input.vo_name>} instance.
-     <result.properties:property_javadoc(attribute=it); separator="\n">
-     */
-    public <input.vo_name> createValueObject(
-        <result.properties:property_method_declaration(attribute=it);
-          separator=",\n">)
-    {
-        return
-            create<input.vo_name>(
-                <result.properties:{<it.columnNameNormalizedUncapitalized>};
-                  separator=",\n">);
     }
 }
 >>
