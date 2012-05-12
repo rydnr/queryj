@@ -101,8 +101,7 @@ class(input, result) ::= <<
  * <[
       first_line_description(result=input.result)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public interface <input.vo_name>
@@ -121,10 +120,6 @@ property_getter(attribute) ::= <<
  * Retrieves the \<i\><attribute.columnName>\</i\> value.
  * @return such information.
  */
-<if(attribute.allowsNull)>
-public <attribute.objectType> get<attribute.columnNameCapitalized>();
-<else>
-public <attribute.javaType> get<attribute.columnNameCapitalized>();
-<endif>
-
+<type_checker(attribute=attribute)>
+<attribute.type> get<attribute.columnNameCapitalized>();
 >>

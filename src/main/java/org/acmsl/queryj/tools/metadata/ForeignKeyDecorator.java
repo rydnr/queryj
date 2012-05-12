@@ -44,6 +44,7 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
@@ -79,7 +80,7 @@ public class ForeignKeyDecorator
             foreignKey.getSourceTableName(),
             foreignKey.getAttributes(),
             foreignKey.getTargetTableName(),
-            foreignKey.getAllowsNull());
+            foreignKey.isNullable());
     }
 
     /**
@@ -95,7 +96,7 @@ public class ForeignKeyDecorator
      */
     public ForeignKeyDecorator(
         final String sourceTableName,
-        final List attributes,
+        final List<Attribute> attributes,
         final String targetTableName,
         final boolean allowsNull)
     {

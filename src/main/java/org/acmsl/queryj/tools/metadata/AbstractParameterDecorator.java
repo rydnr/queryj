@@ -389,7 +389,7 @@ public abstract class AbstractParameterDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final Parameter object)
         throws  ClassCastException
     {
         return compareTo(getParameter(), object);
@@ -405,9 +405,16 @@ public abstract class AbstractParameterDecorator
      * @precondition parameter != null
      */
     @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Parameter parameter, final Object object)
+    protected int compareTo(@NotNull final Parameter parameter, final Parameter object)
         throws  ClassCastException
     {
-        return parameter.compareTo(object);
+        int result = 1;
+
+        if (parameter instanceof Comparable)
+        {
+            result = ((Comparable<Parameter>) parameter).compareTo(object);
+        }
+
+        return result;
     }
 }

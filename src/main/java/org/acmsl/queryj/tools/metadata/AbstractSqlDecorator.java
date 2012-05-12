@@ -37,15 +37,13 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.IdentifiableElement;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
 import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.customsql.SqlElement;
-import org.acmsl.queryj.tools.metadata.CachingParameterDecorator;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.ParameterDecorator;
 
 /*
  * Importing JDK classes.
@@ -58,6 +56,10 @@ import java.util.Iterator;
  * Importing Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,15 +92,11 @@ public abstract class AbstractSqlDecorator
      * @param sql the <code>Sql</code> to decorate.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
-     * @param metadataTypeManager the metadata type manager.
-     * @precondition sql != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataTypeManager != null
      */
     public AbstractSqlDecorator(
         @NotNull final Sql sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
         super(
             sql.getId(),
@@ -640,7 +638,7 @@ public abstract class AbstractSqlDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final IdentifiableElement object)
         throws  ClassCastException
     {
         int result = 1;

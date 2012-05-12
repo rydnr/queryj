@@ -78,7 +78,7 @@ public abstract class AbstractForeignKeyDecorator
             foreignKey.getSourceTableName(),
             foreignKey.getAttributes(),
             foreignKey.getTargetTableName(),
-            foreignKey.getAllowsNull());
+            foreignKey.isNullable());
 
         immutableSetForeignKey(foreignKey);
     }

@@ -305,51 +305,16 @@ public abstract class AbstractParameterElement
      * Compares given object with this instance.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
-        throws  ClassCastException
+    public int compareTo(@NotNull final Parameter object)
     {
-        int result = 1;
-
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof Parameter)
-        {
-                @NotNull final Parameter t_OtherInstance = (Parameter) object;
-
-                result =
-                    new org.apache.commons.lang.builder.CompareToBuilder()
-                        .append(
-                            getColumnName(),
-                            t_OtherInstance.getColumnName())
-                        .append(
-                            getIndex(),
-                            t_OtherInstance.getIndex())
-                        .append(
-                            getName(),
-                            t_OtherInstance.getName())
-                        .append(
-                            getType(),
-                            t_OtherInstance.getType())
-                        .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
-        }
-
-        return result;
+        return
+            new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(getColumnName(), object.getColumnName())
+                .append(getIndex(), object.getIndex())
+                .append(getName(), object.getName())
+                .append(getType(), object.getType())
+                .toComparison();
     }
 }

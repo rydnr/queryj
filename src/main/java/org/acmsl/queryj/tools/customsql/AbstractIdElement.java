@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -35,11 +34,9 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
- * Importing project classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.customsql.IdentifiableElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Common parent to all <i>custom-sql</i> elements with <i>id</i>
@@ -103,9 +100,6 @@ public abstract class AbstractIdElement
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
-     * @param classValue the <i>class</i> attribute.
-     * @param matches the <i>matches</i> attribute.
-     * @param propertyRefs the <i>property-ref</i> elements.
      * @return such information.
      */
     @NotNull
@@ -160,38 +154,12 @@ public abstract class AbstractIdElement
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final IdentifiableElement object)
         throws  ClassCastException
     {
-        int result = 1;
-
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof IdentifiableElement)
-        {
-                @NotNull final IdentifiableElement t_OtherInstance =
-                    (IdentifiableElement) object;
-
-                result =
-                    new org.apache.commons.lang.builder.CompareToBuilder()
-                        .append(getId(), t_OtherInstance.getId())
-                        .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
-        }
-
-        return result;
+        return
+            new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(getId(), object.getId())
+                .toComparison();
     }
 }

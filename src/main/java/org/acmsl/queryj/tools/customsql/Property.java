@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,36 +37,35 @@ package org.acmsl.queryj.tools.customsql;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Property
-    extends  IdentifiableElement,
-             java.lang.Comparable
+    extends  IdentifiableElement
 {
     /**
      * Retrieves the <i>column_name</i> attribute.
      * @return such information.
      */
-    public String getColumnName();
+    String getColumnName();
 
     /**
      * Retrieves the <i>index</i> attribute.
      * @return such information.
      */
-    public int getIndex();
+    int getIndex();
 
     /**
      * Retrieves the <i>name</i> attribute.
      * @return such information.
      */
-    public String getName();
+    String getName();
 
     /**
      * Retrieves the <i>type</i> attribute.
      * @return such information.
      */
-    public String getType();
+    String getType();
 
     /**
-     * Retrieves ehether the property is nullable or not.
+     * Retrieves whether the property is nullable or not.
      * @return such condition.
      */
-    public boolean isNullable();
+    boolean isNullable();
 }

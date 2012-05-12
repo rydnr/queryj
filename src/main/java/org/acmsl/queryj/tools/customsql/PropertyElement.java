@@ -174,37 +174,19 @@ public class PropertyElement
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final Property object)
         throws  ClassCastException
     {
         int result = 1;
 
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof Property)
+        if  (object != null)
         {
-            @NotNull final Property t_OtherInstance = (Property) object;
-
             result =
                 new org.apache.commons.lang.builder.CompareToBuilder()
                 .append(
                     isNullable(),
-                    t_OtherInstance.isNullable())
+                    object.isNullable())
                 .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
         }
 
         return result;

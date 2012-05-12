@@ -70,14 +70,15 @@ public class CustomValueObjectPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    public String getJavaType()
+    @NotNull
+    public String getType()
     {
-        String result = getCachedJavaType();
+        String result = getCachedType();
 
         if  (result == null)
         {
-            result = retrieveJavaType();
-            setCachedJavaType(result);
+            result = retrieveType();
+            setCachedType(result);
         }
 
         return result;
@@ -87,9 +88,9 @@ public class CustomValueObjectPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    protected String retrieveJavaType()
+    protected String retrieveType()
     {
-        return retrieveJavaType(getType(), getMetadataManager(), isNullable());
+        return retrieveType(getType(), getMetadataManager(), isNullable());
     }
 
     /**
@@ -100,7 +101,7 @@ public class CustomValueObjectPropertyDecorator
      * @return such information.
      * @precondition metadataManager != null
      */
-    protected String retrieveJavaType(
+    protected String retrieveType(
         final String type,
         @NotNull final MetadataManager metadataManager,
         final boolean allowsNull)

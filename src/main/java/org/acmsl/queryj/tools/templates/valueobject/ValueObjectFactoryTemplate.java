@@ -28,7 +28,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate ValueObject factoryementation sources.
+ * Description: Is able to generate ValueObject factory sources.
  *
  */
 package org.acmsl.queryj.tools.templates.valueobject;
@@ -45,17 +45,14 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.util.Collection;
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Is able to generate <i>ValueObject</i> factoryementation sources.
+ * Is able to generate <i>ValueObject</i> factory sources.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectFactoryTemplate
@@ -81,17 +78,17 @@ public class ValueObjectFactoryTemplate
      * interfaces.
      */
     public ValueObjectFactoryTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces)
     {
         super(

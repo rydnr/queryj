@@ -42,7 +42,11 @@ import org.acmsl.queryj.tools.customsql.Property;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
-import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
@@ -56,25 +60,20 @@ public interface PropertyDecorator
      * Retrieves the property.
      * @return such instance.
      */
-    public Property getProperty();
-
-    /**
-     * Retrieves the Java type of the property.
-     * @return such information.
-     */
-    @Nullable
-    public String getJavaType();
+    @NotNull
+    Property getProperty();
 
     /**
      * Retrieves the name, in lower case.
      * @return such information.
      */
-    public String getNameLowercased();
+    @NotNull
+    String getNameLowercased();
 
     /**
      * Retrieves whether the type means the attribute is a
      * number smaller than an int.
      * @return such condition.
      */
-    public boolean isNumberSmallerThanInt();
+    boolean isNumberSmallerThanInt();
 }

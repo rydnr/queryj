@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.customsql.xml;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.customsql.xml.ElementFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -49,10 +48,23 @@ import org.acmsl.commons.utils.ConversionUtils;
  * Importing some additional classes.
  */
 import org.apache.commons.digester.Digester;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing SAX classes.
+ */
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.Locale;
 
 /**
  * Is able to create sql.xml &lt;property&gt; element instances from their
@@ -65,7 +77,7 @@ public class PropertyElementFactory
     /**
      * Creates a PropertyElementFactory instance.
      */
-    public PropertyElementFactory() {};
+    public PropertyElementFactory() {}
 
     /**
      * Creates a PropertyElement instance from given SAX attributes.
@@ -81,7 +93,7 @@ public class PropertyElementFactory
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
-        final Digester digester,
+        @NotNull final Digester digester,
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
@@ -101,6 +113,19 @@ public class PropertyElementFactory
 
         String t_strNullable = attributes.getValue("nullable");
 
+        boolean t_bNullable = false;
+
+        if (t_strNullable != null)
+        {
+            t_bNullable = Boolean.TRUE.toString().equalsIgnoreCase(t_strNullable);
+        }
+        else
+        {
+            t_bNullable =
+                (   (t_strType != null)
+                 && (startsWithUpperCase(t_strType)));
+        }
+
         result =
             new PropertyElement(
                 t_strId,
@@ -108,7 +133,25 @@ public class PropertyElementFactory
                 t_iIndex,
                 t_strName,
                 t_strType,
-                Boolean.TRUE.toString().equalsIgnoreCase(t_strNullable));
+                t_bNullable);
+
+        return result;
+    }
+
+    /**
+     * Checks whether given value starts with upper case.
+     */
+    protected boolean startsWithUpperCase(@NotNull final String type)
+    {
+        boolean result = false;
+
+        if (type.length() > 0)
+        {
+            String t_strInitialCharacter = type.substring(0, 1);
+
+            result =
+                t_strInitialCharacter.equals(t_strInitialCharacter.toUpperCase(Locale.US));
+        }
 
         return result;
     }

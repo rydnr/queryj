@@ -37,9 +37,6 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.Property;
-import org.acmsl.queryj.tools.metadata.AbstractPropertyDecorator;
-import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,12 +46,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CachingPropertyDecorator
     extends  AbstractPropertyDecorator
+    implements Comparable<Property>
 {
     private static final long serialVersionUID = -3484708648329474308L;
     /**
      * The cached Java type.
      */
-    private String m__strCachedJavaType;
+    private String m__strCachedType;
 
     /**
      * The cached object type.
@@ -118,42 +116,43 @@ public class CachingPropertyDecorator
      * Specifies the cached Java type.
      * @param type such type.
      */
-    protected final void immutableSetCachedJavaType(final String type)
+    protected final void immutableSetCachedType(final String type)
     {
-        m__strCachedJavaType = type;
+        m__strCachedType = type;
     }
 
     /**
      * Specifies the cached Java type.
      * @param type such type.
      */
-    protected void setCachedJavaType(final String type)
+    protected void setCachedType(final String type)
     {
-        immutableSetCachedJavaType(type);
+        immutableSetCachedType(type);
     }
 
     /**
      * Retrieves the cached Java type.
      * @return such type.
      */
-    public String getCachedJavaType()
+    public String getCachedType()
     {
-        return m__strCachedJavaType;
+        return m__strCachedType;
     }
 
     /**
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @NotNull
     @Nullable
-    public String getJavaType()
+    public String getType()
     {
-        @Nullable String result = getCachedJavaType();
+        @Nullable String result = getCachedType();
 
         if  (result == null)
         {
-            result = super.getJavaType();
-            setCachedJavaType(result);
+            result = super.getType();
+            setCachedType(result);
         }
 
         return result;
@@ -192,6 +191,7 @@ public class CachingPropertyDecorator
      * Retrieves the name, in lower case.
      * @return such information.
      */
+    @NotNull
     public String getNameLowercased()
     {
         String result = getCachedNameLowercased();

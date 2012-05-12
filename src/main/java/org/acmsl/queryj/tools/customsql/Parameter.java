@@ -52,8 +52,7 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Parameter
-    extends  IdentifiableElement,
-             java.lang.Comparable
+    extends  IdentifiableElement
 {
     /**
      * Retrieves the <i>column_name</i> attribute.

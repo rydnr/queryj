@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing JDK classes.
  */
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
 /**
@@ -55,23 +57,26 @@ public interface ForeignKey
      * Retrieves the source table name.
      * @return such table name.
      */
+    @NotNull
     public String getSourceTableName();
     
     /**
      * Retrieves the attributes.
      * @return such information.
      */
-    public List getAttributes();
+    @NotNull
+    public List<Attribute> getAttributes();
     
     /**
      * Retrieves the target table name.
      * @return such table name.
      */
+    @NotNull
     public String getTargetTableName();
 
     /**
-     * Retrieves wheter the foreign key can take null values.
+     * Retrieves whether the foreign key can take null values.
      * @return such information.
      */
-    public boolean getAllowsNull();
+    public boolean isNullable();
 }

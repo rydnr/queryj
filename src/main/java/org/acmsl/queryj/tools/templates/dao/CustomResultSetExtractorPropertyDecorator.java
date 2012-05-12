@@ -55,7 +55,7 @@ public class CustomResultSetExtractorPropertyDecorator
     /**
      * The cached Java type, capitalized.
      */
-    private String m__strCachedJavaTypeCapitalized;
+    private String m__strCachedTypeCapitalized;
 
     /**
      * Creates a {@link CustomResultSetExtractorPropertyDecorator} to
@@ -74,41 +74,43 @@ public class CustomResultSetExtractorPropertyDecorator
      * Specifies the cached Java type, capitalized.
      * @param type such type.
      */
-    protected final void immutableSetCachedJavaTypeCapitalized(final String type)
+    protected final void immutableSetCachedTypeCapitalized(final String type)
     {
-        m__strCachedJavaTypeCapitalized = type;
+        m__strCachedTypeCapitalized = type;
     }
 
     /**
      * Specifies the cached Java type, capitalized.
      * @param type such type.
      */
-    protected void setCachedJavaTypeCapitalized(final String type)
+    @SuppressWarnings("unused")
+    protected void setCachedTypeCapitalized(final String type)
     {
-        immutableSetCachedJavaTypeCapitalized(type);
+        immutableSetCachedTypeCapitalized(type);
     }
 
     /**
      * Retrieves the cached Java type, capitalized.
      * @return such type.
      */
-    public String getCachedJavaTypeCapitalized()
+    @SuppressWarnings("unused")
+    public String getCachedTypeCapitalized()
     {
-        return m__strCachedJavaTypeCapitalized;
+        return m__strCachedTypeCapitalized;
     }
 
     /**
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    public String getJavaTypeCapitalized()
+    public String getTypeCapitalized()
     {
-        String result = getCachedJavaType();
+        String result = getCachedTypeCapitalized();
 
         if  (result == null)
         {
-            result = uppercase(getJavaType());
-            setCachedJavaType(result);
+            result = uppercase(getType());
+            setCachedTypeCapitalized(result);
         }
 
         return result;
@@ -118,14 +120,14 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    public String getJavaType()
+    public String getType()
     {
-        String result = getCachedJavaType();
+        String result = getCachedType();
 
         if  (result == null)
         {
-            result = retrieveJavaType();
-            setCachedJavaType(result);
+            result = retrieveType();
+            setCachedType(result);
         }
 
         return result;
@@ -135,46 +137,47 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    protected String retrieveJavaType()
+    protected String retrieveType()
     {
-        return retrieveJavaType(getType(), getMetadataManager(), isNullable());
+        return retrieveType(getType(), getMetadataManager(), isNullable());
     }
 
     /**
      * Retrieves the Java type of the property.
      * @param type the declared type.
      * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param allowsNull whether it allows nulls.
+     * @param isNullable whether it allows nulls.
      * @return such information.
      * @precondition metadataManager != null
      */
-    protected String retrieveJavaType(
+    protected String retrieveType(
         final String type,
         @NotNull final MetadataManager metadataManager,
-        final boolean allowsNull)
+        final boolean isNullable)
     {
         return
-            retrieveJavaType(
+            retrieveType(
                 type,
                 metadataManager.getMetadataTypeManager(),
-                allowsNull,
+                isNullable,
                 MetadataTypeUtils.getInstance());
     }
 
     /**
-     * Retrieves the Java type of the property.
+     * Retrieves the type of the property.
      * @param type the declared type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param allowsNull whether it allows nulls.
+     * @param isNullable whether it allows nulls.
      * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
      * @return such information.
      * @precondition metadataTypeManager != null
      * @precondition metadataTypeUtils != null
      */
-    protected String retrieveJavaType(
+    @SuppressWarnings("unused")
+    protected String retrieveType(
         final String type,
         final MetadataTypeManager metadataTypeManager,
-        final boolean allowsNull,
+        final boolean isNullable,
         final MetadataTypeUtils metadataTypeUtils)
     {
         return type;

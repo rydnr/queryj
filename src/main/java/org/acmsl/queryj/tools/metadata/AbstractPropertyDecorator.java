@@ -38,9 +38,6 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -117,6 +114,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the decorated <code>Property</code> instance.
      * @return such property.
      */
+    @NotNull
     public Property getProperty()
     {
         return m__Property;
@@ -184,24 +182,23 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    @Nullable
-    public String getJavaType()
+    @NotNull
+    @Override
+    public String getType()
     {
-        return getJavaType(getType(), getMetadataTypeManager());
+        return retrieveType(super.getType(), getMetadataTypeManager());
     }
 
     /**
-     * Retrieves the Java type of the property.
+     * Retrieves the type of the property.
      * @param type the type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
      * @return such information.
-     * @precondition type != null
-     * @precondition metadataTypeManager != null
      */
     @NotNull
-    protected String getJavaType(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    protected String retrieveType(
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         int t_iJavaType = metadataTypeManager.getJavaType(type);
 
@@ -275,6 +272,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the name, in lower case.
      * @return such information.
      */
+    @NotNull
     public String getNameLowercased()
     {
         return lowercase(getName());
@@ -371,15 +369,6 @@ public abstract class AbstractPropertyDecorator
         final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(decorationUtils.normalize(value));
-    }
-
-    /**
-     * Checks whether the property allows null or not.
-     * @return such information.
-     */
-    public boolean getAllowsNull()
-    {
-        return isNullable();
     }
 
     /**
@@ -563,7 +552,7 @@ public abstract class AbstractPropertyDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final Property object)
         throws  ClassCastException
     {
         return compareTo(getProperty(), object);
@@ -578,9 +567,16 @@ public abstract class AbstractPropertyDecorator
      * object prevents it from being compared to this Object.
      * @precondition property != null
      */
-    protected int compareTo(@NotNull final Property property, final Object object)
+    protected int compareTo(@NotNull final Property property, final Property object)
         throws  ClassCastException
     {
-        return property.compareTo(object);
+        int result = 1;
+
+        if (property instanceof Comparable)
+        {
+            result = ((Comparable<Property>) property).compareTo(object);
+        }
+
+        return result;
     }
 }

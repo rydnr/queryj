@@ -67,7 +67,7 @@ public abstract class AbstractForeignKey
     /**
      * Whether the foreign key allows null values.
      */
-    private boolean m__bAllowsNull;
+    private boolean m__bNullable;
 
     /**
      * Creates an <code>AbstractForeignKey</code> with given information.
@@ -88,7 +88,7 @@ public abstract class AbstractForeignKey
         immutableSetSourceTableName(sourceTableName);
         immutableSetAttributes(attributes);
         immutableSetTargetTableName(targetTableName);
-        immutableSetAllowsNull(allowsNull);
+        immutableIsNullable(allowsNull);
     }
 
     /**
@@ -176,27 +176,28 @@ public abstract class AbstractForeignKey
      * Specifies whether the foreign key can take null values.
      * @param allowsNull whether it allows null.
      */
-    protected final void immutableSetAllowsNull(final boolean allowsNull)
+    protected final void immutableIsNullable(final boolean allowsNull)
     {
-        m__bAllowsNull = allowsNull;
+        m__bNullable = allowsNull;
     }
 
     /**
      * Specifies whether the foreign key can take null values.
      * @param allowsNull whether it allows null.
      */
-    protected void setAllowsNull(final boolean allowsNull)
+    @SuppressWarnings("unused")
+    protected void isNullable(final boolean allowsNull)
     {
-        immutableSetAllowsNull(allowsNull);
+        immutableIsNullable(allowsNull);
     }
 
     /**
-     * Retrieves wheter the foreign key can take null values.
+     * Retrieves whether the foreign key can take null values.
      * @return such information.
      */
-    public boolean getAllowsNull()
+    public boolean isNullable()
     {
-        return m__bAllowsNull;
+        return m__bNullable;
     }
 
     /**
@@ -211,7 +212,7 @@ public abstract class AbstractForeignKey
                 .append("sourceTableName", getSourceTableName())
                 .append("attributes", getAttributes())
                 .append("targetTableName", getTargetTableName())
-                .append("allowsNull", getAllowsNull())
+                .append("nullable", isNullable())
                 .toString();
     }
 
@@ -226,7 +227,7 @@ public abstract class AbstractForeignKey
                 .append(getSourceTableName())
                 .append(getAttributes())
                 .append(getTargetTableName())
-                .append(getAllowsNull())
+                .append(isNullable())
                 .toHashCode();
     }
 
@@ -255,8 +256,8 @@ public abstract class AbstractForeignKey
                         getTargetTableName(),
                         t_OtherInstance.getTargetTableName())
                     .append(
-                        getAllowsNull(),
-                        t_OtherInstance.getAllowsNull())
+                        isNullable(),
+                        t_OtherInstance.isNullable())
                 .isEquals();
         }
 
@@ -293,8 +294,8 @@ public abstract class AbstractForeignKey
                     getTargetTableName(),
                     t_OtherInstance.getTargetTableName())
                 .append(
-                    getAllowsNull(),
-                    t_OtherInstance.getAllowsNull())
+                    isNullable(),
+                    t_OtherInstance.isNullable())
                 .toComparison();
         }
         else
