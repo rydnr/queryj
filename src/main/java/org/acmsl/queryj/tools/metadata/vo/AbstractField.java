@@ -36,9 +36,10 @@ package org.acmsl.queryj.tools.metadata.vo;
 /*
  * Importing some JDK classes.
  */
+import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.jetbrains.annotations.NotNull;
+import org.sonatype.inject.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -67,38 +68,46 @@ public abstract class AbstractField
     /**
      * The field fk collection.
      */
-    private Collection m__cFieldFks;
+    private Collection<AntFieldFkElement> m__cFieldFks;
 
     /**
      * Creates an {@link AbstractField} with given information.
      * @param name the field name.
-     * @param type the field type.
+     * @param typeId the type id.
+     * @param type the type.
      * @param tableName the name of the table.
+     * @param comment the field comment.
+     * @param managedExternally whether it's managed externally.
+     * @param allowsNull whether it allows null or not.
+     * @param value the concrete value, if any.
+     * @param readOnly whether it's read-only.
+     * @param isBool whether it represents boolean values or not.
+     * @param booleanTrue the value representing <code>true</code>.
+     * @param booleanFalse the value representing <code>false</code>.
+     * @param booleanNull the value representing <code>null</code>.
      * @param pk whether it participates in the table's pk.
-          */
+     */
     public AbstractField(
-        final String name,
-        final int type,
-        final String nativeType,
-        final String fieldType,
-        final String tableName,
-        final String comment,
+        @NotNull final String name,
+        final int typeId,
+        @NotNull final String type,
+        @NotNull final String tableName,
+        @Nullable final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value,
+        @Nullable final String value,
         final boolean readOnly,
         final boolean isBool,
-        final String booleanTrue,
-        final String booleanFalse,
-        final String booleanNull,
+        @Nullable final String booleanTrue,
+        @Nullable final String booleanFalse,
+        @Nullable final String booleanNull,
         final boolean pk)
     {
         //super(name, type, tableName, false);
         super(
             name,
+            typeId,
             type,
-            nativeType,
-            fieldType,
             tableName,
             comment,
             managedExternally,
@@ -116,36 +125,44 @@ public abstract class AbstractField
     /**
      * Creates an <code>AbstractField</code> with given information.
      * @param name the field name.
-     * @param type the field type.
-     * @param pk whether it participates in the table's pk.
+     * @param typeId the type id.
+     * @param type the type.
      * @param tableName the name of the table.
+     * @param comment the field comment.
+     * @param managedExternally whether it's managed externally.
+     * @param allowsNull whether it allows null or not.
+     * @param value the concrete value, if any.
+     * @param readOnly whether it's read-only.
+     * @param isBool whether it represents boolean values or not.
+     * @param booleanTrue the value representing <code>true</code>.
+     * @param booleanFalse the value representing <code>false</code>.
+     * @param booleanNull the value representing <code>null</code>.
+     * @param pk whether it participates in the table's pk.
      * @param keyword the keyword.
      * @param retrievalQuery the query to retrieval field's values.
      */
     public AbstractField(
-        final String name,
-        final int type,
-        final String nativeType,
-        final String fieldType,
-        final String tableName,
-        final String comment,
+        @NotNull final String name,
+        final int typeId,
+        @NotNull final String type,
+        @NotNull final String tableName,
+        @Nullable final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value,
+        @Nullable final String value,
         final boolean readOnly,
         final boolean isBool,
-        final String booleanTrue,
-        final String booleanFalse,
-        final String booleanNull,
+        @Nullable final String booleanTrue,
+        @Nullable final String booleanFalse,
+        @Nullable final String booleanNull,
         final boolean pk,
-        final String keyword,
-        final String retrievalQuery)
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery)
     {
         this(
             name,
+            typeId,
             type,
-            nativeType,
-            fieldType,
             tableName,
             comment,
             managedExternally,
@@ -247,7 +264,7 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    private void immutableSetFieldFks(final Collection fieldFks)
+    private void immutableSetFieldFks(final Collection<AntFieldFkElement> fieldFks)
     {
         m__cFieldFks = fieldFks;
     }
@@ -256,7 +273,7 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    protected void setFieldFks(final Collection fieldFks)
+    protected void setFieldFks(final Collection<AntFieldFkElement> fieldFks)
     {
         immutableSetFieldFks(fieldFks);
     }
@@ -265,7 +282,7 @@ public abstract class AbstractField
      * Retrieves the field fk collection.
      * @return such collection.
      */
-    public Collection getFieldFks()
+    public Collection<AntFieldFkElement> getFieldFks()
     {
         return m__cFieldFks;
     }
@@ -312,7 +329,7 @@ public abstract class AbstractField
      */
     public boolean equals(final Object object)
     {
-        boolean result = false;
+        final boolean result;
 
         if  (object instanceof AbstractField)
         {
@@ -353,7 +370,7 @@ public abstract class AbstractField
     public int compareTo(final Object object)
         throws  ClassCastException
     {
-        int result = 1;
+        final int result;
 
         if  (object instanceof Field)
         {

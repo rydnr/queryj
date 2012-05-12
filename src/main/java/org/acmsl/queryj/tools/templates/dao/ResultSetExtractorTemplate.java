@@ -119,7 +119,7 @@ public class ResultSetExtractorTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/ResultSetExtractor.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

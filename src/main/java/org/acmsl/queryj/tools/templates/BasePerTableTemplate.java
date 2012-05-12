@@ -462,7 +462,7 @@ public abstract class BasePerTableTemplate
                     new Object[]
                     {
                         t_Template.getName(),
-                        t_Group.getName(),
+                        getTemplateName(),
                         tableName
                     },
 
@@ -976,7 +976,6 @@ public abstract class BasePerTableTemplate
                 new AttributeValueObject(
                     staticAttributeName,
                     metadataTypeManager.getJavaType(staticAttributeType),
-                    staticAttributeType,
                     staticAttributeType,
                     tableName,
                     metadataManager.getTableComment(tableName),

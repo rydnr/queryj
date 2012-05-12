@@ -115,7 +115,7 @@ public class PkStatementSetterTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/dao/PkStatementSetter.stg");
+                "/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

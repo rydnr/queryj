@@ -188,16 +188,6 @@ public class BaseAbstractDAOTemplate
     }
 
     /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public String getTemplateName()
-    {
-        return "Abstract DAO";
-    }
-
-    /**
      * Retrieves the string template group.
      * @return such instance.
      */
@@ -205,6 +195,20 @@ public class BaseAbstractDAOTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/BaseAbstractDAO.stg");
+        return
+            retrieveGroup(
+                "/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return "BaseAbstractDAO";
+    }
+
 }

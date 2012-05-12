@@ -122,27 +122,6 @@ public class DAOChooserTemplate
     }
 
     /**
-     * Retrieves the string template group.
-     * @return such instance.
-     */
-    @NotNull
-    @Override
-    public StringTemplateGroup retrieveGroup()
-    {
-        return retrieveGroup("/org/acmsl/queryj/dao/DAOChooser.stg");
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public String getTemplateName()
-    {
-        return "DAOChooser";
-    }
-
-    /**
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
@@ -236,5 +215,26 @@ public class DAOChooserTemplate
         @NotNull final String repository, @NotNull final DAOChooserTemplateUtils daoChooserTemplateUtils)
     {
         return daoChooserTemplateUtils.retrievePropertiesFileName(repository);
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "DAOChooser";
     }
 }

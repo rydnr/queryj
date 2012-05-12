@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -83,6 +82,8 @@ public abstract class AbstractTemplate
                 DefaultThemeConstants,
                 Serializable
 {
+    private static final long serialVersionUID = -3708579868912707138L;
+
     /**
      * The default StringTemplate error listener.
      */

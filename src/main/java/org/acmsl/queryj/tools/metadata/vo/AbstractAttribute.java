@@ -58,17 +58,12 @@ public abstract class AbstractAttribute
     /**
      * The type.
      */
-    private int m__iType;
+    private int m__iTypeId;
 
     /**
-     * The native type.
+     * The type.
      */
-    private String m__strNativeType;
-
-    /**
-     * The field type.
-     */
-    private String m__strFieldType;
+    private String m__strType;
 
     /**
      * The table name.
@@ -143,9 +138,8 @@ public abstract class AbstractAttribute
      * Creates an <code>AbstractAttribute</code> with the following
      * information.
      * @param name the name.
+     * @param typeId the type id.
      * @param type the type.
-     * @param nativeType the native type.
-     * @param fieldType the field type.
      * @param tableName the table name.
      * @param comment the comment.
      * @param managedExternally whether the attribute is managed externally.
@@ -159,9 +153,8 @@ public abstract class AbstractAttribute
      */
     protected AbstractAttribute(
         final String name,
-        final int type,
-        final String nativeType,
-        final String fieldType,
+        final int typeId,
+        final String type,
         final String tableName,
         final String comment,
         final boolean managedExternally,
@@ -174,9 +167,8 @@ public abstract class AbstractAttribute
         final String booleanNull)
     {
         this(tableName, name);
+        immutableSetTypeId(typeId);
         immutableSetType(type);
-        immutableSetNativeType(nativeType);
-        immutableSetFieldType(fieldType);
         immutableSetComment(comment);
         immutableSetManagedExternally(managedExternally);
         immutableSetAllowsNull(allowsNull);
@@ -219,9 +211,9 @@ public abstract class AbstractAttribute
      * Specifies the type.
      * @param type such information.
      */
-    protected final void immutableSetType(final int type)
+    protected final void immutableSetTypeId(final int type)
     {
-        m__iType = type;
+        m__iTypeId = type;
     }
 
     /**
@@ -229,73 +221,46 @@ public abstract class AbstractAttribute
      * @param type such information.
      */
     @SuppressWarnings("unused")
-    protected void setType(final int type)
+    protected void setTypeId(final int type)
     {
-        immutableSetType(type);
+        immutableSetTypeId(type);
     }
 
     /**
      * Retrieves the attribute type.
      * @return its type.
      */
-    public int getType()
+    public int getTypeId()
     {
-        return m__iType;
+        return m__iTypeId;
+    }
+
+    /**
+     * Specifies the type.
+     * @param type such information.
+     */
+    protected final void immutableSetType(final String type)
+    {
+        m__strType = type;
     }
 
     /**
      * Specifies the native type.
-     * @param nativeType such information.
-     */
-    protected final void immutableSetNativeType(final String nativeType)
-    {
-        m__strNativeType = nativeType;
-    }
-
-    /**
-     * Specifies the native type.
-     * @param nativeType such information.
-     */
-    protected void setNativeType(final String nativeType)
-    {
-        immutableSetNativeType(nativeType);
-    }
-
-    /**
-     * Retrieves the native type.
-     * @return such information.
-     */
-    public String getNativeType()
-    {
-        return m__strNativeType;
-    }
-
-    /**
-     * Specifies the field type.
-     * @param fieldType such information.
-     */
-    protected final void immutableSetFieldType(final String fieldType)
-    {
-        m__strFieldType = fieldType;
-    }
-
-    /**
-     * Specifies the field type.
-     * @param fieldType such information.
+     * @param type such information.
      */
     @SuppressWarnings("unused")
-    protected void setFieldType(final String fieldType)
+    protected void setType(final String type)
     {
-        immutableSetFieldType(fieldType);
+        immutableSetType(type);
     }
 
     /**
-     * Retrieves the field type.
+     * Retrieves the type.
      * @return such information.
      */
-    public String getFieldType()
+    public String getType()
     {
-        return m__strFieldType;
+        return m__strType;
     }
 
     /**
@@ -630,14 +595,11 @@ public abstract class AbstractAttribute
                         getName(),
                         t_OtherInstance.getName())
                     .append(
+                        getTypeId(),
+                        t_OtherInstance.getTypeId())
+                    .append(
                         getType(),
                         t_OtherInstance.getType())
-                    .append(
-                        getNativeType(),
-                        t_OtherInstance.getNativeType())
-                    .append(
-                        getFieldType(),
-                        t_OtherInstance.getFieldType())
                      .append(
                          getTableName(),
                          t_OtherInstance.getTableName())
@@ -686,7 +648,7 @@ public abstract class AbstractAttribute
             return false;
         }
 
-        AbstractAttribute that = (AbstractAttribute) o;
+        @NotNull final AbstractAttribute that = (AbstractAttribute) o;
 
         if (m__bAllowsNull != that.m__bAllowsNull)
         {
@@ -704,7 +666,7 @@ public abstract class AbstractAttribute
         {
             return false;
         }
-        if (m__iType != that.m__iType)
+        if (m__iTypeId != that.m__iTypeId)
         {
             return false;
         }
@@ -731,15 +693,11 @@ public abstract class AbstractAttribute
         {
             return false;
         }
-        if (m__strFieldType != null ? !m__strFieldType.equals(that.m__strFieldType) : that.m__strFieldType != null)
+        if (m__strType != null ? !m__strType.equals(that.m__strType) : that.m__strType != null)
         {
             return false;
         }
         if (m__strName != null ? !m__strName.equals(that.m__strName) : that.m__strName != null)
-        {
-            return false;
-        }
-        if (m__strNativeType != null ? !m__strNativeType.equals(that.m__strNativeType) : that.m__strNativeType != null)
         {
             return false;
         }
@@ -756,9 +714,8 @@ public abstract class AbstractAttribute
     public int hashCode()
     {
         int result = m__strName != null ? m__strName.hashCode() : 0;
-        result = 31 * result + m__iType;
-        result = 31 * result + (m__strNativeType != null ? m__strNativeType.hashCode() : 0);
-        result = 31 * result + (m__strFieldType != null ? m__strFieldType.hashCode() : 0);
+        result = 31 * result + m__iTypeId;
+        result = 31 * result + (m__strType != null ? m__strType.hashCode() : 0);
         result = 31 * result + (m__strTableName != null ? m__strTableName.hashCode() : 0);
         result = 31 * result + (m__strComment != null ? m__strComment.hashCode() : 0);
         result = 31 * result + (m__bManagedExternally ? 1 : 0);

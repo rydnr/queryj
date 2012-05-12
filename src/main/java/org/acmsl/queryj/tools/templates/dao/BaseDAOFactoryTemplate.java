@@ -119,7 +119,7 @@ public class BaseDAOFactoryTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/BaseDAOFactory.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

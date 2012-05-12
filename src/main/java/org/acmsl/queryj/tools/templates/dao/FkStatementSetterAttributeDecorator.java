@@ -39,8 +39,11 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.metadata.CachingAttributeDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,14 +75,14 @@ public class FkStatementSetterAttributeDecorator
      * and the column allows nulls.
      * @return such information.
      */
-    public String getJavaType()
+    public String getType()
     {
-        String result = getCachedJavaType();
+        String result = getCachedType();
 
         if  (result == null)
         {
-            result = retrieveJavaType();
-            setCachedJavaType(result);
+            result = retrieveType();
+            setCachedType(result);
         }
 
         return result;
@@ -92,7 +95,7 @@ public class FkStatementSetterAttributeDecorator
     @Nullable
     public String getObjectType()
     {
-        return getObjectType(getType(), getMetadataTypeManager());
+        return getObjectType(getTypeId(), getMetadataTypeManager());
     }
 
     /**

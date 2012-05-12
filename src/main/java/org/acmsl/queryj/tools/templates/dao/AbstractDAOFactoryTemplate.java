@@ -330,4 +330,6 @@ public abstract class AbstractDAOFactoryTemplate
               "Generating DAOFactory for "
             + tableTemplate.getTableName() + ".";
     }
+
+
 }

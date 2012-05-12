@@ -43,8 +43,6 @@ package org.acmsl.queryj.tools.templates.valueobject;
 * Importing project classes.
 */
 
-import org.acmsl.queryj.tools.templates.valueobject.handlers.HandlersSuite;
-
 
 /*
 /* Importing JUnit classes.
@@ -99,7 +97,6 @@ public class ValueobjectSuite
     new TestSuite("org.acmsl.queryj.tools.templates.valueobject");
     
     suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGeneratorTest.class);
     

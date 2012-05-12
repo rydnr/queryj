@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -81,17 +80,17 @@ public class BaseValueObjectTemplate
      * interfaces.
      */
     public BaseValueObjectTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @Nullable final String header,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final String packageName,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
+        @NotNull final String basePackageName,
+        @Nullable final String repositoryName,
         final boolean implementMarkerInterfaces)
     {
         super(
@@ -117,7 +116,7 @@ public class BaseValueObjectTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/vo/BaseValueObject.stg");
+        return retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**
@@ -127,6 +126,6 @@ public class BaseValueObjectTemplate
     @NotNull
     public String getTemplateName()
     {
-        return "Abstract ValueObject implementation";
+        return "BaseValueObject";
     }
 }

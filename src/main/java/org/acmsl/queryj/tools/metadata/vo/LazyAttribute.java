@@ -57,17 +57,12 @@ public class LazyAttribute
     /**
      * The cached type.
      */
-    private Integer m__CachedType;
+    private Integer m__CachedTypeId;
 
     /**
-     * The cached native type.
+     * The cached type.
      */
-    private String m__CachedNativeType;
-
-    /**
-     * The cached field type.
-     */
-    private String m__strCachedFieldType;
+    private String m__CachedType;
 
     /**
      * The cached comment.
@@ -203,44 +198,111 @@ public class LazyAttribute
      * Specifies the cached type.
      * @param type the type.
      */
-    protected final void immutableSetCachedType(final Integer type)
+    protected final void immutableSetCachedTypeId(final Integer type)
     {
-        m__CachedType = type;
+        m__CachedTypeId = type;
     }
 
     /**
      * Specifies the cached type.
      * @param type the type.
      */
-    protected void setCachedType(final Integer type)
+    @SuppressWarnings("unused")
+    protected void setCachedTypeId(final Integer type)
     {
-        immutableSetCachedType(type);
+        immutableSetCachedTypeId(type);
     }
 
     /**
      * Retrieves the cached type.
      * @return such information.
      */
-    protected Integer getCachedType()
+    protected Integer getCachedTypeId()
     {
-        return m__CachedType;
+        return m__CachedTypeId;
     }
 
     /**
      * Retrieves the attribute type.
      * @return its type.
      */
-    public int getType()
+    public int getTypeId()
     {
-        Integer result = getCachedType();
+        Integer result = getCachedTypeId();
 
         if  (result == null)
         {
             result =
-                retrieveType(
+                retrieveTypeId(
                     getTableName(),
                     getName(),
                     getMetadataManager());
+
+            setCachedTypeId(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the type id.
+     * @param tableName the table name.
+     * @param name the name.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return such information.
+     * @precondition tableName != null
+     * @precondition name != null
+     * @precondition metadataManager != null
+     */
+    protected int retrieveTypeId(
+        final String tableName,
+        final String name,
+        final MetadataManager metadataManager)
+    {
+        return metadataManager.getColumnType(tableName, name);
+    }
+
+    /**
+     * Specifies the cached type.
+     * @param type such type.
+     */
+    protected final void immutableSetCachedType(final String type)
+    {
+        m__CachedType = type;
+    }
+
+    /**
+     * Specifies the cached type.
+     * @param type such type.
+     */
+    protected void setCachedType(final String type)
+    {
+        immutableSetCachedType(type);
+    }
+
+    /**
+     * Retrieves the cached type.
+     * @return such type.
+     */
+    protected String getCachedType()
+    {
+        return m__CachedType;
+    }
+
+    /**
+     * Retrieves the native type.
+     * @return such information.
+     */
+    public String getType()
+    {
+        String result = getCachedType();
+
+        if  (result == null)
+        {
+            result =
+                retrieveNativeType(
+                    getTypeId(),
+                    getMetadataTypeManager());
 
             setCachedType(result);
         }
@@ -250,72 +312,6 @@ public class LazyAttribute
 
     /**
      * Retrieves the type.
-     * @param tableName the table name.
-     * @param name the name.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @return such information.
-     * @precondition tableName != null
-     * @precondition name != null
-     * @precondition metadataManager != null
-     */
-    protected int retrieveType(
-        final String tableName,
-        final String name,
-        final MetadataManager metadataManager)
-    {
-        return metadataManager.getColumnType(tableName, name);
-    }
-
-    /**
-     * Specifies the cached native type.
-     * @param type such type.
-     */
-    protected final void immutableSetCachedNativeType(final String type)
-    {
-        m__CachedNativeType = type;
-    }
-
-    /**
-     * Specifies the cached native type.
-     * @param type such type.
-     */
-    protected void setCachedNativeType(final String type)
-    {
-        immutableSetCachedNativeType(type);
-    }
-
-    /**
-     * Retrieves the cached native type.
-     * @return such type.
-     */
-    protected String getCachedNativeType()
-    {
-        return m__CachedNativeType;
-    }
-
-    /**
-     * Retrieves the native type.
-     * @return such information.
-     */
-    public String getNativeType()
-    {
-        String result = getCachedNativeType();
-
-        if  (result == null)
-        {
-            result =
-                retrieveNativeType(
-                    getType(),
-                    getMetadataTypeManager());
-
-            setCachedNativeType(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the native type.
      * @param type the column type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such information.
@@ -326,68 +322,6 @@ public class LazyAttribute
         final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.getNativeType(type);
-    }
-
-    /**
-     * Specifies the cached field type.
-     * @param type such type.
-     */
-    protected final void immutableSetCachedFieldType(final String type)
-    {
-        m__strCachedFieldType = type;
-    }
-
-    /**
-     * Specifies the cached field type.
-     * @param type such type.
-     */
-    protected void setCachedFieldType(final String type)
-    {
-        immutableSetCachedFieldType(type);
-    }
-
-    /**
-     * Retrieves the cached field type.
-     * @return such type.
-     */
-    protected String getCachedFieldType()
-    {
-        return m__strCachedFieldType;
-    }
-
-    /**
-     * Retrieves the field type.
-     * @return such information.
-     */
-    public String getFieldType()
-    {
-        String result = getCachedFieldType();
-
-        if  (result == null)
-        {
-            result =
-                retrieveFieldType(
-                    getType(),
-                    getMetadataTypeManager());
-
-            setCachedFieldType(result);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the field type.
-     * @param type the column type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @return such information.
-     * @precondition metadataTypeManager != null
-     */
-    protected String retrieveFieldType(
-        final int type,
-        final MetadataTypeManager metadataTypeManager)
-    {
-        return metadataTypeManager.getFieldType(type);
     }
 
     /**
@@ -998,13 +932,13 @@ public class LazyAttribute
         }
         else if (o instanceof Attribute)
         {
-            @NotNull String t_strMyTable = getTableName();
-            String t_strHisTable = ((Attribute) o).getTableName();
+            @NotNull final String t_strMyTable = getTableName();
+            @NotNull final String t_strHisTable = ((Attribute) o).getTableName();
 
             if (t_strMyTable.equals(t_strHisTable))
             {
-                @NotNull String t_strMyName = getName();
-                String t_strHisValue = ((Attribute) o).getValue();
+                final @NotNull String t_strMyName = getName();
+                final String t_strHisValue = ((Attribute) o).getValue();
 
                 result = 1;
 
@@ -1034,7 +968,7 @@ public class LazyAttribute
             return false;
         }
 
-        LazyAttribute that = (LazyAttribute) o;
+        @NotNull final LazyAttribute that = (LazyAttribute) o;
 
         if (m__CachedAllowsNull != null ? !m__CachedAllowsNull.equals(that.m__CachedAllowsNull)
                                         : that.m__CachedAllowsNull != null)
@@ -1050,8 +984,8 @@ public class LazyAttribute
         {
             return false;
         }
-        if (m__CachedNativeType != null ? !m__CachedNativeType.equals(that.m__CachedNativeType)
-                                        : that.m__CachedNativeType != null)
+        if (m__CachedType != null ? !m__CachedType.equals(that.m__CachedType)
+                                        : that.m__CachedType != null)
         {
             return false;
         }
@@ -1089,22 +1023,16 @@ public class LazyAttribute
         {
             return false;
         }
-        if (m__strCachedComment != null ? !m__strCachedComment.equals(that.m__strCachedComment)
-                                        : that.m__strCachedComment != null)
-        {
-            return false;
-        }
-        return !(m__strCachedFieldType != null ? !m__strCachedFieldType.equals(that.m__strCachedFieldType)
-                                               : that.m__strCachedFieldType != null);
+        return !(m__strCachedComment != null ? !m__strCachedComment.equals(that.m__strCachedComment)
+                                               : that.m__strCachedComment != null);
     }
 
     @Override
     public int hashCode()
     {
         int result = super.hashCode();
+        result = 31 * result + (m__CachedTypeId != null ? m__CachedTypeId.hashCode() : 0);
         result = 31 * result + (m__CachedType != null ? m__CachedType.hashCode() : 0);
-        result = 31 * result + (m__CachedNativeType != null ? m__CachedNativeType.hashCode() : 0);
-        result = 31 * result + (m__strCachedFieldType != null ? m__strCachedFieldType.hashCode() : 0);
         result = 31 * result + (m__strCachedComment != null ? m__strCachedComment.hashCode() : 0);
         result = 31 * result + (m__CachedManagedExternally != null ? m__CachedManagedExternally.hashCode() : 0);
         result = 31 * result + (m__CachedAllowsNull != null ? m__CachedAllowsNull.hashCode() : 0);

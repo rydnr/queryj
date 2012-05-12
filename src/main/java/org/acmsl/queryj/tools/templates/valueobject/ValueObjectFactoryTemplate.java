@@ -117,7 +117,7 @@ public class ValueObjectFactoryTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/vo/ValueObjectFactory.stg");
+        return retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

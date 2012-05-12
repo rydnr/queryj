@@ -380,4 +380,14 @@ public class OracleTextFunctionsTemplate
     {
         return FIELD_TYPES;
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
+    }
 }

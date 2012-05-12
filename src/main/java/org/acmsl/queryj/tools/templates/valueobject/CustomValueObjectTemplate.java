@@ -40,17 +40,19 @@ package org.acmsl.queryj.tools.templates.valueobject;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 
 /*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -162,9 +164,9 @@ public class CustomValueObjectTemplate
      * @precondition fqcn != null
      */
     @Nullable
-    public String extractClassName(final String fqdn)
+    public String extractClassName(final String fqcn)
     {
-        return extractClassName(fqdn, PackageUtils.getInstance());
+        return extractClassName(fqcn, PackageUtils.getInstance());
     }
 
     /**
@@ -177,9 +179,9 @@ public class CustomValueObjectTemplate
      */
     @Nullable
     protected String extractClassName(
-        final String fqdn, @NotNull final PackageUtils packageUtils)
+        final String fqcn, @NotNull final PackageUtils packageUtils)
     {
-        return packageUtils.extractClassName(fqdn);
+        return packageUtils.extractClassName(fqcn);
     }
 
     /**
@@ -191,8 +193,7 @@ public class CustomValueObjectTemplate
     public StringTemplateGroup retrieveGroup()
     {
         return
-            retrieveGroup(
-                "/org/acmsl/queryj/vo/CustomValueObject.stg");
+            retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

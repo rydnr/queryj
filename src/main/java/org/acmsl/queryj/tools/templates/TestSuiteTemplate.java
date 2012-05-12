@@ -205,4 +205,14 @@ public class TestSuiteTemplate
 
         return t_sbResult.toString();
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
+    }
 }

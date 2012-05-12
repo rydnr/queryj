@@ -41,6 +41,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplate;
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -260,5 +261,15 @@ public class MySQLTextFunctionsTestTemplate
     protected String[] getFieldTypes()
     {
         return MySQLTextFunctionsTemplate.FIELD_TYPES;
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
     }
 }

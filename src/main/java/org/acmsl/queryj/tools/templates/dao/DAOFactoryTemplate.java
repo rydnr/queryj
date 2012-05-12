@@ -130,7 +130,6 @@ public class DAOFactoryTemplate
      * @param tableTemplate the table template.
      * @param packageName the package name.
      * @param engineName the engine name.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param jndiDataSource the JNDI location of the data source.
      * @param stringUtils the <code>StringUtils</code> instance.
@@ -334,6 +333,18 @@ public class DAOFactoryTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/DAOFactory.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "DAOFactory";
+    }
+
+
 }

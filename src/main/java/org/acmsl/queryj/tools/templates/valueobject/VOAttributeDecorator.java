@@ -70,14 +70,14 @@ public class VOAttributeDecorator
      * and the column allows nulls.
      * @return such information.
      */
-    public String getJavaType()
+    public String getType()
     {
-        String result = getCachedJavaType();
+        String result = getCachedType();
 
         if  (result == null)
         {
-            result = retrieveJavaType();
-            setCachedJavaType(result);
+            result = retrieveType();
+            setCachedType(result);
         }
 
         return result;

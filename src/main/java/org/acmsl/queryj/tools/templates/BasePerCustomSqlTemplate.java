@@ -249,7 +249,25 @@ public abstract class BasePerCustomSqlTemplate
             header,
             stringUtils);
 
-        result = t_Template.toString();
+        try
+        {
+            result = t_Template.toString();
+        }
+        catch (@NotNull final IllegalArgumentException invalidTemplate)
+        {
+            throw
+                new InvalidTemplateException(
+                    "invalid.per.custom-sql.template",
+                    new Object[]
+                    {
+                        t_Template.getName(),
+                        getTemplateName(),
+                        sql.getId(),
+                        sql.getDao()
+                    },
+
+                    invalidTemplate);
+        }
 
         return result;
     }
@@ -266,7 +284,6 @@ public abstract class BasePerCustomSqlTemplate
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage.
      * @param timestamp the timestamp.
-     * @param className the class name of the DAO.
      * @param tableRepositoryName the table repository.
      * @param header the header.
      * @param stringUtils the <code>StringUtils</code> instance.

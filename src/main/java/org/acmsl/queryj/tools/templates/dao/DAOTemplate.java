@@ -197,27 +197,6 @@ public class DAOTemplate
     }
 
     /**
-     * Retrieves the string template group.
-     * @return such instance.
-     */
-    @NotNull
-    @Override
-    public StringTemplateGroup retrieveGroup()
-    {
-        return retrieveGroup("/org/acmsl/queryj/dao/DAO.stg");
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public String getTemplateName()
-    {
-        return "DAO";
-    }
-
-    /**
      * Fills the parameters required by <code>class</code> rule.
      * @param input the input.
      * @param voName the name of the value object.
@@ -336,6 +315,27 @@ public class DAOTemplate
         {
             input.put("cached_rows", t_cStaticValues);
         }
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "DAO";
     }
 }
             

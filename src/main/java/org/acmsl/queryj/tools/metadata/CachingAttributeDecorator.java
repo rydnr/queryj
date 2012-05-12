@@ -151,7 +151,7 @@ public class CachingAttributeDecorator
     /**
      * The cached Java type.
      */
-    private String m__strCachedJavaType;
+    private String m__strCachedType;
 
     /**
      * Creates a <code>CachingAttributeDecorator</code> with the
@@ -1035,44 +1035,44 @@ public class CachingAttributeDecorator
     }
 
     /**
-     * Specifies the cached Java type.
+     * Specifies the cached type.
      * @param type such type.
      */
-    protected final void immutableSetCachedJavaType(final String type)
+    protected final void immutableSetCachedType(final String type)
     {
-        m__strCachedJavaType = type;
+        m__strCachedType = type;
     }
 
     /**
-     * Specifies the cached Java type.
+     * Specifies the cached type.
      * @param type such type.
      */
-    protected void setCachedJavaType(final String type)
+    protected void setCachedType(final String type)
     {
-        immutableSetCachedJavaType(type);
+        immutableSetCachedType(type);
     }
 
     /**
-     * Retrieves the cached Java type.
+     * Retrieves the cached type.
      * @return such type.
      */
-    public String getCachedJavaType()
+    public String getCachedType()
     {
-        return m__strCachedJavaType;
+        return m__strCachedType;
     }
 
     /**
      * Retrieves the Java type of the property.
      * @return such information.
      */
-    public String getJavaType()
+    public String getType()
     {
-        String result = getCachedJavaType();
+        String result = getCachedType();
 
         if  (result == null)
         {
-            result = super.getJavaType();
-            setCachedJavaType(result);
+            result = super.getType();
+            setCachedType(result);
         }
 
         return result;
@@ -1141,7 +1141,7 @@ public class CachingAttributeDecorator
             return false;
         }
 
-        CachingAttributeDecorator that = (CachingAttributeDecorator) o;
+        @NotNull final CachingAttributeDecorator that = (CachingAttributeDecorator) o;
 
         if (m__bCachedIsClob != null ? !m__bCachedIsClob.equals(that.m__bCachedIsClob) : that.m__bCachedIsClob != null)
         {
@@ -1176,8 +1176,8 @@ public class CachingAttributeDecorator
         {
             return false;
         }
-        if (m__strCachedJavaType != null ? !m__strCachedJavaType.equals(that.m__strCachedJavaType)
-                                         : that.m__strCachedJavaType != null)
+        if (m__strCachedType != null ? !m__strCachedType.equals(that.m__strCachedType)
+                                         : that.m__strCachedType != null)
         {
             return false;
         }
@@ -1266,7 +1266,7 @@ public class CachingAttributeDecorator
             31 * result + (m__strCachedTableNameNormalizedLowercased != null ? m__strCachedTableNameNormalizedLowercased
                 .hashCode() : 0);
         result = 31 * result + (m__bCachedNumberSmallerThanInt != null ? m__bCachedNumberSmallerThanInt.hashCode() : 0);
-        result = 31 * result + (m__strCachedJavaType != null ? m__strCachedJavaType.hashCode() : 0);
+        result = 31 * result + (m__strCachedType != null ? m__strCachedType.hashCode() : 0);
         return result;
     }
 }

@@ -112,7 +112,7 @@ public class DataAccessManagerTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/DataAccessManager.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

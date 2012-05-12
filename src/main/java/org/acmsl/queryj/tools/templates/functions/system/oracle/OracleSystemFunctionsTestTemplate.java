@@ -60,6 +60,16 @@ public class OracleSystemFunctionsTestTemplate
     private static final long serialVersionUID = 4401937717131491599L;
 
     /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
+    }
+
+    /**
      * Builds a SystemFunctionsTestTemplate using given information.
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.

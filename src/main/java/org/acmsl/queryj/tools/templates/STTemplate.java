@@ -1,4 +1,4 @@
-package org.acmsl.queryj.tools.templates;/*
+/*
                         QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
@@ -33,11 +33,17 @@ package org.acmsl.queryj.tools.templates;/*
  * Time: 4:40 PM
  *
  */
+package org.acmsl.queryj.tools.templates;
 
 /*
  * Importing some StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * <a href="http://www.stringtemplate.org>StringTemplate</a>-specific templates.
@@ -50,5 +56,12 @@ public interface STTemplate
      * Retrieves the template group.
      * @return such group.
      */
-    public StringTemplateGroup retrieveGroup();
+    public @NotNull StringTemplateGroup retrieveGroup();
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    public @NotNull
+    String getTemplateName();
 }

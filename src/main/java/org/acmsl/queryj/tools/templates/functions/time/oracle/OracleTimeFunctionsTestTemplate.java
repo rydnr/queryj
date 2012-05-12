@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.templates.functions.time.oracle
 
 import org.acmsl.queryj.tools.templates.functions.time
     .TimeFunctionsTestTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -227,5 +228,15 @@ public class OracleTimeFunctionsTestTemplate
     protected String getDefaultFunctionMethod()
     {
         return ANY__CALENDAR_FUNCTION_TEST;
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
     }
 }

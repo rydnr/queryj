@@ -734,4 +734,14 @@ public class DAOTestTemplate
 
         return t_sbResult.toString();
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
+    }
 }

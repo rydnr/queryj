@@ -707,7 +707,6 @@ public class MetadataUtils
                         columnNames[t_iIndex],
                         t_iType,
                         t_strNativeType,
-                        t_strFieldType,
                         tableName,
                         metadataManager.getTableComment(tableName),
                         t_bManagedExternally,

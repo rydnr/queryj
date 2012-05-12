@@ -72,7 +72,7 @@ public class AntFieldElement
      */
     public AntFieldElement()
     {
-        super(null, -1, null, null, null, null, false, false, null, false, false, null, null, null, false);
+        super(null, -1, null, null, null, false, false, null, false, false, null, null, null, false);
     }
 
     /**
@@ -93,6 +93,7 @@ public class AntFieldElement
      * Retrieves if the field is a primary key.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     @Nullable
     public String getPk()
     {
@@ -112,7 +113,7 @@ public class AntFieldElement
         }
         else if  ("type".equals(name))
         {
-            setNativeType(value);
+            setType(value);
         }
         else if  ("pk".equals(name))
         {
@@ -146,7 +147,7 @@ public class AntFieldElement
     @Nullable
     public Object createDynamicElement(final String name)
     {
-        @Nullable AntFieldFkElement result = null;
+        final @Nullable AntFieldFkElement result;
 
         if  ("fk".equals(name)) 
         {

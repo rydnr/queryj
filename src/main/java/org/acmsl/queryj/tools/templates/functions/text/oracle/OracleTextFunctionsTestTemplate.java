@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.templates.functions.text.oracle
 
 import org.acmsl.queryj.tools.templates.functions.text
     .TextFunctionsTestTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -256,5 +257,15 @@ public class OracleTextFunctionsTestTemplate
     protected String[] getFieldTypes()
     {
         return OracleTextFunctionsTemplate.FIELD_TYPES;
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
     }
 }

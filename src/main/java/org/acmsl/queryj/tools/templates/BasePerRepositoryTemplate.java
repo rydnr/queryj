@@ -211,7 +211,23 @@ public abstract class BasePerRepositoryTemplate
             },
             stringUtils);
 
-        result = t_Template.toString();
+        try
+        {
+            result = t_Template.toString();
+        }
+        catch (@NotNull final IllegalArgumentException invalidTemplate)
+        {
+            throw
+                new InvalidTemplateException(
+                    "invalid.per.repository.template",
+                    new Object[]
+                    {
+                        t_Template.getName(),
+                        getTemplateName(),
+                        repositoryName
+                    },
+                    invalidTemplate);
+        }
 
         return result;
     }

@@ -45,13 +45,16 @@ package org.acmsl.queryj.tools.metadata;
 import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -92,13 +95,12 @@ public abstract class AbstractAttributeDecorator
      * @precondition metadataManager != null
      */
     public AbstractAttributeDecorator(
-        final Attribute attribute, final MetadataManager metadataManager)
+        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
     {
         this(
             attribute.getName(),
+            attribute.getTypeId(),
             attribute.getType(),
-            attribute.getNativeType(),
-            attribute.getFieldType(),
             attribute.getTableName(),
             attribute.getComment(),
             attribute.getManagedExternally(),
@@ -118,9 +120,8 @@ public abstract class AbstractAttributeDecorator
      * Creates an <code>AttributeDecorator</code> with the following
      * information.
      * @param name the name.
+     * @param typeId the type id.
      * @param type the type.
-     * @param nativeType the native type.
-     * @param fieldType the field type.
      * @param tableName the table name.
      * @param comment the attribute comment.
      * @param managedExternally whether the attribute is managed externally.
@@ -134,20 +135,11 @@ public abstract class AbstractAttributeDecorator
      * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @precondition name != null
-     * @precondition type != null
-     * @precondition nativeType != null
-     * @precondition fieldType != null
-     * @precondition tableName != null
-     * @precondition attribute != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     public AbstractAttributeDecorator(
         final String name,
-        final int type,
-        final String nativeType,
-        final String fieldType,
+        final int typeId,
+        final String type,
         final String tableName,
         final String comment,
         final boolean managedExternally,
@@ -164,9 +156,8 @@ public abstract class AbstractAttributeDecorator
     {
         super(
             name,
+            typeId,
             type,
-            nativeType,
-            fieldType,
             tableName,
             comment,
             managedExternally,
@@ -253,6 +244,7 @@ public abstract class AbstractAttributeDecorator
      * Specifies the metadata type manager.
      * @param metadataTypeManager such instance.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
         final MetadataTypeManager metadataTypeManager)
     {
@@ -297,7 +289,7 @@ public abstract class AbstractAttributeDecorator
     protected String capitalize(
         final String value, final DecorationUtils decorationUtils)
     {
-        Locale t_Locale = Locale.getDefault();
+        @NotNull final Locale t_Locale = Locale.getDefault();
 
         return decorationUtils.capitalize(value.toLowerCase(t_Locale));
     }
@@ -316,13 +308,11 @@ public abstract class AbstractAttributeDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
     protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
-        Locale t_Locale = Locale.getDefault();
+        @NotNull final Locale t_Locale = Locale.getDefault();
 
         return decorationUtils.uncapitalize(value.toLowerCase(t_Locale));
     }
@@ -332,11 +322,9 @@ public abstract class AbstractAttributeDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
     protected String uppercase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.upperCase(value);
     }
@@ -346,11 +334,9 @@ public abstract class AbstractAttributeDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -438,7 +424,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getGetterMethod()
     {
-        return getGetterMethod(getType(), getMetadataTypeManager());
+        return getGetterMethod(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -460,7 +446,7 @@ public abstract class AbstractAttributeDecorator
      */
     public Boolean isPrimitive()
     {
-        return isPrimitive(getType(), getMetadataTypeManager());
+        return isPrimitive(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -484,7 +470,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getObjectType()
     {
-        return getObjectType(getType(), getMetadataTypeManager());
+        return getObjectType(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -504,9 +490,10 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether the attribute is a blob or not.
      * return such information.
      */
+    @SuppressWarnings("unused")
     public boolean isBlob()
     {
-        return isBlob(getType(), getMetadataTypeManager());
+        return isBlob(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -529,7 +516,7 @@ public abstract class AbstractAttributeDecorator
      */
     public boolean isClob()
     {
-        return isClob(getType(), getMetadataTypeManager());
+        return isClob(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -552,7 +539,7 @@ public abstract class AbstractAttributeDecorator
      */
     public boolean isString()
     {
-        return isString(getType(), getMetadataTypeManager());
+        return isString(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -575,7 +562,7 @@ public abstract class AbstractAttributeDecorator
      */
     public boolean isDate()
     {
-        return isDate(getNativeType(), getMetadataTypeManager());
+        return isDate(getType(), getMetadataTypeManager());
     }
 
     /**
@@ -596,9 +583,10 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether the attribute is a timestamp or not.
      * return such information.
      */
+    @SuppressWarnings("unused")
     public boolean isTimestamp()
     {
-        return isTimestamp(getType(), getMetadataTypeManager());
+        return isTimestamp(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -668,7 +656,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getQueryJFieldType()
     {
-        return getQueryJFieldType(getType(), getMetadataTypeManager());
+        return getQueryJFieldType(getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -692,7 +680,7 @@ public abstract class AbstractAttributeDecorator
     {
         return
             getStatementSetterFieldType(
-                getType(), getMetadataTypeManager());
+                getTypeId(), getMetadataTypeManager());
     }
 
     /**
@@ -734,7 +722,7 @@ public abstract class AbstractAttributeDecorator
      */
     public boolean isNumberSmallerThanInt()
     {
-        return isNumberSmallerThanInt(getType(), getMetadataManager());
+        return isNumberSmallerThanInt(getTypeId(), getMetadataManager());
     }
 
     /**
@@ -771,9 +759,10 @@ public abstract class AbstractAttributeDecorator
      * Retrieves whether the attribute is numeric or not.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public boolean isNumeric()
     {
-        return isNumeric(getType(), getMetadataManager());
+        return isNumeric(getTypeId(), getMetadataManager());
     }
 
     /**
@@ -805,25 +794,24 @@ public abstract class AbstractAttributeDecorator
      * Retrieves the Java type of the attribute.
      * @return such information.
      */
+    @Deprecated
     public String getJavaType()
     {
-        return getJavaType(getType(), getMetadataTypeManager());
+        return getType(getTypeId(), getMetadataManager());
     }
 
     /**
      * Retrieves the Java type of the property.
      * @param type the type.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * @param metadataManager the <code>MetadataManager</code>
      * instance.
      * @return such information.
-     * @precondition type != null
-     * @precondition metadataTypeManager != null
      */
-    protected String getJavaType(
-        final int type, final MetadataTypeManager metadataTypeManager)
+    protected String getType(
+        final int type, @NotNull final MetadataManager metadataManager)
     {
         return
-            retrieveJavaType(type, getMetadataManager(), getAllowsNull(), isBoolean());
+            retrieveType(type, metadataManager, getAllowsNull(), isBoolean());
     }
 
     /**
@@ -832,11 +820,11 @@ public abstract class AbstractAttributeDecorator
      * and the column allows nulls.
      * @return such information.
      */
-    protected String retrieveJavaType()
+    protected String retrieveType()
     {
         return
-            retrieveJavaType(
-                getType(),
+            retrieveType(
+                getTypeId(),
                 getMetadataManager(),
                 getAllowsNull(),
                 isBoolean());
@@ -853,14 +841,14 @@ public abstract class AbstractAttributeDecorator
      * @return such information.
      * @precondition metadataManager != null
      */
-    protected String retrieveJavaType(
+    protected String retrieveType(
         final int type,
         final MetadataManager metadataManager,
         final boolean allowsNull,
         final boolean isBool)
     {
         return
-            retrieveJavaType(
+            retrieveType(
                 type,
                 metadataManager.getMetadataTypeManager(),
                 allowsNull,
@@ -882,7 +870,7 @@ public abstract class AbstractAttributeDecorator
      * @precondition metadataTypeManager != null
      * @precondition metadataTypeUtils != null
      */
-    protected String retrieveJavaType(
+    protected String retrieveType(
         final int type,
         final MetadataTypeManager metadataTypeManager,
         final boolean allowsNull,

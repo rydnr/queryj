@@ -117,7 +117,7 @@ public class ValueObjectImplTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/vo/ValueObjectImpl.stg");
+        return retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**
@@ -127,6 +127,6 @@ public class ValueObjectImplTemplate
     @NotNull
     public String getTemplateName()
     {
-        return "ValueObject implementation";
+        return "ValueObjectImpl";
     }
 }

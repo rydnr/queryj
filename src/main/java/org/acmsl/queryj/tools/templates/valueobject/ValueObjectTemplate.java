@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.commons.patterns.dao.ValueObject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -116,7 +117,7 @@ public class ValueObjectTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/vo/ValueObject.stg");
+        return retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

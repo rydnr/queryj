@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.templates.functions.time.mysql
 
 import org.acmsl.queryj.tools.templates.functions.time
     .TimeFunctionsTestTemplate;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -250,5 +251,15 @@ public class MySQLTimeFunctionsTestTemplate
     protected String[] getFieldTypes()
     {
         return MySQLTimeFunctionsTemplate.FIELD_TYPES;
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
     }
 }

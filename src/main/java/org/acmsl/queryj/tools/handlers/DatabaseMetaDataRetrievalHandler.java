@@ -461,7 +461,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                     t_Table.getName(),
                                     t_Field.getName(),
                                     metadataTypeManager.getJavaType(
-                                        t_Field.getNativeType()));
+                                        t_Field.getType()));
 
                                 @NotNull Collection t_cFields =
                                     (Collection)
@@ -962,7 +962,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                         t_Table.getName(),
                                         t_Field.getName(),
                                         metadataTypeManager.getJavaType(
-                                            t_Field.getNativeType()));
+                                            t_Field.getType()));
 
                                     t_TableFieldsKey =
                                         buildTableFieldsKey(t_Table.getName());

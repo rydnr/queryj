@@ -122,7 +122,7 @@ public class CustomValueObjectImplTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/vo/CustomValueObjectImpl.stg");
+                "/org/acmsl/queryj/vo/" + getTemplateName() + ".stg");
     }
 
     /**

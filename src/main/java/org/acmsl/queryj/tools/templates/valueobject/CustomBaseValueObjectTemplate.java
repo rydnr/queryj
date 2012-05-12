@@ -121,8 +121,7 @@ public class CustomBaseValueObjectTemplate
     public StringTemplateGroup retrieveGroup()
     {
         return
-            retrieveGroup(
-                "/org/acmsl/queryj/vo/CustomBaseValueObject.stg");
+            retrieveGroup("/org/acmsl/queryj/vo/" + getTemplateName() +  ".stg");
     }
 
     /**

@@ -443,4 +443,14 @@ public class MySQLTimeFunctionsTemplate
     {
         return MySQLTimeFunctionsTemplate.class;
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
+    }
 }

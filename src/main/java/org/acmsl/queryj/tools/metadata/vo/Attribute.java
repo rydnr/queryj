@@ -55,19 +55,13 @@ public interface Attribute
      * Retrieves the attribute type.
      * @return its type.
      */
-    public int getType();
+    public int getTypeId();
     
-    /**
-     * Retrieves the native type.
-     * @return such information.
-     */
-    public String getNativeType();
-
     /**
      * Retrieves the field type.
      * @return such information.
      */
-    public String getFieldType();
+    public String getType();
 
     /**
      * Retrieves the table name.

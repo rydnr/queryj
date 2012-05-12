@@ -36,7 +36,7 @@
 // Description: Defines the rules to generate value object
 //              implementations.
 //
-group CustomValueObject;
+group BaseValueObject;
 
 source(input) ::= <<
 <!
@@ -181,18 +181,10 @@ attribute_declaration(attribute) ::= <<
 <endif>
 
  */
-<if(attribute.allowsNull)>
 <if(attribute.boolean)>
-private Boolean m__b<attribute.nameCapitalized>;
+private <type_checker(attribute=attribute)><attribute.type> m__b<attribute.nameCapitalized>;
 <else>
-private <attribute.objectType> m__<attribute.nameCapitalized>;
-<endif>
-<else>
-<if(attribute.boolean)>
-private boolean m__b<attribute.nameCapitalized>;
-<else>
-private <attribute.javaType> m__<attribute.nameCapitalized>;
-<endif>
+private <type_checker(attribute=attribute)><attribute.type> m__<attribute.nameCapitalized>;
 <endif>
 
 >>
@@ -215,30 +207,7 @@ attribute_method_declaration(attribute) ::= <<
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
-<if(attribute.allowsNull)>
-<if(attribute.boolean)>
-final Boolean <attribute.nameUncapitalized>
-<else>
-final <attribute.objectType> <attribute.nameUncapitalized>
-<endif>
-<else>
-<if(attribute.boolean)>
-final boolean <attribute.nameUncapitalized>
-<else>
-final <attribute.javaType> <attribute.nameUncapitalized>
-<endif>
-<endif>
-
->>
-
-immutable_setter_call(attribute) ::= <<
-<!
- Writes the method call for the immutable setter of given attribute.
- @param attribute the attribute.
-!>
-immutableSet<attribute.nameCapitalized>(<attribute.nameUncapitalized>);
-<endif>
-
+<type_checker(attribute=attribute)>final <attribute.type> <attribute.nameUncapitalized>
 >>
 
 attribute_accessors(attribute) ::= <<
@@ -247,6 +216,7 @@ attribute_accessors(attribute) ::= <<
  @param attribute the attribute.
 !>
 <attribute_setter(attribute=attribute)>
+
 <attribute_getter(attribute=attribute)>
 >>
 
@@ -264,20 +234,7 @@ attribute_setter(attribute) ::= <<
 <endif>
 
  */
-<if(attribute.allowsNull)>
-<if(attribute.boolean)>
-protected final void immutableSet<attribute.nameCapitalized>(final Boolean value)
-<else>
-protected final void immutableSet<attribute.nameCapitalized>(final <attribute.objectType> value)
-<endif>
-<else>
-<if(attribute.boolean)>
-protected final void immutableSet<attribute.nameCapitalized>(final boolean value)
-<else>
-protected final void immutableSet<attribute.nameCapitalized>(final <attribute.javaType> value)
-<endif>
-<endif>
-
+protected final void immutableSet<attribute.nameCapitalized>(<type_checker(attribute=attribute)>final <attribute.type> value)
 {
 <if(attribute.boolean)>
     m__b<attribute.nameCapitalized> = value;
@@ -292,23 +249,20 @@ protected final void immutableSet<attribute.nameCapitalized>(final <attribute.ja
  * @param value such information.
  */
 @SuppressWarnings("unused")
-<if(attribute.allowsNull)>
-<if(attribute.boolean)>
-protected void set<attribute.nameCapitalized>(final Boolean value)
-<else>
-protected void set<attribute.nameCapitalized>(final <attribute.objectType> value)
-<endif>
-<else>
-<if(attribute.boolean)>
-protected void set<attribute.nameCapitalized>(final boolean value)
-<else>
-protected void set<attribute.nameCapitalized>(final <attribute.javaType> value)
-<endif>
-<endif>
-
+protected void set<attribute.nameCapitalized>(<type_checker(attribute=attribute)>final <attribute.type> value)
 {
     immutableSet<attribute.nameCapitalized>(value);
 }
+>>
+
+immutable_setter_call(attribute) ::= <<
+<!
+ Writes the method call for the immutable setter of given attribute.
+ @param attribute the attribute.
+!>
+immutableSet<attribute.nameCapitalized>(<attribute.nameUncapitalized>);
+<endif>
+
 >>
 
 attribute_getter(attribute) ::= <<
@@ -325,20 +279,8 @@ attribute_getter(attribute) ::= <<
 <endif>
 
  */
-<if(attribute.allowsNull)>
-<if(attribute.boolean)>
-public Boolean get<attribute.nameCapitalized>()
-<else>
-public <attribute.objectType> get<attribute.nameCapitalized>()
-<endif>
-<else>
-<if(attribute.boolean)>
-public boolean get<attribute.nameCapitalized>()
-<else>
-public <attribute.javaType> get<attribute.nameCapitalized>()
-<endif>
-<endif>
-
+<type_checker(attribute=attribute)>
+public <attribute.type> get<attribute.nameCapitalized>()
 {
 <if(attribute.boolean)>
     return m__b<attribute.nameCapitalized>;

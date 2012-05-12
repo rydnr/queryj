@@ -129,7 +129,7 @@ public class DAOListenerTemplate
     @Override
     public StringTemplateGroup retrieveGroup()
     {
-        return retrieveGroup("/org/acmsl/queryj/dao/DAOListener.stg");
+        return retrieveGroup("/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**
@@ -139,6 +139,6 @@ public class DAOListenerTemplate
     @NotNull
     public String getTemplateName()
     {
-        return "DAO listener";
+        return "DAOListener";
     }
 }

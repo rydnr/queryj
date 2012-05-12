@@ -250,7 +250,24 @@ public abstract class BasePerCustomResultTemplate
             t_strRepositoryName,
             stringUtils);
 
-        result = t_Template.toString();
+        try
+        {
+            result = t_Template.toString();
+        }
+        catch (@NotNull final IllegalArgumentException invalidTemplate)
+        {
+            throw
+                new InvalidTemplateException(
+                    "invalid.per.custom-result.template",
+                    new Object[]
+                    {
+                        t_Template.getName(),
+                        getTemplateName(),
+                        customResult.getId()
+                    },
+
+                    invalidTemplate);
+        }
 
         return result;
     }

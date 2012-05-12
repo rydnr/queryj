@@ -145,19 +145,6 @@ attribute_getter(attribute) ::= <<
 <endif>
 
  */
-<if(attribute.nullable)>
-<if(attribute.boolean)>
-Boolean get<attribute.nameCapitalized>();
-<else>
-// objectType nameCapitalized
-<attribute.objectType> get<attribute.nameCapitalized>();
-<endif>
-<else>
-<if(attribute.boolean)>
-boolean get<attribute.nameCapitalized>();
-<else>
-<attribute.javaType> get<attribute.nameCapitalized>();
-<endif>
-<endif>
+<type_checker(attribute=attribute)><attribute.type> get<attribute.nameCapitalized>();
 
 >>

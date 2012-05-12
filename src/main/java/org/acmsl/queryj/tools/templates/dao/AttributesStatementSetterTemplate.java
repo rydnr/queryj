@@ -115,7 +115,7 @@ public class AttributesStatementSetterTemplate
     {
         return
             retrieveGroup(
-                "/org/acmsl/queryj/dao/AttributesStatementSetter.stg");
+                "/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
     }
 
     /**

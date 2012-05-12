@@ -32,6 +32,12 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Value-object implementation of <code>Attribute</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -43,35 +49,32 @@ public final class AttributeValueObject
      * Creates an <code>AttributeValueObject</code> with the following
      * information.
      * @param name the name.
+     * @param typeId the type id.
      * @param type the type.
-     * @param nativeType the native type.
-     * @param fieldType the field type.
      * @param tableName the table name.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
      */
     public AttributeValueObject(
-        final String name,
-        final int type,
-        final String nativeType,
-        final String fieldType,
-        final String tableName,
-        final String comment,
+        @NotNull final String name,
+        final int typeId,
+        @NotNull final String type,
+        @NotNull final String tableName,
+        @Nullable final String comment,
         final boolean managedExternally,
         final boolean allowsNull,
-        final String value,
+        @Nullable final String value,
         final boolean readOnly,
         final boolean isBool,
-        final String booleanTrue,
-        final String booleanFalse,
-        final String booleanNull)
+        @Nullable final String booleanTrue,
+        @Nullable final String booleanFalse,
+        @Nullable final String booleanNull)
     {
         super(
             name,
+            typeId,
             type,
-            nativeType,
-            fieldType,
             tableName,
             comment,
             managedExternally,

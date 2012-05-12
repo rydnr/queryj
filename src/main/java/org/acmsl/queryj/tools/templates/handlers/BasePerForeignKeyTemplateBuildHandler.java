@@ -611,7 +611,6 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     attributeName,
                     t_iType,
                     t_strNativeType,
-                    t_strFieldType,
                     tableName,
                     metadataManager.getTableComment(tableName),
                     t_bManagedExternally,

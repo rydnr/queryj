@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -61,8 +62,10 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -242,7 +245,24 @@ public abstract class BasePerForeignKeyTemplate
             decoratorFactory,
             stringUtils);
 
-        result = t_Template.toString();
+        try
+        {
+            result = t_Template.toString();
+        }
+        catch (@NotNull final IllegalArgumentException invalidTemplate)
+        {
+            throw
+                new InvalidTemplateException(
+                    "invalid.per.foreign-key.template",
+                    new Object[]
+                    {
+                        t_Template.getName(),
+                        getTemplateName(),
+                        foreignKey.getSourceTableName(),
+                        foreignKey.getTargetTableName()
+                    },
+                    invalidTemplate);
+        }
 
         return result;
     }
@@ -652,7 +672,6 @@ public abstract class BasePerForeignKeyTemplate
                         columnNames[t_iIndex],
                         t_iType,
                         t_strNativeType,
-                        t_strFieldType,
                         tableName,
                         metadataManager.getTableComment(tableName),
                         t_bManagedExternally,

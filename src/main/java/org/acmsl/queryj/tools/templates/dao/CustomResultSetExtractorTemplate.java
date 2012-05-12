@@ -203,29 +203,6 @@ public class CustomResultSetExtractorTemplate
     }
 
     /**
-     * Retrieves the string template group.
-     * @return such instance.
-     */
-    @NotNull
-    @Override
-    public StringTemplateGroup retrieveGroup()
-    {
-        return
-            retrieveGroup(
-                "/org/acmsl/queryj/dao/CustomResultSetExtractor.stg");
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public String getTemplateName()
-    {
-        return "CustomResultSetExtractor";
-    }
-
-    /**
      * Normalizes and lowers the case of given value.
      * @param value the value.
      * @return the processed value.
@@ -248,5 +225,28 @@ public class CustomResultSetExtractorTemplate
         final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
+    }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public StringTemplateGroup retrieveGroup()
+    {
+        return
+            retrieveGroup(
+                "/org/acmsl/queryj/dao/" + getTemplateName() + ".stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "CustomResultSetExtractor";
     }
 }

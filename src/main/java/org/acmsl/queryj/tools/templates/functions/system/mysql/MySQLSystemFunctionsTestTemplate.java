@@ -213,4 +213,14 @@ public class MySQLSystemFunctionsTestTemplate
     {
         return MySQLSystemFunctionsTemplate.FIELD_TYPES;
     }
+
+    /**
+     * Retrieves the template name.
+     * @return such name.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "legacy";
+    }
 }

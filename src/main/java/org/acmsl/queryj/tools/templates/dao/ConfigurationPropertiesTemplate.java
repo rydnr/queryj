@@ -122,27 +122,6 @@ public class ConfigurationPropertiesTemplate
     }
 
     /**
-     * Retrieves the string template group.
-     * @return such instance.
-     */
-    @NotNull
-    @Override
-    public StringTemplateGroup retrieveGroup()
-    {
-        return retrieveGroup("/org/acmsl/queryj/ConfigurationProperties.stg");
-    }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public String getTemplateName()
-    {
-        return "ConfigurationProperties";
-    }
-
-    /**
      * Fills the core parameters.
      * @param input the input.
      * @param metadataManager the database metadata manager.
@@ -223,4 +202,26 @@ public class ConfigurationPropertiesTemplate
     {
         return decorationUtils.split(value);
     }
+
+    /**
+     * Retrieves the string template group.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public StringTemplateGroup retrieveGroup()
+    {
+        return retrieveGroup("/org/acmsl/queryj/" + getTemplateName() + ".stg");
+    }
+
+    /**
+     * Retrieves the template name.
+     * @return such information.
+     */
+    @NotNull
+    public String getTemplateName()
+    {
+        return "ConfigurationProperties";
+    }
+
 }

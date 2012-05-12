@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -137,8 +136,8 @@ public class CustomResultUtils
     {
           return
               isGenerationAllowedForResult(
-                  retrieveExplicitlyDisabledResults(),
                   retrieveExplicitlyEnabledResults(),
+                  retrieveExplicitlyDisabledResults(),
                   resultId);
     }
 
@@ -192,8 +191,8 @@ public class CustomResultUtils
      * @return <code>true</code> in such case.
      */
     protected final boolean isGenerationAllowedForResult(
-        @Nullable final String[] resultsDisabled,
         @Nullable final String[] resultsEnabled,
+        @Nullable final String[] resultsDisabled,
         @NotNull final String resultId)
     {
         boolean result = true;
