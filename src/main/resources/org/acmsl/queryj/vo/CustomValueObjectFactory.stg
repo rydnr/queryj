@@ -201,6 +201,5 @@ property_method_declaration(attribute) ::= <<
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
-<type_checker(attribute=attribute)>
-final <attribute.type> <attribute.columnNameNormalizedUncapitalized>
+<type_checker(attribute=attribute)>final <attribute.type> <attribute.columnNameNormalizedUncapitalized>
 >>
