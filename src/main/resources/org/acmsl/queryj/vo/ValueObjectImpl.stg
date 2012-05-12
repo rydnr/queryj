@@ -37,7 +37,7 @@
 //              implementations.
 //
 //
-group CustomValueObject;
+group ValueObjectImpl;
 
 source(input) ::= <<
 <!
@@ -108,15 +108,14 @@ class_impl(input, table, parent) ::= <<
  * <[
       first_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
  */
 public class <input.vo_name>ValueObject
     extends  Abstract<input.vo_name>ValueObject
 {
     /**
-     * Creates a \<code\><input.vo_name>ValueObject\</code> instance.
+     * Creates a {@link <input.vo_name>} instance.
 <if(parent)>
      <table.allParentAndNonParentAttributes:attribute_javadoc(attribute=it); separator="\n">
 <else>
@@ -165,18 +164,5 @@ attribute_method_declaration(attribute) ::= <<
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
-<if(attribute.allowsNull)>
-<if(attribute.boolean)>
-final Boolean <attribute.nameUncapitalized>
-<else>
-final <attribute.objectType> <attribute.nameUncapitalized>
-<endif>
-<else>
-<if(attribute.boolean)>
-final boolean <attribute.nameUncapitalized>
-<else>
-final <attribute.javaType> <attribute.nameUncapitalized>
-<endif>
-<endif>
-
+<type_checker(attribute=attribute)>final <attribute.type> <attribute.nameUncapitalized>
 >>
