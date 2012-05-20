@@ -70,6 +70,11 @@ public class BasePerRepositoryTemplateContext
     private List<String> m__lTableNames;
 
     /**
+     * The JNDI location of the data source.
+     */
+    private String jndiLocation;
+
+    /**
      * Creates the template context with required information.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -81,6 +86,7 @@ public class BasePerRepositoryTemplateContext
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to include JMX support.
      * @param tableNames the table names.
+     * @param jndiLocation the JNDI location of the data source.
      */
     public BasePerRepositoryTemplateContext(
         @NotNull final MetadataManager metadataManager,
@@ -92,7 +98,8 @@ public class BasePerRepositoryTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull List<String> tableNames)
+        @NotNull List<String> tableNames,
+        @NotNull final String jndiLocation)
     {
         super(
             metadataManager,
@@ -106,6 +113,7 @@ public class BasePerRepositoryTemplateContext
             jmx);
 
         immutableSetTableNames(tableNames);
+        immutableSetJndiLocation(jndiLocation);
     }
 
     /**
@@ -151,5 +159,33 @@ public class BasePerRepositoryTemplateContext
         Collections.copy(result, t_lOriginal);
 
         return result;
+    }
+
+    /**
+     * Specifies the JNDI location of the {@link javax.sql.DataSource}
+     * @param jndiLocation such location.
+     */
+    protected final void immutableSetJndiLocation(final String jndiLocation)
+    {
+        this.jndiLocation = jndiLocation;
+    }
+
+    /**
+     * Specifies the JNDI location of the {@link javax.sql.DataSource}
+     * @param jndiLocation such location.
+     */
+    @SuppressWarnings("unused")
+    protected void setJndiLocation(final String jndiLocation)
+    {
+        immutableSetJndiLocation(jndiLocation);
+    }
+
+    /**
+     * Retrieves the JNDI location of the {@link javax.sql.DataSource}.
+     * @return such location.
+     */
+    public String getJndiLocation()
+    {
+        return jndiLocation;
     }
 }

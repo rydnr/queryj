@@ -38,9 +38,20 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.apache.commons.lang.builder.EqualsBuilder;
-import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.acmsl.queryj.tools.metadata.vo.Row;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Context used by per-table templates.
@@ -57,6 +68,11 @@ public class BasePerTableTemplateContext
     private String tableName;
 
     /**
+     * The static contents.
+     */
+    private List<Row> m__lStaticValues;
+
+    /**
      * Creates a {@link BasePerTableTemplateContext} with given information.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -68,6 +84,7 @@ public class BasePerTableTemplateContext
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include JMX support.
      * @param tableName the table name.
+     * @param staticValues the static rows, if the table is marked as <code>@static</code>.
      */
     public BasePerTableTemplateContext(
         @NotNull final MetadataManager metadataManager,
@@ -79,7 +96,8 @@ public class BasePerTableTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull final String tableName)
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticValues)
     {
         super(
             metadataManager,
@@ -93,6 +111,7 @@ public class BasePerTableTemplateContext
             jmx);
 
         immutableSetTableName(tableName);
+        immutableSetStaticValues(staticValues);
     }
 
     /**
@@ -124,33 +143,52 @@ public class BasePerTableTemplateContext
         return tableName;
     }
 
-    @Override
-    public String toString()
+    /**
+     * Specifies the static values.
+     * @param values such values.
+     */
+    protected final void immutableSetStaticValues(@Nullable final List<Row> values)
     {
-        return
-              "BasePerTableTemplateContext{"
-            + "tableName='" + tableName + '\''
-            + '}';
+        m__lStaticValues = values;
     }
 
-    @Override
-    public int hashCode()
+    /**
+     * Specifies the static values.
+     * @param values such values.
+     */
+    @SuppressWarnings("unused")
+    protected void setStaticValues(@Nullable final List<Row> values)
     {
-        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.tableName).toHashCode();
+        immutableSetStaticValues(values);
     }
 
-    @Override
-    public boolean equals(final Object obj)
+    /**
+     * Retrieves the static values.
+     * @return such values.
+     */
+    protected final List<Row> immutableGetStaticValues()
     {
-        if (obj == null)
+        return m__lStaticValues;
+    }
+
+    /**
+     * Retrieves the static values.
+     * @return such values.
+     */
+    @Nullable
+    public List<Row> getStaticValues()
+    {
+        @Nullable List<Row> result = null;
+
+        @Nullable List<Row> t_lRows = immutableGetStaticValues();
+
+        if (t_lRows != null)
         {
-            return false;
+            result = new ArrayList<Row>(t_lRows.size());
+
+            Collections.copy(result, t_lRows);
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final BasePerTableTemplateContext other = (BasePerTableTemplateContext) obj;
-        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.tableName, other.tableName).isEquals();
+
+        return result;
     }
 }

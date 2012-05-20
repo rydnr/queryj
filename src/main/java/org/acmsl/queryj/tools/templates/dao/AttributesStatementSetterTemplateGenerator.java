@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -53,7 +54,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -65,9 +65,9 @@ import java.util.Locale;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class AttributesStatementSetterTemplateGenerator
-    extends AbstractTemplateGenerator<AttributesStatementSetterTemplate>
+    extends AbstractTemplateGenerator<AttributesStatementSetterTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateFactory<AttributesStatementSetterTemplate>,
-                BasePerTableTemplateGenerator<AttributesStatementSetterTemplate>,
+                BasePerTableTemplateGenerator<AttributesStatementSetterTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**
@@ -103,52 +103,38 @@ public class AttributesStatementSetterTemplateGenerator
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @return a template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition quote != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
      */
-    @Nullable
+    @NotNull
     public AttributesStatementSetterTemplate createTemplate(
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
         @NotNull final String header,
-        final boolean implementMarkerInterfaces)
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String tableName)
     {
         return
             new AttributesStatementSetterTemplate(
-                tableName,
-                metadataManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces);
+                new BasePerTableTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableName));
     }
 
     /**
@@ -165,29 +151,32 @@ public class AttributesStatementSetterTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final AttributesStatementSetterTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
-        return retrieveTemplateFileName(template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+        return
+            retrieveTemplateFileName(
+                context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the template context.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final AttributesStatementSetterTemplate template,
-        @NotNull StringUtils stringUtils,
+        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
             stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                     template.getTableName().toLowerCase(Locale.US)),
+                     context.getTableName().toLowerCase(Locale.US)),
                 '_')
             + "AttributesStatementSetter.java";
     }

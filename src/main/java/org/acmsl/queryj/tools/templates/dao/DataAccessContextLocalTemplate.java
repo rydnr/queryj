@@ -38,18 +38,15 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingTableDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.TableDecorator;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -58,16 +55,15 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importing StringTemplate classes.
+ * Importing JetBrains annotations.
  */
-import org.antlr.stringtemplate.StringTemplateGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -76,86 +72,25 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessContextLocalTemplate
-    extends  BasePerRepositoryTemplate
+    extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 1456110852254779514L;
-    /**
-     * The JNDI location.
-     */
-    private String m__strJNDILocation;
 
     /**
      * Builds a <code>DataAccessContextLocalTemplate</code> using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param jndiLocation the JNDI location.
-     * @param tables the tables.
+     * @param context the {@link BasePerRepositoryTemplateContext} instance.
      */
-    public DataAccessContextLocalTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final String jndiLocation,
-        final Collection tables)
+    public DataAccessContextLocalTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
-        immutableSetJNDILocation(jndiLocation);
-    }
-
-    /**
-     * Specifies the JNDI location.
-     * @param location such value.
-     */
-    private void immutableSetJNDILocation(final String location)
-    {
-        m__strJNDILocation = location;
-    }
-
-    /**
-     * Specifies the JNDI location.
-     * @param location such value.
-     */
-    protected void setJNDILocation(final String location)
-    {
-        immutableSetJNDILocation(location);
-    }
-
-    /**
-     * Retrieves the JNDI location.
-     * @return such value.
-     */
-    public String getJNDILocation()
-    {
-        return m__strJNDILocation;
+        super(context);
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -185,29 +120,21 @@ public class DataAccessContextLocalTemplate
      * @param tables the tables.
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition input != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition decoratorFactory != null
-     * @precondition subpackageName != null
-     * @precondition basePackageName != null
-     * @precondition tableRepositoryName != null
-     * @precondition tables != null
-     * @precondition timestamp != null
-     * @precondition stringUtils != null
      */
+    @SuppressWarnings("unchecked")
+    @Override
     protected void fillCoreParameters(
         @NotNull final Map input,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
-        final String basePackageName,
-        final String subpackageName,
-        final String tableRepositoryName,
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final String tableRepositoryName,
         @NotNull final String engineName,
-        @NotNull final Collection tables,
-        final String timestamp,
-        final StringUtils stringUtils)
+        @NotNull final List<String> tables,
+        @NotNull final String timestamp,
+        @NotNull final StringUtils stringUtils)
     {
         super.fillCoreParameters(
             input,
@@ -229,7 +156,7 @@ public class DataAccessContextLocalTemplate
         {
             input.put("splitted_header", split(t_strProcessedHeader));
         }
-        fillJndiLocation(input, getJNDILocation());
+        fillJndiLocation(input, getTemplateContext().getJndiLocation());
     }
 
     /**
@@ -239,7 +166,8 @@ public class DataAccessContextLocalTemplate
      * @precondition input != null
      * @precondition jndiLocation != null
      */
-    protected void fillJndiLocation(@NotNull final Map input, final String jndiLocation)
+    @SuppressWarnings("unchecked")
+    protected void fillJndiLocation(@NotNull final Map input, @NotNull final String jndiLocation)
     {
         input.put("jndi_location", jndiLocation);
     }
@@ -249,7 +177,8 @@ public class DataAccessContextLocalTemplate
      * @param value the text.
      * @return the splitted text.
      */
-    protected String[] split(final String value)
+    @NotNull
+    protected String[] split(@NotNull final String value)
     {
         return split(value, DecorationUtils.getInstance());
     }

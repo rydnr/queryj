@@ -58,31 +58,27 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
 {
     /**
      * Generates a <i>per-table</i> template.
-     * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
+     * @param jmx whether to include JMX support.
+     * @param tableName the table name.
      * @return a template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
         @NotNull final String header,
-        final boolean implementMarkerInterfaces);
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String tableName);
 }

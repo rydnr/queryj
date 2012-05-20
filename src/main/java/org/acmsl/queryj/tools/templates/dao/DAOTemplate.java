@@ -36,26 +36,35 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.MetadataUtils;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
+import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,234 +73,83 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOTemplate
-    extends  BasePerTableTemplate
+    extends  BasePerTableTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = 8937585277018883623L;
-    /**
-     * The static contents.
-     */
-    private Collection m__cStaticValues;
 
     /**
-     * Builds a {@link DAOTemplate} using given information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
+     * Builds a {@link DAOTemplate} using given context.
+     * @param context the {@link BasePerTableTemplateContext} instance.
      */
-    public DAOTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    public DAOTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces);
+        super(context);
     }
 
     /**
-     * Builds a {@link DAOTemplate} using given information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param staticValues the static values.
+     * {@inheritDoc}
      */
-    public DAOTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final Collection staticValues)
-    {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces);
-
-        immutableSetStaticValues(staticValues);
-    }
-
-    /**
-     * Specifies the static values.
-     * @param values such values.
-     */
-    protected final void immutableSetStaticValues(final Collection values)
-    {
-        m__cStaticValues = values;
-    }
-
-    /**
-     * Specifies the static values.
-     * @param values such values.
-     */
-    protected void setStaticValues(final Collection values)
-    {
-        immutableSetStaticValues(values);
-    }
-
-    /**
-     * Retrieves the static values.
-     * @return such values.
-     */
-    protected Collection getStaticValues()
-    {
-        return m__cStaticValues;
-    }
-
-    /**
-     * Fills the parameters required by <code>class</code> rule.
-     *
-     * @param input the input.
-     * @param voName the name of the value object.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param timestamp the timestamp.
-     * @param staticTable whether the table is static or not.
-     * @param tableRepositoryName the table repository name.
-     * @param tableName the table name.
-     * @param pkAttributes the primary key attributes.
-     * @param nonPkAttributes the ones not part of the primary key.
-     * @param fkAttributes the foreign key attributes.
-     * @param referingKeys the foreign keys of other tables pointing
-     * to this one. It's expected to be
-     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
-     * lists).
-     * @param attributes the attributes.
-     * @param externallyManagedAttributes the attributes which are
-     * managed externally.
-     * @param allButExternallyManagedAttributes all but the attributes which
-     * are managed externally.
-     * @param lobAttributes all but the attributes whose type is
-     * Clob or Blob.
-     * @param allButLobAttributes all but the attributes whose type is
-     * Clob or Blob.
-     * @param foreignKeys the entities pointing to this instance's table.
-     * @param staticAttributeName the name of the static attribute, or
-     * <code>null</code> for non-static tables.
-     * @param staticAttributeType the type of the static attribute, or
-     * <code>null</code> for non-static tables.
-     * @param customSelects the custom selects.
-     * @param customUpdatesOrInserts the custom updates and inserts.
-     * @param customSelectsForUpdate the custom selects for update.
-     * @param customResults the custom results.
-     * @param metadataManager the database metadata manager.
-     * @precondition input != null
-     * @precondition voName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition timestamp != null
-     * @precondition tableRepositoryName != null
-     * @precondition tableName != null
-     * @precondition pkAttributes != null
-     * @precondition nonPkAttributes != null
-     * @precondition fkAttributes != null
-     * @precondition attributes != null
-     * @precondition externallyManagedAttributes != null
-     * @precondition allButExternallyManagedAttributes != null
-     * @precondition lobAttributes != null
-     * @precondition allButLobAttributes != null
-     * @precondition foreignKeys != null
-     * @precondition customSelects != null
-     * @precondition customUpdatesOrInserts != null
-     * @precondition customSelectsForUpdate != null
-     * @precondition customResults != null
-     * @precondition metadataManager != null
-     */
-    protected void fillClassParameters(
+    @SuppressWarnings("unused,unchecked")
+    @Override
+    protected void fillParameters(
         @NotNull final Map input,
-        @NotNull final String voName,
-        final String engineName,
-        final String engineVersion,
-        final String timestamp,
-        final boolean staticTable,
-        @NotNull final String tableRepositoryName,
+        @NotNull final StringTemplate template,
+        @NotNull final Integer[] copyrightYears,
         @NotNull final String tableName,
-        final Collection pkAttributes,
-        final Collection nonPkAttributes,
-        final Collection<ForeignKey> fkAttributes,
-        @NotNull final Map referingKeys,
-        final Collection attributes,
-        final Collection externallyManagedAttributes,
-        final Collection allButExternallyManagedAttributes,
-        final Collection lobAttributes,
-        final Collection allButLobAttributes,
-        final ForeignKey[] foreignKeys,
-        final String staticAttributeName,
-        final String staticAttributeType,
-        final Collection customSelects,
-        final Collection customUpdatesOrInserts,
-        final Collection customSelectsForUpdate,
-        final Collection customResults,
-        final MetadataManager metadataManager)
+        @NotNull final String voName,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final String timestamp,
+        @NotNull final String className,
+        @NotNull final String baseDAOClassName,
+        @NotNull final String baseDAOPackageName,
+        @NotNull final Collection<Attribute> primaryKeyAttributes,
+        @NotNull final Collection<Attribute> nonPrimaryKeyAttributes,
+        @NotNull final Collection<ForeignKey> foreignKeyAttributes,
+        @NotNull final Map<String,ForeignKey[]> referringKeys,
+        @NotNull final Collection<Attribute> attributes,
+        @NotNull final Collection<Attribute> externallyManagedAttributes,
+        @NotNull final Collection<Attribute> allButExternallyManagedAttributes,
+        @NotNull final Collection<Attribute> lobAttributes,
+        @NotNull final Collection<Attribute> allButLobAttributes,
+        @NotNull final ForeignKey[] foreignKeys,
+        @NotNull final Collection<Sql> customSelects,
+        @NotNull final Collection<Sql> customUpdatesOrInserts,
+        @NotNull final Collection<Sql> customSelectsForUpdate,
+        @NotNull final Collection<ResultElement> customResults,
+        @Nullable final String staticAttributeName,
+        @Nullable final String staticAttributeType,
+        @NotNull final String tableRepositoryName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @Nullable final String header,
+        final boolean implementMarkerInterfaces,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final MetadataUtils metadataUtils)
     {
+        List<Row> t_lStaticValues = getTemplateContext().getStaticValues();
+
+        if  (   (t_lStaticValues != null)
+             && (t_lStaticValues.size() > 0))
+        {
+            input.put("cached_rows", t_lStaticValues);
+        }
+
         super.fillClassParameters(
             input,
             voName,
             engineName,
             engineVersion,
             timestamp,
-            staticTable,
+            staticAttributeName != null,
             tableRepositoryName,
             tableName,
-            pkAttributes,
-            nonPkAttributes,
-            fkAttributes,
-            referingKeys,
+            primaryKeyAttributes,
+            nonPrimaryKeyAttributes,
+            foreignKeyAttributes,
+            referringKeys,
             attributes,
             externallyManagedAttributes,
             allButExternallyManagedAttributes,
@@ -306,19 +164,13 @@ public class DAOTemplate
             customResults,
             metadataManager);
 
-        Collection t_cStaticValues = getStaticValues();
-
-        if  (t_cStaticValues != null)
-        {
-            input.put("cached_rows", t_cStaticValues);
-        }
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
