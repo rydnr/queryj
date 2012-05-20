@@ -39,7 +39,9 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -54,11 +56,12 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to generate base DAO implementations according to database
@@ -66,9 +69,9 @@ import java.util.Collection;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseDAOTemplateGenerator
-    extends AbstractTemplateGenerator<BaseDAOTemplate>
+    extends AbstractTemplateGenerator<BaseDAOTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateFactory<BaseDAOTemplate>,
-                BasePerTableTemplateGenerator<BaseDAOTemplate>,
+                BasePerTableTemplateGenerator<BaseDAOTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**
@@ -100,121 +103,52 @@ public class BaseDAOTemplateGenerator
 
     /**
      * Generates a BaseDAO template.
-     * @param tableName the table name.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param header the header.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
-     * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
+     * @param jmx whether to include JMX support.
+     * @param tableName the table name.
      * @return a template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition quote != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
      */
     @NotNull
     public BaseDAOTemplate createTemplate(
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces)
-    {
-        return
-            new BaseDAOTemplate(
-                tableName,
-                metadataManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces);
-    }
-
-    /**
-     * Generates a BaseDAO template.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param staticValues the static values, if the table's comment contains
-     * the @static keyword.
-     * @return a template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition quote != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition staticValues != null
-     */
-    @NotNull
-    public BaseDAOTemplate createTemplate(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
         final boolean implementMarkerInterfaces,
-        @NotNull final Collection staticValues)
+        final boolean jmx,
+        @NotNull final String tableName,
+        @Nullable List<Row> staticContents)
     {
         return
             new BaseDAOTemplate(
-                tableName,
-                metadataManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces,
-                staticValues);
+                new BasePerTableTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableName,
+                    staticContents));
     }
 
     /**
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @Override
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
@@ -224,31 +158,32 @@ public class BaseDAOTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BaseDAOTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
         return
             retrieveTemplateFileName(
-                template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+                context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerTableTemplateContext} instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BaseDAOTemplate template,
+        @NotNull final BasePerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
             stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    template.getTableName().toLowerCase()),
+                    context.getTableName().toLowerCase()),
                 '_')
                 + "DAO.java";
     }

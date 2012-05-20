@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
@@ -65,7 +64,7 @@ import java.util.List;
  */
 public class DataAccessContextLocalTemplateGenerator
     extends AbstractTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateFactory<DataAccessContextLocalTemplate>,
+    implements BasePerRepositoryTemplateFactory<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>,
                 BasePerRepositoryTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>,
                 Singleton
 {
@@ -103,7 +102,6 @@ public class DataAccessContextLocalTemplateGenerator
     @SuppressWarnings("unused")
     public DataAccessContextLocalTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String projectPackage,
         @NotNull final String packageName,

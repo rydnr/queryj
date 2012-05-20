@@ -45,17 +45,13 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
 /*
- * Importing some ACM-SL classes.
- */
-
-/*
- * Importing some jetBrains annotations.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -70,9 +66,9 @@ import java.util.List;
            >Jose San Leandro</a>
  */
 public class DAOListenerImplTemplateGenerator
-    extends AbstractTemplateGenerator<DAOListenerImplTemplate>
-    implements  BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate>,
-                BasePerRepositoryTemplateFactory<DAOListenerImplTemplate>,
+    extends AbstractTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>,
                 Singleton
 {
     /**
@@ -106,56 +102,56 @@ public class DAOListenerImplTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    @SuppressWarnings("unused")
     public DAOListenerImplTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
-        @NotNull final String packageName,
-        @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        @NotNull final String packageName,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new DAOListenerImplTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                jmx,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final DAOListenerImplTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return retrieveTemplateFileName(template, DecorationUtils.getInstance());
+        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the template context.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final DAOListenerImplTemplate  template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
-              decorationUtils.capitalize(template.getRepositoryName())
+              decorationUtils.capitalize(context.getRepositoryName())
             + "DAOListenerImpl.java";
     }
 }

@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.AttributesStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
@@ -60,8 +61,7 @@ import java.util.Map;
  */
 public class AttributesStatementSetterTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <AttributesStatementSetterTemplate,
-                     AttributesStatementSetterTemplateGenerator>
+                 <AttributesStatementSetterTemplate, AttributesStatementSetterTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a AttributesStatementSetterTemplateWritingHandler.

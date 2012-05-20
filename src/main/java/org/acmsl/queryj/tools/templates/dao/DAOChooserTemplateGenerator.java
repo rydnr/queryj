@@ -39,8 +39,8 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
@@ -65,9 +65,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOChooserTemplateGenerator
-    extends AbstractTemplateGenerator<DAOChooserTemplate>
-    implements  BasePerRepositoryTemplateGenerator<DAOChooserTemplate>,
-                BasePerRepositoryTemplateFactory<DAOChooserTemplate>,
+    extends AbstractTemplateGenerator<DAOChooserTemplate, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<DAOChooserTemplate, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DAOChooserTemplate, BasePerRepositoryTemplateContext>,
                 Singleton
 {
     /**
@@ -103,45 +103,46 @@ public class DAOChooserTemplateGenerator
     @NotNull
     public DAOChooserTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new DAOChooserTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final DAOChooserTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return capitalize(template.getRepositoryName()) + "DAOChooser.java";
+        return capitalize(context.getRepositoryName()) + "DAOChooser.java";
     }
 
     /**
      * Capitalizes given value.
      * @param value the value.
      * @return the capitalized value.
-     * @precondition value != null
      */
     protected String capitalize(@NotNull final String value)
     {
@@ -153,8 +154,6 @@ public class DAOChooserTemplateGenerator
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return the capitalized value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
     protected String capitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)

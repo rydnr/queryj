@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
@@ -50,6 +51,8 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -62,9 +65,9 @@ import java.util.Locale;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class FkStatementSetterTemplateGenerator
-    extends AbstractTemplateGenerator<FkStatementSetterTemplate>
-    implements  FkStatementSetterTemplateFactory,
-                Singleton
+    extends AbstractTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
+    implements BasePerForeignKeyTemplateFactory<FkStatementSetterTemplate>,
+               Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -98,28 +101,29 @@ public class FkStatementSetterTemplateGenerator
      */
     @NotNull
     public FkStatementSetterTemplate createTemplate(
-        @NotNull final ForeignKey foreignKey,
         @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header)
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final ForeignKey foreignKey)
     {
         return
             new FkStatementSetterTemplate(
-                foreignKey,
-                metadataManager,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName);
+                new BasePerForeignKeyTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    foreignKey));
     }
 
     /**
@@ -135,12 +139,13 @@ public class FkStatementSetterTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final FkStatementSetterTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerForeignKeyTemplateContext context)
     {
         return
             retrieveTemplateFileName(
-                template.getForeignKey(),
+                context.getForeignKey(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance());
     }

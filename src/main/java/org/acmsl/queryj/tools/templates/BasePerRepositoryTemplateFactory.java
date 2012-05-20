@@ -39,7 +39,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.commons.patterns.Factory;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some JetBrains annotations.
@@ -56,18 +55,17 @@ import java.util.List;
  * Represents entities able to create per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTemplate>
+public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTemplate<C>, C extends BasePerRepositoryTemplateContext>
     extends  Factory
 {
     /**
      * Creates a {@link T} instance with given information.
      * @param metadataManager the {@link MetadataManager} instance.
-     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param projectPackage the project's base package.
-     * @param packageName the package name.
-     * @param repository the repository name.
      * @param header the file header.
+     * @param packageName the package name.
+     * @param projectPackage the project's base package.
+     * @param repository the repository name.
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to enable JMX.
      * @param tableNames the list of table names.
@@ -77,15 +75,13 @@ public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTem
     @Nullable
     public T createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
-        @NotNull final String packageName,
-        @NotNull final String repository,
         @NotNull final String header,
+        @NotNull final String packageName,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation);
-
 }

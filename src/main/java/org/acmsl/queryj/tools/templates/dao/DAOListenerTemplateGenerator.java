@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
@@ -69,9 +70,9 @@ import java.util.List;
            >Jose San Leandro</a>
  */
 public class DAOListenerTemplateGenerator
-    extends AbstractTemplateGenerator<DAOListenerTemplate>
-    implements  BasePerRepositoryTemplateGenerator<DAOListenerTemplate>,
-                BasePerRepositoryTemplateFactory<DAOListenerTemplate>,
+    extends AbstractTemplateGenerator<DAOListenerTemplate<BasePerRepositoryTemplateContext>, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<DAOListenerTemplate<BasePerRepositoryTemplateContext>, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DAOListenerTemplate<BasePerRepositoryTemplateContext>>,
                 Singleton
 {
     /**
@@ -108,30 +109,30 @@ public class DAOListenerTemplateGenerator
     @SuppressWarnings("unused")
     public DAOListenerTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new DAOListenerTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                jmx,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**

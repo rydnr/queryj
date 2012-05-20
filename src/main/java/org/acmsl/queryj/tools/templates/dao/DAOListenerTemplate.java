@@ -40,24 +40,19 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 
 /*
  * Importing some StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.util.Collection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate DAO listeners.
@@ -65,56 +60,25 @@ import java.util.Collection;
  *         >Jose San Leandro</a>
  */
 public class DAOListenerTemplate
-    extends  BasePerRepositoryTemplate
+    extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 6193504232518508768L;
 
     /**
      * Builds a {@link DAOListenerTemplate} using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the database metadata type manager.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param header the header.
-     * @param jmx whether to support JMX.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param tables the tables.
+     * @param context the {@link BasePerRepositoryTemplateContext} instance.
      */
-    public DAOListenerTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final boolean jmx,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables)
+    public DAOListenerTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-//            jmx,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
+        super(context);
     }
 
     /**
      * Builds a key to store the template cache.
      * @return such key.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected Object buildTemplateCacheKey()
     {
@@ -125,7 +89,7 @@ public class DAOListenerTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -133,7 +97,7 @@ public class DAOListenerTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "DAOListener".
      * @return such information.
      */
     @NotNull

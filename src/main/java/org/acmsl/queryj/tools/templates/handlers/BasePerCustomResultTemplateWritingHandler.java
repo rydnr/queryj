@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.TemplateGenerator;
 
 /*
@@ -67,7 +68,7 @@ import java.util.Map;
  * Writes <i>per-custom-result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePerCustomResultTemplate>
+public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePerCustomResultTemplate<C>, C extends BasePerCustomResultTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -155,14 +156,10 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
      * @param charset the file encoding.
      * @param parameters the parameter map.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition templateGenerator != null
-     * @precondition engineName != null
-     * @precondition parameters != null
      */
     protected void writeTemplates(
         @NotNull final List<T> templates,
-        @NotNull final TemplateGenerator<T> templateGenerator,
+        @NotNull final TemplateGenerator<T, C> templateGenerator,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String engineName,
@@ -176,7 +173,9 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
             {
                 if  (t_Template != null)
                 {
-                    Result t_Result = t_Template.getResult();
+                    C t_Context = t_Template.getTemplateContext();
+
+                    Result t_Result = t_Context.getResult();
 
                     if (t_Result != null)
                     {
@@ -206,7 +205,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
      * Retrieves the template generator.
      * @return such instance.
      */
-    protected abstract TemplateGenerator<T> retrieveTemplateGenerator();
+    protected abstract TemplateGenerator<T,C> retrieveTemplateGenerator();
 
     /**
      * Retrieves the templates from the attribute map.

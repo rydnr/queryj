@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.InvalidTemplateException;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 
@@ -135,8 +136,8 @@ public class CustomResultSetExtractorTemplate
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
-        final String engineName,
-        final String engineVersion)
+        @NotNull final String engineName,
+        @NotNull final String engineVersion)
     {
         super.fillCommonParameters(
             input,

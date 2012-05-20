@@ -36,17 +36,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingRowDecorator;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.MetadataUtils;
-import org.acmsl.queryj.tools.metadata.RowDecorator;
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.metadata.vo.Row;
-import org.acmsl.queryj.tools.templates.InvalidTemplateException;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 
 /*
  * Importing StringTemplate classes.
@@ -54,28 +44,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
- * Importing some Commons-Logging classes.
+ * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.Log;
-
-/*
- * Importing some JDK classes.
- */
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-
-/*
- * Importing Commons-Logging classes.
- */
-import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,102 +61,18 @@ public class BaseDAOTemplate
 
     /**
      * Builds a <code>BaseDAOTemplate</code> using given information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
+     * @param context the {@link BasePerTableTemplateContext} instance.
      */
-    public BaseDAOTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    public BaseDAOTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces);
-    }
-
-    /**
-     * Builds a <code>BaseDAOTemplate</code> using given information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param staticValues the static values.
-     */
-    public BaseDAOTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final Collection staticValues)
-    {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces,
-            staticValues);
+        super(context);
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -194,9 +80,10 @@ public class BaseDAOTemplate
     }
     
     /**
-     * Retrieves the template name.
+     * Returns "BaseDAO".
      * @return such information.
      */
+    @Override
     @NotNull
     public String getTemplateName()
     {

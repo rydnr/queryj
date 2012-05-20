@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -61,8 +62,8 @@ import java.util.Locale;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DAOFactoryTemplateGenerator<T extends DAOFactoryTemplate>
-    extends AbstractTemplateGenerator<T>
+public class DAOFactoryTemplateGenerator<T extends DAOFactoryTemplate, C extends BasePerTableTemplateContext>
+    extends AbstractTemplateGenerator<T,C>
     implements  DAOFactoryTemplateFactory,
                 Singleton
 {
@@ -130,29 +131,28 @@ public class DAOFactoryTemplateGenerator<T extends DAOFactoryTemplate>
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final C context)
     {
-        return retrieveTemplateFileName(template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+        return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     *
-     * @param template the template.
+     * @param context the template context.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final T template,
+        @NotNull final C context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
             stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
-                    template.getTableTemplate().getTableName().toLowerCase(Locale.US)),
+                    context.getTableName().toLowerCase(Locale.US)),
                 '_')
             + "DAOFactory.java";
     }

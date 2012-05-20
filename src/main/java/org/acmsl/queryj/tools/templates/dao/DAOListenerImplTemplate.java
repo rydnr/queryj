@@ -40,26 +40,19 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 
 /*
  * Importing some StringTemplate classes.
  */
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate DAO listeners.
@@ -67,51 +60,18 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public class DAOListenerImplTemplate
-    extends  BasePerRepositoryTemplate
+    extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = -6303657842543560189L;
 
     /**
      * Builds a <code>DAOListenerImplTemplate</code> using given
-     * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the database metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param header the header.
-     * @param jmx whether to support JMX.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param tables the tables.
+     * context information.
+     * @param context the {@link BasePerRepositoryTemplateContext} instance.
      */
-    @SuppressWarnings("unused")
-    public DAOListenerImplTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
-        final boolean jmx,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String engineName,
-        @NotNull final List<String> tables)
+    public DAOListenerImplTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-//            jmx,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
+        super(context);
     }
 
     /**
@@ -129,7 +89,7 @@ public class DAOListenerImplTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -137,7 +97,7 @@ public class DAOListenerImplTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "DAOListenerImpl".
      * @return such information.
      */
     @NotNull

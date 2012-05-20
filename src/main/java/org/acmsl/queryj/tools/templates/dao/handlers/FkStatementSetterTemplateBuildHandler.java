@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
@@ -44,21 +45,23 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
-import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -78,16 +81,9 @@ public class FkStatementSetterTemplateBuildHandler
     protected final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
-     * A cached empty template array.
-     */
-    protected final FkStatementSetterTemplate[]
-        EMPTY_FKSTATEMENTSETTERTEMPLATE_ARRAY =
-            new FkStatementSetterTemplate[0];
-
-    /**
      * Creates a <code>FkStatementSetterTemplateBuildHandler</code> instance.
      */
-    public FkStatementSetterTemplateBuildHandler() {};
+    public FkStatementSetterTemplateBuildHandler() {}
 
     /**
      * Handles given information.
@@ -104,77 +100,12 @@ public class FkStatementSetterTemplateBuildHandler
         return
             handle(
                 parameters,
-                retrieveDatabaseMetaData(parameters));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected boolean handle(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
-      throws  QueryJBuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            handle(
-                parameters,
-                metaData.getDatabaseProductName(),
-                retrieveDatabaseProductVersion(metaData),
-                fixQuote(metaData.getIdentifierQuoteString()));
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                      "Cannot retrieve database product name, "
-                    + "version or quote string",
-                    sqlException);
-        }
-
-        return result;
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     */
-    protected boolean handle(
-        @NotNull final Map parameters,
-        @NotNull final String engineName,
-        final String engineVersion,
-        final String quote)
-      throws  QueryJBuildException
-    {
-        return
-            handle(
-                parameters,
-                engineName,
-                engineVersion,
-                quote,
                 FkStatementSetterTemplateGenerator.getInstance());
     }
     
     /**
      * Handles given information.
      * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
@@ -182,21 +113,18 @@ public class FkStatementSetterTemplateBuildHandler
      */
     protected boolean handle(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        final String engineVersion,
-        final String quote,
-        @NotNull final FkStatementSetterTemplateFactory templateFactory)
+        @NotNull final BasePerForeignKeyTemplateFactory<FkStatementSetterTemplate> templateFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
-            engineName,
-            engineVersion,
-            quote,
             retrieveMetadataManager(parameters),
+            retrieveCustomSqlProvider(parameters),
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
             templateFactory,
             templateFactory.getDecoratorFactory(),
             retrieveTableTemplates(parameters),
@@ -208,87 +136,75 @@ public class FkStatementSetterTemplateBuildHandler
     /**
      * Builds the <code>FkStatementSetter</code> templates.
      * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote.
-     * @param metadataManager the database metadata manager.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param basePackageName the base package name.
-     * @param repository the repository.
+     * @param repositoryName the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
+     * @param jmx whether to include JMX support.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition templateFactory != null
-     * @precondition tableTemplates != null
-     * @precondition metadataUtils != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        final String engineVersion,
-        final String quote,
         @NotNull final MetadataManager metadataManager,
-        final String basePackageName,
-        final String repositoryName,
-        final String header,
-        @NotNull final FkStatementSetterTemplateFactory templateFactory,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final BasePerForeignKeyTemplateFactory<FkStatementSetterTemplate> templateFactory,
         @NotNull final DecoratorFactory decoratorFactory,
-        @Nullable final TableTemplate[] tableTemplates,
+        @NotNull final TableTemplate[] tableTemplates,
         @NotNull final MetadataUtils metadataUtils)
       throws  QueryJBuildException
     {
-        @NotNull Collection t_cTemplates = new ArrayList();
+        @NotNull Collection<FkStatementSetterTemplate> t_cTemplates = new ArrayList<FkStatementSetterTemplate>();
 
-        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
-        
-        int t_iFkCount = 0;
-        
         String t_strTableName;
         String t_strPackageName;
         ForeignKey[] t_aForeignKeys;
+        BasePerTableTemplateContext t_Context;
 
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+        for  (TableTemplate t_Template : tableTemplates)
         {
-            t_strTableName =
-                tableTemplates[t_iIndex].getTableName();
-                
-            t_strPackageName =
-                retrievePackage(engineName, t_strTableName, parameters);
-
-            t_aForeignKeys =
-                metadataUtils.retrieveForeignKeys(
-                    t_strTableName, metadataManager, decoratorFactory);
-                
-            t_iFkCount =
-                (t_aForeignKeys != null) ? t_aForeignKeys.length : 0;
-                
-            for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+            if (t_Template != null)
             {
-                t_cTemplates.add(
-                    templateFactory.createTemplate(
-                        t_aForeignKeys[t_iFkIndex],
-                        metadataManager,
-                        t_strPackageName,
-                        engineName,
-                        engineVersion,
-                        quote,
-                        basePackageName,
-                        repositoryName,
-                        header));
+                t_Context = t_Template.getTemplateContext();
+
+                t_strTableName = t_Context.getTableName();
+                
+                t_strPackageName =
+                    retrievePackage(metadataManager.getEngineName(), t_strTableName, parameters);
+
+                t_aForeignKeys =
+                    metadataUtils.retrieveForeignKeys(
+                        t_strTableName, metadataManager, decoratorFactory);
+                
+                for  (ForeignKey t_ForeignKey: t_aForeignKeys)
+                {
+                    t_cTemplates.add(
+                        templateFactory.createTemplate(
+                            metadataManager,
+                            customSqlProvider,
+                            t_strPackageName,
+                            basePackageName,
+                            repositoryName,
+                            header,
+                            implementMarkerInterfaces,
+                            jmx,
+                            t_ForeignKey));
+                }
             }
         }
 
         storeTemplates(
-            (FkStatementSetterTemplate[])
             t_cTemplates.toArray(
-                EMPTY_FKSTATEMENTSETTERTEMPLATE_ARRAY),
+                new FkStatementSetterTemplate[t_cTemplates.size()]),
             parameters);
     }
 
@@ -373,11 +289,10 @@ public class FkStatementSetterTemplateBuildHandler
      * Stores the templates in given attribute map.
      * @param templates the templates.
      * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final FkStatementSetterTemplate[] templates,
+        @NotNull final FkStatementSetterTemplate[] templates,
         @NotNull final Map parameters)
     {
         parameters.put(
@@ -390,15 +305,27 @@ public class FkStatementSetterTemplateBuildHandler
      * @param tableTemplate the table template.
      * @param metadataManager the database metadata manager.
      * @return <code>true</code> in such case.
-     * @precondition tableTemplate != null
-     * @precondition metadataManager != null
      */
+    @SuppressWarnings("unused")
     protected boolean containsForeignKeys(
         @NotNull final TableTemplate tableTemplate,
         @NotNull final MetadataManager metadataManager)
     {
+        return containsForeignKeys(tableTemplate.getTemplateContext(), metadataManager);
+    }
+
+    /**
+     * Checks whether the table associated to given template contains foreign keys.
+     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param metadataManager the database metadata manager.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean containsForeignKeys(
+        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final MetadataManager metadataManager)
+    {
         return
-            metadataManager.containsForeignKeys(tableTemplate.getTableName());
+            metadataManager.containsForeignKeys(context.getTableName());
     }
 
     /**
@@ -406,28 +333,24 @@ public class FkStatementSetterTemplateBuildHandler
      * @param allFks the complete list of foreign keys.
      * @param tableName the table name.
      * @param metadataManager the database metadata manager.
-     * @precondition allFks != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
      */
+    @SuppressWarnings("unused,unchecked")
     @NotNull
     protected String[] retrieveSimpleFks(
-        @Nullable final String[] allFks,
-        final String tableName,
+        @NotNull final String[] allFks,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable Collection t_cResult = null;
+        @NotNull Collection<String> t_cResult;
 
-        @NotNull Map t_mAux = new HashMap();
+        @NotNull Map<String, String> t_mAux = new HashMap<String, String>();
 
-        int t_iLength = (allFks != null) ? allFks.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strFk: allFks)
         {
             // TODO: FIXME!!
             String t_strReferredTable =
                 metadataManager.getReferredTable(
-                    tableName, new String[] {allFks[t_iIndex]});
+                    tableName, new String[] { t_strFk });
 
             if  (t_mAux.containsKey(t_strReferredTable))
             {
@@ -435,13 +358,13 @@ public class FkStatementSetterTemplateBuildHandler
             }
             else
             {
-                t_mAux.put(t_strReferredTable, allFks[t_iIndex]);
+                t_mAux.put(t_strReferredTable, t_strFk);
             }
         }
 
         t_cResult = t_mAux.values();
 
-        return (String[]) t_cResult.toArray(EMPTY_STRING_ARRAY);
+        return t_cResult.toArray(new String[t_cResult.size()]);
     }
 
     /**
@@ -451,29 +374,27 @@ public class FkStatementSetterTemplateBuildHandler
      * @precondition tableName != null
      * @precondition metadataManager != null
      */
+    @SuppressWarnings("unused,unchecked")
     @NotNull
     protected String[] retrieveReferredTablesByCompoundFks(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager)
     {
         @NotNull Collection t_cResult = new ArrayList();
 
-        String[] t_astrReferredTables =
+        @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
-        int t_iLength =
-            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strReferredTable: t_astrReferredTables)
         {
             String[][] t_astrForeignKeys =
                 metadataManager.getForeignKeys(
-                    tableName, t_astrReferredTables[t_iIndex]);
+                    tableName, t_strReferredTable);
 
             if  (   (t_astrForeignKeys != null)
                  && (t_astrForeignKeys.length > 0))
             {
-                t_cResult.add(t_astrReferredTables[t_iIndex]);
+                t_cResult.add(t_strReferredTable);
             }
         }
 

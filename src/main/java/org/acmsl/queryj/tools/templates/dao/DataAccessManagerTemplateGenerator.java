@@ -39,8 +39,8 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
@@ -65,9 +65,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessManagerTemplateGenerator
-    extends AbstractTemplateGenerator<DataAccessManagerTemplate>
-    implements  BasePerRepositoryTemplateGenerator<DataAccessManagerTemplate>,
-                BasePerRepositoryTemplateFactory<DataAccessManagerTemplate>,
+    extends AbstractTemplateGenerator<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>,
                 Singleton
 {
     /**
@@ -104,39 +104,41 @@ public class DataAccessManagerTemplateGenerator
     @NotNull
     public DataAccessManagerTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new DataAccessManagerTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final DataAccessManagerTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
         return
-              capitalize(template.getRepositoryName())
+              capitalize(context.getRepositoryName())
             + "DataAccessManager.java";
     }
 
@@ -158,7 +160,6 @@ public class DataAccessManagerTemplateGenerator
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return the capitalized value.
      * @precondition value != null
-     * @precondition decorationUtils != null
      */
     @NotNull
     protected String capitalize(

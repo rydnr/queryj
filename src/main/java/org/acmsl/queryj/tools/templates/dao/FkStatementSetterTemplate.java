@@ -37,15 +37,17 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,54 +57,25 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class FkStatementSetterTemplate
-    extends  BasePerForeignKeyTemplate
+    extends  BasePerForeignKeyTemplate<BasePerForeignKeyTemplateContext>
 {
     private static final long serialVersionUID = 7887168844018582237L;
 
     /**
      * Builds a <code>FkStatementSetterTemplate</code> using given
      * information.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the database metadata manager.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
+     * @param context the {@link BasePerForeignKeyTemplateContext} instance.
      */
-    public FkStatementSetterTemplate(
-        final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName)
+    public FkStatementSetterTemplate(@NotNull final BasePerForeignKeyTemplateContext context)
     {
-        super(
-            foreignKey,
-            metadataManager,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName);
+        super(context);
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -112,7 +85,7 @@ public class FkStatementSetterTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "ForeignKeyStatementSetter".
      * @return such information.
      */
     @NotNull

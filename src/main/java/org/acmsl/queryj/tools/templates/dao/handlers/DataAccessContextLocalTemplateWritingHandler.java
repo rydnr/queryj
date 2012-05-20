@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplate;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
@@ -59,7 +60,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessContextLocalTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler<DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator>
+    extends  BasePerRepositoryTemplateWritingHandler<DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a DataAccessContextLocalTemplateWritingHandler.

@@ -48,7 +48,6 @@ import org.acmsl.queryj.tools.templates.dao.handlers.DAOFactoryTemplateHandlerBu
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerImplTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOListenerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.DAOTestTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessContextLocalTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateHandlerBundle;

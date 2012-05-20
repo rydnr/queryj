@@ -111,7 +111,7 @@ public class MetaLanguageUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected MetaLanguageUtils() {};
+    protected MetaLanguageUtils() {}
 
     /**
      * Retrieves a <code>MetaLanguageUtils</code> instance.
@@ -213,7 +213,8 @@ public class MetaLanguageUtils
      * @return the ISA parent table.
      * @precondition tableComment != null
      */
-    public String retrieveDiscriminatingParent(final String tableComment)
+    @SuppressWarnings("unused")
+    public String retrieveDiscriminatingParent(@NotNull final String tableComment)
     {
         String result = null;
 
@@ -334,6 +335,7 @@ public class MetaLanguageUtils
      * @return such associations.
      * @precondition columnComment != null
      */
+    @SuppressWarnings("unused")
     public String[][] retrieveColumnDiscriminatedTables(
         final String columnComment)
     {
@@ -404,9 +406,10 @@ public class MetaLanguageUtils
      * Retrieves whether the table is modelling a relationship.
      * @param tableComment the table comment.
      * @return such condition.
-     * @precondition tableComment != null
      */
-    public String[][] retrieveTableRelationship(final String tableComment)
+    @SuppressWarnings("unused")
+    @NotNull
+    public String[][] retrieveTableRelationship(@NotNull final String tableComment)
     {
         String[][] result = EMPTY_STRING_ARRAY_ARRAY;
 
@@ -441,13 +444,12 @@ public class MetaLanguageUtils
      * @param comment the comment to parse.
      * @return the <code>PerCommentParser</code> instance.
      * @throws RecognitionException if the comment cannot be parsed.
-     * @precondition comment != null
-
      */
-    protected PerCommentParser setUpParser(final String comment)
+    @SuppressWarnings("unchecked")
+    protected PerCommentParser setUpParser(@NotNull final String comment)
         throws  RecognitionException
     {
-        PerCommentParser result = null;
+        PerCommentParser result;
 
         Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
@@ -457,23 +459,20 @@ public class MetaLanguageUtils
             t_Log.debug("Parsing '" + comment + "'");
         }
 
-        if  (comment != null)
+        result = (PerCommentParser) PARSER_CACHE.get(comment);
+
+        if  (result == null)
         {
-            result = (PerCommentParser) PARSER_CACHE.get(comment);
-
-            if  (result == null)
-            {
-                PerCommentLexer t_Lexer =
-                    new PerCommentLexer(
-                        new ANTLRStringStream(comment));
+            PerCommentLexer t_Lexer =
+                new PerCommentLexer(
+                    new ANTLRStringStream(comment));
             
-                CommonTokenStream t_Tokens =
-                    new CommonTokenStream(t_Lexer);
+            CommonTokenStream t_Tokens =
+                new CommonTokenStream(t_Lexer);
 
-                result = new PerCommentParser(t_Tokens);
+            result = new PerCommentParser(t_Tokens);
 
-                PARSER_CACHE.put(comment, result);
-            }
+            PARSER_CACHE.put(comment, result);
         }
 
         return result;

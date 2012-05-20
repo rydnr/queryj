@@ -134,11 +134,11 @@ public class CustomValueObjectTemplate
     protected void fillCommonParameters(
         @NotNull final Map input,
         @NotNull final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
-        final String engineName,
-        final String engineVersion)
+        @NotNull final String engineName,
+        @NotNull final String engineVersion)
     {
         super.fillCommonParameters(
             input,

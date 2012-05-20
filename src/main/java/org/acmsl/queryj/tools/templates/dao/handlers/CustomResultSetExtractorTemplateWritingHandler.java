@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGenerator;
@@ -62,7 +63,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomResultSetExtractorTemplateWritingHandler
-    extends  BasePerCustomResultTemplateWritingHandler<CustomResultSetExtractorTemplate>
+    extends  BasePerCustomResultTemplateWritingHandler<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
 {
     /**
      * Creates a {@link CustomResultSetExtractorTemplateWritingHandler}
@@ -74,9 +75,10 @@ public class CustomResultSetExtractorTemplateWritingHandler
      * Retrieves the template generator.
      * @return such instance.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
-    protected TemplateGenerator<CustomResultSetExtractorTemplate> retrieveTemplateGenerator()
+    protected TemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext> retrieveTemplateGenerator()
     {
         return CustomResultSetExtractorTemplateGenerator.getInstance();
     }

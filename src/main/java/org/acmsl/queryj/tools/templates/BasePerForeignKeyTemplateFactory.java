@@ -36,15 +36,19 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
-import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -56,31 +60,32 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
 {
     /**
      * Creates a per-<i>foreign key</i> template.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the database metadata manager.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
+     * @param jmx whether to include JMX support.
+     * @param foreignKey the foreign key.
      */
     @NotNull
     public T createTemplate(
-        @NotNull final ForeignKey foreignKey,
         @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header);
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final ForeignKey foreignKey);
 
     /**
      * Retrieves the decorator factory for each template.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory();
 }

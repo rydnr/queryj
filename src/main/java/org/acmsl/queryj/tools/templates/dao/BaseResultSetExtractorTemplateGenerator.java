@@ -46,6 +46,7 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
@@ -57,6 +58,7 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -70,9 +72,9 @@ import java.util.List;
            >Jose San Leandro</a>
  */
 public class BaseResultSetExtractorTemplateGenerator
-    extends AbstractTemplateGenerator<BaseResultSetExtractorTemplate>
-    implements  BasePerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate>,
-                BasePerRepositoryTemplateFactory<BaseResultSetExtractorTemplate>,
+    extends AbstractTemplateGenerator<BaseResultSetExtractorTemplate<BasePerRepositoryTemplateContext>, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate<BasePerRepositoryTemplateContext>, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<BaseResultSetExtractorTemplate<BasePerRepositoryTemplateContext>>,
                 Singleton
 {
     /**
@@ -109,30 +111,31 @@ public class BaseResultSetExtractorTemplateGenerator
     @SuppressWarnings("unused")
     public BaseResultSetExtractorTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
         @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new BaseResultSetExtractorTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                jmx,
-                getDecoratorFactory(),
-                packageName,
-                packageName,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    packageName,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**

@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
@@ -56,7 +57,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseDAOTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler<BaseDAOTemplate, BaseDAOTemplateGenerator>
+    extends  BasePerTableTemplateWritingHandler<BaseDAOTemplate, BaseDAOTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a <code>BaseDAOTemplateWritingHandler</code> instance.

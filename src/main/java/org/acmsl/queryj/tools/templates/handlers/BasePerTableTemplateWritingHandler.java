@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
 /*
@@ -73,7 +74,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerTableTemplateWritingHandler
-    <T extends BasePerTableTemplate, TG extends BasePerTableTemplateGenerator<T>>
+    <T extends BasePerTableTemplate<C>, TG extends BasePerTableTemplateGenerator<T,C>, C extends BasePerTableTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -154,7 +155,7 @@ public abstract class BasePerTableTemplateWritingHandler
                     templateGenerator.write(
                         t_Template,
                         retrieveOutputDir(
-                            t_Template.getTableName(),
+                            t_Template.getTemplateContext().getTableName(),
                             engineName,
                             parameters),
                         charset);

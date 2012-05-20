@@ -39,7 +39,9 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
@@ -61,6 +63,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -69,9 +72,9 @@ import java.util.Locale;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseAbstractDAOTemplateGenerator
-    extends AbstractTemplateGenerator<BaseAbstractDAOTemplate>
+    extends AbstractTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>
     implements BasePerTableTemplateFactory<BaseAbstractDAOTemplate>,
-               BasePerTableTemplateGenerator<BaseAbstractDAOTemplate>,
+               BasePerTableTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>,
                Singleton
 {
     /**
@@ -102,42 +105,20 @@ public class BaseAbstractDAOTemplateGenerator
     }
 
     /**
-     * Generates a {@link BaseAbstractDAOTemplate} instance.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @return a template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition quote != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * {@inheritDoc}
      */
     @Nullable
     public BaseAbstractDAOTemplate createTemplate(
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
         @NotNull final String header,
-        final boolean implementMarkerInterfaces)
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String tableName,
+        @Nullable List<Row> staticContents)
     {
         @Nullable BaseAbstractDAOTemplate result = null;
 
@@ -145,101 +126,20 @@ public class BaseAbstractDAOTemplateGenerator
         {
             result =
                 new BaseAbstractDAOTemplate(
-                    tableName,
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces);
+                    new BasePerTableTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        getDecoratorFactory(),
+                        packageName,
+                        basePackageName,
+                        repositoryName,
+                        implementMarkerInterfaces,
+                        jmx,
+                        tableName,
+                        staticContents));
         }
 
-        return result;
-    }
-
-    /**
-     * Generates a {@link BaseAbstractDAOTemplate} instance.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param staticValues the static values.
-     * @return a template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition quote != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
-     * @precondition staticValues != null
-     */
-    @Nullable
-    public BaseAbstractDAOTemplate createTemplate(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        @Nullable final Collection staticValues)
-    {
-        @Nullable BaseAbstractDAOTemplate result;
-
-        if  (staticValues != null)
-        {
-            result =
-                new BaseAbstractDAOTemplate(
-                    tableName,
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    staticValues);
-        }
-        else
-        {
-            result =
-                createTemplate(
-                    tableName,
-                    metadataManager,
-                    customSqlProvider,
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    quote,
-                    basePackageName,
-                    repositoryName,
-                    header,
-                    implementMarkerInterfaces);
-        }
-                
         return result;
     }
 
@@ -260,8 +160,6 @@ public class BaseAbstractDAOTemplateGenerator
      * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
      */
     protected boolean isStaticTable(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
@@ -277,9 +175,6 @@ public class BaseAbstractDAOTemplateGenerator
      * @param metadataManager the {@link MetadataManager} instance.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metaLanguageUtils != null
      */
     protected boolean isStaticTable(
         @NotNull final String tableName,
@@ -294,22 +189,23 @@ public class BaseAbstractDAOTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull BaseAbstractDAOTemplate template)
+    public String retrieveTemplateFileName(@NotNull BasePerTableTemplateContext context)
     {
-        return retrieveTemplateFileName(template, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+        return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the template context.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final BaseAbstractDAOTemplate template,
+        @NotNull final BasePerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
@@ -317,7 +213,7 @@ public class BaseAbstractDAOTemplateGenerator
               "Abstract"
             + stringUtils.capitalize(
                   englishGrammarUtils.getSingular(
-                      template.getTableName().toLowerCase(Locale.US)),
+                      context.getTableName().toLowerCase(Locale.US)),
                   '_')
             + "DAO.java";
     }

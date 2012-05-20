@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -48,6 +49,11 @@ import org.acmsl.commons.patterns.Factory;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.List;
 
 /**
  * Represents entities able to create per-table templates.
@@ -80,5 +86,6 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull final String tableName);
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticContents);
 }
