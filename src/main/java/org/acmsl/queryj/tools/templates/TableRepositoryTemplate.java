@@ -35,71 +35,33 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-
-/*
  * Importing some StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.util.Collection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableRepositoryTemplate
-    extends  BasePerRepositoryTemplate
+    extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 59071924084056204L;
 
     /**
      * Builds a <code>TableRepositoryTemplate</code> using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param tables the tables.
+     * @param context the template context.
      */
-    public TableRepositoryTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables)
+    public TableRepositoryTemplate(final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
+        super(context);
     }
 
     /**

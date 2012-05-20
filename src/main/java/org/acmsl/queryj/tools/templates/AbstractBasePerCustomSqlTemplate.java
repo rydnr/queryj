@@ -31,325 +31,28 @@ package org.acmsl.queryj.tools.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.SqlElement;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.customsql.Sql;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.commons.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Collection;
-import java.util.Iterator;
 
 /**
  * Logicless container for all templates to be processed once per custom SQL.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractBasePerCustomSqlTemplate
-    extends  AbstractTemplate
+public abstract class AbstractBasePerCustomSqlTemplate<C extends BasePerCustomSqlTemplateContext>
+    extends  AbstractTemplate<C>
 {
     /**
-     * The sql.
-     */
-    private SqlElement m__Sql;
-
-    /**
-     * The custom SQL provider.
-     */
-    private CustomSqlProvider m__CustomSqlProvider;
-    
-    /**
-     * The database metadata manager.
-     */
-    private MetadataManager m__MetadataManager;
-
-    /**
-     * The package name.
-     */
-    private String m__strPackageName;
-
-    /**
-     * The engine name.
-     */
-    private String m__strEngineName;
-
-    /**
-     * The engine's version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The base package name.
-     */
-    private String m__strBasePackageName;
-
-    /**
-     * The repository name.
-     */
-    private String m__strRepositoryName;
-
-    /**
      * Builds a <code>AbstractBasePerCustomSqlTemplate</code> using
-     * given information.
-     * @param sql the sql.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the database metadata manager.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
+     * given context.
+     * @param context the {@link BasePerCustomSqlTemplateContext} instance.
      */
-    public AbstractBasePerCustomSqlTemplate(
-        final SqlElement sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName)
+    public AbstractBasePerCustomSqlTemplate(@NotNull final C context)
     {
-        super(header, decoratorFactory);
-        immutableSetSql(sql);
-        immutableSetCustomSqlProvider(customSqlProvider);
-        immutableSetMetadataManager(metadataManager);
-        immutableSetPackageName(packageName);
-        immutableSetEngineName(engineName);
-        immutableSetEngineVersion(engineVersion);
-        immutableSetBasePackageName(basePackageName);
-        immutableSetRepositoryName(repositoryName);
-    }
-
-    /**
-     * Specifies the sql.
-     * @param sql the custom sql.
-     */
-    protected final void immutableSetSql(final SqlElement sql)
-    {
-        m__Sql = sql;
-    }
-    
-    /**
-     * Specifies the sql.
-     * @param sql the custom sql.
-     */
-    protected void setSql(final SqlElement sql)
-    {
-        immutableSetSql(sql);
-    }
-    
-    /**
-     * Retrieves the sql.
-     * @return such information.
-     */
-    public SqlElement getSql()
-    {
-        return m__Sql;
-    }
-
-    /**
-     * Specifies the custom sql provider.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     */
-    protected final void immutableSetCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
-    {
-        m__CustomSqlProvider = customSqlProvider;
-    }
-    
-    /**
-     * Specifies the custom sql provider.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     */
-    protected void setCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
-    {
-        immutableSetCustomSqlProvider(customSqlProvider);
-    }
-
-    /**
-     * Retrieves the custom sql provider.
-     * @return such instance.
-     */
-    public CustomSqlProvider getCustomSqlProvider()
-    {
-        return m__CustomSqlProvider;
-    }
-    
-    /**
-     * Specifies the metadata manager.
-     * @param metadataManager the metadata manager.
-     */
-    private void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
-    {
-        m__MetadataManager = metadataManager;
-    }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metadataManager the metadata manager.
-     */
-    protected void setMetadataManager(
-        final MetadataManager metadataManager)
-    {
-        immutableSetMetadataManager(metadataManager);
-    }
-
-    /**
-     * Retrieves the metadata manager.
-     * @return such manager.
-     */
-    public MetadataManager getMetadataManager()
-    {
-        return m__MetadataManager;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    private void immutableSetPackageName(final String packageName)
-    {
-        m__strPackageName = packageName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    protected void setPackageName(final String packageName)
-    {
-        immutableSetPackageName(packageName);
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    public String getPackageName() 
-    {
-        return m__strPackageName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    private void immutableSetEngineName(final String engineName)
-    {
-        m__strEngineName = engineName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    protected void setEngineName(final String engineName)
-    {
-        immutableSetEngineName(engineName);
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @return such information.
-     */
-    public String getEngineName() 
-    {
-        return m__strEngineName;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    private void immutableSetEngineVersion(final String engineVersion)
-    {
-        m__strEngineVersion = engineVersion;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    protected void setEngineVersion(final String engineVersion)
-    {
-        immutableSetEngineVersion(engineVersion);
-    }
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    public String getEngineVersion()
-    {
-        return m__strEngineVersion;
-    }
-
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    private void immutableSetBasePackageName(final String basePackageName)
-    {
-        m__strBasePackageName = basePackageName;
-    }
-
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    protected void setBasePackageName(final String basePackageName)
-    {
-        immutableSetBasePackageName(basePackageName);
-    }
-
-    /**
-     * Retrieves the base package name.
-     * @return such information.
-     */
-    public String getBasePackageName() 
-    {
-        return m__strBasePackageName;
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param repositoryName the new repository name.
-     */
-    private void immutableSetRepositoryName(final String repositoryName)
-    {
-        m__strRepositoryName = repositoryName;
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param repositoryName the new repository name.
-     */
-    protected void setRepositoryName(final String repositoryName)
-    {
-        immutableSetRepositoryName(repositoryName);
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @return such information.
-     */
-    public String getRepositoryName()
-    {
-        return m__strRepositoryName;
+        super(context);
     }
 
     /**
@@ -359,7 +62,19 @@ public abstract class AbstractBasePerCustomSqlTemplate
     @NotNull
     protected String buildHeader()
     {
-        return buildHeader(getTemplateName(), getSql());
+        return buildHeader(getTemplateName(), getTemplateContext());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param templateName the template name.
+     * @param context the {@link BasePerCustomSqlTemplateContext} instance.
+     * @return such header.
+     */
+    @NotNull
+    protected String buildHeader(@NotNull final String templateName, @NotNull final C context)
+    {
+        return buildHeader(templateName, context.getSql());
     }
 
     /**
@@ -367,21 +82,11 @@ public abstract class AbstractBasePerCustomSqlTemplate
      * @param templateName the template name.
      * @param sql the sql.
      * @return such header.
-     * @precondition templateName != null
-     * @precondition sql != null
      */
     @NotNull
     protected String buildHeader(
-        final String templateName, @NotNull final SqlElement sql)
+        final String templateName, @NotNull final Sql sql)
     {
-        return
-              "Generating " + templateName + " for " + sql.getName();
+        return "Generating " + templateName + " for " + sql.getName();
     }
-
-    /**
-     * Retrieves the template name.
-     * @return such information.
-     */
-    @NotNull
-    public abstract String getTemplateName();
 }

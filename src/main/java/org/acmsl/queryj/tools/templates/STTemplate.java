@@ -44,19 +44,21 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * <a href="http://www.stringtemplate.org>StringTemplate</a>-specific templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  */
-public interface STTemplate
-    extends  Template
+public interface STTemplate<T extends TemplateContext>
+    extends  Template<T>
 {
     /**
      * Retrieves the template group.
      * @return such group.
      */
-    public @NotNull StringTemplateGroup retrieveGroup();
+    public @Nullable
+    StringTemplateGroup retrieveGroup();
 
     /**
      * Retrieves the template name.

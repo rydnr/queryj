@@ -36,7 +36,7 @@ package org.acmsl.queryj.tools.templates;
  * Represents entities able to write per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerRepositoryTemplateGenerator<N extends BasePerRepositoryTemplate>
-    extends TemplateGenerator<N>
+public interface BasePerRepositoryTemplateGenerator<N extends BasePerRepositoryTemplate<C>, C extends BasePerRepositoryTemplateContext>
+    extends TemplateGenerator<N,C>
 {
 }

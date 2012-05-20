@@ -43,6 +43,10 @@ import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

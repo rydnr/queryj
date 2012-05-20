@@ -51,7 +51,7 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface ForeignKey
-    extends Comparable
+    extends Comparable<ForeignKey>
 {
     /**
      * Retrieves the source table name.

@@ -502,8 +502,8 @@ public abstract class AbstractQueryPreparedStatementCreatorTemplate
      *
      * @return such instance.
      */
+    @NotNull
     @Override
-    @Nullable
     public StringTemplateGroup retrieveGroup()
     {
         return null;

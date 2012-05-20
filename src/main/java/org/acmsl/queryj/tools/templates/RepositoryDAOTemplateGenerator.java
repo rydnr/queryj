@@ -60,8 +60,8 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOTemplateGenerator
-    extends AbstractTemplateGenerator<RepositoryDAOTemplate>
-    implements  BasePerRepositoryTemplateGenerator<RepositoryDAOTemplate>,
+    extends AbstractTemplateGenerator<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>,
                 BasePerRepositoryTemplateFactory<RepositoryDAOTemplate>,
                 Singleton
 {
@@ -95,6 +95,7 @@ public class RepositoryDAOTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     @SuppressWarnings("unused")
     public RepositoryDAOTemplate createTemplate(
@@ -104,48 +105,65 @@ public class RepositoryDAOTemplateGenerator
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
-            new RepositoryDAOTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+            new RepositoryDAOTemplate<BasePerRepositoryTemplateContext>(
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames));
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final RepositoryDAOTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return retrieveTemplateFileName(template, DecorationUtils.getInstance());
+        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the template context.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such name.
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final RepositoryDAOTemplate template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
+    {
+        return retrieveTemplateFileName(context, context.getMetadataManager(), decorationUtils);
+    }
+
+    /**
+     * Retrieves given template's file name.
+     * @param context the template context.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such name.
+     */
+    @NotNull
+    public String retrieveTemplateFileName(
+        @NotNull final BasePerRepositoryTemplateContext context,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecorationUtils decorationUtils)
     {
         return
-              template.getEngineName()
-            + decorationUtils.capitalize(template.getRepositoryName())
+              metadataManager.getEngineName()
+            + decorationUtils.capitalize(context.getRepositoryName())
             + "DAO.java";
     }
 }

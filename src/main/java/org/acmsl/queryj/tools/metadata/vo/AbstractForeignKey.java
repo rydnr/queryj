@@ -271,48 +271,22 @@ public abstract class AbstractForeignKey
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
-        throws  ClassCastException
+    public int compareTo(final ForeignKey object)
     {
-        int result = 1;
-
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof ForeignKey)
-        {
-            @NotNull final ForeignKey t_OtherInstance = (ForeignKey) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
+        return
+            new org.apache.commons.lang.builder.CompareToBuilder()
                 .append(
                     getSourceTableName(),
-                    t_OtherInstance.getSourceTableName())
+                    object.getSourceTableName())
                 .append(
                     getAttributes(),
-                    t_OtherInstance.getAttributes())
+                    object.getAttributes())
                 .append(
                     getTargetTableName(),
-                    t_OtherInstance.getTargetTableName())
+                    object.getTargetTableName())
                 .append(
                     isNullable(),
-                    t_OtherInstance.isNullable())
+                    object.isNullable())
                 .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
-        }
-
-        return result;
     }
 }

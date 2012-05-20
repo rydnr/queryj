@@ -255,6 +255,21 @@ public abstract class AbstractJdbcMetadataManager
     private boolean m__bCaseSensitive = false;
 
     /**
+     * The engine name.
+     */
+    private String m__strEngineName;
+
+    /**
+     * The engine version.
+     */
+    private String m__strEngineVersion;
+
+    /**
+     * The identifier quote string.
+     */
+    private String m__strQuote;
+
+    /**
      * Creates an empty <code>AbstractJdbcMetadataManager</code> instance.
      * @param metadataExtractionListener the
      * <code>MetadataExtractionListener</code> instance.
@@ -299,12 +314,12 @@ public abstract class AbstractJdbcMetadataManager
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param caseSensitive whether the engine is case sensitive or not.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
-     * @precondition tableNames != null
-     * @precondition procedureNames != null
-     * @precondition metaData != null
      */
     protected AbstractJdbcMetadataManager(
         @Nullable final MetadataExtractionListener metadataExtractionListener,
@@ -317,7 +332,10 @@ public abstract class AbstractJdbcMetadataManager
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
-        final boolean caseSensitive)
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
       throws  SQLException,
               QueryJException
     {
@@ -332,6 +350,96 @@ public abstract class AbstractJdbcMetadataManager
         immutableSetCatalog(catalog);
         immutableSetSchema(schema);
         immutableSetCaseSensitive(caseSensitive);
+        immutableSetEngineName(engineName);
+        immutableSetEngineVersion(engineVersion);
+        immutableSetQuote(quote);
+    }
+
+    /**
+     * Specifies the engine name.
+     * @param engineName the new engine name.
+     */
+    protected final void immutableSetEngineName(@NotNull final String engineName)
+    {
+        m__strEngineName = engineName;
+    }
+
+    /**
+     * Specifies the engine name.
+     * @param engineName the new engine name.
+     */
+    @SuppressWarnings("unused")
+    protected void setEngineName(@NotNull final String engineName)
+    {
+        immutableSetEngineName(engineName);
+    }
+
+    /**
+     * Retrieves the engine name.
+     * @return such information.
+     */
+    @NotNull
+    public String getEngineName()
+    {
+        return m__strEngineName;
+    }
+
+    /**
+     * Specifies the engine version.
+     * @param engineVersion the new engine version.
+     */
+    private void immutableSetEngineVersion(@NotNull final String engineVersion)
+    {
+        m__strEngineVersion = engineVersion;
+    }
+
+    /**
+     * Specifies the engine version.
+     * @param engineVersion the new engine version.
+     */
+    @SuppressWarnings("unused")
+    protected void setEngineVersion(@NotNull final String engineVersion)
+    {
+        immutableSetEngineVersion(engineVersion);
+    }
+
+    /**
+     * Retrieves the engine version.
+     * @return such information.
+     */
+    @NotNull
+    public String getEngineVersion()
+    {
+        return m__strEngineVersion;
+    }
+
+    /**
+     * Specifies the identifier quote string.
+     * @param quote such identifier.
+     */
+    protected void immutableSetQuote(@NotNull final String quote)
+    {
+        m__strQuote = quote;
+    }
+
+    /**
+     * Specifies the identifier quote string.
+     * @param quote such identifier.
+     */
+    @SuppressWarnings("unused")
+    protected void setQuote(@NotNull final String quote)
+    {
+        immutableSetQuote(quote);
+    }
+
+    /**
+     * Retrieves the identifier quote string.
+     * @return such identifier.
+     */
+    @NotNull
+    public String getQuote()
+    {
+        return m__strQuote;
     }
 
     /**
@@ -481,7 +589,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the meta data.
      * @param metaData the database meta data.
      */
-    public void setMetaData(final DatabaseMetaData metaData)
+    public void setMetaData(@NotNull final DatabaseMetaData metaData)
     {
         immutableSetMetaData(metaData);
     }

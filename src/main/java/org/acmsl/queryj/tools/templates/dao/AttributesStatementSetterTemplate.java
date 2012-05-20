@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -46,6 +45,10 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,17 +80,17 @@ public class AttributesStatementSetterTemplate
      * interfaces.
      */
     public AttributesStatementSetterTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @Nullable final String packageName,
+        @Nullable final String engineName,
+        @Nullable final String engineVersion,
+        @Nullable final String quote,
+        @Nullable final String basePackageName,
+        @Nullable final String repositoryName,
         final boolean implementMarkerInterfaces)
     {
         super(

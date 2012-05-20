@@ -35,23 +35,15 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-
-/*
  * Importing some StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.util.Collection;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate base repository DAO factories according to database
@@ -66,40 +58,11 @@ public class BaseRepositoryDAOFactoryTemplate
     /**
      * Builds a <code>BaseRepositoryDAOFactoryTemplate</code> using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the database metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param tables the tables.
+     * @param context thre {@link BasePerRepositoryTemplateContext} instance.
      */
-    public BaseRepositoryDAOFactoryTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables)
+    public BaseRepositoryDAOFactoryTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
+        super(context);
     }
 
     /**
@@ -107,7 +70,7 @@ public class BaseRepositoryDAOFactoryTemplate
      * @return such instance.
      */
     @Override
-    @NotNull
+    @Nullable
     public StringTemplateGroup retrieveGroup()
     {
         return

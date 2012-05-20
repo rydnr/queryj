@@ -1276,8 +1276,8 @@ public abstract class FunctionsTemplate
      *
      * @return such instance.
      */
+    @NotNull
     @Override
-    @Nullable
     public StringTemplateGroup retrieveGroup()
     {
         return null;

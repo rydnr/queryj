@@ -29,13 +29,6 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-
-/*
  * Importing some jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -45,396 +38,17 @@ import org.jetbrains.annotations.NotNull;
  * associated to each table.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractBasePerTableTemplate
-    extends  AbstractTemplate
+public abstract class AbstractBasePerTableTemplate<C extends BasePerTableTemplateContext>
+    extends  AbstractTemplate<C>
 {
-    /**
-     * The table name.
-     */
-    private String m__strTableName;
-
-    /**
-     * The database metadata manager.
-     */
-    private MetadataManager m__MetadataManager;
-
-    /**
-     * The custom-sql provider.
-     */
-    private CustomSqlProvider m__CustomSqlProvider;
-
-    /**
-     * The package name.
-     */
-    private String m__strPackageName;
-
-    /**
-     * The engine name.
-     */
-    private String m__strEngineName;
-
-    /**
-     * The engine's version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The quote.
-     */
-    private String m__strQuote;
-
-    /**
-     * The base package name.
-     */
-    private String m__strBasePackageName;
-
-    /**
-     * The repository name.
-     */
-    private String m__strRepositoryName;
-
-    /**
-     * Whether to implement marker interfaces.
-     */
-    private boolean m__bImplementMarkerInterfaces;
-
     /**
      * Builds an <code>AbstractBasePerTableTemplate</code> using given
      * information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
+     * @param context the {@link BasePerTableTemplateContext} instance.
      */
-    protected AbstractBasePerTableTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    protected AbstractBasePerTableTemplate(@NotNull final C context)
     {
-        super(header, decoratorFactory);
-
-        immutableSetTableName(
-            tableName);
-
-        immutableSetMetadataManager(
-            metadataManager);
-
-        immutableSetCustomSqlProvider(
-            customSqlProvider);
-
-        immutableSetPackageName(
-            packageName);
-
-        immutableSetEngineName(
-            engineName);
-
-        immutableSetEngineVersion(
-            engineVersion);
-
-        immutableSetQuote(
-            quote);
-
-        immutableSetBasePackageName(
-            basePackageName);
-
-        immutableSetRepositoryName(
-            repositoryName);
-
-        immutableSetImplementMarkerInterfaces(
-            implementMarkerInterfaces);
-    }
-
-    /**
-     * Specifies the table name.
-     * @param tableName the table name.
-     */
-    protected final void immutableSetTableName(final String tableName)
-    {
-        m__strTableName = tableName;
-    }
-
-    /**
-     * Specifies the table name.
-     * @param tableName the table name.
-     */
-    protected void setTableName(final String tableName)
-    {
-        immutableSetTableName(tableName);
-    }
-
-    /**
-     * Retrieves the table name.
-     * @return such template.
-     */
-    public String getTableName()
-    {
-        return m__strTableName;
-    }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metadataManager the metadata manager.
-     */
-    private void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
-    {
-        m__MetadataManager = metadataManager;
-    }
-
-    /**
-     * Specifies the metadata manager.
-     * @param metadataManager the metadata manager.
-     */
-    protected void setMetadataManager(
-        final MetadataManager metadataManager)
-    {
-        immutableSetMetadataManager(metadataManager);
-    }
-
-    /**
-     * Retrieves the metadata manager.
-     * @return such manager.
-     */
-    public MetadataManager getMetadataManager()
-    {
-        return m__MetadataManager;
-    }
-
-    /**
-     * Specifies the custom-sql provider.
-     * @param customSqlProvider the customsql provider.
-     */
-    private void immutableSetCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
-    {
-        m__CustomSqlProvider = customSqlProvider;
-    }
-
-    /**
-     * Specifies the custom-sql provider.
-     * @param customSqlProvider the customsql provider.
-     */
-    protected void setCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
-    {
-        immutableSetCustomSqlProvider(customSqlProvider);
-    }
-
-    /**
-     * Retrieves the custom-sql provider.
-     * @return such provider.
-     */
-    public CustomSqlProvider getCustomSqlProvider()
-    {
-        return m__CustomSqlProvider;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    private void immutableSetPackageName(final String packageName)
-    {
-        m__strPackageName = packageName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    protected void setPackageName(final String packageName)
-    {
-        immutableSetPackageName(packageName);
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    public String getPackageName() 
-    {
-        return m__strPackageName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    private void immutableSetEngineName(final String engineName)
-    {
-        m__strEngineName = engineName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    protected void setEngineName(final String engineName)
-    {
-        immutableSetEngineName(engineName);
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @return such information.
-     */
-    public String getEngineName() 
-    {
-        return m__strEngineName;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    private void immutableSetEngineVersion(final String engineVersion)
-    {
-        m__strEngineVersion = engineVersion;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    protected void setEngineVersion(final String engineVersion)
-    {
-        immutableSetEngineVersion(engineVersion);
-    }
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    public String getEngineVersion()
-    {
-        return m__strEngineVersion;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    private void immutableSetQuote(final String quote)
-    {
-        m__strQuote = quote;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    protected void setQuote(final String quote)
-    {
-        immutableSetQuote(quote);
-    }
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such identifier.
-     */
-    public String getQuote()
-    {
-        return m__strQuote;
-    }
-
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    private void immutableSetBasePackageName(final String basePackageName)
-    {
-        m__strBasePackageName = basePackageName;
-    }
-
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    protected void setBasePackageName(final String basePackageName)
-    {
-        immutableSetBasePackageName(basePackageName);
-    }
-
-    /**
-     * Retrieves the base package name.
-     * @return such information.
-     */
-    public String getBasePackageName() 
-    {
-        return m__strBasePackageName;
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param repositoryName the new repository name.
-     */
-    private void immutableSetRepositoryName(final String repositoryName)
-    {
-        m__strRepositoryName = repositoryName;
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param repositoryName the new repository name.
-     */
-    protected void setRepositoryName(final String repositoryName)
-    {
-        immutableSetRepositoryName(repositoryName);
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @return such information.
-     */
-    public String getRepositoryName()
-    {
-        return m__strRepositoryName;
-    }
-
-    /**
-     * Specifies whether to implement marker interfaces.
-     * @param flag such condition.
-     */
-    protected final void immutableSetImplementMarkerInterfaces(
-        final boolean flag)
-    {
-        m__bImplementMarkerInterfaces = flag;
-    }
-
-    /**
-     * Specifies whether to implement marker interfaces.
-     * @param flag such condition.
-     */
-    protected void setImplementMarkerInterfaces(
-        final boolean flag)
-    {
-        immutableSetImplementMarkerInterfaces(flag);
-    }
-
-    /**
-     * Retrieves whether to implement marker interfaces.
-     * @return such condition.
-     */
-    public boolean getImplementMarkerInterfaces()
-    {
-        return m__bImplementMarkerInterfaces;
+        super(context);
     }
 
     /**
@@ -444,7 +58,20 @@ public abstract class AbstractBasePerTableTemplate
     @NotNull
     protected String buildHeader()
     {
-        return buildHeader(getTemplateName(), getTableName());
+        return buildHeader(getTemplateName(), getTemplateContext());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param templateName the template name.
+     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @return such header.
+     */
+    @NotNull
+    protected String buildHeader(
+        @NotNull final String templateName, @NotNull final C context)
+    {
+        return buildHeader(templateName, context.getTableName());
     }
 
     /**
@@ -452,12 +79,10 @@ public abstract class AbstractBasePerTableTemplate
      * @param templateName the template name.
      * @param tableName the table name.
      * @return such header.
-     * @precondition templateName != null
-     * @precondition tableName != null
      */
     @NotNull
     protected String buildHeader(
-        final String templateName, final String tableName)
+        @NotNull final String templateName, @NotNull final String tableName)
     {
         return "Generating " + templateName + " for " + tableName + ".";
     }
@@ -466,5 +91,6 @@ public abstract class AbstractBasePerTableTemplate
      * Retrieves the template name.
      * @return such information.
      */
+    @NotNull
     public abstract String getTemplateName();
 }

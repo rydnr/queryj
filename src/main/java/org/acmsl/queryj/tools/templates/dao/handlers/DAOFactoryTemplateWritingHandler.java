@@ -43,6 +43,10 @@ import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,15 +69,9 @@ public class DAOFactoryTemplateWritingHandler
     implements TemplateWritingHandler
 {
     /**
-     * A cached empty DAO template array.
-     */
-    public static final DAOFactoryTemplate[] EMPTY_DAO_FACTORY_TEMPLATE_ARRAY =
-        new DAOFactoryTemplate[0];
-
-    /**
      * Creates a <code>DAOFactoryTemplateWritingHandler</code> instance.
      */
-    public DAOFactoryTemplateWritingHandler() {};
+    public DAOFactoryTemplateWritingHandler() {}
 
     /**
      * Handles given parameters.
@@ -101,24 +99,27 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition parameters != null
      */
     protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metadata)
+        @NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
       throws  QueryJBuildException
     {
-        try
+        if (metadata != null)
         {
-            writeTemplates(
-                retrieveDAOFactoryTemplates(parameters),
-                retrieveOutputDir(
-                    metadata.getDatabaseProductName().toLowerCase(),
-                    parameters),
-                retrieveCharset(parameters),
-                DAOFactoryTemplateGenerator.getInstance());
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot retrieve the database product name", sqlException);
+            try
+            {
+                writeTemplates(
+                    retrieveDAOFactoryTemplates(parameters),
+                    retrieveOutputDir(
+                        metadata.getDatabaseProductName().toLowerCase(),
+                        parameters),
+                    retrieveCharset(parameters),
+                    DAOFactoryTemplateGenerator.getInstance());
+            }
+            catch  (@NotNull final SQLException sqlException)
+            {
+                throw
+                    new QueryJBuildException(
+                        "Cannot retrieve the database product name", sqlException);
+            }
         }
     }
 
@@ -133,30 +134,30 @@ public class DAOFactoryTemplateWritingHandler
      * @precondition outputDir != null
      * @precondition generator != null
      */
+    @SuppressWarnings("unchecked")
     protected void writeTemplates(
         @Nullable final DAOFactoryTemplate[] templates,
         @NotNull final File outputDir,
-        final Charset charset,
+        @NotNull final Charset charset,
         @NotNull final DAOFactoryTemplateGenerator generator)
       throws  QueryJBuildException
     {
-        try 
+        if (templates != null)
         {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iDAOFactoryIndex = 0;
-                      t_iDAOFactoryIndex < t_iLength;
-                      t_iDAOFactoryIndex++)
+            try
             {
-                generator.write(
-                    templates[t_iDAOFactoryIndex], outputDir, charset);
+                for (DAOFactoryTemplate t_Template : templates)
+                {
+                    generator.write(
+                        t_Template, outputDir, charset);
+                }
             }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the templates", ioException);
+            catch  (@NotNull final IOException ioException)
+            {
+                throw
+                    new QueryJBuildException(
+                        "Cannot write the templates", ioException);
+            }
         }
     }
 

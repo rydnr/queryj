@@ -52,13 +52,17 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,83 +71,18 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplate
-    extends  RepositoryDAOTemplate
+    extends  RepositoryDAOTemplate<RepositoryDAOFactoryTemplateContext>
 {
     private static final long serialVersionUID = -3330025097227634585L;
-    /**
-     * The datasource's JNDI location.
-     */
-    private String m__strJNDIDataSource;
 
     /**
      * Builds a <code>RepositoryDAOFactoryTemplate</code> using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the database metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param tables the tables.
+     * @param context the {@link RepositoryDAOFactoryTemplateContext} instance.
      */
-    public RepositoryDAOFactoryTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final String jndiDataSource,
-        final Collection tables)
+    public RepositoryDAOFactoryTemplate(@NotNull final RepositoryDAOFactoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
-
-        immutableSetJNDIDataSource(jndiDataSource);
-    }
-
-
-    /**
-     * Specifies the JNDI data source.
-     * @param jndiDataSource the new JNDI data source.
-     */
-    private void immutableSetJNDIDataSource(final String jndiDataSource)
-    {
-        m__strJNDIDataSource = jndiDataSource;
-    }
-
-    /**
-     * Specifies the JNDI data source.
-     * @param jndiDataSource the new JNDI data source.
-     */
-    protected void setJNDIDataSource(final String jndiDataSource)
-    {
-        immutableSetJNDIDataSource(jndiDataSource);
-    }
-
-    /**
-     * Retrieves the JNDI data source.
-     * @return such information.
-     */
-    public String getJNDIDataSource() 
-    {
-        return m__strJNDIDataSource;
+        super(context);
     }
 
     /**
@@ -157,43 +96,31 @@ public class RepositoryDAOFactoryTemplate
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param subpackageName the subpackage name.
      * @param basePackageName the base package name.
-     * @param timestamp the timestamp.
      * @param tableRepositoryName the table repository.
      * @param engineName the engine name.
      * @param tables the table names.
      * @param timestamp the timestamp.
      * @param copyrightYears the copyright years.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition input != null
-     * @precondition template != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
-     * @precondition tableRepositoryName != null
-     * @precondition tables != null
-     * @precondition timestamp != null
-     * @precondition copyrightYears != null
-     * @precondition stringUtils != null
      */
+    @SuppressWarnings("unchecked")
+    @Override
     protected void fillParameters(
         @NotNull final Map input,
         @NotNull final StringTemplate template,
-        final String header,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
-        final String subpackageName,
-        final String basePackageName,
-        final String tableRepositoryName,
+        @NotNull final String subpackageName,
+        @NotNull final String basePackageName,
+        @NotNull final String tableRepositoryName,
         @NotNull final String engineName,
-        @NotNull final Collection tables,
-        final String timestamp,
-        final Integer[] copyrightYears,
-        final StringUtils stringUtils)
+        @NotNull final List<String> tables,
+        @NotNull final String timestamp,
+        @NotNull final Integer[] copyrightYears,
+        @NotNull final StringUtils stringUtils)
     {
         super.fillParameters(
             input,
@@ -212,14 +139,25 @@ public class RepositoryDAOFactoryTemplate
             copyrightYears,
             stringUtils);
 
-        input.put("jndi_location", getJNDIDataSource());
+        input.put("jndi_location", getJNDIDataSource(getTemplateContext()));
     }
+
+    /**
+     * Retrieves the JNDI data source.
+     * @param context the context.
+     */
+    @NotNull
+    protected String getJNDIDataSource(@NotNull final RepositoryDAOFactoryTemplateContext context)
+    {
+        return context.getJndiDataSource();
+    }
+
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @Override
     @Nullable
+    @Override
     public StringTemplateGroup retrieveGroup()
     {
         return

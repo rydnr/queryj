@@ -37,9 +37,6 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.ProcedureRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
  * Bundles a pair of ProcedureRepository template build and writing

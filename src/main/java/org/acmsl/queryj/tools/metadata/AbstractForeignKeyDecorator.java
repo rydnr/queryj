@@ -290,7 +290,7 @@ public abstract class AbstractForeignKeyDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final ForeignKey object)
         throws  ClassCastException
     {
         return compareTo(getForeignKey(), object);
@@ -305,7 +305,7 @@ public abstract class AbstractForeignKeyDecorator
      * object prevents it from being compared to this Object.
      * @precondition foreignKey != null
      */
-    protected int compareTo(@NotNull final ForeignKey foreignKey, final Object object)
+    protected int compareTo(@NotNull final ForeignKey foreignKey, final ForeignKey object)
         throws  ClassCastException
     {
         return foreignKey.compareTo(object);

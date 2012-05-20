@@ -2009,8 +2009,6 @@ public class QueryJChain
 
             //chain.add(new FunctionsBundle());
 
-            //chain.add(new ProcedureRepositoryTemplateHandlerBundle());
-
             //chain.add(new KeywordRepositoryTemplateHandlerBundle());
 
             chain.add(new DAOBundle(generateMock, generateXML));

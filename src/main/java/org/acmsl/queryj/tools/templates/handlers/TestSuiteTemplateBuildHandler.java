@@ -39,9 +39,6 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
-import org.acmsl.queryj.tools.templates.TestSuiteTemplate;
-import org.acmsl.queryj.tools.templates.TestSuiteTemplateFactory;
-import org.acmsl.queryj.tools.templates.TestSuiteTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TestTemplate;
 
 /*

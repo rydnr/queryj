@@ -40,8 +40,8 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplate;
-import org.acmsl.queryj.tools.templates.AbstractTestTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -52,56 +52,28 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some StringTemplate classes.
  */
+import org.acmsl.queryj.tools.templates.TemplateContext;
+import org.acmsl.queryj.tools.templates.TestTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some JetBrains classes.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains the subtemplates for creating JUnit tests to ensure
  * generated DAOs are working fine and the resources correctly managed.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractDAOTestTemplate
-    extends  AbstractTestTemplate
+public abstract class AbstractDAOTestTemplate<C extends TemplateContext>
+    extends AbstractTemplate<C>
+    implements TestTemplate
 {
     /**
      * The table template.
      */
     private TableTemplate m__TableTemplate;
-
-    /**
-     * The database metadata manager.
-     */
-    private MetadataManager m__MetadataManager;
-
-    /**
-     * The package declaration.
-     */
-    private String m__strPackageDeclaration;
-
-    /**
-     * The package name.
-     */
-    private String m__strPackageName;
-
-    /**
-     * The engine name.
-     */
-    private String m__strEngineName;
-
-    /**
-     * The engine's version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The quote.
-     */
-    private String m__strQuote;
 
     /**
      * The DAO package name.
@@ -1491,8 +1463,8 @@ public abstract class AbstractDAOTestTemplate
      *
      * @return such instance.
      */
+    @NotNull
     @Override
-    @Nullable
     public StringTemplateGroup retrieveGroup()
     {
         return null;

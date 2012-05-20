@@ -41,7 +41,6 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some StringTemplate classes.
@@ -52,6 +51,10 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +64,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -70,58 +72,30 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class KeywordRepositoryTemplate
-    extends  BasePerRepositoryTemplate
+    extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = 543188035734451487L;
     /**
      * The keywords list.
      */
-    private List m__lKeywords;
+    private List<String> m__lKeywords;
 
     /**
      * The keyword types.
      */
-    private Map m__mKeywordTypes;
+    private Map<String,String> m__mKeywordTypes;
 
     /**
      * Builds a <code>KeywordRepositoryTemplate</code> using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the database metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param keywords the keywords.
+     * @param context the {@link BasePerRepositoryTemplateContext} instance.
      */
-    public KeywordRepositoryTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName)
+    public KeywordRepositoryTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            new ArrayList());
+        super(context);
 
-        immutableSetKeywords(new ArrayList());
-        immutableSetKeywordTypes(new HashMap());
+        immutableSetKeywords(new ArrayList<String>());
+        immutableSetKeywordTypes(new HashMap<String,String>());
     }
 
     /**
@@ -137,29 +111,21 @@ public class KeywordRepositoryTemplate
      * @param tables the tables.
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition input != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition decoratorFactory != null
-     * @precondition subpackageName != null
-     * @precondition basePackageName != null
-     * @precondition tableRepositoryName != null
-     * @precondition tables != null
-     * @precondition timestamp != null
-     * @precondition stringUtils != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void fillCoreParameters(
         @NotNull final Map input,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
-        final String subpackageName,
-        final String basePackageName,
-        final String tableRepositoryName,
+        @NotNull final String subpackageName,
+        @NotNull final String basePackageName,
+        @NotNull final String tableRepositoryName,
         @NotNull final String engineName,
-        @NotNull final Collection tables,
-        final String timestamp,
-        final StringUtils stringUtils)
+        @NotNull final List<String> tables,
+        @NotNull final String timestamp,
+        @NotNull final StringUtils stringUtils)
     {
         super.fillCoreParameters(
             input,
@@ -183,7 +149,7 @@ public class KeywordRepositoryTemplate
      * Specifies the keywords.
      * @param keywords the keywords.
      */
-    private void immutableSetKeywords(final List keywords)
+    protected final void immutableSetKeywords(@NotNull final List<String> keywords)
     {
         m__lKeywords = keywords;
     }
@@ -192,7 +158,8 @@ public class KeywordRepositoryTemplate
      * Specifies the keywords.
      * @param keywords the keywords.
      */
-    protected void setKeywords(final List keywords)
+    @SuppressWarnings("unused")
+    protected void setKeywords(@NotNull final List<String> keywords)
     {
         immutableSetKeywords(keywords);
     }
@@ -201,7 +168,8 @@ public class KeywordRepositoryTemplate
      * Retrieves the keywords.
      * @return such collection.
      */
-    public List getKeywords()
+    @NotNull
+    public List<String> getKeywords()
     {
         return m__lKeywords;
     }
@@ -210,25 +178,17 @@ public class KeywordRepositoryTemplate
      * Adds a new keyword types.
      * @param keyword the keyword.
      * @param fieldType the field type.
-     * @precondition keyword != null
-     * @precondition fieldType != null
      */
     public void addKeyword(
-        final String keyword, final String fieldType)
+        @NotNull final String keyword, @NotNull final String fieldType)
     {
-        List t_lKeywords = getKeywords();
+        List<String> t_lKeywords = getKeywords();
 
-        if  (t_lKeywords != null)
-        {
-            t_lKeywords.add(keyword);
-        }
+        t_lKeywords.add(keyword);
 
-        Map t_mKeywordTypes = getKeywordTypes();
+        Map<String,String> t_mKeywordTypes = getKeywordTypes();
 
-        if  (t_mKeywordTypes != null)
-        {
-            t_mKeywordTypes.put(buildKey(keyword), fieldType);
-        }
+        t_mKeywordTypes.put(buildKey(keyword), fieldType);
     }
 
     /**
@@ -237,20 +197,17 @@ public class KeywordRepositoryTemplate
      * @return the field type.
      */
     @NotNull
-    protected String getKeywordFieldType(@Nullable final String keyword)
+    protected String getKeywordFieldType(@NotNull final String keyword)
     {
-        @NotNull String result = "";
+        @Nullable String result;
 
-        if  (keyword != null)
+        Map<String,String> t_mKeywordtypes = getKeywordTypes();
+
+        result = t_mKeywordtypes.get(buildKey(keyword));
+
+        if (result == null)
         {
-            Map t_mKeywordtypes = getKeywordTypes();
-
-            if  (t_mKeywordtypes != null)
-            {
-                result =
-                      ""
-                    + t_mKeywordtypes.get(buildKey(keyword));
-            }
+            result = "";
         }
 
         return result;
@@ -260,7 +217,7 @@ public class KeywordRepositoryTemplate
      * Specifies the keyword types.
      * @param keywordTypes the keyword types.
      */
-    private void immutableSetKeywordTypes(final Map keywordTypes)
+    private void immutableSetKeywordTypes(final Map<String,String> keywordTypes)
     {
         m__mKeywordTypes = keywordTypes;
     }
@@ -269,7 +226,8 @@ public class KeywordRepositoryTemplate
      * Specifies the keyword types.
      * @param keywordTypes the keyword types.
      */
-    protected void setKeywordTypes(final Map keywordTypes)
+    @SuppressWarnings("unused")
+    protected void setKeywordTypes(final Map<String,String> keywordTypes)
     {
         immutableSetKeywordTypes(keywordTypes);
     }
@@ -278,7 +236,7 @@ public class KeywordRepositoryTemplate
      * Retrieves the keyword types.
      * @return such types.
      */
-    protected Map getKeywordTypes()
+    protected Map<String,String> getKeywordTypes()
     {
         return m__mKeywordTypes;
     }
@@ -288,15 +246,17 @@ public class KeywordRepositoryTemplate
      * @param keyword the keyword.
      * @return the associated key.
      */
-    @Nullable
-    protected Object buildKey(@Nullable final String keyword)
+    @NotNull
+    protected String buildKey(@Nullable final String keyword)
     {
-        @Nullable Object result = keyword;
+        @Nullable String result = keyword;
 
-        if  (keyword != null)
+        if  (result == null)
         {
-            result = "keyword." + keyword;
+            result = "(unknown)";
         }
+
+        result = "keyword." + result;
 
         return result;
     }
@@ -306,7 +266,7 @@ public class KeywordRepositoryTemplate
      * @return such information.
      */
     @NotNull
-    protected Collection retrieveKeywordTypes()
+    protected Collection<String> retrieveKeywordTypes()
     {
         return retrieveKeywordTypes(getKeywords());
     }
@@ -317,18 +277,13 @@ public class KeywordRepositoryTemplate
      * @return such information.
      */
     @NotNull
-    protected Collection retrieveKeywordTypes(@Nullable final Collection keywords)
+    protected Collection<String> retrieveKeywordTypes(@NotNull final Collection<String> keywords)
     {
-        @NotNull Collection result = new ArrayList();
+        @NotNull Collection<String> result = new ArrayList<String>();
 
-        @Nullable Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
-
-        if  (t_Iterator != null)
+        for (String t_strKeyword : keywords)
         {
-            while  (t_Iterator.hasNext())
-            {
-                result.add(getKeywordFieldType((String) t_Iterator.next()));
-            }
+            result.add(getKeywordFieldType(t_strKeyword));
         }
 
         return result;
@@ -350,22 +305,16 @@ public class KeywordRepositoryTemplate
      * @param keywords the keywords.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such information.
-     * @precondition decorationUtils != null
      */
     @NotNull
-    protected Collection retrieveKeywordsUncapitalized(
-        @Nullable final Collection keywords, @NotNull final DecorationUtils decorationUtils)
+    protected Collection<String> retrieveKeywordsUncapitalized(
+        @NotNull final Collection<String> keywords, @NotNull final DecorationUtils decorationUtils)
     {
-        @NotNull Collection result = new ArrayList();
+        @NotNull Collection<String> result = new ArrayList<String>();
 
-        @Nullable Iterator t_Iterator = (keywords != null) ? keywords.iterator() : null;
-
-        if  (t_Iterator != null)
+        for (String t_strKeyword: keywords)
         {
-            while  (t_Iterator.hasNext())
-            {
-                result.add(uncapitalize((String) t_Iterator.next(), decorationUtils));
-            }
+            result.add(uncapitalize(t_strKeyword, decorationUtils));
         }
 
         return result;

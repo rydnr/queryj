@@ -43,6 +43,7 @@ import org.acmsl.queryj.QueryJException;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -82,16 +83,19 @@ public class MySQL4xMetadataManager
      * occurs.
      */
     public MySQL4xMetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
+        @NotNull final String[] tableNames,
+        @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final boolean caseSensitive)
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
         throws  SQLException,
                 QueryJException
     {
@@ -105,7 +109,10 @@ public class MySQL4xMetadataManager
             metaData,
             catalog,
             schema,
-            caseSensitive);
+            caseSensitive,
+            engineName,
+            engineVersion,
+            quote);
     }
 
     /**

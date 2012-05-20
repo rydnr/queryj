@@ -35,17 +35,13 @@
 package org.acmsl.queryj.tools.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
-
-/*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,72 +59,36 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableTemplate
-    extends  BasePerTableTemplate
+    extends  BasePerTableTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = -1114015521191407454L;
     /**
      * The field list.
      */
-    private List m__lFields;
+    private List<String> m__lFields;
 
     /**
      * The field types.
      */
-    private Map m__mFieldTypes;
+    private Map<String,String> m__mFieldTypes;
 
     /**
      * Builds a <code>TableTemplate</code> using given information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
+     * @param context the {@link BasePerTableTemplateContext} instance.
      */
-    public TableTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    public TableTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces);
+        super(context);
 
-        immutableSetFields(new ArrayList());
-        immutableSetFieldTypes(new HashMap());
+        immutableSetFields(new ArrayList<String>());
+        immutableSetFieldTypes(new HashMap<String,String>());
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -139,7 +99,7 @@ public class TableTemplate
      * Specifies the fields.
      * @param fields the fields.
      */
-    private void immutableSetFields(final List fields)
+    protected final void immutableSetFields(@NotNull final List<String> fields)
     {
         m__lFields = fields;
     }
@@ -148,7 +108,8 @@ public class TableTemplate
      * Specifies the fields.
      * @param fields the fields.
      */
-    protected void setFields(final List fields)
+    @SuppressWarnings("unused")
+    protected void setFields(@NotNull final List<String> fields)
     {
         immutableSetFields(fields);
     }
@@ -157,7 +118,8 @@ public class TableTemplate
      * Retrieves the fields.
      * @return such collection.
      */
-    public List getFields()
+    @NotNull
+    public List<String> getFields()
     {
         return m__lFields;
     }
@@ -166,21 +128,18 @@ public class TableTemplate
      * Adds a new field.
      * @param field the new field.
      */
-    public void addField(final String field)
+    public void addField(@NotNull final String field)
     {
-        List t_lFields = getFields();
+        @NotNull final List<String> t_lFields = getFields();
 
-        if  (t_lFields != null) 
-        {
-            t_lFields.add(field);
-        }
+        t_lFields.add(field);
     }
 
     /**
      * Specifies the field types.
      * @param fieldTypes the field type.
      */
-    private void immutableSetFieldTypes(final Map fieldTypes)
+    protected final void immutableSetFieldTypes(@NotNull final Map<String,String> fieldTypes)
     {
         m__mFieldTypes = fieldTypes;
     }
@@ -189,7 +148,8 @@ public class TableTemplate
      * Specifies the field types.
      * @param fieldTypes the field type.
      */
-    protected void setFieldTypes(final Map fieldTypes)
+    @SuppressWarnings("unused")
+    protected void setFieldTypes(final Map<String,String> fieldTypes)
     {
         immutableSetFieldTypes(fieldTypes);
     }
@@ -198,7 +158,8 @@ public class TableTemplate
      * Retrieves the field types.
      * @return such collection.
      */
-    public Map getFieldTypes()
+    @NotNull
+    public Map<String,String> getFieldTypes()
     {
         return m__mFieldTypes;
     }
@@ -208,14 +169,11 @@ public class TableTemplate
      * @param field the field.
      * @param type the field type.
      */
-    public void addFieldType(final String field, String type)
+    public void addFieldType(@NotNull final String field, @NotNull final String type)
     {
-        Map t_mFieldTypes = getFieldTypes();
+        @NotNull Map<String,String> t_mFieldTypes = getFieldTypes();
 
-        if  (t_mFieldTypes != null) 
-        {
-            t_mFieldTypes.put(field, type);
-        }
+        t_mFieldTypes.put(field, type);
     }
 
     /**
@@ -226,13 +184,15 @@ public class TableTemplate
     @NotNull
     public String getFieldType(final String field)
     {
-        @NotNull String result = "Field";
+        @Nullable String result;
 
-        Map t_mFieldTypes = getFieldTypes();
+        @NotNull Map<String,String> t_mFieldTypes = getFieldTypes();
 
-        if  (t_mFieldTypes != null) 
+        result = t_mFieldTypes.get(field);
+
+        if (result == null)
         {
-            result = (String) t_mFieldTypes.get(field);
+            result = "Field";
         }
 
         return result;

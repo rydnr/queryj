@@ -66,8 +66,8 @@ import java.nio.charset.Charset;
  * Common logic for template generators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractTemplateGenerator<N extends Template>
-    implements TemplateGenerator<N>
+public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends TemplateContext>
+    implements TemplateGenerator<N, C>
 {
     /**
      * Whether to enable template caching.
@@ -133,7 +133,7 @@ public abstract class AbstractTemplateGenerator<N extends Template>
     {
         write(
             template,
-            retrieveTemplateFileName(template),
+            retrieveTemplateFileName(template.getTemplateContext()),
             outputDir,
             charset,
             FileUtils.getInstance());

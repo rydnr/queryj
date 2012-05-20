@@ -23,14 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: AbstractTemplateGenerator.java
+ * Filename: CopyrightYearsHandler.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Marker for template generators.
+ * Description: Resolves the copyright years placeholder.
+ *
+ * Date: 5/19/12
+ * Time: 6:24 PM
  *
  */
-package org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
  * Importing some JetBrains annotations.
@@ -40,36 +43,45 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.io.IOException;
-import java.io.File;
-import java.nio.charset.Charset;
+import java.util.Calendar;
 
 /**
- * Marker for template generators.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Resolves the copyright years placeholder.
+ * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @since 2012/05/19
  */
-public interface TemplateGenerator<T extends Template<C>, C extends TemplateContext>
+@SuppressWarnings("unused")
+public class CopyrightYearsHandler
+    extends AbstractFillHandler<Integer[]>
 {
     /**
-     * Retrieves given template's file name.
-     * @param context the template context.
-     * @return such name.
+     * The starting year.
      */
-    @NotNull
-    String retrieveTemplateFileName(@NotNull final C context);
+    public static final int STARTING_YEAR = 2002;
 
     /**
-     * Writes a table template to disk.
-     * @param template the table template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
+     * {@inheritDoc}
      */
-    void write(
-        @NotNull final T template,
-        @NotNull final File outputDir,
-        @NotNull final Charset charset)
-        throws  IOException;
+    @NotNull
+    @Override
+    public String getPlaceHolder()
+    {
+        return "copyright_years";
+    }
+
+    /**
+     * Retrieves the copyright years.
+     * @return the dynamic values.
+     */
+    @NotNull
+    @Override
+    public Integer[] getValue()
+    {
+        return
+            new Integer[]
+            {
+                STARTING_YEAR,
+                Calendar.getInstance().get(Calendar.YEAR)
+        };
+    }
 }

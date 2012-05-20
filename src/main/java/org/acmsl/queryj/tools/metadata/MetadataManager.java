@@ -146,6 +146,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return the column names.
      */
+    @SuppressWarnings("unused")
     public String[] getAllColumnNames(final String tableName);
 
     /**
@@ -287,6 +288,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @return such tables.
      */
+    @SuppressWarnings("unused")
     public String[] getReferingTables(final String tableName);
     
     /**
@@ -358,6 +360,7 @@ public interface MetadataManager
      * @param tableName the table name.
      * @param columnName the column name.
      */
+    @SuppressWarnings("unused")
     public void addExternallyManagedField(
         final String tableName, final String columnName);
 
@@ -548,4 +551,25 @@ public interface MetadataManager
      * @return <code>true</code> in such case.
      */
     boolean isGenerationAllowedForTable(@NotNull final String tableName);
+
+    /**
+     * Retrieves the engine name.
+     * @return such information.
+     */
+    @NotNull
+    String getEngineName();
+
+    /**
+     * Retrieves the engine version.
+     * @return such information.
+     */
+    @NotNull
+    String getEngineVersion();
+
+    /**
+     * Retrieves the identifier quote string.
+     * @return such information.
+     */
+    @NotNull
+    String getQuote();
 }

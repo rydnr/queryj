@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,20 +23,40 @@
 
  ******************************************************************************
  *
- * Filename: TemplateBuildHandler.java
+ * Filename: TemplateFillHandler.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Marks all template build handlers.
+ * Description: 
+ *
+ * Date: 5/19/12
+ * Time: 6:45 PM
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
+
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.templates.Template;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Marks all template build handlers.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Placeholder processors that require access to the {@link Template} instance.
+ * @param <T> the template
+ * @author <a href="mailto:chous@acm-sl.org">chous</a>
  */
-public interface TemplateBuildHandler
-    extends TemplateHandler
+public interface TemplateFillHandler<T extends Template, P>
+    extends FillHandler<P>
 {
+    /**
+     * Retrieves the associated template.
+     * @return such template.
+     */
+    @NotNull
+    T getTemplate();
 }

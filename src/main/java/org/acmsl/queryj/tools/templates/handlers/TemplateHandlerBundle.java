@@ -92,17 +92,16 @@ public class TemplateHandlerBundle
      */
     public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
     {
-        final int t_iLength = (bundles != null) ? bundles.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        if (bundles != null)
         {
-            @Nullable TemplateHandlerBundle t_Bundle = bundles[t_iIndex];
-
-            if  (t_Bundle != null)
+            for (TemplateHandlerBundle t_Bundle : bundles)
             {
-                if (isTemplateHandlingEnabled(retrieveTemplateName(t_Bundle.getClass().getName())))
+                if  (t_Bundle != null)
                 {
-                    immutableAddHandler(t_Bundle);
+                    if (isTemplateHandlingEnabled(retrieveTemplateName(t_Bundle.getClass().getName())))
+                    {
+                        immutableAddHandler(t_Bundle);
+                    }
                 }
             }
         }
@@ -184,7 +183,7 @@ public class TemplateHandlerBundle
 
         boolean t_bExplicitlyEnabled = false;
 
-        String[] t_astrEnabled = null;
+        String[] t_astrEnabled;
 
         if (templatesEnabled != null)
         {
@@ -215,11 +214,11 @@ public class TemplateHandlerBundle
             }
         }
 
-        if (result)
-        {
+//        if (result)
+//        {
             // for debugging purposes
-            int a = -5;
-        }
+//            int a = -5;
+//        }
 
         return result;
     }

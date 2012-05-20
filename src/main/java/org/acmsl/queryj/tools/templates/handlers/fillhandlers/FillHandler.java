@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,20 +23,53 @@
 
  ******************************************************************************
  *
- * Filename: TemplateBuildHandler.java
+ * Filename: TemplateFillHandler.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Marks all template build handlers.
+ * Description: 
+ *
+ * Date: 5/13/12
+ * Time: 6:01 AM
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
+
+/*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.templates.Template;
+import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.Map;
 
 /**
- * Marks all template build handlers.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Used to fill the template's dynamic parameters based on a chain-of-responsibility pattern,
+ * for clarity sake.
+ * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/05/13
  */
-public interface TemplateBuildHandler
+public interface FillHandler<P>
     extends TemplateHandler
 {
+    /**
+     * Retrieves the placeholder.
+     * @return such placeholder.
+     */
+    @NotNull
+    String getPlaceHolder();
+
+    /**
+     * Retrieves the template value for that placeholder.
+     * @return the dynamic value.
+     */
+    @NotNull P getValue();
 }

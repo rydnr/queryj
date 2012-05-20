@@ -32,17 +32,30 @@
  */
 package org.acmsl.queryj.tools.templates;
 
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents any kind of templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface Template
+public interface Template<T extends TemplateContext>
 {
+    /**
+     * Retrieves the template context.
+     * @return such {@link TemplateContext} instance.
+     */
+    @NotNull
+    T getTemplateContext();
+
     /**
      * Generates the output source code.
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
-    public String generate()
+    @NotNull
+    String generate()
       throws  InvalidTemplateException;
 }

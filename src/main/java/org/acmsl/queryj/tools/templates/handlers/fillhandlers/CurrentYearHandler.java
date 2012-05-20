@@ -23,14 +23,17 @@
 
  ******************************************************************************
  *
- * Filename: AbstractTemplateGenerator.java
+ * Filename: CurrentYearHandler.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Marker for template generators.
+ * Description: Used to fill the 'current_year' placeholder in templates.
+ *
+ * Date: 5/13/12
+ * Time: 6:08 AM
  *
  */
-package org.acmsl.queryj.tools.templates;
+package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
  * Importing some JetBrains annotations.
@@ -40,36 +43,37 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.io.IOException;
-import java.io.File;
-import java.nio.charset.Charset;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
- * Marker for template generators.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Used to fill the 'current_year' placeholder in templates.
+ * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/05/13
  */
-public interface TemplateGenerator<T extends Template<C>, C extends TemplateContext>
+@SuppressWarnings("unused")
+public class CurrentYearHandler
+    extends AbstractFillHandler<String>
 {
     /**
-     * Retrieves given template's file name.
-     * @param context the template context.
-     * @return such name.
+     * Returns "current_year".
+     * @return such placeholder.
      */
     @NotNull
-    String retrieveTemplateFileName(@NotNull final C context);
+    @Override
+    public String getPlaceHolder()
+    {
+        return "current_year";
+    }
 
     /**
-     * Writes a table template to disk.
-     * @param template the table template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
+     * Retrieves the template value for that placeholder.
+     * @return the dynamic value.
      */
-    void write(
-        @NotNull final T template,
-        @NotNull final File outputDir,
-        @NotNull final Charset charset)
-        throws  IOException;
+    @NotNull
+    @Override
+    public String getValue()
+    {
+        return new SimpleDateFormat("yyyy").format(new Date());
+    }
 }

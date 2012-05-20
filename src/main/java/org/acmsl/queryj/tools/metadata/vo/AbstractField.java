@@ -37,8 +37,9 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing some JDK classes.
  */
 import org.acmsl.queryj.tools.ant.AntFieldFkElement;
+
 import org.jetbrains.annotations.NotNull;
-import org.sonatype.inject.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -141,6 +142,7 @@ public abstract class AbstractField
      * @param keyword the keyword.
      * @param retrievalQuery the query to retrieval field's values.
      */
+    @SuppressWarnings("unused")
     public AbstractField(
         @NotNull final String name,
         final int typeId,

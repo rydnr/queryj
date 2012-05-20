@@ -42,6 +42,11 @@ import org.acmsl.queryj.tools.logging.QueryJLog;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Command;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -60,7 +65,7 @@ public class QueryJCommand
     /**
      * The attribute collection.
      */
-    private Map m__mAttributes;
+    private Map<String,?> m__mAttributes;
 
     /**
      * The reference to the log instance.
@@ -70,6 +75,7 @@ public class QueryJCommand
     /**
      * Constructs an empty map command.
      */
+    @SuppressWarnings("unchecked")
     public QueryJCommand()
     {
         immutableSetAttributeMap(new HashMap());
@@ -89,7 +95,7 @@ public class QueryJCommand
      * Specifies the attribute map.
      * @param map such map.
      */
-    protected final void immutableSetAttributeMap(final Map map)
+    protected final void immutableSetAttributeMap(final Map<String,?> map)
     {
         m__mAttributes = map;
     }
@@ -98,7 +104,8 @@ public class QueryJCommand
      * Specifies the attribute map.
      * @param map such map.
      */
-    public void setAttributeMap(final Map map)
+    @SuppressWarnings("unused")
+    public void setAttributeMap(final Map<String,?> map)
     {
         immutableSetAttributeMap(map);
     }
@@ -107,7 +114,7 @@ public class QueryJCommand
      * Retrieves the attribute map.
      * @return the map.
      */
-    public Map getAttributeMap()
+    public Map<String,?> getAttributeMap()
     {
         return m__mAttributes;
     }
@@ -116,10 +123,8 @@ public class QueryJCommand
      * Adds a new attribute.
      * @param name the attribute name.
      * @param value the attribute value.
-     * @precondition name != null
-     * @precondition value != null
      */
-    public void setAttribute(final String name, final Object value)
+    public void setAttribute(@NotNull final String name, @NotNull final Object value)
     {
         setAttribute(name, value, getAttributeMap());
     }
@@ -129,11 +134,10 @@ public class QueryJCommand
      * @param name the attribute name.
      * @param value the attribute value.
      * @param map the actual attribute map.
-     * @precondition name != null
-     * @precondition value != null
      */
+    @SuppressWarnings("unchecked")
     protected void setAttribute(
-        final String name, final Object value, @Nullable final Map map)
+        @NotNull final String name, @NotNull final Object value, @Nullable final Map map)
     {
         if  (map != null) 
         {
@@ -145,10 +149,9 @@ public class QueryJCommand
      * Retrieves the attribute value.
      * @param name the attribute name.
      * @return the value or <code>null</code> if it wasn't found.
-     * @precondition name != null
      */
     @Nullable
-    public Object getAttribute(final String name)
+    public Object getAttribute(@NotNull final String name)
     {
         return getAttribute(name, getAttributeMap());
     }
@@ -158,10 +161,9 @@ public class QueryJCommand
      * @param name the attribute name.
      * @param map the attribute map.
      * @return the value or <code>null</code> if it wasn't found.
-     * @precondition name != null
      */
     @Nullable
-    protected Object getAttribute(final String name, @Nullable final Map map)
+    protected Object getAttribute(final String name, @Nullable final Map<String,?> map)
     {
         @Nullable Object result = null;
 
@@ -179,7 +181,7 @@ public class QueryJCommand
      * @return <code>true</code> if the attribute is already defined.
      * @precondition name != null
      */
-    public boolean contains(final String name)
+    public boolean contains(@NotNull final String name)
     {
         return contains(name, getAttributeMap());
     }
@@ -189,9 +191,8 @@ public class QueryJCommand
      * @param name the attribute name.
      * @param map the attribute map.
      * @return <code>true</code> if the attribute is already defined.
-     * @precondition name != null
      */
-    protected boolean contains(final String name, @Nullable final Map map)
+    protected boolean contains(@NotNull final String name, @Nullable final Map<String,?> map)
     {
         boolean result = false;
 
@@ -207,7 +208,7 @@ public class QueryJCommand
      * Specifies the log instance.
      * @param log the log instance.
      */
-    protected final void immutableSetLog(final QueryJLog log)
+    protected final void immutableSetLog(@NotNull final QueryJLog log)
     {
         m__Log = log;
     }
@@ -216,7 +217,8 @@ public class QueryJCommand
      * Specifies the log instance.
      * @param log the log instance.
      */
-    protected void setLog(final QueryJLog log)
+    @SuppressWarnings("unused")
+    protected void setLog(@NotNull final QueryJLog log)
     {
         immutableSetLog(log);
     }
@@ -225,9 +227,9 @@ public class QueryJCommand
      * Retrieves the log instance.
      * @return such instance.
      */
+    @NotNull
     public QueryJLog getLog()
     {
         return m__Log;
     }
-
 }

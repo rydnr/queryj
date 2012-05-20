@@ -36,7 +36,6 @@ package org.acmsl.queryj.tools.templates;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -48,6 +47,11 @@ import org.acmsl.commons.utils.ClassLoaderUtils;
  * Importing Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing ANTLR classes.
+ */
+import org.antlr.grammar.v3.ANTLRParser;
 
 /*
  * Importing StringTemplate classes.
@@ -77,8 +81,8 @@ import java.util.Map;
  * Represents generic templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractTemplate
-    implements  STTemplate,
+public abstract class AbstractTemplate<C extends TemplateContext>
+    implements  STTemplate<C>,
                 DefaultThemeConstants,
                 Serializable
 {
@@ -87,7 +91,7 @@ public abstract class AbstractTemplate
     /**
      * The default StringTemplate error listener.
      */
-    @Nullable
+    @NotNull
     protected static final StringTemplateErrorListener
         DEFAULT_ST_ERROR_LISTENER =
             new StringTemplateErrorListener()
@@ -125,25 +129,20 @@ public abstract class AbstractTemplate
             };
 
     /**
+     * The template context.
+     */
+    private C m__TemplateContext;
+
+    /**
      * Caches the StringTemplateGroup for each template class.
      */
     private static Map m__mSTCache;
-
-    /**
-     * The optional header.
-     */
-    private String m__strHeader;
 
     /**
      * The cached processed header.
      */
     private String m__strCachedProcessedHeader;
     
-    /**
-     * The decorator factory.
-     */
-    private DecoratorFactory m__DecoratorFactory;
-
     /**
      * A singleton container to avoid the double-checking lock idiom.
      */
@@ -167,46 +166,44 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Builds a {@link AbstractTemplate} with given
-     * decorator factory.
-     * @param header the optional header.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @precondition decoratorFactory != null
+     * Builds a {@link AbstractTemplate} with given context.
+     * @param context the context.
      */
-    protected AbstractTemplate(
-        final String header,
-        final DecoratorFactory decoratorFactory)
+    protected AbstractTemplate(@NotNull final C context)
     {
-        immutableSetHeader(header);
-        immutableSetDecoratorFactory(decoratorFactory);
-        immutableSetSTCache(new HashMap());
+        immutableSetTemplateContext(context);
+        setSTCache(new HashMap());
     }
 
     /**
-     * Specifies the header.
-     * @param header the header.
+     * Specifies the {@link TemplateContext}.
+     * @param context the context.
      */
-    protected final void immutableSetHeader(final String header)
+    private void immutableSetTemplateContext(
+        final C context)
     {
-        m__strHeader = header;
+        m__TemplateContext = context;
     }
-    
+
     /**
-     * Specifies the header.
-     * @param header the header.
+     * Specifies the {@link TemplateContext}.
+     * @param context the context.
      */
-    protected void setHeader(final String header)
+    @SuppressWarnings("unused")
+    protected void setTemplateContext(
+        @NotNull final C context)
     {
-        immutableSetHeader(header);
+        immutableSetTemplateContext(context);
     }
-    
+
     /**
-     * Retrieves the header.
-     * @return the header.
+     * Retrieves the {@link TemplateContext context}.
+     * @return such context.
      */
-    protected String getHeader()
+    @NotNull
+    public C getTemplateContext()
     {
-        return m__strHeader;
+        return m__TemplateContext;
     }
 
     /**
@@ -229,27 +226,37 @@ public abstract class AbstractTemplate
     
     /**
      * Retrieves the cached processed header.
-     * @returnsuch value.
+     * @return such value.
      */
+    @Nullable
     protected String getCachedProcessedHeader()
     {
         return m__strCachedProcessedHeader;
     }
 
     /**
+     * Retrieves the header.
+     * @param context the template context.
+     * @return such information.
+     */
+    protected String getHeader(@NotNull final TemplateContext context)
+    {
+        return context.getHeader();
+    }
+
+    /**
      * Retrieves the processed header.
      * @param input the input.
      * @return such information.
-     * @precondition input != null
      */
     @Nullable
-    public String getProcessedHeader(final Map input)
+    public String getProcessedHeader(@NotNull final Map input)
     {
         @Nullable String result = getCachedProcessedHeader();
         
         if  (result == null)
         {
-            result = processHeader(input, getHeader());
+            result = processHeader(input, getHeader(getTemplateContext()));
         }
         
         return result;
@@ -259,7 +266,6 @@ public abstract class AbstractTemplate
      * Retrieves the processed header.
      * @param input the input.
      * @return such information.
-     * @precondition input != null
      */
     @Nullable
     public String processHeader(final Map input, final String header)
@@ -272,39 +278,10 @@ public abstract class AbstractTemplate
     }
 
     /**
-     * Specifies the decorator factory.
-     * @param factory the {@link DecoratorFactory} instance.
-     */
-    protected final void immutableSetDecoratorFactory(
-        final DecoratorFactory factory)
-    {
-        m__DecoratorFactory = factory;
-    }
-
-    /**
-     * Specifies the decorator factory.
-     * @param factory the {@link DecoratorFactory} instance.
-     */
-    protected void setDecoratorFactory(
-        final DecoratorFactory factory)
-    {
-        immutableSetDecoratorFactory(factory);
-    }
-
-    /**
-     * Retrieves the {@link DecoratorFactory} instance.
-     * @return such instance.
-     */
-    public DecoratorFactory getDecoratorFactory()
-    {
-        return m__DecoratorFactory;
-    }
-
-    /**
      * Specifies the ST cache.
      * @param map the map to use as cache.
      */
-    protected static final void immutableSetSTCache(final Map map)
+    protected static void setSTCache(@NotNull final Map map)
     {
         m__mSTCache = map;
     }
@@ -313,7 +290,8 @@ public abstract class AbstractTemplate
      * Retrieves the ST cache.
      * @return the map being used as cache.
      */
-    protected static final Map immutableGetSTCache()
+    @NotNull
+    protected static Map getSTCache()
     {
         return m__mSTCache;
     }
@@ -329,7 +307,6 @@ public abstract class AbstractTemplate
      * Retrieves the string template group.
      * @param path the path.
      * @return such instance.
-     * @precondition path != null
      */
     @Nullable
     protected StringTemplateGroup retrieveGroup(final String path)
@@ -338,7 +315,7 @@ public abstract class AbstractTemplate
             retrieveGroup(
                 path,
                 "/org/acmsl/queryj/queryj.stg",
-                immutableGetSTCache());
+                getSTCache());
     }
     
     /**
@@ -347,15 +324,13 @@ public abstract class AbstractTemplate
      * @param theme the theme.
      * @param cache the ST cache.
      * @return such instance.
-     * @precondition path != null
-     * @precondition theme != null
-     * @precondition cache != null
      */
+    @SuppressWarnings("unchecked")
     @Nullable
     protected StringTemplateGroup retrieveGroup(
         final String path, final String theme, @NotNull final Map cache)
     {
-        @Nullable StringTemplateGroup result = null;
+        @Nullable StringTemplateGroup result;
         
         @NotNull Object t_Key = buildSTGroupKey(path, theme);
 
@@ -383,7 +358,7 @@ public abstract class AbstractTemplate
      * Retrieves the StringTemplate error listener.
      * @return such instance.
      */
-    @Nullable
+    @NotNull
     protected StringTemplateErrorListener retrieveStErrorListener()
     {
         return DEFAULT_ST_ERROR_LISTENER;
@@ -419,9 +394,9 @@ public abstract class AbstractTemplate
      */
     @Nullable
     protected StringTemplateGroup retrieveGroup(
-        final String path,
-        final String theme,
-        final StringTemplateErrorListener errorListener,
+        @NotNull final String path,
+        @NotNull final String theme,
+        @NotNull final StringTemplateErrorListener errorListener,
         @NotNull final STUtils stUtils)
     {
         return stUtils.retrieveGroup(path, theme, errorListener);
@@ -432,10 +407,11 @@ public abstract class AbstractTemplate
      * @param stringTemplate such template.
      * @precondition stringTemplate != null
      */
+    @SuppressWarnings("unused")
     protected void configure(@NotNull final StringTemplate stringTemplate)
     {
         stringTemplate.setPassThroughAttributes(true);
-        stringTemplate.setLintMode(true);
+        StringTemplate.setLintMode(true);
         stringTemplate.setErrorListener(retrieveStErrorListener());
     }
 
@@ -504,8 +480,22 @@ public abstract class AbstractTemplate
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
+    @NotNull
     public String generate()
       throws  InvalidTemplateException
+    {
+        return generate(getTemplateContext());
+    }
+
+    /**
+     * Generates the source code.
+     * @param context the {@link TemplateContext} instance.
+     * @return such output.
+     * @throws InvalidTemplateException if the template cannot be generated.
+     */
+    @NotNull
+    protected String generate(@NotNull final C context)
+        throws  InvalidTemplateException
     {
         String result;
 
@@ -513,7 +503,7 @@ public abstract class AbstractTemplate
 
         traceClassLoaders();
 
-        result = generateOutput(getHeader());
+        result = generateOutput(getHeader(context), context);
 
         cleanUpClassLoaderTracing();
 
@@ -580,14 +570,11 @@ public abstract class AbstractTemplate
         @NotNull FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
-        synchronized (t_FinalizingThread)
-        {
-            Runtime t_Runtime = Runtime.getRuntime();
+        Runtime t_Runtime = Runtime.getRuntime();
 
-            if  (t_Runtime != null)
-            {
-                t_Runtime.addShutdownHook(t_FinalizingThread);
-            }
+        if  (t_Runtime != null)
+        {
+            t_Runtime.addShutdownHook(t_FinalizingThread);
         }
     }
 
@@ -599,14 +586,11 @@ public abstract class AbstractTemplate
         @NotNull FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
-        synchronized (t_FinalizingThread)
-        {
-            Runtime t_Runtime = Runtime.getRuntime();
+        Runtime t_Runtime = Runtime.getRuntime();
 
-            if  (t_Runtime != null)
-            {
-                t_Runtime.removeShutdownHook(t_FinalizingThread);
-            }
+        if  (t_Runtime != null)
+        {
+            t_Runtime.removeShutdownHook(t_FinalizingThread);
         }
     }
 
@@ -629,6 +613,7 @@ public abstract class AbstractTemplate
          * Retrieves whether this thread has just been created or not.
          * @return such information.
          */
+        @SuppressWarnings("unused")
         public boolean isNew()
         {
             boolean result = m__bNew;
@@ -670,7 +655,7 @@ public abstract class AbstractTemplate
 
             String t_strAntlrLocation =
                 t_ClassLoaderUtils.findLocation(
-                    antlr.ANTLRParser.class);
+                    ANTLRParser.class);
 
             String t_strStringTemplateLocation =
                 t_ClassLoaderUtils.findLocation(
@@ -730,10 +715,12 @@ public abstract class AbstractTemplate
     /**
      * Generates the actual source code.
      * @param header the header.
+     * @param context the {@link TemplateContext} instance.
      * @return such output. 
      * @throws InvalidTemplateException if the template cannot be generated.
      */
-    protected abstract String generateOutput(final String header)
+    @NotNull
+    protected abstract String generateOutput(@NotNull final String header, @NotNull final C context)
       throws  InvalidTemplateException;
 
     /**

@@ -45,15 +45,12 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 /*
  * Importing StringTemplate classes.
  */
-import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -198,12 +195,12 @@ public class DAOTemplate
 
     /**
      * Fills the parameters required by <code>class</code> rule.
+     *
      * @param input the input.
      * @param voName the name of the value object.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      * @param timestamp the timestamp.
-     * @param customResults the custom results.
      * @param staticTable whether the table is static or not.
      * @param tableRepositoryName the table repository name.
      * @param tableName the table name.
@@ -266,7 +263,7 @@ public class DAOTemplate
         @NotNull final String tableName,
         final Collection pkAttributes,
         final Collection nonPkAttributes,
-        final Collection fkAttributes,
+        final Collection<ForeignKey> fkAttributes,
         @NotNull final Map referingKeys,
         final Collection attributes,
         final Collection externallyManagedAttributes,

@@ -220,8 +220,8 @@ public class JdbcDAOTemplate
      *
      * @return such instance.
      */
+    @NotNull
     @Override
-    @Nullable
     public StringTemplateGroup retrieveGroup()
     {
         return null;

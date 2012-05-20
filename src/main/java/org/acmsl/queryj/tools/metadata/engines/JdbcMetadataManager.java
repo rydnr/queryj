@@ -40,6 +40,8 @@ package org.acmsl.queryj.tools.metadata.engines;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -75,6 +77,9 @@ public class JdbcMetadataManager
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param caseSensitive whether the engine is case sensitive.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
@@ -83,16 +88,19 @@ public class JdbcMetadataManager
      * @precondition metaData != null
      */
     public JdbcMetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
+        @NotNull final String[] tableNames,
+        @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final boolean caseSensitive)
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
       throws  SQLException,
               QueryJException
     {
@@ -107,7 +115,10 @@ public class JdbcMetadataManager
             metaData,
             catalog,
             schema,
-            caseSensitive);
+            caseSensitive,
+            engineName,
+            engineVersion,
+            quote);
     }
 
     /**
@@ -121,18 +132,18 @@ public class JdbcMetadataManager
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
-     * @precondition tableNames != null
-     * @precondition procedureNames != null
-     * @precondition metaData != null
      */
     protected JdbcMetadataManager(
-        final String[] tableNames,
-        final String[] procedureNames,
-        final DatabaseMetaData metaData,
-        final String catalog,
-        final String schema,
-        final boolean caseSensitive)
-      throws  SQLException,
+        @NotNull final String[] tableNames,
+        @NotNull final String[] procedureNames,
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
+    throws  SQLException,
               QueryJException
     {
         this(
@@ -145,7 +156,10 @@ public class JdbcMetadataManager
             metaData,
             catalog,
             schema,
-            caseSensitive);
+            caseSensitive,
+            engineName,
+            engineVersion,
+            quote);
     }
 
     /**

@@ -67,8 +67,8 @@ public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTem
      * @param projectPackage the project's base package.
      * @param packageName the package name.
      * @param repository the repository name.
-     * @param engineName the database engine name.
      * @param header the file header.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to enable JMX.
      * @param tableNames the list of table names.
      * @param jndiLocation the JNDI location of the data source.
@@ -82,8 +82,8 @@ public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTem
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation);

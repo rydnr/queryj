@@ -106,7 +106,7 @@ public class BaseRepositoryDAOTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @Nullable
+    @NotNull
     @Override
     public StringTemplateGroup retrieveGroup()
     {

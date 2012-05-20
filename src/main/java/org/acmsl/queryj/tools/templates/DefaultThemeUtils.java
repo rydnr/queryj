@@ -64,7 +64,7 @@ public class DefaultThemeUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DefaultThemeUtils() {};
+    protected DefaultThemeUtils() {}
 
     /**
      * Retrieves a <code>DefaultThemeUtils</code> instance.
