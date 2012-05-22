@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -61,9 +60,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplateGenerator
-    extends  AbstractTemplateGenerator<RepositoryDAOFactoryTemplate>
+    extends  AbstractTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateFactory<RepositoryDAOFactoryTemplate>,
-                BasePerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate>,
+                BasePerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>,
                 Singleton
 {
     /**
@@ -99,54 +98,57 @@ public class RepositoryDAOFactoryTemplateGenerator
     @Nullable
     public RepositoryDAOFactoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new RepositoryDAOFactoryTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                packageName,
-                repository,
-                engineName,
-                jndiLocation,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final RepositoryDAOFactoryTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return retrieveTemplateFileName(template, DecorationUtils.getInstance());
+        return retrieveTemplateFileName(context, context.getMetadataManager(), DecorationUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final RepositoryDAOFactoryTemplate template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final BasePerRepositoryTemplateContext context,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecorationUtils decorationUtils)
     {
         return
-              template.getEngineName()
-            + decorationUtils.capitalize(template.getRepositoryName())
+              metadataManager.getEngineName()
+            + decorationUtils.capitalize(context.getRepositoryName())
             + "DAOFactory.java";
     }
 }

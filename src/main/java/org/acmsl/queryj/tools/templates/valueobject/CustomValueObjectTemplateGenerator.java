@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 
 /*
@@ -58,7 +59,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectTemplate>
+    extends AbstractTemplateGenerator<CustomValueObjectTemplate, BasePerCustomResultTemplateContext>
     implements  BasePerCustomResultTemplateFactory<CustomValueObjectTemplate>,
                 Singleton
 {
@@ -78,35 +79,19 @@ public class CustomValueObjectTemplateGenerator
     }
 
     /**
-     * Generates a CustomValueObject template.
-     * @param customResult the custom result.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @return the new template.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * {@inheritDoc}
      */
     @Nullable
     public CustomValueObjectTemplate createTemplate(
-        @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header)
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectTemplate result = null;
 
@@ -116,16 +101,17 @@ public class CustomValueObjectTemplateGenerator
         {
             result =
                 new CustomValueObjectTemplate(
-                    customResult,
-                    customSqlProvider,
-                    metadataManager,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    basePackageName,
-                    repositoryName);
+                    new BasePerCustomResultTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        getDecoratorFactory(),
+                        packageName,
+                        basePackageName,
+                        repositoryName,
+                        implementMarkerInterfaces,
+                        jmx,
+                        customResult));
         }
 
         return result;
@@ -194,10 +180,11 @@ public class CustomValueObjectTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final  CustomValueObjectTemplate template)
+    @Override
+    public String retrieveTemplateFileName(@NotNull final  BasePerCustomResultTemplateContext context)
     {
         return
-            extractClassName(template.getResult().getClassValue())
+            extractClassName(context.getResult().getClassValue())
             + ".java";
     }
 }

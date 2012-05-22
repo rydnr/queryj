@@ -41,6 +41,7 @@ import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
 import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TableTemplate;
@@ -65,7 +66,9 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<RepositoryDAOTemplate, RepositoryDAOTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,
+                     RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.
@@ -101,7 +104,6 @@ public class RepositoryDAOTemplateBuildHandler
         {
             super.buildTemplate(
                 parameters,
-                engineName,
                 metadataManager,
                 customSqlProvider,
                 templateFactory,

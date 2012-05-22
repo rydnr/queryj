@@ -55,7 +55,7 @@ import java.util.List;
  * Represents entities able to create per-repository templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTemplate<C>, C extends BasePerRepositoryTemplateContext>
+public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTemplate>
     extends  Factory
 {
     /**
@@ -76,10 +76,10 @@ public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTem
     public T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,

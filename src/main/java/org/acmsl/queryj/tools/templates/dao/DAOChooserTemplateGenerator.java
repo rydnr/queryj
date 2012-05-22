@@ -67,7 +67,7 @@ import java.util.List;
 public class DAOChooserTemplateGenerator
     extends AbstractTemplateGenerator<DAOChooserTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<DAOChooserTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<DAOChooserTemplate, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DAOChooserTemplate>,
                 Singleton
 {
     /**

@@ -71,16 +71,16 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplate
-    extends  RepositoryDAOTemplate<RepositoryDAOFactoryTemplateContext>
+    extends  RepositoryDAOTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = -3330025097227634585L;
 
     /**
      * Builds a <code>RepositoryDAOFactoryTemplate</code> using given
      * information.
-     * @param context the {@link RepositoryDAOFactoryTemplateContext} instance.
+     * @param context the {@link BasePerRepositoryTemplateContext context}.
      */
-    public RepositoryDAOFactoryTemplate(@NotNull final RepositoryDAOFactoryTemplateContext context)
+    public RepositoryDAOFactoryTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -147,9 +147,9 @@ public class RepositoryDAOFactoryTemplate
      * @param context the context.
      */
     @NotNull
-    protected String getJNDIDataSource(@NotNull final RepositoryDAOFactoryTemplateContext context)
+    protected String getJNDIDataSource(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return context.getJndiDataSource();
+        return context.getJndiLocation();
     }
 
     /**

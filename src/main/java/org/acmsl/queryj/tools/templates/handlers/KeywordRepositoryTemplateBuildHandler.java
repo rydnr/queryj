@@ -41,8 +41,8 @@ import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -72,7 +72,8 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class KeywordRepositoryTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<KeywordRepositoryTemplate, KeywordRepositoryTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <KeywordRepositoryTemplate, KeywordRepositoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.
@@ -89,33 +90,34 @@ public class KeywordRepositoryTemplateBuildHandler
      * {@inheritDoc}
      */
     @Nullable
+    @Override
     protected KeywordRepositoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final KeywordRepositoryTemplateGenerator templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
         @NotNull final List<String> tableNames,
+        @NotNull final String jndiLocation,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         @Nullable KeywordRepositoryTemplate result =
             templateFactory.createTemplate(
                 metadataManager,
-                metadataTypeManager,
                 customSqlProvider,
                 packageName,
                 projectPackage,
                 repository,
-                engineName,
                 header,
-                retrieveJmx(parameters),
+                implementMarkerInterfaces,
+                jmx,
                 tableNames,
-                retrieveJNDILocation(parameters));
+                jndiLocation);
 
         if (result != null)
         {
@@ -150,7 +152,7 @@ public class KeywordRepositoryTemplateBuildHandler
                             {
                                 result.addKeyword(
                                     t_Field.getKeyword(),
-                                    metadataTypeManager.getQueryJFieldType(
+                                    metadataManager.getMetadataTypeManager().getQueryJFieldType(
                                         metadataManager.getColumnType(
                                             t_Field.getTableName(),
                                             t_Field.getName()),

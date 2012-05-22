@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.PkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
@@ -56,7 +57,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class PkStatementSetterTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler<PkStatementSetterTemplate, PkStatementSetterTemplateGenerator>
+    extends  BasePerTableTemplateWritingHandler
+                 <PkStatementSetterTemplate, PkStatementSetterTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a PkStatementSetterTemplateWritingHandler.
@@ -103,11 +105,6 @@ public class PkStatementSetterTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition projectFolder != null
-     * @precondition projectPackage != null
-     * @precondition tableName != null
-     * @precondition engineName != null
-     * @precondition packageUtils != null
      */
     @NotNull
     @Override

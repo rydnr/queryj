@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
@@ -62,7 +63,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomBaseValueObjectTemplateWritingHandler
-    extends BasePerCustomResultTemplateWritingHandler<CustomBaseValueObjectTemplate>
+    extends BasePerCustomResultTemplateWritingHandler
+                <CustomBaseValueObjectTemplate, BasePerCustomResultTemplateContext>
 {
     /**
      * Creates a CustomBaseValueObjectTemplateWritingHandler.

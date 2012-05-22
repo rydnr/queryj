@@ -71,7 +71,7 @@ import org.jetbrains.annotations.Nullable;
  *         >Jose San Leandro</a>
  */
 public abstract class BasePerRepositoryTemplateBuildHandler
-    <T extends BasePerRepositoryTemplate<C>, TF extends BasePerRepositoryTemplateFactory<T,C>, C extends BasePerRepositoryTemplateContext>
+    <T extends BasePerRepositoryTemplate<C>, TF extends BasePerRepositoryTemplateFactory<T>, C extends BasePerRepositoryTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
@@ -265,7 +265,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 implementMarkerInterfaces,
                 jmx,
                 t_lTableNames,
-                retrieveJNDILocation(parameters));
+                retrieveJNDILocation(parameters),
+                parameters);
 
         if (t_Template != null)
         {
@@ -289,6 +290,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @throws QueryJBuildException on invalid input.
      */
     @Nullable
+    @SuppressWarnings("unused")
     protected T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -300,7 +302,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull String jndiLocation)
+        @NotNull String jndiLocation,
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return

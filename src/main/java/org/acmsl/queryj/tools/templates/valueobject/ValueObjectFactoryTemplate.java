@@ -36,10 +36,8 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 
 /*
  * Importing StringTemplate classes.
@@ -50,67 +48,32 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate <i>ValueObject</i> factory sources.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectFactoryTemplate
-    extends  BasePerTableTemplate
+    extends  BasePerTableTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = 7516835891870197968L;
 
     /**
      * Builds a <code>ValueObjectFactoryTemplate</code> using given
      * information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
+     * @param context the {@link BasePerTableTemplateContext context}.
      */
-    public ValueObjectFactoryTemplate(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    public ValueObjectFactoryTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces);
+        super(context);
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -118,10 +81,11 @@ public class ValueObjectFactoryTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "ValueObjectFactory".
      * @return such information.
      */
     @NotNull
+    @Override
     public String getTemplateName()
     {
         return "ValueObjectFactory";

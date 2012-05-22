@@ -38,8 +38,8 @@ package org.acmsl.queryj.tools.templates.dao;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateGenerator;
 
@@ -52,6 +52,7 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -65,8 +66,8 @@ import java.util.Locale;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ConfigurationPropertiesTemplateGenerator
-    extends AbstractTemplateGenerator<ConfigurationPropertiesTemplate>
-    implements  BasePerRepositoryTemplateGenerator<ConfigurationPropertiesTemplate>,
+    extends AbstractTemplateGenerator<ConfigurationPropertiesTemplate, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<ConfigurationPropertiesTemplate, BasePerRepositoryTemplateContext>,
                 BasePerRepositoryTemplateFactory<ConfigurationPropertiesTemplate>,
                 Singleton
 {
@@ -102,55 +103,56 @@ public class ConfigurationPropertiesTemplateGenerator
      * {@inheritDoc}
      */
     @SuppressWarnings("unused")
-    @NotNull
+    @Nullable
     public ConfigurationPropertiesTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new ConfigurationPropertiesTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final ConfigurationPropertiesTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return retrieveTemplateFileName(template, DAOChooserTemplateUtils.getInstance());
+        return retrieveTemplateFileName(context, DAOChooserTemplateUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerRepositoryTemplateContext context}.
      * @param utils the {@link DAOChooserTemplateUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final ConfigurationPropertiesTemplate template, @NotNull final DAOChooserTemplateUtils utils)
+        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DAOChooserTemplateUtils utils)
     {
         return
             utils.retrievePropertiesFileName(
-                template.getRepositoryName().toLowerCase(Locale.US));
+                context.getRepositoryName().toLowerCase(Locale.US));
     }
 }

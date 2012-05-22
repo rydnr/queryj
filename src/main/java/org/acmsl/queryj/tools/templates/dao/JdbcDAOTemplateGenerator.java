@@ -45,6 +45,7 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -52,7 +53,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class JdbcDAOTemplateGenerator
-    extends AbstractTemplateGenerator<JdbcDAOTemplate>
+    extends AbstractTemplateGenerator<JdbcDAOTemplate, BasePerRepositoryTemplateContext>
     implements  JdbcDAOTemplateFactory,
                 Singleton
 {
@@ -86,6 +87,7 @@ public class JdbcDAOTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     public JdbcDAOTemplate createJdbcDAOTemplate(
         @NotNull final String packageName, @NotNull final String header)
@@ -97,7 +99,8 @@ public class JdbcDAOTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final JdbcDAOTemplate template)
+    @Override
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
         return "JdbcDAO.java";
     }

@@ -64,7 +64,7 @@ import java.util.List;
  */
 public class DataAccessContextLocalTemplateGenerator
     extends AbstractTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateFactory<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>,
+    implements BasePerRepositoryTemplateFactory<DataAccessContextLocalTemplate>,
                 BasePerRepositoryTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>,
                 Singleton
 {

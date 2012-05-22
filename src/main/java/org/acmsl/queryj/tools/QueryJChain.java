@@ -53,7 +53,6 @@ import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplat
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.handlers.TestSuiteTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectFactoryTemplateHandlerBundle;

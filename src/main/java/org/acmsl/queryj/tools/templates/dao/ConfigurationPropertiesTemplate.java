@@ -38,19 +38,11 @@ package org.acmsl.queryj.tools.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.CachingTableDecorator;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.TableDecorator;
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-
-/*
- * Importing StringTemplate classes.
- */
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -61,15 +53,17 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,47 +72,18 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ConfigurationPropertiesTemplate
-    extends  BasePerRepositoryTemplate
+    extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = -4951603298977943791L;
 
     /**
      * Builds a <code>ConfigurationPropertiesTemplate</code> using given
      * information.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param engineName the engine name.
-     * @param tables the tables.
+     * @param context the {@link BasePerRepositoryTemplateContext} instance.
      */
-    public ConfigurationPropertiesTemplate(
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String basePackageName,
-        final String repositoryName,
-        final String engineName,
-        final Collection tables)
+    public ConfigurationPropertiesTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        super(
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            basePackageName,
-            repositoryName,
-            engineName,
-            tables);
+        super(context);
     }
 
     /**
@@ -134,29 +99,21 @@ public class ConfigurationPropertiesTemplate
      * @param tables the tables.
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition input != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition decoratorFactory != null
-     * @precondition subpackageName != null
-     * @precondition basePackageName != null
-     * @precondition tableRepositoryName != null
-     * @precondition tables != null
-     * @precondition timestamp != null
-     * @precondition stringUtils != null
      */
+    @Override
+    @SuppressWarnings("unchecked")
     protected void fillCoreParameters(
         @NotNull final Map input,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
-        final String basePackageName,
-        final String subpackageName,
-        final String tableRepositoryName,
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final String tableRepositoryName,
         @NotNull final String engineName,
-        @NotNull final Collection tables,
-        final String timestamp,
-        final StringUtils stringUtils)
+        @NotNull final List<String> tables,
+        @NotNull final String timestamp,
+        @NotNull final StringUtils stringUtils)
     {
         super.fillCoreParameters(
             input,
@@ -207,7 +164,7 @@ public class ConfigurationPropertiesTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {

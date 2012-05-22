@@ -36,8 +36,9 @@ package org.acmsl.queryj.tools.templates;
  * Represents entities able to write per-fk templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerForeignKeyTemplateGenerator<N extends BasePerForeignKeyTemplate>
-    extends   TemplateGenerator<N>,
+public interface BasePerForeignKeyTemplateGenerator
+    <N extends BasePerForeignKeyTemplate<C>, C extends BasePerForeignKeyTemplateContext>
+    extends   TemplateGenerator<N, C>,
               BasePerForeignKeyTemplateFactory<N>
 {
 }

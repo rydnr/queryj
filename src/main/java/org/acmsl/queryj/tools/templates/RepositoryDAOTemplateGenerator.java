@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -100,10 +99,9 @@ public class RepositoryDAOTemplateGenerator
     @SuppressWarnings("unused")
     public RepositoryDAOTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
@@ -123,7 +121,8 @@ public class RepositoryDAOTemplateGenerator
                     repository,
                     implementMarkerInterfaces,
                     jmx,
-                    tableNames));
+                    tableNames,
+                    jndiLocation));
     }
 
     /**

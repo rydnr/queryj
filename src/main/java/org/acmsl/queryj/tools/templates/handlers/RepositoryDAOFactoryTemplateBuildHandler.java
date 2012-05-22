@@ -38,7 +38,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -61,7 +61,8 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.
@@ -80,29 +81,28 @@ public class RepositoryDAOFactoryTemplateBuildHandler
     @Override
     protected RepositoryDAOFactoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final RepositoryDAOFactoryTemplateGenerator templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull String jndiLocation)
+        @NotNull final String jndiLocation,
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
             templateFactory.createTemplate(
                 metadataManager,
-                metadataTypeManager,
                 customSqlProvider,
                 packageName,
                 projectPackage,
                 repository,
-                engineName,
                 header,
+                implementMarkerInterfaces,
                 jmx,
                 tableNames,
                 jndiLocation);

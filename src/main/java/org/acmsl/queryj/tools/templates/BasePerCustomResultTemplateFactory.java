@@ -55,31 +55,31 @@ import org.jetbrains.annotations.Nullable;
  * Represents entities able to create per-<i>custom result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerCustomResultTemplateFactory<T>
+public interface BasePerCustomResultTemplateFactory<T extends BasePerCustomResultTemplate>
     extends  Factory
 {
     /**
      * Creates a per-<i>custom result</i> template.
-     * @param customResult the custom result.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
+     * @param jmx whether to include JMX support.
+     * @param customResult the custom result.
      * @return the template.
      */
     @Nullable
     public T createTemplate(
-        @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header);
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final Result customResult);
 }

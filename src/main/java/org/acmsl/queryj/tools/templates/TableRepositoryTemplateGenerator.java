@@ -38,13 +38,11 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some JetBrains annotations.
@@ -54,9 +52,6 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 
 /**
@@ -64,8 +59,8 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableRepositoryTemplateGenerator
-    extends  AbstractTemplateGenerator<TableRepositoryTemplate>
-    implements  BasePerRepositoryTemplateGenerator<TableRepositoryTemplate>,
+    extends  AbstractTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>,
                 BasePerRepositoryTemplateFactory<TableRepositoryTemplate>,
                 Singleton
 {
@@ -103,118 +98,56 @@ public class TableRepositoryTemplateGenerator
     @SuppressWarnings("unused")
     public TableRepositoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new TableRepositoryTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final TableRepositoryTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return retrieveTemplateFileName(template, TableRepositoryTemplateUtils.getInstance());
+        return retrieveTemplateFileName(context, TableRepositoryTemplateUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerRepositoryTemplateContext context}.
      * @param tableRepositoryTemplateUtils the {@link TableRepositoryTemplateUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final TableRepositoryTemplate template,
+        @NotNull final BasePerRepositoryTemplateContext context,
         @NotNull final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
     {
         return
             tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
-                template.getRepositoryName())
+                context.getRepositoryName())
             + ".java";
-    }
-
-    /**
-     * Writes a table repository template to disk.
-     * @param template the table repository template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @throws IOException if the file cannot be created.
-     */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset)
-      throws  IOException
-    {
-        write(
-            template,
-            outputDir,
-            charset,
-            FileUtils.getInstance(),
-            TableRepositoryTemplateUtils.getInstance());
-    }
-            
-    /**
-     * Writes a table repository template to disk.
-     * @param template the template to write.
-     * @param outputDir the output folder.
-     * @param charset the file encoding.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @param tableRepositoryTemplateUtils the
-     * {@link TableRepositoryTemplateUtils} instance.
-     * @throws IOException if the file cannot be created.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition fileUtils != null
-     * @precondition tableRepositoryTemplateUtils != null
-     */
-    public void write(
-        @NotNull final BasePerRepositoryTemplate template,
-        @NotNull final File outputDir,
-        final Charset charset,
-        @NotNull final FileUtils fileUtils,
-        @NotNull final TableRepositoryTemplateUtils tableRepositoryTemplateUtils)
-      throws  IOException
-    {
-        boolean folderCreated = outputDir.mkdirs();
-
-        if (   (!folderCreated)
-            && (!outputDir.exists()))
-        {
-            throw
-                new IOException("Cannot create output dir: " + outputDir);
-        }
-        else
-        {
-            fileUtils.writeFile(
-                  outputDir.getAbsolutePath()
-                + File.separator
-                + tableRepositoryTemplateUtils.retrieveTableRepositoryClassName(
-                    template.getRepositoryName())
-                + ".java",
-                template.generate(),
-                charset);
-        }
     }
 }

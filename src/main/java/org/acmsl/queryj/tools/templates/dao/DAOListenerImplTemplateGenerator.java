@@ -68,7 +68,7 @@ import java.util.List;
 public class DAOListenerImplTemplateGenerator
     extends AbstractTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DAOListenerImplTemplate>,
                 Singleton
 {
     /**

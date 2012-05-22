@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
@@ -61,7 +62,7 @@ import java.util.Map;
  */
 public class BaseDAOFactoryTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <BaseDAOFactoryTemplate, BaseDAOFactoryTemplateGenerator>
+                 <BaseDAOFactoryTemplate, BaseDAOFactoryTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a <code>BaseDAOFactoryTemplateWritingHandler</code> instance.

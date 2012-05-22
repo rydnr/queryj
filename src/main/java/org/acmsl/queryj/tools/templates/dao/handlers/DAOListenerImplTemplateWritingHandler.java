@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplate;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerImplTemplateGenerator;
@@ -64,7 +65,8 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOListenerImplTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler<DAOListenerImplTemplate, DAOListenerImplTemplateGenerator>
+    extends  BasePerRepositoryTemplateWritingHandler
+                 <DAOListenerImplTemplate, DAOListenerImplTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

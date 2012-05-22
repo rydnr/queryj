@@ -38,10 +38,12 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
@@ -72,6 +74,7 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -86,7 +89,7 @@ public abstract class BasePerTableTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * Creates a {@ BasePerTableTemplateBuildHandler} instance.
+     * Creates a {@link BasePerTableTemplateBuildHandler} instance.
      */
     public BasePerTableTemplateBuildHandler() {}
 
@@ -147,9 +150,9 @@ public abstract class BasePerTableTemplateBuildHandler
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
-        @Nullable final String engineName,
-        @Nullable final String engineVersion,
-        @Nullable final String quote,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
         @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
@@ -165,6 +168,7 @@ public abstract class BasePerTableTemplateBuildHandler
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
             retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
             metadataManager.getTableNames());
     }
 
@@ -188,6 +192,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
+     * @param jmx whether to incldue JMX support.
      * @param tableNames the table names.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
@@ -203,6 +208,7 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
+        final boolean jmx,
         @Nullable final String[] tableNames)
       throws  QueryJBuildException
     {
@@ -227,10 +233,40 @@ public abstract class BasePerTableTemplateBuildHandler
             {
                 if (metadataManager.isGenerationAllowedForTable(t_strTableName))
                 {
+                    List<Row> t_lStaticContent = retrieveCachedStaticContent(parameters, t_strTableName);
+
+                    if (t_lStaticContent == null)
+                    {
+                        try
+                        {
+                            t_lStaticContent =
+                                retrieveStaticContent(
+                                    t_strTableName,
+                                    metadataManager,
+                                    CachingDecoratorFactory.getInstance(),
+                                    DAOTemplateUtils.getInstance());
+                        }
+                        catch (@Nullable final SQLException cannotRetrieveTableContents)
+                        {
+                            @Nullable
+                            Log t_Log = UniqueLogFactory.getLog(BasePerTableTemplateBuildHandler.class);
+
+                            if (t_Log != null)
+                            {
+                                t_Log.error(
+                                    "Cannot retrieve static contents for " + t_strTableName,
+                                    cannotRetrieveTableContents);
+                            }
+                        }
+                        if (t_lStaticContent == null)
+                        {
+                            t_lStaticContent = new ArrayList<Row>(0);
+                        }
+                        storeCachedStaticContent(t_lStaticContent, parameters, t_strTableName);
+                    }
                     t_Template =
                         createTemplate(
                             templateFactory,
-                            t_strTableName,
                             metadataManager,
                             customSqlProvider,
                             retrievePackage(
@@ -242,7 +278,10 @@ public abstract class BasePerTableTemplateBuildHandler
                             repository,
                             header,
                             implementMarkerInterfaces,
-                            parameters);
+                            jmx,
+                            t_strTableName,
+                            parameters,
+                            t_lStaticContent);
 
                     if  (t_Template != null)
                     {
@@ -284,10 +323,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
-     * @param packageUtils the {@link org.acmsl.queryj.tools.PackageUtils} instance.
+     * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     protected abstract String retrievePackage(
         @NotNull final String tableName,
@@ -306,68 +343,49 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final List<T> templates, @NotNull final Map parameters);
 
     /**
-     * Retrieves the table templates.
-     * @param parameters the parameter map.
-     * @return such templates.
-     * @throws QueryJBuildException if the templates cannot be stored for
-     * any reason.
-     * @precondition parameters != null
-     */
-    @Nullable
-    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
-        throws  QueryJBuildException
-    {
-        return
-            (TableTemplate[])
-                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
-    }
-
-    /**
      * Creates a template with required information.
      * @param templateFactory the {@link BasePerTableTemplateFactory} instance.
-     * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
-     * @param engineName the database engine name.
-     * @param engineVersion the database engine version.
-     * @param quote the quote identifier.
      * @param projectPackage the project's base package.
      * @param repository the repository name.
      * @param header the custom file header.
      * @param implementMarkerInterfaces whether to use marker interface or not.
+     * @param jmx whether to include JMX support or not.
+     * @param tableName the table name.
+     * @param staticContents the table's static contents (optional).
      * @param parameters the parameter map.
      */
     @Nullable
+    @Override
     protected T createTemplate(
         @NotNull final TF templateFactory,
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String tableName,
+        @Nullable List<Row> staticContents,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
             templateFactory.createTemplate(
-                tableName,
                 metadataManager,
                 customSqlProvider,
                 packageName,
-                engineName,
-                engineVersion,
-                quote,
                 projectPackage,
                 repository,
                 header,
-                implementMarkerInterfaces);
+                implementMarkerInterfaces,
+                jmx,
+                tableName,
+                staticContents);
     }
 
     /**
@@ -392,9 +410,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param metadataManager the {@link MetadataManager} instance.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metaLanguageUtils != null
      */
     protected boolean isStaticTable(
         @NotNull final String tableName,
@@ -413,19 +428,15 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the decorator factory.
      * @return such information.
-     * @precondition parameters != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     @Nullable
-    protected Collection retrieveStaticContent(
+    protected List<Row> retrieveStaticContent(
         @NotNull final Map parameters,
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @Nullable Collection result =
+        @Nullable List<Row> result =
             retrieveCachedStaticContent(parameters, tableName);
 
         if  (result == null)
@@ -439,10 +450,11 @@ public abstract class BasePerTableTemplateBuildHandler
                         decoratorFactory,
                         DAOTemplateUtils.getInstance());
 
-                if (result != null)
+                if (result == null)
                 {
-                    storeCachedStaticContent(result, parameters, tableName);
+                    result = new ArrayList<Row>(0);
                 }
+                storeCachedStaticContent(result, parameters, tableName);
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -470,13 +482,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @return such information.
      * @throws SQLException if the operation fails.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     * @precondition daoTemplateUtils != null
      */
     @Nullable
-    protected Collection retrieveStaticContent(
+    protected List<Row> retrieveStaticContent(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -493,14 +501,13 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameter map.
      * @param tableName the table name.
      * @return such content, if present.
-     * @precondition parameters != null
-     * @precondition tableName != null
      */
     @Nullable
-    protected Collection retrieveCachedStaticContent(
+    @SuppressWarnings("unchecked")
+    protected List<Row> retrieveCachedStaticContent(
         @NotNull final Map parameters, @NotNull final String tableName)
     {
-        return (Collection) parameters.get(buildStaticContentKey(tableName));
+        return (List<Row>) parameters.get(buildStaticContentKey(tableName));
     }
 
     /**
@@ -508,13 +515,10 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param contents the contents to cache.
      * @param parameters the parameters.
      * @param tableName the table name.
-     * @precondition contents != null
-     * @precondition parameters != null
-     * @precondition tableName != null
      */
     @SuppressWarnings("unchecked")
     protected void storeCachedStaticContent(
-        @NotNull final Collection contents,
+        @NotNull final List<Row> contents,
         @NotNull final Map parameters,
         @NotNull final String tableName)
     {

@@ -47,15 +47,19 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class TableTemplateGenerator<T extends TableTemplate>
-    extends  AbstractTemplateGenerator<T>
-    implements  TableTemplateFactory,
+public class TableTemplateGenerator
+    extends  AbstractTemplateGenerator<TableTemplate, BasePerTableTemplateContext>
+    implements  BasePerTableTemplateFactory<TableTemplate>,
                 Singleton
 {
     /**
@@ -86,71 +90,57 @@ public class TableTemplateGenerator<T extends TableTemplate>
     }
 
     /**
-     * Generates a table template.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
-    public TableTemplate createTableTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    public TableTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
+        @NotNull final String packageName,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticContents)
     {
         return
             new TableTemplate(
-                tableName,
-                metadataManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces);
+                new BasePerTableTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableName,
+                    staticContents));
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final T template)
+    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
-        return retrieveTemplateFileName(template, TableTemplateUtils.getInstance());
+        return retrieveTemplateFileName(context, TableTemplateUtils.getInstance());
     }
 
     /**
      * Retrieves the template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerTableTemplateContext context}.
      * @param tableTemplateUtils the {@link TableTemplateUtils} instance.
      * @return such file name.
      */
     @NotNull
     public String retrieveTemplateFileName(
-        @NotNull final T template, @NotNull final TableTemplateUtils tableTemplateUtils)
+        @NotNull final BasePerTableTemplateContext context, @NotNull final TableTemplateUtils tableTemplateUtils)
     {
         return
-            tableTemplateUtils.retrieveTableClassName(template.getTableName()) + ".java";
+            tableTemplateUtils.retrieveTableClassName(context.getTableName()) + ".java";
     }
 }

@@ -37,8 +37,6 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.dao.handlers.QueryPreparedStatementCreatorTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**

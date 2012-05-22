@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 
@@ -58,7 +59,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomResultSetExtractorTemplateGenerator
-    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate>
+    extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
     implements  BasePerCustomResultTemplateFactory<CustomResultSetExtractorTemplate>,
                 Singleton
 {
@@ -95,44 +96,37 @@ public class CustomResultSetExtractorTemplateGenerator
      * @param customResult the custom result.
      * @param customSqlProvider the custom sql provider.
      * @param metadataManager the database metadata manager.
+     * @param header the header.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
-     * @param header the header.
      * @return the new template.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition packageName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
      */
     @NotNull
     public CustomResultSetExtractorTemplate createTemplate(
-        @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header)
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final Result customResult)
     {
         return
             new CustomResultSetExtractorTemplate(
-                customResult,
-                customSqlProvider,
-                metadataManager,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                basePackageName,
-                repositoryName);
+                new BasePerCustomResultTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    customResult));
     }
 
     /**
@@ -148,27 +142,28 @@ public class CustomResultSetExtractorTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final CustomResultSetExtractorTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        return retrieveTemplateFileName(template, StringUtils.getInstance());
+        return retrieveTemplateFileName(context, StringUtils.getInstance());
     }
 
     /**
      * Retrieves the file name for given template.
-     * @param template the template.
+     * @param context the {@link BasePerCustomResultTemplateContext} context.
      * @param stringUtils the {@link StringUtils} instance.
      * @return the file name.
      */
     protected String retrieveTemplateFileName(
-        @NotNull final CustomResultSetExtractorTemplate template,
+        @NotNull final BasePerCustomResultTemplateContext context,
         @NotNull final StringUtils stringUtils)
     {
         return
             stringUtils.capitalize(
                 stringUtils.capitalize(
                     stringUtils.capitalize(
-                        template.getResult().getId(),
+                        context.getResult().getId(),
                         '.'),
                     '_'),
                 '-')

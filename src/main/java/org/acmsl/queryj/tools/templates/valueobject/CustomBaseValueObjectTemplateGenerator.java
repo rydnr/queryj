@@ -48,6 +48,7 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JetBrains annotations.
  */
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -57,7 +58,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomBaseValueObjectTemplateGenerator
-    extends AbstractTemplateGenerator<CustomBaseValueObjectTemplate>
+    extends AbstractTemplateGenerator<CustomBaseValueObjectTemplate, BasePerCustomResultTemplateContext>
     implements BasePerCustomResultTemplateFactory<CustomBaseValueObjectTemplate>,
                Singleton
 {
@@ -71,15 +72,15 @@ public class CustomBaseValueObjectTemplateGenerator
      */
     @Nullable
     public CustomBaseValueObjectTemplate createTemplate(
-        @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header)
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final Result customResult)
     {
         @Nullable CustomBaseValueObjectTemplate result = null;
 
@@ -89,16 +90,17 @@ public class CustomBaseValueObjectTemplateGenerator
         {
             result =
                 new CustomBaseValueObjectTemplate(
-                    customResult,
-                    customSqlProvider,
-                    metadataManager,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    basePackageName,
-                    repositoryName);
+                    new BasePerCustomResultTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        getDecoratorFactory(),
+                        packageName,
+                        basePackageName,
+                        repositoryName,
+                        implementMarkerInterfaces,
+                        jmx,
+                        customResult));
         }
 
         return result;
@@ -108,11 +110,12 @@ public class CustomBaseValueObjectTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final CustomBaseValueObjectTemplate template)
+    @Override
+    public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
     {
         return
               "Abstract"
-            + extractClassName(template.getResult().getClassValue())
+            + extractClassName(context.getResult().getClassValue())
             + "ValueObject.java";
     }
 

@@ -37,23 +37,19 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.util.Collection;
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create <code>DAOFactory</code> interfaces for each
@@ -61,61 +57,25 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseDAOFactoryTemplate
-    extends  BasePerTableTemplate
+    extends  BasePerTableTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = 5048749126915731614L;
 
     /**
      * Builds a <code>BaseDAOFactoryTemplate</code> using given
      * information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
+     * @param context the {@link BasePerTableTemplateContext context}
      */
-    public BaseDAOFactoryTemplate(
-        final String tableName,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final boolean implementMarkerInterfaces)
+    public BaseDAOFactoryTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        super(
-            tableName,
-            metadataManager,
-            customSqlProvider,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            quote,
-            basePackageName,
-            repositoryName,
-            implementMarkerInterfaces);
+        super(context);
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -123,7 +83,7 @@ public class BaseDAOFactoryTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "BaseDAOFactory".
      * @return such information.
      */
     @NotNull

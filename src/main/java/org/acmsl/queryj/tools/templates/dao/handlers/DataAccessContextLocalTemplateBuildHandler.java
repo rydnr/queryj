@@ -35,12 +35,8 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplate;
 import org.acmsl.queryj.tools.templates.dao.DataAccessContextLocalTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
@@ -53,7 +49,6 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -66,7 +61,8 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessContextLocalTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a <code>DataAccessContextLocalTemplateBuildHandler</code>
@@ -82,39 +78,6 @@ public class DataAccessContextLocalTemplateBuildHandler
     protected DataAccessContextLocalTemplateGenerator retrieveTemplateFactory()
     {
         return DataAccessContextLocalTemplateGenerator.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    protected DataAccessContextLocalTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final DataAccessContextLocalTemplateGenerator templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String packageName,
-        @NotNull final String repository,
-        @NotNull final String engineName,
-        @NotNull final String header,
-        @NotNull final List<String> tableNames,
-        @NotNull final Map parameters)
-      throws  QueryJBuildException
-    {
-        return
-            templateFactory.createTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                header,
-                retrieveJmx(parameters),
-                tableNames,
-                retrieveJNDILocation(parameters));
     }
 
     /**

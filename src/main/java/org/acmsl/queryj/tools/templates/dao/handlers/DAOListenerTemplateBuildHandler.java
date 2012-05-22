@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
@@ -62,7 +63,8 @@ import java.util.Map;
            >Jose San Leandro</a>
  */
 public class DAOListenerTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<DAOListenerTemplate, DAOListenerTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <DAOListenerTemplate, DAOListenerTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.

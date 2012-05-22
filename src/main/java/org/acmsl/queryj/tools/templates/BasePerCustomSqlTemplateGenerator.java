@@ -36,8 +36,8 @@ package org.acmsl.queryj.tools.templates;
  * Represents entities able to write per-sql templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public interface BasePerCustomSqlTemplateGenerator<N extends BasePerCustomSqlTemplate>
-    extends   TemplateGenerator<N>,
+public interface BasePerCustomSqlTemplateGenerator<N extends BasePerCustomSqlTemplate<C>, C extends BasePerCustomSqlTemplateContext>
+    extends   TemplateGenerator<N,C>,
               BasePerCustomSqlTemplateFactory<N>
 {
 }

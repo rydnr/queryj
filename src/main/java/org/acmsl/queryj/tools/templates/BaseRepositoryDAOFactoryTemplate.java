@@ -51,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOFactoryTemplate
-    extends  RepositoryDAOTemplate
+    extends  RepositoryDAOTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = -607618292235033006L;
 
@@ -79,12 +79,13 @@ public class BaseRepositoryDAOFactoryTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "BaseRepositoryDAOFactory".
      * @return such information.
      */
     @NotNull
+    @Override
     public String getTemplateName()
     {
-        return "Base Repository DAO Factory";
+        return "BaseRepositoryDAOFactory";
     }
 }

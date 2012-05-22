@@ -74,6 +74,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -866,7 +867,7 @@ public class DAOTemplateUtils
      * @precondition decoratorFactory != null
      */
     @Nullable
-    public Collection queryContents(
+    public List<Row> queryContents(
         final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -897,7 +898,7 @@ public class DAOTemplateUtils
      * @precondition metadataUtils != null
      */
     @NotNull
-    public Collection queryContents(
+    public List<Row> queryContents(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -927,14 +928,9 @@ public class DAOTemplateUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the retrieved rows.
      * @throws SQLException if the operation fails.
-     * @precondition tableName != null
-     * @precondition staticAttributeName != null
-     * @precondition attributes != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Row> queryContents(
+    public List<Row> queryContents(
         @NotNull final String tableName,
         @NotNull final String staticAttributeName,
         @NotNull final Collection<Attribute> attributes,
@@ -964,16 +960,9 @@ public class DAOTemplateUtils
      * @param metaData the metadata.
      * @return the retrieved rows.
      * @throws SQLException if the operation fails.
-     * @precondition tableName != null
-     * @precondition staticAttributeName != null
-     * @precondition attributes != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     * @precondition metaData != null
      */
     @NotNull
-    protected Collection<Row> queryContents(
+    protected List<Row> queryContents(
         @NotNull final String tableName,
         @NotNull final String staticAttributeName,
         @NotNull final Collection<Attribute> attributes,
@@ -983,7 +972,7 @@ public class DAOTemplateUtils
         @NotNull final DatabaseMetaData metaData)
       throws  SQLException
     {
-        @Nullable Collection<Row> result = null;
+        @Nullable List<Row> result = null;
 
         try
         {
@@ -1008,11 +997,6 @@ public class DAOTemplateUtils
             throw sqlException;
         }
 
-        if  (result == null)
-        {
-            result = new ArrayList<Row>();
-        }
-
         return result;
     }
 
@@ -1028,17 +1012,9 @@ public class DAOTemplateUtils
      * @param connection the connection.
      * @return the retrieved rows.
      * @throws SQLException if the operation fails.
-     * @precondition tableName != null
-     * @precondition staticAttributeName != null
-     * @precondition attributes != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     * @precondition metadataUtils != null
-     * @precondition connection != null
      */
     @NotNull
-    protected Collection<Row> queryContents(
+    protected List<Row> queryContents(
         @NotNull final String tableName,
         @NotNull final String staticAttributeName,
         @NotNull final Collection<Attribute> attributes,
@@ -1049,7 +1025,7 @@ public class DAOTemplateUtils
         @NotNull final Connection connection)
       throws  SQLException
     {
-        @NotNull Collection<Row> result = new ArrayList<Row>();
+        @NotNull List<Row> result = new ArrayList<Row>();
 
         Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
         
@@ -1165,6 +1141,11 @@ public class DAOTemplateUtils
                         sqlException);
                 }
             }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Row>(0);
         }
 
         return result;

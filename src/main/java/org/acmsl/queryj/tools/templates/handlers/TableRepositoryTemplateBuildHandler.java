@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.TableRepositoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -56,7 +57,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableRepositoryTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<TableRepositoryTemplate, TableRepositoryTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <TableRepositoryTemplate, TableRepositoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.

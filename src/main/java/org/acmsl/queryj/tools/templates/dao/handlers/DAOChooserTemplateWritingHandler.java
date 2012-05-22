@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
@@ -58,7 +59,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOChooserTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler<DAOChooserTemplate, DAOChooserTemplateGenerator>
+    extends  BasePerRepositoryTemplateWritingHandler
+                 <DAOChooserTemplate, DAOChooserTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a <code>DAOChooserTemplateWritingHandler</code> instance.

@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
  * Importing some ACM-SL classes.
@@ -60,8 +59,8 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOFactoryTemplateGenerator
-    extends     AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate>
-    implements  BasePerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate>,
+    extends     AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>,
                 BasePerRepositoryTemplateFactory<BaseRepositoryDAOFactoryTemplate>,
                 Singleton
 {
@@ -96,55 +95,56 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    @SuppressWarnings("unused")
     public BaseRepositoryDAOFactoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String engineName,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation)
     {
         return
             new BaseRepositoryDAOFactoryTemplate(
-                metadataManager,
-                metadataTypeManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                projectPackage,
-                repository,
-                engineName,
-                tableNames);
+                new BasePerRepositoryTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableNames,
+                    jndiLocation));
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BaseRepositoryDAOFactoryTemplate template)
+    @Override
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return retrieveTemplateFileName(template, DecorationUtils.getInstance());
+        return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }
 
     /**
      * Retrieves the template's file name.
-     * @param template the template.
+     * @param context the template.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return the template's file name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BaseRepositoryDAOFactoryTemplate template, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
         return
-              decorationUtils.capitalize(template.getRepositoryName())
+              decorationUtils.capitalize(context.getRepositoryName())
             + "DAOFactory.java";
     }
 }

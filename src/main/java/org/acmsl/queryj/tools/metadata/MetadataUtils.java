@@ -74,17 +74,6 @@ public class MetadataUtils
                Utils
 {
     /**
-     * An empty {@link String} array.
-     */
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
-    /**
-     * An empty {@link ForeignKey} array.
-     */
-    public static final ForeignKey[] EMPTY_FOREIGNKEY_ARRAY = 
-        new ForeignKey[0];
-
-    /**
      * Singleton implemented to avoid the double-checked locking.
      */
     private static class MetadataUtilsSingletonContainer
@@ -146,14 +135,10 @@ public class MetadataUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the collection of attributes not participating in the primary
      * key.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
     public Collection retrieveNonPrimaryKeyAttributes(
-        final String tableName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -163,21 +148,18 @@ public class MetadataUtils
         @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strColumnName: t_astrColumnNames)
         {
             if  (!metadataManager.isPartOfPrimaryKey(
-                     tableName, t_astrColumnNames[t_iIndex]))
+                     tableName, t_strColumnName))
             {
-                t_cNonPkNames.add(t_astrColumnNames[t_iIndex]);
+                t_cNonPkNames.add(t_strColumnName);
             }
         }
 
         return
             buildAttributes(
-                t_cNonPkNames.toArray(EMPTY_STRING_ARRAY),
+                t_cNonPkNames.toArray(new String[t_cNonPkNames.size()]),
                 tableName,
                 metadataManager,
                 metadataTypeManager,
@@ -214,17 +196,16 @@ public class MetadataUtils
         int t_iLength =
             (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
 
-	t_iLength =
-	    Math.min(
-		(t_astrReferredTables != null)
-		? t_astrReferredTables.length
-		: 0,
-		t_iLength);
+        t_iLength =
+            Math.min(
+                (t_astrReferredTables != null)
+                ? t_astrReferredTables.length
+                : 0,
+                t_iLength);
 
-        @Nullable List<Attribute> t_lAttributes = null;
-        @Nullable ForeignKey t_CurrentFk = null;
-        @Nullable Attribute t_FirstAttribute = null;
-        boolean t_bAllowsNullAsAWhole = false;
+        @Nullable List<Attribute> t_lAttributes;
+        @Nullable ForeignKey t_CurrentFk;
+        boolean t_bAllowsNullAsAWhole;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -236,8 +217,7 @@ public class MetadataUtils
                     metadataTypeManager,
                     decoratorFactory);
 
-            if  (   (t_lAttributes != null)
-                 && (t_lAttributes.size() > 0))
+            if  (t_lAttributes.size() > 0)
             {
                 t_bAllowsNullAsAWhole =
                     allowsNullAsAWhole(t_lAttributes);
@@ -270,7 +250,7 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection retrieveAttributes(
+    public List<Attribute> retrieveAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -310,23 +290,18 @@ public class MetadataUtils
         @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strColumnName : t_astrColumnNames)
         {
-            if  (metadataManager.isManagedExternally(
-                     tableName, t_astrColumnNames[t_iIndex]))
+            if  (metadataManager.isManagedExternally(tableName, t_strColumnName))
             {
-                t_cExternallyManagedAttributeNames.add(
-                    t_astrColumnNames[t_iIndex]);
+                t_cExternallyManagedAttributeNames.add(t_strColumnName);
             }
         }
 
         return
             buildAttributes(
                 t_cExternallyManagedAttributeNames.toArray(
-                    EMPTY_STRING_ARRAY),
+                    new String[t_cExternallyManagedAttributeNames.size()]),
                 tableName,
                 metadataManager,
                 metadataTypeManager,
@@ -358,23 +333,18 @@ public class MetadataUtils
         @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strColumnName : t_astrColumnNames)
         {
-            if  (!metadataManager.isManagedExternally(
-                     tableName, t_astrColumnNames[t_iIndex]))
+            if  (!metadataManager.isManagedExternally(tableName, t_strColumnName))
             {
-                t_cNonExternallyManagedAttributeNames.add(
-                    t_astrColumnNames[t_iIndex]);
+                t_cNonExternallyManagedAttributeNames.add(t_strColumnName);
             }
         }
 
         return
             buildAttributes(
                 t_cNonExternallyManagedAttributeNames.toArray(
-                    EMPTY_STRING_ARRAY),
+                    new String[t_cNonExternallyManagedAttributeNames.size()]),
                 tableName,
                 metadataManager,
                 metadataTypeManager,
@@ -389,10 +359,6 @@ public class MetadataUtils
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the foreign key attributes (a list of attribute lists,
      * grouped by referred tables.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
     public Collection<Collection<Attribute>> retrieveForeignKeys(
@@ -408,31 +374,18 @@ public class MetadataUtils
 
         @Nullable String[] t_astrReferredColumns = null;
 
-        int t_iLength =
-            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
+        @Nullable Collection<Attribute> t_cCurrentForeignKey;
 
-        @Nullable Collection<Attribute> t_cCurrentForeignKey = null;
-
-        @Nullable String t_strReferredTable = null;
-
-        for  (int t_iRefTableIndex = 0;
-                  t_iRefTableIndex < t_iLength;
-                  t_iRefTableIndex++)
+        for  (String t_strReferredTable : t_astrReferredTables)
         {
-            t_strReferredTable =
-                t_astrReferredTables[t_iRefTableIndex];
-
             @NotNull String[][] t_aastrForeignKeys =
                 metadataManager.getForeignKeys(tableName, t_strReferredTable);
 
-            int t_iFkLength =
-                (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iFkLength; t_iIndex++)
+            for  (String[] t_astrForeignKey : t_aastrForeignKeys)
             {
                 t_cCurrentForeignKey =
                     buildAttributes(
-                        t_aastrForeignKeys[t_iIndex],
+                        t_astrForeignKey,
                         t_strReferredTable,
                         (metadataManager.allowsNull(
                             t_strReferredTable, t_astrReferredColumns)
@@ -443,8 +396,6 @@ public class MetadataUtils
 
                 // Note: 'result' contains a list of lists.
                 result.add(t_cCurrentForeignKey);
-
-                t_cCurrentForeignKey = null;
             }
         }
 
@@ -477,17 +428,8 @@ public class MetadataUtils
         @NotNull String[] t_astrReferringTables =
             metadataManager.getReferringTables(tableName);
 
-        int t_iLength =
-            (t_astrReferringTables != null) ? t_astrReferringTables.length : 0;
-
-        String t_strReferringTable;
-
-        for  (int t_iRefTableIndex = 0;
-                  t_iRefTableIndex < t_iLength;
-                  t_iRefTableIndex++)
+        for  (String t_strReferringTable : t_astrReferringTables)
         {
-            t_strReferringTable = t_astrReferringTables[t_iRefTableIndex];
-
             result.put(
                 t_strReferringTable,
                 retrieveForeignKeys(
@@ -509,11 +451,6 @@ public class MetadataUtils
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
     public List<Attribute> buildAttributes(
@@ -668,7 +605,7 @@ public class MetadataUtils
     {
         @NotNull List<Attribute> result = new ArrayList<Attribute>();
 
-        int t_iLength = (columnNames != null) ? columnNames.length : 0;
+        int t_iLength = columnNames.length;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
@@ -679,11 +616,11 @@ public class MetadataUtils
             @Nullable String t_strNativeType =
                 metadataTypeManager.getNativeType(t_iType);
 
-            boolean t_bAllowsNull = false;
+            boolean t_bAllowsNull;
 
             if  (allowsNullAsAWhole != null)
             {
-                t_bAllowsNull = allowsNullAsAWhole.booleanValue();
+                t_bAllowsNull = allowsNullAsAWhole;
             }
             else
             {
@@ -739,7 +676,7 @@ public class MetadataUtils
 
             if  (t_itAttributes != null)
             {
-                @Nullable Attribute t_CurrentAttribute = null;
+                @Nullable Attribute t_CurrentAttribute;
 
                 while  (t_itAttributes.hasNext())
                 {
@@ -769,19 +706,17 @@ public class MetadataUtils
      * @precondition metadataManager != null
      */
     public boolean allowsNullAsAWhole(
-        @Nullable final String[] columnNames,
+        @NotNull final String[] columnNames,
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager)
     {
         boolean result = false;
 
-        int t_iLength = (columnNames != null) ? columnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strColumnName : columnNames)
         {
             result =
                 metadataManager.allowsNull(
-                    tableName, columnNames[t_iIndex]);
+                    tableName, t_strColumnName);
 
             if  (result)
             {
@@ -840,22 +775,19 @@ public class MetadataUtils
         @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
-        int t_iLength =
-            (t_astrReferredTables != null) ? t_astrReferredTables.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for (String t_strReferredTable : t_astrReferredTables)
         {
             result.addAll(
                 Arrays.asList(
                     retrieveForeignKeys(
                         tableName,
-                        t_astrReferredTables[t_iIndex],
+                        t_strReferredTable,
                         metadataManager,
                         metadataTypeManager,
                         decoratorFactory)));
         }
 
-        return result.toArray(EMPTY_FOREIGNKEY_ARRAY);
+        return result.toArray(new ForeignKey[result.size()]);
     }
 
     /**
@@ -885,14 +817,11 @@ public class MetadataUtils
             metadataManager.getForeignKeys(
                 sourceTableName, targetTableName);
 
-        int t_iFkCount =
-            (t_aastrForeignKeys != null) ? t_aastrForeignKeys.length : 0;
-
-        for  (int t_iFkIndex = 0; t_iFkIndex < t_iFkCount; t_iFkIndex++)
+        for (String[] t_aastrForeignKey : t_aastrForeignKeys)
         {
             boolean t_bAllowsNullAsAWhole =
                 allowsNullAsAWhole(
-                    t_aastrForeignKeys[t_iFkIndex],
+                    t_aastrForeignKey,
                     sourceTableName,
                     metadataManager);
 
@@ -900,7 +829,7 @@ public class MetadataUtils
                 decoratorFactory.createDecorator(
                     sourceTableName,
                     buildAttributes(
-                        t_aastrForeignKeys[t_iFkIndex],
+                        t_aastrForeignKey,
                         sourceTableName,
                         t_bAllowsNullAsAWhole,
                         metadataManager,
@@ -995,29 +924,26 @@ public class MetadataUtils
         @NotNull String[] t_astrColumnNames =
             metadataManager.getColumnNames(tableName);
 
-        int t_iLength =
-            (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
+        boolean t_bCheck;
 
-        boolean t_bCheck = false;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+        for  (String t_strColumnName : t_astrColumnNames)
         {
             t_bCheck =
                 metadataTypeManager.isClob(
                     metadataManager.getColumnType(
-                        tableName, t_astrColumnNames[t_iIndex]));
+                        tableName, t_strColumnName));
 
             t_bCheck = includeLob ? t_bCheck : !t_bCheck;
 
             if  (t_bCheck)
             {
-                t_cLobAttributeNames.add(t_astrColumnNames[t_iIndex]);
+                t_cLobAttributeNames.add(t_strColumnName);
             }
         }
 
         return
             buildAttributes(
-                t_cLobAttributeNames.toArray(EMPTY_STRING_ARRAY),
+                t_cLobAttributeNames.toArray(new String[t_cLobAttributeNames.size()]),
                 tableName,
                 metadataManager,
                 metadataTypeManager,
@@ -1088,7 +1014,7 @@ public class MetadataUtils
             (attributes != null)
             ? attributes.iterator() : new ArrayList<Attribute>().iterator();
 
-        @Nullable Attribute t_CurrentItem = null;
+        @Nullable Attribute t_CurrentItem;
 
         while  (t_Iterator.hasNext())
         {

@@ -38,26 +38,18 @@ package org.acmsl.queryj.tools.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.Result;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.InvalidTemplateException;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 
 /*
  * Importing StringTemplate classes.
  */
 import org.antlr.stringtemplate.StringTemplateGroup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.util.Map;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to create CustomBaseValueObject implementations for each
@@ -72,51 +64,18 @@ public class CustomBaseValueObjectTemplate
     /**
      * Builds a <code>CustomValueObjectTemplate</code> using
      * information.
-     * @param result the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @precondition result != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataNanager != null
-     * @precondition decoratorFactory != null
+     * @param context the {@link BasePerCustomResultTemplateContext context}.
      */
-    public CustomBaseValueObjectTemplate(
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName)
+    public CustomBaseValueObjectTemplate(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        super(
-            result,
-            customSqlProvider,
-            metadataManager,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            basePackageName,
-            repositoryName);
+        super(context);
     }
 
     /**
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -125,10 +84,11 @@ public class CustomBaseValueObjectTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "CustomBaseValueObject".
      * @return such information.
      */
     @NotNull
+    @Override
     public String getTemplateName()
     {
         return "CustomBaseValueObject";

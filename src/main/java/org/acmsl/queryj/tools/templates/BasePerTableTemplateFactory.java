@@ -74,6 +74,7 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
      * interfaces.
      * @param jmx whether to include JMX support.
      * @param tableName the table name.
+     * @param staticContents the table's static contents (optional).
      * @return a template.
      */
     @Nullable

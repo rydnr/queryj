@@ -67,7 +67,7 @@ import java.util.List;
 public class DataAccessManagerTemplateGenerator
     extends AbstractTemplateGenerator<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<DataAccessManagerTemplate, BasePerRepositoryTemplateContext>,
+                BasePerRepositoryTemplateFactory<DataAccessManagerTemplate>,
                 Singleton
 {
     /**

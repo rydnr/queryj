@@ -38,7 +38,9 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -53,15 +55,18 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseValueObjectTemplateGenerator
-    extends AbstractTemplateGenerator<BaseValueObjectTemplate>
+    extends AbstractTemplateGenerator<BaseValueObjectTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateFactory<BaseValueObjectTemplate>,
-                BasePerTableTemplateGenerator<BaseValueObjectTemplate>,
+                BasePerTableTemplateGenerator<BaseValueObjectTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**
@@ -94,55 +99,46 @@ public class BaseValueObjectTemplateGenerator
     /**
      * Creates a {@link BaseValueObjectTemplate} using given
      * information.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
+     * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
      * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
+     * @param repositoryName the name of the repository.
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
-     * @return the fresh new template.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition basePackageName != null
-     * @precondition repositoryName != null
+     * @param jmx whether to include JMX support.
+     * @param tableName the table name.
+     * @param staticContents the table's static contents (optional).
+     * @return a template.
      */
     @NotNull
     public BaseValueObjectTemplate createTemplate(
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
         @NotNull final String header,
-        final boolean implementMarkerInterfaces)
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticContents)
     {
         return
             new BaseValueObjectTemplate(
-                tableName,
-                metadataManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces);
+                new BasePerTableTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableName,
+                    staticContents));
     }
 
     /**
@@ -150,6 +146,7 @@ public class BaseValueObjectTemplateGenerator
      * @return such instance.
      */
     @NotNull
+    @Override
     public DecoratorFactory getDecoratorFactory()
     {
         return VODecoratorFactory.getInstance();
@@ -159,11 +156,12 @@ public class BaseValueObjectTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final BaseValueObjectTemplate template)
+    @Override
+    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
         return
             retrieveTemplateFileName(
-                template,
+                context,
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 ValueObjectUtils.getInstance());
@@ -171,7 +169,7 @@ public class BaseValueObjectTemplateGenerator
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerTableTemplateContext context}.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @param valueObjectUtils the {@link ValueObjectUtils} instance.
@@ -179,7 +177,7 @@ public class BaseValueObjectTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final BaseValueObjectTemplate template,
+        @NotNull final BasePerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils,
         @NotNull final ValueObjectUtils valueObjectUtils)
@@ -187,7 +185,7 @@ public class BaseValueObjectTemplateGenerator
         return
               "Abstract"
             + valueObjectUtils.getVoClassName(
-                  template.getTableName(),
+                  context.getTableName(),
                   englishGrammarUtils,
                   stringUtils)
             + "ValueObject.java";

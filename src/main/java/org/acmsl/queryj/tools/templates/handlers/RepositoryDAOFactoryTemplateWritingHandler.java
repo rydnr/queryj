@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -58,7 +59,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler<RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator>
+    extends  BasePerRepositoryTemplateWritingHandler
+                 <RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

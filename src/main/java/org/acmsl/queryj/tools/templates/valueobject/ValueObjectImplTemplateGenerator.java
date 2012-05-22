@@ -38,7 +38,9 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 
@@ -53,15 +55,18 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectImplTemplateGenerator
-    extends AbstractTemplateGenerator<ValueObjectImplTemplate>
+    extends AbstractTemplateGenerator<ValueObjectImplTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateFactory<ValueObjectImplTemplate>,
-                BasePerTableTemplateGenerator<ValueObjectImplTemplate>,
+                BasePerTableTemplateGenerator<ValueObjectImplTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**
@@ -96,32 +101,31 @@ public class ValueObjectImplTemplateGenerator
      */
     @NotNull
     public ValueObjectImplTemplate createTemplate(
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String header,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces)
+        final boolean jmx,
+        final boolean implementMarkerInterfaces,
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticContents)
     {
         return
             new ValueObjectImplTemplate(
-                tableName,
-                metadataManager,
-                customSqlProvider,
-                header,
-                getDecoratorFactory(),
-                packageName,
-                engineName,
-                engineVersion,
-                quote,
-                basePackageName,
-                repositoryName,
-                implementMarkerInterfaces);
+                new BasePerTableTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    basePackageName,
+                    repositoryName,
+                    implementMarkerInterfaces,
+                    jmx,
+                    tableName,
+                    staticContents));
     }
 
     /**

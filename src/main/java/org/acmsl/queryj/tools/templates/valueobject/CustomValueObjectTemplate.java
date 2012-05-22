@@ -48,6 +48,7 @@ import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
 /*
  * Importing StringTemplate classes.
  */
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -67,51 +68,18 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectTemplate
-    extends   BasePerCustomResultTemplate
+    extends   BasePerCustomResultTemplate<BasePerCustomResultTemplateContext>
 {
     private static final long serialVersionUID = 2996313642901416338L;
 
     /**
      * Builds a <code>CustomValueObjectTemplate</code> using
      * information.
-     * @param result the custom result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @precondition result != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataNanager != null
-     * @precondition decoratorFactory != null
+     * @param context the {@link BasePerCustomResultTemplateContext context}.
      */
-    public CustomValueObjectTemplate(
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName)
+    public CustomValueObjectTemplate(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        super(
-            result,
-            customSqlProvider,
-            metadataManager,
-            header,
-            decoratorFactory,
-            packageName,
-            engineName,
-            engineVersion,
-            basePackageName,
-            repositoryName);
+        super(context);
     }
 
     /**
@@ -123,14 +91,9 @@ public class CustomValueObjectTemplate
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @precondition input != null
-     * @precondition result != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
      */
+    @SuppressWarnings("unchecked")
+    @Override
     protected void fillCommonParameters(
         @NotNull final Map input,
         @NotNull final Result result,
@@ -188,7 +151,7 @@ public class CustomValueObjectTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -197,7 +160,7 @@ public class CustomValueObjectTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "CustomValueObject".
      * @return such information.
      */
     @NotNull

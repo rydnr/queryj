@@ -38,12 +38,15 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
-import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplate;
 import org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -56,7 +59,9 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ConfigurationPropertiesTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler<ConfigurationPropertiesTemplate, ConfigurationPropertiesTemplateGenerator>
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <ConfigurationPropertiesTemplate,
+                     ConfigurationPropertiesTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a <code>ConfigurationPropertiesTemplateBuildHandler</code>

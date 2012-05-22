@@ -38,6 +38,9 @@ package org.acmsl.queryj.tools.templates.valueobject;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 
 /*
  * Importing some ACM-SL classes.
@@ -47,8 +50,6 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +58,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate>
+    extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate, BasePerCustomResultTemplateContext>
     implements BasePerCustomResultTemplateFactory<CustomValueObjectFactoryTemplate>,
                 Singleton
 {
@@ -71,15 +72,15 @@ public class CustomValueObjectFactoryTemplateGenerator
      */
     @Nullable
     public CustomValueObjectFactoryTemplate createTemplate(
-        @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header)
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectFactoryTemplate result = null;
 
@@ -89,16 +90,17 @@ public class CustomValueObjectFactoryTemplateGenerator
         {
             result =
                 new CustomValueObjectFactoryTemplate(
-                    customResult,
-                    customSqlProvider,
-                    metadataManager,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    engineName,
-                    engineVersion,
-                    basePackageName,
-                    repositoryName);
+                    new BasePerCustomResultTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        getDecoratorFactory(),
+                        packageName,
+                        basePackageName,
+                        repositoryName,
+                        implementMarkerInterfaces,
+                        jmx,
+                        customResult));
         }
 
         return result;
@@ -107,11 +109,12 @@ public class CustomValueObjectFactoryTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final CustomValueObjectFactoryTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
     {
         return
-              extractClassName(template.getResult().getClassValue())
+              extractClassName(context.getResult().getClassValue())
             + "ValueObjectFactory.java";
     }
 

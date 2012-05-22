@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.templates.valueobject.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplate;
 import org.acmsl.queryj.tools.templates.valueobject.ValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
@@ -59,7 +60,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectImplTemplateWritingHandler
-    extends  BasePerTableTemplateWritingHandler<ValueObjectImplTemplate, ValueObjectImplTemplateGenerator>
+    extends  BasePerTableTemplateWritingHandler
+                 <ValueObjectImplTemplate, ValueObjectImplTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a <code>ValueObjectImplTemplateWritingHandler</code> instance.
