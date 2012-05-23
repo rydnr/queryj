@@ -23,22 +23,21 @@
 
  ******************************************************************************
  *
- * Filename: DatabaseEngineNameHandler.java
+ * Filename: SubPackageNameHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Resolves the "engine_name" placeholder in templates.
+ * Description: 
  *
- * Date: 5/19/12
- * Time: 7:04 PM
+ * Date: 5/23/12
+ * Time: 8:29 PM
  *
  */
 package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TemplateContext;
 
 /*
@@ -47,63 +46,43 @@ import org.acmsl.queryj.tools.templates.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Resolves the "engine_name" placeholder in templates.
- * @param <C> the {@link TemplateContext}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/19
- */
-public class DatabaseEngineNameHandler<C extends TemplateContext>
-    extends AbstractTemplateContextFillHandler<C, String>
+* Is able to resolve "sub_package_name" placeholders
+* @author <a href="mailto:chous@acm-sl.org">chous</a>
+* @since 2012/05/23
+*/
+@SuppressWarnings("unused")
+public class SubPackageNameHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext,String>
 {
     /**
-     * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
-     * @param context the template context.
+     * Creates a handler able to resolve "sub_package_name" using given {@link TemplateContext}.
+     * @param context the {@link TemplateContext context}.
      */
-    public DatabaseEngineNameHandler(@NotNull final C context)
+    @SuppressWarnings("unused")
+    public SubPackageNameHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "engine_name".
+     * Returns "sub_package_name".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "engine_name";
+        return "sub_package_name";
     }
 
     /**
-     * Retrieves the engine name.
-     * @return such information.
+     * Retrieves the template value for this placeholder.
+     * @return such value.
      */
     @NotNull
     @Override
-    public String getValue()
+    protected String getValue(@NotNull final TemplateContext context)
     {
-        return getEngineName(getTemplateContext().getMetadataManager());
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @param context the {@link TemplateContext context}.
-     * @return such information.
-     */
-    @NotNull
-    protected String getValue(@NotNull final C context)
-    {
-        return getEngineName(context.getMetadataManager());
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     */
-    @NotNull
-    protected String getEngineName(@NotNull final MetadataManager metadataManager)
-    {
-        return metadataManager.getEngineName();
+        return context.getPackageName();
     }
 }

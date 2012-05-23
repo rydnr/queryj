@@ -23,75 +23,67 @@
 
  ******************************************************************************
  *
- * Filename: AbstractTemplateFillHandler.java
+ * Filename: ProjectPackageHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Is able to resolve "project_package" placeholders.
  *
- * Date: 5/19/12
- * Time: 6:53 PM
+ * Date: 5/23/12
+ * Time: 8:23 PM
  *
  */
 package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing some project classes.
+ * Importing project classes.
  */
-import org.acmsl.queryj.tools.templates.Template;
+import org.acmsl.queryj.tools.templates.TemplateContext;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Base implementation of {@link TemplateFillHandler}.
+ * Is able to resolve "project_package" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/19
+ * @since 2012/05/23
  */
-public abstract class AbstractTemplateFillHandler<T extends Template,P>
-    extends AbstractFillHandler<P>
-    implements TemplateFillHandler<T,P>
+@SuppressWarnings("unused")
+public class ProjectPackageHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext, String>
 {
     /**
-     * The template
-     */
-    private T template;
-
-    /**
-     * Creates a new {@link AbstractTemplateFillHandler} associated to given
-     * {@link Template}.
-     * @param template the template.
-     */
-    protected AbstractTemplateFillHandler(@NotNull final T template)
-    {
-        immutableSetTemplate(template);
-    }
-
-    /**
-     * Specifies the template.
-     * @param template the template.
-     */
-    protected final void immutableSetTemplate(@NotNull final T template)
-    {
-        this.template = template;
-    }
-
-    /**
-     * Specifies the template.
-     * @param template the template.
+     * Creates a handler to resolve "project_package" placeholders.
+     * @param context the {@link TemplateContext context}.
      */
     @SuppressWarnings("unused")
-    protected void setTemplate(@NotNull final T template)
+    public ProjectPackageHandler(@NotNull final TemplateContext context)
     {
-        immutableSetTemplate(template);
+        super(context);
     }
 
     /**
-     * Retrieves the template.
-     * @return such information.
+     * Returns "project_package".
+     * @return such placeholder.
      */
-    @Override
     @NotNull
-    public T getTemplate()
+    @Override
+    public String getPlaceHolder()
     {
-        return template;
+        return "project_package";
     }
+
+    /**
+     * Retrieves the template value for this placeholder.
+     * @return such value.
+     */
+    @NotNull
+    @Override
+    protected String getValue(@NotNull final TemplateContext context)
+    {
+        return context.getBasePackageName();
+    }
+
 }

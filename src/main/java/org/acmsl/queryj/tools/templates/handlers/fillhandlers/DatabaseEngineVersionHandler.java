@@ -39,7 +39,7 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.templates.AbstractTemplate;
+import org.acmsl.queryj.tools.templates.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -48,20 +48,21 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Resolves the "engine_version" placeholder in templates.
- * @param <T> the {@link AbstractTemplate}.
+ * @param <C> the {@link TemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
-public class DatabaseEngineVersionHandler<T extends AbstractTemplate>
-    extends AbstractTemplateFillHandler<T, String>
+@SuppressWarnings("unused")
+public class DatabaseEngineVersionHandler<C extends TemplateContext>
+    extends AbstractTemplateContextFillHandler<C,String>
 {
     /**
-     * Creates a {@link DatabaseEngineNameHandler} for given {@link AbstractTemplate}.
-     * @param template the template.
+     * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
+     * @param context the context.
      */
-    public DatabaseEngineVersionHandler(@NotNull final T template)
+    public DatabaseEngineVersionHandler(@NotNull final C context)
     {
-        super(template);
+        super(context);
     }
 
     /**
@@ -81,9 +82,9 @@ public class DatabaseEngineVersionHandler<T extends AbstractTemplate>
      */
     @NotNull
     @Override
-    public String getValue()
+    public String getValue(@NotNull final TemplateContext context)
     {
-        return getEngineVersion(getTemplate().getTemplateContext().getMetadataManager());
+        return getEngineVersion(context.getMetadataManager());
     }
 
     /**

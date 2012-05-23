@@ -23,22 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: TableNameHandler.java
+ * Filename: TemplateContextFillHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Fills the "table_name" placeholder.
+ * Description: Allows FillHandlers to access the TemplateContext.
  *
- * Date: 5/19/12
- * Time: 6:29 PM
+ * Date: 5/23/12
+ * Time: 7:59 PM
  *
  */
 package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing some project classes.
+ * Importing project classes.
  */
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.tools.templates.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -46,43 +46,18 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Fills the "table_name" placeholder.
+ * Allows {@link FillHandler FillHandlers} to access the {@link TemplateContext}.
+ * @param <C> the {@link TemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/19
+ * @since 2012/05/23
  */
-@SuppressWarnings("unused")
-public class TableNameHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, String>
+public interface TemplateContextFillHandler<C extends TemplateContext,P>
+    extends FillHandler<P>
 {
     /**
-     * Creates a {@link TableNameHandler} for given {@link BasePerTableTemplateContext}.
-     * @param context the template context.
-     */
-    @SuppressWarnings("unused")
-    public TableNameHandler(@NotNull final BasePerTableTemplateContext context)
-    {
-        super(context);
-    }
-
-    /**
-     * Returns "table_name".
-     * @return such placeholder.
+     * Retrieves the {@link TemplateContext context}.
+     * @return such context.
      */
     @NotNull
-    @Override
-    public String getPlaceHolder()
-    {
-        return "table_name";
-    }
-
-    /**
-     * Retrieves the table name from given template.
-     * @param context the {@link BasePerTableTemplateContext} instance.
-     * @return the table name.
-     */
-    @NotNull
-    protected String getValue(@NotNull final BasePerTableTemplateContext context)
-    {
-        return context.getTableName();
-    }
+    C getTemplateContext();
 }

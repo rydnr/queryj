@@ -23,22 +23,21 @@
 
  ******************************************************************************
  *
- * Filename: DatabaseEngineNameHandler.java
+ * Filename: HeaderHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Resolves the "engine_name" placeholder in templates.
+ * Description: 
  *
- * Date: 5/19/12
- * Time: 7:04 PM
+ * Date: 5/23/12
+ * Time: 8:15 PM
  *
  */
 package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing some project-specific classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.TemplateContext;
 
 /*
@@ -47,63 +46,44 @@ import org.acmsl.queryj.tools.templates.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Resolves the "engine_name" placeholder in templates.
- * @param <C> the {@link TemplateContext}.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/19
+ * Fills "header" placeholder in templates.
+ * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
+ * @since 2012/05/23
  */
-public class DatabaseEngineNameHandler<C extends TemplateContext>
-    extends AbstractTemplateContextFillHandler<C, String>
+@SuppressWarnings("unused")
+public class HeaderHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext, String>
 {
     /**
-     * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
-     * @param context the template context.
+     * Creates a handler able to resolve "header" placeholders.
+     * @param context the {@link TemplateContext context}.
      */
-    public DatabaseEngineNameHandler(@NotNull final C context)
+    @SuppressWarnings("unused")
+    public HeaderHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "engine_name".
+     * Returns "header".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "engine_name";
+        return "header";
     }
 
     /**
-     * Retrieves the engine name.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getValue()
-    {
-        return getEngineName(getTemplateContext().getMetadataManager());
-    }
-
-    /**
-     * Retrieves the engine name.
+     * Retrieves the template value for this placeholder.
      * @param context the {@link TemplateContext context}.
-     * @return such information.
+     * @return the dynamic value.
      */
+    @Override
     @NotNull
-    protected String getValue(@NotNull final C context)
+    protected String getValue(@NotNull final TemplateContext context)
     {
-        return getEngineName(context.getMetadataManager());
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     */
-    @NotNull
-    protected String getEngineName(@NotNull final MetadataManager metadataManager)
-    {
-        return metadataManager.getEngineName();
+        return context.getHeader();
     }
 }

@@ -49,6 +49,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -58,7 +59,8 @@ import java.util.Map;
  * @since 2012/05/13
  */
 public interface FillHandler<P>
-    extends TemplateHandler
+    extends TemplateHandler,
+            Serializable
 {
     /**
      * Retrieves the placeholder.
