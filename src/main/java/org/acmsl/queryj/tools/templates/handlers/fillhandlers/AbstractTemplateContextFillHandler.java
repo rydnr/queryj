@@ -38,10 +38,13 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.Template;
 import org.acmsl.queryj.tools.templates.TemplateContext;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -60,7 +63,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
 
     /**
      * Creates a new {@link AbstractTemplateContextFillHandler} associated to given
-     * {@link Template}.
+     * {@link TemplateContext}.
      * @param context the template.
      */
     protected AbstractTemplateContextFillHandler(@NotNull final C context)
