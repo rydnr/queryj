@@ -83,6 +83,7 @@ public class BasePerTableTemplateContext
      * @param repositoryName the repository name.
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableName the table name.
      * @param staticValues the static rows, if the table is marked as <code>@static</code>.
      */
@@ -96,6 +97,7 @@ public class BasePerTableTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticValues)
     {
@@ -108,7 +110,8 @@ public class BasePerTableTemplateContext
             basePackageName,
             repositoryName,
             implementMarkerInterfaces,
-            jmx);
+            jmx,
+            jndiLocation);
 
         immutableSetTableName(tableName);
         immutableSetStaticValues(staticValues);

@@ -37,10 +37,10 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.DefaultThemeUtils;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -53,6 +53,10 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,56 +72,49 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOFactoryTemplate
-     extends AbstractDAOFactoryTemplate
+     extends AbstractDAOFactoryTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = -836140578744901008L;
 
     /**
      * Builds a <code>DAOFactoryTemplate</code> using given information.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableTemplate the table template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
+     * @param context the {@link BasePerTableTemplateContext context}.
      */
-    public DAOFactoryTemplate(
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final TableTemplate tableTemplate,
-        final String packageName,
-        final String engineName,
-        final String basePackageName,
-        final String jndiDataSource)
+    public DAOFactoryTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        super(
-            header,
-            decoratorFactory,
-            tableTemplate,
-            packageName,
-            engineName,
-            null,
-            null,
-            basePackageName,
-            jndiDataSource);
+        super(context);
     }
 
     /**
-     * Retrieves the source code of the generated field tableName.
-     * @param header the header.
-     * @return such source code.
+     * {@inheritDoc}
      */
-    protected String generateOutput(final String header)
+    @Override
+    @NotNull
+    protected String generateOutput(@NotNull final String header, @NotNull final BasePerTableTemplateContext context)
+    {
+        return generateOutput(header, context, context.getMetadataManager());
+    }
+
+    /**
+     * Generates the source code from given context.
+     * @param header the header.
+     * @param context the {@link BasePerTableTemplateContext context}.
+     * @param metadataManager the {@link MetadataManager} instance.
+     */
+    @NotNull
+    protected String generateOutput(
+        @NotNull final String header,
+        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final MetadataManager metadataManager)
     {
         return
             generateOutput(
                 header,
-                getTableTemplate(),
-                getPackageName(),
-                getEngineName(),
-                getBasePackageName(),
-                getJNDIDataSource(),
+                context.getTableName(),
+                context.getPackageName(),
+                metadataManager.getEngineName(),
+                context.getBasePackageName(),
+                context.getJndiLocation(),
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 DefaultThemeUtils.getInstance(),
@@ -127,7 +124,7 @@ public class DAOFactoryTemplate
     /**
      * Retrieves the source code of the generated field tableName.
      * @param header the header.
-     * @param tableTemplate the table template.
+     * @param tableName the table name.
      * @param packageName the package name.
      * @param engineName the engine name.
      * @param basePackageName the base package name.
@@ -138,19 +135,16 @@ public class DAOFactoryTemplate
      * @param defaultThemeUtils the <code>DefaultThemeUtils</code> instance.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such source code.
-     * @precondition tableTemplate != null
-     * @precondition stringUtils != null
-     * @precondition englishGrammarUtils != null
-     * @precondition defaultThemeUtils != null
-     * @precondition packageUtils != null
      */
+    @SuppressWarnings("unused")
+    @NotNull
     protected String generateOutput(
-        final String header,
-        @NotNull final TableTemplate tableTemplate,
-        final String packageName,
+        @NotNull final String header,
+        @NotNull final String tableName,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final String basePackageName,
-        final String jndiDataSource,
+        @NotNull final String basePackageName,
+        @NotNull final String jndiDataSource,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils,
         @NotNull final DefaultThemeUtils defaultThemeUtils,
@@ -158,50 +152,51 @@ public class DAOFactoryTemplate
     {
         String result = "";
 
-        String t_strTableName = tableTemplate.getTableName();
-
-        String t_strSingularName =
-            stringUtils.capitalize(
-                englishGrammarUtils.getSingular(
-                    t_strTableName.toLowerCase()),
-                '_');
-
         @Nullable StringTemplateGroup t_Group = retrieveGroup();
 
         @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
-        String t_strCapitalizedEngine =
-            stringUtils.capitalize(engineName, '_');
+        if (t_Template != null)
+        {
+            String t_strSingularName =
+                stringUtils.capitalize(
+                    englishGrammarUtils.getSingular(
+                        tableName.toLowerCase()),
+                    '_');
 
-        fillParameters(
-            t_Template,
-            new Integer[]
-            {
-                STARTING_YEAR,
-                Integer.valueOf(retrieveCurrentYear())
-            },
-            header,
-            t_strTableName,
-            engineName,
-            basePackageName,
-            packageUtils.retrieveDAOSubpackage(engineName),
-            createTimestamp(),
-            defaultThemeUtils.buildDAOFactoryImplementationClassName(
-                t_strCapitalizedEngine, t_strSingularName),
-            packageUtils.retrieveDAOFactoryPackage(
-                basePackageName, engineName),
-            defaultThemeUtils.buildDAOClassName(t_strSingularName),
-            packageUtils.retrieveBaseDAOPackage(basePackageName),
-            defaultThemeUtils.buildDAOFactoryClassName(t_strSingularName),
-            packageUtils.retrieveBaseDAOFactoryPackage(
-                basePackageName),
-            defaultThemeUtils.buildDAOImplementationClassName(
-                t_strCapitalizedEngine, t_strSingularName),
-            packageUtils.retrieveDAOPackage(
-                basePackageName, engineName),
-            jndiDataSource);
+            String t_strCapitalizedEngine =
+                stringUtils.capitalize(engineName, '_');
 
-        result = t_Template.toString();
+            fillParameters(
+                t_Template,
+                new Integer[]
+                {
+                    STARTING_YEAR,
+                    retrieveCurrentYear()
+                },
+                header,
+                tableName,
+                engineName,
+                basePackageName,
+                packageUtils.retrieveDAOSubpackage(engineName),
+                createTimestamp(),
+                defaultThemeUtils.buildDAOFactoryImplementationClassName(
+                    t_strCapitalizedEngine, t_strSingularName),
+                packageUtils.retrieveDAOFactoryPackage(
+                    basePackageName, engineName),
+                defaultThemeUtils.buildDAOClassName(t_strSingularName),
+                packageUtils.retrieveBaseDAOPackage(basePackageName),
+                defaultThemeUtils.buildDAOFactoryClassName(t_strSingularName),
+                packageUtils.retrieveBaseDAOFactoryPackage(
+                    basePackageName),
+                defaultThemeUtils.buildDAOImplementationClassName(
+                    t_strCapitalizedEngine, t_strSingularName),
+                packageUtils.retrieveDAOPackage(
+                    basePackageName, engineName),
+                jndiDataSource);
+
+            result = t_Template.toString();
+        }
 
         return result;
     }
@@ -231,41 +226,26 @@ public class DAOFactoryTemplate
      * @param daoImplementationPackageName the package
      * of the DAO implementation.
      * @param jndiLocation the JNDI location.
-     * @precondition template != null
-     * @precondition copyrightYears != null
-     * @precondition tableName != null
-     * @precondition engineName != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
-     * @precondition timestamp != null
-     * @precondition daoFactoryImplementationClassName != null
-     * @precondition daoFactoryImplementationPackageName != null
-     * @precondition daoClassName != null
-     * @precondition daoPackageName != null
-     * @precondition daoFactoryClassName != null
-     * @precondition daoFactoryPackageName != null
-     * @precondition daoImplementationClassName != null
-     * @precondition daoImplementationPackageName != null
-     * @precondition jndiLocation != null
      */
+    @SuppressWarnings("unused,unchecked")
     protected void fillParameters(
         @NotNull final StringTemplate template,
-        final Integer[] copyrightYears,
-        @Nullable final String header,
-        final String tableName,
-        final String engineName,
-        final String basePackageName,
-        final String subpackageName,
-        final String timestamp,
-        final String daoFactoryImplementationClassName,
-        final String daoFactoryImplementationPackageName,
-        final String daoClassName,
-        final String daoPackageName,
-        final String daoFactoryClassName,
-        final String daoFactoryPackageName,
-        final String daoImplementationClassName,
-        final String daoImplementationPackageName,
-        final String jndiLocation)
+        @NotNull final Integer[] copyrightYears,
+        @NotNull final String header,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final String timestamp,
+        @NotNull final String daoFactoryImplementationClassName,
+        @NotNull final String daoFactoryImplementationPackageName,
+        @NotNull final String daoClassName,
+        @NotNull final String daoPackageName,
+        @NotNull final String daoFactoryClassName,
+        @NotNull final String daoFactoryPackageName,
+        @NotNull final String daoImplementationClassName,
+        @NotNull final String daoImplementationPackageName,
+        @NotNull final String jndiLocation)
     {
         @NotNull Map input = new HashMap();
 
@@ -300,11 +280,7 @@ public class DAOFactoryTemplate
 
         input.put("jndi_location", jndiLocation);
 
-        if  (   (header != null)
-             && (!input.containsKey("header")))
-        {
-            input.put("header", processHeader(input, header));
-        }
+        input.put("header", processHeader(input, header));
     }
 
     /**
@@ -312,14 +288,12 @@ public class DAOFactoryTemplate
      * @param input the input.
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage.
-     * @precondition input != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
      */
+    @SuppressWarnings("unchecked")
     protected void fillPackageDeclarationParameters(
         @NotNull final Map input,
-        final String basePackageName,
-        final String subpackageName)
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName)
     {
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
@@ -329,7 +303,7 @@ public class DAOFactoryTemplate
      * Retrieves the string template group.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     @Override
     public StringTemplateGroup retrieveGroup()
     {
@@ -337,9 +311,10 @@ public class DAOFactoryTemplate
     }
 
     /**
-     * Retrieves the template name.
+     * Returns "DAOFactory".
      * @return such name.
      */
+    @Override
     @NotNull
     public String getTemplateName()
     {

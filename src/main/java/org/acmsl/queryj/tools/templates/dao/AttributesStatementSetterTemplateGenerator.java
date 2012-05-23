@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
@@ -54,10 +55,12 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -98,17 +101,7 @@ public class AttributesStatementSetterTemplateGenerator
     }
 
     /**
-     * Generates a template.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
     public AttributesStatementSetterTemplate createTemplate(
@@ -120,7 +113,9 @@ public class AttributesStatementSetterTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull final String tableName)
+        @NotNull final String jndiLocation,
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticContents)
     {
         return
             new AttributesStatementSetterTemplate(
@@ -134,7 +129,9 @@ public class AttributesStatementSetterTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
-                    tableName));
+                    jndiLocation,
+                    tableName,
+                    staticContents));
     }
 
     /**

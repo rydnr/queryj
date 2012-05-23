@@ -256,6 +256,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @NotNull
+    @SuppressWarnings("unused")
     protected String retrieveJdbcDriver(@NotNull final Map parameters)
     {
         return
@@ -269,6 +270,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @NotNull
+    @SuppressWarnings("unused")
     protected String retrieveJdbcUrl(@NotNull final Map parameters)
     {
         return
@@ -282,6 +284,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @NotNull
+    @SuppressWarnings("unused")
     protected String retrieveJdbcUsername(@NotNull final Map parameters)
     {
         return
@@ -295,6 +298,7 @@ public abstract class AbstractQueryJCommandHandler
      * @precondition parameters != null
      */
     @NotNull
+    @SuppressWarnings("unused")
     protected String retrieveJdbcPassword(@NotNull final Map parameters)
     {
         return
@@ -307,7 +311,7 @@ public abstract class AbstractQueryJCommandHandler
      * @return the correct one.
      */
     @NotNull
-    public static String fixQuote(@NotNull final String quote)
+    public static String fixQuote(@Nullable final String quote)
     {
         String result = quote;
 

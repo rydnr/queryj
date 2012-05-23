@@ -112,6 +112,7 @@ public class BaseDAOTemplateGenerator
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableName the table name.
      * @return a template.
      */
@@ -125,6 +126,7 @@ public class BaseDAOTemplateGenerator
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable List<Row> staticContents)
     {
@@ -140,6 +142,7 @@ public class BaseDAOTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     tableName,
                     staticContents));
     }

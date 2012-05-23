@@ -107,6 +107,11 @@ public abstract class AbstractTemplateContext
     private boolean m__bJmx;
 
     /**
+     * The JNDI path of the DataSource.
+     */
+    private String m__strJndiLocation;
+
+    /**
      * Creates an {@link AbstractTemplateContext} with given information.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -117,6 +122,7 @@ public abstract class AbstractTemplateContext
      * @param repositoryName the repository name.
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      */
     protected AbstractTemplateContext(
         @NotNull final MetadataManager metadataManager,
@@ -127,7 +133,8 @@ public abstract class AbstractTemplateContext
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
-        final boolean jmx)
+        final boolean jmx,
+        @NotNull final String jndiLocation)
     {
         immutableSetMetadataManager(metadataManager);
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -138,6 +145,7 @@ public abstract class AbstractTemplateContext
         immutableSetRepositoryName(repositoryName);
         immutableSetImplementMarkerInterfaces(implementMarkerInterfaces);
         immutableSetJmxSupportEnabled(jmx);
+        immutableSetJndiLocation(jndiLocation);
     }
 
     /**
@@ -413,5 +421,34 @@ public abstract class AbstractTemplateContext
     public boolean isJmxSupportEnabled()
     {
         return m__bJmx;
+    }
+
+    /**
+     * Specifies the JNDI location for the {@link javax.sql.DataSource}.
+     * @param location the JNDI location.
+     */
+    protected final void immutableSetJndiLocation(@NotNull final String location)
+    {
+        this.m__strJndiLocation = location;
+    }
+
+    /**
+     * Specifies the JNDI location for the {@link javax.sql.DataSource}.
+     * @param location the JNDI location.
+     */
+    @SuppressWarnings("unused")
+    protected void setJndiLocation(@NotNull final String location)
+    {
+        this.m__strJndiLocation = location;
+    }
+
+    /**
+     * Retrieves the JNDI location for the {@link javax.sql.DataSource}.
+     * @return such location.
+     */
+    @NotNull
+    public String getJndiLocation()
+    {
+        return this.m__strJndiLocation;
     }
 }

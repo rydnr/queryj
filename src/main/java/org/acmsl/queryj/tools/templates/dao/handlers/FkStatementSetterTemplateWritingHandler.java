@@ -39,12 +39,16 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -52,8 +56,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -68,7 +70,7 @@ public class FkStatementSetterTemplateWritingHandler
      * Creates a <code>FkStatementSetterTemplateWritingHandler</code>
      * instance.
      */
-    public FkStatementSetterTemplateWritingHandler() {};
+    public FkStatementSetterTemplateWritingHandler() {}
 
     /**
      * Handles given information.
@@ -85,8 +87,10 @@ public class FkStatementSetterTemplateWritingHandler
     {
         writeTemplates(
             parameters,
-            retrieveDatabaseMetaData(parameters),
-            retrieveCharset(parameters));
+            retrieveMetadataManager(parameters),
+            retrieveCharset(parameters),
+            retrieveTemplates(parameters),
+            FkStatementSetterTemplateGenerator.getInstance());
 
         return false;
     }
@@ -94,39 +98,7 @@ public class FkStatementSetterTemplateWritingHandler
     /**
      * Writes the <code>FkStatementSetter</code> templates.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @param charset the file encoding.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters,
-        @NotNull final DatabaseMetaData metaData,
-        final Charset charset)
-      throws  QueryJBuildException
-    {
-        try
-        {
-            writeTemplates(
-                parameters,
-                metaData.getDatabaseProductName(),
-                charset,
-                retrieveTemplates(parameters),
-                FkStatementSetterTemplateGenerator.getInstance());
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot retrieve database product name", sqlException);
-        }
-    }
-
-    /**
-     * Writes the <code>FkStatementSetter</code> templates.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param charset the file encoding.
      * @param templates the templates.
      * @param templateGenerator the template generator.
@@ -138,29 +110,23 @@ public class FkStatementSetterTemplateWritingHandler
      */
     protected void writeTemplates(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        final Charset charset,
-        @Nullable final FkStatementSetterTemplate[] templates,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final Charset charset,
+        @NotNull final FkStatementSetterTemplate[] templates,
         @NotNull final FkStatementSetterTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
         try 
         {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            @Nullable FkStatementSetterTemplate t_Template;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
+            for  (FkStatementSetterTemplate t_Template : templates)
             {
-                t_Template = templates[t_iIndex];
-
                 if  (t_Template != null)
                 {
                     templateGenerator.write(
                         t_Template,
                         retrieveOutputDir(
-                            engineName,
-                            t_Template.getForeignKey().getSourceTableName(),
+                            metadataManager.getEngineName(),
+                            t_Template.getTemplateContext().getForeignKey().getSourceTableName(),
                             parameters),
                         charset);
                 }

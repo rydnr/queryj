@@ -48,7 +48,6 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,11 +57,8 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -74,7 +70,6 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some JetBrains annotations.
  */
-import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -105,7 +100,7 @@ public abstract class BasePerTableTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplate(parameters, retrieveDatabaseMetaData(parameters));
+        buildTemplate(parameters, retrieveMetadataManager(parameters));
 
         return false;
     }
@@ -113,54 +108,16 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Builds the template.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected void buildTemplate(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
-      throws  QueryJBuildException
-    {
-        try
-        {
-            buildTemplate(
-                parameters,
-                metaData.getDatabaseProductName(),
-                retrieveDatabaseProductVersion(metaData),
-                fixQuote(metaData.getIdentifierQuoteString()),
-                retrieveMetadataManager(parameters));
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot build the table-specific template", sqlException);
-        }
-    }
-
-    /**
-     * Builds the template.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the {@link MetadataManager} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
         buildTemplate(
             parameters,
-            engineName,
-            engineVersion,
-            quote,
             metadataManager,
             retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
@@ -169,6 +126,7 @@ public abstract class BasePerTableTemplateBuildHandler
             retrieveHeader(parameters),
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
             metadataManager.getTableNames());
     }
 
@@ -181,9 +139,6 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Builds the template.
      * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
@@ -192,15 +147,13 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
-     * @param jmx whether to incldue JMX support.
+     * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableNames the table names.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
@@ -209,6 +162,7 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @Nullable final String[] tableNames)
       throws  QueryJBuildException
     {
@@ -222,8 +176,6 @@ public abstract class BasePerTableTemplateBuildHandler
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
         {
-            @Nullable TableTemplate t_TableTemplate = null;
-
             if (tableNames != null)
             {
                 t_strTableName = tableNames[t_iIndex];
@@ -270,18 +222,16 @@ public abstract class BasePerTableTemplateBuildHandler
                             metadataManager,
                             customSqlProvider,
                             retrievePackage(
-                                t_strTableName, engineName, parameters),
-                            engineName,
-                            engineVersion,
-                            quote,
+                                t_strTableName, metadataManager.getEngineName(), parameters),
                             projectPackage,
                             repository,
                             header,
                             implementMarkerInterfaces,
                             jmx,
+                            jndiLocation,
                             t_strTableName,
-                            parameters,
-                            t_lStaticContent);
+                            t_lStaticContent,
+                            parameters);
 
                     if  (t_Template != null)
                     {
@@ -353,12 +303,13 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param header the custom file header.
      * @param implementMarkerInterfaces whether to use marker interface or not.
      * @param jmx whether to include JMX support or not.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @param parameters the parameter map.
      */
     @Nullable
-    @Override
+    @SuppressWarnings("unused")
     protected T createTemplate(
         @NotNull final TF templateFactory,
         @NotNull final MetadataManager metadataManager,
@@ -369,6 +320,7 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable List<Row> staticContents,
         @NotNull final Map parameters)
@@ -384,6 +336,7 @@ public abstract class BasePerTableTemplateBuildHandler
                 header,
                 implementMarkerInterfaces,
                 jmx,
+                jndiLocation,
                 tableName,
                 staticContents);
     }

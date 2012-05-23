@@ -110,6 +110,7 @@ public class ResultSetExtractorTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -125,6 +126,7 @@ public class ResultSetExtractorTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     tableName,
                     staticContents));
     }

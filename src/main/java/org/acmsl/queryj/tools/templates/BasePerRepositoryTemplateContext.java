@@ -110,10 +110,10 @@ public class BasePerRepositoryTemplateContext
             basePackageName,
             repositoryName,
             implementMarkerInterfaces,
-            jmx);
+            jmx,
+            jndiLocation);
 
         immutableSetTableNames(tableNames);
-        immutableSetJndiLocation(jndiLocation);
     }
 
     /**
@@ -159,33 +159,5 @@ public class BasePerRepositoryTemplateContext
         Collections.copy(result, t_lOriginal);
 
         return result;
-    }
-
-    /**
-     * Specifies the JNDI location of the {@link javax.sql.DataSource}
-     * @param jndiLocation such location.
-     */
-    protected final void immutableSetJndiLocation(final String jndiLocation)
-    {
-        this.jndiLocation = jndiLocation;
-    }
-
-    /**
-     * Specifies the JNDI location of the {@link javax.sql.DataSource}
-     * @param jndiLocation such location.
-     */
-    @SuppressWarnings("unused")
-    protected void setJndiLocation(final String jndiLocation)
-    {
-        immutableSetJndiLocation(jndiLocation);
-    }
-
-    /**
-     * Retrieves the JNDI location of the {@link javax.sql.DataSource}.
-     * @return such location.
-     */
-    public String getJndiLocation()
-    {
-        return jndiLocation;
     }
 }

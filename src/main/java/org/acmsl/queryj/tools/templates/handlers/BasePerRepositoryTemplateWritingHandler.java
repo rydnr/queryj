@@ -64,7 +64,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerRepositoryTemplateWritingHandler
-    <T extends BasePerRepositoryTemplate, G extends BasePerRepositoryTemplateGenerator<T,C>, C extends BasePerRepositoryTemplateContext>
+    <T extends BasePerRepositoryTemplate<C>, G extends BasePerRepositoryTemplateGenerator<T,C>, C extends BasePerRepositoryTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {

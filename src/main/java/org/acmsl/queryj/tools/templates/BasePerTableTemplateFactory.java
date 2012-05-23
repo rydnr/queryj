@@ -40,11 +40,6 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Row;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Factory;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -60,7 +55,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
-    extends  Factory
+    extends  TemplateFactory
 {
     /**
      * Generates a <i>per-table</i> template.
@@ -73,6 +68,7 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @return a template.
@@ -87,6 +83,7 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents);
 }

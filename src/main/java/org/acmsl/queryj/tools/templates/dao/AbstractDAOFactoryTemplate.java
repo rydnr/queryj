@@ -37,9 +37,13 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
-import org.acmsl.queryj.tools.templates.AbstractTemplate;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.tools.templates.TemplateContext;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -47,264 +51,16 @@ import org.jetbrains.annotations.NotNull;
  * database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class AbstractDAOFactoryTemplate
-    extends  AbstractTemplate
+public abstract class AbstractDAOFactoryTemplate<C extends BasePerTableTemplateContext>
+    extends BasePerTableTemplate<C>
 {
     /**
-     * The package name.
-     */
-    private String m__strPackageName;
-
-    /**
-     * The table template.
-     */
-    private TableTemplate m__TableTemplate;
-
-    /**
-     * The engine name.
-     */
-    private String m__strEngineName;
-
-    /**
-     * The engine's version.
-     */
-    private String m__strEngineVersion;
-
-    /**
-     * The quote.
-     */
-    private String m__strQuote;
-
-    /**
-     * The base package name.
-     */
-    private String m__strBasePackageName;
-
-    /**
-     * The datasource's JNDI location.
-     */
-    private String m__strJNDIDataSource;
-
-    /**
      * Builds an <code>AbstractDAOFactoryTemplate</code> using given information.
-     * @param header the header.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableTemplate the table template.
-     * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the identifier quote string.
-     * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
+     * @param context the {@link BasePerTableTemplateContext context}.
      */
-    protected AbstractDAOFactoryTemplate(
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final TableTemplate tableTemplate,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String jndiDataSource)
+    protected AbstractDAOFactoryTemplate(@NotNull final C context)
     {
-        super(header, decoratorFactory);
-        immutableSetTableTemplate(tableTemplate);
-        immutableSetPackageName(packageName);
-        immutableSetEngineName(engineName);
-        immutableSetEngineVersion(engineVersion);
-        immutableSetQuote(quote);
-        immutableSetBasePackageName(basePackageName);
-        immutableSetJNDIDataSource(jndiDataSource);
-    }
-
-    /**
-     * Specifies the table template.
-     * @param tableTemplate the new table template.
-     */
-    private void immutableSetTableTemplate(final TableTemplate tableTemplate)
-    {
-        m__TableTemplate = tableTemplate;
-    }
-
-    /**
-     * Specifies the table template.
-     * @param tableTemplate the new table template.
-     */
-    protected void setTableTemplate(final TableTemplate tableTemplate)
-    {
-        immutableSetTableTemplate(tableTemplate);
-    }
-
-    /**
-     * Retrieves the table template.
-     * @return such information.
-     */
-    public TableTemplate getTableTemplate()
-    {
-        return m__TableTemplate;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    private void immutableSetPackageName(final String packageName)
-    {
-        m__strPackageName = packageName;
-    }
-
-    /**
-     * Specifies the package name.
-     * @param packageName the new package name.
-     */
-    protected void setPackageName(final String packageName)
-    {
-        immutableSetPackageName(packageName);
-    }
-
-    /**
-     * Retrieves the package name.
-     * @return such information.
-     */
-    public String getPackageName() 
-    {
-        return m__strPackageName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    private void immutableSetEngineName(final String engineName)
-    {
-        m__strEngineName = engineName;
-    }
-
-    /**
-     * Specifies the engine name.
-     * @param engineName the new engine name.
-     */
-    protected void setEngineName(final String engineName)
-    {
-        immutableSetEngineName(engineName);
-    }
-
-    /**
-     * Retrieves the engine name.
-     * @return such information.
-     */
-    public String getEngineName() 
-    {
-        return m__strEngineName;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    private void immutableSetEngineVersion(final String engineVersion)
-    {
-        m__strEngineVersion = engineVersion;
-    }
-
-    /**
-     * Specifies the engine version.
-     * @param engineVersion the new engine version.
-     */
-    protected void setEngineVersion(final String engineVersion)
-    {
-        immutableSetEngineVersion(engineVersion);
-    }
-
-    /**
-     * Retrieves the engine version.
-     * @return such information.
-     */
-    public String getEngineVersion()
-    {
-        return m__strEngineVersion;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    private void immutableSetQuote(final String quote)
-    {
-        m__strQuote = quote;
-    }
-
-    /**
-     * Specifies the identifier quote string.
-     * @param quote such identifier.
-     */
-    protected void setQuote(final String quote)
-    {
-        immutableSetQuote(quote);
-    }
-
-    /**
-     * Retrieves the identifier quote string.
-     * @return such identifier.
-     */
-    public String getQuote()
-    {
-        return m__strQuote;
-    }
-
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    private void immutableSetBasePackageName(final String basePackageName)
-    {
-        m__strBasePackageName = basePackageName;
-    }
-
-    /**
-     * Specifies the base package name.
-     * @param basePackageName the new base package name.
-     */
-    protected void setBasePackageName(final String basePackageName)
-    {
-        immutableSetBasePackageName(basePackageName);
-    }
-
-    /**
-     * Retrieves the base package name.
-     * @return such information.
-     */
-    public String getBasePackageName() 
-    {
-        return m__strBasePackageName;
-    }
-
-    /**
-     * Specifies the JNDI data source.
-     * @param jndiDataSource the new JNDI data source.
-     */
-    private void immutableSetJNDIDataSource(final String jndiDataSource)
-    {
-        m__strJNDIDataSource = jndiDataSource;
-    }
-
-    /**
-     * Specifies the JNDI data source.
-     * @param jndiDataSource the new JNDI data source.
-     */
-    protected void setJNDIDataSource(final String jndiDataSource)
-    {
-        immutableSetJNDIDataSource(jndiDataSource);
-    }
-
-    /**
-     * Retrieves the JNDI data source.
-     * @return such information.
-     */
-    public String getJNDIDataSource() 
-    {
-        return m__strJNDIDataSource;
+        super(context);
     }
 
     /**
@@ -312,24 +68,22 @@ public abstract class AbstractDAOFactoryTemplate
      * @return such header.
      */
     @NotNull
+    @Override
     protected String buildHeader()
     {
-        return buildHeader(getTableTemplate());
+        return buildHeader(getTemplateContext());
     }
 
     /**
      * Builds the header for logging purposes.
-     * @param tableTemplate the table template.
+     * @param context the {@link TemplateContext context}.
      * @return such header.
-     * @precondition tableTemplate != null
      */
     @NotNull
-    protected String buildHeader(@NotNull final TableTemplate tableTemplate)
+    protected String buildHeader(@NotNull final BasePerTableTemplateContext context)
     {
         return
               "Generating DAOFactory for "
-            + tableTemplate.getTableName() + ".";
+            + context.getTableName() + ".";
     }
-
-
 }

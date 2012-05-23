@@ -36,9 +36,11 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
  * Importing some ACM-SL classes.
@@ -50,11 +52,14 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -62,9 +67,9 @@ import java.util.Locale;
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DAOFactoryTemplateGenerator<T extends DAOFactoryTemplate, C extends BasePerTableTemplateContext>
-    extends AbstractTemplateGenerator<T,C>
-    implements  DAOFactoryTemplateFactory,
+public class DAOFactoryTemplateGenerator
+    extends AbstractTemplateGenerator<DAOFactoryTemplate,BasePerTableTemplateContext>
+    implements BasePerTableTemplateFactory<DAOFactoryTemplate>,
                 Singleton
 {
     /**
@@ -95,57 +100,71 @@ public class DAOFactoryTemplateGenerator<T extends DAOFactoryTemplate, C extends
     }
 
     /**
-     * Generates a DAO factory template.
-     * @param tableTemplate the table template.
+     * Generates a DAOFactory template.
+     *
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param packageName the package name.
-     * @param engineName the engine name.
-     * @param basePackageName the base package name.
-     * @param jndiDataSource the JNDI location of the data source.
+     * @param projectPackage the project's base package name.
+     * @param repository the repository name.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
+     * @param jmx whether to include JMX support.
+     * @param jndiDataSource the JNDI location of the data source.
+     * @param tableName the table name.
+     * @param staticContents the static contents of the table (optional).
      * @return a template.
-     * @precondition tableTemplate != null
-     * @precondition packageName != null
-     * @precondition engineName != null
      */
     @NotNull
-    public DAOFactoryTemplate createDAOFactoryTemplate(
-        final TableTemplate tableTemplate,
-        final String packageName,
-        final String engineName,
-        final String basePackageName,
-        final String jndiDataSource,
-        final String header)
+    public DAOFactoryTemplate createTemplate(
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final String packageName,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiDataSource,
+        @NotNull final String tableName,
+        @Nullable final List<Row> staticContents)
     {
         return
             new DAOFactoryTemplate(
-                header,
-                getDecoratorFactory(),
-                tableTemplate,
-                packageName,
-                engineName,
-                basePackageName,
-                jndiDataSource);
+                new BasePerTableTemplateContext(
+                    metadataManager,
+                    customSqlProvider,
+                    header,
+                    getDecoratorFactory(),
+                    packageName,
+                    projectPackage,
+                    repository,
+                    implementMarkerInterfaces,
+                    jmx,
+                    jndiDataSource,
+                    tableName,
+                    staticContents));
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull final C context)
+    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
         return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
-     * @param context the template context.
+     * @param context the {@link BasePerTableTemplateContext context}.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final C context,
+        @NotNull final BasePerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {

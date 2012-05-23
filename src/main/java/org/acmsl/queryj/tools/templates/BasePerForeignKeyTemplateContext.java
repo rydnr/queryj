@@ -74,6 +74,7 @@ public class BasePerForeignKeyTemplateContext
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param foreignKey the {@link ForeignKey} instance.
      */
     public BasePerForeignKeyTemplateContext(
@@ -86,6 +87,7 @@ public class BasePerForeignKeyTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final ForeignKey foreignKey)
     {
         super(
@@ -97,7 +99,8 @@ public class BasePerForeignKeyTemplateContext
             basePackageName,
             repositoryName,
             implementMarkerInterfaces,
-            jmx);
+            jmx,
+            jndiLocation);
 
         immutableSetForeignKey(foreignKey);
     }

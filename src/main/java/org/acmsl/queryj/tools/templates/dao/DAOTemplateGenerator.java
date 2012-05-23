@@ -103,19 +103,7 @@ public class DAOTemplateGenerator
     }
 
     /**
-     * Generates a DAO template.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param jmx whether to include JMX support.
-     * @param tableName the table name.
-     * @param staticContents the (optional) static contents of the table.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
     public DAOTemplate createTemplate(
@@ -127,6 +115,7 @@ public class DAOTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -142,6 +131,7 @@ public class DAOTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     tableName,
                     staticContents));
     }

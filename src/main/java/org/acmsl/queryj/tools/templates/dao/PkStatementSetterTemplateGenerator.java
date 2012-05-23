@@ -100,17 +100,7 @@ public class PkStatementSetterTemplateGenerator
     }
 
     /**
-     * Generates a template.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @return a template.
+     * {@inheritDoc}
      */
     @NotNull
     public PkStatementSetterTemplate createTemplate(
@@ -122,6 +112,7 @@ public class PkStatementSetterTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -137,6 +128,7 @@ public class PkStatementSetterTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     tableName,
                     staticContents));
     }

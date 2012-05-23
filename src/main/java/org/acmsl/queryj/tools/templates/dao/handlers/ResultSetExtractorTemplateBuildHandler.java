@@ -95,6 +95,7 @@ public class ResultSetExtractorTemplateBuildHandler
             retrieveHeader(parameters),
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
             ResultSetExtractorTemplateGenerator.getInstance(),
             filterTableTemplates(
                 retrieveTableTemplates(parameters),
@@ -114,6 +115,7 @@ public class ResultSetExtractorTemplateBuildHandler
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param templateFactory the template factory.
      * @param tableTemplates the table templates.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -127,6 +129,7 @@ public class ResultSetExtractorTemplateBuildHandler
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final BasePerTableTemplateFactory<ResultSetExtractorTemplate> templateFactory,
         @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
@@ -157,6 +160,7 @@ public class ResultSetExtractorTemplateBuildHandler
                             header,
                             implementMarkerInterfaces,
                             jmx,
+                            jndiLocation,
                             t_strTableName,
                             null));
                 }

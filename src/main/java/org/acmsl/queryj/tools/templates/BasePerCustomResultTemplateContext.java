@@ -85,6 +85,7 @@ public class BasePerCustomResultTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Result result)
     {
         super(
@@ -96,7 +97,8 @@ public class BasePerCustomResultTemplateContext
             basePackageName,
             repositoryName,
             implementMarkerInterfaces,
-            jmx);
+            jmx,
+            jndiLocation);
 
         immutableSetResult(result);
     }

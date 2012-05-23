@@ -36,26 +36,22 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,147 +59,22 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOFactoryTemplateBuildHandler
-    extends    AbstractQueryJCommandHandler
-    implements TemplateBuildHandler
+    extends BasePerTableTemplateBuildHandler<DAOFactoryTemplate, DAOFactoryTemplateGenerator>
 {
-    /**
-     * A cached empty table template array.
-     */
-    public static final TableTemplate[] EMPTY_TABLE_TEMPLATE_ARRAY =
-        new TableTemplate[0];
-
     /**
      * Creates a <code>DAOFactoryTemplateBuildHandler</code> instance.
      */
-    public DAOFactoryTemplateBuildHandler() {};
+    public DAOFactoryTemplateBuildHandler() {}
 
     /**
-     * Handles given information.
-     *
-     *
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * Retrieves the {@link DAOFactoryTemplateGenerator} instance.
+     * @return such instance.
      */
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
+    @Override
+    @NotNull
+    protected DAOFactoryTemplateGenerator retrieveTemplateFactory()
     {
-        return
-            handle(
-                parameters,
-                retrieveDatabaseMetaData(parameters),
-                retrieveProjectPackage(parameters));
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @param basePackage the base package.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     * @precondition basePackage != null
-     */
-    protected boolean handle(
-        @NotNull final Map parameters,
-        @NotNull final DatabaseMetaData metaData,
-        final String basePackage)
-      throws  QueryJBuildException
-    {
-        boolean result = false;
-
-        try
-        {
-            buildTemplates(
-                parameters,
-                retrieveJNDIDataSource(parameters),
-                retrievePackage(
-                    basePackage,
-                    metaData.getDatabaseProductName().toLowerCase()),
-                basePackage,
-                metaData.getDatabaseProductName(),
-                retrieveHeader(parameters),
-                retrieveTableTemplates(parameters),
-                DAOFactoryTemplateGenerator.getInstance());
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot retrieve database product name", sqlException);
-        }
-
-        return result;
-    }
-
-    /**
-     * Builds the <code>DAOFactory</code> templates.
-     * @param parameters the parameters.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param packageName the package name.
-     * @param basePackage the base package.
-     * @param engineName the engine name.
-     * @param header the header.
-     * @param tableTemplates the table templates.
-     * @param templateFactory the template factory.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition jndiDataSource != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableTemplates != null
-     * @precondition templateFactory != null
-     */
-    protected void buildTemplates(
-        @NotNull final Map parameters,
-        final String jndiDataSource,
-        final String packageName,
-        final String basePackage,
-        final String engineName,
-        final String header,
-        @Nullable final TableTemplate[] tableTemplates,
-        @NotNull final DAOFactoryTemplateFactory templateFactory)
-      throws  QueryJBuildException
-    {
-        int t_iLength =
-            (tableTemplates != null) ? tableTemplates.length : 0;
-            
-        @NotNull DAOFactoryTemplate[] t_aDAOFactoryTemplates =
-            new DAOFactoryTemplate[t_iLength];
-
-        for  (int t_iDAOFactoryIndex = 0;
-                  t_iDAOFactoryIndex < t_iLength;
-                  t_iDAOFactoryIndex++) 
-        {
-            t_aDAOFactoryTemplates[t_iDAOFactoryIndex] =
-                templateFactory.createDAOFactoryTemplate(
-                    tableTemplates[t_iDAOFactoryIndex],
-                    packageName,
-                    engineName,
-                    basePackage,
-                    jndiDataSource,
-                    header);
-        }
-
-        storeDAOFactoryTemplates(t_aDAOFactoryTemplates, parameters);
-    }
-
-    /**
-     * Retrieves the package name from the attribute map.
-     * @param basePackage the base package.
-     * @param engineName the engine name.
-     * @return the package name.
-     * @precondition parameters != null
-     */
-    protected String retrievePackage(
-        final String basePackage, @NotNull final String engineName)
-    {
-        return
-            retrievePackage(
-                basePackage, engineName, PackageUtils.getInstance());
+        return DAOFactoryTemplateGenerator.getInstance();
     }
 
     /**
@@ -212,12 +83,13 @@ public class DAOFactoryTemplateBuildHandler
      * @param engineName the engine name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
+    @NotNull
+    @Override
     protected String retrievePackage(
-        final String basePackage,
+        @NotNull final String tableName,
         @NotNull final String engineName,
+        @NotNull final String basePackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
@@ -226,53 +98,12 @@ public class DAOFactoryTemplateBuildHandler
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     */
-    @NotNull
-    protected File retrieveOutputDir(
-        @NotNull final String engineName, @NotNull final Map parameters)
-    {
-        return
-            retrieveOutputDir(
-                engineName, parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
-     */
-    @NotNull
-    protected File retrieveOutputDir(
-        @NotNull final String engineName,
-        @NotNull final Map parameters,
-        @NotNull final PackageUtils packageUtils)
-    {
-        return
-            packageUtils.retrieveDAOFactoryFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                engineName,
-                retrieveUseSubfoldersFlag(parameters));
-    }
-
-    /**
      * Retrieves the JNDI location of the data source from the attribute map.
      * @param parameters the parameter map.
      * @return the JNDI location.
-     * @precondition parameters != null
      */
     @NotNull
+    @SuppressWarnings("unused,unchecked")
     protected String retrieveJNDIDataSource(@NotNull final Map parameters)
     {
         return
@@ -285,30 +116,15 @@ public class DAOFactoryTemplateBuildHandler
      * Stores the DAO factory template collection in given attribute map.
      * @param daoFactoryTemplates the DAO factory templates.
      * @param parameters the parameter map.
-     * @precondition daoFactoryTemplates != null
-     * @precondition parameters != null
      */
-    protected void storeDAOFactoryTemplates(
-        final DAOFactoryTemplate[] daoFactoryTemplates,
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void storeTemplates(
+        @NotNull final List<DAOFactoryTemplate> daoFactoryTemplates,
         @NotNull final Map parameters)
     {
         parameters.put(
             TemplateMappingManager.DAO_FACTORY_TEMPLATES,
             daoFactoryTemplates);
-    }
-
-    /**
-     * Retrieves the table templates.
-     * @param parameters the parameter map.
-     * @return such templates.
-     * @precondition parameters != null
-     */
-    @NotNull
-    protected TableTemplate[] retrieveTableTemplates(
-        @NotNull final Map parameters)
-    {
-        return
-            (TableTemplate[])
-                parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 }
