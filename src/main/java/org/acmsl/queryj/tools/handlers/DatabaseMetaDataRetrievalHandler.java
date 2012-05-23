@@ -102,6 +102,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * The table fields attribute name.
      */
+    @SuppressWarnings("unused")
     public static final String TABLE_FIELDS = "table.fields";
 
     /**
@@ -191,7 +192,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     retrieveExtractTables(parameters),
                     retrieveExtractProcedures(parameters));
                 */
-                handle(parameters, buildMetadataManager(parameters));
+                handle(parameters, buildMetadataManager(parameters, metaData));
         }
 
         return result;
@@ -231,11 +232,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * Builds the metadata manager.
      * @param parameters the command parameters.
+     * @param metaData the {@link DatabaseMetaData} instance.
      * @return the {@link MetadataManager} instance.
      * @throws QueryJBuildException if the manager instance cannot be created.
      */
     @Nullable
-    protected MetadataManager buildMetadataManager(@NotNull final Map parameters)
+    protected MetadataManager buildMetadataManager(
+        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
       throws QueryJBuildException
     {
         boolean t_bDisableTableExtraction =
@@ -246,7 +249,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         return
             buildMetadataManager(
-                parameters, t_bDisableTableExtraction, t_bDisableProcedureExtraction);
+                parameters, metaData, t_bDisableTableExtraction, t_bDisableProcedureExtraction);
     }
 
     /**
@@ -359,6 +362,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData,
         final boolean disableTableExtraction,
         final boolean disableProcedureExtraction)
       throws QueryJBuildException
@@ -369,6 +373,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         {
             result =
                 buildMetadataManager(
+                    metaData,
                     disableTableExtraction,
                     lazyTableExtraction(retrieveTablesElement(parameters)),
                     disableProcedureExtraction,
@@ -672,6 +677,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         @Nullable MetadataManager t_MetadataManager =
             buildMetadataManager(
+                metaData,
                 !enableTableExtraction,
                 lazyTableExtraction(t_TablesElement),
                 !enableProcedureExtraction,
@@ -707,7 +713,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     protected String[] extractTableNames(
-        final Map parameters, @Nullable final AntTablesElement tablesElement)
+        @NotNull final Map parameters, @Nullable final AntTablesElement tablesElement)
     {
         String[] result = new String[0];
 
@@ -827,15 +833,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param tablesElement the tables element.
      * @param metadataTypeManager the metadata type manager.
      * @return <code>true</code> if the chain should be stopped.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     * @precondition metadataManager != null
-     * @precondition tableElements != null
-     * @precondition metadataTypeManager != null
      */
     protected boolean extractProcedures(
-        final Map parameters,
-        final DatabaseMetaData metaData,
+        @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData,
         @NotNull final MetadataManager metadataManager,
         @NotNull final AntTablesElement tablesElement,
         @NotNull final MetadataTypeManager metadataTypeManager)
@@ -859,19 +860,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param tableKey the key to store the tables.
      * @param metadataTypeManager the metadata type manager.
      * @return <code>true</code> if the chain should be stopped.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     * @precondition metadataManager != null
-     * @precondition tableElements != null
-     * @precondition tableKey != null
-     * @precondition metadataTypeManager != null
      */
     protected boolean extractProcedures(
-        final Map parameters,
-        final DatabaseMetaData metaData,
+        @NotNull final Map parameters,
+        @NotNull final DatabaseMetaData metaData,
         @NotNull final MetadataManager metadataManager,
-        @Nullable final Collection tableElements,
-        final Object tableKey,
+        @NotNull final Collection tableElements,
+        @NotNull final Object tableKey,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
         boolean result = false;
@@ -1052,7 +1047,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final Collection tables,
         @NotNull final Map extractedMap,
         @NotNull final MetadataManager metadataManager,
-        final Object tableKey)
+        @NotNull Object tableKey)
     {
         Iterator t_itTables = tables.iterator();
 
@@ -1167,9 +1162,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Annotates the database product name.
      * @param productName the product name.
      * @param parameters the parameters.
-     * @return such name.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     public void storeDatabaseProductName(@NotNull String productName, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_PRODUCT_NAME, productName);
@@ -1180,6 +1174,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return such name.
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     public String retrieveDatabaseProductName(@NotNull final Map parameters)
     {
         return (String) parameters.get(DATABASE_PRODUCT_NAME);
@@ -1189,9 +1184,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Annotates the database product version.
      * @param productVersion the product version.
      * @param parameters the parameters.
-     * @return such name.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     public void storeDatabaseProductVersion(@NotNull String productVersion, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_PRODUCT_VERSION, productVersion);
@@ -1202,6 +1196,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return such version.
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     public String retrieveDatabaseProductVersion(@NotNull final Map parameters)
     {
         return (String) parameters.get(DATABASE_PRODUCT_VERSION);
@@ -1211,10 +1206,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Annotates the database major version.
      * @param majorVersion the major version.
      * @param parameters the parameters.
-     * @return such name.
-     * @precondition parameters != null
      */
-    public void storeDatabaseMajorVersion(final int majorVersion, @NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    public void storeDatabaseMajorVersion(@NotNull final int majorVersion, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_MAJOR_VERSION, majorVersion);
     }
@@ -1241,9 +1235,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Annotates the database minor version.
      * @param minorVersion the minor version.
      * @param parameters the parameters.
-     * @return such name.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     public void storeDatabaseMinorVersion(final int minorVersion, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_MINOR_VERSION, minorVersion);
@@ -1272,9 +1265,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param name the key name.
      * @param parameters the parameter map.
      * @return the boolean value.
-     * @precondition parameters != null
      */
-    protected boolean retrieveBoolean(final String name, @NotNull final Map parameters)
+    protected boolean retrieveBoolean(@NotNull final String name, @NotNull final Map parameters)
     {
         boolean result = false;
 
@@ -1292,6 +1284,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * Retrieves the database metadata manager using the database metadata and
      * parameters stored in the attribute map.
+     * @param metaData the {@link DatabaseMetaData} instance.
      * @param disableTableExtraction if the table metadata should not be
      * extracted.
      * @param lazyTableExtraction if the table metadata should not be
@@ -1308,6 +1301,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @Nullable
     protected MetadataManager buildMetadataManager(
+        @NotNull DatabaseMetaData metaData,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
@@ -1334,7 +1328,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     retrieveDatabaseMetaData(parameters),
                     retrieveCatalog(parameters),
                     retrieveSchema(parameters),
-                    retrieveCaseSensitive(parameters));
+                    retrieveCaseSensitive(parameters),
+                    retrieveProductName(metaData),
+                    retrieveProductVersion(metaData),
+                    retrieveProductQuote(metaData));
 
 
         }
@@ -1413,6 +1410,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param catalog the database catalog.
      * @param schema the database schema.
      * @param caseSensitive whether the engine is case sensitive or not.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
      * @return the metadata manager instance.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
@@ -1430,7 +1430,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @NotNull final String schema,
-        final boolean caseSensitive)
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
       throws  QueryJBuildException
     {
         MetadataManager result;
@@ -1448,7 +1451,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     metaData,
                     catalog,
                     schema,
-                    caseSensitive);
+                    caseSensitive,
+                    engineName,
+                    engineVersion,
+                    quote);
         }
         catch  (@NotNull final RuntimeException exception)
         {
@@ -1479,11 +1485,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Stores the database metadata in the attribute map.
      * @param metaData the database metadata.
      * @param parameters the parameter map.
-     * @precondition metaData != null
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeMetadata(
-        final DatabaseMetaData metaData, @NotNull final Map parameters)
+        @NotNull final DatabaseMetaData metaData, @NotNull final Map parameters)
     {
         parameters.put(DATABASE_METADATA, metaData);
     }
@@ -1491,8 +1496,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * Stores a flag indicating the metadata extraction has already been done.
      * @param parameters the parameter map.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeAlreadyDoneFlag(@NotNull final Map parameters)
     {
         parameters.put(METADATA_EXTRACTION_ALREADY_DONE, Boolean.TRUE);
@@ -1523,11 +1528,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Stores the table names in the attribute map.
      * @param tableNames the table names.
      * @param parameters the parameter map.
-     * @precondition tableNames != null
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeTableNames(
-        final String[] tableNames, @NotNull final Map parameters)
+        @NotNull final String[] tableNames, @NotNull final Map parameters)
     {
         parameters.put(TABLE_NAMES, tableNames);
     }
@@ -1539,6 +1543,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     protected String[] retrieveTableNames(@NotNull final Map parameters)
     {
         return (String[]) parameters.get(TABLE_NAMES);
@@ -1560,11 +1565,10 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Stores the database metadata manager in the attribute map.
      * @param metadataManager the metadata manager.
      * @param parameters the parameter map.
-     * @precondition metadataManager != null
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeMetadataManager(
-        final MetadataManager metadataManager, @NotNull final Map parameters)
+        @NotNull final MetadataManager metadataManager, @NotNull final Map parameters)
     {
         parameters.put(METADATA_MANAGER, metadataManager);
     }
@@ -1576,6 +1580,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @precondition parameters != null
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     protected String retrieveCatalog(@NotNull final Map parameters)
     {
         return (String) parameters.get(ParameterValidationHandler.JDBC_CATALOG);
@@ -1585,9 +1590,9 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the JDBC schema from the attribute map.
      * @param parameters the parameter map.
      * @return the schema.
-     * @precondition parameters != null
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     protected String retrieveSchema(@NotNull final Map parameters)
     {
         return (String) parameters.get(ParameterValidationHandler.JDBC_SCHEMA);
@@ -1608,7 +1613,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildTableFieldsKey(final Object key)
+    protected Object buildTableFieldsKey(@NotNull final Object key)
     {
         return ".98.table'@'@'fields`p" + key;
     }
@@ -1619,7 +1624,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildPkKey(final Object firstKey)
+    protected Object buildPkKey(@NotNull final Object firstKey)
     {
         return ".|\\|.pk" + firstKey;
     }
@@ -1632,7 +1637,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @NotNull
     protected Object buildPkKey(
-        final Object firstKey, final Object secondKey)
+        @NotNull final Object firstKey, @NotNull final Object secondKey)
     {
         return buildPkKey(firstKey) + "-.,.,-" + secondKey;
     }
@@ -1643,7 +1648,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @return the map key.
      */
     @NotNull
-    protected Object buildFkKey(final Object firstKey)
+    protected Object buildFkKey(@NotNull final Object firstKey)
     {
         return "==fk''" + firstKey;
     }
@@ -1656,7 +1661,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      */
     @NotNull
     protected Object buildFkKey(
-        final Object firstKey, final Object secondKey)
+        @NotNull final Object firstKey, @NotNull final Object secondKey)
     {
         return buildFkKey(firstKey) + ".,.," + secondKey;
     }
@@ -1668,6 +1673,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @throws QueryJBuildException if the check fails.
      * @precondition metaData != null
      */
+    @NotNull
     protected String retrieveProductName(@NotNull final DatabaseMetaData metaData)
         throws  QueryJBuildException
     {
@@ -1738,6 +1744,50 @@ public abstract class DatabaseMetaDataRetrievalHandler
     }
 
     /**
+     * Retrieves the product's identifier quote string.
+     * @param metaData the database metadata.
+     * @return the quote string.
+     * @throws QueryJBuildException if the check fails.
+     */
+    protected String retrieveProductQuote(@NotNull final DatabaseMetaData metaData)
+        throws  QueryJBuildException
+    {
+        @NotNull String result = "";
+
+        @Nullable QueryJBuildException t_ExceptionToThrow = null;
+
+        try
+        {
+            result = metaData.getIdentifierQuoteString();
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            Log t_Log =
+                UniqueLogFactory.getLog(
+                    DatabaseMetaDataRetrievalHandler.class);
+
+            if  (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve database vendor's quote string.",
+                    sqlException);
+            }
+
+            t_ExceptionToThrow =
+                new QueryJBuildException(
+                    "cannot.retrieve.vendor.quote.string",
+                    sqlException);
+        }
+
+        if (t_ExceptionToThrow != null)
+        {
+            throw t_ExceptionToThrow;
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the database major version.
      * @param metaData the database metadata.
      * @return the database major version.
@@ -1772,7 +1822,6 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * Retrieves the database minor version.
      * @param metaData the database metadata.
      * @return the database minor version.
-     * @precondition metaData != null
      */
     protected int retrieveDatabaseMinorVersion(@NotNull final DatabaseMetaData metaData)
     {
@@ -1811,7 +1860,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     protected boolean checkVendor(@NotNull final DatabaseMetaData metaData, @NotNull Map parameters)
         throws  QueryJBuildException
     {
-        boolean result = false;
+        boolean result;
 
         @Nullable QueryJBuildException t_ExceptionToThrow = null;
 

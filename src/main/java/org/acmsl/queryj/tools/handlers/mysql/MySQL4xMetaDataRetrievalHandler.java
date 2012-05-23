@@ -139,7 +139,10 @@ public class MySQL4xMetaDataRetrievalHandler
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @NotNull final String schema,
-        final boolean caseSensitive)
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
         throws  QueryJBuildException
     {
         MetadataManager result;
@@ -157,7 +160,10 @@ public class MySQL4xMetaDataRetrievalHandler
                     metaData,
                     catalog,
                     schema,
-                    caseSensitive);
+                    caseSensitive,
+                    engineName,
+                    engineVersion,
+                    quote);
 
             result.retrieveMetadata();
         }

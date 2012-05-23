@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.AbstractTemplate;
 
 /*
@@ -82,16 +83,16 @@ public class DatabaseEngineNameHandler<T extends AbstractTemplate>
     @Override
     public String getValue()
     {
-        return getEngineName(getTemplate());
+        return getEngineName(getTemplate().getTemplateContext().getMetadataManager());
     }
 
     /**
      * Retrieves the engine name.
-     * @param template the template.
+     * @param metadataManager the {@link MetadataManager} instance.
      */
     @NotNull
-    protected String getEngineName(@NotNull final T template)
+    protected String getEngineName(@NotNull final MetadataManager metadataManager)
     {
-        return template.getEngineName();
+        return metadataManager.getEngineName();
     }
 }

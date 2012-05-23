@@ -71,6 +71,7 @@ public class CustomBaseValueObjectTemplateGenerator
      * {@inheritDoc}
      */
     @Nullable
+    @Override
     public CustomBaseValueObjectTemplate createTemplate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -80,6 +81,7 @@ public class CustomBaseValueObjectTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Result customResult)
     {
         @Nullable CustomBaseValueObjectTemplate result = null;
@@ -100,6 +102,7 @@ public class CustomBaseValueObjectTemplateGenerator
                         repositoryName,
                         implementMarkerInterfaces,
                         jmx,
+                        jndiLocation,
                         customResult));
         }
 

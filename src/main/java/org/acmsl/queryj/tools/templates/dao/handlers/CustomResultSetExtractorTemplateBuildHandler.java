@@ -40,7 +40,7 @@ import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerCustomResultTemplateBuildHandler;
@@ -111,7 +111,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
         
         for  (CustomResultSetExtractorTemplate t_Template : templates)
         {
-            if  (matchesSqlFilter(t_Template))
+            if  (matchesSqlFilter(t_Template.getTemplateContext()))
             {
                 t_lFilteredTemplates.add(t_Template);
             }
@@ -125,24 +125,17 @@ public class CustomResultSetExtractorTemplateBuildHandler
     /**
      * Checks whether the template matches the filter consisting of
      * finding out if there's any custom sql defined for the custom result.
-     * @param template the template to check.
+     * @param context the {@link BasePerCustomResultTemplateContext context}.
      * @return <code>true</code> in such case.
      */
-    protected boolean matchesSqlFilter(@Nullable final BasePerCustomResultTemplate template)
+    protected boolean matchesSqlFilter(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        boolean result = false;
-
-        if  (template != null)
-        {
-            result =
-                matchesSqlFilter(
-                    template.getResult(),
-                    template.getCustomSqlProvider(),
-                    template.getMetadataManager(),
-                    CustomResultUtils.getInstance());
-        }
-        
-        return result;
+        return
+            matchesSqlFilter(
+                context.getResult(),
+                context.getCustomSqlProvider(),
+                context.getMetadataManager(),
+                CustomResultUtils.getInstance());
     }
     
     /**

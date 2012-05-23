@@ -80,6 +80,7 @@ public class CustomValueObjectImplTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectImplTemplate result = null;
@@ -100,6 +101,7 @@ public class CustomValueObjectImplTemplateGenerator
                         repositoryName,
                         implementMarkerInterfaces,
                         jmx,
+                        jndiLocation,
                         customResult));
         }
 

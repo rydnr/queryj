@@ -43,6 +43,8 @@ import org.acmsl.queryj.tools.metadata.vo.Row;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -193,5 +195,28 @@ public class BasePerTableTemplateContext
         }
 
         return result;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.tableName).append(this.m__lStaticValues)
+            .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final BasePerTableTemplateContext other = (BasePerTableTemplateContext) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.tableName, other.tableName)
+            .append(this.m__lStaticValues, other.m__lStaticValues).isEquals();
     }
 }

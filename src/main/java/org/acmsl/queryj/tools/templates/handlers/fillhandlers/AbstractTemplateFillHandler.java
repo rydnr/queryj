@@ -67,21 +67,21 @@ public abstract class AbstractTemplateFillHandler<T extends Template,P>
 
     /**
      * Specifies the template.
-     * @param templ the template.
+     * @param template the template.
      */
-    protected final void immutableSetTemplate(@NotNull final T templ)
+    protected final void immutableSetTemplate(@NotNull final T template)
     {
-        this.template = templ;
+        this.template = template;
     }
 
     /**
      * Specifies the template.
-     * @param templ the template.
+     * @param template the template.
      */
     @SuppressWarnings("unused")
-    protected void setTemplate(@NotNull final T templ)
+    protected void setTemplate(@NotNull final T template)
     {
-        immutableSetTemplate(templ);
+        immutableSetTemplate(template);
     }
 
     /**

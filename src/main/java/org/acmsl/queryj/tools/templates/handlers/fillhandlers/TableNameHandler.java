@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
@@ -50,13 +51,15 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
-public class TableNameHandler<T extends BasePerTableTemplate>
+@SuppressWarnings("unused")
+public class TableNameHandler<T extends BasePerTableTemplate<C>, C extends BasePerTableTemplateContext>
     extends AbstractTemplateFillHandler<T, String>
 {
     /**
      * Creates a {@link TableNameHandler} for given {@link BasePerTableTemplate}.
      * @param template the template.
      */
+    @SuppressWarnings("unused")
     public TableNameHandler(@NotNull final T template)
     {
         super(template);
@@ -81,17 +84,17 @@ public class TableNameHandler<T extends BasePerTableTemplate>
     @Override
     public String getValue()
     {
-        return getTableName(getTemplate());
+        return getTableName(getTemplate().getTemplateContext());
     }
 
     /**
      * Retrieves the table name from given template.
-     * @param template the {@link BasePerTableTemplate} instance.
+     * @param context the {@link BasePerTableTemplateContext} instance.
      * @return the table name.
      */
     @NotNull
-    protected String getTableName(@NotNull final T template)
+    protected String getTableName(@NotNull final C context)
     {
-        return template.getTableName();
+        return context.getTableName();
     }
 }

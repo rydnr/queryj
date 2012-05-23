@@ -109,6 +109,7 @@ public class FkStatementSetterTemplateGenerator
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final ForeignKey foreignKey)
     {
         return
@@ -123,6 +124,7 @@ public class FkStatementSetterTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     foreignKey));
     }
 

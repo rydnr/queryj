@@ -2028,8 +2028,6 @@ public class QueryJChain
 
             chain.add(new CustomValueObjectFactoryTemplateHandlerBundle());
 
-            chain.add(new TestSuiteTemplateHandlerBundle());
-
             chain.add(new JdbcConnectionClosingHandler());
         }
 

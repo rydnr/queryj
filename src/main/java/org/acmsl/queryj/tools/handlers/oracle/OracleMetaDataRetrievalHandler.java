@@ -42,25 +42,23 @@ import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Command;
 import org.acmsl.commons.version.VersionUtils;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -77,7 +75,6 @@ public class OracleMetaDataRetrievalHandler
      * @param majorVersion the major version number.
      * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
-     * @precondition product != null
      */
     protected boolean checkVendor(
         @NotNull final String productName,
@@ -85,14 +82,12 @@ public class OracleMetaDataRetrievalHandler
         final int majorVersion,
         final int minorVersion)
     {
-        boolean result = (productName.indexOf("Oracle") > -1);
+        return (productName.contains("Oracle"));
 
 //        if  (result)
 //        {
 //            result = checkVersion(productVersion, VersionUtils.getInstance());
 //        }
-
-        return result;
     }
 
     /**
@@ -100,9 +95,8 @@ public class OracleMetaDataRetrievalHandler
      * @param version the version.
      * @param versionUtils the {@link VersionUtils} instance.
      * @return <code>true</code> if the version matches or is compatible with.
-     * @precondition version != null
-     * @precondition versionUtils != null
      */
+    @SuppressWarnings("unused")
     protected boolean checkVersion(
         @NotNull final String version, @NotNull final VersionUtils versionUtils)
     {
@@ -125,10 +119,13 @@ public class OracleMetaDataRetrievalHandler
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
-        final boolean caseSensitive)
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
         throws  BuildException
     {
-        @Nullable MetadataManager result = null;
+        @Nullable MetadataManager result;
 
         try 
         {
@@ -143,7 +140,10 @@ public class OracleMetaDataRetrievalHandler
                     metaData,
                     catalog,
                     schema,
-                    caseSensitive);
+                    caseSensitive,
+                    engineName,
+                    engineVersion,
+                    quote);
 
             if (result != null)
             {

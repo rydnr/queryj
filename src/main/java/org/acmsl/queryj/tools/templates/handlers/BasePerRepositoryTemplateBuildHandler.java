@@ -81,6 +81,12 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     public BasePerRepositoryTemplateBuildHandler() {}
 
     /**
+     * Retrieves the per-repository template factory.
+     * @return such instance.
+     */
+    protected abstract TF retrieveTemplateFactory();
+
+    /**
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
@@ -95,127 +101,64 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
     /**
      * Handles given information.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
+        return
+            handle(parameters, retrieveProjectPackage(parameters));
+    }
+
+    /**
+     * Handles given information.
+     * @param parameters the parameters.
+     * @param projectPackage the project package.
+     * @return <code>true</code> if the chain should be stopped.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     */
+    protected boolean handle(@NotNull final Map parameters, @NotNull final String projectPackage)
+        throws  QueryJBuildException
+    {
+        @Nullable MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager == null)
+        {
+            throw new QueryJBuildException("Cannot access database metadata");
+        }
+
         buildTemplate(
             parameters,
-            retrieveMetadataManager(parameters),
+            t_MetadataManager,
             retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
+            retrievePackage(t_MetadataManager.getEngineName(), projectPackage, PackageUtils.getInstance()),
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
             retrieveTableTemplates(parameters));
 
         return false;
     }
 
     /**
-     * Retrieves the per-repository template factory.
-     * @return such instance.
-     */
-    protected abstract TF retrieveTemplateFactory();
-
-    /**
      * Handles given information.
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param repository the repository.
-     * @param header the header.
-     * @param jmx whether to support JMX or not.
-     * @param tableTemplates the table templates.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void buildTemplate(
-        @NotNull final Map parameters,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final TF templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean jmx,
-        @NotNull final TableTemplate[] tableTemplates)
-      throws  QueryJBuildException
-    {
-        buildTemplate(
-            parameters,
-            retrieveDatabaseProductName(metadataManager.getMetaData()),
-            metadataManager,
-            customSqlProvider,
-            templateFactory,
-            projectPackage,
-            repository,
-            header,
-            jmx,
-            tableTemplates);
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
-     * @param templateFactory the template factory.
-     * @param projectPackage the project package.
-     * @param repository the repository.
-     * @param header the header.
-     * @param jmx whether to support JMX or not.
-     * @param tableTemplates the table templates.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void buildTemplate(
-        @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final TF templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean jmx,
-        @NotNull final TableTemplate[] tableTemplates)
-      throws  QueryJBuildException
-    {
-        buildTemplate(
-            parameters,
-            metadataManager,
-            customSqlProvider,
-            templateFactory,
-            projectPackage,
-            retrievePackage(engineName, parameters),
-            repository,
-            header,
-            retrieveImplementMarkerInterfaces(parameters),
-            jmx,
-            tableTemplates);
-    }
-
-    /**
-     * Handles given information.
-     * @param parameters the parameters.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom sql provider.
-     * @param templateFactory the template factory.
-     * @param projectPackage the project package.
      * @param packageName the package name.
+     * @param projectPackage the project package.
      * @param repository the repository.
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to support JMX or not.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableTemplates the table templates.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
@@ -224,12 +167,13 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {

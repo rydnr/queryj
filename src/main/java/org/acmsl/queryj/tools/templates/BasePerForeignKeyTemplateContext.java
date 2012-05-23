@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -132,5 +134,27 @@ public class BasePerForeignKeyTemplateContext
     public ForeignKey getForeignKey()
     {
         return m__ForeignKey;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__ForeignKey).toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final BasePerForeignKeyTemplateContext other = (BasePerForeignKeyTemplateContext) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__ForeignKey, other.m__ForeignKey)
+            .isEquals();
     }
 }

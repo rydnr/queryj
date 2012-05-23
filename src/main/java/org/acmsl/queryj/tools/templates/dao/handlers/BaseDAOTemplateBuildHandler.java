@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplate;
 import org.acmsl.queryj.tools.templates.dao.BaseDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateBuildHandler;
@@ -53,7 +54,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -114,17 +114,17 @@ public class BaseDAOTemplateBuildHandler
     @Nullable
     protected BaseDAOTemplate createTemplate(
         @NotNull final BaseDAOTemplateGenerator templateFactory,
-        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        @NotNull final String tableName,
+        @Nullable List<Row> staticContents,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {        
@@ -132,7 +132,7 @@ public class BaseDAOTemplateBuildHandler
 
         if  (isStaticTable(tableName, metadataManager))
         {
-            @Nullable Collection t_cStaticValues =
+            @Nullable List<Row> t_cStaticValues =
                 retrieveStaticContent(
                     parameters,
                     tableName,
@@ -143,17 +143,16 @@ public class BaseDAOTemplateBuildHandler
             {
                 result =
                     templateFactory.createTemplate(
-                        tableName,
                         metadataManager,
                         customSqlProvider,
                         packageName,
-                        engineName,
-                        engineVersion,
-                        quote,
                         projectPackage,
                         repository,
                         header,
                         implementMarkerInterfaces,
+                        jmx,
+                        jndiLocation,
+                        tableName,
                         t_cStaticValues);
             }
         }

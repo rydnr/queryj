@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -107,7 +109,7 @@ public class BasePerCustomResultTemplateContext
      * Specifies the result.
      * @param result the custom result.
      */
-    protected final void immutableSetResult(final Result result)
+    protected final void immutableSetResult(@NotNull final Result result)
     {
         m__Result = result;
     }
@@ -117,7 +119,7 @@ public class BasePerCustomResultTemplateContext
      * @param result the custom result.
      */
     @SuppressWarnings("unused")
-    protected void setResult(final Result result)
+    protected void setResult(@NotNull final Result result)
     {
         immutableSetResult(result);
     }
@@ -126,8 +128,30 @@ public class BasePerCustomResultTemplateContext
      * Retrieves the result.
      * @return such information.
      */
+    @NotNull
     public Result getResult()
     {
         return m__Result;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__Result).toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final BasePerCustomResultTemplateContext other = (BasePerCustomResultTemplateContext) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__Result, other.m__Result).isEquals();
     }
 }

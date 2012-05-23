@@ -68,6 +68,7 @@ public interface BasePerCustomResultTemplateFactory<T extends BasePerCustomResul
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path for the {@link javax.sql.DataSource}.
      * @param customResult the custom result.
      * @return the template.
      */
@@ -81,5 +82,6 @@ public interface BasePerCustomResultTemplateFactory<T extends BasePerCustomResul
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Result customResult);
 }

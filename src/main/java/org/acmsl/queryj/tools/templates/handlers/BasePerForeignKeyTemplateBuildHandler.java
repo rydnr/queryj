@@ -48,21 +48,24 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -71,15 +74,11 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerForeignKeyTemplateBuildHandler
+    <T extends BasePerForeignKeyTemplate<C>,
+        TF extends BasePerForeignKeyTemplateFactory<T>, C extends BasePerForeignKeyTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
-    /**
-     * A cached empty ForeignKey array.
-     */
-    public static final ForeignKey[] EMPTY_FOREIGNKEY_ARRAY =
-        new ForeignKey[0];
-
     /**
      * The key for storing the foreign keys in the parameter map.
      */
@@ -97,12 +96,22 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
+    @Override
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
+        @Nullable MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager == null)
+        {
+            throw new QueryJBuildException("Error accessing database metadata");
+        }
+
+        buildTemplates(
+            parameters,
+            t_MetadataManager,
+            retrieveTemplateFactory());
 
         return false;
     }
@@ -110,89 +119,19 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     /**
      * Builds the templates.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected void buildTemplates(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
-      throws  QueryJBuildException
-    {
-        try
-        {
-            buildTemplates(
-                parameters,
-                metaData.getDatabaseProductName(),
-                retrieveDatabaseProductVersion(metaData),
-                fixQuote(metaData.getIdentifierQuoteString()));
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                      "Cannot retrieve database product name, "
-                    + "version or quote string",
-                    sqlException);
-        }
-    }
-
-    /**
-     * Builds the templates.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition quote != null
-     */
-    protected void buildTemplates(
-        @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote)
-      throws  QueryJBuildException
-    {
-        buildTemplates(
-            parameters,
-            engineName,
-            engineVersion,
-            quote,
-            retrieveMetadataManager(parameters),
-            retrieveTemplateFactory());
-    }
-
-    /**
-     * Builds the templates.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param templateFactory the {@link BasePerForeignKeyTemplateFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition templateFactory != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final MetadataManager metadataManager,
-        @NotNull final BasePerForeignKeyTemplateFactory templateFactory)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final TF templateFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
-            engineName,
-            engineVersion,
-            quote,
-            retrieveMetadataManager(parameters),
+            metadataManager,
             templateFactory,
             templateFactory.getDecoratorFactory());
     }
@@ -200,39 +139,29 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     /**
      * Builds the templates.
      * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param templateFactory the template factory.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final BasePerForeignKeyTemplateFactory templateFactory,
+        @NotNull final TF templateFactory,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
-            engineName,
-            engineVersion,
-            quote,
             metadataManager,
             retrieveCustomSqlProvider(parameters),
             templateFactory,
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
             retrieveForeignKeys(
                 parameters, metadataManager, decoratorFactory));
     }
@@ -242,73 +171,59 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected abstract BasePerForeignKeyTemplateFactory retrieveTemplateFactory();
+    protected abstract TF retrieveTemplateFactory();
 
     /**
      * Builds the templates.
      * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @param quote the quote character.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
      * @param repository the repository.
      * @param header the header.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
+     * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI location.
      * @param foreignKeys the foreign keys.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition foreignKeys != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
-        @NotNull final BasePerForeignKeyTemplateFactory templateFactory,
-        final String projectPackage,
-        final String repository,
-        final String header,
-        @Nullable final ForeignKey[] foreignKeys)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final TF templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        @NotNull final ForeignKey[] foreignKeys)
       throws  QueryJBuildException
     {
-        int t_iLength = (foreignKeys != null) ? foreignKeys.length : 0;
-        
-        @NotNull BasePerForeignKeyTemplate[] t_aTemplates =
-            new BasePerForeignKeyTemplate[t_iLength];
+        @NotNull List<T> t_lTemplates = new ArrayList<T>();
 
-        @Nullable ForeignKey t_ForeignKey = null;
-            
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+        for  (ForeignKey t_ForeignKey : foreignKeys)
         {
-            t_ForeignKey = foreignKeys[t_iIndex];
-                
-            t_aTemplates[t_iIndex] =
+            t_lTemplates.add(
                 templateFactory.createTemplate(
-                    t_ForeignKey,
                     metadataManager,
+                    customSqlProvider,
                     retrievePackage(
                         t_ForeignKey.getSourceTableName(),
-                        engineName,
+                        metadataManager.getEngineName(),
                         parameters),
-                    engineName,
-                    engineVersion,
-                    quote,
                     projectPackage,
                     repository,
-                    header);
+                    header,
+                    implementMarkerInterfaces,
+                    jmx,
+                    jndiLocation,
+                    t_ForeignKey));
         }
 
-        storeTemplates(t_aTemplates, parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -317,11 +232,10 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
-     * @precondition parameters != null
      */
     @NotNull
     protected String retrievePackage(
-        final String tableName, final String engineName, @NotNull final Map parameters)
+        @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrievePackage(
@@ -338,25 +252,21 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected abstract String retrievePackage(
-        final String tableName,
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils);
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils);
 
     /**
      * Stores the template collection in given attribute map.
      * @param templates the templates.
      * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
      */
     protected abstract void storeTemplates(
-        final BasePerForeignKeyTemplate[] templates, final Map parameters);
+        @NotNull final List<T> templates, @NotNull final Map parameters);
 
     /**
      * Retrieves the foreign keys.
@@ -384,17 +294,14 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             @NotNull ForeignKey[] t_aFks =
                 retrieveForeignKeys(metadataManager, decoratorFactory);
 
-            for  (ForeignKey t_ForeignKey : t_aFks)
-            {
-                t_cForeignKeys.add(t_ForeignKey);
-            }
+            t_cForeignKeys.addAll(Arrays.asList(t_aFks));
 
             result = t_cForeignKeys.toArray(new ForeignKey[t_aFks.length]);
         }
 
         if (result == null)
         {
-            result = EMPTY_FOREIGNKEY_ARRAY;
+            result = new ForeignKey[0];
         }
 
         return result;
@@ -405,15 +312,13 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such foreign keys.
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
     protected ForeignKey[] retrieveForeignKeys(
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull ForeignKey[] result = EMPTY_FOREIGNKEY_ARRAY;
+        @NotNull ForeignKey[] result = new ForeignKey[0];
 
         @Nullable Collection<ForeignKey> t_cResult = null;
 
@@ -427,7 +332,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         int t_iReferredTableLength;
         @Nullable String[][] t_aastrForeignKeys;
         int t_iForeignKeyLength;
-        @Nullable String t_strReferredTable;
+        @NotNull String t_strReferredTable;
         
         for  (int t_iTableIndex = 0;
                   t_iTableIndex < t_iTableLength;
@@ -515,9 +420,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      */
     @Nullable
     protected ForeignKey buildForeignKey(
-        @Nullable final String[] attributes,
-        final String sourceTable,
-        final String targetTable,
+        @NotNull final String[] attributes,
+        @NotNull final String sourceTable,
+        @NotNull final String targetTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
@@ -525,35 +430,30 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
 
         @NotNull List<Attribute> t_lAttributes = new ArrayList<Attribute>();
 
-        int t_iAttributeLength = (attributes != null) ? attributes.length : 0;
-
         MetadataTypeManager t_TypeManager =
             metadataManager.getMetadataTypeManager();
 
         @Nullable Attribute t_Attribute;
         boolean t_bAllowsNull = false;
 
-        for  (int t_iIndex = 0; t_iIndex < t_iAttributeLength; t_iIndex++)
+        for  (String t_strAttribute : attributes)
         {
-            if (attributes != null)
+            t_Attribute =
+                buildAttribute(
+                    t_strAttribute,
+                    sourceTable,
+                    metadataManager,
+                    t_TypeManager,
+                    decoratorFactory);
+
+            if  (t_Attribute != null)
             {
-                t_Attribute =
-                    buildAttribute(
-                        attributes[t_iIndex],
-                        sourceTable,
-                        metadataManager,
-                        t_TypeManager,
-                        decoratorFactory);
+                t_lAttributes.add(t_Attribute);
 
-                if  (t_Attribute != null)
+                if  (   (!t_bAllowsNull)
+                     && (t_Attribute.isNullable()))
                 {
-                    t_lAttributes.add(t_Attribute);
-
-                    if  (   (!t_bAllowsNull)
-                         && (t_Attribute.isNullable()))
-                    {
-                        t_bAllowsNull = true;
-                    }
+                    t_bAllowsNull = true;
                 }
             }
         }
@@ -573,16 +473,12 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the attribute.
-     * @precondition attributeName != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @Nullable
+    @SuppressWarnings("unused")
     protected Attribute buildAttribute(
-        final String attributeName,
-        final String tableName,
+        @NotNull final String attributeName,
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -624,5 +520,107 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                 metadataManager);
 
         return result;
+    }
+
+
+    /**
+     * Checks whether the table associated to given template contains foreign keys.
+     * @param tableTemplate the table template.
+     * @param metadataManager the database metadata manager.
+     * @return <code>true</code> in such case.
+     */
+    @SuppressWarnings("unused")
+    protected boolean containsForeignKeys(
+        @NotNull final TableTemplate tableTemplate,
+        @NotNull final MetadataManager metadataManager)
+    {
+        return containsForeignKeys(tableTemplate.getTemplateContext(), metadataManager);
+    }
+
+    /**
+     * Checks whether the table associated to given template contains foreign keys.
+     * @param context the {@link BasePerTableTemplateContext} instance.
+     * @param metadataManager the database metadata manager.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean containsForeignKeys(
+        @NotNull final BasePerTableTemplateContext context,
+        @NotNull final MetadataManager metadataManager)
+    {
+        return
+            metadataManager.containsForeignKeys(context.getTableName());
+    }
+
+    /**
+     * Retrieves the simple foreign keys.
+     * @param allFks the complete list of foreign keys.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     */
+    @SuppressWarnings("unused,unchecked")
+    @NotNull
+    protected String[] retrieveSimpleFks(
+        @NotNull final String[] allFks,
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @NotNull Collection<String> t_cResult;
+
+        @NotNull Map<String, String> t_mAux = new HashMap<String, String>();
+
+        for  (String t_strFk: allFks)
+        {
+            // TODO: FIXME!!
+            String t_strReferredTable =
+                metadataManager.getReferredTable(
+                    tableName, new String[] { t_strFk });
+
+            if  (t_mAux.containsKey(t_strReferredTable))
+            {
+                t_mAux.remove(t_strReferredTable);
+            }
+            else
+            {
+                t_mAux.put(t_strReferredTable, t_strFk);
+            }
+        }
+
+        t_cResult = t_mAux.values();
+
+        return t_cResult.toArray(new String[t_cResult.size()]);
+    }
+
+    /**
+     * Retrieves the tables referred by compound foreign keys.
+     * @param tableName the table name.
+     * @param metadataManager the database metadata manager.
+     * @precondition tableName != null
+     * @precondition metadataManager != null
+     */
+    @SuppressWarnings("unused,unchecked")
+    @NotNull
+    protected String[] retrieveReferredTablesByCompoundFks(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @NotNull Collection<String> t_cResult = new ArrayList<String>();
+
+        @NotNull String[] t_astrReferredTables =
+            metadataManager.getReferredTables(tableName);
+
+        for  (String t_strReferredTable: t_astrReferredTables)
+        {
+            String[][] t_astrForeignKeys =
+                metadataManager.getForeignKeys(
+                    tableName, t_strReferredTable);
+
+            if  (   (t_astrForeignKeys != null)
+                    && (t_astrForeignKeys.length > 0))
+            {
+                t_cResult.add(t_strReferredTable);
+            }
+        }
+
+        return t_cResult.toArray(new String[t_cResult.size()]);
     }
 }

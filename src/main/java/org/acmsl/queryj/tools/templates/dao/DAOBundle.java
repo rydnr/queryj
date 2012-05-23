@@ -51,7 +51,6 @@ import org.acmsl.queryj.tools.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.DataAccessContextLocalTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.FkStatementSetterTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.JdbcDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
@@ -68,6 +67,7 @@ public class DAOBundle
      * @param includeMock whether to include Mock implementations.
      * @param includeXML whether to include XML implementations.
      */
+    @SuppressWarnings("unused")
     public DAOBundle(final boolean includeMock, final boolean includeXML)
     {
         super(
@@ -93,7 +93,7 @@ public class DAOBundle
                 new ResultSetExtractorTemplateHandlerBundle(),
                 new DAOListenerTemplateHandlerBundle(),
                 new DAOListenerImplTemplateHandlerBundle(),
-                new JdbcDAOTemplateHandlerBundle(),
+//                new JdbcDAOTemplateHandlerBundle(),
 // TODO                new ThreadLocalBagTemplateHandlerBundle(),
 //                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
 //                new TransactionManagerTemplateHandlerBundle(),

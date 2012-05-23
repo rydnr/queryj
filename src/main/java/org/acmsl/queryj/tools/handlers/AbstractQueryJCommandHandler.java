@@ -218,7 +218,7 @@ public abstract class AbstractQueryJCommandHandler
      * @return the manager.
      * @precondition parameters != null
      */
-    @NotNull
+    @Nullable
     protected MetadataManager retrieveMetadataManager(@NotNull final Map parameters)
     {
         return

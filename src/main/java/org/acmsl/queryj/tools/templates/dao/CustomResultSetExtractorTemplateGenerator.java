@@ -92,15 +92,7 @@ public class CustomResultSetExtractorTemplateGenerator
     }
 
     /**
-     * Generates a CustomResultSetExtractor template.
-     * @param customResult the custom result.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the database metadata manager.
-     * @param header the header.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @return the new template.
+     * {@inheritDoc}
      */
     @NotNull
     public CustomResultSetExtractorTemplate createTemplate(
@@ -112,6 +104,7 @@ public class CustomResultSetExtractorTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Result customResult)
     {
         return
@@ -126,6 +119,7 @@ public class CustomResultSetExtractorTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     customResult));
     }
 

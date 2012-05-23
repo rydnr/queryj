@@ -62,7 +62,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -117,6 +116,7 @@ public class BaseAbstractDAOTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable List<Row> staticContents)
     {
@@ -136,6 +136,7 @@ public class BaseAbstractDAOTemplateGenerator
                         repositoryName,
                         implementMarkerInterfaces,
                         jmx,
+                        jndiLocation,
                         tableName,
                         staticContents));
         }

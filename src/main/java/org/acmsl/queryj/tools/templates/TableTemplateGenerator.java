@@ -93,6 +93,7 @@ public class TableTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
+    @Override
     public TableTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -102,6 +103,7 @@ public class TableTemplateGenerator
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -117,6 +119,7 @@ public class TableTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     tableName,
                     staticContents));
     }

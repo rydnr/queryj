@@ -47,6 +47,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -85,6 +87,7 @@ public class BasePerCustomSqlTemplateContext
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Sql sql)
     {
         super(
@@ -96,7 +99,8 @@ public class BasePerCustomSqlTemplateContext
             basePackageName,
             repositoryName,
             implementMarkerInterfaces,
-            jmx);
+            jmx,
+            jndiLocation);
 
         immutableSetSql(sql);
     }
@@ -105,7 +109,7 @@ public class BasePerCustomSqlTemplateContext
      * Specifies the {@link Sql}.
      * @param sql the Sql.
      */
-    protected final void immutableSetSql(final Sql sql)
+    protected final void immutableSetSql(@NotNull final Sql sql)
     {
         m__Sql = sql;
     }
@@ -124,8 +128,30 @@ public class BasePerCustomSqlTemplateContext
      * Retrieves the Sql.
      * @return such information.
      */
+    @NotNull
     public Sql getSql()
     {
         return m__Sql;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__Sql).toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final BasePerCustomSqlTemplateContext other = (BasePerCustomSqlTemplateContext) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__Sql, other.m__Sql).isEquals();
     }
 }

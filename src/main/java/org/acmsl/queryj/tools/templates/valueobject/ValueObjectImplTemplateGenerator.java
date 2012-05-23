@@ -109,6 +109,7 @@ public class ValueObjectImplTemplateGenerator
         @NotNull final String repositoryName,
         final boolean jmx,
         final boolean implementMarkerInterfaces,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -124,6 +125,7 @@ public class ValueObjectImplTemplateGenerator
                     repositoryName,
                     implementMarkerInterfaces,
                     jmx,
+                    jndiLocation,
                     tableName,
                     staticContents));
     }
@@ -142,11 +144,11 @@ public class ValueObjectImplTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull ValueObjectImplTemplate template)
+    public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
         return
             retrieveTemplateFileName(
-                template,
+                context,
                 StringUtils.getInstance(),
                 EnglishGrammarUtils.getInstance(),
                 ValueObjectUtils.getInstance());
@@ -154,7 +156,7 @@ public class ValueObjectImplTemplateGenerator
 
     /**
      * Retrieves given template's file name.
-     * @param template the template.
+     * @param context the {@link BasePerTableTemplateContext context}.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @param valueObjectUtils the {@link ValueObjectUtils} instance.
@@ -162,14 +164,14 @@ public class ValueObjectImplTemplateGenerator
      */
     @NotNull
     protected String retrieveTemplateFileName(
-        @NotNull final ValueObjectImplTemplate template,
+        @NotNull final BasePerTableTemplateContext context,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils,
         @NotNull final ValueObjectUtils valueObjectUtils)
     {
         return
             valueObjectUtils.getVoClassName(
-                template.getTableName(),
+                context.getTableName(),
                 englishGrammarUtils,
                 stringUtils)
             + "ValueObject.java";

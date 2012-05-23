@@ -43,6 +43,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -450,5 +452,38 @@ public abstract class AbstractTemplateContext
     public String getJndiLocation()
     {
         return this.m__strJndiLocation;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(this.m__strHeader).append(this.m__DecoratorFactory)
+            .append(this.m__MetadataManager).append(this.m__CustomSqlProvider).append(this.m__strPackageName)
+            .append(this.m__strBasePackageName).append(this.m__strRepositoryName)
+            .append(this.m__bImplementMarkerInterfaces).append(this.m__bJmx).append(this.m__strJndiLocation)
+            .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final AbstractTemplateContext other = (AbstractTemplateContext) obj;
+        return new EqualsBuilder().append(this.m__strHeader, other.m__strHeader)
+            .append(this.m__DecoratorFactory, other.m__DecoratorFactory)
+            .append(this.m__MetadataManager, other.m__MetadataManager)
+            .append(this.m__CustomSqlProvider, other.m__CustomSqlProvider)
+            .append(this.m__strPackageName, other.m__strPackageName)
+            .append(this.m__strBasePackageName, other.m__strBasePackageName)
+            .append(this.m__strRepositoryName, other.m__strRepositoryName)
+            .append(this.m__bImplementMarkerInterfaces, other.m__bImplementMarkerInterfaces)
+            .append(this.m__bJmx, other.m__bJmx).append(this.m__strJndiLocation, other.m__strJndiLocation).isEquals();
     }
 }

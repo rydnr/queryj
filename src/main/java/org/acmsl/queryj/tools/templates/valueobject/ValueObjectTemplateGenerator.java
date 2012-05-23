@@ -108,6 +108,7 @@ public class ValueObjectTemplateGenerator
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param jmx whether to support JMX.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param staticContents the table's static contents (optional).
      * @param tableName the table name.
      * @return the fresh new template.
@@ -122,6 +123,7 @@ public class ValueObjectTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -137,6 +139,7 @@ public class ValueObjectTemplateGenerator
                 repositoryName,
                 implementMarkerInterfaces,
                 jmx,
+                jndiLocation,
                 tableName,
                 staticContents));
     }

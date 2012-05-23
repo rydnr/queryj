@@ -68,6 +68,7 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param foreignKey the foreign key.
      */
     @NotNull
@@ -80,6 +81,7 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final ForeignKey foreignKey);
 
     /**

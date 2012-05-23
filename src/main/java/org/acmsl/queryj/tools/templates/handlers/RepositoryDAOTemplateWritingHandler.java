@@ -60,7 +60,7 @@ import java.util.Map;
  */
 public class RepositoryDAOTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
-                 <RepositoryDAOTemplate, RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <RepositoryDAOTemplate<BasePerRepositoryTemplateContext>, RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
@@ -77,7 +77,8 @@ public class RepositoryDAOTemplateWritingHandler
      */
     @Nullable
     @Override
-    protected RepositoryDAOTemplate retrieveTemplate(
+    @SuppressWarnings("unchecked")
+    protected RepositoryDAOTemplate<BasePerRepositoryTemplateContext> retrieveTemplate(
         @NotNull final Map parameters)
     {
         return

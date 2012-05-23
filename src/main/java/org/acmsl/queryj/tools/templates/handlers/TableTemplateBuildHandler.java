@@ -83,9 +83,6 @@ public class TableTemplateBuildHandler
     @Override
     protected void buildTemplate(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TableTemplateGenerator templateFactory,
@@ -93,13 +90,15 @@ public class TableTemplateBuildHandler
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
         @Nullable final String[] tableNames)
         throws  QueryJBuildException
     {
         String[] t_astrTableNames = tableNames;
 
-        if (   (t_astrTableNames == null)
-            || (t_astrTableNames.length == 0))
+        if (   (t_astrTableNames != null)
+            && (t_astrTableNames.length == 0))
         {
             t_astrTableNames = metadataManager.getTableNames();
 
@@ -108,9 +107,6 @@ public class TableTemplateBuildHandler
 
         super.buildTemplate(
             parameters,
-            engineName,
-            engineVersion,
-            quote,
             metadataManager,
             customSqlProvider,
             templateFactory,
@@ -118,6 +114,8 @@ public class TableTemplateBuildHandler
             repository,
             header,
             implementMarkerInterfaces,
+            jmx,
+            jndiLocation,
             t_astrTableNames);
     }
 

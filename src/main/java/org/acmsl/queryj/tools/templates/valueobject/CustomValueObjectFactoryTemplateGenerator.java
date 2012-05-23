@@ -80,6 +80,7 @@ public class CustomValueObjectFactoryTemplateGenerator
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectFactoryTemplate result = null;
@@ -100,6 +101,7 @@ public class CustomValueObjectFactoryTemplateGenerator
                         repositoryName,
                         implementMarkerInterfaces,
                         jmx,
+                        jndiLocation,
                         customResult));
         }
 

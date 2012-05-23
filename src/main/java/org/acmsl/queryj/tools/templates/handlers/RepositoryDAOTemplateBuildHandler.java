@@ -86,7 +86,6 @@ public class RepositoryDAOTemplateBuildHandler
     @Override
     protected void buildTemplate(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final RepositoryDAOTemplateGenerator templateFactory,
@@ -94,7 +93,9 @@ public class RepositoryDAOTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String repository,
         @NotNull final String header,
+        final boolean implementMarkerInterfaces,
         final boolean jmx,
+        @NotNull final String jndiLocation,
         @Nullable final TableTemplate[] tableTemplates)
       throws  QueryJBuildException
     {
@@ -111,7 +112,9 @@ public class RepositoryDAOTemplateBuildHandler
                 packageName,
                 repository,
                 header,
+                implementMarkerInterfaces,
                 jmx,
+                jndiLocation,
                 tableTemplates);
         }
     }

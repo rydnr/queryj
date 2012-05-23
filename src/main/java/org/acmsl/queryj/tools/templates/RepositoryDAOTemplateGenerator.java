@@ -61,7 +61,7 @@ import java.util.List;
 public class RepositoryDAOTemplateGenerator
     extends AbstractTemplateGenerator<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<RepositoryDAOTemplate>,
+                BasePerRepositoryTemplateFactory<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>>,
                 Singleton
 {
     /**
@@ -97,7 +97,7 @@ public class RepositoryDAOTemplateGenerator
     @Override
     @NotNull
     @SuppressWarnings("unused")
-    public RepositoryDAOTemplate createTemplate(
+    public RepositoryDAOTemplate<BasePerRepositoryTemplateContext> createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,

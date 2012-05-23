@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing some JetBrains annotations.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -68,11 +70,6 @@ public class BasePerRepositoryTemplateContext
      * The table names.
      */
     private List<String> m__lTableNames;
-
-    /**
-     * The JNDI location of the data source.
-     */
-    private String jndiLocation;
 
     /**
      * Creates the template context with required information.
@@ -159,5 +156,27 @@ public class BasePerRepositoryTemplateContext
         Collections.copy(result, t_lOriginal);
 
         return result;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().appendSuper(super.hashCode()).append(this.m__lTableNames).toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final BasePerRepositoryTemplateContext other = (BasePerRepositoryTemplateContext) obj;
+        return new EqualsBuilder().appendSuper(super.equals(obj)).append(this.m__lTableNames, other.m__lTableNames)
+            .isEquals();
     }
 }

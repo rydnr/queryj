@@ -56,8 +56,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -97,7 +95,10 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
+        buildTemplates(
+            parameters,
+            retrieveMetadataManager(parameters),
+            retrieveCustomSqlProvider(parameters));
 
         return false;
     }
@@ -105,84 +106,27 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Builds the templates.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected void buildTemplates(
-        @NotNull final Map parameters, @Nullable final DatabaseMetaData metaData)
-      throws  QueryJBuildException
-    {
-        try
-        {
-            buildTemplates(
-                parameters,
-                (metaData != null) ? metaData.getDatabaseProductName() : "",
-                (metaData != null) ? metaData.getDatabaseProductVersion() : "");
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot retrieve database product information",
-                    sqlException);
-        }
-    }
-
-    /**
-     * Builds the templates.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     */
-    protected void buildTemplates(
-        @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion)
-      throws  QueryJBuildException
-    {
-        buildTemplates(
-            parameters,
-            engineName,
-            engineVersion,
-            retrieveMetadataManager(parameters),
-            retrieveCustomSqlProvider(parameters));
-    }
-
-    /**
-     * Builds the templates.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom RESULT provider.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
-            engineName,
-            engineVersion,
             metadataManager,
             customSqlProvider,
             retrieveTemplateFactory(),
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
+            retrieveImplementMarkerInterfaces(parameters),
+            retrieveJmx(parameters),
+            retrieveJNDILocation(parameters),
             retrieveCustomResult(parameters, customSqlProvider),
             CustomResultUtils.getInstance());
     }
@@ -196,29 +140,30 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * Builds the templates.
      * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @param engineVersion the engine version.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom result provider.
      * @param templateFactory the template factory.
      * @param projectPackage the project package.
      * @param repository the repository.
      * @param header the header.
-     * @param resultElements the custom RESULT elements.
+     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
+     * @param jmx whether to include JMX support or not.
+     * @param resultElements the custom {@link Result elements}.
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
-        @Nullable final Result[] resultElements,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        @NotNull final Result[] resultElements,
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
@@ -226,44 +171,42 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
         @Nullable T t_Template;
 
-        if (resultElements != null)
+        for  (Result t_ResultElement: resultElements)
         {
-            for  (Result t_ResultElement: resultElements)
+            if (   (t_ResultElement != null)
+                && (customResultUtils.isGenerationAllowedForResult(t_ResultElement.getId())))
             {
-                if (   (t_ResultElement != null)
-                    && (customResultUtils.isGenerationAllowedForResult(t_ResultElement.getId())))
+                try
                 {
-                    try
-                    {
-                        t_Template =
-                            templateFactory.createTemplate(
+                    t_Template =
+                        templateFactory.createTemplate(
+                            customSqlProvider,
+                            metadataManager,
+                            retrievePackage(
                                 t_ResultElement,
                                 customSqlProvider,
                                 metadataManager,
-                                retrievePackage(
-                                    t_ResultElement,
-                                    customSqlProvider,
-                                    metadataManager,
-                                    engineName,
-                                    parameters),
-                                engineName,
-                                engineVersion,
-                                projectPackage,
-                                repository,
-                                header);
+                                metadataManager.getEngineName(),
+                                parameters),
+                            projectPackage,
+                            repository,
+                            header,
+                            implementMarkerInterfaces,
+                            jmx,
+                            jndiLocation,
+                            t_ResultElement);
 
-                        if  (t_Template != null)
-                        {
-                            t_lTemplates.add(t_Template);
-                        }
-                    }
-                    catch  (@NotNull final QueryJException queryjException)
+                    if  (t_Template != null)
                     {
-                        throw
-                            new QueryJBuildException(
-                                "Cannot create template for result " + t_ResultElement.getId(),
-                                queryjException);
+                        t_lTemplates.add(t_Template);
                     }
+                }
+                catch  (@NotNull final QueryJException queryjException)
+                {
+                    throw
+                        new QueryJBuildException(
+                            "Cannot create template for result " + t_ResultElement.getId(),
+                            queryjException);
                 }
             }
         }
@@ -352,7 +295,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         {
             result = retrieveCustomResultElements(customSqlProvider);
         }
-
 
         parameters.put(CUSTOM_RESULT, result);
 
