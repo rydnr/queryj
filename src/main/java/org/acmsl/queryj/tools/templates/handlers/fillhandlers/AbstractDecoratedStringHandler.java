@@ -23,67 +23,67 @@
 
  ******************************************************************************
  *
- * Filename: RepositoryNameHandler.java
+ * Filename: AbstractDecoratedStringHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Generic class to decorate simple String placeholders with
+ *              "normalized", "capitalized", etc. versions.
  *
- * Date: 5/23/12
- * Time: 9:20 PM
+ * Date: 5/24/12
+ * Time: 4:25 AM
  *
  */
 package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing project classes.
+ * Importing some project classes.
  */
 import org.acmsl.queryj.tools.templates.TemplateContext;
 
 /*
-* Importing some JetBrains annotations.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Is able to resolve "repository" placeholder values.
+ * Generic class to decorate simple String placeholders with "normalized",
+ * "capitalized", etc. versions.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/23
+ * @since 2012/05/24
  */
 @SuppressWarnings("unused")
-public class RepositoryNameHandler
-    extends AbstractDecoratedStringHandler<TemplateContext>
+public abstract class AbstractDecoratedStringHandler<C extends TemplateContext>
+    extends AbstractTemplateContextFillHandler<C, DecoratedString>
 {
     /**
-     * Creates a new {@link RepositoryNameHandler} associated to given
-     * {@link TemplateContext}.
-     * @param context the template.
+     * Creates {@link AbstractDecoratedStringHandler} to enhance String
+     * placeholders with 'decorated' versions.
+     * @param context the {@link TemplateContext context}.
      */
     @SuppressWarnings("unused")
-    protected RepositoryNameHandler(@NotNull final TemplateContext context)
+    public AbstractDecoratedStringHandler(@NotNull final C context)
     {
         super(context);
     }
 
     /**
-     * Returns "repository".
-     * @return such placeholder.
+     * Retrieves the template value for this placeholder.
+     *
+     * @return such value.
      */
     @NotNull
     @Override
-    public String getPlaceHolder()
+    protected final DecoratedString getValue(@NotNull final C context)
     {
-        return "repository";
+        return new DecoratedString(resolveContextValue(context));
     }
 
     /**
-     * {@inheritDoc}
+     * Resolves the actual value using given {@link TemplateContext context}.
+     * @param context the {@link TemplateContext context}.
+     * @return such value.
      */
     @NotNull
-    @Override
-    protected String resolveContextValue(@NotNull final TemplateContext context)
-    {
-        return context.getRepositoryName();
-    }
-
+    protected abstract String resolveContextValue(@NotNull final C context);
 }

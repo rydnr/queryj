@@ -23,67 +23,68 @@
 
  ******************************************************************************
  *
- * Filename: RepositoryNameHandler.java
+ * Filename: ForeignKeyHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Is able to resolve ForeignKey placeholders in templates.
  *
- * Date: 5/23/12
- * Time: 9:20 PM
+ * Date: 5/24/12
+ * Time: 3:56 AM
  *
  */
 package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing project classes.
+ * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.TemplateContext;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
 
 /*
-* Importing some JetBrains annotations.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Is able to resolve "repository" placeholder values.
+ * Is able to resolve {@link ForeignKey} placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/23
+ * @since 2012/05/24
  */
 @SuppressWarnings("unused")
-public class RepositoryNameHandler
-    extends AbstractDecoratedStringHandler<TemplateContext>
+public class ForeignKeyHandler
+    extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, ForeignKey>
 {
     /**
-     * Creates a new {@link RepositoryNameHandler} associated to given
-     * {@link TemplateContext}.
-     * @param context the template.
+     * Creates a new {@link ForeignKeyHandler} to resolve "foreign_key" placeholders using
+     * given {@link BasePerForeignKeyTemplateContext context}.
+     * @param context the {@link BasePerForeignKeyTemplateContext context}
      */
     @SuppressWarnings("unused")
-    protected RepositoryNameHandler(@NotNull final TemplateContext context)
+    public ForeignKeyHandler(@NotNull final BasePerForeignKeyTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "repository".
+     * Returns "foreign_key".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "repository";
+        return "foreign_key";
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieves the {@link ForeignKey} from given {@link BasePerForeignKeyTemplateContext context}.
+     * @return such value.
      */
     @NotNull
     @Override
-    protected String resolveContextValue(@NotNull final TemplateContext context)
+    protected ForeignKey getValue(@NotNull final BasePerForeignKeyTemplateContext context)
     {
-        return context.getRepositoryName();
+        return context.getForeignKey();
     }
-
 }
