@@ -36,8 +36,6 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 
@@ -46,24 +44,12 @@ import org.acmsl.queryj.tools.logging.QueryJLog;
  */
 import org.acmsl.commons.patterns.ArrayListChainAdapter;
 import org.acmsl.commons.patterns.Chain;
-import org.acmsl.commons.utils.StringUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.io.File;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Manages a sequential chain of actions within QueryJ.
@@ -98,6 +84,7 @@ public abstract class AbstractQueryJChain
      * Specifies the chain.
      * @param chain the new chain.
      */
+    @SuppressWarnings("unused")
     protected void setChain(final Chain chain)
     {
         immutableSetChain(chain);
@@ -185,6 +172,7 @@ public abstract class AbstractQueryJChain
 
         return result;
     }
+
     /**
      * Sends given command to a concrete chain.
      * @param chain the concrete chain.
