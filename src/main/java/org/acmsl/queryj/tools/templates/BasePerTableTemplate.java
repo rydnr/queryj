@@ -36,7 +36,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
@@ -226,21 +226,21 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
                 metadataManager.getColumnType(
                     tableName, t_strStaticAttributeName));
 
-        @NotNull Collection<Attribute> t_cPrimaryKeyAttributes =
+        @NotNull List<Attribute> t_cPrimaryKeyAttributes =
             metadataUtils.retrievePrimaryKeyAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<Attribute> t_cNonPrimaryKeyAttributes =
+        @NotNull List<Attribute> t_cNonPrimaryKeyAttributes =
             metadataUtils.retrieveNonPrimaryKeyAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<ForeignKey> t_cForeignKeyAttributes =
+        @NotNull List<ForeignKey> t_cForeignKeyAttributes =
             metadataUtils.retrieveForeignKeyAttributes(
                 tableName,
                 metadataManager,
@@ -255,35 +255,35 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<Attribute> t_cAttributes =
+        @NotNull List<Attribute> t_cAttributes =
             metadataUtils.retrieveAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<Attribute> t_cExternallyManagedAttributes =
+        @NotNull List<Attribute> t_cExternallyManagedAttributes =
             metadataUtils.retrieveExternallyManagedAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<Attribute> t_cAllButExternallyManagedAttributes =
+        @NotNull List<Attribute> t_cAllButExternallyManagedAttributes =
             metadataUtils.retrieveAllButExternallyManagedAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<Attribute> t_cLobAttributes =
+        @NotNull List<Attribute> t_cLobAttributes =
             metadataUtils.retrieveLobAttributes(
                 tableName,
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
 
-        @NotNull Collection<Attribute> t_cAllButLobAttributes =
+        @NotNull List<Attribute> t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
                 tableName,
                 metadataManager,
@@ -296,37 +296,34 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
                 metadataManager,
                 decoratorFactory);
 
-        @Nullable Collection<Sql> t_cCustomSelects =
+        @Nullable List<Sql> t_cCustomSelects =
             retrieveCustomSelects(
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils,
                 templateUtils);
 
-        @Nullable Collection<Sql> t_cCustomUpdatesOrInserts =
+        @Nullable List<Sql> t_cCustomUpdatesOrInserts =
             retrieveCustomUpdatesOrInserts(
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils,
                 templateUtils);
 
-        @Nullable Collection<Sql> t_cCustomSelectsForUpdate =
+        @Nullable List<Sql> t_cCustomSelectsForUpdate =
             retrieveCustomSelectsForUpdate(
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils,
                 templateUtils);
 
-        @Nullable Collection<ResultElement> t_cCustomResults =
+        @Nullable List<Result> t_cCustomResults =
             retrieveCustomResults(
                 tableName,
                 customSqlProvider,
@@ -341,7 +338,7 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
             new Integer[]
             {
                 STARTING_YEAR,
-                Integer.valueOf(retrieveCurrentYear())
+                retrieveCurrentYear()
             },
             tableName,
             t_strCapitalizedValueObjectName,
@@ -417,36 +414,36 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param baseDAOPackageName the DAO interface package.
      * @param primaryKeyAttributes the primary key attributes.
      * @param nonPrimaryKeyAttributes the ones not part of the primary
-* key..
+     * key.
      * @param foreignKeyAttributes the foreign key attributes.
      * @param referringKeys the foreign keys of other tables pointing
-* to this one. It's expected to be
-* a map of "fk_"referringTableName -> foreign_keys (list of attribute
-* lists).
+     * to this one. It's expected to be
+     * a map of "fk_"referringTableName -> foreign_keys (list of attribute
+     * lists).
      * @param attributes the attributes.
      * @param externallyManagedAttributes the attributes which are
-* managed externally.
+     * managed externally.
      * @param allButExternallyManagedAttributes all but the attributes which
-* are managed externally.
+     * are managed externally.
      * @param allButLobAttributes all but the attributes whose type is
-* Clob or Blob.
+     * Clob or Blob.
      * @param foreignKeys the entities pointing to this instance's table.
      * @param customSelects the custom selects.
      * @param customUpdatesOrInserts the custom updates or inserts.
      * @param customSelectsForUpdate the custom selects for update.
      * @param customResults the custom results.
      * @param staticAttributeName the name of the static attribute, or
-* <code>null</code> for non-static tables.
+     * <code>null</code> for non-static tables.
      * @param staticAttributeType the type of the static attribute, or
-* <code>null</code> for non-static tables.
+     * <code>null</code> for non-static tables.
      * @param tableRepositoryName the table repository.
      * @param metadataManager the database metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
-* interfaces.
-     * @param decoratorFactory the {@link org.acmsl.queryj.tools.metadata.DecoratorFactory} instance.
-     * @param metadataUtils the {@link org.acmsl.queryj.tools.metadata.MetadataUtils} instance.
+     * interfaces.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param metadataUtils the {@link MetadataUtils} instance.
      */
     protected void fillParameters(
         @NotNull final Map input,
@@ -462,20 +459,20 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         @NotNull final String className,
         @NotNull final String baseDAOClassName,
         @NotNull final String baseDAOPackageName,
-        @NotNull final Collection<Attribute> primaryKeyAttributes,
-        @NotNull final Collection<Attribute> nonPrimaryKeyAttributes,
-        @NotNull final Collection<ForeignKey> foreignKeyAttributes,
+        @NotNull final List<Attribute> primaryKeyAttributes,
+        @NotNull final List<Attribute> nonPrimaryKeyAttributes,
+        @NotNull final List<ForeignKey> foreignKeyAttributes,
         @NotNull final Map<String,ForeignKey[]> referringKeys,
-        @NotNull final Collection<Attribute> attributes,
-        @NotNull final Collection<Attribute> externallyManagedAttributes,
-        @NotNull final Collection<Attribute> allButExternallyManagedAttributes,
-        @NotNull final Collection<Attribute> lobAttributes,
-        @NotNull final Collection<Attribute> allButLobAttributes,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute> externallyManagedAttributes,
+        @NotNull final List<Attribute> allButExternallyManagedAttributes,
+        @NotNull final List<Attribute> lobAttributes,
+        @NotNull final List<Attribute> allButLobAttributes,
         @NotNull final ForeignKey[] foreignKeys,
-        @NotNull final Collection<Sql> customSelects,
-        @NotNull final Collection<Sql> customUpdatesOrInserts,
-        @NotNull final Collection<Sql> customSelectsForUpdate,
-        @NotNull final Collection<ResultElement> customResults,
+        @NotNull final List<Sql> customSelects,
+        @NotNull final List<Sql> customUpdatesOrInserts,
+        @NotNull final List<Sql> customSelectsForUpdate,
+        @NotNull final List<Result> customResults,
         @Nullable final String staticAttributeName,
         @Nullable final String staticAttributeType,
         @NotNull final String tableRepositoryName,
@@ -658,13 +655,13 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param fkAttributes the foreign-key attributes.
      * @param metadataManager the database metadata manager.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unchecked")
     protected void fillProjectImportsParameters(
         @NotNull final Map input,
         @NotNull final String basePackageName,
         @NotNull final String subpackageName,
         @NotNull final String tableName,
-        @NotNull final Collection<ResultElement> customResults,
+        @NotNull final Collection<Result> customResults,
         @NotNull final String voName,
         @NotNull final Collection<ForeignKey> fkAttributes,
         @NotNull final MetadataManager metadataManager)
@@ -713,7 +710,7 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param customResults the custom results.
      * @param metadataManager the database metadata manager.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unchecked")
     protected void fillClassParameters(
         @NotNull final Map input,
         @NotNull final String voName,
@@ -738,7 +735,7 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         @NotNull final Collection<Sql> customSelects,
         @NotNull final Collection<Sql> customUpdatesOrInserts,
         @NotNull final Collection<Sql> customSelectsForUpdate,
-        @NotNull final Collection<ResultElement> customResults,
+        @NotNull final Collection<Result> customResults,
         @NotNull final MetadataManager metadataManager)
     {
         input.put("vo_name", voName);
@@ -844,28 +841,25 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      */
     @NotNull
-    protected Collection<Sql> retrieveCustomSelects(
-        final String tableName,
-        @Nullable final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager,
+    protected List<Sql> retrieveCustomSelects(
+        @Nullable final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
     {
-        @Nullable Collection<Sql> result =
+        @Nullable List<Sql> result =
             templateUtils.retrieveCustomSelects(
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
 
@@ -882,28 +876,25 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom sql.
      */
     @NotNull
-    protected Collection<Sql> retrieveCustomUpdatesOrInserts(
-        @NotNull final String tableName,
-        @Nullable final CustomSqlProvider customSqlProvider,
+    protected List<Sql> retrieveCustomUpdatesOrInserts(
+        @Nullable final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
     {
-        @Nullable Collection result =
+        @Nullable List<Sql> result =
             templateUtils.retrieveCustomUpdatesOrInserts(
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
 
@@ -920,28 +911,25 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      */
     @Nullable
-    protected Collection<Sql> retrieveCustomSelectsForUpdate(
-        @NotNull final String tableName,
-        @Nullable final CustomSqlProvider customSqlProvider,
+    protected List<Sql> retrieveCustomSelectsForUpdate(
+        @Nullable final String tableName,
+        @NotNull  final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
     {
-        @Nullable Collection<Sql> result =
+        @Nullable List<Sql> result =
             templateUtils.retrieveCustomSelectsForUpdate(
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
 
@@ -964,7 +952,7 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @return the custom results.
      */
     @NotNull
-    protected Collection<ResultElement> retrieveCustomResults(
+    protected List<Result> retrieveCustomResults(
         @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -972,7 +960,7 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
     {
-        @Nullable Collection<ResultElement> result =
+        @Nullable List<Result> result =
             templateUtils.retrieveCustomResults(
                 tableName,
                 customSqlProvider,
@@ -982,7 +970,7 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
 
         if  (result == null)
         {
-            result = new ArrayList<ResultElement>();
+            result = new ArrayList<Result>();
         }
 
         return result;

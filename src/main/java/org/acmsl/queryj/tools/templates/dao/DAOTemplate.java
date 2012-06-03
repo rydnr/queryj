@@ -36,7 +36,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -63,7 +63,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -105,20 +104,20 @@ public class DAOTemplate
         @NotNull final String className,
         @NotNull final String baseDAOClassName,
         @NotNull final String baseDAOPackageName,
-        @NotNull final Collection<Attribute> primaryKeyAttributes,
-        @NotNull final Collection<Attribute> nonPrimaryKeyAttributes,
-        @NotNull final Collection<ForeignKey> foreignKeyAttributes,
+        @NotNull final List<Attribute> primaryKeyAttributes,
+        @NotNull final List<Attribute> nonPrimaryKeyAttributes,
+        @NotNull final List<ForeignKey> foreignKeyAttributes,
         @NotNull final Map<String,ForeignKey[]> referringKeys,
-        @NotNull final Collection<Attribute> attributes,
-        @NotNull final Collection<Attribute> externallyManagedAttributes,
-        @NotNull final Collection<Attribute> allButExternallyManagedAttributes,
-        @NotNull final Collection<Attribute> lobAttributes,
-        @NotNull final Collection<Attribute> allButLobAttributes,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final List<Attribute> externallyManagedAttributes,
+        @NotNull final List<Attribute> allButExternallyManagedAttributes,
+        @NotNull final List<Attribute> lobAttributes,
+        @NotNull final List<Attribute> allButLobAttributes,
         @NotNull final ForeignKey[] foreignKeys,
-        @NotNull final Collection<Sql> customSelects,
-        @NotNull final Collection<Sql> customUpdatesOrInserts,
-        @NotNull final Collection<Sql> customSelectsForUpdate,
-        @NotNull final Collection<ResultElement> customResults,
+        @NotNull final List<Sql> customSelects,
+        @NotNull final List<Sql> customUpdatesOrInserts,
+        @NotNull final List<Sql> customSelectsForUpdate,
+        @NotNull final List<Result> customResults,
         @Nullable final String staticAttributeName,
         @Nullable final String staticAttributeType,
         @NotNull final String tableRepositoryName,

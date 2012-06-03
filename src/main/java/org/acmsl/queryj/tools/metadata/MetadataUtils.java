@@ -112,8 +112,8 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection retrievePrimaryKeyAttributes(
-        final String tableName,
+    public List<Attribute> retrievePrimaryKeyAttributes(
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
@@ -137,7 +137,7 @@ public class MetadataUtils
      * key.
      */
     @NotNull
-    public Collection retrieveNonPrimaryKeyAttributes(
+    public List<Attribute> retrieveNonPrimaryKeyAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -179,13 +179,13 @@ public class MetadataUtils
      * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<ForeignKey> retrieveForeignKeyAttributes(
+    public List<ForeignKey> retrieveForeignKeyAttributes(
         final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull Collection<ForeignKey> result = new ArrayList<ForeignKey>();
+        @NotNull List<ForeignKey> result = new ArrayList<ForeignKey>();
 
         @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
@@ -198,39 +198,45 @@ public class MetadataUtils
 
         t_iLength =
             Math.min(
-                (t_astrReferredTables != null)
-                ? t_astrReferredTables.length
-                : 0,
+                t_astrReferredTables.length,
                 t_iLength);
 
         @Nullable List<Attribute> t_lAttributes;
         @Nullable ForeignKey t_CurrentFk;
         boolean t_bAllowsNullAsAWhole;
 
+        @Nullable String[] t_astrForeignKey;
+
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            t_lAttributes =
-                buildAttributes(
-                    t_aastrForeignKeys[t_iIndex],
-                    tableName,
-                    metadataManager,
-                    metadataTypeManager,
-                    decoratorFactory);
+            t_astrForeignKey =
+                t_aastrForeignKeys[t_iIndex];
 
-            if  (t_lAttributes.size() > 0)
+            if (t_astrForeignKey != null)
             {
-                t_bAllowsNullAsAWhole =
-                    allowsNullAsAWhole(t_lAttributes);
+                t_lAttributes =
+                    buildAttributes(
+                        t_astrForeignKey,
+                        tableName,
+                        metadataManager,
+                        metadataTypeManager,
+                        decoratorFactory);
 
-                t_CurrentFk =
-                    new CachingForeignKeyDecorator(
-                        new ForeignKeyValueObject(
-                            t_astrReferredTables[t_iIndex],
-                            t_lAttributes,
-                            tableName,
-                            t_bAllowsNullAsAWhole));
+                if  (t_lAttributes.size() > 0)
+                {
+                    t_bAllowsNullAsAWhole =
+                        allowsNullAsAWhole(t_lAttributes);
 
-                result.add(t_CurrentFk);
+                    t_CurrentFk =
+                        new CachingForeignKeyDecorator(
+                            new ForeignKeyValueObject(
+                                t_astrReferredTables[t_iIndex],
+                                t_lAttributes,
+                                tableName,
+                                t_bAllowsNullAsAWhole));
+
+                    result.add(t_CurrentFk);
+                }
             }
         }
 
@@ -272,13 +278,9 @@ public class MetadataUtils
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the externally-managed attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> retrieveExternallyManagedAttributes(
+    public List<Attribute> retrieveExternallyManagedAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -315,13 +317,9 @@ public class MetadataUtils
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return all but the externally-managed attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> retrieveAllButExternallyManagedAttributes(
+    public List<Attribute> retrieveAllButExternallyManagedAttributes(
         final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -360,21 +358,22 @@ public class MetadataUtils
      * @return the foreign key attributes (a list of attribute lists,
      * grouped by referred tables.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public Collection<Collection<Attribute>> retrieveForeignKeys(
-        final String tableName,
+    public List<List<Attribute>> retrieveForeignKeys(
+        @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
-        @NotNull Collection<Collection<Attribute>> result = new ArrayList<Collection<Attribute>>();
+        @NotNull List<List<Attribute>> result = new ArrayList<List<Attribute>>();
 
         @NotNull String[] t_astrReferredTables =
             metadataManager.getReferredTables(tableName);
 
         @Nullable String[] t_astrReferredColumns = null;
 
-        @Nullable Collection<Attribute> t_cCurrentForeignKey;
+        @Nullable List<Attribute> t_cCurrentForeignKey;
 
         for  (String t_strReferredTable : t_astrReferredTables)
         {
@@ -411,10 +410,6 @@ public class MetadataUtils
      * @return the foreign keys of other tables pointing
      * to this one:
      * a map of referringTableName -> ForeignKey[].
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
     public Map<String,ForeignKey[]> retrieveReferringKeys(
@@ -631,6 +626,7 @@ public class MetadataUtils
 
             boolean t_bIsBool = metadataManager.isBoolean(tableName, columnNames[t_iIndex]);
 
+            @SuppressWarnings("unused")
             String t_strFieldType =
                 metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
 
@@ -849,13 +845,9 @@ public class MetadataUtils
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> retrieveLobAttributes(
+    public List<Attribute> retrieveLobAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -877,13 +869,9 @@ public class MetadataUtils
      * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    public Collection<Attribute> retrieveAllButLobAttributes(
+    public List<Attribute> retrieveAllButLobAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -906,13 +894,9 @@ public class MetadataUtils
      * @param includeLob whether to include or exclude the LOB attributes.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return such attributes.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    protected Collection<Attribute> retrieveLobAttributes(
+    protected List<Attribute> retrieveLobAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
@@ -955,15 +939,13 @@ public class MetadataUtils
      * @param properties the properties.
      * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return such collection.
-     * @precondition properties != null
-     * @precondition metadataTypeManager != null
      */
     @NotNull
-    public Collection<Property> filterLobProperties(
+    public List<Property> filterLobProperties(
         @Nullable final Collection<Property> properties,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        @NotNull Collection<Property> result = new ArrayList<Property>();
+        @NotNull List<Property> result = new ArrayList<Property>();
 
         Iterator<Property> t_itPropertyIterator =
             (properties != null)

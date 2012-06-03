@@ -37,13 +37,12 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
-import org.acmsl.queryj.tools.customsql.ResultElement;
 import org.acmsl.queryj.tools.customsql.ResultRefElement;
 import org.acmsl.queryj.tools.metadata.CachingResultDecorator;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 
 /*
@@ -56,6 +55,10 @@ import org.acmsl.commons.patterns.Utils;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +68,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Provides some useful methods when filling up templates.
@@ -104,16 +108,15 @@ public class TemplateUtils
      * Retrieves the custom selects.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom selects.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public Collection<Sql> retrieveCustomSelects(
+    public List<Sql> retrieveCustomSelects(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
@@ -122,7 +125,6 @@ public class TemplateUtils
                 null,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -133,17 +135,15 @@ public class TemplateUtils
      * repository-wide results.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom selects.
      */
     @NotNull
-    public Collection<Sql> retrieveCustomSelects(
-        @NotNull final String tableName,
+    public List<Sql> retrieveCustomSelects(
+        @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
@@ -156,7 +156,6 @@ public class TemplateUtils
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -165,16 +164,15 @@ public class TemplateUtils
      * Retrieves the custom updates or inserts.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom sql.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public Collection<Sql> retrieveCustomUpdatesOrInserts(
+    public List<Sql> retrieveCustomUpdatesOrInserts(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
@@ -183,7 +181,6 @@ public class TemplateUtils
                 null,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -193,17 +190,15 @@ public class TemplateUtils
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom sql.
      */
     @NotNull
-    public Collection<Sql> retrieveCustomUpdatesOrInserts(
-        @NotNull final String tableName,
+    public List<Sql> retrieveCustomUpdatesOrInserts(
+        @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
@@ -218,7 +213,6 @@ public class TemplateUtils
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -227,16 +221,15 @@ public class TemplateUtils
      * Retrieves the custom selects.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom selects.
      */
+    @SuppressWarnings("unused")
     @NotNull
-    public Collection<Sql> retrieveCustomSelectsForUpdate(
+    public List<Sql> retrieveCustomSelectsForUpdate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
@@ -245,7 +238,6 @@ public class TemplateUtils
                 null,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -255,17 +247,15 @@ public class TemplateUtils
      * @param tableName the table name.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom selects.
      */
     @NotNull
-    public Collection<Sql> retrieveCustomSelectsForUpdate(
-        @NotNull final String tableName,
+    public List<Sql> retrieveCustomSelectsForUpdate(
+        @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
@@ -278,7 +268,6 @@ public class TemplateUtils
                 tableName,
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -290,22 +279,20 @@ public class TemplateUtils
      * repository-wide results.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom sql.
      */
     @NotNull
-    public Collection<Sql> retrieveCustomSql(
+    public List<Sql> retrieveCustomSql(
         @Nullable final String[] types,
-        @NotNull final String tableName,
+        @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
-        @NotNull Collection<Sql> result = new ArrayList<Sql>();
+        @NotNull List<Sql> result = new ArrayList<Sql>();
 
         Collection t_cContents = customSqlProvider.getCollection();
 
@@ -345,7 +332,7 @@ public class TemplateUtils
                         {
                             boolean t_bAdd = false;
 
-                            @Nullable String t_strCurrentType = null;
+                            @Nullable String t_strCurrentType;
 
                             for  (int t_iIndex = 0;
                                       t_iIndex < t_iTypes;
@@ -391,7 +378,7 @@ public class TemplateUtils
      * @precondition daoTemplateUtils != null
      */
     @NotNull
-    public Collection<ResultElement> retrieveCustomResults(
+    public List<Result> retrieveCustomResults(
         @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
@@ -421,23 +408,23 @@ public class TemplateUtils
      * @precondition daoTemplateUtils != null
      */
     @NotNull
-    public Collection<ResultElement> retrieveCustomResults(
+    public List<Result> retrieveCustomResults(
         @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
-        @NotNull Collection<ResultElement> result = new ArrayList<ResultElement>();
+        @NotNull List<Result> result = new ArrayList<Result>();
 
         Collection t_cContents = customSqlProvider.getCollection();
 
         if  (t_cContents != null)
         {
-            @Nullable Object t_Content = null;
-            @Nullable Sql t_Sql = null;
-            @Nullable ResultRefElement t_ResultRefElement = null;
-            @Nullable ResultElement t_ResultElement = null;
+            @Nullable Object t_Content;
+            @Nullable Sql t_Sql;
+            @Nullable ResultRefElement t_ResultRefElement;
+            @Nullable Result t_ResultElement;
             String t_strDao;
             boolean t_bMatches;
 

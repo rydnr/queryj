@@ -38,7 +38,7 @@ package org.acmsl.queryj.tools.templates;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.Sql;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
@@ -57,7 +57,7 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
- * Importign some JetBrains annotations.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -65,7 +65,6 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -202,40 +201,37 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
     {
-        @Nullable Collection<Sql> t_cCustomSelects =
+        @Nullable List<Sql> t_cCustomSelects =
             retrieveCustomSelects(
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils,
                 templateUtils);
 
         input.put("custom_selects", t_cCustomSelects);
 
-        @Nullable Collection<Sql> t_cCustomUpdatesOrInserts =
+        @Nullable List<Sql> t_cCustomUpdatesOrInserts =
             retrieveCustomUpdatesOrInserts(
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils,
                 templateUtils);
 
         input.put("custom_updates_or_inserts", t_cCustomUpdatesOrInserts);
 
-        @Nullable Collection<Sql> t_cCustomSelectsForUpdate =
+        @Nullable List<Sql> t_cCustomSelectsForUpdate =
             retrieveCustomSelectsForUpdate(
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils,
                 templateUtils);
 
         input.put("custom_selects_for_update", t_cCustomSelectsForUpdate);
 
-        @Nullable Collection<ResultElement> t_cCustomResults =
+        @Nullable List<Result> t_cCustomResults =
             retrieveCustomResults(
                 customSqlProvider,
                 metadataManager,
@@ -250,17 +246,15 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * Retrieves the custom selects.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      */
     @NotNull
-    protected Collection<Sql> retrieveCustomSelects(
+    protected List<Sql> retrieveCustomSelects(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
@@ -269,7 +263,6 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
             templateUtils.retrieveCustomSelects(
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -278,17 +271,15 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * Retrieves the custom updates or inserts.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom sql.
      */
     @NotNull
-    protected Collection<Sql> retrieveCustomUpdatesOrInserts(
+    protected List<Sql> retrieveCustomUpdatesOrInserts(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
@@ -297,7 +288,6 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
             templateUtils.retrieveCustomUpdatesOrInserts(
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -306,17 +296,15 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * Retrieves the custom selects.
      * @param customSqlProvider the provider.
      * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom selects.
      */
     @NotNull
-    protected Collection<Sql> retrieveCustomSelectsForUpdate(
+    protected List<Sql> retrieveCustomSelectsForUpdate(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
@@ -325,7 +313,6 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
             templateUtils.retrieveCustomSelectsForUpdate(
                 customSqlProvider,
                 metadataManager,
-                metadataTypeManager,
                 decoratorFactory,
                 daoTemplateUtils);
     }
@@ -340,7 +327,7 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * @return the custom results.
      */
     @NotNull
-    protected Collection<ResultElement> retrieveCustomResults(
+    protected List<Result> retrieveCustomResults(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
