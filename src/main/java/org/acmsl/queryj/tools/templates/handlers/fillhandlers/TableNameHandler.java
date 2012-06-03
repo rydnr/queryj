@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("unused")
 public class TableNameHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, String>
+    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, DecoratedString>
 {
     /**
      * Creates a {@link TableNameHandler} for given {@link BasePerTableTemplateContext}.
@@ -81,8 +81,8 @@ public class TableNameHandler
      * @return the table name.
      */
     @NotNull
-    protected String getValue(@NotNull final BasePerTableTemplateContext context)
+    protected DecoratedString getValue(@NotNull final BasePerTableTemplateContext context)
     {
-        return context.getTableName();
+        return new DecoratedString(context.getTableName());
     }
 }

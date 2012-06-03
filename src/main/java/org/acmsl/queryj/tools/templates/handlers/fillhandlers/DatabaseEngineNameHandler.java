@@ -48,18 +48,17 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Resolves the "engine_name" placeholder in templates.
- * @param <C> the {@link TemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
-public class DatabaseEngineNameHandler<C extends TemplateContext>
-    extends AbstractTemplateContextFillHandler<C, String>
+public class DatabaseEngineNameHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
     /**
      * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
      * @param context the template context.
      */
-    public DatabaseEngineNameHandler(@NotNull final C context)
+    public DatabaseEngineNameHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }
@@ -77,24 +76,13 @@ public class DatabaseEngineNameHandler<C extends TemplateContext>
 
     /**
      * Retrieves the engine name.
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public String getValue()
-    {
-        return getEngineName(getTemplateContext().getMetadataManager());
-    }
-
-    /**
-     * Retrieves the engine name.
      * @param context the {@link TemplateContext context}.
      * @return such information.
      */
     @NotNull
-    protected String getValue(@NotNull final C context)
+    protected DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        return getEngineName(context.getMetadataManager());
+        return new DecoratedString(getEngineName(context.getMetadataManager()));
     }
 
     /**

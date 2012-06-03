@@ -41,11 +41,31 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.AbstractQueryJChain;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.tools.templates.handlers.FillAdapterHandler;
+import org.acmsl.queryj.tools.templates.handlers.TemplateContextFillAdapterHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.CopyrightYearsHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.CurrentYearHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.DAOSubpackageNameHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.DatabaseEngineNameHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.DatabaseEngineVersionHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.DecoratedString;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.HeaderHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.IsRepositoryDAOHandler;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Chain;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.ProjectPackageHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.RepositoryNameHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.SubPackageNameHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 /**
  * Sets up the chain to provide all placeholder replacements in templates.
@@ -114,9 +134,8 @@ public abstract class FillTemplateChain<C extends TemplateContext>
 
     /**
      * Performs any clean up whenever an error occurs.
-     *
      * @param buildException the error that triggers this clean-up.
-     * @param command        the command.
+     * @param command the command.
      */
     @Override
     protected void cleanUpOnError(final QueryJBuildException buildException, final QueryJCommand command)
@@ -128,9 +147,91 @@ public abstract class FillTemplateChain<C extends TemplateContext>
      * Performs the required processing.
      * @throws QueryJBuildException if the process fails.
      */
-    public void process()
+    @SuppressWarnings("unchecked")
+    public Map providePlaceholders()
         throws QueryJBuildException
     {
-        super.process();
+        Map result;
+
+        @NotNull QueryJCommand t_Command = buildCommand();
+
+        super.process(buildChain(getChain()), t_Command);
+
+        result = t_Command.getAttributeMap();
+
+        return result;
     }
+
+    /**
+     * Builds the chain.
+     *
+     * @param chain the chain to be configured.
+     * @return the updated chain.
+     */
+    @Override
+    @NotNull
+    protected final Chain buildChain(final Chain chain)
+    {
+        return buildChain(chain, getTemplateContext());
+    }
+
+    /**
+     * Builds the chain.
+     *
+     * @param chain the chain to be configured.
+     * @param context the context.
+     * @return the updated chain.
+     */
+    @NotNull
+    protected final Chain buildChain(@NotNull final Chain chain, @NotNull final C context)
+    {
+        chain.add(
+            new FillAdapterHandler<CopyrightYearsHandler,Integer[]>(new CopyrightYearsHandler()));
+
+        chain.add(
+            new FillAdapterHandler<CurrentYearHandler,String>(new CurrentYearHandler()));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,DAOSubpackageNameHandler,String>(
+                new DAOSubpackageNameHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,DatabaseEngineNameHandler,DecoratedString>(
+                new DatabaseEngineNameHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,DatabaseEngineVersionHandler,DecoratedString>(
+                new DatabaseEngineVersionHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,HeaderHandler,DecoratedString>(
+                new HeaderHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,IsRepositoryDAOHandler,Boolean>(
+                new IsRepositoryDAOHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,ProjectPackageHandler,DecoratedString>(
+                new ProjectPackageHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,RepositoryNameHandler,DecoratedString>(
+                new RepositoryNameHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,SubPackageNameHandler,DecoratedString>(
+                new SubPackageNameHandler(context)));
+
+        addHandlers(chain, context);
+
+        return chain;
+    }
+
+    /**
+     * Adds additional handlers.
+     * @param chain the chain.
+     * @param context the {@link TemplateContext context}.
+     */
+    protected abstract void addHandlers(@NotNull final Chain chain, @NotNull final C context);
 }

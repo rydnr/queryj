@@ -50,7 +50,6 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
-@SuppressWarnings("unused")
 public class RepositoryNameHandler
     extends AbstractDecoratedStringHandler<TemplateContext>
 {
@@ -59,8 +58,7 @@ public class RepositoryNameHandler
      * {@link TemplateContext}.
      * @param context the template.
      */
-    @SuppressWarnings("unused")
-    protected RepositoryNameHandler(@NotNull final TemplateContext context)
+    public RepositoryNameHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }

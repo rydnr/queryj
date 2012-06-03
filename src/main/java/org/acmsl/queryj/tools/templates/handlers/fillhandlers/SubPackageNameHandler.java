@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
 */
 @SuppressWarnings("unused")
 public class SubPackageNameHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext,String>
+    extends AbstractTemplateContextFillHandler<TemplateContext,DecoratedString>
 {
     /**
      * Creates a handler able to resolve "sub_package_name" using given {@link TemplateContext}.
@@ -81,8 +81,8 @@ public class SubPackageNameHandler
      */
     @NotNull
     @Override
-    protected String getValue(@NotNull final TemplateContext context)
+    protected DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        return context.getPackageName();
+        return new DecoratedString(context.getPackageName());
     }
 }

@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("unused")
 public class HeaderHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, String>
+    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
     /**
      * Creates a handler able to resolve "header" placeholders.
@@ -82,8 +82,8 @@ public class HeaderHandler
      */
     @Override
     @NotNull
-    protected String getValue(@NotNull final TemplateContext context)
+    protected DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        return context.getHeader();
+        return new DecoratedString(context.getHeader());
     }
 }

@@ -39,10 +39,12 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
+import org.acmsl.queryj.tools.customsql.Result;
+import org.acmsl.queryj.tools.metadata.TableDecorator;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.FillTemplateChain;
-import org.acmsl.queryj.tools.templates.TemplateContext;
-import org.acmsl.queryj.tools.templates.handlers.FillAdapterHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateContextFillAdapterHandler;
 
 /*
@@ -55,9 +57,11 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Sets up the chain required to provide placeholder replacements for
- * {@BasePerTableTemplate per-table templates}.
+ * {@link org.acmsl.queryj.tools.templates.BasePerTableTemplate per-table templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
@@ -74,25 +78,51 @@ public class BasePerTableFillTemplateChain
     }
 
     /**
-     * Builds the chain.
-     *
+     * Adds additional per-table handlers.
      * @param chain the chain to be configured.
-     * @return the updated chain.
+     * @param context the {@link BasePerTableTemplateContext context}.
      */
     @Override
-    protected Chain buildChain(final Chain chain)
+    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerTableTemplateContext context)
     {
         chain.add(
-            new FillAdapterHandler<CopyrightYearsHandler,Integer[]>(new CopyrightYearsHandler()));
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,CustomResultsHandler,List<Result>>(
+                new CustomResultsHandler(context)));
 
         chain.add(
             new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOClassNameHandler,DecoratedString>(
-                new DAOClassNameHandler(getTemplateContext())));
+                new DAOClassNameHandler(context)));
 
         chain.add(
             new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOImplementationClassNameHandler,DecoratedString>(
-                new DAOImplementationClassNameHandler(getTemplateContext())));
+                new DAOImplementationClassNameHandler(context)));
 
-        return chain;
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,ForeignKeyListHandler,List<ForeignKey>>(
+                new ForeignKeyListHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,LobHandlingCheckHandler,Boolean>(
+                new LobHandlingCheckHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,NonPrimaryKeyAttributesHandler,List<Attribute>>(
+                new NonPrimaryKeyAttributesHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,PrimaryKeyHandler,List<Attribute>>(
+                new PrimaryKeyHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,TableHandler,TableDecorator>(
+                new TableHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,TableNameHandler,DecoratedString>(
+                new TableNameHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,ValueObjectNameHandler,DecoratedString>(
+                new ValueObjectNameHandler(context)));
     }
 }

@@ -181,7 +181,7 @@ public abstract class AbstractQueryJChain
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected boolean process(
-        final Chain chain, @NotNull final QueryJCommand command)
+        @NotNull final Chain chain, @NotNull final QueryJCommand command)
       throws QueryJBuildException
     {
         boolean result = false;

@@ -48,19 +48,18 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Resolves the "engine_version" placeholder in templates.
- * @param <C> the {@link TemplateContext}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
 @SuppressWarnings("unused")
-public class DatabaseEngineVersionHandler<C extends TemplateContext>
-    extends AbstractTemplateContextFillHandler<C,String>
+public class DatabaseEngineVersionHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext,DecoratedString>
 {
     /**
      * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.
      * @param context the context.
      */
-    public DatabaseEngineVersionHandler(@NotNull final C context)
+    public DatabaseEngineVersionHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }
@@ -82,9 +81,9 @@ public class DatabaseEngineVersionHandler<C extends TemplateContext>
      */
     @NotNull
     @Override
-    public String getValue(@NotNull final TemplateContext context)
+    public DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        return getEngineVersion(context.getMetadataManager());
+        return new DecoratedString(getEngineVersion(context.getMetadataManager()));
     }
 
     /**
