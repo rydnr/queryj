@@ -39,32 +39,14 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.tools.templates.TemplateContext;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.TemplateContextFillHandler;
 
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.patterns.Command;
-
-/*
- * Importing some Commons-Logging classes.
- */
-import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.Map;
 
 /**
  * Adapts fill handlers to be used as regular handlers in a chain-of-responsibility
@@ -73,13 +55,8 @@ import java.util.Map;
  * @since 2012/06/03
  */
 public class TemplateContextFillAdapterHandler<C extends TemplateContext, F extends TemplateContextFillHandler<C,P>, P>
-    implements QueryJCommandHandler
+    extends FillAdapterHandler
 {
-    /**
-     * The fill handler.
-     */
-    @NotNull private F fillHandler;
-
     /**
      * Creates a {@link TemplateContextFillAdapterHandler instance} to adapt given
      * {@link TemplateContextFillHandler fill handler}.
@@ -87,107 +64,6 @@ public class TemplateContextFillAdapterHandler<C extends TemplateContext, F exte
      */
     public TemplateContextFillAdapterHandler(@NotNull final F fillHandler)
     {
-        immutableSetFillHandler(fillHandler);
-    }
-
-    /**
-     * Specifies the {@link TemplateContextFillHandler fill handler}.
-     * @param handler the fill handler.
-     */
-    protected final void immutableSetFillHandler(@NotNull final F handler)
-    {
-        this.fillHandler = handler;
-    }
-
-    /**
-     * Specifies the {@link TemplateContextFillHandler fill handler}.
-     * @param handler the fill handler.
-     */
-    @SuppressWarnings("unused")
-    protected void setFillHandler(@NotNull final F handler)
-    {
-        immutableSetFillHandler(handler);
-    }
-
-    /**
-     * Retrieves the {@link TemplateContextFillHandler fill handler}.
-     * @return such instance.
-     */
-    @NotNull
-    public F getFillHandler()
-    {
-        return this.fillHandler;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     */
-    public boolean handle(@NotNull final Command command)
-    {
-        boolean result = false;
-
-        try
-        {
-            result = handle((QueryJCommand) command);
-        }
-        catch (@NotNull final QueryJBuildException templateError)
-        {
-            Log t_Log = UniqueLogFactory.getLog(TemplateContextFillAdapterHandler.class);
-
-            if (t_Log != null)
-            {
-                t_Log.fatal("Cannot process template using " + getFillHandler(), templateError);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param command the command.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @SuppressWarnings("unchecked")
-    public boolean handle(@NotNull final QueryJCommand command)
-        throws QueryJBuildException
-    {
-        return handle(command.getAttributeMap(), getFillHandler());
-    }
-
-    /**
-     * Handles given command.
-     * @param attributes the attribute map.
-     * @param fillHandler the {@link TemplateContextFillHandler fill handler}.
-     * @return <code>true</code> to avoid further processing of such command
-     * by different handlers.
-     * @throws QueryJBuildException if the process fails.
-     */
-    @SuppressWarnings("unchecked")
-    public boolean handle(@NotNull final Map attributes, @NotNull final F fillHandler)
-        throws QueryJBuildException
-    {
-        boolean result = false;
-
-        @NotNull String t_strPlaceHolder = fillHandler.getPlaceHolder();
-        @NotNull P t_Value = fillHandler.getValue();
-
-        attributes.put(t_strPlaceHolder, t_Value);
-
-        return result;
-    }
-
-    /**
-     * Handles given command.
-     * @param fillHandler the {@link TemplateContextFillHandler fill handler}.
-     */
-    protected void handle(@NotNull final F fillHandler)
-    {
-
+        super(fillHandler);
     }
 }

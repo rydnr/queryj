@@ -41,6 +41,8 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 */
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.FillTemplateChain;
+import org.acmsl.queryj.tools.templates.TemplateContext;
+import org.acmsl.queryj.tools.templates.handlers.FillAdapterHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateContextFillAdapterHandler;
 
 /*
@@ -81,8 +83,15 @@ public class BasePerTableFillTemplateChain
     protected Chain buildChain(final Chain chain)
     {
         chain.add(
+            new FillAdapterHandler<CopyrightYearsHandler,Integer[]>(new CopyrightYearsHandler()));
+
+        chain.add(
             new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOClassNameHandler,DecoratedString>(
                 new DAOClassNameHandler(getTemplateContext())));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOImplementationClassNameHandler,DecoratedString>(
+                new DAOImplementationClassNameHandler(getTemplateContext())));
 
         return chain;
     }
