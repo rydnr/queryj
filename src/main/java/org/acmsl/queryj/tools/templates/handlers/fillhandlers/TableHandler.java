@@ -46,7 +46,6 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 /**
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
