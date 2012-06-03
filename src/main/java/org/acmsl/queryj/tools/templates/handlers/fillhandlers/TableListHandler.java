@@ -60,16 +60,16 @@ import java.util.List;
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
-public class TablesHandler
+public class TableListHandler
     extends AbstractTemplateContextFillHandler<BasePerRepositoryTemplateContext, List<TableDecorator>>
 {
     /**
-     * Creates a {@link TablesHandler} to resolve "tables" placeholders using given
+     * Creates a {@link TableListHandler} to resolve "tables" placeholders using given
      * {@link BasePerRepositoryTemplateContext context}.
      * @param context the {@link BasePerRepositoryTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public TablesHandler(@NotNull final BasePerRepositoryTemplateContext context)
+    public TableListHandler(@NotNull final BasePerRepositoryTemplateContext context)
     {
         super(context);
     }

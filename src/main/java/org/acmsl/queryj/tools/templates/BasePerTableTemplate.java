@@ -1055,9 +1055,6 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the decorated table.
-     * @precondition table != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
     protected TableDecorator decorate(
