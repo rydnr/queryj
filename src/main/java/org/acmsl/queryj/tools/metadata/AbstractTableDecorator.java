@@ -47,12 +47,15 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.LazyAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Table;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -126,6 +129,7 @@ public abstract class AbstractTableDecorator
             table.getName(),
             table.getPrimaryKey(),
             table.getAttributes(),
+            table.getForeignKeys(),
             table.getParentTable(),
             table.isStatic(),
             table.isVoDecorated(),
@@ -139,20 +143,19 @@ public abstract class AbstractTableDecorator
      * @param name the name.
      * @param primaryKey the primary key.
      * @param attributes the attributes.
+     * @param foreignKeys the foreign keys.
      * @param parentTable the parent table.
      * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object should be decorated.
      * @param metadataManager the metadata manager.
      * @param decoratorFactory the decorator factory.
-     * @precondition name != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     public AbstractTableDecorator(
         final Table table,
         final String name,
-        final List primaryKey,
-        final List attributes,
+        final List<Attribute> primaryKey,
+        final List<Attribute> attributes,
+        final List<ForeignKey> foreignKeys,
         final Table parentTable,
         final boolean isStatic,
         final boolean voDecorated,
@@ -160,11 +163,124 @@ public abstract class AbstractTableDecorator
         final DecoratorFactory decoratorFactory)
     {
         super(
-            name, primaryKey, attributes, parentTable, isStatic, voDecorated);
+            name, table.getComment(), primaryKey, attributes, foreignKeys, parentTable, isStatic, voDecorated);
 
         immutableSetTable(table);
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
+    }
+
+    /**
+     * Creates a <code>AbstractTableDecorator</code> instance.
+     * @param table the table name.
+     * @param primaryKey the primary key.
+     * @param attributes the attributes.
+     * @param isStatic whether the table is static.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param childAttributes the child attributes.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition decoratorFactory != null
+     */
+    public AbstractTableDecorator(
+        final String table,
+        final List<Attribute> primaryKey,
+        final List<Attribute> attributes,
+        final boolean isStatic,
+        final boolean voDecorated,
+        final MetadataManager metadataManager,
+        final List<Attribute> childAttributes,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(
+            null,
+            table,
+            primaryKey,
+            attributes,
+            new ArrayList<ForeignKey>(0),
+            null,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
+
+        immutableSetChildAttributes(childAttributes);
+    }
+
+    /**
+     * Creates a <code>AbstractTableDecorator</code> instance.
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param primaryKey the primary key.
+     * @param isStatic whether the table is static.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition table != null
+     * @precondition primaryKey != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected AbstractTableDecorator(
+        final String table,
+        final List primaryKey,
+        final boolean isStatic,
+        final boolean voDecorated,
+        final MetadataManager metadataManager,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(
+            null,
+            table,
+            primaryKey,
+            new ArrayList<Attribute>(0),
+            new ArrayList<ForeignKey>(0),
+            null,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
+    }
+
+    /**
+     * Creates a <code>AbstractTableDecorator</code> instance.
+     * <code>Table</code> to decorate.
+     * @param table the table.
+     * @param primaryKey the primary key.
+     * @param isStatic whether the table is static.
+     * @param voDecorated whether the value-object for the table is
+     * decorated.
+     * @param metadataManager the metadata manager.
+     * @param childAttributes the child attributes.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @precondition table != null
+     * @precondition primaryKey != null
+     * @precondition metadataManager != null
+     * @precondition decoratorFactory != null
+     */
+    protected AbstractTableDecorator(
+        final String table,
+        final List<Attribute> primaryKey,
+        final boolean isStatic,
+        final boolean voDecorated,
+        final MetadataManager metadataManager,
+        final List childAttributes,
+        final DecoratorFactory decoratorFactory)
+    {
+        this(
+            null,
+            table,
+            primaryKey,
+            new ArrayList<Attribute>(0),
+            new ArrayList<ForeignKey>(0),
+            null,
+            isStatic,
+            voDecorated,
+            metadataManager,
+            decoratorFactory);
+        immutableSetChildAttributes(childAttributes);
     }
 
     /**
@@ -203,116 +319,6 @@ public abstract class AbstractTableDecorator
         return immutableGetTable();
     }
 
-    /**
-     * Creates a <code>AbstractTableDecorator</code> instance.
-     * @param table the table name.
-     * @param primaryKey the primary key.
-     * @param attributes the attributes.
-     * @param isStatic whether the table is static.
-     * @param voDecorated whether the value-object for the table is
-     * decorated.
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param childAttributes the child attributes.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @precondition decoratorFactory != null
-     */
-    public AbstractTableDecorator(
-        final String table,
-        final List primaryKey,
-        final List attributes,
-        final boolean isStatic,
-        final boolean voDecorated,
-        final MetadataManager metadataManager,
-        final List childAttributes,
-        final DecoratorFactory decoratorFactory)
-    {
-        this(
-            null,
-            table,
-            primaryKey,
-            attributes,
-            null,
-            isStatic,
-            voDecorated,
-            metadataManager,
-            decoratorFactory);
-
-        immutableSetChildAttributes(childAttributes);
-    }
-
-    /**
-     * Creates a <code>AbstractTableDecorator</code> instance.
-     * <code>Table</code> to decorate.
-     * @param table the table.
-     * @param primaryKey the primary key.
-     * @param isStatic whether the table is static.
-     * @param voDecorated whether the value-object for the table is
-     * decorated.
-     * @param metadataManager the metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @precondition table != null
-     * @precondition primaryKey != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     */
-    protected AbstractTableDecorator(
-        final String table,
-        final List primaryKey,
-        final boolean isStatic,
-        final boolean voDecorated,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
-    {
-        this(
-            null,
-            table,
-            primaryKey,
-            null,
-            null,
-            isStatic,
-            voDecorated,
-            metadataManager,
-            decoratorFactory);
-    }
-    
-    /**
-     * Creates a <code>AbstractTableDecorator</code> instance.
-     * <code>Table</code> to decorate.
-     * @param table the table.
-     * @param primaryKey the primary key.
-     * @param isStatic whether the table is static.
-     * @param voDecorated whether the value-object for the table is
-     * decorated.
-     * @param metadataManager the metadata manager.
-     * @param childAttributes the child attributes.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @precondition table != null
-     * @precondition primaryKey != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     */
-    protected AbstractTableDecorator(
-        final String table,
-        final List primaryKey,
-        final boolean isStatic,
-        final boolean voDecorated,
-        final MetadataManager metadataManager,
-        final List childAttributes,
-        final DecoratorFactory decoratorFactory)
-    {
-        this(
-            null,
-            table,
-            primaryKey,
-            null,
-            null,
-            isStatic,
-            voDecorated,
-            metadataManager,
-            decoratorFactory);
-        immutableSetChildAttributes(childAttributes);
-    }
-    
     /**
      * Specifies the metadata manager.
      * @param metadataManager such instance.
@@ -428,6 +434,7 @@ public abstract class AbstractTableDecorator
      * Specifies the child attributes.
      * @param childAttributes the child attributes.
      */
+    @SuppressWarnings("unchecked")
     protected void setChildAttributes(
         final List childAttributes)
     {
@@ -444,39 +451,14 @@ public abstract class AbstractTableDecorator
     }
 
     /**
-     * Specifies the foreign keys.
-     * @param foreignKeys the foreign keys.
-     */
-    protected final void immutableSetForeignKeys(final List foreignKeys)
-    {
-        m__lForeignKeys = foreignKeys;
-    }
-
-    /**
-     * Specifies the foreign keys.
-     * @param foreignKeys the foreign keys.
-     */
-    protected void setForeignKeys(final List foreignKeys)
-    {
-        immutableSetForeignKeys(foreignKeys);
-    }
-
-    /**
      * Retrieves the foreign keys.
      * @return such list.
      */
-    protected final List immutableGetForeignKeys()
+    @NotNull
+    @Override
+    public List<ForeignKey> getForeignKeys()
     {
-        return m__lForeignKeys;
-    }
-
-    /**
-     * Retrieves the foreign keys.
-     * @return such list.
-     */
-    public List getForeignKeys()
-    {
-        List result = immutableGetForeignKeys();
+        List<ForeignKey> result = immutableGetForeignKeys();
 
         if  (result == null)
         {
@@ -502,7 +484,7 @@ public abstract class AbstractTableDecorator
      * @precondition name != null
      * @precondition metadataManager != null
      */
-    protected List retrieveForeignKeys(
+    protected List<ForeignKey> retrieveForeignKeys(
         final String name,
         final MetadataManager metadataManager)
     {
@@ -523,12 +505,12 @@ public abstract class AbstractTableDecorator
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
-    protected List retrieveForeignKeys(
+    protected List<ForeignKey> retrieveForeignKeys(
         final String name,
         final MetadataManager metadataManager,
         final MetadataTypeManager metadataTypeManager)
     {
-        List result = null;
+        List<ForeignKey> result = null;
 
         String[] t_astrReferredTables = metadataManager.getReferredTables(name);
 
@@ -573,7 +555,7 @@ public abstract class AbstractTableDecorator
      * @precondition metadataManager != null
      * @precondition metadataTypeManager != null
      */
-    protected List convertToForeignKeyList(
+    protected List<ForeignKey> convertToForeignKeyList(
         final String sourceTable,
         final String targetTable,
         final String[][] fks,
@@ -1372,6 +1354,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the attributes.
      * @return such information.
      */
+    @NotNull
     public List getAttributes()
     {
         return

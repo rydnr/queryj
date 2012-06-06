@@ -248,6 +248,10 @@ public class CustomResultUtils
 
         if (result == null)
         {
+            if (resultElement.getId().equals("draws.multiple.draw.result"))
+            {
+                System.out.println("caught");
+            }
             String[] t_astrTableNames = metadataManager.getTableNames();
 
             int t_iTableCount =

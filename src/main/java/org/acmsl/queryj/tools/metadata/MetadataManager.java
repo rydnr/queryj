@@ -79,6 +79,8 @@ public interface MetadataManager
      */
     public String getName();
 
+    /// EVERYTHING BELOW IS DEPRECATED //
+
     /**
      * Retrieves the metadata.
      * @throws SQLException if the database operation fails.
@@ -86,24 +88,8 @@ public interface MetadataManager
      * occurs.
      */
     public void retrieveMetadata()
-      throws  SQLException,
-              QueryJException;
-
-    /**
-     * Retrieves the table names.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
-     */
-    public void extractTableMetadata()
         throws  SQLException,
         QueryJException;
-
-    /**
-     * Retrieves the database meta data.
-     * @return such information.
-     */
-    public DatabaseMetaData getMetaData();
 
     /**
      * Retrieves the table names.
@@ -132,7 +118,7 @@ public interface MetadataManager
      * @param columnNames the column names.
      */
     public void addColumnNames(
-        final String tableName, final String[] columnNames);
+        @NotNull final String tableName, @NotNull final String[] columnNames);
 
     /**
      * Retrieves the column names.
@@ -544,6 +530,12 @@ public interface MetadataManager
      * @param metaData the {@link DatabaseMetaData} instance.
      */
     public void setMetaData(@NotNull final DatabaseMetaData metaData);
+
+    /**
+     * Retrieves the {@link DatabaseMetaData}.
+     * @return such instance.
+     */
+    public DatabaseMetaData getMetaData();
 
     /**
      * Checks whether the generation phase is enabled for given table.

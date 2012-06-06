@@ -101,7 +101,7 @@ public class TemplatesSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
+    //suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TestSuiteTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGeneratorTest.class);
@@ -111,7 +111,7 @@ public class TemplatesSuite
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateUtilsTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateTest.class);
+    //suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateTest.class);
     
     suite.addTest(org.acmsl.queryj.tools.templates.dao.DaoSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.FunctionsSuite.suite());

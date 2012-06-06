@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -642,6 +641,9 @@ public class MetadataUtils
                         t_strNativeType,
                         tableName,
                         metadataManager.getColumnComment(tableName, columnNames[t_iIndex]),
+                        t_iIndex + 1, // ordinal position
+                        -1, // length
+                        -1, // precision
                         t_bManagedExternally,
                         t_bAllowsNull,
                         columnValues[t_iIndex],

@@ -69,6 +69,7 @@ import org.apache.commons.logging.Log;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -139,9 +140,10 @@ public class MetaLanguageUtils
     * @param tableComment the table's comment.
     * @return such attribute.
     */
+    @Nullable
     public String retrieveStaticAttribute(final String tableComment)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (!isEmpty(tableComment))
         {

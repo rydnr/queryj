@@ -151,7 +151,7 @@ public class BasePerRepositoryTemplateContext
     {
         @NotNull List<String> t_lOriginal = immutableGetTableNames();
 
-        List<String> result = new ArrayList<String>(t_lOriginal.size());
+        List<String> result = new ArrayList<String>(t_lOriginal);
 
         Collections.copy(result, t_lOriginal);
 

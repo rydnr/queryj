@@ -40,7 +40,10 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -226,8 +229,9 @@ public class CachingTableDecorator
      */
     public CachingTableDecorator(
         final String name,
-        final List primaryKey,
-        final List attributes,
+        final List<Attribute> primaryKey,
+        final List<Attribute> attributes,
+        final List<ForeignKey> foreignKeys,
         final Table parentTable,
         final boolean isStatic,
         final boolean voDecorated,
@@ -239,6 +243,7 @@ public class CachingTableDecorator
             name,
             primaryKey,
             attributes,
+            foreignKeys,
             parentTable,
             isStatic,
             voDecorated,
@@ -261,12 +266,12 @@ public class CachingTableDecorator
      */
     public CachingTableDecorator(
         final String table,
-        final List primaryKey,
-        final List attributes,
+        final List<Attribute> primaryKey,
+        final List<Attribute> attributes,
         final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
-        final List childAttributes,
+        final List<Attribute> childAttributes,
         final DecoratorFactory decoratorFactory)
     {
         super(
@@ -329,11 +334,11 @@ public class CachingTableDecorator
      */
     protected CachingTableDecorator(
         final String table,
-        final List primaryKey,
+        final List<Attribute> primaryKey,
         final boolean isStatic,
         final boolean voDecorated,
         final MetadataManager metadataManager,
-        final List childAttributes,
+        final List<Attribute> childAttributes,
         final DecoratorFactory decoratorFactory)
     {
         super(
@@ -423,6 +428,7 @@ public class CachingTableDecorator
      * Retrieves the attributes.
      * @return such information.
      */
+    @NotNull
     public List getAttributes()
     {
         List result = getCachedAttributes();

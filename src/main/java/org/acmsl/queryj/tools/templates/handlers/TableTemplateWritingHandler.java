@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -50,6 +49,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -94,36 +95,32 @@ public class TableTemplateWritingHandler
      * @param generator the <code>TableTemplateGenerator</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition outputDir != null
-     * @precondition generator != null
      */
     protected boolean handle(
-        @Nullable final TableTemplate[] templates,
-        @NotNull final File outputDir,
-        final Charset charset,
+        @NotNull final List<TableTemplate> templates,
+        @Nullable final File outputDir,
+        @NotNull final Charset charset,
         @NotNull final TableTemplateGenerator generator)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        try 
+        if (outputDir != null)
         {
-            int t_iLength = (templates != null) ? templates.length : 0;
-
-            for  (int t_iTableIndex = 0;
-                      t_iTableIndex < t_iLength;
-                      t_iTableIndex++) 
+            try
             {
-                generator.write(
-                    templates[t_iTableIndex], outputDir, charset);
+                for (TableTemplate t_TableTemplate : templates)
+                {
+                    generator.write(
+                        t_TableTemplate, outputDir, charset);
+                }
             }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the template", ioException);
+            catch  (@NotNull final IOException ioException)
+            {
+                throw
+                    new QueryJBuildException(
+                        "Cannot write the template", ioException);
+            }
         }
         
         return result;
@@ -135,13 +132,21 @@ public class TableTemplateWritingHandler
      * @return the template array.
      * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
+    protected List<TableTemplate> retrieveTableTemplates(@NotNull final Map parameters)
     {
-        return
-            (TableTemplate[])
+        List<TableTemplate> result =
+            (List<TableTemplate>)
                 parameters.get(
                     TableTemplateBuildHandler.TABLE_TEMPLATES);
+
+        if (result == null)
+        {
+            result = new ArrayList<TableTemplate>(0);
+        }
+
+        return result;
     }
 
     /**

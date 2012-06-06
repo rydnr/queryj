@@ -59,6 +59,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -96,7 +97,7 @@ public class RepositoryDAOTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @Nullable final TableTemplate[] tableTemplates)
+        @NotNull final List<TableTemplate> tableTemplates)
       throws  QueryJBuildException
     {
         if  (definesRepositoryScopedSql(

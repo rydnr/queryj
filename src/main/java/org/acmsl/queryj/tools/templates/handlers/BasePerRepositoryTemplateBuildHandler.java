@@ -162,6 +162,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param tableTemplates the table templates.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unused")
     protected void buildTemplate(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -174,26 +175,23 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @Nullable final TableTemplate[] tableTemplates)
+        @NotNull final List<TableTemplate> tableTemplates)
       throws  QueryJBuildException
     {
         @NotNull List<String> t_lTableNames = new ArrayList<String>();
 
-        if (tableTemplates != null)
+        String t_strTableName;
+        BasePerTableTemplateContext t_Context;
+
+        for (TableTemplate t_TableTemplate : tableTemplates)
         {
-            String t_strTableName;
-            BasePerTableTemplateContext t_Context;
-
-            for (TableTemplate t_TableTemplate : tableTemplates)
+            if (t_TableTemplate != null)
             {
-                if (t_TableTemplate != null)
-                {
-                    t_Context = t_TableTemplate.getTemplateContext();
+                t_Context = t_TableTemplate.getTemplateContext();
 
-                    t_strTableName = t_Context.getTableName();
+                t_strTableName = t_Context.getTableName();
 
-                    t_lTableNames.add(t_strTableName);
-                }
+                t_lTableNames.add(t_strTableName);
             }
         }
 
@@ -315,15 +313,15 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
+    protected List<TableTemplate> retrieveTableTemplates(@NotNull final Map parameters)
     {
-        TableTemplate[] result =
-            (TableTemplate[])
+        List<TableTemplate> result =
+            (List<TableTemplate>)
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
 
         if (result == null)
         {
-            result = new TableTemplate[0];
+            result = new ArrayList<TableTemplate>(0);
         }
 
         return result;

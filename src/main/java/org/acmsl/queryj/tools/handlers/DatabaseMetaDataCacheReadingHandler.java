@@ -129,7 +129,7 @@ public class DatabaseMetaDataCacheReadingHandler
             {
                 try
                 {
-                    metadataManager.extractTableMetadata();
+                    metadataManager.retrieveMetadata();
                 }
                 catch (@NotNull final SQLException cannotExtractTableMetadata)
                 {

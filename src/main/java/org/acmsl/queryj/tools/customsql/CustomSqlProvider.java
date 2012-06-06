@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -35,8 +34,16 @@
 package org.acmsl.queryj.tools.customsql;
 
 /*
+ * Importing project classes.
+ */
+import org.acmsl.queryj.tools.metadata.SqlDAO;
+import org.acmsl.queryj.tools.metadata.SqlParameterDAO;
+import org.acmsl.queryj.tools.metadata.SqlResultDAO;
+
+/*
  * Importing JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
@@ -53,6 +60,28 @@ import java.util.Collection;
 public interface CustomSqlProvider
     extends Serializable
 {
+    /**
+     * Retrieves the {@link SqlDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    SqlDAO getSqlDAO();
+
+    /**
+     * Retrieves the {@link SqlResultDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    SqlResultDAO getSqlResultDAO();
+
+    /**
+     * Retrieves the {@link SqlParameterDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    SqlParameterDAO getSqlParameterDAO();
+
+    // EVERYTHING BELOW IS DEPRECATED //
     /**
      * Retrieves the custom sql element collection.
      * return such collection.

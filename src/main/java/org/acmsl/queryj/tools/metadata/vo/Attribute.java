@@ -37,55 +37,58 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+import java.io.Serializable;
+
 /**
  * Represents <i>attribute</i> entities in the metadata model.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
 public interface Attribute
-    extends Comparable
+    extends Comparable,
+            Serializable
 {
     /**
      * Retrieves the attribute name.
      * @return such name.
      */
-    public String getName();
+    String getName();
 
     /**
      * Retrieves the attribute type.
      * @return its type.
      */
-    public int getTypeId();
+    int getTypeId();
     
     /**
      * Retrieves the field type.
      * @return such information.
      */
-    public String getType();
+    String getType();
 
     /**
      * Retrieves the table name.
      * @return such information.
      */
-    public String getTableName();
+    String getTableName();
 
     /**
      * Retrieves the column comment.
      * @return such information.
      */
-    public String getComment();
+    String getComment();
 
     /**
      * Retrieves whether it's managed externally.
      * @return such information.
      */
-    public boolean getManagedExternally();
+    boolean getManagedExternally();
 
     /**
      * Retrieves whether it allows null values or not.
      * @return such information.
      */
-    public boolean isNullable();
+    boolean isNullable();
 
     /**
      * Retrieves the optional attribute's value, meaning
@@ -93,36 +96,55 @@ public interface Attribute
      * contains data.
      * @return such information.
      */
-    public String getValue();
+    String getValue();
 
     /**
      * Retrieves whether the attribute is marked as read-only.
      * @return such information.
      */
-    public boolean isReadOnly();
+    boolean isReadOnly();
 
     /**
      * Retrieves whether the attribute is marked as boolean.
      * @return such information.
      */
-    public boolean isBoolean();
+    boolean isBoolean();
 
     /**
      * Retrieves the symbol for <code>true</code> values.
      * @return such information.
      */
-    public String getBooleanTrue();
+    String getBooleanTrue();
 
     /**
      * Retrieves the symbol for <code>false</code> values.
      * @return such information.
      */
-    public String getBooleanFalse();
+    String getBooleanFalse();
 
     /**
      * Retrieves the symbol for <code>null</code> values.
      * @return such information.
      */
-    public String getBooleanNull();
+    String getBooleanNull();
+
+    /**
+     * Retrieves the ordinal position.
+     * @return the position.
+     */
+    int getOrdinalPosition();
+
+    /**
+     * Retrieves the column length.
+     * @return such information.
+     */
+    int getLength();
+
+    /**
+     * Retrieves the column precision.
+     * @return such information.
+     */
+    int getPrecision();
+
 }
 

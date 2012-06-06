@@ -40,9 +40,11 @@ import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
 import org.acmsl.queryj.tools.customsql.ConnectionFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.CustomSqlProviderSqlDAO;
+import org.acmsl.queryj.tools.customsql.CustomSqlProviderSqlParameterDAO;
+import org.acmsl.queryj.tools.customsql.CustomSqlProviderSqlResultDAO;
 import org.acmsl.queryj.tools.customsql.ParameterElement;
 import org.acmsl.queryj.tools.customsql.ParameterRefElement;
-import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
@@ -53,16 +55,6 @@ import org.acmsl.queryj.tools.customsql.ResultSetFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsElement;
 import org.acmsl.queryj.tools.customsql.StatementFlagsRefElement;
 import org.acmsl.queryj.tools.customsql.SqlElement;
-import org.acmsl.queryj.tools.customsql.xml.ConnectionFlagsElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.ParameterElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.ParameterRefElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.PropertyElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.PropertyRefElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.ResultElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.ResultRefElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.ResultSetFlagsElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.SqlElementFactory;
-import org.acmsl.queryj.tools.customsql.xml.StatementFlagsElementFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -74,7 +66,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some JDK classes.
  */
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -84,12 +75,19 @@ import java.util.Map;
 /*
  * Importing Digester classes.
  */
+import org.acmsl.queryj.tools.metadata.SqlDAO;
+import org.acmsl.queryj.tools.metadata.SqlParameterDAO;
+import org.acmsl.queryj.tools.metadata.SqlResultDAO;
 import org.apache.commons.digester.Digester;
 
 /*
  * Importing Jakarta Commons Logging classes
  */
 import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,6 +130,39 @@ public class SqlXmlParser
     }
 
     /**
+     * Retrieves the {@link SqlDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public SqlDAO getSqlDAO()
+    {
+        return new CustomSqlProviderSqlDAO(this);
+    }
+
+    /**
+     * Retrieves the {@link SqlResultDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public SqlResultDAO getSqlResultDAO()
+    {
+        return new CustomSqlProviderSqlResultDAO(this);
+    }
+
+    /**
+     * Retrieves the {@link SqlParameterDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public SqlParameterDAO getSqlParameterDAO()
+    {
+        return new CustomSqlProviderSqlParameterDAO(this);
+    }
+
+    /**
      * Specifies the map with sql.xml contents.
      * @param map the new map.
      */
@@ -171,6 +202,7 @@ public class SqlXmlParser
      * Specifies the class loader (to give it to Digester).
      * @param classLoader the class loader.
      */
+    @SuppressWarnings("unused")
     public void setClassLoader(final ClassLoader classLoader)
     {
         m__ClassLoader = classLoader;
@@ -198,6 +230,7 @@ public class SqlXmlParser
      * Specifies the input stream.
      * @param input the input stream.
      */
+    @SuppressWarnings("unused")
     protected void setInput(final InputStream input)
     {
         immutableSetInput(input);
@@ -230,7 +263,6 @@ public class SqlXmlParser
      * @param input the input stream.
      * @return the information.
      * @throws QueryJBuildException if the information cannot be read.
-     * @precondition (stream != null)
      */
     @Nullable
     protected synchronized Map load(
@@ -443,9 +475,8 @@ public class SqlXmlParser
      * Processes given sql.xml information.
      * @param collection the sql.xml element collection.
      * @param map the sql.xml map.
-     * @precondition collection != null
-     * @precondition map != null
      */
+    @SuppressWarnings("unchecked")
     protected synchronized void processSqlXml(
         @NotNull final Collection collection, @NotNull final Map map)
     {

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -38,6 +37,7 @@ package org.acmsl.queryj.tools.metadata.engines;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.jetbrains.annotations.NotNull;
@@ -160,6 +160,29 @@ public class JdbcMetadataManager
             engineName,
             engineVersion,
             quote);
+    }
+
+    @Override
+    protected void retrieveMetadata(
+        final String[] tableNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+        QueryJException
+    {
+        retrieveMetadata(
+            getMetadataExtractionListener(),
+            getTableNames(),
+            getProcedureNames(),
+            getDisableTableExtraction(),
+            getLazyTableExtraction(),
+            getDisableProcedureExtraction(),
+            getLazyProcedureExtraction(),
+            getMetaData(),
+            getCatalog(),
+            getSchema());
     }
 
     /**

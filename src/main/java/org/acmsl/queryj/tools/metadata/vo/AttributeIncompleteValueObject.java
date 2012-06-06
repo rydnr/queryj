@@ -21,13 +21,16 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jose.sanleandro@acm-sl.com
 
- *****************************************************************************
+ ******************************************************************************
  *
- * Filename: AttributeValueObject.java
+ * Filename: AttributeIncompleteValueObject.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Value-object implementation of Attribute interface.
+ * Description: An incomplete Attribute.
+ *
+ * Date: 6/6/12
+ * Time: 12:05 PM
  *
  */
 package org.acmsl.queryj.tools.metadata.vo;
@@ -36,52 +39,40 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Value-object implementation of <code>Attribute</code> interface.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * An incomplete {@link Attribute}.
+ * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @since 2012/06/06
  */
-public final class AttributeValueObject
+public class AttributeIncompleteValueObject
     extends AbstractAttribute
 {
     /**
-     * Creates an <code>AttributeValueObject</code> with the following
+     * Creates an <code>AbstractAttribute</code> with the following
      * information.
      * @param name the name.
      * @param typeId the type id.
      * @param type the type.
      * @param tableName the table name.
-     * @param comment the column comment.
+     * @param comment the comment.
      * @param ordinalPosition the ordinal position.
      * @param length the maximum data length that can be stored in this attribute.
      * @param precision the precision if the data is numeric.
-     * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
-     * @param readOnly if the attribute is read-only.
-     * @param isBool if the attribute is boolean.
-     * @param booleanTrue the value indicating a <code>true</code> value.
-     * @param booleanFalse the value indicating a <code>false</code> value.
-     * @param booleanNull the value indicating a <code>null</code> value.
      */
-    public AttributeValueObject(
+    public AttributeIncompleteValueObject(
         @NotNull final String name,
         final int typeId,
         @NotNull final String type,
         @NotNull final String tableName,
-        @Nullable final String comment,
+        @NotNull final String comment,
         final int ordinalPosition,
         final int length,
         final int precision,
-        final boolean managedExternally,
         final boolean allowsNull,
-        @Nullable final String value,
-        final boolean readOnly,
-        final boolean isBool,
-        @Nullable final String booleanTrue,
-        @Nullable final String booleanFalse,
-        @Nullable final String booleanNull)
+        @NotNull final String value)
     {
         super(
             name,
@@ -92,14 +83,72 @@ public final class AttributeValueObject
             ordinalPosition,
             length,
             precision,
-            managedExternally,
             allowsNull,
-            value,
-            readOnly,
-            isBool,
-            booleanTrue,
-            booleanFalse,
-            booleanNull);
+            value);
+    }
+
+    /**
+     * Specifies whether the attribute is marked as boolean.
+     * @param flag such condition.
+     */
+    @Override
+    public void setBoolean(final boolean flag)
+    {
+        super.setBoolean(flag);
+    }
+
+    /**
+     * Specifies whether the attribute is marked as read-only.
+     *
+     * @param flag such condition.
+     */
+    @Override
+    public void setReadOnly(final boolean flag)
+    {
+        super.setReadOnly(flag);
+    }
+
+    /**
+     * Specifies the symbol for <code>true</code> values.
+     *
+     * @param value such information.
+     */
+    @Override
+    public void setBooleanTrue(final String value)
+    {
+        super.setBooleanTrue(value);
+    }
+
+    /**
+     * Specifies the symbol for <code>false</code> values.
+     *
+     * @param value such information.
+     */
+    @Override
+    public void setBooleanFalse(final String value)
+    {
+        super.setBooleanFalse(value);
+    }
+
+    /**
+     * Specifies the symbol for <code>null</code> values.
+     *
+     * @param value such information.
+     */
+    @Override
+    public void setBooleanNull(final String value)
+    {
+        super.setBooleanNull(value);
+    }
+
+    /**
+     * Specifies whether it's managed externally.
+     *
+     * @param managedExternally such information.
+     */
+    @Override
+    public void setManagedExternally(final boolean managedExternally)
+    {
+        super.setManagedExternally(managedExternally);
     }
 }
-

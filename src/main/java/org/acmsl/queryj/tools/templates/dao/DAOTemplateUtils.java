@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -906,17 +905,32 @@ public class DAOTemplateUtils
         @NotNull final MetadataUtils metadataUtils)
       throws  SQLException
     {
-        return
-            queryContents(
-                tableName,
-                metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName)),
-                metadataUtils.retrieveAttributes(
+        List<Row> result = null;
+
+        @Nullable String t_strStaticAttribute =
+            metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName));
+
+        if (t_strStaticAttribute != null)
+        {
+            result =
+                queryContents(
                     tableName,
+                    t_strStaticAttribute,
+                    metadataUtils.retrieveAttributes(
+                        tableName,
+                        metadataManager,
+                        metadataManager.getMetadataTypeManager(),
+                        decoratorFactory),
                     metadataManager,
-                    metadataManager.getMetadataTypeManager(),
-                    decoratorFactory),
-                metadataManager,
-                decoratorFactory);
+                    decoratorFactory);
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Row>(0);
+        }
+
+        return result;
     }
 
     /**
@@ -932,8 +946,8 @@ public class DAOTemplateUtils
     @NotNull
     public List<Row> queryContents(
         @NotNull final String tableName,
-        @NotNull final String staticAttributeName,
-        @NotNull final Collection<Attribute> attributes,
+        @Nullable final String staticAttributeName,
+        @NotNull final List<Attribute> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  SQLException
@@ -964,8 +978,8 @@ public class DAOTemplateUtils
     @NotNull
     protected List<Row> queryContents(
         @NotNull final String tableName,
-        @NotNull final String staticAttributeName,
-        @NotNull final Collection<Attribute> attributes,
+        @Nullable final String staticAttributeName,
+        @NotNull final List<Attribute> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -1016,8 +1030,8 @@ public class DAOTemplateUtils
     @NotNull
     protected List<Row> queryContents(
         @NotNull final String tableName,
-        @NotNull final String staticAttributeName,
-        @NotNull final Collection<Attribute> attributes,
+        @Nullable final String staticAttributeName,
+        @NotNull final List<Attribute> attributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory,

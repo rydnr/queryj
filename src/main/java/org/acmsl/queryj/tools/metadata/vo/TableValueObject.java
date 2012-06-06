@@ -33,6 +33,12 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.List;
@@ -48,19 +54,30 @@ public final class TableValueObject
      * Creates an <code>TableValueObject</code> with the following
      * information.
      * @param name the name.
+     * @param comment the table comment.
+     * @param primaryKey the primary key.
+     * @param attributes the columns.
+     * @param foreignKeys the foreign keys.
+     * @param parentTable the parent table.
+     * @param isStatic whether the table is static.
+     * @param voDecorated whether the table is decorated.
      */
     public TableValueObject(
-        final String name,
-        final List primaryKey,
-        final List attributes,
-        final Table parentTable,
+        @NotNull final String name,
+        @Nullable final String comment,
+        @NotNull final List<Attribute> primaryKey,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final List<ForeignKey> foreignKeys,
+        @Nullable final Table parentTable,
         final boolean isStatic,
         final boolean voDecorated)
     {
         super(
             name,
+            comment,
             primaryKey,
             attributes,
+            foreignKeys,
             parentTable,
             isStatic,
             voDecorated);

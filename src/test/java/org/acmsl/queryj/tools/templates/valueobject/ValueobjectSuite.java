@@ -97,7 +97,7 @@ public class ValueobjectSuite
     new TestSuite("org.acmsl.queryj.tools.templates.valueobject");
     
     suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateTest.class);
+    //suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectFactoryTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.valueobject.ValueObjectTemplateGeneratorTest.class);
     
     suite.addTest(org.acmsl.queryj.tools.templates.valueobject.handlers.HandlersSuite.suite());

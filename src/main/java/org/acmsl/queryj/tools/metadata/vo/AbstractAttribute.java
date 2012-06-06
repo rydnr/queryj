@@ -38,9 +38,16 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
-import org.jetbrains.annotations.NotNull;
+/*
+ * Importing some Apache Commons-Lang classes.
+ */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
-import java.util.Arrays;
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Abstract logic-less implementation of {@link Attribute} interface.
@@ -116,6 +123,21 @@ public abstract class AbstractAttribute
     private String m__strBooleanNull;
 
     /**
+     * The ordinal position.
+     */
+    private int m__iOrdinalPosition;
+
+    /**
+     * The column length.
+     */
+    private int m__iColumnLength;
+
+    /**
+     * The column precision.
+     */
+    private int m__iColumnPrecision;
+
+    /**
      * The stack trace to know who created me.
      */
     private final StackTraceElement[] m__aStackTrace =
@@ -142,6 +164,46 @@ public abstract class AbstractAttribute
      * @param type the type.
      * @param tableName the table name.
      * @param comment the comment.
+     * @param ordinalPosition the ordinal position.
+     * @param length the maximum data length that can be stored in this attribute.
+     * @param precision the precision if the data is numeric.
+     * @param allowsNull whether the attribute allows null values or not.
+     * @param value the optional value.
+     */
+    protected AbstractAttribute(
+        final String name,
+        final int typeId,
+        final String type,
+        final String tableName,
+        final String comment,
+        final int ordinalPosition,
+        final int length,
+        final int precision,
+        final boolean allowsNull,
+        final String value)
+    {
+        this(tableName, name);
+        immutableSetTypeId(typeId);
+        immutableSetType(type);
+        immutableSetComment(comment);
+        immutableSetOrdinalPosition(ordinalPosition);
+        immutableSetLength(length);
+        immutableSetPrecision(precision);
+        immutableIsNullable(allowsNull);
+        immutableSetValue(value);
+    }
+
+    /**
+     * Creates an <code>AbstractAttribute</code> with the following
+     * information.
+     * @param name the name.
+     * @param typeId the type id.
+     * @param type the type.
+     * @param tableName the table name.
+     * @param comment the comment.
+     * @param ordinalPosition the ordinal position.
+     * @param length the maximum data length that can be stored in this attribute.
+     * @param precision the precision if the data is numeric.
      * @param managedExternally whether the attribute is managed externally.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
@@ -157,6 +219,9 @@ public abstract class AbstractAttribute
         final String type,
         final String tableName,
         final String comment,
+        final int ordinalPosition,
+        final int length,
+        final int precision,
         final boolean managedExternally,
         final boolean allowsNull,
         final String value,
@@ -166,13 +231,19 @@ public abstract class AbstractAttribute
         final String booleanFalse,
         final String booleanNull)
     {
-        this(tableName, name);
-        immutableSetTypeId(typeId);
-        immutableSetType(type);
-        immutableSetComment(comment);
+        this(
+            name,
+            typeId,
+            type,
+            tableName,
+            comment,
+            ordinalPosition,
+            length,
+            precision,
+            allowsNull,
+            value);
+
         immutableSetManagedExternally(managedExternally);
-        immutableIsNullable(allowsNull);
-        immutableSetValue(value);
         immutableSetReadOnly(readOnly);
         immutableSetBoolean(isBool);
         immutableSetBooleanTrue(booleanTrue);
@@ -550,6 +621,132 @@ public abstract class AbstractAttribute
     }
 
     /**
+     * Specifies the ordinal position.
+     * @param position the position.
+     */
+    protected final void immutableSetOrdinalPosition(final int position)
+    {
+        m__iOrdinalPosition = position;
+    }
+
+    /**
+     * Specifies the ordinal position.
+     * @param position the position.
+     */
+    @SuppressWarnings("unused")
+    protected void setOrdinalPosition(final int position)
+    {
+        immutableSetOrdinalPosition(position);
+    }
+
+    /**
+     * Retrieves the ordinal position.
+     * @return the position.
+     */
+    @SuppressWarnings("unused")
+    @Override
+    public int getOrdinalPosition()
+    {
+        return m__iOrdinalPosition;
+    }
+
+    /**
+     * Specifies the column length.
+     * @param length the length.
+     */
+    protected final void immutableSetLength(final int length)
+    {
+        m__iColumnLength = length;
+    }
+
+    /**
+     * Specifies the column length.
+     * @param length the length.
+     */
+    @SuppressWarnings("unused")
+    protected void setLength(final int length)
+    {
+        immutableSetLength(length);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(this.m__strName).append(this.m__iTypeId).append(this.m__strType)
+            .append(this.m__strTableName).append(this.m__strComment).append(this.m__bManagedExternally)
+            .append(this.m__bNullable).append(this.m__strValue).append(this.m__bReadOnly).append(this.m__bBoolean)
+            .append(this.m__strBooleanTrue).append(this.m__strBooleanFalse).append(this.m__strBooleanNull)
+            .append(this.m__iOrdinalPosition).append(this.m__iColumnLength).append(this.m__iColumnPrecision)
+            .toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final AbstractAttribute other = (AbstractAttribute) obj;
+        return new EqualsBuilder().append(this.m__strName, other.m__strName).append(this.m__iTypeId, other.m__iTypeId)
+            .append(this.m__strType, other.m__strType).append(this.m__strTableName, other.m__strTableName)
+            .append(this.m__strComment, other.m__strComment)
+            .append(this.m__bManagedExternally, other.m__bManagedExternally)
+            .append(this.m__bNullable, other.m__bNullable).append(this.m__strValue, other.m__strValue)
+            .append(this.m__bReadOnly, other.m__bReadOnly).append(this.m__bBoolean, other.m__bBoolean)
+            .append(this.m__strBooleanTrue, other.m__strBooleanTrue)
+            .append(this.m__strBooleanFalse, other.m__strBooleanFalse)
+            .append(this.m__strBooleanNull, other.m__strBooleanNull)
+            .append(this.m__iOrdinalPosition, other.m__iOrdinalPosition)
+            .append(this.m__iColumnLength, other.m__iColumnLength)
+            .append(this.m__iColumnPrecision, other.m__iColumnPrecision).isEquals();
+    }
+
+    /**
+     * Retrieves the column length.
+     * @return such information.
+     */
+    @Override
+    public int getLength()
+    {
+        return m__iColumnLength;
+
+    }
+
+    /**
+     * Specifies the column precision.
+     * @param precision the precision.
+     */
+    protected final void immutableSetPrecision(final int precision)
+    {
+        m__iColumnPrecision = precision;
+    }
+
+    /**
+     * Specifies the column precision.
+     * @param precision the precision.
+     */
+    @SuppressWarnings("unused")
+    protected void setPrecision(final int precision)
+    {
+        immutableSetPrecision(precision);
+    }
+
+    /**
+     * Retrieves the column precision.
+     * @return such information.
+     */
+    @Override
+    public int getPrecision()
+    {
+        return m__iColumnPrecision;
+    }
+
+    /**
      * Retrieves the stack trace when the attribute was created.
      * @return such information.
      */
@@ -636,97 +833,4 @@ public abstract class AbstractAttribute
         return result;
     }
 
-    @Override
-    public boolean equals(final Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass())
-        {
-            return false;
-        }
-
-        @NotNull final AbstractAttribute that = (AbstractAttribute) o;
-
-        if (m__bNullable != that.m__bNullable)
-        {
-            return false;
-        }
-        if (m__bBoolean != that.m__bBoolean)
-        {
-            return false;
-        }
-        if (m__bManagedExternally != that.m__bManagedExternally)
-        {
-            return false;
-        }
-        if (m__bReadOnly != that.m__bReadOnly)
-        {
-            return false;
-        }
-        if (m__iTypeId != that.m__iTypeId)
-        {
-            return false;
-        }
-        if (!Arrays.equals(m__aStackTrace, that.m__aStackTrace))
-        {
-            return false;
-        }
-        if (m__strBooleanFalse != null ? !m__strBooleanFalse.equals(that.m__strBooleanFalse)
-                                       : that.m__strBooleanFalse != null)
-        {
-            return false;
-        }
-        if (m__strBooleanNull != null ? !m__strBooleanNull.equals(that.m__strBooleanNull)
-                                      : that.m__strBooleanNull != null)
-        {
-            return false;
-        }
-        if (m__strBooleanTrue != null ? !m__strBooleanTrue.equals(that.m__strBooleanTrue)
-                                      : that.m__strBooleanTrue != null)
-        {
-            return false;
-        }
-        if (m__strComment != null ? !m__strComment.equals(that.m__strComment) : that.m__strComment != null)
-        {
-            return false;
-        }
-        if (m__strType != null ? !m__strType.equals(that.m__strType) : that.m__strType != null)
-        {
-            return false;
-        }
-        if (m__strName != null ? !m__strName.equals(that.m__strName) : that.m__strName != null)
-        {
-            return false;
-        }
-        if (m__strTableName != null ? !m__strTableName.equals(that.m__strTableName) : that.m__strTableName != null)
-        {
-            return false;
-        }
-
-        return !(m__strValue != null ? !m__strValue.equals(that.m__strValue) : that.m__strValue != null);
-
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = m__strName != null ? m__strName.hashCode() : 0;
-        result = 31 * result + m__iTypeId;
-        result = 31 * result + (m__strType != null ? m__strType.hashCode() : 0);
-        result = 31 * result + (m__strTableName != null ? m__strTableName.hashCode() : 0);
-        result = 31 * result + (m__strComment != null ? m__strComment.hashCode() : 0);
-        result = 31 * result + (m__bManagedExternally ? 1 : 0);
-        result = 31 * result + (m__bNullable ? 1 : 0);
-        result = 31 * result + (m__strValue != null ? m__strValue.hashCode() : 0);
-        result = 31 * result + (m__bReadOnly ? 1 : 0);
-        result = 31 * result + (m__bBoolean ? 1 : 0);
-        result = 31 * result + (m__strBooleanTrue != null ? m__strBooleanTrue.hashCode() : 0);
-        result = 31 * result + (m__strBooleanFalse != null ? m__strBooleanFalse.hashCode() : 0);
-        result = 31 * result + (m__strBooleanNull != null ? m__strBooleanNull.hashCode() : 0);
-        result = 31 * result + (m__aStackTrace != null ? Arrays.hashCode(m__aStackTrace) : 0);
-        return result;
-    }
 }

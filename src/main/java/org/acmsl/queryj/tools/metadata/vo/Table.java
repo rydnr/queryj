@@ -39,8 +39,15 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.util.List;
  
 /**
@@ -49,41 +56,60 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface Table
+    extends Serializable
 {
     /**
      * Retrieves the table name.
      * @return such name.
      */
-    public String getName();
+    @NotNull
+    String getName();
+
+    /**
+     * Retrieves the table comment.
+     * @return such comment.
+     */
+    @Nullable
+    String getComment();
 
     /**
      * Retrieves the primary key attributes.
      * @return such list.
      */
-    public List getPrimaryKey();
+    @NotNull
+    List<Attribute> getPrimaryKey();
 
     /**
      * Retrieves the attributes.
      * @return such list.
      */
-    public List getAttributes();
+    @NotNull
+    List<Attribute> getAttributes();
+
+    /**
+     * Retrieves the {@link org.acmsl.queryj.tools.metadata.vo.ForeignKey foreign keys}.
+     * @return such list.
+     */
+    @NotNull
+    List<ForeignKey> getForeignKeys();
 
     /**
      * Retrieves the parent table.
      * @return such table.
      */
-    public Table getParentTable();
+    @Nullable
+    Table getParentTable();
 
     /**
      * Retrieves whether the table contains static values or not.
      * @return <tt>true</tt> in such case.
      */
-    public boolean isStatic();
+    boolean isStatic();
     
     /**
      * Retrieves whether the value object for the table is
      * decorated or not.
      * @return such information.
      */
-    public boolean isVoDecorated();
+    boolean isVoDecorated();
 }

@@ -509,6 +509,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     t_strNativeType,
                     tableName,
                     metadataManager.getTableComment(tableName),
+                    1, // ordinal position
+                    -1, // length
+                    -1, // precision
                     t_bManagedExternally,
                     t_bAllowsNull,
                     null, // value

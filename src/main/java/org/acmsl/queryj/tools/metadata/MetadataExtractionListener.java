@@ -42,6 +42,8 @@ package org.acmsl.queryj.tools.metadata;
  */
 //import org.acmsl.commons.patterns.Listener;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Receives notifications on metadata extraction.
  * @author <a href="mailto:chous@acm-sl.org"
@@ -59,24 +61,24 @@ public interface MetadataExtractionListener
      * Notifies a table name has been extracted.
      * @param table the table name.
      */
-    public void tableNameExtracted(final String table);
+    public void tableNameExtracted(@NotNull final String table);
 
     /**
      * Notifies all table names have been extracted.
      */
-    public void tableNamesExtracted(final int count);
+    public void tableNamesExtracted(@NotNull final int count);
 
     /**
      * Notifies the table extraction has been started.
      * @param table the table.
      */
-    public void tableExtractionStarted(final String table);
+    public void tableExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies the table extraction has been completed.
      * @param table the table.
      */
-    public void tableExtracted(final String table);
+    public void tableExtracted(@NotNull final String table);
 
     /**
      * Notifies table metadata extraction has been started.
@@ -84,10 +86,15 @@ public interface MetadataExtractionListener
     public void tableMetadataExtractionStarted();
 
     /**
+     * Notifies table metadata extraction has been started.
+     */
+    public void tableMetadataExtracted();
+
+    /**
      * Notifies the table comment extraction has been started.
      * @param table the table.
      */
-    public void tableCommentExtractionStarted(final String table);
+    public void tableCommentExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies a table comment has been extracted.
@@ -95,7 +102,7 @@ public interface MetadataExtractionListener
      * @param comment the comment.
      */
     public void tableCommentExtracted(
-        final String table, final String comment);
+        @NotNull final String table, @NotNull final String comment);
 
     /**
      * Notifies all table comments have been extracted.
@@ -106,7 +113,7 @@ public interface MetadataExtractionListener
      * Notifies column name extraction has been started.
      * @param table the table.
      */
-    public void columnNamesExtractionStarted(final String table);
+    public void columnNamesExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies a column name has been extracted.
@@ -114,20 +121,20 @@ public interface MetadataExtractionListener
      * @param column the column name.
      */
     public void columnNameExtracted(
-        final String table, final String column);
+        @NotNull final String table, @NotNull final String column);
 
     /**
      * Notifies all column names have been extracted.
      * @param table the table name.
      * @param count the count.
      */
-    public void columnNamesExtracted(final String table, final int count);
+    public void columnNamesExtracted(@NotNull final String table, @NotNull final int count);
 
     /**
      * Notifies column comment extraction has been started.
      * @param table the table.
      */
-    public void columnCommentsExtractionStarted(final String table);
+    public void columnCommentsExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies a column comment has been extracted.
@@ -136,19 +143,19 @@ public interface MetadataExtractionListener
      * @param comment the column comment.
      */
     public void columnCommentExtracted(
-        final String table, final String column, final String comment);
+        @NotNull final String table, @NotNull final String column, @NotNull final String comment);
 
     /**
      * Notifies all column comments have been extracted.
      * @param table the table name.
      */
-    public void columnCommentsExtracted(final String table);
+    public void columnCommentsExtracted(@NotNull final String table);
 
     /**
      * Notifies column type extraction has been started.
      * @param table the table.
      */
-    public void columnTypesExtractionStarted(final String table);
+    public void columnTypesExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies a column type has been extracted.
@@ -157,19 +164,19 @@ public interface MetadataExtractionListener
      * @param type the column type.
      */
     public void columnTypeExtracted(
-        final String table, final String column, final int type);
+        @NotNull final String table, @NotNull final String column, final int type);
 
     /**
      * Notifies all column types have been extracted.
      * @param table the table name.
      */
-    public void columnTypesExtracted(final String table);
+    public void columnTypesExtracted(@NotNull final String table);
 
     /**
      * Notifies column nullable setting extraction has been extracted.
      * @param table the table.
      */
-    public void columnNullablesExtractionStarted(final String table);
+    public void columnNullablesExtractionStarted(@NotNull final String table);
 
     /**
      * Notifies a column nullable setting has been extracted.
@@ -178,13 +185,13 @@ public interface MetadataExtractionListener
      * @param nullable whether the column allows null.
      */
     public void columnNullableExtracted(
-        final String table, final String column, final boolean nullable);
+        @NotNull final String table, @NotNull final String column, @NotNull final boolean nullable);
 
     /**
      * Notifies all column nullable settings have been extracted.
      * @param table the table name.
      */
-    public void columnNullablesExtracted(final String table);
+    public void columnNullablesExtracted(@NotNull final String table);
 
     /**
      * Notifies a primary key extraction has been started.
@@ -197,7 +204,7 @@ public interface MetadataExtractionListener
      * @param primaryKey the primary key.
      */
     public void primaryKeyExtracted(
-        final String table, final String[] primaryKey);
+        @NotNull final String table, @NotNull final String[] primaryKey);
 
     /**
      * Notifies all primary keys have been extracted.
@@ -216,15 +223,15 @@ public interface MetadataExtractionListener
      * @param foreignKey the foreign key.
      */
     public void foreignKeyExtracted(
-        final String table,
-        final String targetTable,
-        final String[] foreignKey);
+        @NotNull final String table,
+        @NotNull final String targetTable,
+        @NotNull final String[] foreignKey);
 
     /**
      * Notifies all foreign keys for a given table have been extracted.
      * @param table the table name.
      */
-    public void foreignKeysExtracted(final String table);
+    public void foreignKeysExtracted(@NotNull final String table);
 
     /**
      * Notifies all foreign keys have been extracted.
@@ -243,7 +250,7 @@ public interface MetadataExtractionListener
      * @param comment the comment.
      */
     public void procedureMetadataExtracted(
-        final String name, final int type, final String comment);
+        @NotNull final String name, final int type, @NotNull final String comment);
 
     /**
      * Notifies a procedure parameter metadata has been extracted.
@@ -255,9 +262,9 @@ public interface MetadataExtractionListener
      * @param nullable the nullable attribute.
      */
     public void procedureParameterMetadataExtracted(
-        final String columnName,
+        @NotNull final String columnName,
         final int columnType,
-        final String comment,
+        @NotNull final String comment,
         final int dataType,
         final int length,
         final int nullable);
@@ -268,7 +275,7 @@ public interface MetadataExtractionListener
      * @param parameters the parameters.
      */
     public void procedureExtracted(
-        final String name, final ProcedureParameterMetadata[] parameters);
+        @NotNull final String name, @NotNull final ProcedureParameterMetadata[] parameters);
 
     /**
      * Notifies all procedures have been extracted.

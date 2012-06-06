@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -648,15 +647,18 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
                         t_strNativeType,
                         tableName,
                         metadataManager.getTableComment(tableName),
+                        t_iIndex + 1, // ordinal position
+                        -1, // length
+                        -1, // precision
                         t_bManagedExternally,
                         t_bAllowsNull,
                         columnValues[t_iIndex],
                         metadataManager.isReadOnly(tableName, columnNames[t_iIndex]),
-                    metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
-                    metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
-                    metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
-                    metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
-                metadataManager));
+                        metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
+                        metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
+                        metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
+                        metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
+                    metadataManager));
         }
 
         return result;

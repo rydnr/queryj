@@ -45,6 +45,8 @@ import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 import org.acmsl.queryj.QueryJException;
 
@@ -57,6 +59,10 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
+
+/*
+* Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -150,6 +156,16 @@ public abstract class AbstractJdbcMetadataManager
      * The table names.
      */
     private String[] m__astrTableNames;
+
+    /**
+     * The table list.
+     */
+    private List<Table> m__lTables;
+
+    /**
+     * The table attributes.
+     */
+    private Map<String,List<Attribute>> m__lColumns;
 
     /**
      * The column names (as list) of each table.
@@ -520,7 +536,7 @@ public abstract class AbstractJdbcMetadataManager
         if  (   (!disableTableExtraction)
              && (!lazyTableExtraction))
         {
-            extractTableMetadata(
+            retrieveMetadata(
                 tableNames,
                 metaData,
                 catalog,
@@ -575,6 +591,15 @@ public abstract class AbstractJdbcMetadataManager
             }
         }
     }
+
+    protected abstract void retrieveMetadata(
+        final String[] tableNames,
+        final DatabaseMetaData metaData,
+        final String catalog,
+        final String schema,
+        final MetadataExtractionListener metadataExtractionListener)
+    throws  SQLException,
+        QueryJException;
 
     /**
      * Specifies the meta data.
@@ -849,7 +874,8 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the table comments.
      * @param comments such comments.
      */
-    protected void setTableComments(final Map comments)
+    @SuppressWarnings("unused")
+    protected void setTableComments(final Map<String,String> comments)
     {
         immutableSetTableComments(comments);
     }
@@ -867,7 +893,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the column comments.
      * @param comments such comments.
      */
-    protected final void immutableSetColumnComments(final Map comments)
+    protected final void immutableSetColumnComments(final Map<String,String> comments)
     {
         m__mColumnComments = comments;
     }
@@ -876,7 +902,8 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the column comments.
      * @param comments such comments.
      */
-    protected void setColumnComments(final Map comments)
+    @SuppressWarnings("unused")
+    protected void setColumnComments(@NotNull final Map<String,String> comments)
     {
         immutableSetColumnComments(comments);
     }
@@ -894,7 +921,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the column bools.
      * @param bools such bools.
      */
-    protected final void immutableSetColumnBools(final Map bools)
+    protected final void immutableSetColumnBools(@NotNull final Map<String,String> bools)
     {
         m__mColumnBools = bools;
     }
@@ -903,7 +930,8 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the column bools.
      * @param bools such bools.
      */
-    protected void setColumnBools(final Map bools)
+    @SuppressWarnings("unused")
+    protected void setColumnBools(@NotNull final Map<String,String> bools)
     {
         immutableSetColumnBools(bools);
     }
@@ -921,7 +949,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the static tables.
      * @param tables such tables.
      */
-    protected final void immutableSetStaticTables(final Map tables)
+    protected final void immutableSetStaticTables(@NotNull final Map<String,Table> tables)
     {
         m__mStaticTables = tables;
     }
@@ -930,7 +958,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the static tables.
      * @param tables such tables.
      */
-    protected void setStaticTables(final Map tables)
+    protected void setStaticTables(@NotNull final Map<String,Table> tables)
     {
         immutableSetStaticTables(tables);
     }
@@ -948,7 +976,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the decorated tables.
      * @param tables such tables.
      */
-    protected final void immutableSetDecoratedTables(final Map tables)
+    protected final void immutableSetDecoratedTables(@NotNull final Map<String,Table> tables)
     {
         m__mDecoratedTables = tables;
     }
@@ -2982,23 +3010,7 @@ public abstract class AbstractJdbcMetadataManager
             "[column-comment]!!" + buildKey(tableName) + buildKey(columnName);
     }
 
-    /**
-     * Retrieves the table names.
-     * @throws SQLException if the database operation fails.
-     * @throws QueryJException if an error, which is identified by QueryJ,
-     * occurs.
-     */
-    public void extractTableMetadata()
-        throws  SQLException,
-        QueryJException
-    {
-        extractTableMetadata(
-            getTableNames(),
-            getMetaData(),
-            getCatalog(),
-            getSchema(),
-            getMetadataExtractionListener());
-    }
+// BELOW THIS IS DEPRECATED //
 
     /**
      * Retrieves the table names.
@@ -3012,7 +3024,7 @@ public abstract class AbstractJdbcMetadataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    protected void extractTableMetadata(
+    protected void oldExtractTableMetadata(
         final String[] tableNames,
         final DatabaseMetaData metaData,
         final String catalog,
@@ -4773,6 +4785,7 @@ public abstract class AbstractJdbcMetadataManager
             throw sqlException;
         }
     }
+
 
     /**
      * Retrieves the table comments.

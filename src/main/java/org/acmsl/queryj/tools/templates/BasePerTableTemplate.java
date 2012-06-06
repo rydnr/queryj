@@ -894,6 +894,9 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
                     staticAttributeType,
                     tableName,
                     metadataManager.getTableComment(tableName),
+                    1, // ordinal position
+                    -1, // size
+                    -1, // precision
                     managedExternally,
                     allowsNull,
                     null,

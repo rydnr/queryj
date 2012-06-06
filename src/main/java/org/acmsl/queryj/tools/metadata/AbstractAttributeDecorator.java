@@ -103,6 +103,9 @@ public abstract class AbstractAttributeDecorator
             attribute.getType(),
             attribute.getTableName(),
             attribute.getComment(),
+            attribute.getOrdinalPosition(),
+            attribute.getLength(),
+            attribute.getPrecision(),
             attribute.getManagedExternally(),
             attribute.isNullable(),
             attribute.getValue(),
@@ -142,6 +145,9 @@ public abstract class AbstractAttributeDecorator
         final String type,
         final String tableName,
         final String comment,
+        final int ordinalPosition,
+        final int length,
+        final int precision,
         final boolean managedExternally,
         final boolean allowsNull,
         final String value,
@@ -160,6 +166,9 @@ public abstract class AbstractAttributeDecorator
             type,
             tableName,
             comment,
+            ordinalPosition,
+            length,
+            precision,
             managedExternally,
             allowsNull,
             value,
@@ -795,6 +804,7 @@ public abstract class AbstractAttributeDecorator
      * @return such information.
      */
     @Deprecated
+    @SuppressWarnings("unused")
     public String getJavaType()
     {
         return getType(getTypeId(), getMetadataManager());
