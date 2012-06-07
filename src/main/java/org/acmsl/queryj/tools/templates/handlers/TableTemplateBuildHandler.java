@@ -39,6 +39,7 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
 
@@ -51,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,9 +70,9 @@ public class TableTemplateBuildHandler
     public static final String TABLE_TEMPLATES = "table.templates";
 
     /**
-     * The table names attribute name.
+     * The tables attribute name.
      */
-    public static final String TABLE_NAMES = "table.names";
+    public static final String TABLES = "tables";
 
     /**
      * Creates a TableTemplateBuildHandler.
@@ -92,17 +94,22 @@ public class TableTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @Nullable final String[] tableNames)
+        @Nullable final List<Table> tables)
         throws  QueryJBuildException
     {
-        String[] t_astrTableNames = tableNames;
+        List<Table> t_lTables = tables;
 
-        if (   (t_astrTableNames != null)
-            && (t_astrTableNames.length == 0))
+        if (   (t_lTables != null)
+            && (t_lTables.size() == 0))
         {
-            t_astrTableNames = metadataManager.getTableNames();
+            t_lTables = metadataManager.getTableDAO().findAllTables();
 
-            storeTableNames(t_astrTableNames, parameters);
+            storeTables(t_lTables, parameters);
+        }
+
+        if (t_lTables == null)
+        {
+            t_lTables = new ArrayList<Table>(0);
         }
 
         super.buildTemplate(
@@ -116,7 +123,7 @@ public class TableTemplateBuildHandler
             implementMarkerInterfaces,
             jmx,
             jndiLocation,
-            t_astrTableNames);
+            t_lTables);
     }
 
     /**
@@ -158,13 +165,13 @@ public class TableTemplateBuildHandler
 
     /**
      * Stores the table name collection in given attribute map.
-     * @param tableNames the table names.
+     * @param tables the tables.
      * @param parameters the parameter map.
      */
     @SuppressWarnings("unchecked")
-    protected void storeTableNames(
-        @NotNull final String[] tableNames, @NotNull final Map parameters)
+    protected void storeTables(
+        @NotNull final List<Table> tables, @NotNull final Map parameters)
     {
-        parameters.put(TABLE_NAMES, tableNames);
+        parameters.put(TABLES, tables);
     }
 }

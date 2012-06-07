@@ -1030,9 +1030,9 @@ public class CachingTableDecorator
      * @precondition decoratorFactory != null
      */
     protected TableDecorator createTableDecorator(
-        final Table parentTable,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final Table parentTable,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             new CachingTableDecorator(

@@ -55,7 +55,6 @@ import org.acmsl.commons.patterns.Factory;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -78,8 +77,10 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public AttributeDecorator createDecorator(
-        final Attribute attribute, final MetadataManager metadataManager);
+        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager);
+
 
     /**
      * Creates an <code>ParameterDecorator</code> for given
@@ -88,8 +89,9 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public ParameterDecorator createDecorator(
-        final Parameter parameter, final MetadataManager metadataManager);
+        @NotNull final Parameter parameter, @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates a <code>PropertyDecorator</code> for given
@@ -100,11 +102,12 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated property for the concrete template.
      */
+    @NotNull
     public PropertyDecorator createDecorator(
-        final Property property,
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager);
+        @NotNull final Property property,
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates a <code>ResultDecorator</code> for given
@@ -114,10 +117,11 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated result for the concrete template.
      */
+    @NotNull
     public ResultDecorator createDecorator(
-        final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager);
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates a <code>SqlDecorator</code>.
@@ -126,19 +130,22 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated sql for the concrete template.
      */
+    @NotNull
     public SqlDecorator createDecorator(
-        final Sql sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager);
+        @NotNull final Sql sql,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates a <code>TableDecorator</code>.
+     *
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated table for the concrete template.
      */
+    @NotNull
     public TableDecorator createTableDecorator(
-        final String  table, final MetadataManager metadataManager);
+        @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
      * Retrieves the decorated list of attributes of given table.
@@ -146,8 +153,9 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the attribute list
      */
-    public List decorateAttributes(
-        final String table, final MetadataManager metadataManager);
+    @NotNull
+    public List<Attribute> decorateAttributes(
+        @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
      * Retrieves the decorated list of attributes of given table.
@@ -155,8 +163,9 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the attribute list
      */
-    public List decoratePrimaryKey(
-        final String table, final MetadataManager metadataManager);
+    @NotNull
+    public List<Attribute> decoratePrimaryKey(
+        @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
      * Creates a <code>ForeignKeyDecorator</code>.
@@ -168,8 +177,8 @@ public interface DecoratorFactory
      */
     @NotNull
     public ForeignKeyDecorator createDecorator(
-        final String sourceTableName,
-        final List attributes,
-        final String targetTableName,
+        @NotNull final String sourceTableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final String targetTableName,
         final boolean allowsNull);
 }

@@ -80,4 +80,13 @@ public interface TableDAO
      */
     @Nullable
     Table findByName(@NotNull final String name, @Nullable final String catalog, @Nullable final String schema);
+
+    /**
+     * Retrieves the list of tables with foreign keys to given table.
+     * @param target the target table.
+     * @return the list of referring tables.
+     */
+    @NotNull
+    List<Table> findReferringTables(@NotNull final String target);
+
 }

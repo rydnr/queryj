@@ -50,7 +50,6 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.metadata.vo.LazyAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -109,7 +108,7 @@ public class CachingDecoratorFactory
      */
     @NotNull
     public AttributeDecorator createDecorator(
-        final Attribute attribute, final MetadataManager metadataManager)
+        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
     {
         return new CachingAttributeDecorator(attribute, metadataManager);
     }
@@ -174,6 +173,7 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated attribute for the concrete template.
      */
+    @NotNull
     public ParameterDecorator createDecorator(
         @NotNull final Parameter parameter, @NotNull final MetadataManager metadataManager)
     {
@@ -202,24 +202,25 @@ public class CachingDecoratorFactory
 
     /**
      * Creates a <code>TableDecorator</code>.
+     *
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated table for the concrete template.
      */
+    @Nullable
     public TableDecorator createTableDecorator(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final Table t_Table =
-            new CachingTableDecorator(
-                table,
-                decoratePrimaryKey(table, metadataManager),
-                metadataManager.isTableStatic(table),
-                metadataManager.isTableDecorated(table),
-                metadataManager,
-                decorateAttributes(table, metadataManager),
-                this);
+        @Nullable TableDecorator result = null;
 
-        return new CachingTableDecorator(t_Table, metadataManager, this);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table, null, null);
+
+        if (t_Table != null)
+        {
+            result = new CachingTableDecorator(t_Table, metadataManager, this);
+        }
+
+        return result;
     }
 
     /**
@@ -228,23 +229,34 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the attribute list
      */
+    @NotNull
     public List<Attribute> decorateAttributes(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @Nullable List<Attribute> result = null;
 
-        @Nullable final String[] t_astrColumnNames = metadataManager.getColumnNames(table);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table, null, null);
 
-        if (t_astrColumnNames != null)
+        if (t_Table != null)
         {
-            for (final String t_strColumnName : t_astrColumnNames)
+            for (Attribute t_Attribute : t_Table.getAttributes())
             {
-                result.add(
-                    new CachingAttributeDecorator(
-                        new LazyAttribute(
-                            table, t_strColumnName, metadataManager, metadataManager.getMetadataTypeManager()),
-                        metadataManager));
+                if (t_Attribute != null)
+                {
+                    if (result == null)
+                    {
+                        result = new ArrayList<Attribute>(t_Table.getAttributes().size());
+                    }
+
+                    result.add(
+                        new CachingAttributeDecorator(t_Attribute, metadataManager));
+                }
             }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Attribute>(0);
         }
 
         return result;
@@ -260,21 +272,31 @@ public class CachingDecoratorFactory
     public List<Attribute> decoratePrimaryKey(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)
     {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
+        @Nullable List<Attribute> result = null;
 
-        @Nullable final String[] t_astrPrimaryKeyColumnNames = metadataManager.getPrimaryKey(table);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table, null, null);
 
-        if (t_astrPrimaryKeyColumnNames != null)
+        if (t_Table != null)
         {
-            for (final String t_strPrimaryKeyColumnName : t_astrPrimaryKeyColumnNames)
+            List<Attribute> t_lPrimaryKey = t_Table.getPrimaryKey();
+
+            for (Attribute t_Attribute : t_lPrimaryKey)
             {
-                result.add(
-                    new LazyAttribute(
-                        table,
-                        t_strPrimaryKeyColumnName,
-                        metadataManager,
-                        metadataManager.getMetadataTypeManager()));
+                if (t_Attribute != null)
+                {
+                    if (result == null)
+                    {
+                        result = new ArrayList<Attribute>(t_lPrimaryKey.size());
+                    }
+                    result.add(
+                        new CachingAttributeDecorator(t_Attribute, metadataManager));
+                }
             }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Attribute>(0);
         }
 
         return result;
@@ -290,8 +312,11 @@ public class CachingDecoratorFactory
      * @return the decorator instance.
      */
     @NotNull
-    public ForeignKeyDecorator createDecorator(final String sourceTableName, final List attributes, final String
-        targetTableName, final boolean allowsNull)
+    public ForeignKeyDecorator createDecorator(
+        @NotNull final String sourceTableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final String targetTableName,
+        final boolean allowsNull)
     {
         return new ForeignKeyDecorator(sourceTableName, attributes, targetTableName, allowsNull);
     }

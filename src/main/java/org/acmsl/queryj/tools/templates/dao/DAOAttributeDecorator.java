@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.templates.dao;
 import org.acmsl.queryj.tools.metadata.CachingAttributeDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Decorates attributes for DAO template.
@@ -68,6 +69,7 @@ public class DAOAttributeDecorator
      * and the column allows nulls.
      * @return such information.
      */
+    @NotNull
     public String getType()
     {
         String result = getCachedType();

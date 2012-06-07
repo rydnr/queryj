@@ -57,16 +57,6 @@ public abstract class AbstractField
     private boolean m__bPk = false;
 
     /**
-     * The keyword.
-     */
-    private String m__strKeyword;
-
-    /**
-     * The query to retrieve the keyword value.
-     */
-    private String m__strRetrievalQuery;
-
-    /**
      * The field fk collection.
      */
     private Collection<AntFieldFkElement> m__cFieldFks;
@@ -78,7 +68,8 @@ public abstract class AbstractField
      * @param type the type.
      * @param tableName the name of the table.
      * @param comment the field comment.
-     * @param managedExternally whether it's managed externally.
+     * @param keyword the keyword used to retrieve the value, if any.
+     * @param retrievalQuery the query used to retrieve the value, if any.
      * @param allowsNull whether it allows null or not.
      * @param value the concrete value, if any.
      * @param readOnly whether it's read-only.
@@ -97,7 +88,8 @@ public abstract class AbstractField
         final int ordinalPosition,
         final int length,
         final int precision,
-        final boolean managedExternally,
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery,
         final boolean allowsNull,
         @Nullable final String value,
         final boolean readOnly,
@@ -117,7 +109,8 @@ public abstract class AbstractField
             ordinalPosition,
             length,
             precision,
-            managedExternally,
+            keyword,
+            retrievalQuery,
             allowsNull,
             value,
             readOnly,
@@ -127,70 +120,6 @@ public abstract class AbstractField
             booleanNull);
 
         immutableSetPk(pk);
-    }
-
-    /**
-     * Creates an <code>AbstractField</code> with given information.
-     * @param name the field name.
-     * @param typeId the type id.
-     * @param type the type.
-     * @param tableName the name of the table.
-     * @param comment the field comment.
-     * @param managedExternally whether it's managed externally.
-     * @param allowsNull whether it allows null or not.
-     * @param value the concrete value, if any.
-     * @param readOnly whether it's read-only.
-     * @param isBool whether it represents boolean values or not.
-     * @param booleanTrue the value representing <code>true</code>.
-     * @param booleanFalse the value representing <code>false</code>.
-     * @param booleanNull the value representing <code>null</code>.
-     * @param pk whether it participates in the table's pk.
-     * @param keyword the keyword.
-     * @param retrievalQuery the query to retrieval field's values.
-     */
-    @SuppressWarnings("unused")
-    public AbstractField(
-        @NotNull final String name,
-        final int typeId,
-        @NotNull final String type,
-        @NotNull final String tableName,
-        @Nullable final String comment,
-        final int ordinalPosition,
-        final int length,
-        final int precision,
-        final boolean managedExternally,
-        final boolean allowsNull,
-        @Nullable final String value,
-        final boolean readOnly,
-        final boolean isBool,
-        @Nullable final String booleanTrue,
-        @Nullable final String booleanFalse,
-        @Nullable final String booleanNull,
-        final boolean pk,
-        @Nullable final String keyword,
-        @Nullable final String retrievalQuery)
-    {
-        this(
-            name,
-            typeId,
-            type,
-            tableName,
-            comment,
-            ordinalPosition,
-            length,
-            precision,
-            managedExternally,
-            allowsNull,
-            value,
-            readOnly,
-            isBool,
-            booleanTrue,
-            booleanFalse,
-            booleanNull,
-            pk);
-
-        immutableSetKeyword(keyword);
-        immutableSetRetrievalQuery(retrievalQuery);
     }
 
     /**
@@ -218,60 +147,6 @@ public abstract class AbstractField
     public boolean isPk()
     {
         return m__bPk;
-    }
-
-    /**
-     * Specifies the field's keyword.
-     * @param keyword the keyword.
-     */
-    protected final void immutableSetKeyword(final String keyword)
-    {
-        m__strKeyword = keyword;
-    }
-
-    /**
-     * Specifies the field's keyword.
-     * @param keyword the keyword.
-     */
-    protected void setKeyword(final String keyword)
-    {
-        immutableSetKeyword(keyword);
-    }
-
-    /**
-     * Retrieves the field's keyword.
-     * @return such keyword.
-     */
-    public String getKeyword()
-    {
-        return m__strKeyword;
-    }
-
-    /**
-     * Specifies the query to retrieve the field value.
-     * @param query such query.
-     */
-    protected final void immutableSetRetrievalQuery(final String query)
-    {
-        m__strRetrievalQuery = query;
-    }
-
-    /**
-     * Specifies the query to retrieve the field value.
-     * @param query such query.
-     */
-    protected void setRetrievalQuery(final String query)
-    {
-        immutableSetRetrievalQuery(query);
-    }
-
-    /**
-     * Retrieves the query to retrieve the field value.
-     * @return such information.
-     */
-    public String getRetrievalQuery()
-    {
-        return m__strRetrievalQuery;
     }
 
     /**

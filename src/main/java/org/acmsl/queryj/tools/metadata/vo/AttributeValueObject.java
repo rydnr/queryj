@@ -56,7 +56,8 @@ public final class AttributeValueObject
      * @param ordinalPosition the ordinal position.
      * @param length the maximum data length that can be stored in this attribute.
      * @param precision the precision if the data is numeric.
-     * @param managedExternally whether the attribute is managed externally.
+     * @param keyword the keyword used to retrieve the value, if any.
+     * @param retrievalQuery the query used to retrieve the value, if any.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional value.
      * @param readOnly if the attribute is read-only.
@@ -74,7 +75,8 @@ public final class AttributeValueObject
         final int ordinalPosition,
         final int length,
         final int precision,
-        final boolean managedExternally,
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery,
         final boolean allowsNull,
         @Nullable final String value,
         final boolean readOnly,
@@ -92,7 +94,8 @@ public final class AttributeValueObject
             ordinalPosition,
             length,
             precision,
-            managedExternally,
+            keyword,
+            retrievalQuery,
             allowsNull,
             value,
             readOnly,

@@ -35,21 +35,21 @@
 package org.acmsl.queryj.tools.ant;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.tools.ant.AntTableElement;
-
-/*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -63,41 +63,41 @@ public class AntTablesElement
     /**
      * The table collection.
      */
-    private Collection m__cTables;
+    private List<AntTableElement> m__lTables;
 
     /**
      * Creates an empty "tables" element.
      */
     public AntTablesElement()
     {
-        inmutableSetTables(new ArrayList());
+        immutableSetTables(new ArrayList<AntTableElement>());
     }
 
     /**
      * Specifies the table collection.
      * @param tables the collection
      */
-    private void inmutableSetTables(Collection tables)
+    private void immutableSetTables(@NotNull final List<AntTableElement> tables)
     {
-        m__cTables = tables;
+        m__lTables = tables;
     }
 
     /**
      * Specifies the table collection.
-     * @param tables the collection
+     * @param tables the collection.
      */
-    private void setTables(Collection tables)
+    private void setTables(@NotNull final List<AntTableElement> tables)
     {
-        inmutableSetTables(tables);
+        immutableSetTables(tables);
     }
 
     /**
      * Retrieves the table collection.
      * @return such collection.
      */
-    public Collection getTables()
+    public List<AntTableElement> getTables()
     {
-        return m__cTables;
+        return m__lTables;
     }
 
     /**
@@ -121,21 +121,21 @@ public class AntTablesElement
     @Nullable
     public Object createDynamicElement(String name)
     {
-        @Nullable AntTableElement result = null;
+        @Nullable AntTableElement result;
 
         if  ("table".equals(name)) 
         {
             result = new AntTableElement();
 
-            Collection t_cTables = getTables();
+            List<AntTableElement> t_lTables = getTables();
 
-            if  (t_cTables == null)
+            if  (t_lTables == null)
             {
-                t_cTables = new ArrayList();
-                setTables(t_cTables);
+                t_lTables = new ArrayList<AntTableElement>();
+                setTables(t_lTables);
             }
 
-            t_cTables.add(result);
+            t_lTables.add(result);
         }
         else 
         {

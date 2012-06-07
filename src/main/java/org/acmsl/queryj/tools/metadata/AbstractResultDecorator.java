@@ -50,10 +50,12 @@ import org.acmsl.queryj.tools.customsql.ResultElement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /*
  * Importing Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -367,13 +369,9 @@ public abstract class AbstractResultDecorator
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return such information.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     * @precondition customResultUtils != null
      */
     @NotNull
-    public Collection getProperties(
+    public List<Property> getProperties(
         @Nullable final Collection propertyRefs,
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -381,7 +379,7 @@ public abstract class AbstractResultDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        @NotNull Collection result = new ArrayList();
+        @NotNull List<Property> result = new ArrayList<Property>();
 
         @Nullable Iterator t_PropertyRefIterator =
             (propertyRefs != null) ? propertyRefs.iterator() : null;
@@ -438,34 +436,19 @@ public abstract class AbstractResultDecorator
             if  (   (t_strTable != null)
                  && (t_MetadataTypeManager != null))
             {
-                @NotNull String[] t_astrColumnNames =
-                    metadataManager.getColumnNames(t_strTable);
-
-                int t_iCount =
-                    (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
-
-                String t_strColumnName;
-                boolean t_bAllowsNull;
-                for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+                for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable, null, null))
                 {
-                    t_strColumnName = t_astrColumnNames[t_iIndex];
-
-                    t_bAllowsNull = 
-                        metadataManager.allowsNull(
-                            t_strTable, t_strColumnName);
-
                     result.add(
                         decoratorFactory.createDecorator(
                             new PropertyElement(
-                                t_strTable + "." + t_strColumnName,
-                                t_strColumnName,
-                                t_iIndex + 1,
-                                t_strColumnName,
-                                t_MetadataTypeManager.getNativeType(
-                                    metadataManager.getColumnType(
-                                        t_strTable, t_strColumnName),
-                                    t_bAllowsNull),
-                                t_bAllowsNull),
+                                t_strTable + "." + t_Attribute.getName(),
+                                t_Attribute.getName(),
+                                t_Attribute.getOrdinalPosition(),
+                                t_Attribute.getName(),
+                                t_Attribute.getType(),
+                                t_Attribute.isNullable()),
+                            resultElement,
+                            customSqlProvider,
                             metadataManager));
                 }
             }

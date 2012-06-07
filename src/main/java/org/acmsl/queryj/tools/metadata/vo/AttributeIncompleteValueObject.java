@@ -142,13 +142,22 @@ public class AttributeIncompleteValueObject
     }
 
     /**
-     * Specifies whether it's managed externally.
-     *
-     * @param managedExternally such information.
+     * Specifies the keyword used to retrieve the value.
+     * @param keyword such information.
      */
     @Override
-    public void setManagedExternally(final boolean managedExternally)
+    public void setKeyword(@NotNull final String keyword)
     {
-        super.setManagedExternally(managedExternally);
+        super.setKeyword(keyword);
+    }
+
+    /**
+     * Specifies the query used to retrieve the value.
+     * @param query such information.
+     */
+    @Override
+    public void setRetrievalQuery(@NotNull final String query)
+    {
+        super.setRetrievalQuery(query);
     }
 }

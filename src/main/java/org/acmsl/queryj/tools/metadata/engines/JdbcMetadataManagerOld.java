@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.metadata.engines;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.MetadataManagerOld;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,9 +54,9 @@ import java.sql.SQLException;
  * Manages the information provided by database metadata, using plain JDBC.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class JdbcMetadataManager
-    extends AbstractJdbcMetadataManager
-    implements MetadataManager
+public class JdbcMetadataManagerOld
+    extends AbstractJdbcMetadataManagerOld
+    implements MetadataManagerOld
 {
     private static final long serialVersionUID = 163877584229565647L;
 
@@ -87,7 +88,7 @@ public class JdbcMetadataManager
      * @precondition procedureNames != null
      * @precondition metaData != null
      */
-    public JdbcMetadataManager(
+    public JdbcMetadataManagerOld(
         @NotNull final String[] tableNames,
         @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -133,7 +134,7 @@ public class JdbcMetadataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    protected JdbcMetadataManager(
+    protected JdbcMetadataManagerOld(
         @NotNull final String[] tableNames,
         @NotNull final String[] procedureNames,
         @NotNull final DatabaseMetaData metaData,
@@ -222,6 +223,7 @@ public class JdbcMetadataManager
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */
+    @NotNull
     public String getName()
     {
         return "jdbc";

@@ -96,7 +96,7 @@ public class DAODecoratorFactory
      */
     @NotNull
     public AttributeDecorator createDecorator(
-        final Attribute attribute, final MetadataManager metadataManager)
+        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
     {
         return new DAOAttributeDecorator(attribute, metadataManager);
     }

@@ -148,17 +148,16 @@ public class KeywordRepositoryTemplateBuildHandler
 
                         if  (t_Field != null)
                         {
-                            if  (!t_StringValidator.isEmpty(t_Field.getKeyword()))
+                            String t_strKeyword = t_Field.getKeyword();
+
+                            if  (   (t_strKeyword != null)
+                                 && (!t_StringValidator.isEmpty(t_Field.getKeyword())))
                             {
                                 result.addKeyword(
-                                    t_Field.getKeyword(),
+                                    t_strKeyword,
                                     metadataManager.getMetadataTypeManager().getQueryJFieldType(
-                                        metadataManager.getColumnType(
-                                            t_Field.getTableName(),
-                                            t_Field.getName()),
-                                        metadataManager.isBoolean(
-                                            t_Field.getTableName(),
-                                            t_Field.getName())));
+                                        t_Field.getTypeId(),
+                                        t_Field.isBoolean()));
                             }
                         }
                     }

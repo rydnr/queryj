@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
@@ -95,7 +94,6 @@ public class ForeignKeyListHandler
             retrieveForeignKeys(
                 context.getTableName(),
                 context.getMetadataManager(),
-                context.getDecoratorFactory(),
                 MetadataUtils.getInstance());
     }
 
@@ -103,7 +101,6 @@ public class ForeignKeyListHandler
      * Retrieves the list of {@link ForeignKey foreign keys} for a given table.
      * @param tableName the name of the table.
      * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param metadataUtils the {@link MetadataUtils} instance.
      * @return such value.
      */
@@ -111,15 +108,11 @@ public class ForeignKeyListHandler
     protected List<ForeignKey> retrieveForeignKeys(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final MetadataUtils metadataUtils)
     {
         return
             metadataUtils.retrieveForeignKeyAttributes(
-                tableName,
-                metadataManager,
-                metadataManager.getMetadataTypeManager(),
-                decoratorFactory);
+                tableName, metadataManager);
     }
 
 }

@@ -47,6 +47,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 /*
  * Importing some JetBrains classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -232,9 +233,6 @@ public class CustomResultUtils
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the database metadata manager.
      * @return the table name.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
     @Nullable
     public String retrieveTable(
@@ -252,37 +250,36 @@ public class CustomResultUtils
             {
                 System.out.println("caught");
             }
-            String[] t_astrTableNames = metadataManager.getTableNames();
+            List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-            int t_iTableCount =
-                (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+            int t_iTableCount = t_lTables.size();
 
-            @Nullable SqlElement[] t_aSqlElements = null;
+            @Nullable SqlElement[] t_aSqlElements;
 
             int t_iSqlCount;
 
             String t_strDao;
 
             for  (int t_iTableIndex = 0;
-                  (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
-                  t_iTableIndex++)
+                     (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
+                      t_iTableIndex++)
             {
                 t_aSqlElements =
                     retrieveSqlElementsByResultId(
                         customSqlProvider, resultElement.getId());
 
-                t_iSqlCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
+                t_iSqlCount = t_aSqlElements.length;
 
                 for  (int t_iSqlIndex = 0;
-                         t_iSqlIndex < t_iSqlCount;
-                         t_iSqlIndex++)
+                          t_iSqlIndex < t_iSqlCount;
+                          t_iSqlIndex++)
                 {
                     t_strDao = t_aSqlElements[t_iSqlIndex].getDao();
 
                     if  (   (t_strDao != null)
-                         && (matches(t_astrTableNames[t_iTableIndex], t_strDao)))
+                         && (matches(t_lTables.get(t_iTableIndex).getName(), t_strDao)))
                     {
-                        result = t_astrTableNames[t_iTableIndex];
+                        result = t_lTables.get(t_iTableIndex).getName();
                         cacheEntry(resultElement.getId(), result);
                         t_bBreakLoop = true;
                         break;

@@ -56,6 +56,7 @@ import org.acmsl.commons.utils.StringValidator;
 /*
  * Importing some ANTLR 3 classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -512,7 +513,16 @@ public class MetaLanguageUtils
     public boolean containsStaticValues(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.isTableStatic(tableName);
+        boolean result = false;
+
+        Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+
+        if (t_Table != null)
+        {
+            result = t_Table.isStatic();
+        }
+
+        return result;
     }
 
 }

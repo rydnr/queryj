@@ -47,6 +47,7 @@ import org.acmsl.commons.version.VersionUtils;
 /*
  * Importing some Ant classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.apache.tools.ant.BuildException;
 
 /*
@@ -59,6 +60,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -110,7 +112,7 @@ public class OracleMetaDataRetrievalHandler
     @Nullable
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
-        @Nullable final String[] tableNames,
+        @Nullable final List<Table> tables,
         @Nullable final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
@@ -129,9 +131,11 @@ public class OracleMetaDataRetrievalHandler
 
         try 
         {
-            result =
+            // TODO
+            result = null;
+            /*
                 new Oracle8MetadataManager(
-                    tableNames,
+                    tables,
                     procedureNames,
                     disableTableExtraction,
                     lazyTableExtraction,
@@ -144,11 +148,12 @@ public class OracleMetaDataRetrievalHandler
                     engineName,
                     engineVersion,
                     quote);
-
+              */
             if (result != null)
             {
-                result.retrieveMetadata();
-                storeTableNames(result.getTableNames(), parameters);
+                result.eagerlyFetchMetadata();
+
+                storeTables(result.getTableDAO().findAllTables(), parameters);
             }
         }
         catch  (@NotNull final RuntimeException exception)

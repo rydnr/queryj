@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
@@ -86,7 +85,6 @@ public class PrimaryKeyHandler
             retrievePrimaryKeyAttributes(
                 context.getTableName(),
                 context.getMetadataManager(),
-                context.getDecoratorFactory(),
                 MetadataUtils.getInstance());
     }
 
@@ -109,15 +107,11 @@ public class PrimaryKeyHandler
     protected List<Attribute> retrievePrimaryKeyAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final MetadataUtils metadataUtils)
     {
         return
             metadataUtils.retrievePrimaryKeyAttributes(
-                tableName,
-                metadataManager,
-                metadataManager.getMetadataTypeManager(),
-                decoratorFactory);
+                tableName, metadataManager);
     }
 
 }

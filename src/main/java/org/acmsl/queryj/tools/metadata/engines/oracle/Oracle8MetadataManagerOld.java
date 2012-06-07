@@ -53,8 +53,8 @@ import java.sql.SQLException;
  * Manages the information metadata stored in an Oracle8 database.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class Oracle8MetadataManager
-    extends  OracleMetadataManager
+public class Oracle8MetadataManagerOld
+    extends  OracleMetadataManagerOld
 {
     private static final long serialVersionUID = -2218526567706026084L;
 
@@ -83,7 +83,7 @@ public class Oracle8MetadataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    public Oracle8MetadataManager(
+    public Oracle8MetadataManagerOld(
         @NotNull final String[] tableNames,
         @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,

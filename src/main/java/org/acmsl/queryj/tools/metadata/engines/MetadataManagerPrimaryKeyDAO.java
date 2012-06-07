@@ -40,7 +40,6 @@ package org.acmsl.queryj.tools.metadata.engines;
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.PrimaryKeyDAO;
-import org.acmsl.queryj.tools.metadata.RefactoredMetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
@@ -64,15 +63,15 @@ public class MetadataManagerPrimaryKeyDAO
     implements PrimaryKeyDAO
 {
     /**
-     * The {@link RefactoredMetadataManager} instance.
+     * The {@link MetadataManager} instance.
      */
-    private RefactoredMetadataManager m__MetadataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
-     * Creates a new {@link MetadataManagerPrimaryKeyDAO} instance using given {@link RefactoredMetadataManager}.
-     * @param manager the {@link RefactoredMetadataManager} instance.
+     * Creates a new {@link MetadataManagerPrimaryKeyDAO} instance using given {@link MetadataManager}.
+     * @param manager the {@link MetadataManager} instance.
      */
-    public MetadataManagerPrimaryKeyDAO(@NotNull final RefactoredMetadataManager manager)
+    public MetadataManagerPrimaryKeyDAO(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -81,7 +80,7 @@ public class MetadataManagerPrimaryKeyDAO
      * Specifies the {@link MetadataManager} instance.
      * @param manager the {@link MetadataManager manager}.
      */
-    protected final void immutableSetMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected final void immutableSetMetadataManager(@NotNull final MetadataManager manager)
     {
         m__MetadataManager = manager;
     }
@@ -91,7 +90,7 @@ public class MetadataManagerPrimaryKeyDAO
      * @param manager the {@link MetadataManager manager}.
      */
     @SuppressWarnings("unused")
-    protected void setMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected void setMetadataManager(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -101,7 +100,7 @@ public class MetadataManagerPrimaryKeyDAO
      * @return such {@link MetadataManager instance}.
      */
     @NotNull
-    protected RefactoredMetadataManager getMetadataManager()
+    protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
     }
@@ -141,5 +140,21 @@ public class MetadataManagerPrimaryKeyDAO
     {
         // TODO
         return false;
+    }
+
+    /**
+     * Inserts a new primary key (needed when processing manual schemas).
+     * @param table the table name.
+     * @param primaryKey the primary key.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    public void insert(
+        @NotNull final String table,
+        @NotNull final List<Attribute> primaryKey,
+        @Nullable final String catalog,
+        @Nullable final String schema)
+    {
+        // TODO
     }
 }

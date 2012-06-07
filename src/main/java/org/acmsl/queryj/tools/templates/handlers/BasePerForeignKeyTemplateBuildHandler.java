@@ -38,15 +38,11 @@ package org.acmsl.queryj.tools.templates.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
-import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
@@ -54,8 +50,6 @@ import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateFactory;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,9 +57,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -120,35 +111,13 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * Builds the templates.
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
-     * @param templateFactory the {@link BasePerForeignKeyTemplateFactory} instance.
+     * @param templateFactory the template factory.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final TF templateFactory)
-      throws  QueryJBuildException
-    {
-        buildTemplates(
-            parameters,
-            metadataManager,
-            templateFactory,
-            templateFactory.getDecoratorFactory());
-    }
-
-    /**
-     * Builds the templates.
-     * @param parameters the parameters.
-     * @param metadataManager the database metadata manager.
-     * @param templateFactory the template factory.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void buildTemplates(
-        @NotNull final Map parameters,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final TF templateFactory,
-        @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -163,7 +132,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
             retrieveForeignKeys(
-                parameters, metadataManager, decoratorFactory));
+                parameters, metadataManager));
     }
     
     /**
@@ -199,7 +168,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final ForeignKey[] foreignKeys)
+        @NotNull final List<ForeignKey> foreignKeys)
       throws  QueryJBuildException
     {
         @NotNull List<T> t_lTemplates = new ArrayList<T>();
@@ -272,36 +241,19 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * Retrieves the foreign keys.
      * @param parameters the parameter map.
      * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such templates.
-     * for any reason.
-     * @precondition parameters != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
     @NotNull
-    protected ForeignKey[] retrieveForeignKeys(
+    @SuppressWarnings("unchecked")
+    protected List<ForeignKey> retrieveForeignKeys(
         @NotNull final Map parameters,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final MetadataManager metadataManager)
     {
-        @Nullable ForeignKey[] result = (ForeignKey[]) parameters.get(FOREIGN_KEYS);
+        @Nullable List<ForeignKey> result = (List<ForeignKey>) parameters.get(FOREIGN_KEYS);
 
         if  (result == null)
         {
-            @NotNull Collection<ForeignKey> t_cForeignKeys = new ArrayList<ForeignKey>();
-            
-            @NotNull ForeignKey[] t_aFks =
-                retrieveForeignKeys(metadataManager, decoratorFactory);
-
-            t_cForeignKeys.addAll(Arrays.asList(t_aFks));
-
-            result = t_cForeignKeys.toArray(new ForeignKey[t_aFks.length]);
-        }
-
-        if (result == null)
-        {
-            result = new ForeignKey[0];
+            result = retrieveForeignKeys(metadataManager);
         }
 
         return result;
@@ -310,320 +262,34 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     /**
      * Retrieves the foreign keys.
      * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such foreign keys.
      */
     @NotNull
-    protected ForeignKey[] retrieveForeignKeys(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+    protected List<ForeignKey> retrieveForeignKeys(
+        @NotNull final MetadataManager metadataManager)
     {
-        @NotNull ForeignKey[] result = new ForeignKey[0];
+        @Nullable List<ForeignKey> result = null;
 
-        @Nullable Collection<ForeignKey> t_cResult = null;
+        List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-        String[] t_astrTableNames = metadataManager.getTableNames();
-
-        int t_iTableLength =
-            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
-
-        @Nullable String t_strSourceTable;
-        @Nullable String[] t_astrReferredTables;
-        int t_iReferredTableLength;
-        @Nullable String[][] t_aastrForeignKeys;
-        int t_iForeignKeyLength;
-        @NotNull String t_strReferredTable;
-        
-        for  (int t_iTableIndex = 0;
-                  t_iTableIndex < t_iTableLength;
-                  t_iTableIndex++)
+        for (@Nullable Table t_Table : t_lTables)
         {
-            if (t_astrTableNames != null)
+            if (t_Table != null)
             {
-                t_strSourceTable = t_astrTableNames[t_iTableIndex];
-
-                if (t_strSourceTable != null)
+                if (result == null)
                 {
-                    t_astrReferredTables =
-                        metadataManager.getReferringTables(t_strSourceTable);
-
-                    t_iReferredTableLength =
-                        (t_astrReferredTables != null)
-                        ?  t_astrReferredTables.length
-                        :  0;
-
-                    for  (int t_iReferredTableIndex = 0;
-                              t_iReferredTableIndex < t_iReferredTableLength;
-                              t_iReferredTableIndex++)
-                    {
-                        if (t_astrReferredTables != null)
-                        {
-                            t_strReferredTable =
-                                t_astrReferredTables[t_iReferredTableIndex];
-
-                            t_aastrForeignKeys =
-                                metadataManager.getReferredKeys(
-                                    t_strSourceTable, t_strReferredTable);
-
-                            if  (t_cResult == null)
-                            {
-                                t_cResult = new ArrayList<ForeignKey>();
-                            }
-
-                            t_iForeignKeyLength =
-                                (t_aastrForeignKeys != null)
-                                ?  t_aastrForeignKeys.length
-                                :  0;
-
-                            for  (int t_iForeignKeyIndex = 0;
-                                      t_iForeignKeyIndex < t_iForeignKeyLength;
-                                      t_iForeignKeyIndex++)
-                            {
-                                if (t_aastrForeignKeys != null)
-                                {
-                                    t_cResult.add(
-                                        buildForeignKey(
-                                            t_aastrForeignKeys[t_iForeignKeyIndex],
-                                            t_strSourceTable,
-                                            t_strReferredTable,
-                                            metadataManager,
-                                            decoratorFactory));
-                                }
-                            }
-                        }
-                    }
+                    result = new ArrayList<ForeignKey>();
                 }
+
+                result.addAll(t_Table.getForeignKeys());
             }
         }
 
-        if  (t_cResult != null)
+        if (result == null)
         {
-            result = t_cResult.toArray(new ForeignKey[t_cResult.size()]);
+            result = new ArrayList<ForeignKey>(0);
         }
 
         return result;
-    }
-
-    /**
-     * Builds a foreign key.
-     * @param attributes the attributes.
-     * @param sourceTable the source table.
-     * @param targetTable the target table.
-     * @param metadataManager the database metadata manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the foreign key.
-     * @precondition attributes != null
-     * @precondition sourceTable != null
-     * @precondition targetTable != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     */
-    @Nullable
-    protected ForeignKey buildForeignKey(
-        @NotNull final String[] attributes,
-        @NotNull final String sourceTable,
-        @NotNull final String targetTable,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        @Nullable ForeignKey result;
-
-        @NotNull List<Attribute> t_lAttributes = new ArrayList<Attribute>();
-
-        MetadataTypeManager t_TypeManager =
-            metadataManager.getMetadataTypeManager();
-
-        @Nullable Attribute t_Attribute;
-        boolean t_bAllowsNull = false;
-
-        for  (String t_strAttribute : attributes)
-        {
-            t_Attribute =
-                buildAttribute(
-                    t_strAttribute,
-                    sourceTable,
-                    metadataManager,
-                    t_TypeManager,
-                    decoratorFactory);
-
-            if  (t_Attribute != null)
-            {
-                t_lAttributes.add(t_Attribute);
-
-                if  (   (!t_bAllowsNull)
-                     && (t_Attribute.isNullable()))
-                {
-                    t_bAllowsNull = true;
-                }
-            }
-        }
-
-        result =
-            new ForeignKeyValueObject(
-                sourceTable, t_lAttributes, targetTable, t_bAllowsNull);
-
-        return result;
-    }
-
-    /**
-     * Builds an attribute.
-     * @param attributeName the name.
-     * @param tableName the source table.
-     * @param metadataManager the database metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the attribute.
-     */
-    @Nullable
-    @SuppressWarnings("unused")
-    protected Attribute buildAttribute(
-        @NotNull final String attributeName,
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        @Nullable Attribute result;
-
-        int t_iType = metadataManager.getColumnType(tableName, attributeName);
-
-        @Nullable String t_strNativeType = metadataTypeManager.getNativeType(t_iType);
-
-        boolean t_bAllowsNull =
-            metadataManager.allowsNull(tableName, attributeName);
-
-        boolean t_bIsBool =
-            metadataManager.isBoolean(tableName, attributeName);
-
-        String t_strFieldType =
-            metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
-
-        boolean t_bManagedExternally =
-            metadataManager.isManagedExternally(tableName, attributeName);
-        
-        result =
-            decoratorFactory.createDecorator(
-                new AttributeValueObject(
-                    attributeName,
-                    t_iType,
-                    t_strNativeType,
-                    tableName,
-                    metadataManager.getTableComment(tableName),
-                    1, // ordinal position
-                    -1, // length
-                    -1, // precision
-                    t_bManagedExternally,
-                    t_bAllowsNull,
-                    null, // value
-                    metadataManager.isReadOnly(tableName, attributeName),
-                    metadataManager.isBoolean(tableName, attributeName),
-                    metadataManager.getBooleanTrue(tableName, attributeName),
-                    metadataManager.getBooleanFalse(tableName, attributeName),
-                    metadataManager.getBooleanNull(tableName, attributeName)),
-                metadataManager);
-
-        return result;
-    }
-
-
-    /**
-     * Checks whether the table associated to given template contains foreign keys.
-     * @param tableTemplate the table template.
-     * @param metadataManager the database metadata manager.
-     * @return <code>true</code> in such case.
-     */
-    @SuppressWarnings("unused")
-    protected boolean containsForeignKeys(
-        @NotNull final TableTemplate tableTemplate,
-        @NotNull final MetadataManager metadataManager)
-    {
-        return containsForeignKeys(tableTemplate.getTemplateContext(), metadataManager);
-    }
-
-    /**
-     * Checks whether the table associated to given template contains foreign keys.
-     * @param context the {@link BasePerTableTemplateContext} instance.
-     * @param metadataManager the database metadata manager.
-     * @return <code>true</code> in such case.
-     */
-    protected boolean containsForeignKeys(
-        @NotNull final BasePerTableTemplateContext context,
-        @NotNull final MetadataManager metadataManager)
-    {
-        return
-            metadataManager.containsForeignKeys(context.getTableName());
-    }
-
-    /**
-     * Retrieves the simple foreign keys.
-     * @param allFks the complete list of foreign keys.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     */
-    @SuppressWarnings("unused,unchecked")
-    @NotNull
-    protected String[] retrieveSimpleFks(
-        @NotNull final String[] allFks,
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager)
-    {
-        @NotNull Collection<String> t_cResult;
-
-        @NotNull Map<String, String> t_mAux = new HashMap<String, String>();
-
-        for  (String t_strFk: allFks)
-        {
-            // TODO: FIXME!!
-            String t_strReferredTable =
-                metadataManager.getReferredTable(
-                    tableName, new String[] { t_strFk });
-
-            if  (t_mAux.containsKey(t_strReferredTable))
-            {
-                t_mAux.remove(t_strReferredTable);
-            }
-            else
-            {
-                t_mAux.put(t_strReferredTable, t_strFk);
-            }
-        }
-
-        t_cResult = t_mAux.values();
-
-        return t_cResult.toArray(new String[t_cResult.size()]);
-    }
-
-    /**
-     * Retrieves the tables referred by compound foreign keys.
-     * @param tableName the table name.
-     * @param metadataManager the database metadata manager.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     */
-    @SuppressWarnings("unused,unchecked")
-    @NotNull
-    protected String[] retrieveReferredTablesByCompoundFks(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager)
-    {
-        @NotNull Collection<String> t_cResult = new ArrayList<String>();
-
-        @NotNull String[] t_astrReferredTables =
-            metadataManager.getReferredTables(tableName);
-
-        for  (String t_strReferredTable: t_astrReferredTables)
-        {
-            String[][] t_astrForeignKeys =
-                metadataManager.getForeignKeys(
-                    tableName, t_strReferredTable);
-
-            if  (   (t_astrForeignKeys != null)
-                    && (t_astrForeignKeys.length > 0))
-            {
-                t_cResult.add(t_strReferredTable);
-            }
-        }
-
-        return t_cResult.toArray(new String[t_cResult.size()]);
     }
 }

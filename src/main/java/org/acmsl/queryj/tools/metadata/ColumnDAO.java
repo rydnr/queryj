@@ -71,7 +71,7 @@ public interface ColumnDAO
      * @param catalog the catalog.
      * @param schema the schema.
      */
-    @NotNull
+    @Nullable
     Attribute findColumn(
         @NotNull final String table,
         @NotNull final String columnName,
@@ -98,4 +98,61 @@ public interface ColumnDAO
     List<Attribute> findAllColumns(
         @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
 
+    /**
+     * Inserts a new column (needed when processing manually-defined schemas)
+     * @param table the table name.
+     * @param columnName the column name.
+     * @param typeId the column type id.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    void insert(
+        @NotNull final String table,
+        @NotNull final String columnName,
+        final int typeId,
+        @Nullable final String catalog,
+        @Nullable final String schema);
+
+    /**
+     * Updates a given column.
+     * @param table the table.
+     * @param columnName the column name.
+     * @param typeId the type id.
+     * @param type the type.
+     * @param comment the comment.
+     * @param ordinalPosition the ordinal position.
+     * @param length the maximum allowed length.
+     * @param precision the precision.
+     * @param value the value.
+     * @param keyword the keyword used to get the column's value.
+     * @param retrievalQuery the query used to get the column's value.
+     * @param readOnly whether it's read-only or not.
+     * @param nullable whether it allows null.
+     * @param isBoolean whether it's represents boolean values.
+     * @param booleanTrue the value representing <code>true</code>.
+     * @param booleanFalse the value representing <code>false</code>.
+     * @param booleanNull if nullable, the value representing <code>null</code>.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    void update(
+        @NotNull final String table,
+        @NotNull final String columnName,
+        final int typeId,
+        @NotNull final String type,
+        @Nullable final String comment,
+        final int ordinalPosition,
+        final int length,
+        final int precision,
+        @Nullable final String value,
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery,
+        final boolean readOnly,
+        final boolean nullable,
+        final boolean isBoolean,
+        @Nullable final String booleanTrue,
+        @Nullable final String booleanFalse,
+        @Nullable final String booleanNull,
+        @Nullable final String catalog,
+        @Nullable final String schema);
 }

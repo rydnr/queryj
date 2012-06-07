@@ -284,86 +284,57 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         String t_strCapitalizedValueObjectName =
             stringUtils.capitalize(t_strValueObjectName, '_');
 
-        String[] t_astrPrimaryKeys =
-            metadataManager.getPrimaryKey(tableName);
+        String[] t_astrPrimaryKeys = new String[0];
+//            metadataManager.getPrimaryKey(tableName);
 
         @Nullable String t_strStaticAttributeName =
             retrieveStaticAttribute(tableName, metadataManager);
 
-        String t_strStaticAttributeType =
-            metadataTypeManager.getFieldType(
-                metadataManager.getColumnType(
-                    tableName, t_strStaticAttributeName));
+        String t_strStaticAttributeType = null;
+//            metadataTypeManager.getFieldType(
+//                metadataManager.getColumnType(
+//                    tableName, t_strStaticAttributeName));
 
         @NotNull List<Attribute> t_cPrimaryKeyAttributes =
             metadataUtils.retrievePrimaryKeyAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @NotNull List<Attribute> t_cNonPrimaryKeyAttributes =
             metadataUtils.retrieveNonPrimaryKeyAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @NotNull List<ForeignKey> t_cForeignKeyAttributes =
             metadataUtils.retrieveForeignKeyAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         // A map of "fk_"referringTableName -> foreign_keys (list of lists)
-        @NotNull Map<String,ForeignKey[]> t_mReferringKeys =
+        @NotNull Map<String,List<ForeignKey>> t_mReferringKeys =
             metadataUtils.retrieveReferringKeys(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @NotNull List<Attribute> t_cAttributes =
             metadataUtils.retrieveAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @NotNull List<Attribute> t_cExternallyManagedAttributes =
             metadataUtils.retrieveExternallyManagedAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @NotNull List<Attribute> t_cAllButExternallyManagedAttributes =
             metadataUtils.retrieveAllButExternallyManagedAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @NotNull List<Attribute> t_cLobAttributes =
             metadataUtils.retrieveLobAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager, metadataTypeManager);
 
         @NotNull List<Attribute> t_cAllButLobAttributes =
             metadataUtils.retrieveAllButLobAttributes(
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
+                tableName, metadataManager, metadataTypeManager);
 
-        ForeignKey[] t_aForeignKeys =
+        List<ForeignKey> t_aForeignKeys =
             metadataUtils.retrieveForeignKeys(
-                tableName,
-                metadataManager,
-                decoratorFactory);
+                tableName, metadataManager);
 
         @Nullable List<Sql> t_cCustomSelects =
             retrieveCustomSelects(
@@ -531,13 +502,13 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         @NotNull final List<Attribute> primaryKeyAttributes,
         @NotNull final List<Attribute> nonPrimaryKeyAttributes,
         @NotNull final List<ForeignKey> foreignKeyAttributes,
-        @NotNull final Map<String,ForeignKey[]> referringKeys,
+        @NotNull final Map<String,List<ForeignKey>> referringKeys,
         @NotNull final List<Attribute> attributes,
         @NotNull final List<Attribute> externallyManagedAttributes,
         @NotNull final List<Attribute> allButExternallyManagedAttributes,
         @NotNull final List<Attribute> lobAttributes,
         @NotNull final List<Attribute> allButLobAttributes,
-        @NotNull final ForeignKey[] foreignKeys,
+        @NotNull final List<ForeignKey> foreignKeys,
         @NotNull final List<Sql> customSelects,
         @NotNull final List<Sql> customUpdatesOrInserts,
         @NotNull final List<Sql> customSelectsForUpdate,
@@ -617,8 +588,9 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
                     externallyManagedAttributes,
                     staticAttributeName,
                     tableName),
-                metadataManager.getAllowNull(
-                    tableName, staticAttributeName),
+                false,
+                //metadataManager.getAllowNull(
+                //    tableName, staticAttributeName),
                 metadataManager,
                 metadataTypeManager,
                 decoratorFactory);
@@ -792,13 +764,13 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         @NotNull final Collection<Attribute> pkAttributes,
         @NotNull final Collection<Attribute> nonPkAttributes,
         @NotNull final Collection<ForeignKey> fkAttributes,
-        @NotNull final Map<String,ForeignKey[]> referringKeys,
+        @NotNull final Map<String,List<ForeignKey>> referringKeys,
         @NotNull final Collection<Attribute> attributes,
         @NotNull final Collection<Attribute> externallyManagedAttributes,
         @NotNull final Collection<Attribute> allButExternallyManagedAttributes,
         @NotNull final Collection<Attribute> lobAttributes,
         @NotNull final Collection<Attribute> allButLobAttributes,
-        @NotNull final ForeignKey[] foreignKeys,
+        @NotNull final List<ForeignKey> foreignKeys,
         @Nullable final String staticAttributeName,
         @Nullable final String staticAttributeType,
         @NotNull final Collection<Sql> customSelects,
@@ -893,18 +865,19 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
                     metadataTypeManager.getJavaType(staticAttributeType),
                     staticAttributeType,
                     tableName,
-                    metadataManager.getTableComment(tableName),
+                    null, //metadataManager.getTableComment(tableName),
                     1, // ordinal position
                     -1, // size
                     -1, // precision
-                    managedExternally,
+                    null, // keyword
+                    null, // retrieval query
                     allowsNull,
                     null,
-                    metadataManager.isReadOnly(tableName, staticAttributeName),
-                    metadataManager.isBoolean(tableName, staticAttributeName),
-                    metadataManager.getBooleanTrue(tableName, staticAttributeName),
-                    metadataManager.getBooleanFalse(tableName, staticAttributeName),
-                    metadataManager.getBooleanNull(tableName, staticAttributeName)),
+                    false, //metadataManager.isReadOnly(tableName, staticAttributeName),
+                    false, //metadataManager.isBoolean(tableName, staticAttributeName),
+                    null, //metadataManager.getBooleanTrue(tableName, staticAttributeName),
+                    null, //metadataManager.getBooleanFalse(tableName, staticAttributeName),
+                    null), //metadataManager.getBooleanNull(tableName, staticAttributeName)),
                 metadataManager));
     }
 
@@ -1101,21 +1074,21 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
     {
         boolean result = false;
 
-        String[] t_astrColumnNames = metadataManager.getColumnNames(tableName);
+        String[] t_astrColumnNames = new String[0]; //metadataManager.getColumnNames(tableName);
 
         int t_iLength =
             (t_astrColumnNames != null) ? t_astrColumnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            if  (metadataTypeManager.isClob(
-                     metadataManager.getColumnType(
-                         tableName,
-                         t_astrColumnNames[t_iIndex])))
-            {
+//            if  (metadataTypeManager.isClob(
+//                     metadataManager.getColumnType(
+//                         tableName,
+//                         t_astrColumnNames[t_iIndex])))
+//            {
                 result = true;
                 break;
-            }
+//            }
         }
 
         return result;
@@ -1167,8 +1140,8 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
-        return
-            metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName));
+        return null;
+//            metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName));
     }
 
     /**

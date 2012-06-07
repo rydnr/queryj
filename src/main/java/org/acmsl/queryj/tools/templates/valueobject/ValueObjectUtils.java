@@ -37,7 +37,10 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Provides some useful methods for ValueObject-related templates.
@@ -86,15 +89,15 @@ public class ValueObjectUtils
     {
         boolean result = false;
 
-        String[] t_astrTableNames = metadataManager.getTableNames();
+        List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
         String t_strVoClassName;
 
-        for (String t_strTableName : t_astrTableNames)
+        for (Table t_Table : t_lTables)
         {
-            if (t_strTableName != null)
+            if (t_Table != null)
             {
-                t_strVoClassName = getVoClassName(t_strTableName);
+                t_strVoClassName = getVoClassName(t_Table.getName());
 
                 if (   (t_strVoClassName != null)
                     && (   (t_strVoClassName.equals(className)))

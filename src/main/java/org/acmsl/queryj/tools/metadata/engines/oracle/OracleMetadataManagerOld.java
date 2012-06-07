@@ -42,7 +42,7 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.QueryResultSet;
 import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
-import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManagerOld;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 
 /*
@@ -77,8 +77,8 @@ import java.util.Locale;
  * Manages the information metadata stored in an Oracle database.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class OracleMetadataManager
-    extends  JdbcMetadataManager
+public class OracleMetadataManagerOld
+    extends  JdbcMetadataManagerOld
     implements  OracleTableRepository
 {
     private static final long serialVersionUID = 7615952180554057335L;
@@ -108,7 +108,7 @@ public class OracleMetadataManager
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    public OracleMetadataManager(
+    public OracleMetadataManagerOld(
         @NotNull final String[] tableNames,
         @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
@@ -157,7 +157,7 @@ public class OracleMetadataManager
      * occurs.
      */
     @SuppressWarnings("unused")
-    public OracleMetadataManager(
+    public OracleMetadataManagerOld(
         @NotNull final String[] tableNames,
         @NotNull final String[] procedureNames,
         @NotNull final DatabaseMetaData metaData,

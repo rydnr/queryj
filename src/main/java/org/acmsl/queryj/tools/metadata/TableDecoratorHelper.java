@@ -40,13 +40,14 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
  * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
@@ -77,7 +78,7 @@ public class TableDecoratorHelper
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected TableDecoratorHelper() {};
+    protected TableDecoratorHelper() {}
 
     /**
      * Retrieves a <code>TableDecoratorHelper</code> instance.
@@ -95,27 +96,18 @@ public class TableDecoratorHelper
      * @param parentTableName the parent table name of the second attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
-     * @precondition firstAttributes != null
-     * @preconditoin secondAttributes != null
-     * @precondition metadataManager != null
      */
-    public List removeOverridden(
-        final List firstAttributes,
-        final List secondAttributes,
-        final String parentTableName,
-        final MetadataManager metadataManager)
+    @NotNull
+    public List<Attribute> removeOverridden(
+        @NotNull final List<Attribute> firstAttributes,
+        @NotNull final List<Attribute> secondAttributes,
+        @NotNull final String parentTableName,
+        @NotNull final MetadataManager metadataManager)
     {
-        List result = new ArrayList();
+        List<Attribute> result = new ArrayList<Attribute>();
 
-        int t_iCount = (secondAttributes != null) ? secondAttributes.size() : 0;
-
-        Attribute t_Attribute;
-        String t_strName;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for  (@Nullable Attribute t_Attribute : secondAttributes)
         {
-            t_Attribute = (Attribute) secondAttributes.get(t_iIndex);
-
             if  (t_Attribute != null)
             {
                 if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
@@ -135,20 +127,20 @@ public class TableDecoratorHelper
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param parentTableName the parent table name.
      * @return <tt>true</tt> in such case.
-     * @precondition attribute != null
-     * @precondition metadataManager != null
-     * @precondition parentTableName != null
      */
+    @SuppressWarnings("unused")
     protected boolean isOverridden(
-        final Attribute attribute,
-        final MetadataManager metadataManager,
-        final String parentTableName)
+        @NotNull final Attribute attribute,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String parentTableName)
     {
         boolean result = false;
 
         String t_strName = attribute.getName();
         String t_strTableName = attribute.getTableName();
 
+        // TODO
+        /*
         result =
             (   (metadataManager.isPartOfPrimaryKey(
                      t_strTableName, t_strName))
@@ -158,6 +150,7 @@ public class TableDecoratorHelper
                      t_strTableName,
                      new String[] { t_strName },
                      parentTableName)));
+          */
 
         return result;
     }
@@ -170,29 +163,19 @@ public class TableDecoratorHelper
      * @param parentTableName the parent table name of the second attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
-     * @precondition firstAttributes != null
-     * @preconditoin secondAttributes != null
-     * @precondition primaryKey != null
-     * @precondition metadataManager != null
      */
-    public List removeOverriddenPlusPk(
-        final List firstAttributes,
-        final List secondAttributes,
-        final List primaryKey,
-        final String parentTableName,
-        final MetadataManager metadataManager)
+    @NotNull
+    public List<Attribute> removeOverriddenPlusPk(
+        @NotNull final List<Attribute> firstAttributes,
+        @NotNull final List<Attribute> secondAttributes,
+        @NotNull final List<Attribute> primaryKey,
+        @NotNull final String parentTableName,
+        @NotNull final MetadataManager metadataManager)
     {
-        List result = new ArrayList();
+        List<Attribute> result = new ArrayList<Attribute>();
 
-        int t_iCount = (secondAttributes != null) ? secondAttributes.size() : 0;
-
-        Attribute t_Attribute;
-        String t_strName;
-        
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for (@Nullable Attribute t_Attribute : secondAttributes)
         {
-            t_Attribute = (Attribute) secondAttributes.get(t_iIndex);
-
             if  (t_Attribute != null)
             {
                 if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
@@ -212,31 +195,19 @@ public class TableDecoratorHelper
      * @param attributes the attributes.
      * @param attribute the attribute to check.
      * @return <code>true</code> in such case.
-     * @precondition attributes != null
-     * @precondition attribute != null
      */
-    public boolean contains(final List attributes, final Attribute attribute)
+    public boolean contains(
+        @NotNull final List<Attribute> attributes, @NotNull final Attribute attribute)
     {
         boolean result = false;
 
-        int t_iCount = (attributes != null) ? attributes.size() : 0;
-
-        String t_strName = (attribute != null) ? attribute.getName() : null;
-
-        if  (t_strName != null)
+        for  (@Nullable Attribute t_Attribute : attributes)
         {
-            Attribute t_CurrentAttribute;
-
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+            if (    (t_Attribute != null)
+                 && (attribute.getName().equals(t_Attribute.getName())))
             {
-                t_CurrentAttribute = (Attribute) attributes.get(t_iIndex);
-
-                if  (   (t_CurrentAttribute != null)
-                        && (t_strName.equals(t_CurrentAttribute.getName())))
-                {
-                    result = true;
-                    break;
-                }
+                result = true;
+                break;
             }
         }
 
@@ -250,14 +221,13 @@ public class TableDecoratorHelper
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return such collection.
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
      */
-    public List sumUpParentAndChildAttributes(
-        final String parentTable,
-        final List attributes,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+    @NotNull
+    public List<Attribute> sumUpParentAndChildAttributes(
+        @NotNull final String parentTable,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             sumUpParentAndChildAttributes(
@@ -271,10 +241,11 @@ public class TableDecoratorHelper
      * @param childAttributes the child attributes.
      * @return such collection.
      */
-    protected List sumUpParentAndChildAttributes(
-        final List attributes, final List childAttributes)
+    @NotNull
+    protected List<Attribute> sumUpParentAndChildAttributes(
+        @NotNull final List<Attribute> attributes, @Nullable final List<Attribute> childAttributes)
     {
-        List result = new ArrayList();
+        List<Attribute> result = new ArrayList<Attribute>();
 
         result.addAll(attributes);
 
@@ -292,20 +263,14 @@ public class TableDecoratorHelper
      * Removes the read-only attributes from given list.
      * @param attributes the attributes.
      * @return the list without the read-only attributes.
-     * @precondition attributes != null
      */
-    public List removeReadOnly(final List attributes)
+    @NotNull
+    public List<Attribute> removeReadOnly(@NotNull final List<Attribute> attributes)
     {
-        List result = new ArrayList();
+        List<Attribute> result = new ArrayList<Attribute>();
 
-        int t_iCount = (attributes != null) ? attributes.size() : 0;
-
-        Attribute t_Attribute;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for (@Nullable Attribute t_Attribute : attributes)
         {
-            t_Attribute = (Attribute) attributes.get(t_iIndex);
-
             if  (   (t_Attribute != null)
                  && (!t_Attribute.isReadOnly()))
             {
@@ -320,20 +285,14 @@ public class TableDecoratorHelper
      * Checks whether the table contains read-only attributes.
      * @param attributes the attributes.
      * @return such information.
-     * @precondition attributes != null
      */
-    public List removeNonReadOnlyAttributes(final List attributes)
+    @NotNull
+    public List<Attribute> removeNonReadOnlyAttributes(@NotNull final List<Attribute> attributes)
     {
-        List result = new ArrayList();
+        List<Attribute> result = new ArrayList<Attribute>();
 
-        int t_iCount = (attributes != null) ? attributes.size() : 0;
-
-        Attribute t_Attribute;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for (@Nullable Attribute t_Attribute : attributes)
         {
-            t_Attribute = (Attribute) attributes.get(t_iIndex);
-
             if  (   (t_Attribute != null)
                  && (t_Attribute.isReadOnly()))
             {
@@ -343,5 +302,4 @@ public class TableDecoratorHelper
 
         return result;
     }
-
 }

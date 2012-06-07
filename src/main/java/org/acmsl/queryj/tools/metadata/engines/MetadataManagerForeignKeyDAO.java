@@ -40,7 +40,7 @@ package org.acmsl.queryj.tools.metadata.engines;
  */
 import org.acmsl.queryj.tools.metadata.ForeignKeyDAO;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.RefactoredMetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
@@ -66,13 +66,13 @@ public class MetadataManagerForeignKeyDAO
     /**
      * The {@link MetadataManager} instance.
      */
-    private RefactoredMetadataManager m__MetadataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
      * Creates a new {@link MetadataManagerColumnDAO} instance using given {@link MetadataManager}.
-     * @param manager the {@link MetadataManager} instance.
+     * @param manager the {@link MetadataManagerForeignKeyDAO} instance.
      */
-    public MetadataManagerForeignKeyDAO(@NotNull final RefactoredMetadataManager manager)
+    public MetadataManagerForeignKeyDAO(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -81,7 +81,7 @@ public class MetadataManagerForeignKeyDAO
      * Specifies the {@link MetadataManager} instance.
      * @param manager the {@link MetadataManager manager}.
      */
-    protected final void immutableSetMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected final void immutableSetMetadataManager(@NotNull final MetadataManager manager)
     {
         m__MetadataManager = manager;
     }
@@ -91,7 +91,7 @@ public class MetadataManagerForeignKeyDAO
      * @param manager the {@link MetadataManager manager}.
      */
     @SuppressWarnings("unused")
-    protected void setMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected void setMetadataManager(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -101,7 +101,7 @@ public class MetadataManagerForeignKeyDAO
      * @return such {@link MetadataManager instance}.
      */
     @NotNull
-    protected RefactoredMetadataManager getMetadataManager()
+    protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
     }
@@ -136,5 +136,23 @@ public class MetadataManagerForeignKeyDAO
     {
         // TODO
         return new ArrayList<ForeignKey>(0);
+    }
+
+    /**
+     * Inserts a new {@link ForeignKey} (required when processing explicit schemas).
+     * @param table the table.
+     * @param sourceAttributes the foreign key attributes.
+     * @param targetAttributes the primary key attributes in the referred table.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    public void insert(
+        @NotNull final String table,
+        @NotNull final List<Attribute> sourceAttributes,
+        @NotNull final List<Attribute> targetAttributes,
+        @Nullable final String catalog,
+        @Nullable final String schema)
+    {
+        // TODO
     }
 }

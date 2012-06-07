@@ -66,13 +66,13 @@ public class MetadataManagerColumnDAO
     /**
      * The {@link MetadataManager} instance.
      */
-    private RefactoredMetadataManager m__MetadataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
-     * Creates a new {@link MetadataManagerColumnDAO} instance using given {@link RefactoredMetadataManager}.
-     * @param manager the {@link RefactoredMetadataManager} instance.
+     * Creates a new {@link MetadataManagerColumnDAO} instance using given {@link MetadataManager}.
+     * @param manager the {@link MetadataManager} instance.
      */
-    public MetadataManagerColumnDAO(@NotNull final RefactoredMetadataManager manager)
+    public MetadataManagerColumnDAO(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -81,27 +81,27 @@ public class MetadataManagerColumnDAO
      * Specifies the {@link RefactoredMetadataManager} instance.
      * @param manager the {@link RefactoredMetadataManager manager}.
      */
-    protected final void immutableSetMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected final void immutableSetMetadataManager(@NotNull final MetadataManager manager)
     {
         m__MetadataManager = manager;
     }
 
     /**
-     * Specifies the {@link RefactoredMetadataManager} instance.
-     * @param manager the {@link RefactoredMetadataManager manager}.
+     * Specifies the {@link MetadataManager} instance.
+     * @param manager the {@link MetadataManager manager}.
      */
     @SuppressWarnings("unused")
-    protected void setMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected void setMetadataManager(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
 
     /**
-     * Retrieves the {@link RefactoredMetadataManager} instance.
-     * @return such {@link RefactoredMetadataManager instance}.
+     * Retrieves the {@link MetadataManager} instance.
+     * @return such {@link MetadataManager instance}.
      */
     @NotNull
-    protected RefactoredMetadataManager getMetadataManager()
+    protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
     }
@@ -159,4 +159,52 @@ public class MetadataManagerColumnDAO
         // TODO
         return new ArrayList<Attribute>(0);
     }
+
+    /**
+     * Inserts a new column (needed when processing manually-defined schemas)
+     * @param table the table name.
+     * @param columnName the column name.
+     * @param typeId the column type id.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    @Override
+    public void insert(
+        @NotNull final String table,
+        @NotNull final String columnName,
+        final int typeId,
+        @Nullable final String catalog,
+        @Nullable final String schema)
+    {
+        // TODO
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void update(
+        @NotNull final String table,
+        @NotNull final String columnName,
+        final int typeId,
+        @NotNull final String type,
+        @Nullable final String comment,
+        final int ordinalPosition,
+        final int length,
+        final int precision,
+        @NotNull final String value,
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery,
+        final boolean readOnly,
+        final boolean nullable,
+        final boolean isBoolean,
+        @Nullable final String booleanTrue,
+        @Nullable final String booleanFalse,
+        @Nullable final String booleanNull,
+        @Nullable final String catalog,
+        @Nullable final String schema)
+    {
+        // TODO
+    }
+
 }

@@ -38,7 +38,6 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
@@ -96,7 +95,6 @@ public class NonPrimaryKeyAttributesHandler
             retrieveNonPkAttributes(
                 context.getTableName(),
                 context.getMetadataManager(),
-                context.getDecoratorFactory(),
                 MetadataUtils.getInstance());
     }
 
@@ -104,21 +102,16 @@ public class NonPrimaryKeyAttributesHandler
      * Retrieves the attributes not part of the primary key.
      * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param metadataUtils the {@link MetadataUtils} instance.
      */
     @NotNull
     protected List<Attribute> retrieveNonPkAttributes(
         @NotNull final String tableName,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final MetadataUtils metadataUtils)
     {
         return
             metadataUtils.retrieveNonPrimaryKeyAttributes(
-                tableName,
-                metadataManager,
-                metadataManager.getMetadataTypeManager(),
-                decoratorFactory);
+                tableName, metadataManager);
     }
 }

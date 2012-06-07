@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
@@ -85,4 +86,19 @@ public interface ForeignKeyDAO
     @NotNull
     List<ForeignKey> findReferringForeignKeys(
         @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
+
+    /**
+     * Inserts a new {@link ForeignKey} (required when processing explicit schemas).
+     * @param table the table.
+     * @param sourceAttributes the foreign key attributes.
+     * @param targetAttributes the primary key attributes in the referred table.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    void insert(
+        @NotNull final String table,
+        @NotNull final List<Attribute> sourceAttributes,
+        @NotNull final List<Attribute> targetAttributes,
+        @Nullable final String catalog,
+        @Nullable final String schema);
 }

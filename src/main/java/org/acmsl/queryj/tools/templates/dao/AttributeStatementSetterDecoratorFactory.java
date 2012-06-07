@@ -97,7 +97,7 @@ public class AttributeStatementSetterDecoratorFactory
      */
     @NotNull
     public AttributeDecorator createDecorator(
-        final Attribute attribute, final MetadataManager metadataManager)
+        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
     {
         return
             new AttributeStatementSetterAttributeDecorator(

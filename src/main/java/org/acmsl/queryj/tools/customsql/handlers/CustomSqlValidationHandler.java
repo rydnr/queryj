@@ -80,11 +80,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /*
  * Importing some Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -97,21 +99,10 @@ public class CustomSqlValidationHandler
     extends  AbstractQueryJCommandHandler
 {
     /**
-     * A cached empty class array.
-     */
-    protected static final Class[] EMPTY_CLASS_ARRAY = new Class[0];
-
-    /**
      * A cached class array.
      */
     private static final Class[] CLASS_ARRAY_OF_ONE_STRING =
         new Class[] { String.class };
-
-    /**
-     * A cached empty parameter element array.
-     */
-    protected static final ParameterElement[] EMPTY_PARAMETERELEMENT_ARRAY =
-        new ParameterElement[0];
 
     /**
      * The date format.
@@ -121,29 +112,35 @@ public class CustomSqlValidationHandler
     /**
      * Creates a <code>CustomSqlValidationHandler</code> instance.
      */
-    public CustomSqlValidationHandler() {};
+    public CustomSqlValidationHandler() {}
 
     /**
      * Handles given information.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> in case the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        if  (!retrieveDisableCustomSqlValidation(parameters))
+        boolean result = false;
+
+        MetadataManager t_MetadataManager =
+            retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager == null)
+        {
+            result = true;
+        }
+        else if  (!retrieveDisableCustomSqlValidation(parameters))
         {
             validate(
                 retrieveCustomSqlProvider(parameters),
                 retrieveConnection(parameters),
-                retrieveMetadataManager(parameters));
+                t_MetadataManager);
         }
 
-        return false;
+        return result;
     }
 
     /**
@@ -209,11 +206,6 @@ public class CustomSqlValidationHandler
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
      * @throws QueryJBuildException if the sql is not valid.
-     * @precondition sql != null
-     * @precondition customSqlProvider != null
-     * @precondition connection != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     protected void validate(
         @NotNull final Sql sql,
@@ -428,15 +420,15 @@ public class CustomSqlValidationHandler
 
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        @Nullable ParameterElement t_Parameter = null;
+        @Nullable ParameterElement t_Parameter;
 
-        @Nullable Method t_Method = null;
+        @Nullable Method t_Method;
 
-        @Nullable Collection<Class> t_cSetterParams = null;
+        @Nullable Collection<Class> t_cSetterParams;
 
-        @Nullable Class<?> t_Type = null;
+        @Nullable Class<?> t_Type;
 
-        @Nullable String t_strType = null;
+        @Nullable String t_strType;
 
         int t_iLength = (t_aParameters != null) ? t_aParameters.length : 0;
         
@@ -485,7 +477,7 @@ public class CustomSqlValidationHandler
                         retrieveMethod(
                             statement.getClass(),
                             getSetterMethod(t_strType, metadataTypeManager),
-                            t_cSetterParams.toArray(EMPTY_CLASS_ARRAY));
+                            t_cSetterParams.toArray(new Class[t_cSetterParams.size()]));
                 }
                 catch  (@NotNull final NoSuchMethodException noSuchMethodException)
                 {
@@ -498,7 +490,7 @@ public class CustomSqlValidationHandler
 
                 try
                 {
-                    @Nullable Method t_ParameterMethod = null;
+                    @Nullable Method t_ParameterMethod;
 
                     if  (   (   ("Date".equals(t_strType))
                              || ("Timestamp".equals(t_strType)))
@@ -518,10 +510,7 @@ public class CustomSqlValidationHandler
                             t_ParameterValue =
                                 t_ParameterMethod.invoke(
                                     conversionUtils,
-                                    new Object[]
-                                    {
-                                        t_Parameter.getValidationValue()
-                                    });
+                                    t_Parameter.getValidationValue());
 
                             exceptionToThrow = null;
                         }
@@ -584,10 +573,7 @@ public class CustomSqlValidationHandler
                             {
                                 t_ParameterValue =
                                     t_Constructor.newInstance(
-                                        new Object[]
-                                        {
-                                            t_Parameter.getValidationValue()
-                                        });
+                                        t_Parameter.getValidationValue());
                             }
                         }
                         catch  (@NotNull final NoSuchMethodException noSuchMethod)
@@ -648,12 +634,9 @@ public class CustomSqlValidationHandler
                     {
                         t_Method.invoke(
                             statement,
-                            new Object[]
-                            {
-                                Integer.valueOf(t_iParameterIndex + 1),
-                                t_ParameterValue
-                            });
-                        
+                            t_iParameterIndex + 1,
+                            t_ParameterValue);
+
                     }
                     catch  (@NotNull final IllegalAccessException illegalAccessException)
                     {
@@ -733,7 +716,7 @@ public class CustomSqlValidationHandler
             }
         }
 
-        return t_cResult.toArray(EMPTY_PARAMETERELEMENT_ARRAY);
+        return t_cResult.toArray(new ParameterElement[t_cResult.size()]);
     }
 
     /**
@@ -840,8 +823,7 @@ public class CustomSqlValidationHandler
                 metadataManager,
                 metadataTypeManager);
         
-        if  (   (t_cProperties == null)
-             || (t_cProperties.size() == 0))
+        if  (t_cProperties.size() == 0)
         {
             throw
                 new QueryJBuildException(
@@ -894,7 +876,7 @@ public class CustomSqlValidationHandler
                     }
                 }
             }
-            else if  (t_cProperties != null)
+            else
             {
                 ResultSetMetaData t_Metadata = resultSet.getMetaData();
 
@@ -940,7 +922,6 @@ public class CustomSqlValidationHandler
     
     /**
      * Retrieves the properties declared for given result.
-     * @param resultSet the result set to validate.
      * @param sql the sql.
      * @param sqlResult the custom sql result.
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
@@ -948,15 +929,11 @@ public class CustomSqlValidationHandler
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such properties.
      * @throws QueryJBuildException if the properties cannot be retrieved..
-     * @precondition sql != null
-     * @precondition sqlResult != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected Collection<Property> retrieveProperties(
-        final Sql sql,
+        @NotNull final Sql sql,
         @Nullable final Result sqlResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -968,7 +945,8 @@ public class CustomSqlValidationHandler
         @Nullable Collection<PropertyRefElement> t_cPropertyRefs =
             (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
 
-        if  (t_cPropertyRefs == null)
+        if  (   (t_cPropertyRefs == null)
+             && (sqlResult != null))
         {
             result =
                 retrieveImplicitProperties(
@@ -977,11 +955,10 @@ public class CustomSqlValidationHandler
                     metadataManager,
                     metadataTypeManager);
         }
-        else
+        else if (t_cPropertyRefs != null)
         {
             Iterator<PropertyRefElement> t_Iterator = t_cPropertyRefs.iterator();
 
-            Object t_Item;
             @Nullable Property t_Property;
 
             if  (t_Iterator != null)
@@ -1068,42 +1045,35 @@ public class CustomSqlValidationHandler
 
         if  (t_strTable != null)
         {
-            String[] t_astrColumnNames =
-                metadataManager.getColumnNames(t_strTable);
+            @Nullable List<Attribute> t_lColumns =
+                metadataManager.getColumnDAO().findAllColumns(t_strTable, null, null);
 
-            int t_iCount =
-                (t_astrColumnNames != null)
-                ? t_astrColumnNames.length : 0;
+            int t_iCount = t_lColumns.size();
 
             String t_strId;
-            String t_strColumnName;
-            String t_strName;
+            Attribute t_Column;
             @Nullable String t_strType;
-            boolean t_bNullable;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {
-                t_strColumnName = t_astrColumnNames[t_iIndex];
+                t_Column = t_lColumns.get(t_iIndex);
 
-                t_strId = t_strTable + "." + t_strColumnName + ".property";
+                if (t_Column != null)
+                {
+                    t_strId = t_strTable + "." + t_Column.getName() + ".property";
                 
-                t_strName = t_strColumnName;
-                t_strType =
-                    metadataTypeManager.getNativeType(
-                        metadataManager.getColumnType(
-                            t_strTable, t_strColumnName));
-                
-                t_bNullable =
-                    metadataManager.allowsNull(t_strTable, t_strColumnName);
+                    t_strType =
+                        metadataTypeManager.getNativeType(t_Column.getTypeId());
 
-                result.add(
-                    new PropertyElement(
-                        t_strId,
-                        t_strColumnName,
-                        t_iIndex + 1,
-                        t_strName,
-                        t_strType,
-                        t_bNullable));
+                    result.add(
+                        new PropertyElement(
+                            t_strId,
+                            t_Column.getName(),
+                            t_iIndex + 1,
+                            t_Column.getName(),
+                            t_strType,
+                            t_Column.isNullable()));
+                }
             }
         }
         else
@@ -1152,8 +1122,7 @@ public class CustomSqlValidationHandler
 
             if  (property.getIndex() > 0)
             {
-                t_aParameters[0] =
-                    Integer.valueOf(property.getIndex());
+                t_aParameters[0] = property.getIndex();
             }
             else
             {
@@ -1379,9 +1348,8 @@ public class CustomSqlValidationHandler
      * @param propertyIndex the property index.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return <code>true</code> in such case.
-     * @precondition property != null
-     * @precondition metadataTypeManager != null
      */
+    @SuppressWarnings("unused")
     protected boolean matches(
         @Nullable final String name,
         final int type,
@@ -1425,14 +1393,14 @@ public class CustomSqlValidationHandler
     {
         boolean result = false;
 
-        @NotNull Boolean flag =
+        @Nullable Boolean flag =
             (Boolean)
                 settings.get(
                     ParameterValidationHandler.DISABLE_CUSTOM_SQL_VALIDATION);
 
         if  (flag != null)
         {
-            result = flag.booleanValue();
+            result = flag;
         }
 
         return result;

@@ -37,6 +37,9 @@
  */
 package org.acmsl.queryj.tools.metadata.vo;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.Serializable;
 
 /**
@@ -52,6 +55,7 @@ public interface Attribute
      * Retrieves the attribute name.
      * @return such name.
      */
+    @NotNull
     String getName();
 
     /**
@@ -64,25 +68,42 @@ public interface Attribute
      * Retrieves the field type.
      * @return such information.
      */
+    @NotNull
     String getType();
 
     /**
      * Retrieves the table name.
      * @return such information.
      */
+    @NotNull
     String getTableName();
 
     /**
      * Retrieves the column comment.
      * @return such information.
      */
+    @Nullable
     String getComment();
 
     /**
-     * Retrieves whether it's managed externally.
+     * Retrieves whether the value is managed externally (via keyword or retrieval query).
      * @return such information.
      */
-    boolean getManagedExternally();
+    boolean isManagedExternally();
+
+    /**
+     * Retrieves the keyword used to retrieve the value, if any.
+     * @return such information.
+     */
+    @Nullable
+    String getKeyword();
+
+    /**
+     * Retrieves the query used to retrieve the value, if any.
+     * @return such information.
+     */
+    @Nullable
+    String getRetrievalQuery();
 
     /**
      * Retrieves whether it allows null values or not.
@@ -96,6 +117,7 @@ public interface Attribute
      * contains data.
      * @return such information.
      */
+    @Nullable
     String getValue();
 
     /**
@@ -114,18 +136,21 @@ public interface Attribute
      * Retrieves the symbol for <code>true</code> values.
      * @return such information.
      */
+    @Nullable
     String getBooleanTrue();
 
     /**
      * Retrieves the symbol for <code>false</code> values.
      * @return such information.
      */
+    @Nullable
     String getBooleanFalse();
 
     /**
      * Retrieves the symbol for <code>null</code> values.
      * @return such information.
      */
+    @Nullable
     String getBooleanNull();
 
     /**

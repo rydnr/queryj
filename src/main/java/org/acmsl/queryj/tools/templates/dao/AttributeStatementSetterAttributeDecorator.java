@@ -75,6 +75,7 @@ public class AttributeStatementSetterAttributeDecorator
      * and the column allows nulls.
      * @return such information.
      */
+    @NotNull
     public String getType()
     {
         String result = getCachedType();

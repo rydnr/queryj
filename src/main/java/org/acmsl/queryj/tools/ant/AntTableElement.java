@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -35,22 +34,22 @@
 package org.acmsl.queryj.tools.ant;
 
 /*
- * Importing project-specific classes.
- */
-import org.acmsl.queryj.tools.ant.AntFieldElement;
-
-/*
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Contains all information inside a "table" XML element in Ant scripts,
@@ -70,7 +69,7 @@ public class AntTableElement
      * The field collection.
      * @parameter property="fields"
      */
-    private Collection m__cFields;
+    private List<AntFieldElement> m__lFields;
 
     /**
      * Specifies the table name.
@@ -103,16 +102,16 @@ public class AntTableElement
      * Specifies the field collection.
      * @param fields the collection
      */
-    protected final void immutableSetFields(final Collection fields)
+    protected final void immutableSetFields(final List<AntFieldElement> fields)
     {
-        m__cFields = fields;
+        m__lFields = fields;
     }
 
     /**
      * Specifies the field collection.
      * @param fields the collection
      */
-    public void setFields(final Collection fields)
+    public void setFields(final List<AntFieldElement> fields)
     {
         immutableSetFields(fields);
     }
@@ -121,9 +120,9 @@ public class AntTableElement
      * Retrieves the field collection.
      * @return such collection.
      */
-    public Collection getFields()
+    public List<AntFieldElement> getFields()
     {
-        return m__cFields;
+        return m__lFields;
     }
 
     /**
@@ -131,7 +130,7 @@ public class AntTableElement
      * @param name the attribute name.
      * @param value the attribute value.
      */
-    public void setDynamicAttribute(final String name, final String value)
+    public void setDynamicAttribute(@NotNull final String name, @NotNull final String value)
     {
         if  ("name".equals(name))
         {
@@ -150,7 +149,7 @@ public class AntTableElement
      * @throws BuildException if the element is not supported.
      */
     @Nullable
-    public Object createDynamicElement(final String name)
+    public Object createDynamicElement(@NotNull final String name)
     {
         @Nullable AntFieldElement result = null;
 
@@ -158,15 +157,15 @@ public class AntTableElement
         {
             result = new AntFieldElement();
 
-            Collection t_cFields = getFields();
+            List<AntFieldElement> t_lFields = getFields();
 
-            if  (t_cFields == null)
+            if  (t_lFields == null)
             {
-                t_cFields = new ArrayList();
-                setFields(t_cFields);
+                t_lFields = new ArrayList<AntFieldElement>();
+                setFields(t_lFields);
             }
 
-            t_cFields.add(result);
+            t_lFields.add(result);
         }
         else 
         {

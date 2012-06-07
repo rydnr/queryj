@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 
 /*
  * Importing some ACM-SL classes.
@@ -57,6 +58,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -108,7 +110,7 @@ public class MySQL4xMetaDataRetrievalHandler
     
     /**
      * Builds a database metadata manager.
-     * @param tableNames the table names.
+     * @param tables the table names.
      * @param procedureNames the procedure names.
      * @param disableTableExtraction if the table metadata should not
      * be extracted.
@@ -130,7 +132,7 @@ public class MySQL4xMetaDataRetrievalHandler
     @Nullable
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
-        @NotNull String[] tableNames,
+        @NotNull List<Table> tables,
         @NotNull String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
@@ -147,11 +149,16 @@ public class MySQL4xMetaDataRetrievalHandler
     {
         MetadataManager result;
 
+        result = null;
+
+        /*
         try
         {
+
+            // TODO
             result =
                 new MySQL4xMetadataManager(
-                    tableNames,
+                    tables,
                     procedureNames,
                     disableTableExtraction,
                     lazyTableExtraction,
@@ -164,8 +171,7 @@ public class MySQL4xMetaDataRetrievalHandler
                     engineName,
                     engineVersion,
                     quote);
-
-            result.retrieveMetadata();
+            result.eagerlyFetchMetadata();
         }
         catch  (@NotNull final SQLException sqlException)
         {
@@ -180,6 +186,7 @@ public class MySQL4xMetaDataRetrievalHandler
                 new QueryJBuildException(
                     "Cannot process MySQL metadata", queryjException);
         }
+ */
 
         return result;
     }

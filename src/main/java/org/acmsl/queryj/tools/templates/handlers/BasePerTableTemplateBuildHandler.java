@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.vo.Row;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplate;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
@@ -127,7 +128,7 @@ public abstract class BasePerTableTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
-            metadataManager.getTableNames());
+            metadataManager.getTableDAO().findAllTables());
     }
 
     /**
@@ -138,6 +139,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Builds the template.
+     *
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom sql provider.
@@ -149,7 +151,7 @@ public abstract class BasePerTableTemplateBuildHandler
      * interfaces.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param tableNames the table names.
+     * @param tables the tables.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplate(
@@ -163,29 +165,20 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @Nullable final String[] tableNames)
+        @NotNull final List<Table> tables)
       throws  QueryJBuildException
     {
-        int t_iLength = (tableNames != null) ? tableNames.length : 0;
-
         List<T> t_lTemplates = new ArrayList<T>();
 
         @Nullable T t_Template;
 
-        String t_strTableName = null;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+        for  (Table t_Table : tables)
         {
-            if (tableNames != null)
+            if (t_Table != null)
             {
-                t_strTableName = tableNames[t_iIndex];
-            }
-
-            if (t_strTableName != null)
-            {
-                if (metadataManager.isGenerationAllowedForTable(t_strTableName))
+                if (metadataManager.isGenerationAllowedForTable(t_Table.getName()))
                 {
-                    List<Row> t_lStaticContent = retrieveCachedStaticContent(parameters, t_strTableName);
+                    List<Row> t_lStaticContent = retrieveCachedStaticContent(parameters, t_Table.getName());
 
                     if (t_lStaticContent == null)
                     {
@@ -193,7 +186,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         {
                             t_lStaticContent =
                                 retrieveStaticContent(
-                                    t_strTableName,
+                                    t_Table.getName(),
                                     metadataManager,
                                     CachingDecoratorFactory.getInstance(),
                                     DAOTemplateUtils.getInstance());
@@ -206,7 +199,7 @@ public abstract class BasePerTableTemplateBuildHandler
                             if (t_Log != null)
                             {
                                 t_Log.error(
-                                    "Cannot retrieve static contents for " + t_strTableName,
+                                    "Cannot retrieve static contents for " + t_Table.getName(),
                                     cannotRetrieveTableContents);
                             }
                         }
@@ -214,7 +207,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         {
                             t_lStaticContent = new ArrayList<Row>(0);
                         }
-                        storeCachedStaticContent(t_lStaticContent, parameters, t_strTableName);
+                        storeCachedStaticContent(t_lStaticContent, parameters, t_Table.getName());
                     }
                     t_Template =
                         createTemplate(
@@ -222,14 +215,14 @@ public abstract class BasePerTableTemplateBuildHandler
                             metadataManager,
                             customSqlProvider,
                             retrievePackage(
-                                t_strTableName, metadataManager.getEngineName(), parameters),
+                                t_Table.getName(), metadataManager.getEngineName(), parameters),
                             projectPackage,
                             repository,
                             header,
                             implementMarkerInterfaces,
                             jmx,
                             jndiLocation,
-                            t_strTableName,
+                            t_Table.getName(),
                             t_lStaticContent,
                             parameters);
 

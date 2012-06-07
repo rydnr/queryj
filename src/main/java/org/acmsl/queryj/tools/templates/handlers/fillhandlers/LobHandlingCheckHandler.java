@@ -40,12 +40,14 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Resolves "lob_handling_required" placeholders.
@@ -116,15 +118,15 @@ public class LobHandlingCheckHandler
     {
         boolean result = false;
 
-        for (String t_strColumnName : metadataManager.getColumnNames(tableName))
+        for (@Nullable Attribute t_Column : metadataManager.getColumnDAO().findColumns(tableName, null, null))
         {
-            if  (metadataTypeManager.isClob(
-                     metadataManager.getColumnType(
-                         tableName,
-                         t_strColumnName)))
+            if (t_Column != null)
             {
-                result = true;
-                break;
+                if  (metadataTypeManager.isClob(t_Column.getTypeId()))
+                {
+                    result = true;
+                    break;
+                }
             }
         }
 

@@ -89,4 +89,17 @@ public interface PrimaryKeyDAO
         @NotNull final String column,
         @Nullable final String catalog,
         @Nullable final String schema);
+
+    /**
+     * Inserts a new primary key (needed when processing manual schemas).
+     * @param table the table name.
+     * @param primaryKey the primary key.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     */
+    void insert(
+        @NotNull final String table,
+        @NotNull final List<Attribute> primaryKey,
+        @Nullable final String catalog,
+        @Nullable final String schema);
 }

@@ -45,11 +45,15 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,10 +83,20 @@ public class CustomSqlProvisioningHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        return
-            handle(
-                retrieveCustomSqlProvider(parameters),
-                retrieveMetadataManager(parameters));
+        boolean result = true;
+
+        MetadataManager t_MetadataManager =
+            retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager != null)
+        {
+            result =
+                handle(
+                    retrieveCustomSqlProvider(parameters),
+                    t_MetadataManager);
+        }
+
+        return result;
     }
 
     /**
@@ -124,10 +138,9 @@ public class CustomSqlProvisioningHandler
     {
         boolean result = false;
 
-        String[] t_astrTableNames = metadataManager.getTableNames();
+        List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-        int t_iTableCount =
-            (t_astrTableNames != null) ? t_astrTableNames.length : 0;
+        int t_iTableCount = t_lTables.size();
 
         String t_strTableName;
         String t_strResultName;
@@ -136,45 +149,22 @@ public class CustomSqlProvisioningHandler
         String t_strPropertyName;
         int t_iAttributeCount;
 
-        for  (int t_iTableIndex = 0;
-                  t_iTableIndex < t_iTableCount;
-                  t_iTableIndex++)
+        for  (@Nullable Table t_Table : t_lTables)
         {
-            if (t_astrTableNames != null)
+            if (t_Table != null)
             {
-                t_strTableName = t_astrTableNames[t_iTableIndex];
-
-                t_astrAttributeNames =
-                    metadataManager.getColumnNames(t_strTableName);
-
-                t_iAttributeCount =
-                    (t_astrAttributeNames != null)
-                    ?  t_astrAttributeNames.length
-                    :  0;
-
-                for  (int t_iAttributeIndex = 0;
-                          t_iAttributeIndex < t_iAttributeCount;
-                          t_iAttributeIndex++)
+                for (@Nullable Attribute t_Attribute : t_Table.getAttributes())
                 {
-                    if (t_astrAttributeNames != null)
+                    if (t_Attribute != null)
                     {
-                        t_strAttributeName =
-                            t_astrAttributeNames[t_iAttributeIndex];
-
                         t_strPropertyName =
-                            buildPropertyName(t_strAttributeName);
+                            buildPropertyName(t_Attribute.getName());
 
                         customSqlProvider.addProperty(
                             t_strPropertyName,
-                            t_strTableName,
+                            t_Table.getName(),
                             metadataTypeManager.getFieldType(
-                                metadataManager.getColumnType(
-                                    t_strTableName,
-                                    t_strAttributeName),
-                                metadataManager.allowsNull(
-                                    t_strTableName,
-                                    t_strAttributeName),
-                                metadataManager.isBoolean(t_strTableName, t_strAttributeName)));
+                                t_Attribute.getTypeId()));
                     }
                 }
             }

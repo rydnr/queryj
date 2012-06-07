@@ -38,21 +38,26 @@ package org.acmsl.queryj.tools.handlers;
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.QueryJBuildException;
+
+/*
+ * Importing some Apache Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing jetbrains annotations.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -122,14 +127,13 @@ public class DatabaseMetaDataCacheReadingHandler
         // We only need the table names, if they're not extracted already.
         if (metadataManager != null)
         {
-            String[] t_astrTableNames = metadataManager.getTableNames();
+            List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-            if (   (t_astrTableNames == null)
-                || (t_astrTableNames.length == 0))
+            if (   (t_lTables.size() == 0))
             {
                 try
                 {
-                    metadataManager.retrieveMetadata();
+                    metadataManager.eagerlyFetchMetadata();
                 }
                 catch (@NotNull final SQLException cannotExtractTableMetadata)
                 {
@@ -153,50 +157,5 @@ public class DatabaseMetaDataCacheReadingHandler
         }
 
         return false;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    protected MetadataManager buildMetadataManager(
-        final boolean disableTableExtraction,
-        final boolean lazyTableExtraction,
-        final boolean disableProcedureExtraction,
-        final boolean lazyProcedureExtraction,
-        @NotNull final Map parameters)
-        throws  QueryJBuildException
-    {
-        @Nullable MetadataManager result = null;
-
-        @NotNull File t_OutputDir = retrieveProjectOutputDir(parameters);
-
-        try 
-        {
-            if (isCacheAvailable(t_OutputDir))
-            {
-                // TODO: perform checksum validation
-                result = retrieveCache(t_OutputDir);
-
-                if (result != null)
-                {
-                    storeMetadataManager(result, parameters);
-                    storeTableNames(result.getTableNames(), parameters);
-                    result.setMetaData(retrieveDatabaseMetaData(parameters));
-                    storeAlreadyDoneFlag(parameters);
-
-                }
-            }
-        }
-        catch  (@NotNull final RuntimeException exception)
-        {
-            throw exception;
-        }
-        catch  (@NotNull final Exception exception)
-        {
-            throw new QueryJBuildException("cannot.read.metadata.from.cache", exception);
-        }
-
-        return result;
     }
 }

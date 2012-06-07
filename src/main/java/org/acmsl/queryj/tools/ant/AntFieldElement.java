@@ -72,7 +72,7 @@ public class AntFieldElement
      */
     public AntFieldElement()
     {
-        super(null, -1, null, null, null, 1, -1, -1, false, false, null, false, false, null, null, null, false);
+        super(null, -1, null, null, null, 1, -1, -1, null, null, false, null, false, false, null, null, null, false);
     }
 
     /**

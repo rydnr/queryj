@@ -55,6 +55,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -106,7 +107,8 @@ public abstract class AbstractAttributeDecorator
             attribute.getOrdinalPosition(),
             attribute.getLength(),
             attribute.getPrecision(),
-            attribute.getManagedExternally(),
+            attribute.getKeyword(),
+            attribute.getRetrievalQuery(),
             attribute.isNullable(),
             attribute.getValue(),
             attribute.isReadOnly(),
@@ -127,7 +129,8 @@ public abstract class AbstractAttributeDecorator
      * @param type the type.
      * @param tableName the table name.
      * @param comment the attribute comment.
-     * @param managedExternally whether the attribute is managed externally.
+     * @param keyword the keyword used to retrieve the value, if any.
+     * @param retrievalQuery the query used to retrieve the value, if any.
      * @param allowsNull whether the attribute allows null values or not.
      * @param value the optional attribute value.
      * @param readOnly whether the attribute is marked as read-only.
@@ -140,25 +143,26 @@ public abstract class AbstractAttributeDecorator
      * @param metadataTypeManager the metadata type manager.
      */
     public AbstractAttributeDecorator(
-        final String name,
+        @NotNull final String name,
         final int typeId,
-        final String type,
-        final String tableName,
-        final String comment,
+        @NotNull final String type,
+        @NotNull final String tableName,
+        @Nullable final String comment,
         final int ordinalPosition,
         final int length,
         final int precision,
-        final boolean managedExternally,
+        @Nullable final String keyword,
+        @Nullable final String retrievalQuery,
         final boolean allowsNull,
-        final String value,
+        @Nullable final String value,
         final boolean readOnly,
         final boolean isBool,
-        final String booleanTrue,
-        final String booleanFalse,
-        final String booleanNull,
-        final Attribute attribute,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @Nullable final String booleanTrue,
+        @Nullable final String booleanFalse,
+        @Nullable final String booleanNull,
+        @NotNull final Attribute attribute,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(
             name,
@@ -169,7 +173,8 @@ public abstract class AbstractAttributeDecorator
             ordinalPosition,
             length,
             precision,
-            managedExternally,
+            keyword,
+            retrievalQuery,
             allowsNull,
             value,
             readOnly,
@@ -618,7 +623,7 @@ public abstract class AbstractAttributeDecorator
      */
     public String getQuery()
     {
-        return getQuery(getManagedExternally());
+        return getQuery(isManagedExternally());
     }
 
     /**
@@ -645,18 +650,18 @@ public abstract class AbstractAttributeDecorator
      * @param tableName the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition name != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
      */
+    @SuppressWarnings("unused")
     protected String getQuery(
         final String name,
         final String tableName,
         final MetadataManager metadataManager)
     {
-        return
-            metadataManager.getExternallyManagedFieldRetrievalQuery(
-                tableName, name);
+        // TODO
+        //metadataManager.getExternallyManagedFieldRetrievalQuery(
+        //    tableName, name);
+        return null;
+
     }
 
     /**

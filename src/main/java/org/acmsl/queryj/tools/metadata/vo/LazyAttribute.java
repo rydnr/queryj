@@ -43,7 +43,12 @@ package org.acmsl.queryj.tools.metadata.vo;
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <code>Attribute</code> implementation which retrieves its information
@@ -259,7 +264,16 @@ public class LazyAttribute
         final String name,
         final MetadataManager metadataManager)
     {
-        return metadataManager.getColumnType(tableName, name);
+        int result = -1;
+
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, name, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.getTypeId();
+        }
+
+        return result;
     }
 
     /**
@@ -293,6 +307,7 @@ public class LazyAttribute
      * Retrieves the native type.
      * @return such information.
      */
+    @NotNull
     public String getType()
     {
         String result = getCachedType();
@@ -377,16 +392,23 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition metadataManager != null
      */
+    @Nullable
     protected String retrieveComment(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.getColumnComment(tableName, columnName);
+        @Nullable String result = null;
+
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.getComment();
+        }
+
+        return result;
     }
 
     /**
@@ -446,18 +468,23 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition metadataManager != null
      */
     protected boolean retrieveManagedExternally(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.isManagedExternally(tableName, columnName);
-    }
+        boolean result = false;
 
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.isManagedExternally();
+        }
+
+        return result;
+    }
 
     /**
      * Caches whether the attribute allows null or not.
@@ -490,6 +517,7 @@ public class LazyAttribute
      * Retrieves whether the attribute allows null or not.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public boolean getAllowsNull()
     {
         Boolean result = getCachedAllowsNull();
@@ -516,18 +544,23 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition metadataManager != null
      */
     protected boolean retrieveAllowsNull(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.allowsNull(tableName, columnName);
-    }
+        boolean result = false;
 
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.isNullable();
+        }
+
+        return result;
+    }
 
     /**
      * Caches whether the attribute is read-only or not.
@@ -587,16 +620,22 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != only
-     * @precondition columnName != only
-     * @precondition metadataManager != only
      */
     protected boolean retrieveReadOnly(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.isReadOnly(tableName, columnName);
+        boolean result = false;
+
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.isReadOnly();
+        }
+
+        return result;
     }
 
 
@@ -658,16 +697,22 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != 
-     * @precondition columnName != 
-     * @precondition metadataManager != 
      */
     protected boolean retrieveBoolean(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.isBoolean(tableName, columnName);
+        boolean result = false;
+
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.isBoolean();
+        }
+
+        return result;
     }
 
     /**
@@ -734,7 +779,47 @@ public class LazyAttribute
         final String columnName,
         final MetadataManager metadataManager)
     {
-        return metadataManager.getBooleanTrue(tableName, columnName);
+        @Nullable String result = null;
+
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.getBooleanTrue();
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the attribute.
+     * @param tableName the table name.
+     * @param columnName the column name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     */
+    @Nullable
+    protected Attribute retrieveAttribute(
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @Nullable Attribute result = null;
+
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+
+        if (t_Table != null)
+        {
+            for (Attribute t_Attribute : t_Table.getAttributes())
+            {
+                if (   (t_Attribute != null)
+                    && (t_Attribute.getName().equalsIgnoreCase(columnName)))
+                {
+                    result = t_Attribute;
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -792,18 +877,24 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition metadataManager != null
      */
+    @Nullable
     protected String retrieveBooleanFalse(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.getBooleanFalse(tableName, columnName);
-    }
+        @Nullable String result = null;
 
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.getBooleanFalse();
+        }
+
+        return result;
+    }
 
     /**
      * Specifies the cached null symbol for boolean values.
@@ -860,16 +951,23 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition metadataManager != null
      */
+    @Nullable
     protected String retrieveBooleanNull(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.getBooleanNull(tableName, columnName);
+        @Nullable String result = null;
+
+        @Nullable final Attribute t_Attribute = retrieveAttribute(tableName, columnName, metadataManager);
+
+        if (t_Attribute != null)
+        {
+            result = t_Attribute.getBooleanNull();
+        }
+
+        return result;
     }
 
     /**

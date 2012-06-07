@@ -40,6 +40,7 @@ import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
  * Importing some ACM-SL classes.
@@ -71,7 +72,7 @@ public class ExternallyManagedFieldsRetrievalHandler
      * Creates an <code>ExternallyManagedFieldsRetrievalHandler</code>
      * instance.
      */
-    public ExternallyManagedFieldsRetrievalHandler() {};
+    public ExternallyManagedFieldsRetrievalHandler() {}
 
     /**
      * Handles given parameters.
@@ -104,14 +105,15 @@ public class ExternallyManagedFieldsRetrievalHandler
      * @precondition metadataManager != null
      */
     protected boolean handle(
-        @NotNull final MetadataManager metadataManager,
+        @Nullable final MetadataManager metadataManager,
         @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
         @NotNull final StringValidator stringValidator)
       throws  QueryJBuildException
     {
         boolean result = false;
 
-        if  (externallyManagedFields != null)
+        if  (   (metadataManager != null)
+             && (externallyManagedFields != null))
         {
             Collection t_cFieldElements =
                 externallyManagedFields.getFields();
@@ -146,11 +148,37 @@ public class ExternallyManagedFieldsRetrievalHandler
                         }
                         else 
                         {
-                            metadataManager.addExternallyManagedField(
-                                t_Field.getTableName(),
-                                t_Field.getName(),
-                                t_Field.getKeyword(),
-                                t_Field.getRetrievalQuery());
+                            @Nullable Attribute t_Attribute =
+                                metadataManager.getColumnDAO().findColumn(
+                                    t_Field.getTableName(),
+                                    t_Field.getName(),
+                                    null,
+                                    null);
+
+                            if (t_Attribute != null)
+                            {
+                                metadataManager.getColumnDAO().update(
+                                    t_Field.getTableName(),
+                                    t_Field.getName(),
+                                    t_Attribute.getTypeId(),
+                                    t_Attribute.getType(),
+                                    t_Attribute.getComment(),
+                                    t_Attribute.getOrdinalPosition(),
+                                    t_Attribute.getLength(),
+                                    t_Attribute.getPrecision(),
+                                    t_Attribute.getValue(),
+                                    t_Field.getKeyword(),
+                                    t_Field.getRetrievalQuery(),
+                                    t_Attribute.isReadOnly(),
+                                    t_Attribute.isNullable(),
+                                    t_Attribute.isBoolean(),
+                                    t_Attribute.getBooleanTrue(),
+                                    t_Attribute.getBooleanFalse(),
+                                    t_Attribute.getBooleanNull(),
+                                    null,
+                                    null);
+
+                            }
                         }
                     }
                 }

@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.dao.AutoCommitDisabledMockConnection;
 import org.acmsl.queryj.tools.customsql.IdentifiableElement;
 import org.acmsl.queryj.tools.customsql.ConnectionFlagsElement;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
@@ -51,7 +52,10 @@ import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataUtils;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Row;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 
 /*
@@ -907,22 +911,23 @@ public class DAOTemplateUtils
     {
         List<Row> result = null;
 
-        @Nullable String t_strStaticAttribute =
-            metaLanguageUtils.retrieveStaticAttribute(metadataManager.getTableComment(tableName));
+        Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
 
-        if (t_strStaticAttribute != null)
+        if (t_Table != null)
         {
-            result =
-                queryContents(
-                    tableName,
-                    t_strStaticAttribute,
-                    metadataUtils.retrieveAttributes(
+            @Nullable String t_strStaticAttribute =
+                metaLanguageUtils.retrieveStaticAttribute(t_Table.getComment());
+
+            if (t_strStaticAttribute != null)
+            {
+                result =
+                    queryContents(
                         tableName,
+                        t_strStaticAttribute,
+                        metadataUtils.retrieveAttributes(tableName, metadataManager),
                         metadataManager,
-                        metadataManager.getMetadataTypeManager(),
-                        decoratorFactory),
-                    metadataManager,
-                    decoratorFactory);
+                        decoratorFactory);
+            }
         }
 
         if (result == null)
@@ -1096,17 +1101,45 @@ public class DAOTemplateUtils
                     reorderAttributes(
                         attributes, t_astrColumnNames, t_astrColumnValues);
 
+                    List<Attribute> t_lAttributes = new ArrayList<Attribute>(t_astrColumnValues.length);
+
+                    Attribute t_NewAttribute;
+
+                    for (int t_iIndex = 0; t_iIndex < t_astrColumnValues.length; t_iIndex++)
+                    {
+                        Attribute t_Attribute = attributes.get(t_iIndex);
+
+                        if (t_Attribute != null)
+                        {
+                            t_NewAttribute =
+                                new AttributeValueObject(
+                                    t_Attribute.getName(),
+                                    t_Attribute.getTypeId(),
+                                    t_Attribute.getType(),
+                                    t_Attribute.getTableName(),
+                                    t_Attribute.getComment(),
+                                    t_Attribute.getOrdinalPosition(),
+                                    t_Attribute.getLength(),
+                                    t_Attribute.getPrecision(),
+                                    t_Attribute.getKeyword(),
+                                    t_Attribute.getRetrievalQuery(),
+                                    t_Attribute.isNullable(),
+                                    t_astrColumnValues[t_iIndex],
+                                    t_Attribute.isReadOnly(),
+                                    t_Attribute.isBoolean(),
+                                    t_Attribute.getBooleanTrue(),
+                                    t_Attribute.getBooleanFalse(),
+                                    t_Attribute.getBooleanNull());
+
+                            t_lAttributes.add(t_NewAttribute);
+                        }
+                    }
+
                     result.add(
                         buildRow(
                             t_strRowName,
                             tableName,
-                            metadataUtils.buildAttributes(
-                                t_astrColumnNames,
-                                t_astrColumnValues,
-                                tableName,
-                                metadataManager,
-                                metadataTypeManager,
-                                decoratorFactory),
+                            t_lAttributes,
                             metadataTypeManager));
                 }
             }

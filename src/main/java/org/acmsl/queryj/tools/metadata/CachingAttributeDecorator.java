@@ -1064,6 +1064,7 @@ public class CachingAttributeDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @NotNull
     public String getType()
     {
         String result = getCachedType();

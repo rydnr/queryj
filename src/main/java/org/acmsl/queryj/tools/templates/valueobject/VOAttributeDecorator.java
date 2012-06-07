@@ -41,6 +41,7 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeUtils;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Decorates attributes for ValueObject-related templates.
@@ -70,6 +71,7 @@ public class VOAttributeDecorator
      * and the column allows nulls.
      * @return such information.
      */
+    @NotNull
     public String getType()
     {
         String result = getCachedType();

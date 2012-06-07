@@ -39,7 +39,6 @@ import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -61,10 +60,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /*
@@ -604,15 +601,16 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {
+        // TODO: Refactor this
         @NotNull Collection result = new ArrayList();
 
         int t_iLength = (columnNames != null) ? columnNames.length : 0;
 
         for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
         {
-            int t_iType =
-                metadataManager.getColumnType(
-                    tableName, columnNames[t_iIndex]);
+            int t_iType = -1;
+//                metadataManager.getColumnType(
+//                    tableName, columnNames[t_iIndex]);
 
             @Nullable String t_strNativeType =
                 metadataTypeManager.getNativeType(t_iType);
@@ -625,19 +623,19 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
             }
             else
             {
-                t_bAllowsNull =
-                    metadataManager.allowsNull(
-                        tableName, columnNames[t_iIndex]);
+                t_bAllowsNull = false;
+//                    metadataManager.allowsNull(
+//                        tableName, columnNames[t_iIndex]);
             }
 
-            boolean t_bIsBool = metadataManager.isBoolean(tableName, columnNames[t_iIndex]);
+            boolean t_bIsBool = false; //metadataManager.isBoolean(tableName, columnNames[t_iIndex]);
 
             String t_strFieldType =
                 metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
 
-            boolean t_bManagedExternally =
-                metadataManager.isManagedExternally(
-                    tableName, columnNames[t_iIndex]);
+            boolean t_bManagedExternally = false;
+//                metadataManager.isManagedExternally(
+//                    tableName, columnNames[t_iIndex]);
 
             result.add(
                 decoratorFactory.createDecorator(
@@ -646,18 +644,19 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
                         t_iType,
                         t_strNativeType,
                         tableName,
-                        metadataManager.getTableComment(tableName),
+                        null, //metadataManager.getTableComment(tableName),
                         t_iIndex + 1, // ordinal position
                         -1, // length
                         -1, // precision
-                        t_bManagedExternally,
+                        null, //t_strKeyword,
+                        null, //t_strRetrievalQuery,
                         t_bAllowsNull,
                         columnValues[t_iIndex],
-                        metadataManager.isReadOnly(tableName, columnNames[t_iIndex]),
-                        metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
-                        metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
-                        metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
-                        metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
+                        false, //metadataManager.isReadOnly(tableName, columnNames[t_iIndex]),
+                        false, //metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
+                        null, //metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
+                        null, //metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
+                        null), //metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
                     metadataManager));
         }
 

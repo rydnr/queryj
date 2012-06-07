@@ -39,8 +39,8 @@ package org.acmsl.queryj.tools.metadata.engines;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.RefactoredMetadataManager;
 import org.acmsl.queryj.tools.metadata.TableDAO;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 
 /*
@@ -66,42 +66,42 @@ public class MetadataManagerTableDAO
     /**
      * The {@link MetadataManager} instance.
      */
-    private RefactoredMetadataManager m__MetadataManager;
+    private MetadataManager m__MetadataManager;
 
     /**
-     * Creates a new {@link MetadataManagerTableDAO} instance using given {@link RefactoredMetadataManager}.
-     * @param manager the {@link RefactoredMetadataManager} instance.
+     * Creates a new {@link MetadataManagerTableDAO} instance using given {@link MetadataManager}.
+     * @param manager the {@link MetadataManager} instance.
      */
-    public MetadataManagerTableDAO(@NotNull final RefactoredMetadataManager manager)
+    public MetadataManagerTableDAO(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
 
     /**
-     * Specifies the {@link RefactoredMetadataManager} instance.
-     * @param manager the {@link RefactoredMetadataManager manager}.
+     * Specifies the {@link MetadataManager} instance.
+     * @param manager the {@link MetadataManager manager}.
      */
-    protected final void immutableSetMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected final void immutableSetMetadataManager(@NotNull final MetadataManager manager)
     {
         m__MetadataManager = manager;
     }
 
     /**
-     * Specifies the {@link RefactoredMetadataManager} instance.
-     * @param manager the {@link RefactoredMetadataManager manager}.
+     * Specifies the {@link MetadataManager} instance.
+     * @param manager the {@link MetadataManager manager}.
      */
     @SuppressWarnings("unused")
-    protected void setMetadataManager(@NotNull final RefactoredMetadataManager manager)
+    protected void setMetadataManager(@NotNull final MetadataManager manager)
     {
         immutableSetMetadataManager(manager);
     }
 
     /**
-     * Retrieves the {@link RefactoredMetadataManager} instance.
-     * @return such {@link RefactoredMetadataManager instance}.
+     * Retrieves the {@link MetadataManager} instance.
+     * @return such {@link MetadataManager instance}.
      */
     @NotNull
-    protected RefactoredMetadataManager getMetadataManager()
+    protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
     }
@@ -131,5 +131,41 @@ public class MetadataManagerTableDAO
     {
         // TODO
         return null;
+    }
+
+    /**
+     * Retrieves the list of tables with foreign keys to given table.
+     * @param target the target table.
+     * @return the list of referring tables.
+     */
+    @NotNull
+    public List<Table> findReferringTables(@NotNull final String target)
+    {
+        @NotNull final List<Table> result = new ArrayList<Table>(1);
+
+        @Nullable final List<Table> t_Tables = findAllTables();
+
+        @NotNull List<ForeignKey> t_lForeignKeys;
+
+        for (@Nullable Table t_Table : t_Tables)
+        {
+            if (t_Table != null)
+            {
+                t_lForeignKeys = t_Table.getForeignKeys();
+
+                for (@Nullable ForeignKey t_ForeignKey : t_lForeignKeys)
+                {
+                    if (   (t_ForeignKey != null)
+                        && (t_ForeignKey.getTargetTableName().equalsIgnoreCase(target)))
+                    {
+                        result.add(t_Table);
+                        break;
+
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 }
