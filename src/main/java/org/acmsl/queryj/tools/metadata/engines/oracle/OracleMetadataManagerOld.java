@@ -195,117 +195,100 @@ public class OracleMetadataManagerOld
       throws  SQLException,
               QueryJException
     {
-        extractPrimaryKeys(
-            metaData.getConnection(),
-            tableNames,
-            QueryFactory.getInstance());
+        extractPrimaryKeys(metaData.getConnection(), tableNames);
     }
 
     /**
      * Extracts the primary keys.
      * @param connection the database connection.
      * @param tableNames the table names.
-     * @param queryFactory the <code>QueryFactory</code> instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      */
     protected void extractPrimaryKeys(
         @NotNull final Connection connection,
-        @Nullable final String[] tableNames,
-        @NotNull final QueryFactory queryFactory)
+        @Nullable final String[] tableNames)
       throws  SQLException,
               QueryJException
     {
+        @Nullable SQLException sqlExceptionToThrow = null;
+
         @Nullable ResultSet t_rsResults = null;
 
         @Nullable PreparedStatement t_PreparedStatement = null;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
-        int t_iLength = (tableNames != null) ? tableNames.length : 0;
-            
         try
         {
-            for  (int t_iTableIndex = 0;
-                      t_iTableIndex < t_iLength;
-                      t_iTableIndex++) 
+            @NotNull final String t_strQuery =
+                  "select c.table_name, "
+                +        "tc.comments, "
+                +        "c.column_name, "
+                +        "uc.comments, "
+                +        "c.data_type, "
+                +        "c.data_length, "
+                +        "c.data_precision, "
+                +        "c.data_scale, "
+                +        "c.nullable, "
+                +        "c.column_id, "
+                +        "cons.position pk_position "
+                + "from user_tab_columns c left outer join ("
+                +          "select ucc.* from user_cons_columns ucc, user_constraints uc "
+                +           "where uc.constraint_type = 'P' and uc.status = 'ENABLED' "
+                +             "and uc.constraint_name = ucc.constraint_name) cons "
+                +         "on c.table_name = cons.table_name and c.column_name = cons.column_name, "
+                +       "user_tab_comments tc, "
+                +       "user_col_comments uc "
+                + "where tc.table_name = c.table_name "
+                +   "and tc.table_name = uc.table_name "
+                +   "and c.column_name = uc.column_name";
+
+            if  (t_Log != null)
             {
-                try
-                {
-                    @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
-
-                    t_Query.select(USER_CONS_COLUMNS.COLUMN_NAME);
-
-                    t_Query.from(USER_CONS_COLUMNS);
-                    t_Query.from(USER_CONSTRAINTS);
-
-                    @NotNull Condition t_Condition =
-                        USER_CONS_COLUMNS.CONSTRAINT_NAME.equals(
-                            USER_CONSTRAINTS.CONSTRAINT_NAME);
-
-                    // USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME
-
-                    t_Condition =
-                        t_Condition.and(
-                            USER_CONS_COLUMNS.TABLE_NAME.equals());
-
-                    //(USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
-                    // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)
-
-                    t_Condition =
-                        t_Condition.and(
-                            USER_CONSTRAINTS.CONSTRAINT_TYPE.equals("P"));
-
-                    //((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
-                    // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
-
-                    t_Query.where(t_Condition);
-
-                    t_PreparedStatement = t_Query.prepareStatement(connection);
-
-                    t_Query.setString(
-                        USER_CONS_COLUMNS.TABLE_NAME.equals(),
-                        tableNames[t_iTableIndex]);
-
-                    //SELECT USER_CONS_COLUMNS.COLUMN_NAME
-                    //FROM USER_CONS_COLUMNS, USER_CONSTRAINTS
-                    //WHERE ((USER_CONS_COLUMNS.CONSTRAINT_NAME = USER_CONSTRAINTS.CONSTRAINT_NAME)
-                    // AND (USER_CONS_COLUMNS.TABLE_NAME = ?)) AND (USER_CONSTRAINTS.CONSTRAINT_TYPE = 'P')
-
-                    if  (t_Log != null)
-                    {
-                        t_Log.debug(
-                            "query:" + t_Query);
-                    }
+                t_Log.debug("query:" + t_strQuery);
+            }
                     
-                    t_rsResults = t_Query.executeQuery();
+            t_PreparedStatement = connection.prepareStatement(t_strQuery);
+        }
+        catch (@NotNull final SQLException invalidQuery)
+        {
+            sqlExceptionToThrow = invalidQuery;
+        }
 
-                    while  (   (t_rsResults != null)
-                            && (t_rsResults.next()))
-                    {
-                        addPrimaryKey(
-                            tableNames[t_iTableIndex],
-                            t_rsResults.getString(
-                                USER_CONS_COLUMNS.COLUMN_NAME.toSimplifiedString()));
-                    }
-                }
-                catch  (@NotNull final SQLException sqlException)
-                {
-                    throw
-                        new QueryJException(
-                            "cannot.retrieve.primary.keys",
-                            sqlException);
-                }
+        if (   (t_PreparedStatement != null)
+            && (sqlExceptionToThrow != null))
+        {
+            try
+            {
+                t_rsResults = t_PreparedStatement.executeQuery();
+            }
+            catch (@NotNull final SQLException queryFailed)
+            {
+                sqlExceptionToThrow = queryFailed;
             }
         }
-        finally
+
+        if (   (t_rsResults != null)
+            && (sqlExceptionToThrow != null))
         {
-            try 
+            try
             {
-                if  (t_rsResults != null)
+                while  (t_rsResults.next())
                 {
-                    t_rsResults.close();
                 }
+            }
+            catch (@NotNull final SQLException errorIteratingResults)
+            {
+                sqlExceptionToThrow = errorIteratingResults;
+            }
+        }
+
+        if (t_rsResults != null)
+        {
+            try
+            {
+                t_rsResults.close();
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -316,13 +299,13 @@ public class OracleMetadataManagerOld
                         sqlException);
                 }
             }
+        }
 
+        if (t_PreparedStatement != null)
+        {
             try 
             {
-                if  (t_PreparedStatement != null)
-                {
-                    t_PreparedStatement.close();
-                }
+                t_PreparedStatement.close();
             }
             catch  (@NotNull final SQLException sqlException)
             {
@@ -333,6 +316,11 @@ public class OracleMetadataManagerOld
                         sqlException);
                 }
             }
+        }
+
+        if (sqlExceptionToThrow != null)
+        {
+            throw sqlExceptionToThrow;
         }
     }
 

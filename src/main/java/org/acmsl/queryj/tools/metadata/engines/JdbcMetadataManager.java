@@ -78,9 +78,57 @@ public class JdbcMetadataManager
      * Creates a {@link JdbcMetadataManager} with given name.
      * @param name the name.
      */
+    @SuppressWarnings("unused")
     public JdbcMetadataManager(@NotNull final String name)
     {
         super(name);
+    }
+
+    /**
+     * Creates a {@link AbstractJdbcMetadataManager} with given information.
+     * @param name the manager name.
+     * @param metadata the {@link DatabaseMetaData} instance.
+     * @param metadataExtractionListener the {@link MetadataExtractionListener} instance.
+     * @param catalog the database catalog.
+     * @param schema the database schema.
+     * @param tableNames the table names.
+     * @param tables the list of tables.
+     * @param disableTableExtraction whether to disable table extraction or not.
+     * @param lazyTableExtraction whether to retrieve table information on demand.
+     * @param caseSensitive whether it's case sensitive.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     */
+    public JdbcMetadataManager(
+        @NotNull final String name,
+        @NotNull final DatabaseMetaData metadata,
+        @NotNull final MetadataExtractionListener metadataExtractionListener,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final String[] tableNames,
+        @NotNull final List<Table> tables,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
+    {
+        super(
+            name,
+            metadata,
+            metadataExtractionListener,
+            catalog,
+            schema,
+            tableNames,
+            tables,
+            disableTableExtraction,
+            lazyTableExtraction,
+            caseSensitive,
+            engineName,
+            engineVersion,
+            quote);
     }
 
     /**
@@ -272,33 +320,7 @@ public class JdbcMetadataManager
             throw sqlException;
         }
 
-        Table t_ParentTable;
-        List<Attribute> t_lParentTableAttributes;
-        List<Attribute> t_lChildTableAttributes;
-        List<Attribute> t_lCompleteAttributes;
-
-        for (TableIncompleteValueObject t_Table : tables)
-        {
-            t_lChildTableAttributes = t_mAux.get(t_Table.getName());
-
-            t_ParentTable = t_Table.getParentTable();
-
-            if (t_ParentTable != null)
-            {
-                t_lParentTableAttributes = t_ParentTable.getAttributes();
-
-                t_lCompleteAttributes =
-                    new ArrayList<Attribute>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
-
-                t_lCompleteAttributes.addAll(t_lParentTableAttributes);
-                t_lCompleteAttributes.addAll(t_lChildTableAttributes);
-                t_Table.setAttributes(t_lCompleteAttributes);
-            }
-            else
-            {
-                t_Table.setAttributes(t_lChildTableAttributes);
-            }
-        }
+        bindAttributes(tables, t_mAux);
     }
 
     /**
@@ -381,7 +403,7 @@ public class JdbcMetadataManager
         catch  (final SQLException sqlException)
         {
             logWarn(
-                "Cannot retrieve the column names.",
+                "Cannot retrieve the primary keys.",
                 sqlException);
 
             throw sqlException;
@@ -516,7 +538,7 @@ public class JdbcMetadataManager
         catch  (final SQLException sqlException)
         {
             logWarn(
-                "Cannot retrieve the column names.",
+                "Cannot retrieve the foreign keys.",
                 sqlException);
 
             throw sqlException;

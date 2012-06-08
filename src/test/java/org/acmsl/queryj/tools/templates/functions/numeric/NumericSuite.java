@@ -100,9 +100,6 @@ public class NumericSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates.functions.numeric");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTestTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.numeric.NumericFunctionsTemplateGeneratorTest.class);
-    
     suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.mysql.MysqlSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.numeric.oracle.OracleSuite.suite());

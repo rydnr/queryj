@@ -97,11 +97,6 @@ public class MysqlSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates.functions.time.mysql");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.time.mysql.MySQLTimeFunctionsTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.time.mysql.MySQLTimeFunctionsTestTemplateGeneratorTest.class);
-    
-    
-    
     // JUnitDoclet begin method suite
     // JUnitDoclet end method suite
     

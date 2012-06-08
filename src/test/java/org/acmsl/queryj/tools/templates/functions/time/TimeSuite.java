@@ -100,9 +100,6 @@ public class TimeSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates.functions.time");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.time.TimeFunctionsTestTemplateGeneratorTest.class);
-    
     suite.addTest(org.acmsl.queryj.tools.templates.functions.time.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.time.mysql.MysqlSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.time.oracle.OracleSuite.suite());

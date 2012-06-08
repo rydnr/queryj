@@ -574,22 +574,12 @@ public abstract class AbstractJdbcMetadataManagerOld
         if  (   (!disableProcedureExtraction)
              && (!lazyProcedureExtraction))
         {
-            if  (metadataExtractionListener != null)
-            {
-                metadataExtractionListener.procedureExtractionStarted();
-            }
-
             extractProcedureMetadata(
                 procedureNames,
                 metaData,
                 catalog,
                 schema,
                 metadataExtractionListener);
-
-            if  (metadataExtractionListener != null)
-            {
-                metadataExtractionListener.allProceduresExtracted();
-            }
         }
     }
 
@@ -3281,14 +3271,7 @@ public abstract class AbstractJdbcMetadataManagerOld
             addProcedureParametersMetadata(
                 t_astrProcedureNames[t_iIndex],
                 t_aProcedureParametersMetadata);
-
-            if  (metadataExtractionListener != null)
-            {
-                metadataExtractionListener.procedureExtracted(
-                    t_astrProcedureNames[t_iIndex],
-                    t_aProcedureParametersMetadata);
-            }
-        }        
+        }
     }
 
     /**
@@ -4240,9 +4223,6 @@ public abstract class AbstractJdbcMetadataManagerOld
 
                 t_lProcedureList.add(
                     new ProcedureMetadata(t_strName, t_iType, t_strComment));
-
-                metadataExtractionListener.procedureMetadataExtracted(
-                    t_strName, t_iType, t_strComment);
             }
         }
 
@@ -4399,17 +4379,6 @@ public abstract class AbstractJdbcMetadataManagerOld
                         t_iLength,
                         t_iNullable));
 
-                if  (metadataExtractionListener != null)
-                {
-                    metadataExtractionListener
-                        .procedureParameterMetadataExtracted(
-                            t_strColumnName,
-                            t_iColumnType,
-                            t_strComment,
-                            t_iDataType,
-                            t_iLength,
-                            t_iNullable);
-                }
             }
         }
 
@@ -4630,13 +4599,6 @@ public abstract class AbstractJdbcMetadataManagerOld
                             t_rsPrimaryKeys.getString("COLUMN_NAME"));
                     }
 
-                    if  (metadataExtractionListener != null)
-                    {
-                        metadataExtractionListener.primaryKeyExtracted(
-                            t_strTableName,
-                            getPrimaryKey(t_strTableName));
-                    }
-
                     t_rsPrimaryKeys.close();
                 }
             }
@@ -4750,16 +4712,6 @@ public abstract class AbstractJdbcMetadataManagerOld
                             t_cPkColumnNames = new ArrayList();
                             t_cFkColumnNames = new ArrayList();
                             t_iIndex = 0;
-
-                            if  (metadataExtractionListener != null)
-                            {
-                                metadataExtractionListener.foreignKeyExtracted(
-                                    t_strTableName,
-                                    t_strFkTableName,
-                                    (String[])
-                                        t_cPkColumnNames.toArray(
-                                            EMPTY_STRING_ARRAY));
-                            }
                         }
 
                         t_cPkColumnNames.add(

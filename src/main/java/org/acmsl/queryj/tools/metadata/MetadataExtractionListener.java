@@ -42,7 +42,11 @@ package org.acmsl.queryj.tools.metadata;
  */
 //import org.acmsl.commons.patterns.Listener;
 
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Receives notifications on metadata extraction.
@@ -58,15 +62,9 @@ public interface MetadataExtractionListener
     public void tableNamesExtractionStarted();
 
     /**
-     * Notifies a table name has been extracted.
-     * @param table the table name.
-     */
-    public void tableNameExtracted(@NotNull final String table);
-
-    /**
      * Notifies all table names have been extracted.
      */
-    public void tableNamesExtracted(@NotNull final int count);
+    public void tableNamesExtracted(final int count);
 
     /**
      * Notifies the table extraction has been started.
@@ -105,30 +103,17 @@ public interface MetadataExtractionListener
         @NotNull final String table, @NotNull final String comment);
 
     /**
-     * Notifies all table comments have been extracted.
-     */
-    public void tableCommentsExtracted();
-
-    /**
      * Notifies column name extraction has been started.
      * @param table the table.
      */
     public void columnNamesExtractionStarted(@NotNull final String table);
 
     /**
-     * Notifies a column name has been extracted.
-     * @param table the table name.
-     * @param column the column name.
-     */
-    public void columnNameExtracted(
-        @NotNull final String table, @NotNull final String column);
-
-    /**
      * Notifies all column names have been extracted.
      * @param table the table name.
      * @param count the count.
      */
-    public void columnNamesExtracted(@NotNull final String table, @NotNull final int count);
+    public void columnNamesExtracted(@NotNull final String table, final int count);
 
     /**
      * Notifies column comment extraction has been started.
@@ -158,15 +143,6 @@ public interface MetadataExtractionListener
     public void columnTypesExtractionStarted(@NotNull final String table);
 
     /**
-     * Notifies a column type has been extracted.
-     * @param table the table name.
-     * @param column the column name.
-     * @param type the column type.
-     */
-    public void columnTypeExtracted(
-        @NotNull final String table, @NotNull final String column, final int type);
-
-    /**
      * Notifies all column types have been extracted.
      * @param table the table name.
      */
@@ -177,15 +153,6 @@ public interface MetadataExtractionListener
      * @param table the table.
      */
     public void columnNullablesExtractionStarted(@NotNull final String table);
-
-    /**
-     * Notifies a column nullable setting has been extracted.
-     * @param table the table name.
-     * @param column the column name.
-     * @param nullable whether the column allows null.
-     */
-    public void columnNullableExtracted(
-        @NotNull final String table, @NotNull final String column, @NotNull final boolean nullable);
 
     /**
      * Notifies all column nullable settings have been extracted.
@@ -204,7 +171,7 @@ public interface MetadataExtractionListener
      * @param primaryKey the primary key.
      */
     public void primaryKeyExtracted(
-        @NotNull final String table, @NotNull final String[] primaryKey);
+        @NotNull final String table, @NotNull final List<Attribute> primaryKey);
 
     /**
      * Notifies all primary keys have been extracted.
@@ -218,67 +185,12 @@ public interface MetadataExtractionListener
 
     /**
      * Notifies a foreign key has been extracted.
-     * @param table the table name.
-     * @param targetTable the target table.
      * @param foreignKey the foreign key.
      */
-    public void foreignKeyExtracted(
-        @NotNull final String table,
-        @NotNull final String targetTable,
-        @NotNull final String[] foreignKey);
-
-    /**
-     * Notifies all foreign keys for a given table have been extracted.
-     * @param table the table name.
-     */
-    public void foreignKeysExtracted(@NotNull final String table);
+    public void foreignKeyExtracted(@NotNull final ForeignKey foreignKey);
 
     /**
      * Notifies all foreign keys have been extracted.
      */
     public void allForeignKeysExtracted();
-
-    /**
-     * Notifies the procedures extraction has been started.
-     */
-    public void procedureExtractionStarted();
-
-    /**
-     * Notifies a procedure metadata has been extracted.
-     * @param name the procedure name.
-     * @param type the type.
-     * @param comment the comment.
-     */
-    public void procedureMetadataExtracted(
-        @NotNull final String name, final int type, @NotNull final String comment);
-
-    /**
-     * Notifies a procedure parameter metadata has been extracted.
-     * @param columnName the column name.
-     * @param columnType the column type.
-     * @param comment the comment.
-     * @param dataType the data type.
-     * @param length the length.
-     * @param nullable the nullable attribute.
-     */
-    public void procedureParameterMetadataExtracted(
-        @NotNull final String columnName,
-        final int columnType,
-        @NotNull final String comment,
-        final int dataType,
-        final int length,
-        final int nullable);
-
-    /**
-     * Notifies a procedure has been extracted.
-     * @param name the procedure name.
-     * @param parameters the parameters.
-     */
-    public void procedureExtracted(
-        @NotNull final String name, @NotNull final ProcedureParameterMetadata[] parameters);
-
-    /**
-     * Notifies all procedures have been extracted.
-     */
-    public void allProceduresExtracted();
 }

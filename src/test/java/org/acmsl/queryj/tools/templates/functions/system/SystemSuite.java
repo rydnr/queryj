@@ -100,9 +100,6 @@ public class SystemSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates.functions.system");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.system.SystemFunctionsTestTemplateGeneratorTest.class);
-    
     suite.addTest(org.acmsl.queryj.tools.templates.functions.system.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.system.mysql.MysqlSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.system.oracle.OracleSuite.suite());

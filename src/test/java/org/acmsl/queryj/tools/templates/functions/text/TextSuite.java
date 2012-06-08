@@ -100,9 +100,6 @@ public class TextSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates.functions.text");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTestTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.text.TextFunctionsTemplateGeneratorTest.class);
-    
     suite.addTest(org.acmsl.queryj.tools.templates.functions.text.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.text.mysql.MysqlSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.functions.text.oracle.OracleSuite.suite());

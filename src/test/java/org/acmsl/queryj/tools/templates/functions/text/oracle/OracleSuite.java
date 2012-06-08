@@ -97,11 +97,6 @@ public class OracleSuite
     suite =
     new TestSuite("org.acmsl.queryj.tools.templates.functions.text.oracle");
     
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.text.oracle.OracleTextFunctionsTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.functions.text.oracle.OracleTextFunctionsTestTemplateGeneratorTest.class);
-    
-    
-    
     // JUnitDoclet begin method suite
     // JUnitDoclet end method suite
     

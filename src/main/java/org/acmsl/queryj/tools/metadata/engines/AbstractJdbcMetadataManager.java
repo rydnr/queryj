@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
+import org.acmsl.queryj.tools.metadata.vo.TableValueObject;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
 
 /*
@@ -160,6 +161,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     private String m__strQuote;
 
+
     /**
      * Creates a new {@link AbstractJdbcMetadataManager} with given information.
      * @param name the name.
@@ -168,6 +170,52 @@ public abstract class AbstractJdbcMetadataManager
     protected AbstractJdbcMetadataManager(@NotNull final String name)
     {
         immutableSetName(name);
+    }
+
+    /**
+     * Creates a {@link AbstractJdbcMetadataManager} with given information.
+     * @param name the manager name.
+     * @param metadata the {@link DatabaseMetaData} instance.
+     * @param metadataExtractionListener the {@link MetadataExtractionListener} instance.
+     * @param catalog the database catalog.
+     * @param schema the database schema.
+     * @param tableNames the table names.
+     * @param tables the list of tables.
+     * @param disableTableExtraction whether to disable table extraction or not.
+     * @param lazyTableExtraction whether to retrieve table information on demand.
+     * @param caseSensitive whether it's case sensitive.
+     * @param engineName the engine name.
+     * @param engineVersion the engine version.
+     * @param quote the identifier quote string.
+     */
+    protected AbstractJdbcMetadataManager(
+        @NotNull final String name,
+        @NotNull final DatabaseMetaData metadata,
+        @NotNull final MetadataExtractionListener metadataExtractionListener,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final String[] tableNames,
+        @NotNull final List<Table> tables,
+        final boolean disableTableExtraction,
+        final boolean lazyTableExtraction,
+        final boolean caseSensitive,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote)
+    {
+        this(name);
+        immutableSetMetaData(metadata);
+        immutableSetMetadataExtractionListener(metadataExtractionListener);
+        immutableSetCatalog(catalog);
+        immutableSetSchema(schema);
+        immutableSetTableNames(tableNames);
+        immutableSetTables(tables);
+        immutableSetDisableTableExtraction(disableTableExtraction);
+        immutableSetLazyTableExtraction(lazyTableExtraction);
+        immutableSetCaseSensitive(caseSensitive);
+        immutableSetEngineName(engineName);
+        immutableSetEngineVersion(engineVersion);
+        immutableSetQuote(quote);
     }
 
     /**
@@ -724,14 +772,15 @@ public abstract class AbstractJdbcMetadataManager
     public void eagerlyFetchMetadata()
         throws SQLException, QueryJException
     {
-        extractTableMetadata(
-            getTableNames(),
-            getMetaData(),
-            getCatalog(),
-            getSchema(),
-            isCaseSensitive(),
-            getMetadataExtractionListener(),
-            MetaLanguageUtils.getInstance());
+        setTables(
+            extractTableMetadata(
+                getTableNames(),
+                getMetaData(),
+                getCatalog(),
+                getSchema(),
+                isCaseSensitive(),
+                getMetadataExtractionListener(),
+                MetaLanguageUtils.getInstance()));
     }
 
     /**
@@ -744,11 +793,13 @@ public abstract class AbstractJdbcMetadataManager
      * @param metadataExtractionListener the
      * <code>MetadataExtractionListener</code> instance.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
+     * @return the list of tables.
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if an error, which is identified by QueryJ,
      * occurs.
      */
-    protected void extractTableMetadata(
+    @NotNull
+    protected List<Table> extractTableMetadata(
         @Nullable final String[] tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
@@ -756,11 +807,9 @@ public abstract class AbstractJdbcMetadataManager
         final boolean caseSensitiveness,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
-        throws  SQLException,
-        QueryJException
+      throws  SQLException,
+              QueryJException
     {
-        metadataExtractionListener.tableNamesExtractionStarted();
-
         String[] t_astrTableNames = tableNames;
 
         if (t_astrTableNames == null)
@@ -812,8 +861,86 @@ public abstract class AbstractJdbcMetadataManager
             metadataExtractionListener);
 
         metadataExtractionListener.tableMetadataExtracted();
+
+        return cloneTables(t_lTables);
     }
 
+    /**
+     * Clones given incomplete tables.
+     * @param tables the tables to clone.
+     * @return the ultimate table list.
+     */
+    protected List<Table> cloneTables(@NotNull final List<? extends Table> tables)
+    {
+        @NotNull final List<Table> result = new ArrayList<Table>(tables.size());
+
+        @NotNull Table t_MirrorTable;
+
+        for (@Nullable Table t_Table : tables)
+        {
+            if (t_Table != null)
+            {
+                if (t_Table instanceof TableValueObject)
+                {
+                    t_MirrorTable = t_Table;
+                }
+                else
+                {
+                    t_MirrorTable =
+                        new TableValueObject(
+                            t_Table.getName(),
+                            t_Table.getComment(),
+                            t_Table.getPrimaryKey(),
+                            t_Table.getAttributes(),
+                            t_Table.getForeignKeys(),
+                            t_Table.getParentTable(),
+                            t_Table.isStatic(),
+                            t_Table.isVoDecorated());
+                }
+
+                result.add(t_MirrorTable);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Appends parent attributes into their children.
+     * @param tables the list of tables.
+     * @param attributes the map of tableName -> attributes.
+     */
+    protected void bindAttributes(
+        @NotNull final List<TableIncompleteValueObject> tables, @NotNull Map<String, List<Attribute>> attributes)
+    {
+        Table t_ParentTable;
+        List<Attribute> t_lParentTableAttributes;
+        List<Attribute> t_lChildTableAttributes;
+        List<Attribute> t_lCompleteAttributes;
+
+        for (TableIncompleteValueObject t_Table : tables)
+        {
+            t_lChildTableAttributes = attributes.get(t_Table.getName());
+
+            t_ParentTable = t_Table.getParentTable();
+
+            if (t_ParentTable != null)
+            {
+                t_lParentTableAttributes = t_ParentTable.getAttributes();
+
+                t_lCompleteAttributes =
+                    new ArrayList<Attribute>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
+
+                t_lCompleteAttributes.addAll(t_lParentTableAttributes);
+                t_lCompleteAttributes.addAll(t_lChildTableAttributes);
+                t_Table.setAttributes(t_lCompleteAttributes);
+            }
+            else
+            {
+                t_Table.setAttributes(t_lChildTableAttributes);
+            }
+        }
+
+    }
     /**
      * Binds parent-child relationships within given list.
      * @param tables the list of tables.
@@ -1245,7 +1372,7 @@ public abstract class AbstractJdbcMetadataManager
      * cloning if necessary.
      * @param position the new position.
      * @param attribute the {@link org.acmsl.queryj.tools.metadata.vo.Attribute}.
-     * @result the updated attribute.
+     * @return the updated attribute.
      */
     @NotNull
     protected Attribute fixOrdinalPosition(final int position, @NotNull final Attribute attribute)

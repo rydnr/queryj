@@ -41,8 +41,10 @@ import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
@@ -1206,8 +1208,8 @@ public abstract class DatabaseMetaDataRetrievalHandler
     /**
      * Retrieves whether the database engine is case sensitive or not.
      * @param parameters the parameters.
-     * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unchecked")
     public void storeCaseSensitive(final boolean caseSensitive, @NotNull final Map parameters)
     {
         parameters.put(CASE_SENSITIVE, caseSensitive);
@@ -1248,7 +1250,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
         final boolean lazyProcedureExtraction,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @NotNull final String schema,
+        @Nullable final String schema,
         final boolean caseSensitive,
         @NotNull final String engineName,
         @NotNull final String engineVersion,
@@ -1259,24 +1261,21 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         try 
         {
-            result = null;
-            // TODO
-            /*
+            result =
                 new JdbcMetadataManager(
-                    tables,
-                    procedureNames,
-                    disableTableExtraction,
-                    lazyTableExtraction,
-                    disableProcedureExtraction,
-                    lazyProcedureExtraction,
+                    "jdbc",
                     metaData,
+                    new MetadataExtractionLogger(),
                     catalog,
                     schema,
+                    new String[0],
+                    tables,
+                    disableTableExtraction,
+                    lazyTableExtraction,
                     caseSensitive,
                     engineName,
                     engineVersion,
                     quote);
-                    */
         }
         catch  (@NotNull final RuntimeException exception)
         {
