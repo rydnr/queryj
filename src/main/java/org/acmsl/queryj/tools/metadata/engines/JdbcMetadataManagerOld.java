@@ -38,9 +38,12 @@ package org.acmsl.queryj.tools.metadata.engines;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManagerOld;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,7 +64,7 @@ public class JdbcMetadataManagerOld
     private static final long serialVersionUID = 163877584229565647L;
 
     /**
-     * Creates a {@link JdbcMetadataManager} using given information.
+     * Creates a {@link JdbcMetadataManagerOld} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -123,7 +126,7 @@ public class JdbcMetadataManagerOld
     }
 
     /**
-     * Creates a {@link JdbcMetadataManager} using given information.
+     * Creates a {@link JdbcMetadataManagerOld} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param metaData the database meta data.

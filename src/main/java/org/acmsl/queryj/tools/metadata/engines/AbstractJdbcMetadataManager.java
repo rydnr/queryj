@@ -43,11 +43,11 @@ import org.acmsl.queryj.tools.metadata.ColumnDAO;
 import org.acmsl.queryj.tools.metadata.ForeignKeyDAO;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.PrimaryKeyDAO;
 import org.acmsl.queryj.tools.metadata.TableDAO;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
+import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
@@ -72,7 +72,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -84,8 +83,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
-@SuppressWarnings("unused")
-public class AbstractJdbcMetadataManager
+public abstract class AbstractJdbcMetadataManager
     implements MetadataManager
 {
     /**
@@ -260,6 +258,7 @@ public class AbstractJdbcMetadataManager
      * Retrieves the tables.
      * @return the list of {@link Table tables}.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Table> getTables()
     {
@@ -306,6 +305,7 @@ public class AbstractJdbcMetadataManager
      * Retrieves the columns.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public Map<String,List<Attribute>> getColumns()
     {
@@ -663,6 +663,7 @@ public class AbstractJdbcMetadataManager
      * @param separator the separator.
      * @return the result of concatenating given values.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected String concat(
         @NotNull final String[] values, @NotNull final String separator)
@@ -784,20 +785,7 @@ public class AbstractJdbcMetadataManager
 
         metadataExtractionListener.tableMetadataExtractionStarted();
 
-        String t_strTableName;
-        Table t_Parent;
-
-        for (TableIncompleteValueObject t_Table : t_lTables)
-        {
-            t_strTableName = t_Table.getName();
-            t_Parent =
-                retrieveParentTable(t_strTableName, t_lTables, caseSensitiveness, metaLanguageUtils);
-
-            if (t_Parent != null)
-            {
-                t_Table.setParentTable(t_Parent);
-            }
-        }
+        bindParentChildRelationships(t_lTables, caseSensitiveness, metaLanguageUtils);
 
         extractTableColumns(
             metaData,
@@ -807,11 +795,50 @@ public class AbstractJdbcMetadataManager
             caseSensitiveness,
             metadataExtractionListener);
 
-        // TODO: retrieve primary keys.
+        extractPrimaryKeys(
+            metaData,
+            catalog,
+            schema,
+            t_lTables,
+            caseSensitiveness,
+            metadataExtractionListener);
 
-        // TODO: retrieve foreign keys.
+        extractForeignKeys(
+            metaData,
+            catalog,
+            schema,
+            t_lTables,
+            caseSensitiveness,
+            metadataExtractionListener);
 
         metadataExtractionListener.tableMetadataExtracted();
+    }
+
+    /**
+     * Binds parent-child relationships within given list.
+     * @param tables the list of tables.
+     * @param caseSensitiveness whether to care about case sensitiveness or not.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
+     */
+    protected void bindParentChildRelationships(
+        @NotNull final List<TableIncompleteValueObject> tables,
+        final boolean caseSensitiveness,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
+    {
+        String t_strTableName;
+        Table t_Parent;
+
+        for (TableIncompleteValueObject t_Table : tables)
+        {
+            t_strTableName = t_Table.getName();
+            t_Parent =
+                retrieveParentTable(t_strTableName, tables, caseSensitiveness, metaLanguageUtils);
+
+            if (t_Parent != null)
+            {
+                t_Table.setParentTable(t_Parent);
+            }
+        }
     }
 
     /**
@@ -852,15 +879,15 @@ public class AbstractJdbcMetadataManager
     protected Table findTableByName(
         @NotNull final String table, @NotNull final List<? extends Table> tables, final boolean caseSensitiveness)
     {
-        Table result = null;
+        @Nullable Table result = null;
 
-        for (Table t_Table : tables)
+        for (@Nullable Table t_Table : tables)
         {
             if (t_Table != null)
             {
                 if (caseSensitiveness)
                 {
-                    if (table.equalsIgnoreCase(t_Table.getName()))
+                    if (table.equals(t_Table.getName()))
                     {
                         result = t_Table;
                         break;
@@ -868,7 +895,7 @@ public class AbstractJdbcMetadataManager
                 }
                 else
                 {
-                    if (table.equals(t_Table.getName()))
+                    if (table.equalsIgnoreCase(t_Table.getName()))
                     {
                         result = t_Table;
                         break;
@@ -899,7 +926,7 @@ public class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the table names.
+     * Extracts the table names and comments.
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
@@ -909,7 +936,7 @@ public class AbstractJdbcMetadataManager
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      */
-    protected List<TableIncompleteValueObject> extractTableNamesAndComments(
+    protected abstract List<TableIncompleteValueObject> extractTableNamesAndComments(
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable  String schema,
@@ -917,228 +944,10 @@ public class AbstractJdbcMetadataManager
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         final boolean caseSensitiveness)
         throws  SQLException,
-        QueryJException
-    {
-        List<TableIncompleteValueObject> result = new ArrayList<TableIncompleteValueObject>();
-
-        ResultSet t_rsTables = null;
-
-        try
-        {
-            try
-            {
-                t_rsTables =
-                    metaData.getTables(
-                        catalog,
-                        schema,
-                        null,
-                        new String[]{ "TABLE" });
-            }
-            catch  (final SQLException sqlException)
-            {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                        sqlException);
-            }
-
-            TableIncompleteValueObject t_Table;
-            String t_strTableName;
-
-            while (t_rsTables.next())
-            {
-                t_strTableName = t_rsTables.getString("TABLE_NAME");
-
-                if (passesFilter(t_strTableName, tableNames, caseSensitiveness))
-                {
-                    t_Table =
-                        new TableIncompleteValueObject(
-                            t_strTableName,
-                            t_rsTables.getString("REMARKS"));
-
-                    result.add(t_Table);
-                }
-            }
-        }
-        catch  (final SQLException sqlException)
-        {
-            logWarn(
-                "Cannot retrieve the table names.",
-                sqlException);
-
-            throw sqlException;
-        }
-        finally
-        {
-            if  (t_rsTables != null)
-            {
-                t_rsTables.close();
-            }
-        }
-
-        return result;
-    }
+                QueryJException;
 
     /**
-     * Checks whether given table passes the filter.
-     * @param table the table name.
-     * @param fixedTables the fixed list of tables (empty means no filter)
-     * @param caseSensitiveness whether the check is case sensitive.
-     * @return <code>true</code> if the table passes the filter.
-     */
-    protected boolean passesFilter(
-        @NotNull final String table, @NotNull final List<? extends Table> fixedTables, final boolean caseSensitiveness)
-    {
-        boolean result = true;
-
-        for (Table t_FixedTable : fixedTables)
-        {
-            if (t_FixedTable != null)
-            {
-                if (caseSensitiveness)
-                {
-                    result = table.equals(t_FixedTable.getName());
-                }
-                else
-                {
-                    result = table.equalsIgnoreCase(t_FixedTable.getName());
-                }
-
-                if (result)
-                {
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
-
-    /**
-     * Checks whether given table passes the filter.
-     * @param table the table name.
-     * @param fixedTables the fixed list of tables (empty means no filter)
-     * @param caseSensitiveness whether the check is case sensitive.
-     * @return <code>true</code> if the table passes the filter.
-     */
-    protected boolean passesFilter(
-        @NotNull final String table, @NotNull final String[] fixedTables, final boolean caseSensitiveness)
-    {
-        boolean result = true;
-
-        for (String t_strFixedTable : fixedTables)
-        {
-            if (caseSensitiveness)
-            {
-                result = table.equals(t_strFixedTable);
-            }
-            else
-            {
-                result = table.equalsIgnoreCase(t_strFixedTable);
-            }
-
-            if (result)
-            {
-                break;
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Extracts the comments for all tables.
-     * @param metaData the metadata.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @param tableNames the table names.
-     * @param metadataExtractionListener the metadata extraction listener.
-     * @return a map of table -> comment.
-     * @throws SQLException if the database operation fails.
-     */
-    protected Map<String,String> extractTableComments(
-        @NotNull final DatabaseMetaData metaData,
-        @Nullable final String catalog,
-        @Nullable final String schema,
-        @NotNull final String[] tableNames,
-        @Nullable final MetadataExtractionListener metadataExtractionListener)
-        throws  SQLException,
-        QueryJException
-    {
-        Map<String,String> result;
-
-        ResultSet t_rsTables = null;
-
-        try
-        {
-            try
-            {
-                t_rsTables =
-                    metaData.getTables(
-                        catalog,
-                        schema,
-                        null,
-                        new String[]{ "TABLE" });
-            }
-            catch  (final SQLException sqlException)
-            {
-                throw
-                    new QueryJException(
-                        "cannot.retrieve.database.table.names",
-                        sqlException);
-            }
-
-            result = extractTableComments(t_rsTables, tableNames.length);
-        }
-        finally
-        {
-            if  (t_rsTables != null)
-            {
-                t_rsTables.close();
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Extracts the comment from given result set.
-     * @param resultSet the result set with the table comment information.
-     * @param tableCount the number of tables, to provide accurate dimension to the resulting map.
-     * @return a map of table name -> comment.
-     * @throws SQLException if the database operation fails.
-     */
-    @NotNull
-    protected Map<String,String> extractTableComments(@NotNull final ResultSet resultSet, final int tableCount)
-        throws  SQLException
-    {
-        Map<String,String> result = new HashMap<String,String>(tableCount);
-
-        String t_strTableName;
-        String t_strTableComment;
-
-        while  (resultSet.next())
-        {
-            t_strTableName = resultSet.getString("TABLE_NAME");
-            t_strTableComment = resultSet.getString("REMARKS");
-
-            if (t_strTableName != null)
-            {
-                if (t_strTableComment == null)
-                {
-                    t_strTableComment = "";
-                }
-
-                result.put(t_strTableName, t_strTableComment);
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the column information for given tables.
+     * Extracts the column information for given tables.
      * @param metaData the metadata.
      * @param catalog the catalog.
      * @param schema the schema.
@@ -1147,7 +956,7 @@ public class AbstractJdbcMetadataManager
      * @throws SQLException if the database operation fails.
      * @throws QueryJException if the any other error occurs.
      */
-    protected void extractTableColumns(
+    protected abstract void extractTableColumns(
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -1155,120 +964,47 @@ public class AbstractJdbcMetadataManager
         final boolean caseSensitiveness,
         @Nullable final MetadataExtractionListener metadataExtractionListener)
         throws  SQLException,
-        QueryJException
-    {
-        Map<String,List<Attribute>> t_mAux = new HashMap<String,List<Attribute>>(tables.size());
+                QueryJException;
 
-        ResultSet t_rsColumns;
-        String t_strTableName;
-        String t_strColumnName;
-        int t_iColumnType;
-        String t_strTypeName;
-        int t_iColumnSize;
-        int t_iDecimalDigits;
-        int t_iNullable;
-        String t_strColumnComment;
-        String t_strDefaultValue;
-        //int t_iMaxStringBytes;
-        int t_iOrdinalPosition;
+    /**
+     * Extracts the primary keys for given tables.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param caseSensitiveness whether the table names are case sensitive or not.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if the any other error occurs.
+     */
+    protected abstract void extractPrimaryKeys(
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final List<TableIncompleteValueObject> tables,
+        final boolean caseSensitiveness,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+                QueryJException;
 
-        try
-        {
-            t_rsColumns =
-                metaData.getColumns(
-                    catalog,
-                    schema,
-                    null,
-                    null);
-
-            List<Attribute> t_lColumns;
-            Attribute t_Attribute;
-
-            while (t_rsColumns.next())
-            {
-                t_strTableName = t_rsColumns.getString("TABLE_NAME");
-
-                if (passesFilter(t_strTableName, tables, caseSensitiveness))
-                {
-                    t_lColumns = t_mAux.get(t_strTableName);
-
-                    if (t_lColumns == null)
-                    {
-                        t_lColumns = new ArrayList<Attribute>(9);
-                        t_mAux.put(t_strTableName, t_lColumns);
-                    }
-
-                    t_strColumnName = t_rsColumns.getString("COLUMN_NAME");
-                    t_iColumnType = t_rsColumns.getInt("COLUMN_TYPE");
-                    t_strTypeName = t_rsColumns.getString("TYPE_NAME");
-                    t_iColumnSize = t_rsColumns.getInt("COLUMN_SIZE");
-                    t_iDecimalDigits = t_rsColumns.getInt("DECIMAL_DIGITS");
-                    t_iNullable = t_rsColumns.getInt("NULLABLE");
-                    t_strColumnComment = t_rsColumns.getString("REMARKS");
-                    t_strDefaultValue = t_rsColumns.getString("COLUMN_DEF");
-                    //t_iMaxStringBytes = t_rsColumns.getInt("CHAR_OCTET_LENGTH");
-                    t_iOrdinalPosition = t_rsColumns.getInt("ORDINAL_POSITION");
-
-                    t_Attribute =
-                        new AttributeIncompleteValueObject(
-                            t_strColumnName,
-                            t_iColumnType,
-                            t_strTypeName,
-                            t_strTableName,
-                            t_strColumnComment,
-                            t_iOrdinalPosition,
-                            t_iColumnSize,
-                            t_iDecimalDigits,
-                            (t_iNullable == DatabaseMetaData.columnNullable),
-                            t_strDefaultValue);
-
-                    t_lColumns.add(t_Attribute);
-                }
-                else
-                {
-                    logVerbose("Discarding " + t_strTableName);
-                }
-            }
-
-            t_rsColumns.close();
-        }
-        catch  (final SQLException sqlException)
-        {
-            logWarn(
-                "Cannot retrieve the column names.",
-                sqlException);
-
-            throw sqlException;
-        }
-
-        Table t_ParentTable;
-        List<Attribute> t_lParentTableAttributes;
-        List<Attribute> t_lChildTableAttributes;
-        List<Attribute> t_lCompleteAttributes;
-
-        for (TableIncompleteValueObject t_Table : tables)
-        {
-            t_lChildTableAttributes = t_mAux.get(t_Table.getName());
-
-            t_ParentTable = t_Table.getParentTable();
-
-            if (t_ParentTable != null)
-            {
-                t_lParentTableAttributes = t_ParentTable.getAttributes();
-
-                t_lCompleteAttributes =
-                    new ArrayList<Attribute>(t_lParentTableAttributes.size() + t_lChildTableAttributes.size());
-
-                t_lCompleteAttributes.addAll(t_lParentTableAttributes);
-                t_lCompleteAttributes.addAll(t_lChildTableAttributes);
-                t_Table.setAttributes(t_lCompleteAttributes);
-            }
-            else
-            {
-                t_Table.setAttributes(t_lChildTableAttributes);
-            }
-        }
-    }
+    /**
+     * Extracts the foreign keys for given tables.
+     * @param metaData the metadata.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @param caseSensitiveness whether the table names are case sensitive or not.
+     * @param metadataExtractionListener the metadata extraction listener.
+     * @throws SQLException if the database operation fails.
+     * @throws QueryJException if the any other error occurs.
+     */
+    protected abstract void extractForeignKeys(
+        @NotNull final DatabaseMetaData metaData,
+        @Nullable final String catalog,
+        @Nullable final String schema,
+        @NotNull final List<TableIncompleteValueObject> tables,
+        final boolean caseSensitiveness,
+        @Nullable final MetadataExtractionListener metadataExtractionListener)
+        throws  SQLException,
+                QueryJException;
 
     /**
      * Retrieves the {@link org.acmsl.queryj.tools.metadata.TableDAO} instance.
@@ -1331,24 +1067,239 @@ public class AbstractJdbcMetadataManager
     }
 
     /**
-     * Retrieves the type manager.
-     *
-     * @return such instance.
+     * Checks whether given table passes the filter.
+     * @param table the table name.
+     * @param fixedTables the fixed list of tables (empty means no filter)
+     * @param caseSensitiveness whether the check is case sensitive.
+     * @return <code>true</code> if the table passes the filter.
      */
-    @Override
-    public MetadataTypeManager getMetadataTypeManager()
+    protected boolean passesFilter(
+        @NotNull final String table, @NotNull final List<? extends Table> fixedTables, final boolean caseSensitiveness)
     {
-        return JdbcMetadataTypeManager.getInstance();
+        boolean result = true;
+
+        for (Table t_FixedTable : fixedTables)
+        {
+            if (t_FixedTable != null)
+            {
+                if (caseSensitiveness)
+                {
+                    result = table.equals(t_FixedTable.getName());
+                }
+                else
+                {
+                    result = table.equalsIgnoreCase(t_FixedTable.getName());
+                }
+
+                if (result)
+                {
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
-     * Checks whether the engine requires specific CLOB handling.
-     *
-     * @return <code>true</code> in such case.
+     * Checks whether given table passes the filter.
+     * @param table the table name.
+     * @param fixedTables the fixed list of tables (empty means no filter)
+     * @param caseSensitiveness whether the check is case sensitive.
+     * @return <code>true</code> if the table passes the filter.
      */
-    @Override
-    public boolean requiresCustomClobHandling()
+    protected boolean passesFilter(
+        @NotNull final Table table, @NotNull final List<? extends Table> fixedTables, final boolean caseSensitiveness)
     {
-        return false;
+        boolean result = true;
+
+        for (Table t_FixedTable : fixedTables)
+        {
+            if (t_FixedTable != null)
+            {
+                if (caseSensitiveness)
+                {
+                    result = table.getName().equals(t_FixedTable.getName());
+                }
+                else
+                {
+                    result = table.getName().equalsIgnoreCase(t_FixedTable.getName());
+                }
+
+                if (result)
+                {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given table passes the filter.
+     * @param table the table name.
+     * @param fixedTables the fixed list of tables (empty means no filter)
+     * @param caseSensitiveness whether the check is case sensitive.
+     * @return <code>true</code> if the table passes the filter.
+     */
+    protected boolean passesFilter(
+        @NotNull final String table, @NotNull final String[] fixedTables, final boolean caseSensitiveness)
+    {
+        boolean result = true;
+
+        for (String t_strFixedTable : fixedTables)
+        {
+            if (caseSensitiveness)
+            {
+                result = table.equals(t_strFixedTable);
+            }
+            else
+            {
+                result = table.equalsIgnoreCase(t_strFixedTable);
+            }
+
+            if (result)
+            {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds a concrete table in given list.
+     * @param name the table name.
+     * @param tables the list of tables.
+     * @param caseSensitiveness whether to care about case sensitiveness or not.
+     * @return the matching table.
+     */
+    @Nullable
+    protected Table findTable(
+        @NotNull final String name, @NotNull final List<? extends Table> tables, final boolean caseSensitiveness)
+    {
+        @Nullable Table result = null;
+
+        for (@Nullable Table t_Table : tables)
+        {
+            if (t_Table != null)
+            {
+                if (   (caseSensitiveness)
+                    && (t_Table.getName().equals(name)))
+                {
+                    result = t_Table;
+                    break;
+                }
+                else if (   (!caseSensitiveness)
+                         && (t_Table.getName().equalsIgnoreCase(name)))
+                {
+                    result = t_Table;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Finds a concrete attribute in given list.
+     * @param name the table name.
+     * @param attributes the list of attributes.
+     * @param caseSensitiveness whether to care about case sensitiveness or not.
+     * @return the matching attribute.
+     */
+    @Nullable
+    protected Attribute findAttribute(
+        @NotNull final String name,
+        @NotNull final List<? extends Attribute> attributes,
+        final boolean caseSensitiveness)
+    {
+        @Nullable Attribute result = null;
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (t_Attribute != null)
+            {
+                if (   (caseSensitiveness)
+                    && (t_Attribute.getName().equals(name)))
+                {
+                    result = t_Attribute;
+                    break;
+                }
+                else if (   (!caseSensitiveness)
+                         && (t_Attribute.getName().equalsIgnoreCase(name)))
+                {
+                    result = t_Attribute;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Changes the ordinal position of given {@link org.acmsl.queryj.tools.metadata.vo.Attribute}. Involves
+     * cloning if necessary.
+     * @param position the new position.
+     * @param attribute the {@link org.acmsl.queryj.tools.metadata.vo.Attribute}.
+     * @result the updated attribute.
+     */
+    @NotNull
+    protected Attribute fixOrdinalPosition(final int position, @NotNull final Attribute attribute)
+    {
+        Attribute result = attribute;
+
+        if (result instanceof AttributeIncompleteValueObject)
+        {
+            ((AttributeIncompleteValueObject) result).setOrdinalPosition(position);
+        }
+        else
+        {
+            result =
+                new AttributeValueObject(
+                    result.getName(),
+                    result.getTypeId(),
+                    result.getType(),
+                    result.getTableName(),
+                    result.getComment(),
+                    position,
+                    result.getLength(),
+                    result.getPrecision(),
+                    result.getKeyword(),
+                    result.getRetrievalQuery(),
+                    result.isNullable(),
+                    result.getValue(),
+                    result.isReadOnly(),
+                    result.isBoolean(),
+                    result.getBooleanTrue(),
+                    result.getBooleanFalse(),
+                    result.getBooleanNull());
+        }
+
+        return result;
+    }
+
+    /**
+     * Fixes the ordinal positions of given attributes, according to their
+     * order in the list (involves attribute cloning if necessary).
+     * @param list the list of attributes.
+     */
+    protected void fixOrdinalPositions(@NotNull final List<Attribute> list)
+    {
+        Attribute t_Attribute;
+
+        for (int t_iIndex = 0; t_iIndex < list.size(); t_iIndex++)
+        {
+            t_Attribute = list.get(t_iIndex);
+
+            if (t_Attribute != null)
+            {
+                list.set(t_iIndex, fixOrdinalPosition(t_iIndex, t_Attribute));
+            }
+        }
+
     }
 }

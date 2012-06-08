@@ -75,8 +75,17 @@ public class TableIncompleteValueObject
      * @param attrs the attributes.
      */
     @Override
-    public void setAttributes(final List<Attribute> attrs)
+    public void setAttributes(@NotNull final List<Attribute> attrs)
     {
         super.setAttributes(attrs);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    {
+        super.setForeignKeys(foreignKeys);
     }
 }

@@ -160,4 +160,13 @@ public class AttributeIncompleteValueObject
     {
         super.setRetrievalQuery(query);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setOrdinalPosition(final int position)
+    {
+        super.setOrdinalPosition(position);
+    }
 }
