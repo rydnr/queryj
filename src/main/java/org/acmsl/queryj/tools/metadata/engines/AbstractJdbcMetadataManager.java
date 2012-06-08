@@ -45,7 +45,6 @@ import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.PrimaryKeyDAO;
-import org.acmsl.queryj.tools.metadata.RefactoredMetadataManager;
 import org.acmsl.queryj.tools.metadata.TableDAO;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
@@ -81,7 +80,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Abstract implementation of {@link RefactoredMetadataManager}.
+ * Abstract implementation of {@link MetadataManager}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
@@ -164,7 +163,7 @@ public class AbstractJdbcMetadataManager
     private String m__strQuote;
 
     /**
-     * Creates a new {@link AbstractRefactoredJdbcMetadataManager} with given information.
+     * Creates a new {@link AbstractJdbcMetadataManager} with given information.
      * @param name the name.
      */
     @SuppressWarnings("unused")

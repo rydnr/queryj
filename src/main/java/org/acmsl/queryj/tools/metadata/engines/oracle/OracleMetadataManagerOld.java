@@ -84,7 +84,7 @@ public class OracleMetadataManagerOld
     private static final long serialVersionUID = 7615952180554057335L;
 
     /**
-     * Creates an {@link OracleMetadataManager} using given information.
+     * Creates an {@link OracleMetadataManagerOld} using given information.
      * @param tableNames explicitly specified table names.
      * @param procedureNames explicitly specified procedure names.
      * @param disableTableExtraction <code>true</code> to disable table
@@ -220,7 +220,7 @@ public class OracleMetadataManagerOld
 
         @Nullable PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
             
@@ -375,11 +375,8 @@ public class OracleMetadataManagerOld
      * @param textFunctions the {@link OracleTextFunctions} instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
-     * @precondition connection != null
-     * @precondition tableNames != null
-     * @precondition queryFactory != null
-     * @precondition textFunctions != null
      */
+    @SuppressWarnings("unused")
     protected void extractForeignKeys(
         @NotNull final Connection connection,
         @NotNull final String[] tableNames,
@@ -390,7 +387,7 @@ public class OracleMetadataManagerOld
     {
         @Nullable PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
 
@@ -584,10 +581,6 @@ public class OracleMetadataManagerOld
      * @param textFunctions the {@link OracleTextFunctions} instance.
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
-     * @precondition connection != null
-     * @precondition tableNames != null
-     * @precondition queryFactory != null
-     * @precondition textFunctions != null
      */
     @SuppressWarnings("unused")
     protected void newExtractForeignKeys(
@@ -602,7 +595,7 @@ public class OracleMetadataManagerOld
 
         @Nullable PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         int t_iLength = (tableNames != null) ? tableNames.length : 0;
         
@@ -811,7 +804,7 @@ public class OracleMetadataManagerOld
     {
         String[] result = EMPTY_STRING_ARRAY;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable QueryResultSet t_Results = null;
 
@@ -980,7 +973,7 @@ public class OracleMetadataManagerOld
         // TODO: column names from parent table.
         String[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1147,7 +1140,7 @@ public class OracleMetadataManagerOld
     {
         int[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1368,7 +1361,7 @@ public class OracleMetadataManagerOld
         // TODO: use parent table
         boolean[] result;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1579,7 +1572,7 @@ public class OracleMetadataManagerOld
         // TODO: use listener
         @Nullable String result = "";
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
         @Nullable ResultSet t_rsResults = null;
 
@@ -1797,6 +1790,7 @@ public class OracleMetadataManagerOld
      * @return the list of all table names.
      * @throws SQLException if the database operation fails.
      */
+    @SuppressWarnings("unused")
     @Nullable
     protected String getColumnComment(
         @NotNull final Connection connection,
@@ -1808,7 +1802,7 @@ public class OracleMetadataManagerOld
     {
         @Nullable String result = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
+        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
         @Nullable ResultSet t_rsResults = null;
 

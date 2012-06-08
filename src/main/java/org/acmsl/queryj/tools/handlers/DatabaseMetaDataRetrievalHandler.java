@@ -41,9 +41,11 @@ import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -53,10 +55,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some Commons-Logging classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
-import org.acmsl.queryj.tools.metadata.vo.Table;
-import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
 import org.apache.commons.logging.Log;
 
 /*
@@ -71,7 +69,6 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.HashMap;
@@ -159,11 +156,20 @@ public abstract class DatabaseMetaDataRetrievalHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        return
-            handle(
-                parameters,
-                retrieveAlreadyDoneFlag(parameters),
-                retrieveDatabaseMetaData(parameters));
+        boolean result = true;
+
+        @Nullable final DatabaseMetaData t_Metadata = retrieveDatabaseMetaData(parameters);
+
+        if (t_Metadata != null)
+        {
+            result =
+                handle(
+                    parameters,
+                    retrieveAlreadyDoneFlag(parameters),
+                    t_Metadata);
+        }
+
+        return result;
     }
 
     /**

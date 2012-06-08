@@ -40,7 +40,6 @@ package org.acmsl.queryj.tools.metadata.engines;
  */
 import org.acmsl.queryj.tools.metadata.ColumnDAO;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.RefactoredMetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 
 /*
@@ -78,8 +77,8 @@ public class MetadataManagerColumnDAO
     }
 
     /**
-     * Specifies the {@link RefactoredMetadataManager} instance.
-     * @param manager the {@link RefactoredMetadataManager manager}.
+     * Specifies the {@link MetadataManager} instance.
+     * @param manager the {@link MetadataManager manager}.
      */
     protected final void immutableSetMetadataManager(@NotNull final MetadataManager manager)
     {
