@@ -150,7 +150,7 @@ public abstract class AbstractTable
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -159,7 +159,7 @@ public abstract class AbstractTable
      * Specifies the name.
      * @param name such name.
      */
-    protected void setName(final String name)
+    protected void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -308,7 +308,7 @@ public abstract class AbstractTable
 
     /**
      * Specifies the foreign keys.
-     * @param fks the List of {@link ForeignKey}s.
+     * @param fks the List of {@link ForeignKey foreign keys}.
      */
     protected void setForeignKeys(@NotNull final List<ForeignKey> fks)
     {
@@ -396,6 +396,7 @@ public abstract class AbstractTable
      * Retrieves whether the table is static or not.
      * @return <tt>true</tt> in such case.
      */
+    @SuppressWarnings("unused")
     public boolean isStatic()
     {
         return m__bStatic;
@@ -426,6 +427,7 @@ public abstract class AbstractTable
      * Retrieves whether the value-object for the table is decorated.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public boolean isVoDecorated()
     {
         return m__bVoDecorated;

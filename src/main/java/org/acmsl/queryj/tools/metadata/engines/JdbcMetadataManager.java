@@ -236,7 +236,8 @@ public class JdbcMetadataManager
         throws SQLException,
                QueryJException
     {
-        Map<String,List<Attribute>> t_mAux = new HashMap<String,List<Attribute>>(tables.size());
+        Map<String,List<AttributeIncompleteValueObject>> t_mAux =
+            new HashMap<String,List<AttributeIncompleteValueObject>>(tables.size());
 
         ResultSet t_rsColumns;
         String t_strTableName;
@@ -260,8 +261,8 @@ public class JdbcMetadataManager
                     null,
                     null);
 
-            List<Attribute> t_lColumns;
-            Attribute t_Attribute;
+            List<AttributeIncompleteValueObject> t_lColumns;
+            AttributeIncompleteValueObject t_Attribute;
 
             while (t_rsColumns.next())
             {
@@ -273,7 +274,7 @@ public class JdbcMetadataManager
 
                     if (t_lColumns == null)
                     {
-                        t_lColumns = new ArrayList<Attribute>(9);
+                        t_lColumns = new ArrayList<AttributeIncompleteValueObject>(9);
                         t_mAux.put(t_strTableName, t_lColumns);
                     }
 

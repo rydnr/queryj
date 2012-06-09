@@ -42,6 +42,7 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing JDK classes.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -53,6 +54,13 @@ import java.util.List;
 public interface ForeignKey
     extends Comparable<ForeignKey>
 {
+    /**
+     * Retrieves the foreign key name (optional).
+     * @return such name.
+     */
+    @Nullable
+    public String getFkName();
+
     /**
      * Retrieves the source table name.
      * @return such table name.

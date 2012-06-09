@@ -33,6 +33,11 @@
 package org.acmsl.queryj.tools.metadata.vo;
 
 /*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing JDK classes.
  */
 import java.util.List;
@@ -50,14 +55,11 @@ public class ForeignKeyValueObject
      * @param attributes the attributes.
      * @param targetTableName the target table name.
      * @param allowsNull whether the foreign key allows null values.
-     * @precondition sourceTableName the source table name.
-     * @precondition attributes != null
-     * @precondition targetTableName != null
      */
     public ForeignKeyValueObject(
-        final String sourceTableName,
-        final List attributes,
-        final String targetTableName,
+        @NotNull final String sourceTableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final String targetTableName,
         final boolean allowsNull)
     {
         super(sourceTableName, attributes, targetTableName, allowsNull);

@@ -44,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class AttributeValueObject
     extends AbstractAttribute
+    implements Attribute
 {
     /**
      * Creates an <code>AttributeValueObject</code> with the following

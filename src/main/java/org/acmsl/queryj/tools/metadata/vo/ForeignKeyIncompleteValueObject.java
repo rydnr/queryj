@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: TableIncompleteValueObject.java
+ * Filename: ForeignKeyIncompleteValueObject.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents an incomplete Table: only with partial information.
+ * Description: 
  *
- * Date: 6/6/12
- * Time: 10:08 AM
+ * Date: 6/9/12
+ * Time: 9:10 AM
  *
  */
 package org.acmsl.queryj.tools.metadata.vo;
@@ -40,63 +40,51 @@ package org.acmsl.queryj.tools.metadata.vo;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing some JDK classes.
+ */
 import java.util.List;
 
 /**
- * Represents an incomplete {@link Table}: only with partial information.
+ * A mutable implementation of {@link ForeignKey}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @since 2012/06/09
  */
-public class TableIncompleteValueObject
-    extends AbstractTable
+public class ForeignKeyIncompleteValueObject
+    extends AbstractForeignKey
 {
     /**
-     * Creates a {@link TableIncompleteValueObject}.
-     * @param name the table name.
-     * @param comment the table comment.
+     * Creates a {@link ForeignKeyIncompleteValueObject} with given information.
+     * @param fkName the name of the foreign key.
+     * @param sourceTableName the source table.
+     * @param targetTableName the target table.
      */
-    public TableIncompleteValueObject(
-        @NotNull final String name, @NotNull final String comment)
+    public ForeignKeyIncompleteValueObject(
+        @NotNull final String fkName,
+        @NotNull final String sourceTableName,
+        @NotNull final String targetTableName)
     {
-        super(name, comment);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setParentTable(@NotNull final Table parent)
-    {
-        super.setParentTable(parent);
+        super(fkName, sourceTableName, targetTableName);
     }
 
     /**
      * Specifies the attributes.
-     * @param attrs the attributes.
+     * @param attributes the attributes.
      */
     @Override
-    public void setAttributes(@NotNull final List<Attribute> attrs)
+    public void setAttributes(@NotNull final List<Attribute> attributes)
     {
-        super.setAttributes(attrs);
+        super.setAttributes(attributes);
     }
 
     /**
-     * Specifies the primary key attributes.
+     * Specifies whether the foreign key can take null values.
      *
-     * @param attrs the primary key attributes.
+     * @param allowsNull whether it allows null.
      */
     @Override
-    public void setPrimaryKey(@NotNull final List<Attribute> attrs)
+    public void isNullable(final boolean allowsNull)
     {
-        super.setPrimaryKey(attrs);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
-    {
-        super.setForeignKeys(foreignKeys);
+        super.isNullable(allowsNull);
     }
 }

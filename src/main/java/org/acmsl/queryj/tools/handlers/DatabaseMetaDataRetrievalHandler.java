@@ -952,7 +952,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
     {
         return
             (AntTablesElement)
-                parameters.get(ParameterValidationHandler.TABLES);
+                parameters.get(ParameterValidationHandler.EXPLICIT_TABLES);
     }
 
     /**

@@ -47,8 +47,13 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class AbstractForeignKey
-    implements  ForeignKey
+    implements ForeignKey
 {
+    /**
+     * (Optional) the foreign key name.
+     */
+    private String m__strFkName;
+
     /**
      * The source table name.
      */
@@ -57,7 +62,7 @@ public abstract class AbstractForeignKey
     /**
      * The attributes.
      */
-    private List m__lAttributes;
+    private List<Attribute> m__lAttributes;
     
     /**
      * The target table name.
@@ -75,14 +80,11 @@ public abstract class AbstractForeignKey
      * @param attributes the attributes.
      * @param targetTableName the target table name.
      * @param allowsNull whether the foreign key can take null values.
-     * @precondition sourceTableName the source table name.
-     * @precondition attributes != null
-     * @precondition targetTableName != null
      */
     protected AbstractForeignKey(
-        final String sourceTableName,
-        final List attributes,
-        final String targetTableName,
+        @NotNull final String sourceTableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final String targetTableName,
         final boolean allowsNull)
     {
         immutableSetSourceTableName(sourceTableName);
@@ -92,10 +94,56 @@ public abstract class AbstractForeignKey
     }
 
     /**
+     * Creates an <code>AbstractForeignKey</code> with given information.
+     * @param fkName the name of the foreign key.
+     * @param sourceTableName the source table name.
+     * @param targetTableName the target table name.
+     */
+    protected AbstractForeignKey(
+        @NotNull final String fkName,
+        @NotNull final String sourceTableName,
+        @NotNull final String targetTableName)
+    {
+        immutableSetFkName(fkName);
+        immutableSetSourceTableName(sourceTableName);
+        immutableSetTargetTableName(targetTableName);
+    }
+
+    /**
+     * Specifies the foreign key name.
+     * @param name such name.
+     */
+    protected final void immutableSetFkName(@NotNull final String name)
+    {
+        this.m__strFkName = name;
+    }
+
+    /**
+     * Specifies the foreign key name.
+     * @param name such name.
+     */
+    @SuppressWarnings("unused")
+    protected void setFkName(@NotNull final String name)
+    {
+        immutableSetFkName(name);
+    }
+
+    /**
+     * Retrieves the foreign key name.
+     * @return such name.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public String getFkName()
+    {
+        return m__strFkName;
+    }
+
+    /**
      * Specifies the source table name.
      * @param tableName such table name.
      */
-    protected final void immutableSetSourceTableName(final String tableName)
+    protected final void immutableSetSourceTableName(@NotNull final String tableName)
     {
         m__strSourceTableName = tableName;
     }
@@ -104,7 +152,8 @@ public abstract class AbstractForeignKey
      * Specifies the source table name.
      * @param tableName such table name.
      */
-    protected void setSourceTableName(final String tableName)
+    @SuppressWarnings("unused")
+    protected void setSourceTableName(@NotNull final String tableName)
     {
         immutableSetSourceTableName(tableName);
     }
@@ -113,6 +162,7 @@ public abstract class AbstractForeignKey
      * Retrieves the source table name.
      * @return such table name.
      */
+    @NotNull
     public String getSourceTableName()
     {
         return m__strSourceTableName;
@@ -122,7 +172,7 @@ public abstract class AbstractForeignKey
      * Specifies the attributes.
      * @param attributes such attributes.
      */
-    protected final void immutableSetAttributes(final List attributes)
+    protected final void immutableSetAttributes(@NotNull final List<Attribute> attributes)
     {
         m__lAttributes = attributes;
     }
@@ -131,7 +181,7 @@ public abstract class AbstractForeignKey
      * Specifies the attributes.
      * @param attributes the attributes.
      */
-    protected void setAttributes(final List attributes)
+    protected void setAttributes(@NotNull final List<Attribute> attributes)
     {
         immutableSetAttributes(attributes);
     }
@@ -140,7 +190,8 @@ public abstract class AbstractForeignKey
      * Retrieves the attributes.
      * @return such information.
      */
-    public List getAttributes()
+    @NotNull
+    public List<Attribute> getAttributes()
     {
         return m__lAttributes;
     }
@@ -149,7 +200,7 @@ public abstract class AbstractForeignKey
      * Specifies the target table name.
      * @param tableName such table name.
      */
-    protected final void immutableSetTargetTableName(final String tableName)
+    protected final void immutableSetTargetTableName(@NotNull final String tableName)
     {
         m__strTargetTableName = tableName;
     }
@@ -158,7 +209,8 @@ public abstract class AbstractForeignKey
      * Specifies the target table name.
      * @param tableName such table name.
      */
-    protected void setTargetTableName(final String tableName)
+    @SuppressWarnings("unused")
+    protected void setTargetTableName(@NotNull final String tableName)
     {
         immutableSetTargetTableName(tableName);
     }
@@ -167,6 +219,7 @@ public abstract class AbstractForeignKey
      * Retrieves the target table name.
      * @return such table name.
      */
+    @NotNull
     public String getTargetTableName()
     {
         return m__strTargetTableName;

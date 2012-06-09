@@ -251,8 +251,14 @@ public abstract class AbstractAttribute
             allowsNull,
             value);
 
-        immutableSetKeyword(keyword);
-        immutableSetRetrievalQuery(retrievalQuery);
+        if (keyword != null)
+        {
+            immutableSetKeyword(keyword);
+        }
+        if (retrievalQuery != null)
+        {
+            immutableSetRetrievalQuery(retrievalQuery);
+        }
         immutableSetReadOnly(readOnly);
         immutableSetBoolean(isBool);
         immutableSetBooleanTrue(booleanTrue);
@@ -282,7 +288,6 @@ public abstract class AbstractAttribute
      * Retrieves the attribute name.
      * @return such name.
      */
-    @Override
     @NotNull
     public String getName()
     {
@@ -312,7 +317,6 @@ public abstract class AbstractAttribute
      * Retrieves the attribute type.
      * @return its type.
      */
-    @Override
     public int getTypeId()
     {
         return m__iTypeId;
@@ -341,7 +345,6 @@ public abstract class AbstractAttribute
      * Retrieves the type.
      * @return such information.
      */
-    @Override
     @NotNull
     public String getType()
     {
@@ -370,7 +373,6 @@ public abstract class AbstractAttribute
      * Retrieves the table name.
      * @return such information.
      */
-    @Override
     @NotNull
     public String getTableName()
     {
@@ -400,7 +402,6 @@ public abstract class AbstractAttribute
      * Retrieves the attribute comment.
      * @return such comment.
      */
-    @Override
     @Nullable
     public String getComment()
     {
@@ -430,7 +431,6 @@ public abstract class AbstractAttribute
      * Retrieves the keyword used to retrieve the value, if any.
      * @return such information.
      */
-    @Override
     @Nullable
     public String getKeyword()
     {
@@ -460,7 +460,6 @@ public abstract class AbstractAttribute
      * Retrieves the query used to retrieve the value, if any.
      * @return such information.
      */
-    @Override
     @Nullable
     public String getRetrievalQuery()
     {
@@ -471,7 +470,6 @@ public abstract class AbstractAttribute
      * Retrieves whether it's managed externally.
      * @return such information.
      */
-    @Override
     public boolean isManagedExternally()
     {
         return
@@ -502,7 +500,6 @@ public abstract class AbstractAttribute
      * Retrieves whether it allows null values or not.
      * @return such information.
      */
-    @Override
     public boolean isNullable()
     {
         return m__bNullable;
@@ -537,7 +534,6 @@ public abstract class AbstractAttribute
      * contains data.
      * @return such information.
      */
-    @Override
     @Nullable
     public String getValue()
     {
@@ -567,7 +563,6 @@ public abstract class AbstractAttribute
      * Retrieves whether the attribute is marked as read-only.
      * @return such condition.
      */
-    @Override
     public boolean isReadOnly()
     {
         return m__bReadOnly;
@@ -596,7 +591,6 @@ public abstract class AbstractAttribute
      * Retrieves whether the attribute is marked as boolean.
      * @return such condition.
      */
-    @Override
     public boolean isBoolean()
     {
         return m__bBoolean;
@@ -625,7 +619,6 @@ public abstract class AbstractAttribute
      * Retrieves the symbol for <code>true</code> values.
      * @return such information.
      */
-    @Override
     @Nullable
     public String getBooleanTrue()
     {
@@ -655,7 +648,6 @@ public abstract class AbstractAttribute
      * Retrieves the symbol for <code>false</code> values.
      * @return such information.
      */
-    @Override
     @Nullable
     public String getBooleanFalse()
     {
@@ -685,7 +677,6 @@ public abstract class AbstractAttribute
      * Retrieves the symbol for <code>null</code> values.
      * @return such information.
      */
-    @Override
     @Nullable
     public String getBooleanNull()
     {
@@ -716,7 +707,6 @@ public abstract class AbstractAttribute
      * @return the position.
      */
     @SuppressWarnings("unused")
-    @Override
     public int getOrdinalPosition()
     {
         return m__iOrdinalPosition;
@@ -745,7 +735,6 @@ public abstract class AbstractAttribute
      * Retrieves the column length.
      * @return such information.
      */
-    @Override
     public int getLength()
     {
         return m__iColumnLength;
@@ -775,7 +764,6 @@ public abstract class AbstractAttribute
      * Retrieves the column precision.
      * @return such information.
      */
-    @Override
     public int getPrecision()
     {
         return m__iColumnPrecision;
@@ -800,7 +788,6 @@ public abstract class AbstractAttribute
     {
         return getName();
     }
-
 
     @Override
     public int hashCode()

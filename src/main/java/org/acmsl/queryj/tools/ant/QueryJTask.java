@@ -1501,7 +1501,7 @@ public class QueryJTask
                 if  (tables != null)
                 {
                     attributes.put(
-                        ParameterValidationHandler.TABLES,
+                        ParameterValidationHandler.EXPLICIT_TABLES,
                         tables);
                 }
 

@@ -1983,7 +1983,7 @@ public class QueryJChain
             chain.add(new JdbcConnectionOpeningHandler());
             chain.add(new CustomSqlProviderRetrievalHandler());
 
-            chain.add(new DatabaseMetaDataCacheReadingHandler());
+            // chain.add(new DatabaseMetaDataCacheReadingHandler());
 
             chain.add(new MySQL4xMetaDataRetrievalHandler());
             chain.add(new OracleMetaDataRetrievalHandler());

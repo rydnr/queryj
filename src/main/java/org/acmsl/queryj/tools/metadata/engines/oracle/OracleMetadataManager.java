@@ -27,7 +27,9 @@
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Overrides JdbcMetadataManager in order to retrieve Oracle
+ * dictionary information when using the standard DatabaseMetaData
+ * instance does provide no information.
  *
  * Date: 6/8/12
  * Time: 5:08 PM
@@ -40,9 +42,10 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
  */
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
+import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
 import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
-import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKeyIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
@@ -66,6 +69,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -85,11 +89,13 @@ import java.util.Map;
  */
 public class OracleMetadataManager
     extends JdbcMetadataManager
-    implements  OracleTableRepository
+    implements  OracleTableRepository,
+                Serializable
 {
+    private static final long serialVersionUID = -914170490377897216L;
+
     /**
      * Creates a {@link org.acmsl.queryj.tools.metadata.engines.AbstractJdbcMetadataManager} with given information.
-     * @param name                       the manager name.
      * @param metadata                   the {@link java.sql.DatabaseMetaData} instance.
      * @param metadataExtractionListener the {@link org.acmsl.queryj.tools.metadata.MetadataExtractionListener}
      *                                   instance.
@@ -105,7 +111,6 @@ public class OracleMetadataManager
      * @param quote                      the identifier quote string.
      */
     public OracleMetadataManager(
-        @NotNull final String name,
         @NotNull final DatabaseMetaData metadata,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @Nullable final String catalog,
@@ -120,7 +125,7 @@ public class OracleMetadataManager
         @NotNull final String quote)
     {
         super(
-            name,
+            engineName,
             metadata,
             metadataExtractionListener,
             catalog,
@@ -170,16 +175,18 @@ public class OracleMetadataManager
                 metaData.getConnection(),
                 caseSensitiveness,
                 metadataExtractionListener,
-                metaLanguageUtils);
+                metaLanguageUtils,
+                getMetadataTypeManager());
     }
 
     /**
-     * Retrieves the table names.
+     * Processes the schema.
      * @param tableNames the table names.
      * @param connection the database connection.
      * @param caseSensitiveness whether the checks are case sensitive or not.
      * @param metadataExtractionListener the metadata extraction listener.
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @return the list of all table names.
      * @throws java.sql.SQLException if the database operation fails.
      */
@@ -190,10 +197,11 @@ public class OracleMetadataManager
         @NotNull final Connection connection,
         final boolean caseSensitiveness,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
-        @NotNull final MetaLanguageUtils metaLanguageUtils)
+        @NotNull final MetaLanguageUtils metaLanguageUtils,
+        @NotNull final MetadataTypeManager metadataTypeManager)
         throws SQLException, QueryJException
     {
-        @NotNull final List<TableIncompleteValueObject> result = new ArrayList<TableIncompleteValueObject>();
+        @NotNull final List<Table> result;
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManager.class);
 
@@ -214,55 +222,58 @@ public class OracleMetadataManager
         @NotNull final Map<String,List<AttributeIncompleteValueObject>> t_mPrimaryKeyMap =
             new HashMap<String, List<AttributeIncompleteValueObject>>();
 
-        @NotNull final Map<String,List<ForeignKey>> t_mForeignKeyMap =
-            new HashMap<String, List<ForeignKey>>();
+        @NotNull final Map<String,List<ForeignKeyIncompleteValueObject>> t_mForeignKeyMap =
+            new HashMap<String, List<ForeignKeyIncompleteValueObject>>();
+
+        @NotNull final Map<String,List<AttributeIncompleteValueObject>> t_mForeignKeyAttributeMap =
+            new HashMap<String, List<AttributeIncompleteValueObject>>();
 
         try
         {
             @NotNull final String t_strQuery =
-                  "select c.table_name,"
-                +        "tc.comments table_comment,"
-                +        "c.column_name,"
-                +        "uc.comments column_comment,"
-                +        "c.data_type,"
-                +        "c.data_length,"
-                +        "c.data_precision,"
-                +        "c.data_scale,"
-                +        "c.nullable,"
-                +        "c.column_id,"
-                +        "cons.position pk_position,"
-                +        "fks.constraint_name fk_name,"
-                +        "fks.target_table,"
-                +        "fks.position fk_position"
-                +   "from user_tab_comments tc, user_col_comments uc,"
+                  "select c.table_name, "
+                +        "tc.comments table_comment, "
+                +        "c.column_name, "
+                +        "uc.comments column_comment, "
+                +        "c.data_type, "
+                +        "c.data_length, "
+                +        "c.data_precision, "
+                +        "c.data_scale, "
+                +        "c.nullable, "
+                +        "c.column_id, "
+                +        "cons.position pk_position, "
+                +        "fks.constraint_name fk_name, "
+                +        "fks.target_table, "
+                +        "fks.position fk_position "
+                +   "from user_tab_comments tc, user_col_comments uc, "
                 +         "user_tab_columns c "
-                +         "left outer join ("
+                +         "left outer join ( "
                 +              "select ucc.* "
-                +                "from user_cons_columns ucc, user_constraints uc"
-                +               "where uc.constraint_type = 'P' and uc.status = 'ENABLED'"
-                +                 "and uc.constraint_name = ucc.constraint_name) cons"
-                +           "on c.table_name = cons.table_name and c.column_name = cons.column_name"
-                +         "left outer join ("
-                +              "select rcon.constraint_name,"
-                +                     "col.position,"
-                +                     "rcol.table_name source_table,"
-                +                     "con.table_name target_table,"
-                +                     "rcol.column_name"
-                +                "from user_constraints con,"
-                +                     "user_cons_columns col,"
-                +                     "user_constraints rcon,"
-                +                     "user_cons_columns rcol"
-                +               "where rcon.constraint_type = 'R'"
-                +                 "and rcon.r_constraint_name = con.constraint_name"
-                +                 "and col.table_name = con.table_name"
-                +                 "and col.constraint_name = con.constraint_name"
-                +                 "and rcol.table_name = rcon.table_name"
-                +                 "and rcol.constraint_name = rcon.constraint_name"
-                +                 "and rcol.position = col.position) fks"
-                +           "on c.table_name = fks.source_table and c.column_name = fks.column_name"
-                +  "where tc.table_name = c.table_name"
-                +    "and tc.table_name = uc.table_name"
-                +    "and c.column_name = uc.column_name";
+                +                "from user_cons_columns ucc, user_constraints uc "
+                +               "where uc.constraint_type = 'P' and uc.status = 'ENABLED' "
+                +                 "and uc.constraint_name = ucc.constraint_name) cons "
+                +           "on c.table_name = cons.table_name and c.column_name = cons.column_name "
+                +         "left outer join ( "
+                +              "select rcon.constraint_name, "
+                +                     "col.position, "
+                +                     "rcol.table_name source_table, "
+                +                     "con.table_name target_table, "
+                +                     "rcol.column_name "
+                +                "from user_constraints con, "
+                +                     "user_cons_columns col, "
+                +                     "user_constraints rcon, "
+                +                     "user_cons_columns rcol "
+                +               "where rcon.constraint_type = 'R' "
+                +                 "and rcon.r_constraint_name = con.constraint_name "
+                +                 "and col.table_name = con.table_name "
+                +                 "and col.constraint_name = con.constraint_name "
+                +                 "and rcol.table_name = rcon.table_name "
+                +                 "and rcol.constraint_name = rcon.constraint_name "
+                +                 "and rcol.position = col.position) fks "
+                +           "on c.table_name = fks.source_table and c.column_name = fks.column_name "
+                +  "where tc.table_name = c.table_name "
+                +    "and tc.table_name = uc.table_name "
+                +    "and c.column_name = uc.column_name ";
             
             if  (t_Log != null)
             {
@@ -276,8 +287,7 @@ public class OracleMetadataManager
             sqlExceptionToThrow = invalidQuery;
         }
 
-        if (   (t_PreparedStatement != null)
-               && (sqlExceptionToThrow != null))
+        if (t_PreparedStatement != null)
         {
             try
             {
@@ -289,14 +299,22 @@ public class OracleMetadataManager
             }
         }
 
-        if (   (t_rsResults != null)
-               && (sqlExceptionToThrow != null))
+        if (t_rsResults != null)
         {
             try
             {
                 while  (t_rsResults.next())
                 {
-                    processRow(t_rsResults, t_mTableMap, t_mColumnMap, t_mPrimaryKeyMap, t_mForeignKeyMap);
+                    processRow(
+                        t_rsResults,
+                        t_mTableMap,
+                        t_mColumnMap,
+                        t_mPrimaryKeyMap,
+                        t_mForeignKeyMap,
+                        t_mForeignKeyAttributeMap,
+                        caseSensitiveness,
+                        metaLanguageUtils,
+                        metadataTypeManager);
                 }
             }
             catch (@NotNull final SQLException errorIteratingResults)
@@ -344,7 +362,72 @@ public class OracleMetadataManager
             throw sqlExceptionToThrow;
         }
 
-        return cloneTables(result);
+        buildUpTables(
+            t_mTableMap,
+            t_mColumnMap,
+            t_mPrimaryKeyMap,
+            t_mForeignKeyMap,
+            t_mForeignKeyAttributeMap,
+            caseSensitiveness,
+            metaLanguageUtils);
+
+        result = cloneTables(t_mTableMap.values());
+
+        return result;
+    }
+
+    protected void buildUpTables(
+        @NotNull final Map<String,TableIncompleteValueObject> tableMap,
+        @NotNull final Map<String,List<AttributeIncompleteValueObject>> columnMap,
+        @NotNull final Map<String,List<AttributeIncompleteValueObject>> primaryKeyMap,
+        @NotNull final Map<String,List<ForeignKeyIncompleteValueObject>> foreignKeyMap,
+        @NotNull final Map<String,List<AttributeIncompleteValueObject>> foreignKeyAttributeMap,
+        final boolean caseSensitiveness,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
+    {
+        for (@Nullable TableIncompleteValueObject t_Table : tableMap.values())
+        {
+            if (t_Table != null)
+            {
+                List<AttributeIncompleteValueObject> t_lColumns = columnMap.get(t_Table.getName());
+
+                if (t_lColumns != null)
+                {
+                    t_Table.setAttributes(toAttributeList(t_lColumns));
+                }
+
+                List<AttributeIncompleteValueObject> t_lPrimaryKeys = primaryKeyMap.get(t_Table.getName());
+
+                if (t_lPrimaryKeys != null)
+                {
+                    t_Table.setPrimaryKey(toAttributeList(t_lPrimaryKeys));
+                }
+
+                List<ForeignKeyIncompleteValueObject> t_lForeignKeys = foreignKeyMap.get(t_Table.getName());
+
+                if (t_lForeignKeys != null)
+                {
+                    for (@Nullable ForeignKeyIncompleteValueObject t_ForeignKey : t_lForeignKeys)
+                    {
+                        if (t_ForeignKey != null)
+                        {
+                            List<AttributeIncompleteValueObject> t_lForeignKeyAttributes =
+                                foreignKeyAttributeMap.get(t_ForeignKey.getFkName());
+
+                            if (t_lForeignKeyAttributes != null)
+                            {
+                                t_ForeignKey.setAttributes(toAttributeList(t_lForeignKeyAttributes));
+                            }
+                        }
+                    }
+                    t_Table.setForeignKeys(toForeignKeyList(t_lForeignKeys));
+                }
+            }
+        }
+
+        // second round: parent tables
+        bindParentChildRelationships(tableMap.values(), caseSensitiveness, metaLanguageUtils);
+        bindAttributes(tableMap.values(), columnMap);
     }
 
     /**
@@ -364,22 +447,30 @@ public class OracleMetadataManager
      * @param columnMap the map with the temporary column results.
      * @param primaryKeyMap the map with the temporary primary keys.
      * @param foreignKeyMap the map with the temporary foreign keys.
+     * @param foreignKeyAttributeMap the map with the temporary foreign key attributes.
+     * @param caseSensitiveness whether the engine is case sensitive or not.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
      * @throws SQLException if the {@link ResultSet} cannot be processed.
      */
-    @Nullable
+    @SuppressWarnings("unused,unchecked")
     protected void processRow(
         @NotNull final ResultSet resultSet,
         @NotNull final Map<String,TableIncompleteValueObject> tableMap,
         @NotNull final Map<String,List<AttributeIncompleteValueObject>> columnMap,
         @NotNull final Map<String,List<AttributeIncompleteValueObject>> primaryKeyMap,
-        @NotNull final Map<String,List<ForeignKey>> foreignKeyMap)
+        @NotNull final Map<String,List<ForeignKeyIncompleteValueObject>> foreignKeyMap,
+        @NotNull final Map<String,List<AttributeIncompleteValueObject>> foreignKeyAttributeMap,
+        final boolean caseSensitiveness,
+        @NotNull final MetaLanguageUtils metaLanguageUtils,
+        @NotNull final MetadataTypeManager metadataTypeManager)
       throws SQLException
     {
         String t_strTableName = resultSet.getString("TABLE_NAME");
         String t_strTableComment = resultSet.getString("TABLE_COMMENT");
         String t_strColumnName = resultSet.getString("COLUMN_NAME");
         String t_strColumnComment = resultSet.getString("COLUMN_COMMENT");
-        int t_iTypeId = resultSet.getInt("DATA_TYPE");
+        String t_strType = resultSet.getString("DATA_TYPE");
         int t_iLength = resultSet.getInt("DATA_LENGTH");
         Integer t_iPrecision = resultSet.getInt("DATA_PRECISION");
         Integer t_iScale = resultSet.getInt("DATA_SCALE");
@@ -389,5 +480,119 @@ public class OracleMetadataManager
         String t_strFkName = resultSet.getString("FK_NAME");
         String t_strTargetTable = resultSet.getString("TARGET_TABLE");
         Integer t_iFkPosition = resultSet.getInt("FK_POSITION");
+
+        @Nullable TableIncompleteValueObject t_Table = tableMap.get(t_strTableName);
+
+        if (t_Table == null)
+        {
+            t_Table = new TableIncompleteValueObject(t_strTableName, t_strTableComment);
+            tableMap.put(t_strTableName, t_Table);
+        }
+
+        @Nullable List<AttributeIncompleteValueObject> t_lColumns = columnMap.get(t_strTableName);
+
+        if (t_lColumns == null)
+        {
+            t_lColumns = new ArrayList<AttributeIncompleteValueObject>();
+            columnMap.put(t_strTableName, t_lColumns);
+        }
+        AttributeIncompleteValueObject t_CurrentAttribute =
+            new AttributeIncompleteValueObject(
+                t_strColumnName,
+                metadataTypeManager.getJavaType(t_strType, t_iPrecision),
+                t_strType,
+                t_strTableName,
+                t_strColumnComment,
+                t_iOrdinalPosition,
+                t_iLength,
+                t_iPrecision,
+                t_bNullable,
+                null);
+
+        t_lColumns.add(t_CurrentAttribute);
+
+        if (t_iPkPosition != null)
+        {
+            @Nullable List<AttributeIncompleteValueObject> t_lPrimaryKey = primaryKeyMap.get(t_strTableName);
+
+            if (t_lPrimaryKey == null)
+            {
+                t_lPrimaryKey = new ArrayList<AttributeIncompleteValueObject>(1);
+                primaryKeyMap.put(t_strTableName, t_lPrimaryKey);
+            }
+            t_lPrimaryKey.add(t_CurrentAttribute);
+        }
+
+        if (t_strFkName != null)
+        {
+            @Nullable List<ForeignKeyIncompleteValueObject> t_lForeignKeys =
+                foreignKeyMap.get(t_strTableName);
+
+            if (t_lForeignKeys == null)
+            {
+                t_lForeignKeys = new ArrayList<ForeignKeyIncompleteValueObject>(1);
+                foreignKeyMap.put(t_strTableName, t_lForeignKeys);
+            }
+
+            @Nullable List<AttributeIncompleteValueObject> t_lFkAttributes =
+                foreignKeyAttributeMap.get(t_strFkName);
+
+            if (t_lFkAttributes == null)
+            {
+                t_lFkAttributes = new ArrayList<AttributeIncompleteValueObject>(1);
+                foreignKeyAttributeMap.put(t_strFkName, t_lFkAttributes);
+            }
+
+            t_lFkAttributes.add(t_CurrentAttribute);
+
+            @Nullable ForeignKeyIncompleteValueObject t_ForeignKey =
+                findForeignKeyByName(t_strFkName, t_lForeignKeys, caseSensitiveness);
+
+            if (t_ForeignKey == null)
+            {
+                t_ForeignKey =
+                    new ForeignKeyIncompleteValueObject(
+                        t_strFkName, t_strTableName, t_strTargetTable);
+
+                t_lForeignKeys.add(t_ForeignKey);
+            }
+        }
+    }
+
+    /**
+     * Finds a foreign key using the name.
+     * @param name the foreign key name.
+     * @param foreignKeys the list of {@link ForeignKeyIncompleteValueObject foreign keys}.
+     * @param caseSensitiveness whether the match is case sensitive or not.
+     * @return the foreign key with given name, or <code>null</code> if not found.
+     */
+    @Nullable
+    protected ForeignKeyIncompleteValueObject findForeignKeyByName(
+        @NotNull final String name,
+        @NotNull final List<ForeignKeyIncompleteValueObject> foreignKeys,
+        final boolean caseSensitiveness)
+    {
+        @Nullable ForeignKeyIncompleteValueObject result = null;
+
+        for (@Nullable ForeignKeyIncompleteValueObject t_ForeignKey : foreignKeys)
+        {
+            if (t_ForeignKey != null)
+            {
+                if (   (caseSensitiveness)
+                    && (name.equals(t_ForeignKey.getFkName())))
+                {
+                    result = t_ForeignKey;
+                    break;
+                }
+                else if (   (!caseSensitiveness)
+                         && (name.equalsIgnoreCase(t_ForeignKey.getFkName())))
+                {
+                    result = t_ForeignKey;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 }

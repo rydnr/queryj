@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
@@ -46,6 +47,7 @@ import org.acmsl.commons.version.VersionUtils;
 /*
  * Importing some Ant classes.
  */
+import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.apache.tools.ant.BuildException;
 
@@ -130,30 +132,24 @@ public class OracleMetaDataRetrievalHandler
 
         try 
         {
-            // TODO
-            result = null;
-            /*
-                new Oracle8MetadataManager(
-                    tables,
-                    procedureNames,
-                    disableTableExtraction,
-                    lazyTableExtraction,
-                    disableProcedureExtraction,
-                    lazyProcedureExtraction,
+            result =
+                new OracleMetadataManager(
                     metaData,
+                    new MetadataExtractionLogger(),
                     catalog,
                     schema,
+                    null, // TODO: String[] tableNames
+                    tables,
+                    disableTableExtraction,
+                    lazyTableExtraction,
                     caseSensitive,
                     engineName,
                     engineVersion,
                     quote);
-              */
-            if (result != null)
-            {
-                result.eagerlyFetchMetadata();
 
-                storeTables(result.getTableDAO().findAllTables(), parameters);
-            }
+            result.eagerlyFetchMetadata();
+
+            storeTables(result.getTableDAO().findAllTables(), parameters);
         }
         catch  (@NotNull final RuntimeException exception)
         {

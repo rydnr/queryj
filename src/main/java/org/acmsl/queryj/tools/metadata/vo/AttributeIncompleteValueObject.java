@@ -39,6 +39,7 @@ package org.acmsl.queryj.tools.metadata.vo;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An incomplete {@link Attribute}.
@@ -72,7 +73,7 @@ public class AttributeIncompleteValueObject
         final int length,
         final int precision,
         final boolean allowsNull,
-        @NotNull final String value)
+        @Nullable final String value)
     {
         super(
             name,

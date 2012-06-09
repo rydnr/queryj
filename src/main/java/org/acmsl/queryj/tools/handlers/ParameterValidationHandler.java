@@ -268,6 +268,11 @@ public class ParameterValidationHandler
     public static final String TABLES = "tables";
 
     /**
+     * The tables element name.
+     */
+    public static final String EXPLICIT_TABLES = "explicit-tables";
+
+    /**
      * The missing tables error message.
      */
     public static final String TABLES_MISSING =

@@ -49,6 +49,7 @@ import java.util.List;
  */
 public final class TableValueObject
     extends AbstractTable
+    implements Table
 {
     /**
      * Creates an <code>TableValueObject</code> with the following

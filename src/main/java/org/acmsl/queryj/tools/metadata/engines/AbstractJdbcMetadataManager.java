@@ -45,9 +45,13 @@ import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.PrimaryKeyDAO;
 import org.acmsl.queryj.tools.metadata.TableDAO;
+import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKeyIncompleteValueObject;
+import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.TableValueObject;
@@ -68,6 +72,7 @@ import org.apache.commons.logging.Log;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.stringtemplate.v4.ST.AttributeList;
 
 /*
  * Importing some JDK classes.
@@ -75,6 +80,7 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -866,39 +872,154 @@ public abstract class AbstractJdbcMetadataManager
     }
 
     /**
+     * Converts between given lists.
+     * @param list the list to convert.
+     */
+    @NotNull
+    protected List<Attribute> toAttributeList(@NotNull final List<AttributeIncompleteValueObject> list)
+    {
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>(list.size());
+
+        for (@Nullable AttributeIncompleteValueObject t_Attribute : list)
+        {
+            result.add(t_Attribute);
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts between given lists.
+     * @param list the list to convert.
+     */
+    @NotNull
+    protected List<ForeignKey> toForeignKeyList(@NotNull final List<ForeignKeyIncompleteValueObject> list)
+    {
+        @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(list.size());
+
+        for (@Nullable ForeignKey t_Item : list)
+        {
+            result.add(t_Item);
+        }
+
+        return result;
+    }
+
+    /**
      * Clones given incomplete tables.
      * @param tables the tables to clone.
      * @return the ultimate table list.
      */
-    protected List<Table> cloneTables(@NotNull final List<? extends Table> tables)
+    protected List<Table> cloneTables(@NotNull final Collection<TableIncompleteValueObject> tables)
     {
         @NotNull final List<Table> result = new ArrayList<Table>(tables.size());
-
-        @NotNull Table t_MirrorTable;
 
         for (@Nullable Table t_Table : tables)
         {
             if (t_Table != null)
             {
-                if (t_Table instanceof TableValueObject)
-                {
-                    t_MirrorTable = t_Table;
-                }
-                else
-                {
-                    t_MirrorTable =
-                        new TableValueObject(
-                            t_Table.getName(),
-                            t_Table.getComment(),
-                            t_Table.getPrimaryKey(),
-                            t_Table.getAttributes(),
-                            t_Table.getForeignKeys(),
-                            t_Table.getParentTable(),
-                            t_Table.isStatic(),
-                            t_Table.isVoDecorated());
-                }
+                result.add(cloneTable(t_Table));
+            }
+        }
+        return result;
+    }
 
-                result.add(t_MirrorTable);
+    /**
+     * Clones given incomplete tables.
+     * @param table the table to clone.
+     * @return the ultimate table list.
+     */
+    protected Table cloneTable(@NotNull final Table table)
+    {
+        @NotNull Table result;
+
+        if (table instanceof TableValueObject)
+        {
+            result = table;
+        }
+        else
+        {
+            Table t_Table = table.getParentTable();
+
+            if (t_Table != null)
+            {
+                t_Table = cloneTable(t_Table);
+            }
+            result =
+                new TableValueObject(
+                    table.getName(),
+                    table.getComment(),
+                    cloneAttributes(table.getPrimaryKey()),
+                    cloneAttributes(table.getAttributes()),
+                    cloneForeignKeys(table.getForeignKeys()),
+                    t_Table,
+                    table.isStatic(),
+                    table.isVoDecorated());
+        }
+
+        return result;
+    }
+
+    /**
+     * Clones given attributes.
+     * @param attributes the attributes to clone.
+     * @return such attributes.
+     */
+    @NotNull
+    protected List<Attribute> cloneAttributes(@NotNull final List<Attribute> attributes)
+    {
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>(attributes.size());
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (t_Attribute != null)
+            {
+                result.add(
+                    new AttributeValueObject(
+                        t_Attribute.getName(),
+                        t_Attribute.getTypeId(),
+                        t_Attribute.getType(),
+                        t_Attribute.getTableName(),
+                        t_Attribute.getComment(),
+                        t_Attribute.getOrdinalPosition(),
+                        t_Attribute.getLength(),
+                        t_Attribute.getPrecision(),
+                        t_Attribute.getKeyword(),
+                        t_Attribute.getRetrievalQuery(),
+                        t_Attribute.isNullable(),
+                        t_Attribute.getValue(),
+                        t_Attribute.isBoolean(),
+                        t_Attribute.isReadOnly(),
+                        t_Attribute.getBooleanTrue(),
+                        t_Attribute.getBooleanFalse(),
+                        t_Attribute.getBooleanNull()));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Clones given foreign keys.
+     * @param foreignKeys the {@link org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey foreign keys}.
+     * @return the cloned foreign keys.
+     */
+    @NotNull
+    protected List<ForeignKey> cloneForeignKeys(
+        @NotNull final List<ForeignKey> foreignKeys)
+    {
+        @NotNull final List<ForeignKey> result = new AttributeList<ForeignKey>(foreignKeys.size());
+
+        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        {
+            if (t_ForeignKey != null)
+            {
+                result.add(
+                    new ForeignKeyValueObject(
+                        t_ForeignKey.getSourceTableName(),
+                        cloneAttributes(t_ForeignKey.getAttributes()),
+                        t_ForeignKey.getTargetTableName(),
+                        t_ForeignKey.isNullable()));
             }
         }
         return result;
@@ -910,11 +1031,12 @@ public abstract class AbstractJdbcMetadataManager
      * @param attributes the map of tableName -> attributes.
      */
     protected void bindAttributes(
-        @NotNull final List<TableIncompleteValueObject> tables, @NotNull Map<String, List<Attribute>> attributes)
+        @NotNull final Collection<TableIncompleteValueObject> tables,
+        @NotNull Map<String, List<AttributeIncompleteValueObject>> attributes)
     {
         Table t_ParentTable;
         List<Attribute> t_lParentTableAttributes;
-        List<Attribute> t_lChildTableAttributes;
+        List<AttributeIncompleteValueObject> t_lChildTableAttributes;
         List<Attribute> t_lCompleteAttributes;
 
         for (TableIncompleteValueObject t_Table : tables)
@@ -936,7 +1058,7 @@ public abstract class AbstractJdbcMetadataManager
             }
             else
             {
-                t_Table.setAttributes(t_lChildTableAttributes);
+                t_Table.setAttributes(toAttributeList(t_lChildTableAttributes));
             }
         }
 
@@ -948,7 +1070,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
      */
     protected void bindParentChildRelationships(
-        @NotNull final List<TableIncompleteValueObject> tables,
+        @NotNull final Collection<TableIncompleteValueObject> tables,
         final boolean caseSensitiveness,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
@@ -979,7 +1101,7 @@ public abstract class AbstractJdbcMetadataManager
     @Nullable
     protected Table retrieveParentTable(
         @NotNull final String tableComment,
-        @NotNull final List<? extends Table> tables,
+        @NotNull final Collection<? extends Table> tables,
         final boolean caseSensitiveness,
         @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
@@ -1004,7 +1126,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     @Nullable
     protected Table findTableByName(
-        @NotNull final String table, @NotNull final List<? extends Table> tables, final boolean caseSensitiveness)
+        @NotNull final String table, @NotNull final Collection<? extends Table> tables, final boolean caseSensitiveness)
     {
         @Nullable Table result = null;
 
@@ -1040,7 +1162,7 @@ public abstract class AbstractJdbcMetadataManager
      * @param tables the table information.
      * @return just the table names.
      */
-    protected String[] retrieveTableNames(@NotNull final List<? extends Table> tables)
+    protected String[] retrieveTableNames(@NotNull final List<? extends AbstractTable> tables)
     {
         String[] result = new String[tables.size()];
 
