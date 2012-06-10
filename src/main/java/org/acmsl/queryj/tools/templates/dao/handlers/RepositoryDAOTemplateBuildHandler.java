@@ -31,7 +31,7 @@
  * Description: Builds a repository DAO if requested.
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
  * Importing some project classes.
@@ -51,6 +51,7 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,9 +68,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOTemplateBuildHandler
-    extends  BasePerRepositoryTemplateBuildHandler
-                 <RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,
-                     RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+    extends BasePerRepositoryTemplateBuildHandler<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,
+                         RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.

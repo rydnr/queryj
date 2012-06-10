@@ -64,7 +64,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
     /**
      * Creates a <code>BasePerCustomSqlTemplateWritingHandler</code> instance.
      */
-    public BasePerCustomSqlTemplateWritingHandler() {};
+    public BasePerCustomSqlTemplateWritingHandler() {}
 
     /**
      * Handles given information.

@@ -35,7 +35,6 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.customsql.Result;
@@ -49,9 +48,7 @@ import org.acmsl.queryj.tools.templates.TemplateGenerator;
 /*
  * Importing Jetbrains annotations.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -59,8 +56,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -85,63 +80,35 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        writeTemplates(parameters, retrieveDatabaseMetaData(parameters));
+        boolean result = true;
 
-        return false;
-    }
+        MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
 
-    /**
-     * Writes the templates.
-     * @param parameters the parameters.
-     * @param metaData the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters, @Nullable final DatabaseMetaData metaData)
-      throws  QueryJBuildException
-    {
-        String t_strProductName = "";
-
-        if (metaData != null)
+        if (t_MetadataManager != null)
         {
-            try
-            {
-                t_strProductName = metaData.getDatabaseProductName();
-            }
-            catch  (@NotNull final SQLException resultException)
-            {
-                Log t_Log = UniqueLogFactory.getLog(BasePerCustomResultTemplateBuildHandler.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.warn("Cannot retrieve database product name", resultException);
-                }
-            }
+            writeTemplates(parameters, t_MetadataManager);
+            result = false;
         }
 
-        writeTemplates(parameters, t_strProductName);
+        return result;
     }
 
     /**
      * Writes the templates.
      * @param parameters the parameters.
-     * @param engineName the engine name.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
      */
     protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final String engineName)
+        @NotNull final Map parameters, @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
         writeTemplates(
             retrieveTemplates(parameters),
             retrieveTemplateGenerator(),
             retrieveCustomSqlProvider(parameters),
-            retrieveMetadataManager(parameters),
-            engineName,
+            metadataManager,
+            metadataManager.getEngineName(),
             retrieveCharset(parameters),
             parameters);
     }
@@ -177,19 +144,16 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
 
                     Result t_Result = t_Context.getResult();
 
-                    if (t_Result != null)
-                    {
-                        File t_OutputDir =
-                            retrieveOutputDir(
-                                t_Result,
-                                customSqlProvider,
-                                metadataManager,
-                                engineName,
-                                parameters);
+                    File t_OutputDir =
+                        retrieveOutputDir(
+                            t_Result,
+                            customSqlProvider,
+                            metadataManager,
+                            engineName,
+                            parameters);
 
-                        templateGenerator.write(
-                            t_Template, t_OutputDir, charset);
-                    }
+                    templateGenerator.write(
+                        t_Template, t_OutputDir, charset);
                 }
             }
         }
@@ -226,8 +190,6 @@ public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePe
      * @param parameters the parameter map.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
-     * @precondition resultElement != null
      */
     @NotNull
     protected File retrieveOutputDir(

@@ -31,7 +31,7 @@
  * Description: Builds the repository DAO factory interface if requested.
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
  * Importing some project classes.
@@ -45,6 +45,7 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -57,9 +58,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOFactoryTemplateBuildHandler
-      extends  BasePerRepositoryTemplateBuildHandler
-                   <BaseRepositoryDAOFactoryTemplate,
-                       BaseRepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
+      extends BasePerRepositoryTemplateBuildHandler<BaseRepositoryDAOFactoryTemplate,
+                             BaseRepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

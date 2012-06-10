@@ -35,8 +35,6 @@ package org.acmsl.queryj.tools.ant;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
-import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
@@ -45,15 +43,9 @@ import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.logging.QueryJAntLog;
 
 /*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 
 /*
@@ -61,7 +53,6 @@ import java.util.Map;
  */
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DynamicConfigurator;
-import org.apache.tools.ant.Project;
 import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Reference;
@@ -69,7 +60,6 @@ import org.apache.tools.ant.types.Reference;
 /*
  * Importing some Apache Commons Logging classes.
  */
-import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -124,6 +114,7 @@ public class QueryJTask
      * Specifies the {@link QueryJChain} to delegate.
      * @param delegee such instance.
      */
+    @SuppressWarnings("unused")
     protected void setQueryJChain(final QueryJChain delegee)
     {
         immutableSetQueryJChain(delegee);
@@ -142,6 +133,7 @@ public class QueryJTask
      * Specifies the properties file.
      * @param file such file.
      */
+    @SuppressWarnings("unused")
     public void setSettingsFile(final File file)
     {
         setSettingsFile(file, getQueryJChain());
@@ -151,7 +143,6 @@ public class QueryJTask
      * Specifies the properties file.
      * @param file such file.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setSettingsFile(final File file, @NotNull final QueryJChain delegee)
     {
@@ -162,6 +153,7 @@ public class QueryJTask
      * Retrieves the properties file.
      * @return such file.
      */
+    @SuppressWarnings("unused")
     public File getSettingsFile()
     {
         return getSettingsFile(getQueryJChain());
@@ -171,7 +163,6 @@ public class QueryJTask
      * Retrieves the properties file.
      * @param delegee the delegee.
      * @return such file.
-     * @precondition delegee != null
      */
     protected File getSettingsFile(@NotNull final QueryJChain delegee)
     {
@@ -191,7 +182,6 @@ public class QueryJTask
      * Specifies the driver.
      * @param driver the new driver.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setDriver(final String driver, @NotNull final QueryJChain delegee)
     {
@@ -202,6 +192,7 @@ public class QueryJTask
      * Retrieves the driver.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getDriver()
     {
         return getDriver(getQueryJChain());
@@ -211,7 +202,6 @@ public class QueryJTask
      * Retrieves the driver.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getDriver(@NotNull final QueryJChain delegee)
     {
@@ -231,7 +221,6 @@ public class QueryJTask
      * Specifies the url.
      * @param url the new url.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setUrl(final String url, @NotNull final QueryJChain delegee)
     {
@@ -242,6 +231,7 @@ public class QueryJTask
      * Retrieves the url.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getUrl()
     {
         return getUrl(getQueryJChain());
@@ -251,7 +241,6 @@ public class QueryJTask
      * Retrieves the url.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getUrl(@NotNull final QueryJChain delegee)
     {
@@ -271,7 +260,6 @@ public class QueryJTask
      * Specifies the username.
      * @param username the new username.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setUsername(
         final String username, @NotNull final QueryJChain delegee)
@@ -283,6 +271,7 @@ public class QueryJTask
      * Retrieves the username.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getUsername()
     {
         return getUsername(getQueryJChain());
@@ -292,7 +281,6 @@ public class QueryJTask
      * Retrieves the username.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getUsername(@NotNull final QueryJChain delegee)
     {
@@ -312,7 +300,6 @@ public class QueryJTask
      * Specifies the password.
      * @param password the new password.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setPassword(
         final String password, @NotNull final QueryJChain delegee)
@@ -324,6 +311,7 @@ public class QueryJTask
      * Retrieves the password.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getPassword()
     {
         return getPassword(getQueryJChain());
@@ -333,7 +321,6 @@ public class QueryJTask
      * Retrieves the password.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getPassword(@NotNull final QueryJChain delegee)
     {
@@ -353,7 +340,6 @@ public class QueryJTask
      * Specifies the catalog.
      * @param catalog the new catalog.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setCatalog(
         final String catalog, @NotNull final QueryJChain delegee)
@@ -365,6 +351,7 @@ public class QueryJTask
      * Retrieves the catalog.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getCatalog()
     {
         return getCatalog(getQueryJChain());
@@ -374,7 +361,6 @@ public class QueryJTask
      * Retrieves the catalog.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getCatalog(@NotNull final QueryJChain delegee)
     {
@@ -394,7 +380,6 @@ public class QueryJTask
      * Specifies the schema.
      * @param schema the new schema.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setSchema(
         final String schema, @NotNull final QueryJChain delegee)
@@ -406,6 +391,7 @@ public class QueryJTask
      * Retrieves the schema.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getSchema()
     {
         return getSchema(getQueryJChain());
@@ -415,7 +401,6 @@ public class QueryJTask
      * Retrieves the schema.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getSchema(@NotNull final QueryJChain delegee)
     {
@@ -435,7 +420,6 @@ public class QueryJTask
      * Specifies the repository.
      * @param repository the new repository.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setRepository(
         final String repository, @NotNull final QueryJChain delegee)
@@ -447,6 +431,7 @@ public class QueryJTask
      * Retrieves the repository.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getRepository()
     {
         return getRepository(getQueryJChain());
@@ -456,7 +441,6 @@ public class QueryJTask
      * Retrieves the repository.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getRepository(@NotNull final QueryJChain delegee)
     {
@@ -476,7 +460,6 @@ public class QueryJTask
      * Specifies the package.
      * @param packageName the new package.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setPackage(
         final String packageName, @NotNull final QueryJChain delegee)
@@ -488,6 +471,7 @@ public class QueryJTask
      * Retrieves the package.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getPackage()
     {
         return getPackage(getQueryJChain());
@@ -497,7 +481,6 @@ public class QueryJTask
      * Retrieves the package.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getPackage(@NotNull final QueryJChain delegee)
     {
@@ -517,7 +500,6 @@ public class QueryJTask
      * Specifies the output dir.
      * @param outputdir the new output dir.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setOutputdir(
         final File outputdir, @NotNull final QueryJChain delegee)
@@ -529,6 +511,7 @@ public class QueryJTask
      * Retrieves the output dir.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public File getOutputdir()
     {
         return getOutputdir(getQueryJChain());
@@ -538,7 +521,6 @@ public class QueryJTask
      * Retrieves the output dir.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected File getOutputdir(@NotNull final QueryJChain delegee)
     {
@@ -558,7 +540,6 @@ public class QueryJTask
      * Specifies the header file.
      * @param headerfile the new header file.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setHeaderfile(
         final File headerfile, @NotNull final QueryJChain delegee)
@@ -570,6 +551,7 @@ public class QueryJTask
      * Retrieves the header file.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public File getHeaderfile()
     {
         return getHeaderfile(getQueryJChain());
@@ -579,7 +561,6 @@ public class QueryJTask
      * Retrieves the header file.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected File getHeaderfile(@NotNull final QueryJChain delegee)
     {
@@ -599,7 +580,6 @@ public class QueryJTask
      * Specifies whether to use subfolders.
      * @param outputDirSubFolders such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setOutputdirsubfolders(
         final String outputDirSubFolders, @NotNull final QueryJChain delegee)
@@ -611,6 +591,7 @@ public class QueryJTask
      * Retrieves whether to use subfolders.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getOutputdirsubfolders()
     {
         return getOutputdirsubfolders(getQueryJChain());
@@ -620,7 +601,6 @@ public class QueryJTask
      * Retrieves whether to use subfolders.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getOutputdirsubfolders(@NotNull final QueryJChain delegee)
     {
@@ -631,6 +611,7 @@ public class QueryJTask
      * Specifies whether to extract the tables.
      * @param extractTables the procedure extraction setting.
      */
+    @SuppressWarnings("unused")
     public void setExtractTables(final String extractTables)
     {
         setExtractTables(extractTables, getQueryJChain());
@@ -640,7 +621,6 @@ public class QueryJTask
      * Specifies whether to extract the tables.
      * @param extractTables the procedure extraction setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setExtractTables(
         final String extractTables, @NotNull final QueryJChain delegee)
@@ -652,6 +632,7 @@ public class QueryJTask
      * Retrieves whether to extract the tables.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getExtractTables()
     {
         return getExtractTables(getQueryJChain());
@@ -661,7 +642,6 @@ public class QueryJTask
      * Retrieves whether to extract the tables.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getExtractTables(@NotNull final QueryJChain delegee)
     {
@@ -699,7 +679,6 @@ public class QueryJTask
      * Specifies whether to extract the procedures.
      * @param extractProcedures the procedure extraction setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setExtractProcedures(
         final String extractProcedures, @NotNull final QueryJChain delegee)
@@ -711,6 +690,7 @@ public class QueryJTask
      * Retrieves whether to extract the procedures.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getExtractProcedures()
     {
         return getExtractProcedures(getQueryJChain());
@@ -720,7 +700,6 @@ public class QueryJTask
      * Retrieves whether to extract the procedures.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getExtractProcedures(@NotNull final QueryJChain delegee)
     {
@@ -740,7 +719,6 @@ public class QueryJTask
      * Specifies whether to extract the functions.
      * @param extractFunctions the procedure extraction setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setExtractFunctions(
         final String extractFunctions, @NotNull final QueryJChain delegee)
@@ -752,6 +730,7 @@ public class QueryJTask
      * Retrieves whether to extract the functions.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getExtractFunctions()
     {
         return getExtractFunctions(getQueryJChain());
@@ -761,7 +740,6 @@ public class QueryJTask
      * Retrieves whether to extract the functions.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getExtractFunctions(@NotNull final QueryJChain delegee)
     {
@@ -781,7 +759,6 @@ public class QueryJTask
      * Specifices the JNDI location for the data sources.
      * @param jndiLocation the JNDI location.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setJndiDataSource(
         final String jndiLocation, @NotNull final QueryJChain delegee)
@@ -793,6 +770,7 @@ public class QueryJTask
      * Retrieves the JNDI location for the data sources.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getJndiDataSource()
     {
         return getJndiDataSource(getQueryJChain());
@@ -802,7 +780,6 @@ public class QueryJTask
      * Retrieves the JNDI location for the data sources.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getJndiDataSource(@NotNull final QueryJChain delegee)
     {
@@ -822,7 +799,6 @@ public class QueryJTask
      * Specifies whether to generate Mock DAO implementations.
      * @param generate such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setGenerateMockDAOImplementation(
         final String generate, @NotNull final QueryJChain delegee)
@@ -834,6 +810,7 @@ public class QueryJTask
      * Retrieves whether to generate Mock DAO implementations.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getGenerateMockDAOImplementation()
     {
         return getGenerateMockDAOImplementation(getQueryJChain());
@@ -862,7 +839,6 @@ public class QueryJTask
      * Specifies whether to generate XML DAO implementations.
      * @param generate such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setGenerateXMLDAOImplementation(
         final String generate, @NotNull final QueryJChain delegee)
@@ -874,6 +850,7 @@ public class QueryJTask
      * Retrieves whether to generate XML DAO implementations.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getGenerateXMLDAOImplementation()
     {
         return getGenerateXMLDAOImplementation(getQueryJChain());
@@ -883,7 +860,6 @@ public class QueryJTask
      * Retrieves whether to generate XML DAO implementations.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getGenerateXMLDAOImplementation(
         @NotNull final QueryJChain delegee)
@@ -904,7 +880,6 @@ public class QueryJTask
      * Specifies whether to generate test cases.
      * @param generate such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setGenerateTests(
         final String generate, @NotNull final QueryJChain delegee)
@@ -916,6 +891,7 @@ public class QueryJTask
      * Retrieves whether to generate test cases.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getGenerateTests()
     {
         return getGenerateTests(getQueryJChain());
@@ -925,7 +901,6 @@ public class QueryJTask
      * Retrieves whether to generate test cases.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getGenerateTests(
         @NotNull final QueryJChain delegee)
@@ -937,6 +912,7 @@ public class QueryJTask
      * Specifies whether to allow empty repository DAO.
      * @param allow such setting.
      */
+    @SuppressWarnings("unused")
     public void setAllowEmptyRepositoryDAO(final String allow)
     {
         setAllowEmptyRepositoryDAO(allow, getQueryJChain());
@@ -946,7 +922,6 @@ public class QueryJTask
      * Specifies whether to allow empty repository DAO.
      * @param allow such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setAllowEmptyRepositoryDAO(
         final String allow, @NotNull final QueryJChain delegee)
@@ -958,6 +933,7 @@ public class QueryJTask
      * Retrieves whether to allow empty repository DAO.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getAllowEmptyRepositoryDAO()
     {
         return getAllowEmptyRepositoryDAO(getQueryJChain());
@@ -967,7 +943,6 @@ public class QueryJTask
      * Retrieves whether to allow empty repository DAO.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getAllowEmptyRepositoryDAO(@NotNull final QueryJChain delegee)
     {
@@ -978,6 +953,7 @@ public class QueryJTask
      * Specifies whether to implement marker interfaces.
      * @param implement such setting.
      */
+    @SuppressWarnings("unused")
     public void setImplementMarkerInterfaces(final String implement)
     {
         setImplementMarkerInterfaces(implement, getQueryJChain());
@@ -987,7 +963,6 @@ public class QueryJTask
      * Specifies whether to implement marker interfaces.
      * @param implement such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setImplementMarkerInterfaces(
         final String implement, @NotNull final QueryJChain delegee)
@@ -999,6 +974,7 @@ public class QueryJTask
      * Retrieves whether to implement marker interfaces.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getImplementMarkerInterfaces()
     {
         return getImplementMarkerInterfaces(getQueryJChain());
@@ -1008,7 +984,6 @@ public class QueryJTask
      * Retrieves whether to implement marker interfaces.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getImplementMarkerInterfaces(@NotNull final QueryJChain delegee)
     {
@@ -1028,7 +1003,6 @@ public class QueryJTask
      * Specifies the custom-sql model.
      * @param model the model.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setCustomSqlModel(
         final String model, @NotNull final QueryJChain delegee)
@@ -1041,6 +1015,7 @@ public class QueryJTask
      * @return such model.
      */
     @Nullable
+    @SuppressWarnings("unused")
     public String getCustomSqlModel()
     {
         return getCustomSqlModel(getQueryJChain());
@@ -1050,7 +1025,6 @@ public class QueryJTask
      * Retrieves the custom-sql model.
      * @param delegee the delegee.
      * @return such model.
-     * @precondition delegee != null
      */
     @Nullable
     protected String getCustomSqlModel(@NotNull final QueryJChain delegee)
@@ -1062,6 +1036,7 @@ public class QueryJTask
      * Specifies whether to disable custom sql validation.
      * @param disable such setting.
      */
+    @SuppressWarnings("unused")
     public void setDisableCustomSqlValidation(final String disable)
     {
         setDisableCustomSqlValidation(disable, getQueryJChain());
@@ -1071,7 +1046,6 @@ public class QueryJTask
      * Specifies whether to disable custom sql validation.
      * @param disable such setting.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setDisableCustomSqlValidation(
         final String disable, @NotNull final QueryJChain delegee)
@@ -1083,6 +1057,7 @@ public class QueryJTask
      * Retrieves whether to disable custom sql validation.
      * @return such setting.
      */
+    @SuppressWarnings("unused")
     public String getDisableCustomSqlValidation()
     {
         return getDisableCustomSqlValidation(getQueryJChain());
@@ -1092,7 +1067,6 @@ public class QueryJTask
      * Retrieves whether to disable custom sql validation.
      * @param delegee the delegee.
      * @return such setting.
-     * @precondition delegee != null
      */
     protected String getDisableCustomSqlValidation(@NotNull final QueryJChain delegee)
     {
@@ -1112,7 +1086,6 @@ public class QueryJTask
      * Specifies the sql.xml file.
      * @param file the new file.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setSqlXmlFile(final File file, @NotNull final QueryJChain delegee)
     {
@@ -1123,6 +1096,7 @@ public class QueryJTask
      * Retrieves the sql.xml file.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public File getSqlXmlFile()
     {
         return getSqlXmlFile(getQueryJChain());
@@ -1132,7 +1106,6 @@ public class QueryJTask
      * Retrieves the sql.xml file.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected File getSqlXmlFile(@NotNull final QueryJChain delegee)
     {
@@ -1152,7 +1125,6 @@ public class QueryJTask
      * Specifies the grammar bundle.
      * @param grammarBundle the new grammar bundle.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setGrammarbundle(
         final String grammarBundle, @NotNull final QueryJChain delegee)
@@ -1164,6 +1136,7 @@ public class QueryJTask
      * Retrieves the grammar bundle.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getGrammarbundle()
     {
         return getGrammarbundle(getQueryJChain());
@@ -1173,7 +1146,6 @@ public class QueryJTask
      * Retrieves the grammar bundle.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getGrammarbundle(@NotNull final QueryJChain delegee)
     {
@@ -1220,6 +1192,7 @@ public class QueryJTask
      * Reference to the classpath.
      * @param classpathReference the reference to the class path.
      */
+    @SuppressWarnings("unused")
     public void setClasspathRef(final Reference classpathReference)
     {
         Path t_Path = createClasspath();
@@ -1270,7 +1243,6 @@ public class QueryJTask
      * Specifies the encoding.
      * @param encoding the new encoding.
      * @param delegee the delegee.
-     * @precondition delegee != null
      */
     protected void setEncoding(
         final String encoding, @NotNull final QueryJChain delegee)
@@ -1282,6 +1254,7 @@ public class QueryJTask
      * Retrieves the encoding.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public String getEncoding()
     {
         return getEncoding(getQueryJChain());
@@ -1291,7 +1264,6 @@ public class QueryJTask
      * Retrieves the encoding.
      * @param delegee the delegee.
      * @return such information.
-     * @precondition delegee != null
      */
     protected String getEncoding(@NotNull final QueryJChain delegee)
     {
@@ -1361,7 +1333,7 @@ public class QueryJTask
         /**
          * Creates an {@link AntQueryJChain} instance.
          */
-        public AntQueryJChain() {};
+        public AntQueryJChain() {}
                 
         /**
          * Builds the command.
@@ -1386,10 +1358,7 @@ public class QueryJTask
          * @param schema the JDBC schema.
          * @param repository the repository.
          * @param packageName the base package of the generated sources.
-         * @param outputDir the output folder.
          * @param header the copyright header.
-         * @param outputDirSubfolders whether to use main/ and test/ as
-         * subfolders.
          * @param extractTables whether to extract tables or not.
          * @param extractProcedures whether to extract the procedures or not.
          * @param extractFunctions whether to extract the functions or not.
@@ -1410,7 +1379,6 @@ public class QueryJTask
          * @param grammarBundle the grammar with irregular singular and plural
          * forms of the table names.
          * @param encoding the file encoding.
-         * @precondition attributes != null
          */
         protected void mapAttributes(
             final Map attributes,
@@ -1481,8 +1449,8 @@ public class QueryJTask
          * @param tables the custom tables.
          * @param externallyManagedFields the externally-managed fields.
          * @param classpath the classpath.
-         * @precondition attributes != null
          */
+        @SuppressWarnings("unchecked")
         protected void mapAttributes(
             @Nullable final Map attributes,
             @Nullable final AntTablesElement tables,
@@ -1538,11 +1506,11 @@ public class QueryJTask
     @Nullable
     public Object createDynamicElement(final String name)
     {
-        @Nullable Object result = null;
+        @Nullable Object result;
 
         if  ("tables".equals(name))
         {
-            @Nullable AntTablesElement t_ateResult = null;
+            @Nullable AntTablesElement t_ateResult;
 
             if  (!getExtractTablesFlag())
             {

@@ -778,15 +778,18 @@ public abstract class AbstractJdbcMetadataManager
     public void eagerlyFetchMetadata()
         throws SQLException, QueryJException
     {
-        setTables(
-            extractTableMetadata(
-                getTableNames(),
-                getMetaData(),
-                getCatalog(),
-                getSchema(),
-                isCaseSensitive(),
-                getMetadataExtractionListener(),
-                MetaLanguageUtils.getInstance()));
+        if (getTables().size() == 0)
+        {
+            setTables(
+                extractTableMetadata(
+                    getTableNames(),
+                    getMetaData(),
+                    getCatalog(),
+                    getSchema(),
+                    isCaseSensitive(),
+                    getMetadataExtractionListener(),
+                    MetaLanguageUtils.getInstance()));
+        }
     }
 
     /**

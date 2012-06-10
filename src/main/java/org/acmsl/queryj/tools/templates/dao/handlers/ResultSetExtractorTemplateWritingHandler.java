@@ -49,6 +49,7 @@ import org.acmsl.queryj.tools.templates.TemplateMappingManager;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -56,6 +57,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,14 +87,24 @@ public class ResultSetExtractorTemplateWritingHandler
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        writeTemplates(
-            parameters,
-            retrieveMetadataManager(parameters),
-            retrieveCharset(parameters),
-            retrieveTemplates(parameters),
-            ResultSetExtractorTemplateGenerator.getInstance());
+        boolean result = true;
 
-        return false;
+        @Nullable final MetadataManager t_MetadataManager =
+            retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager != null)
+        {
+            writeTemplates(
+                parameters,
+                t_MetadataManager,
+                retrieveCharset(parameters),
+                retrieveTemplates(parameters),
+                ResultSetExtractorTemplateGenerator.getInstance());
+
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -107,7 +119,7 @@ public class ResultSetExtractorTemplateWritingHandler
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final Charset charset,
-        @NotNull final ResultSetExtractorTemplate[] templates,
+        @NotNull final List<ResultSetExtractorTemplate> templates,
         @NotNull final ResultSetExtractorTemplateGenerator templateGenerator)
       throws  QueryJBuildException
     {
@@ -139,14 +151,14 @@ public class ResultSetExtractorTemplateWritingHandler
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    protected ResultSetExtractorTemplate[] retrieveTemplates(
+    protected List<ResultSetExtractorTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (ResultSetExtractorTemplate[])
+            (List<ResultSetExtractorTemplate>)
                 parameters.get(
                     TemplateMappingManager.RESULTSET_EXTRACTOR_TEMPLATES);
     }
@@ -184,17 +196,12 @@ public class ResultSetExtractorTemplateWritingHandler
      * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition engineName != null
-     * @precondition projectOutputDir != null
-     * @precondition projectPackage != null
-     * @precondition tableName != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected File retrieveOutputDir(
         @NotNull final String engineName,
         @NotNull final File projectOutputDir,
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final String tableName,
         final boolean subFolders,
         @NotNull final PackageUtils packageUtils)

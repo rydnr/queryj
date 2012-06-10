@@ -86,22 +86,30 @@ public class ResultSetExtractorTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplates(
-            parameters,
-            retrieveMetadataManager(parameters),
-            retrieveCustomSqlProvider(parameters),
-            retrieveProjectPackage(parameters),
-            retrieveTableRepositoryName(parameters),
-            retrieveHeader(parameters),
-            retrieveImplementMarkerInterfaces(parameters),
-            retrieveJmx(parameters),
-            retrieveJNDILocation(parameters),
-            ResultSetExtractorTemplateGenerator.getInstance(),
-            filterTableTemplates(
-                retrieveTableTemplates(parameters),
-                retrieveCustomSqlProvider(parameters)));
+        boolean result = true;
 
-        return false;
+        @Nullable MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager != null)
+        {
+            buildTemplates(
+                parameters,
+                t_MetadataManager,
+                retrieveCustomSqlProvider(parameters),
+                retrieveProjectPackage(parameters),
+                retrieveTableRepositoryName(parameters),
+                retrieveHeader(parameters),
+                retrieveImplementMarkerInterfaces(parameters),
+                retrieveJmx(parameters),
+                retrieveJNDILocation(parameters),
+                ResultSetExtractorTemplateGenerator.getInstance(),
+                filterTableTemplates(
+                    retrieveTableTemplates(parameters),
+                    retrieveCustomSqlProvider(parameters)));
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -131,43 +139,38 @@ public class ResultSetExtractorTemplateBuildHandler
         final boolean jmx,
         @NotNull final String jndiLocation,
         @NotNull final BasePerTableTemplateFactory<ResultSetExtractorTemplate> templateFactory,
-        @Nullable final TableTemplate[] tableTemplates)
+        @NotNull final List<TableTemplate> tableTemplates)
       throws  QueryJBuildException
     {
-        int t_iLength = (tableTemplates != null) ? tableTemplates.length : 0;
-        
         @NotNull final List<ResultSetExtractorTemplate> t_lTemplates =
-            new ArrayList<ResultSetExtractorTemplate>(t_iLength);
+            new ArrayList<ResultSetExtractorTemplate>(tableTemplates.size());
 
         String t_strTableName;
 
-        if (tableTemplates != null)
+        for  (@Nullable TableTemplate t_TableTemplate: tableTemplates)
         {
-            for  (TableTemplate t_TableTemplate: tableTemplates)
+            if  (t_TableTemplate != null)
             {
-                if  (t_TableTemplate != null)
-                {
-                    t_strTableName = t_TableTemplate.getTemplateContext().getTableName();
+                t_strTableName = t_TableTemplate.getTemplateContext().getTableName();
 
-                    t_lTemplates.add(
-                        templateFactory.createTemplate(
-                            metadataManager,
-                            customSqlProvider,
-                            retrievePackage(
-                                metadataManager.getEngineName(), t_strTableName, parameters),
-                            basePackageName,
-                            repositoryName,
-                            header,
-                            implementMarkerInterfaces,
-                            jmx,
-                            jndiLocation,
-                            t_strTableName,
-                            null));
-                }
+                t_lTemplates.add(
+                    templateFactory.createTemplate(
+                        metadataManager,
+                        customSqlProvider,
+                        retrievePackage(
+                            metadataManager.getEngineName(), t_strTableName, parameters),
+                        basePackageName,
+                        repositoryName,
+                        header,
+                        implementMarkerInterfaces,
+                        jmx,
+                        jndiLocation,
+                        t_strTableName,
+                        null));
             }
         }
 
-        storeTemplates(t_lTemplates.toArray(new ResultSetExtractorTemplate[t_lTemplates.size()]), parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -178,8 +181,8 @@ public class ResultSetExtractorTemplateBuildHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected TableTemplate[] filterTableTemplates(
-        @NotNull final TableTemplate[] tableTemplates,
+    protected List<TableTemplate> filterTableTemplates(
+        @NotNull final List<TableTemplate> tableTemplates,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         return tableTemplates;
@@ -247,13 +250,13 @@ public class ResultSetExtractorTemplateBuildHandler
      * Retrieves the table templates.
      * @param parameters the parameter map.
      * @return such templates.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    protected TableTemplate[] retrieveTableTemplates(@NotNull final Map parameters)
+    protected List<TableTemplate> retrieveTableTemplates(@NotNull final Map parameters)
     {
         return
-            (TableTemplate[])
+            (List<TableTemplate>)
                 parameters.get(TableTemplateBuildHandler.TABLE_TEMPLATES);
     }
 
@@ -261,7 +264,6 @@ public class ResultSetExtractorTemplateBuildHandler
      * Retrieves the custom-sql provider from the attribute map.
      * @param parameters the parameter map.
      * @return the provider.
-     * @precondition parameters != null
      */
     @NotNull
     public static CustomSqlProvider retrieveCustomSqlProvider(
@@ -280,7 +282,7 @@ public class ResultSetExtractorTemplateBuildHandler
      */
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
-        final ResultSetExtractorTemplate[] templates,
+        final List<ResultSetExtractorTemplate> templates,
         @NotNull final Map parameters)
     {
         parameters.put(

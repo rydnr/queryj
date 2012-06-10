@@ -246,7 +246,8 @@ public class CustomResultUtils
 
         if (result == null)
         {
-            if (resultElement.getId().equals("draws.multiple.draw.result"))
+            if (   (resultElement.getId().equals("draws.multiple.draw.result"))
+                || (resultElement.getId().equals("active_lottery_numbers.multiple.total_avaibles.result")))
             {
                 System.out.println("caught");
             }
@@ -288,11 +289,11 @@ public class CustomResultUtils
             }
         }
 
-        if (   (result == null)
-            && (!t_bBreakLoop))
-        {
-            throw new IllegalArgumentException("Result " + resultElement.getId() + " does not match any table");
-        }
+//        if (   (result == null)
+//            && (!t_bBreakLoop))
+//        {
+//            throw new IllegalArgumentException("Result " + resultElement.getId() + " does not match any table");
+//        }
 
         return result;
     }

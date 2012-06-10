@@ -24,11 +24,11 @@
 
  ******************************************************************************
  *
- * Filename: DAOFactoryTemplateWritingHandler.java
+ * Filename: RepositoryDAOFactoryTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes DAO factory templates.
+ * Description: Writes the repository DAO factory implementation.
  *
  */
 package org.acmsl.queryj.tools.templates.dao.handlers;
@@ -37,75 +37,57 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplate;
-import org.acmsl.queryj.tools.templates.dao.DAOFactoryTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplate;
+import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 /**
- * Writes DAO factory templates.
+ * Writes the repository DAO factory implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class DAOFactoryTemplateWritingHandler
-    extends BasePerTableTemplateWritingHandler<DAOFactoryTemplate, DAOFactoryTemplateGenerator, BasePerTableTemplateContext>
+public class RepositoryDAOFactoryTemplateWritingHandler
+    extends BasePerRepositoryTemplateWritingHandler<RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
-     * Creates a <code>DAOFactoryTemplateWritingHandler</code> instance.
-     */
-    public DAOFactoryTemplateWritingHandler() {}
-
-    /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected DAOFactoryTemplateGenerator retrieveTemplateGenerator()
+    protected RepositoryDAOFactoryTemplateGenerator retrieveTemplateGenerator()
     {
-        return DAOFactoryTemplateGenerator.getInstance();
+        return RepositoryDAOFactoryTemplateGenerator.getInstance();
     }
 
     /**
-     * Retrieves the templates from the attribute map.
-     *
-     * @param parameters the parameter map.
-     * @return the template.
+     * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected List<DAOFactoryTemplate> retrieveTemplates(
-        @NotNull final Map parameters)
+    protected RepositoryDAOFactoryTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
-            (List<DAOFactoryTemplate>)
-                parameters.get(TemplateMappingManager.DAO_FACTORY_TEMPLATES);
+            (RepositoryDAOFactoryTemplate)
+                parameters.get(
+                    TemplateMappingManager.REPOSITORY_DAO_FACTORY_TEMPLATE);
     }
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param projectFolder the project folder.
-     * @param projectPackage the project base package.
-     * @param useSubfolders whether to use subfolders for tests, or
-     * using a different package naming scheme.
-     * @param tableName the table name.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @param packageUtils the <code>PackageUtils</code> instance.
-     * @return such folder.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
@@ -113,13 +95,12 @@ public class DAOFactoryTemplateWritingHandler
         @NotNull final File projectFolder,
         @NotNull final String projectPackage,
         final boolean useSubfolders,
-        @NotNull final String tableName,
         @NotNull final String engineName,
         @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveDAOFactoryFolder(
+            packageUtils.retrieveRepositoryDAOFolder(
                 projectFolder,
                 projectPackage,
                 engineName,

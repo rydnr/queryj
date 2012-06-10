@@ -82,7 +82,6 @@ public abstract class AbstractQueryJCommandHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @precondition command != null
      */
     public boolean handle(@NotNull final Command command)
     {
@@ -126,7 +125,6 @@ public abstract class AbstractQueryJCommandHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition command != null
      */
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
@@ -150,7 +148,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the output dir from the attribute map.
      * @param parameters the parameter map.
      * @return such folder.
-     * @precondition parameters != null
      */
     @NotNull
     protected File retrieveProjectOutputDir(@NotNull final Map parameters)
@@ -163,7 +160,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the package name from the attribute map.
      * @param parameters the parameter map.
      * @return the package name.
-     * @precondition parameters !0 null
      */
     @NotNull
     protected String retrieveProjectPackage(@NotNull final Map parameters)
@@ -176,7 +172,6 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the metadata.
      * @throws QueryJBuildException if the database metadata is not accessible.
-     * @precondition parameters != null
      */
     @Nullable
     protected DatabaseMetaData retrieveDatabaseMetaData(@NotNull final Map parameters)
@@ -216,7 +211,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the database metadata manager from the attribute map.
      * @param parameters the parameter map.
      * @return the manager.
-     * @precondition parameters != null
      */
     @Nullable
     protected MetadataManager retrieveMetadataManager(@NotNull final Map parameters)
@@ -231,7 +225,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves whether to use sub folders or not.
      * @param parameters the parameters.
      * @return such flag.
-     * @precondition parameters != null
      */
     protected boolean retrieveUseSubfoldersFlag(@NotNull final Map parameters)
     {
@@ -253,7 +246,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the JDBC driver from the attribute map.
      * @param parameters the parameter map.
      * @return the driver name.
-     * @precondition parameters != null
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -267,7 +259,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the JDBC url from the attribute map.
      * @param parameters the parameter map.
      * @return the url name.
-     * @precondition parameters != null
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -281,7 +272,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the JDBC username from the attribute map.
      * @param parameters the parameter map.
      * @return the username name.
-     * @precondition parameters != null
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -295,7 +285,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the JDBC password from the attribute map.
      * @param parameters the parameter map.
      * @return the password name.
-     * @precondition parameters != null
      */
     @NotNull
     @SuppressWarnings("unused")
@@ -332,7 +321,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the custom-sql provider from the attribute map.
      * @param parameters the parameter map.
      * @return the provider.
-     * @precondition parameters != null
      */
     @NotNull
     public static CustomSqlProvider retrieveCustomSqlProvider(@NotNull final Map parameters)
@@ -347,7 +335,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the repository name.
      * @param parameters the parameters.
      * @return the repository's name.
-     * @precondition parameters != null
      */
     @NotNull
     protected String retrieveTableRepositoryName(@NotNull final Map parameters)
@@ -362,7 +349,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the header from the attribute map.
      * @param parameters the parameter map.
      * @return the header.
-     * @precondition parameters != null
      */
     @NotNull
     protected String retrieveHeader(@NotNull final Map parameters)
@@ -374,7 +360,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves whether to generate support for JMX or not.
      * @param parameters the parameter map.
      * @return such condition.
-     * @precondition parameters != null
      */
     protected boolean retrieveJmx(@NotNull final Map parameters)
     {
@@ -394,7 +379,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves whether to implement marker interfaces or not.
      * @param parameters the parameter map.
      * @return such condition.
-     * @precondition parameters != null
      */
     protected boolean retrieveImplementMarkerInterfaces(@NotNull final Map parameters)
     {
@@ -412,44 +396,9 @@ public abstract class AbstractQueryJCommandHandler
     }
 
     /**
-     * Retrieves the database product name.
-     * @param metadata the database metadata.
-     * @return such information, or null if the vendor complains.
-     * @precondition metadata != null
-     */
-    @NotNull
-    protected String retrieveDatabaseProductName(
-        @NotNull final DatabaseMetaData metadata)
-    {
-        @NotNull String result = "";
-
-        try
-        {
-            result = metadata.getDatabaseProductName();
-        }
-        catch  (@NotNull final Throwable throwable)
-        {
-            Log t_Log =
-                    UniqueLogFactory.getLog(AbstractQueryJCommandHandler.class);
-
-            if  (t_Log != null)
-            {
-                t_Log.info(
-                        "Database vendor complained when queried about "
-                      + "its version via "
-                      + "java.sql.DatabaseMetaData.getDatabaseProductName()",
-                      throwable);
-            }
-        }
-
-        return result;
-    }
-
-    /**
      * Retrieves the database product version.
      * @param metadata the database metadata.
      * @return such information, or null if the vendor complains.
-     * @precondition metadata != null
      */
     @Nullable
     protected String retrieveDatabaseProductVersion(
@@ -485,7 +434,6 @@ public abstract class AbstractQueryJCommandHandler
      * @return such instance.
      * @throws QueryJBuildException if the provider cannot be stored for
      * any reason.
-     * @precondition parameters != null
      */
     @NotNull
     protected Connection retrieveConnection(@NotNull final Map parameters)
@@ -502,7 +450,6 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return such instance.
      * @throws QueryJBuildException if the charset is not valid.
-     * @precondition parameters != null
      */
     @SuppressWarnings("unchecked")
     protected Charset retrieveCharset(@NotNull final Map parameters)
@@ -577,7 +524,6 @@ public abstract class AbstractQueryJCommandHandler
      * Retrieves the JNDI location from the attribute map.
      * @param parameters the parameter map.
      * @return the location.
-     * @precondition parameters != null
      */
     @NotNull
     @SuppressWarnings("unchecked")

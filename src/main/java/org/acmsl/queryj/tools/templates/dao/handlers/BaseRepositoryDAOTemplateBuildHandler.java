@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,87 +23,75 @@
 
  ******************************************************************************
  *
- * Filename: RepositoryDAOTemplateWritingHandler.java
+ * Filename: BaseRepositoryDAOTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the table repository.
+ * Description: Builds the repository DAO interface if requested.
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplate;
-import org.acmsl.queryj.tools.templates.RepositoryDAOTemplateGenerator;
+import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplate;
+import org.acmsl.queryj.tools.templates.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
- n*/
+ */
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the table repository.
+ * Builds the repository DAO interface if requested.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class RepositoryDAOTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
-                 <RepositoryDAOTemplate<BasePerRepositoryTemplateContext>, RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+public class BaseRepositoryDAOTemplateBuildHandler
+    extends BasePerRepositoryTemplateBuildHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected RepositoryDAOTemplateGenerator retrieveTemplateGenerator()
+    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateFactory()
     {
-        return RepositoryDAOTemplateGenerator.getInstance();
+        return BaseRepositoryDAOTemplateGenerator.getInstance();
     }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    @SuppressWarnings("unchecked")
-    protected RepositoryDAOTemplate<BasePerRepositoryTemplateContext> retrieveTemplate(
-        @NotNull final Map parameters)
-    {
-        return
-            (RepositoryDAOTemplate)
-                parameters.get(
-                    TemplateMappingManager.REPOSITORY_DAO_TEMPLATE);
-    }
-
+    
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected File retrieveOutputDir(
-        @NotNull final File projectFolder,
-        @NotNull final String projectPackage,
-        final boolean useSubfolders,
+    protected String retrievePackage(
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
-        return
-            packageUtils.retrieveRepositoryDAOFolder(
-                projectFolder,
-                projectPackage,
-                engineName,
-                useSubfolders);
+        return packageUtils.retrieveBaseRepositoryDAOPackage(projectPackage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void storeTemplate(
+        @NotNull final BaseRepositoryDAOTemplate template, @NotNull final Map parameters)
+    {
+        parameters.put(
+            TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE,
+            template);
     }
 }

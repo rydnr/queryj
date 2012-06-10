@@ -36,13 +36,12 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
+import org.acmsl.queryj.tools.templates.TemplateGenerator;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.tools.templates.dao.FkStatementSetterTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.BasePerForeignKeyTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
@@ -54,8 +53,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,8 +61,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class FkStatementSetterTemplateWritingHandler
-    extends    AbstractQueryJCommandHandler
-    implements TemplateWritingHandler
+    extends BasePerForeignKeyTemplateWritingHandler<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
 {
     /**
      * Creates a <code>FkStatementSetterTemplateWritingHandler</code>
@@ -73,111 +70,32 @@ public class FkStatementSetterTemplateWritingHandler
     public FkStatementSetterTemplateWritingHandler() {}
 
     /**
-     * Handles given information.
+     * Retrieves the template generator.
      *
-     *
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * @return such instance.
      */
+    @NotNull
     @Override
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
+    protected TemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext> retrieveTemplateGenerator()
     {
-        writeTemplates(
-            parameters,
-            retrieveMetadataManager(parameters),
-            retrieveCharset(parameters),
-            retrieveTemplates(parameters),
-            FkStatementSetterTemplateGenerator.getInstance());
-
-        return false;
-    }
-
-    /**
-     * Writes the <code>FkStatementSetter</code> templates.
-     * @param parameters the parameters.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param charset the file encoding.
-     * @param templates the templates.
-     * @param templateGenerator the template generator.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition templates != null
-     * @precondition templateGenerator != null
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final Charset charset,
-        @NotNull final FkStatementSetterTemplate[] templates,
-        @NotNull final FkStatementSetterTemplateGenerator templateGenerator)
-      throws  QueryJBuildException
-    {
-        try 
-        {
-            for  (FkStatementSetterTemplate t_Template : templates)
-            {
-                if  (t_Template != null)
-                {
-                    templateGenerator.write(
-                        t_Template,
-                        retrieveOutputDir(
-                            metadataManager.getEngineName(),
-                            t_Template.getTemplateContext().getForeignKey().getSourceTableName(),
-                            parameters),
-                        charset);
-                }
-            }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the templates", ioException);
-        }
+        return FkStatementSetterTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
      * @param parameters the parameter map.
      * @return the templates.
-     * @precondition parameters != null
      */
+    @Override
     @NotNull
-    protected FkStatementSetterTemplate[] retrieveTemplates(
+    @SuppressWarnings("unchecked")
+    protected List<FkStatementSetterTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (FkStatementSetterTemplate[])
+            (List<FkStatementSetterTemplate>)
                 parameters.get(
                     TemplateMappingManager.FK_STATEMENT_SETTER_TEMPLATES);
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name.
-     * @param tableName the table name.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition tableName != null
-     * @precondition parameters != null
-     */
-    @NotNull
-    protected File retrieveOutputDir(
-        @NotNull final String engineName, @NotNull final String tableName, @NotNull final Map parameters)
-    {
-        return
-            retrieveOutputDir(
-                engineName,
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                tableName,
-                retrieveUseSubfoldersFlag(parameters),
-                PackageUtils.getInstance());
     }
 
     /**
@@ -189,12 +107,8 @@ public class FkStatementSetterTemplateWritingHandler
      * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition engineName != null
-     * @precondition projectOutputDir != null
-     * @precondition projectPackage != null
-     * @precondition tableName != null
-     * @precondition packageUtils != null
      */
+    @Override
     @NotNull
     protected File retrieveOutputDir(
         @NotNull final String engineName,

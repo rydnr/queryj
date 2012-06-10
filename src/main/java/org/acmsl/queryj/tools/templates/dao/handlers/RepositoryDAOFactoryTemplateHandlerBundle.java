@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,38 +23,36 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOFactoryTemplateHandlerBundle.java
+ * Filename: RepositoryDAOFactoryTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles a pair of BaseRepositoryDAOFactory template build
+ * Description: Bundles a pair of RepositoryDAOFactory template build
  *              and writing handlers.
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.dao.handlers;
 
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.BaseRepositoryDAOFactoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of BaseRepositoryDAOFactory template build and writing
+ * Bundles a pair of RepositoryDAOFactory template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOFactoryTemplateHandlerBundle
-    extends  TemplateHandlerBundle
+public class RepositoryDAOFactoryTemplateHandlerBundle
+    extends TemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
      */
-    public BaseRepositoryDAOFactoryTemplateHandlerBundle()
+    public RepositoryDAOFactoryTemplateHandlerBundle()
     {
         super(
-            new BaseRepositoryDAOFactoryTemplateBuildHandler(),
-            new BaseRepositoryDAOFactoryTemplateWritingHandler());
+            new org.acmsl.queryj.tools.templates.dao.handlers.RepositoryDAOFactoryTemplateBuildHandler(),
+            new org.acmsl.queryj.tools.templates.dao.handlers.RepositoryDAOFactoryTemplateWritingHandler());
     }
 }

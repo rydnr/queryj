@@ -53,6 +53,7 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,8 +69,9 @@ import java.util.Locale;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOFactoryTemplateGenerator
-    extends AbstractTemplateGenerator<DAOFactoryTemplate,BasePerTableTemplateContext>
-    implements BasePerTableTemplateFactory<DAOFactoryTemplate>,
+    extends AbstractTemplateGenerator<DAOFactoryTemplate, BasePerTableTemplateContext>
+    implements  BasePerTableTemplateFactory<DAOFactoryTemplate>,
+                BasePerTableTemplateGenerator<DAOFactoryTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**
