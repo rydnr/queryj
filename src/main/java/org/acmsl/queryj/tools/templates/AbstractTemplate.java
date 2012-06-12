@@ -520,7 +520,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         
         if  (t_Log != null)
         {
-            t_Log.trace(header);
+            t_Log.info(header);
         }
     }
 

@@ -469,9 +469,8 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected File retrieveTestFolder(
         @NotNull final File parentFolder,
@@ -629,8 +628,8 @@ public class PackageUtils
      * Retrieves the package name for baseValue object templates.
      * @param packageName the original package.
      * @return the package for the associated baseValue object class.
-     * @precondition packageName != null
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveBaseValueObjectPackage(
         @NotNull final String packageName)
@@ -765,6 +764,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated Jdbc DAO class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveJdbcDAOPackage(@NotNull final String packageName)
     {
@@ -779,6 +779,7 @@ public class PackageUtils
      * @return the folder in which the associated Jdbc DAO should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveJdbcDAOFolder(
         @NotNull final File parentFolder,
@@ -970,6 +971,7 @@ public class PackageUtils
      * @return the folder in which the associated test class should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveDAOTestFolder(
         @NotNull final File parentFolder,
@@ -990,6 +992,7 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @return the package for the associated suite.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveBaseTestSuitePackage(
         @NotNull final String packageName, final boolean useSubFolders)
@@ -1005,6 +1008,7 @@ public class PackageUtils
      * @return the folder in which the associated suite class should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveBaseTestSuiteFolder(
         @NotNull final File parentFolder,
@@ -1075,6 +1079,7 @@ public class PackageUtils
      * @return the folder in which the associated functions classes should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveTestFunctionsFolder(
         @NotNull final File parentFolder,
@@ -1217,6 +1222,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveMockDAOFactoryPackage(@NotNull final String packageName)
     {
@@ -1231,6 +1237,7 @@ public class PackageUtils
      * @return the folder in which  the associated DAO factory should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveMockDAOFactoryFolder(
         @NotNull final File parentFolder,
@@ -1246,6 +1253,7 @@ public class PackageUtils
      * @param subFolders whether to use sub folders or not.
      * @return the package for the associated Mock DAO tests.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveMockDAOTestPackage(
         @NotNull final String packageName, final boolean subFolders)
@@ -1263,6 +1271,7 @@ public class PackageUtils
      * @return the folder in which the associated test class should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveMockDAOTestFolder(
         @NotNull final File parentFolder,
@@ -1316,6 +1325,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated DAO factory class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveXmlDAOFactoryPackage(@NotNull final String packageName)
     {
@@ -1330,6 +1340,7 @@ public class PackageUtils
      * @return the folder in which  the associated DAO factory should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveXmlDAOFactoryFolder(
         @NotNull final File parentFolder,
@@ -1345,6 +1356,7 @@ public class PackageUtils
      * @param subFolders whether to use sub folders or not.
      * @return the package for the associated XML DAO tests.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveXMLDAOTestPackage(
         @NotNull final String packageName, final boolean subFolders)
@@ -1362,6 +1374,7 @@ public class PackageUtils
      * @return the folder in which the associated test class should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveXMLDAOTestFolder(
         @NotNull final File parentFolder,
@@ -1380,6 +1393,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for the associated factory class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveXMLValueObjectFactoryPackage(
         @NotNull final String packageName)
@@ -1395,6 +1409,7 @@ public class PackageUtils
      * @return the folder in which the associated factory class should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveXMLValueObjectFactoryFolder(
         @NotNull final File parentFolder,
@@ -1527,6 +1542,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for such class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveQueryPreparedStatementCreatorPackage(
         @NotNull final String packageName)
@@ -1542,6 +1558,7 @@ public class PackageUtils
      * @return the folder in which the associated rdb classes should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveQueryPreparedStatementCreatorFolder(
         @NotNull final File parentFolder,
@@ -1595,11 +1612,11 @@ public class PackageUtils
     {
         return
             retrieveJdbcOperationsFolder(
-                    parentFolder,
-                    packageName,
-                    engineName,
-                    tableName,
-                    useSubFolders);
+                parentFolder,
+                packageName,
+                engineName,
+                tableName,
+                useSubFolders);
     }
 
     /**
@@ -1877,8 +1894,6 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated DAO class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     public File retrieveBaseAbstractDAOFolder(
@@ -1888,9 +1903,9 @@ public class PackageUtils
     {
         return
             retrieveRdbFolder(
-                    parentFolder,
-                    packageName,
-                    useSubFolders);
+                parentFolder,
+                packageName,
+                useSubFolders);
     }
 
     /**
@@ -1899,11 +1914,12 @@ public class PackageUtils
      * @param engineName the engine.
      * @return the package for the associated DAOListener class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveDAOListenerPackage(
         @NotNull final String packageName, @NotNull final String engineName)
     {
-        return retrieveDAOPackage(packageName, engineName);
+        return retrieveRdbPackage(packageName);
     }
 
     /**
@@ -1915,6 +1931,7 @@ public class PackageUtils
      * @return the folder in which the associated DAOListener should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveDAOListenerFolder(
         @NotNull final File parentFolder,
@@ -1970,6 +1987,7 @@ public class PackageUtils
      * @return the folder in which the associated rdb classes should be
      * generated.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public File retrieveStatisticsProviderFolder(
         @NotNull final File parentFolder,
@@ -2001,6 +2019,7 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the package for such class.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public String retrieveStatisticsProviderPackage(
         @NotNull final String packageName)
@@ -2035,11 +2054,10 @@ public class PackageUtils
 
         String[] t_astrPieces = split(fqdn, ".");
 
-        int t_iCount = (t_astrPieces != null) ? t_astrPieces.length : 0;
+        int t_iCount = t_astrPieces.length;
 
         if  (t_iCount > 0)
         {
-            assert t_astrPieces != null;
             result = t_astrPieces[t_iCount - 1];
         }
 

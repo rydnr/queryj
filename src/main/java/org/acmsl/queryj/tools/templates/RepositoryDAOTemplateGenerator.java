@@ -96,7 +96,6 @@ public class RepositoryDAOTemplateGenerator
      */
     @Override
     @NotNull
-    @SuppressWarnings("unused")
     public RepositoryDAOTemplate<BasePerRepositoryTemplateContext> createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,

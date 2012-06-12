@@ -94,12 +94,13 @@ public class KeywordRepositoryTemplateGenerator
     /**
      * {@inheritDoc}
      */
-    @Nullable
+    @NotNull
+    @Override
     public KeywordRepositoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,

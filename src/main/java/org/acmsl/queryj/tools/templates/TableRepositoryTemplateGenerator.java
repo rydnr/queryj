@@ -95,7 +95,7 @@ public class TableRepositoryTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    @SuppressWarnings("unused")
+    @Override
     public TableRepositoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,

@@ -103,7 +103,8 @@ public class ConfigurationPropertiesTemplateGenerator
      * {@inheritDoc}
      */
     @SuppressWarnings("unused")
-    @Nullable
+    @NotNull
+    @Override
     public ConfigurationPropertiesTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,

@@ -135,7 +135,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory(),
             retrievePackage(t_MetadataManager.getEngineName(), projectPackage, PackageUtils.getInstance()),
-            retrieveProjectPackage(parameters),
+            projectPackage,
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
             retrieveImplementMarkerInterfaces(parameters),
@@ -223,8 +223,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
@@ -238,8 +238,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             templateFactory.createTemplate(
                 metadataManager,
                 customSqlProvider,
-                projectPackage,
                 packageName,
+                projectPackage,
                 repository,
                 header,
                 implementMarkerInterfaces,
@@ -272,8 +272,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected abstract String retrievePackage(
@@ -285,8 +283,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * Stores the template in given attribute map.
      * @param template the template.
      * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
      */
     protected abstract void storeTemplate(
         @NotNull final T template, @NotNull final Map parameters);
@@ -295,7 +291,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * Retrieves the table templates.
      * @param parameters the parameter map.
      * @return such templates.
-     * @precondition parameters != null
      */
     @NotNull
     @SuppressWarnings("unchecked")

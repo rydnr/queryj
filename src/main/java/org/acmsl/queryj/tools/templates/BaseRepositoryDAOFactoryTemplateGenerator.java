@@ -95,6 +95,7 @@ public class BaseRepositoryDAOFactoryTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
+    @Override
     public BaseRepositoryDAOFactoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,

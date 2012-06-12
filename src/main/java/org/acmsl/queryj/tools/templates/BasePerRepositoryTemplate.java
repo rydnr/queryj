@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -251,8 +250,8 @@ public abstract class BasePerRepositoryTemplate<C extends BasePerRepositoryTempl
             metadataManager,
             customSqlProvider,
             decoratorFactory,
-            basePackageName,
             subpackageName,
+            basePackageName,
             tableRepositoryName,
             engineName,
             tables,
@@ -385,8 +384,9 @@ public abstract class BasePerRepositoryTemplate<C extends BasePerRepositoryTempl
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the decorated table.
      */
+    @NotNull
     protected TableDecorator decorate(
-        @Nullable final String table,
+        @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory)
     {

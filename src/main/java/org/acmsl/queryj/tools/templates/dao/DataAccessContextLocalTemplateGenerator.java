@@ -99,12 +99,13 @@ public class DataAccessContextLocalTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
+    @Override
     @SuppressWarnings("unused")
     public DataAccessContextLocalTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,

@@ -91,8 +91,6 @@ public class DAOBundle
 //                new JdbcDAOTemplateHandlerBundle(),
                 new PkStatementSetterTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
-                new DAOListenerTemplateHandlerBundle(),
-                new DAOListenerImplTemplateHandlerBundle(),
 //                new JdbcDAOTemplateHandlerBundle(),
 // TODO                new ThreadLocalBagTemplateHandlerBundle(),
 //                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
