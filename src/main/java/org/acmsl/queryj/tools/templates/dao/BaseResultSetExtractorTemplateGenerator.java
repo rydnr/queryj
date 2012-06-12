@@ -106,14 +106,14 @@ public class BaseResultSetExtractorTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    @SuppressWarnings("unused")
+    @Override
     public BaseResultSetExtractorTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,

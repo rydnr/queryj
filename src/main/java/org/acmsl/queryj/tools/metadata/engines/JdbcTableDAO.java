@@ -23,77 +23,53 @@
 
  ******************************************************************************
  *
- * Filename: TableDAO.java
+ * Filename: JdbcTableDAO.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Provides the methods to access Table information.
+ * Description: A TableDAO implementation using JdbcMetadataManager.
  *
- * Date: 6/6/12
- * Time: 5:24 AM
+ * Date: 6/12/12
+ * Time: 10:54 AM
  *
  */
-package org.acmsl.queryj.tools.metadata;
-
-/*
- * Importing project classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.Table;
-
-/*
- * Importing ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.dao.DAO;
+package org.acmsl.queryj.tools.metadata.engines;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+* Importing JDK classes.
  */
 import java.util.List;
 
 /**
- * Provides the methods to access {@link Table} information.
+ * A {@link org.acmsl.queryj.tools.metadata.TableDAO} implementation using {@link JdbcMetadataManager}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/06
+ * @version 2012/06/12
  */
-public interface TableDAO
-    extends DAO
+public class JdbcTableDAO
+    extends MetadataManagerTableDAO<JdbcMetadataManager>
 {
     /**
-     * Retrieves all tables.
-     * @return such information.
+     * Creates a {@link JdbcTableDAO} using given manager.
+     * @param manager the {@link JdbcMetadataManager} instance.
      */
-    @NotNull
-    List<Table> findAllTables();
+    public JdbcTableDAO(@NotNull final JdbcMetadataManager manager)
+    {
+        super(manager);
+    }
 
     /**
      * Retrieves all tables.
      * @return such information.
      */
     @NotNull
-    List<String> findAllTableNames();
-
-    /**
-     * Retrieves the table matching given name.
-     * @param name the table name.
-     * @param catalog the catalog.
-     * @param schema the schema.
-     * @return the associated {@link Table} instance, if the table is found.
-     */
-    @Nullable
-    Table findByName(@NotNull final String name, @Nullable final String catalog, @Nullable final String schema);
-
-    /**
-     * Retrieves the list of tables with foreign keys to given table.
-     * @param target the target table.
-     * @return the list of referring tables.
-     */
-    @NotNull
-    List<Table> findReferringTables(@NotNull final String target);
-
+    @Override
+    public List<String> findAllTableNames()
+    {
+        return getMetadataManager().getTableNames();
+    }
 }

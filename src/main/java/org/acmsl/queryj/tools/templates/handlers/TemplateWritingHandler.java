@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -32,11 +31,6 @@
  *
  */
 package org.acmsl.queryj.tools.templates.handlers;
-
-/*
- * Importing some project classes.
- */
-import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
 
 /**
  * Marks all template writing handlers.

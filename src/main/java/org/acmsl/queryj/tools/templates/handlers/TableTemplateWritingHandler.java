@@ -35,11 +35,14 @@ package org.acmsl.queryj.tools.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,9 +50,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -58,8 +58,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableTemplateWritingHandler
-    extends    AbstractQueryJCommandHandler
-    implements TemplateWritingHandler
+    extends BasePerTableTemplateWritingHandler
+                <TableTemplate, TableTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a TableTemplateWritingHandler.
@@ -67,116 +67,58 @@ public class TableTemplateWritingHandler
     public TableTemplateWritingHandler() {}
 
     /**
-     * Handles given parameters.
-     *
-     *
-     * @param parameters the parameters to handle.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
+    @NotNull
     @Override
-    protected boolean handle(@NotNull final Map parameters)
-        throws  QueryJBuildException
+    protected TableTemplateGenerator retrieveTemplateGenerator()
     {
-        return
-            handle(
-                retrieveTableTemplates(parameters),
-                retrieveOutputDir(parameters),
-                retrieveCharset(parameters),
-                TableTemplateGenerator.getInstance());
-    }
-
-    /**
-     * Writes the Table templates.
-     * @param templates the templates to write.
-     * @param outputDir the output dir.
-     * @param charset the file encoding.
-     * @param generator the <code>TableTemplateGenerator</code> instance.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected boolean handle(
-        @NotNull final List<TableTemplate> templates,
-        @Nullable final File outputDir,
-        @NotNull final Charset charset,
-        @NotNull final TableTemplateGenerator generator)
-      throws  QueryJBuildException
-    {
-        boolean result = false;
-
-        if (outputDir != null)
-        {
-            try
-            {
-                for (TableTemplate t_TableTemplate : templates)
-                {
-                    generator.write(
-                        t_TableTemplate, outputDir, charset);
-                }
-            }
-            catch  (@NotNull final IOException ioException)
-            {
-                throw
-                    new QueryJBuildException(
-                        "Cannot write the template", ioException);
-            }
-        }
-        
-        return result;
+        return TableTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the table templates from the attribute map.
      * @param parameters the parameter map.
      * @return the template array.
-     * @precondition parameters != null
      */
     @SuppressWarnings("unchecked")
-    @NotNull
-    protected List<TableTemplate> retrieveTableTemplates(@NotNull final Map parameters)
+    @Nullable
+    protected List<TableTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
-        List<TableTemplate> result =
+        return
             (List<TableTemplate>)
                 parameters.get(
                     TableTemplateBuildHandler.TABLE_TEMPLATES);
-
-        if (result == null)
-        {
-            result = new ArrayList<TableTemplate>(0);
-        }
-
-        return result;
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param parameters the parameter map.
-     * @return such folder.
-     * @precondition parameters != null
-     */
-    @Nullable
-    protected File retrieveOutputDir(@NotNull final Map parameters)
-    {
-        return retrieveOutputDir(parameters, PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
+     * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
-    @Nullable
+    @NotNull
+    @Override
     protected File retrieveOutputDir(
-        @NotNull final Map parameters, @NotNull final PackageUtils packageUtils)
+        @NotNull final File projectFolder,
+        @NotNull final String projectPackage,
+        final boolean useSubfolders,
+        @NotNull final String tableName,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveTableFolder(
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                retrieveUseSubfoldersFlag(parameters));
+                projectFolder,
+                projectPackage,
+                useSubfolders);
     }
 }

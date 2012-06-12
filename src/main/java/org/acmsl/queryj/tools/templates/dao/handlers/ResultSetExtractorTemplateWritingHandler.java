@@ -36,27 +36,22 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplate;
 import org.acmsl.queryj.tools.templates.dao.ResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.tools.templates.handlers.TemplateWritingHandler;
+import org.acmsl.queryj.tools.templates.handlers.BasePerTableTemplateWritingHandler;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
@@ -65,8 +60,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ResultSetExtractorTemplateWritingHandler
-    extends    AbstractQueryJCommandHandler
-    implements TemplateWritingHandler
+    extends BasePerTableTemplateWritingHandler
+                <ResultSetExtractorTemplate, ResultSetExtractorTemplateGenerator, BasePerTableTemplateContext>
 {
     /**
      * Creates a {@link ResultSetExtractorTemplateWritingHandler}
@@ -75,143 +70,62 @@ public class ResultSetExtractorTemplateWritingHandler
     public ResultSetExtractorTemplateWritingHandler() {}
 
     /**
-     * Handles given information.
-     *
-     *
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * Retrieves the template generator.
+     * @return such instance.
      */
+    @NotNull
     @Override
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
+    protected ResultSetExtractorTemplateGenerator retrieveTemplateGenerator()
     {
-        boolean result = true;
-
-        @Nullable final MetadataManager t_MetadataManager =
-            retrieveMetadataManager(parameters);
-
-        if (t_MetadataManager != null)
-        {
-            writeTemplates(
-                parameters,
-                t_MetadataManager,
-                retrieveCharset(parameters),
-                retrieveTemplates(parameters),
-                ResultSetExtractorTemplateGenerator.getInstance());
-
-            result = false;
-        }
-
-        return result;
-    }
-
-    /**
-     * Writes the {@link ResultSetExtractorTemplate} templates.
-     * @param parameters the parameters.
-     * @param charset the file encoding.
-     * @param templates the templates.
-     * @param templateGenerator the template generator.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final Charset charset,
-        @NotNull final List<ResultSetExtractorTemplate> templates,
-        @NotNull final ResultSetExtractorTemplateGenerator templateGenerator)
-      throws  QueryJBuildException
-    {
-        try 
-        {
-            for  (ResultSetExtractorTemplate t_Template : templates)
-            {
-                if  (t_Template != null)
-                {
-                    templateGenerator.write(
-                        t_Template,
-                        retrieveOutputDir(
-                            metadataManager.getEngineName(),
-                            t_Template.getTemplateContext().getTableName(),
-                            parameters),
-                        charset);
-                }
-            }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the templates", ioException);
-        }
+        return ResultSetExtractorTemplateGenerator.getInstance();
     }
 
     /**
      * Retrieves the templates from the attribute map.
+     *
      * @param parameters the parameter map.
-     * @return the templates.
+     * @return the template.
      */
-    @SuppressWarnings("unchecked")
     @NotNull
+    @Override
+    @SuppressWarnings("unchecked")
     protected List<ResultSetExtractorTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
             (List<ResultSetExtractorTemplate>)
-                parameters.get(
-                    TemplateMappingManager.RESULTSET_EXTRACTOR_TEMPLATES);
+                parameters.get(TemplateMappingManager.RESULTSET_EXTRACTOR_TEMPLATES);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name.
+     * @param projectFolder the project folder.
+     * @param projectPackage the project base package.
+     * @param useSubfolders whether to use subfolders for tests, or
+     * using a different package naming scheme.
      * @param tableName the table name.
+     * @param engineName the engine name.
      * @param parameters the parameter map.
-     * @return such folder.
-     * @precondition engineName != null
-     * @precondition tableName != null
-     * @precondition parameters != null
-     */
-    @NotNull
-    protected File retrieveOutputDir(
-        @NotNull final String engineName, @NotNull final String tableName, @NotNull final Map parameters)
-    {
-        return
-            retrieveOutputDir(
-                engineName,
-                retrieveProjectOutputDir(parameters),
-                retrieveProjectPackage(parameters),
-                tableName,
-                retrieveUseSubfoldersFlag(parameters),
-                PackageUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the output dir from the attribute map.
-     * @param engineName the engine name.
-     * @param projectOutputDir the project output dir.
-     * @param projectPackage the project package.
-     * @param tableName the table name.
-     * @param subFolders whether to use subfolders or not.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
      */
     @NotNull
+    @Override
     protected File retrieveOutputDir(
-        @NotNull final String engineName,
-        @NotNull final File projectOutputDir,
+        @NotNull final File projectFolder,
         @NotNull final String projectPackage,
+        final boolean useSubfolders,
         @NotNull final String tableName,
-        final boolean subFolders,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
         @NotNull final PackageUtils packageUtils)
     {
         return
             packageUtils.retrieveResultSetExtractorFolder(
-                projectOutputDir,
+                projectFolder,
                 projectPackage,
                 engineName,
                 tableName,
-                subFolders);
+                useSubfolders);
     }
 }

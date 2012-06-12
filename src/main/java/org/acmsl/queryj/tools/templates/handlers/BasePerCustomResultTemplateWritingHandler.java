@@ -63,7 +63,8 @@ import java.util.Map;
  * Writes <i>per-custom-result</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public abstract class BasePerCustomResultTemplateWritingHandler<T extends BasePerCustomResultTemplate<C>, C extends BasePerCustomResultTemplateContext>
+public abstract class BasePerCustomResultTemplateWritingHandler
+    <T extends BasePerCustomResultTemplate<C>, C extends BasePerCustomResultTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {

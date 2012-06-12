@@ -53,6 +53,7 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.templates.BasePerTableTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,6 +70,7 @@ import java.util.Locale;
 public class ResultSetExtractorTemplateGenerator
     extends AbstractTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>
     implements BasePerTableTemplateFactory<ResultSetExtractorTemplate>,
+               BasePerTableTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>,
                Singleton
 {
     /**

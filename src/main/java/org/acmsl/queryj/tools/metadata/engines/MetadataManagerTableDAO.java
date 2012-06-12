@@ -60,19 +60,19 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
-public class MetadataManagerTableDAO
+public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     implements TableDAO
 {
     /**
      * The {@link MetadataManager} instance.
      */
-    private MetadataManager m__MetadataManager;
+    private M m__MetadataManager;
 
     /**
      * Creates a new {@link MetadataManagerTableDAO} instance using given {@link MetadataManager}.
      * @param manager the {@link MetadataManager} instance.
      */
-    public MetadataManagerTableDAO(@NotNull final MetadataManager manager)
+    public MetadataManagerTableDAO(@NotNull final M manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -81,7 +81,7 @@ public class MetadataManagerTableDAO
      * Specifies the {@link MetadataManager} instance.
      * @param manager the {@link MetadataManager manager}.
      */
-    protected final void immutableSetMetadataManager(@NotNull final MetadataManager manager)
+    protected final void immutableSetMetadataManager(@NotNull final M manager)
     {
         m__MetadataManager = manager;
     }
@@ -91,7 +91,7 @@ public class MetadataManagerTableDAO
      * @param manager the {@link MetadataManager manager}.
      */
     @SuppressWarnings("unused")
-    protected void setMetadataManager(@NotNull final MetadataManager manager)
+    protected void setMetadataManager(@NotNull final M manager)
     {
         immutableSetMetadataManager(manager);
     }
@@ -101,7 +101,7 @@ public class MetadataManagerTableDAO
      * @return such {@link MetadataManager instance}.
      */
     @NotNull
-    protected MetadataManager getMetadataManager()
+    protected M getMetadataManager()
     {
         return m__MetadataManager;
     }

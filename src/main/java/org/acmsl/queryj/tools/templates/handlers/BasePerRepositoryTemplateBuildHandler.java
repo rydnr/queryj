@@ -178,22 +178,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final List<TableTemplate> tableTemplates)
       throws  QueryJBuildException
     {
-        @NotNull List<String> t_lTableNames = new ArrayList<String>();
+        @NotNull List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
 
-        String t_strTableName;
         BasePerTableTemplateContext t_Context;
-
-        for (TableTemplate t_TableTemplate : tableTemplates)
-        {
-            if (t_TableTemplate != null)
-            {
-                t_Context = t_TableTemplate.getTemplateContext();
-
-                t_strTableName = t_Context.getTableName();
-
-                t_lTableNames.add(t_strTableName);
-            }
-        }
 
         @Nullable T t_Template =
             createTemplate(
@@ -232,7 +219,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @throws QueryJBuildException on invalid input.
      */
     @Nullable
-    @SuppressWarnings("unused")
     protected T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,

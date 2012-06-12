@@ -109,10 +109,6 @@ public class BaseDAOFactoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition projectFolder != null
-     * @precondition projectPackage != null
-     * @precondition engineName != null
-     * @precondition packageUtils != null
      */
     @NotNull
     @Override

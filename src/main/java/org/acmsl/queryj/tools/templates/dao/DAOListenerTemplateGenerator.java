@@ -105,14 +105,14 @@ public class DAOListenerTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
-    @SuppressWarnings("unused")
+    @Override
     public DAOListenerTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
-        @NotNull final String projectPackage,
         @NotNull final String packageName,
+        @NotNull final String projectPackage,
         @NotNull final String repository,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,

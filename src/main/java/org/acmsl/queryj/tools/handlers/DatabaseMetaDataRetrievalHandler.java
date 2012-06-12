@@ -1268,7 +1268,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                     new MetadataExtractionLogger(),
                     catalog,
                     schema,
-                    new String[0],
+                    new ArrayList<String>(0),
                     tables,
                     disableTableExtraction,
                     lazyTableExtraction,

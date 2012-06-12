@@ -122,8 +122,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
      */
     public void write(
         @NotNull final N template,
@@ -147,10 +145,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param charset the file encoding.
      * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
-     * @precondition fileUtils != null
-     * @precondition tableTemplateUtils != null
      */
     protected void write(
         @NotNull final N template,

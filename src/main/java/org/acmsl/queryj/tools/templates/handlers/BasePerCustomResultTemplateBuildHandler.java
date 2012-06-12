@@ -58,6 +58,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -75,7 +76,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     /**
      * The key for storing the custom RESULT in the parameter map.
      */
-    public static final String CUSTOM_RESULT = "..CustOMresult:::";
+    public static final String CUSTOM_RESULTS = "..CustOMresultS:::";
 
     /**
      * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
@@ -95,12 +96,20 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplates(
-            parameters,
-            retrieveMetadataManager(parameters),
-            retrieveCustomSqlProvider(parameters));
+        boolean result = true;
 
-        return false;
+        @Nullable final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager != null)
+        {
+            buildTemplates(
+                parameters,
+                t_MetadataManager,
+                retrieveCustomSqlProvider(parameters));
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -127,7 +136,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
-            retrieveCustomResult(parameters, customSqlProvider),
+            retrieveCustomResults(parameters, customSqlProvider),
             CustomResultUtils.getInstance());
     }
 
@@ -163,7 +172,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final Result[] resultElements,
+        @NotNull final List<Result> resultElements,
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
     {
@@ -284,19 +293,44 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    protected Result[] retrieveCustomResult(
+    protected List<Result> retrieveCustomResults(
         @NotNull final Map parameters,
         @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
     {
-        @Nullable Result[] result = (Result[]) parameters.get(CUSTOM_RESULT);
+        @Nullable List<Result> result = (List<Result>) parameters.get(CUSTOM_RESULTS);
 
         if  (result == null)
         {
             result = retrieveCustomResultElements(customSqlProvider);
+            result = fixDuplicated(result);
+            parameters.put(CUSTOM_RESULTS, result);
         }
 
-        parameters.put(CUSTOM_RESULT, result);
+        return result;
+    }
+
+    /**
+     * Fixes (semantically-)duplicated results.
+     * @param results the original results.
+     * @return the list without duplicates (i.e. {@link Result} differing only if they're single or multiple).
+     */
+    @NotNull
+    protected List<Result> fixDuplicated(@NotNull final List<Result> results)
+    {
+        @NotNull final List<Result> result = new ArrayList<Result>(results.size());
+
+        @NotNull final Map<String,Result> t_mAux = new HashMap<String,Result>();
+
+        for (@Nullable Result t_Result : results)
+        {
+            if (t_Result != null)
+            {
+                t_mAux.put(t_Result.getClassValue(), t_Result);
+            }
+        }
+
+        result.addAll(t_mAux.values());
 
         return result;
     }
@@ -306,11 +340,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @return such result elements.
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    protected Result[] retrieveCustomResultElements(
+    protected List<Result> retrieveCustomResultElements(
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull Collection<Result> t_cResult = new ArrayList<Result>();
+        @NotNull final List<Result> result = new ArrayList<Result>();
 
         @Nullable Collection t_cCollection =
             customSqlProvider.getCollection();
@@ -329,12 +364,12 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
                     if  (t_Item instanceof Result)
                     {
-                        t_cResult.add((Result) t_Item);
+                        result.add((Result) t_Item);
                     }
                 }
             }
         }
 
-        return t_cResult.toArray(new Result[t_cResult.size()]);
+        return result;
     }
 }

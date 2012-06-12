@@ -115,7 +115,7 @@ public class OracleMetadataManager
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @Nullable final String catalog,
         @Nullable final String schema,
-        @NotNull final String[] tableNames,
+        @NotNull final List<String> tableNames,
         @NotNull final List<Table> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
@@ -159,8 +159,9 @@ public class OracleMetadataManager
      */
     @NotNull
     @Override
+    @SuppressWarnings("unused")
     protected List<Table> extractTableMetadata(
-        @Nullable final String[] tableNames,
+        @Nullable final List<String> tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -193,7 +194,7 @@ public class OracleMetadataManager
     @NotNull
     @SuppressWarnings("unused")
     protected List<Table> extractTableMetadata(
-        @Nullable final String[] tableNames,
+        @Nullable final List<String> tableNames,
         @NotNull final Connection connection,
         final boolean caseSensitiveness,
         @NotNull final MetadataExtractionListener metadataExtractionListener,

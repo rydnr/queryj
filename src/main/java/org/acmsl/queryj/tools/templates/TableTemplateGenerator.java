@@ -38,6 +38,7 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 
 /*
  * Importing some ACM-SL classes.
@@ -47,10 +48,12 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing some JDK classes.
+ */
 import java.util.List;
 
 /**
@@ -60,6 +63,7 @@ import java.util.List;
 public class TableTemplateGenerator
     extends  AbstractTemplateGenerator<TableTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateFactory<TableTemplate>,
+                BasePerTableTemplateGenerator<TableTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**

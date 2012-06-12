@@ -134,12 +134,9 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition templates != null
-     * @precondition parameters != null
-     * @precondition templateGenerator != null
      */
     protected void writeTemplates(
-        @NotNull final List<T> templates,
+        @Nullable final List<T> templates,
         @NotNull final String engineName,
         @NotNull final Map parameters,
         @NotNull final Charset charset,
@@ -148,17 +145,20 @@ public abstract class BasePerTableTemplateWritingHandler
     {
         try 
         {
-            for  (T t_Template : templates)
+            if (templates != null)
             {
-                if  (t_Template != null)
+                for  (T t_Template : templates)
                 {
-                    templateGenerator.write(
-                        t_Template,
-                        retrieveOutputDir(
-                            t_Template.getTemplateContext().getTableName(),
-                            engineName,
-                            parameters),
-                        charset);
+                    if  (t_Template != null)
+                    {
+                        templateGenerator.write(
+                            t_Template,
+                            retrieveOutputDir(
+                                t_Template.getTemplateContext().getTableName(),
+                                engineName,
+                                parameters),
+                            charset);
+                    }
                 }
             }
         }
@@ -184,7 +184,7 @@ public abstract class BasePerTableTemplateWritingHandler
      * @return the template.
      * @throws QueryJBuildException if the template retrieval process if faulty.
      */
-    @NotNull
+    @Nullable
     protected abstract List<T> retrieveTemplates(@NotNull final Map parameters)
         throws QueryJBuildException;
 

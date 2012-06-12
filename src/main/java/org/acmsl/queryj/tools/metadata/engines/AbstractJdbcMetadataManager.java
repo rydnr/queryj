@@ -44,7 +44,6 @@ import org.acmsl.queryj.tools.metadata.ForeignKeyDAO;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.PrimaryKeyDAO;
-import org.acmsl.queryj.tools.metadata.TableDAO;
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
@@ -121,7 +120,7 @@ public abstract class AbstractJdbcMetadataManager
     /**
      * The table names.
      */
-    private String[] m__astrTableNames;
+    private List<String> m__lTableNames;
 
     /**
      * The table list.
@@ -200,7 +199,7 @@ public abstract class AbstractJdbcMetadataManager
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @Nullable final String catalog,
         @Nullable final String schema,
-        @NotNull final String[] tableNames,
+        @NotNull final List<String> tableNames,
         @NotNull final List<Table> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
@@ -257,16 +256,17 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the table names.
      * @param names such names.
      */
-    protected final void immutableSetTableNames(@NotNull final String[] names)
+    protected final void immutableSetTableNames(@NotNull final List<String> names)
     {
-        m__astrTableNames = names;
+        m__lTableNames = names;
     }
 
     /**
      * Specifies the table names.
      * @param names such names.
      */
-    protected void setTableNames(@NotNull final String[] names)
+    @SuppressWarnings("unused")
+    protected void setTableNames(@NotNull final List<String> names)
     {
         immutableSetTableNames(names);
     }
@@ -275,9 +275,29 @@ public abstract class AbstractJdbcMetadataManager
      * Retrieves the table names.
      * @return such names.
      */
-    public String[] getTableNames()
+    @Nullable
+    protected final List<String> immutableGetTableNames()
     {
-        return m__astrTableNames;
+        return m__lTableNames;
+    }
+
+    /**
+     * Retrieves the table names.
+     * @return such names.
+     */
+    @NotNull
+    public List<String> getTableNames()
+    {
+        List<String> result = immutableGetTableNames();
+
+        if (   (result == null)
+            || (result.size() == 0))
+        {
+            result = extractTableNames(getTables());
+            setTableNames(result);
+        }
+
+        return result;
     }
 
     /**
@@ -367,7 +387,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (result == null)
         {
-            result = new HashMap<String,List<Attribute>>();
+            result = new HashMap<String,List<Attribute>>(0);
             setColumns(result);
         }
 
@@ -809,7 +829,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     @NotNull
     protected List<Table> extractTableMetadata(
-        @Nullable final String[] tableNames,
+        @Nullable final List<String> tableNames,
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -819,27 +839,25 @@ public abstract class AbstractJdbcMetadataManager
       throws  SQLException,
               QueryJException
     {
-        String[] t_astrTableNames = tableNames;
+        List<String> t_lTableNames = tableNames;
 
-        if (t_astrTableNames == null)
+        if (t_lTableNames == null)
         {
-            t_astrTableNames = new String[0];
+            t_lTableNames = new ArrayList<String>();
         }
 
         List<TableIncompleteValueObject> t_lTables =
             extractTableNamesAndComments(
-                metaData, catalog, schema, t_astrTableNames, metadataExtractionListener, caseSensitiveness);
+                metaData, catalog, schema, t_lTableNames, metadataExtractionListener, caseSensitiveness);
 
-        if  (t_astrTableNames.length == 0)
+        if  (t_lTableNames.size() == 0)
         {
-            t_astrTableNames = retrieveTableNames(t_lTables);
+            t_lTableNames = retrieveTableNames(t_lTables);
 
-            setTableNames(t_astrTableNames);
+            setTableNames(t_lTableNames);
         }
 
-        int t_iTableCount = t_astrTableNames.length;
-
-        metadataExtractionListener.tableNamesExtracted(t_iTableCount);
+        metadataExtractionListener.tableNamesExtracted(t_lTableNames.size());
 
         metadataExtractionListener.tableMetadataExtractionStarted();
 
@@ -1165,13 +1183,16 @@ public abstract class AbstractJdbcMetadataManager
      * @param tables the table information.
      * @return just the table names.
      */
-    protected String[] retrieveTableNames(@NotNull final List<? extends AbstractTable> tables)
+    protected List<String> retrieveTableNames(@NotNull final List<? extends AbstractTable> tables)
     {
-        String[] result = new String[tables.size()];
+        List<String> result = new ArrayList<String>(tables.size());
 
-        for (int t_iIndex = 0; t_iIndex < tables.size(); t_iIndex++)
+        for (AbstractTable t_Table : tables)
         {
-            result[t_iIndex] = tables.get(t_iIndex).getName();
+            if (t_Table != null)
+            {
+                result.add(t_Table.getName());
+            }
         }
 
         return result;
@@ -1192,7 +1213,7 @@ public abstract class AbstractJdbcMetadataManager
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable  String schema,
-        @NotNull final String[] tableNames,
+        @NotNull final List<String> tableNames,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         final boolean caseSensitiveness)
         throws  SQLException,
@@ -1257,18 +1278,6 @@ public abstract class AbstractJdbcMetadataManager
         @Nullable final MetadataExtractionListener metadataExtractionListener)
         throws  SQLException,
                 QueryJException;
-
-    /**
-     * Retrieves the {@link org.acmsl.queryj.tools.metadata.TableDAO} instance.
-     *
-     * @return such instance.
-     */
-    @NotNull
-    @Override
-    public TableDAO getTableDAO()
-    {
-        return new MetadataManagerTableDAO(this);
-    }
 
     /**
      * Retrieves the {@link org.acmsl.queryj.tools.metadata.ColumnDAO} instance.
@@ -1396,7 +1405,7 @@ public abstract class AbstractJdbcMetadataManager
      * @return <code>true</code> if the table passes the filter.
      */
     protected boolean passesFilter(
-        @NotNull final String table, @NotNull final String[] fixedTables, final boolean caseSensitiveness)
+        @NotNull final String table, final boolean caseSensitiveness, @NotNull final List<String> fixedTables)
     {
         boolean result = true;
 
@@ -1553,5 +1562,26 @@ public abstract class AbstractJdbcMetadataManager
             }
         }
 
+    }
+
+    /**
+     * Extracts the names of given tables.
+     * @param tables the {@link Table} list.
+     * @return the list of table names.
+     */
+    @NotNull
+    protected List<String> extractTableNames(@NotNull final List<Table> tables)
+    {
+        @NotNull final List<String> result = new ArrayList<String>(tables.size());
+
+        for (@Nullable Table t_Table : tables)
+        {
+            if (t_Table != null)
+            {
+                result.add(t_Table.getName());
+            }
+        }
+
+        return result;
     }
 }

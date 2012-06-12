@@ -39,8 +39,14 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplate;
+import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerCustomSqlTemplateGenerator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -49,16 +55,16 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
  * Writes <i>per-custom-sql</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public abstract class BasePerCustomSqlTemplateWritingHandler
-    extends    AbstractQueryJCommandHandler
+    <T extends BasePerCustomSqlTemplate<C>, C extends BasePerCustomSqlTemplateContext>
+extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
     /**
@@ -79,35 +85,30 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        writeTemplate(parameters, retrieveDatabaseMetaData(parameters));
+        boolean result = true;
 
-        return false;
+        MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager != null)
+        {
+            writeTemplate(parameters, t_MetadataManager);
+            result = false;
+        }
+
+        return result;
     }
 
     /**
      * Writes the template.
      * @param parameters the parameters.
-     * @param metaData the database metadata.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
      */
     protected void writeTemplate(
-        @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
+        @NotNull final Map parameters, @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        try
-        {
-            writeTemplate(parameters, metaData.getDatabaseProductName());
-        }
-        catch  (@NotNull final SQLException sqlException)
-        {
-            throw
-                new QueryJBuildException(
-                      "Cannot retrieve database product name, "
-                    + "version or quote string",
-                    sqlException);
-        }
+        writeTemplate(parameters, metadataManager.getEngineName());
     }
 
     /**
@@ -115,11 +116,9 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
      */
     protected void writeTemplate(
-        @NotNull final Map parameters, final String engineName)
+        @NotNull final Map parameters, @NotNull final String engineName)
       throws  QueryJBuildException
     {
         writeTemplate(
@@ -136,15 +135,12 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition templateGenerator != null
      */
     protected void writeTemplate(
-        final BasePerCustomSqlTemplate template,
-        final File outputDir,
-        final Charset charset,
-        @NotNull final BasePerCustomSqlTemplateGenerator templateGenerator)
+        @NotNull final T template,
+        @NotNull final File outputDir,
+        @NotNull final Charset charset,
+        @NotNull final BasePerCustomSqlTemplateGenerator<T, C> templateGenerator)
       throws  QueryJBuildException
     {
         try 
@@ -164,7 +160,7 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @return such instance.
      */
     @NotNull
-    protected abstract BasePerCustomSqlTemplateGenerator retrieveTemplateGenerator();
+    protected abstract BasePerCustomSqlTemplateGenerator<T,C> retrieveTemplateGenerator();
 
     /**
      * Retrieves the template from the attribute map.
@@ -172,19 +168,17 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @return the template.
      */
     @NotNull
-    protected abstract BasePerCustomSqlTemplate retrieveTemplate(
-        final Map parameters);
+    protected abstract T retrieveTemplate(@NotNull final Map parameters);
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @precondition parameters != null
      */
     @NotNull
     protected File retrieveOutputDir(
-        final String engineName, @NotNull final Map parameters)
+        @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -206,16 +200,13 @@ public abstract class BasePerCustomSqlTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected abstract File retrieveOutputDir(
-        final File projectFolder,
-        final String projectPackage,
+        @NotNull final File projectFolder,
+        @NotNull final String projectPackage,
         final boolean useSubfolders,
-        final String engineName,
-        final Map parameters,
-        final PackageUtils packageUtils);
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final PackageUtils packageUtils);
 }

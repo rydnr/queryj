@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.metadata.engines;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
+import org.acmsl.queryj.tools.metadata.TableDAO;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
@@ -106,7 +107,7 @@ public class JdbcMetadataManager
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @Nullable final String catalog,
         @Nullable final String schema,
-        @NotNull final String[] tableNames,
+        @NotNull final List<String> tableNames,
         @NotNull final List<Table> tables,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
@@ -147,7 +148,7 @@ public class JdbcMetadataManager
         @NotNull final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable  String schema,
-        @NotNull final String[] tableNames,
+        @NotNull final List<String> tableNames,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         final boolean caseSensitiveness)
         throws  SQLException,
@@ -185,7 +186,7 @@ public class JdbcMetadataManager
                 t_strTableName = t_rsTables.getString("TABLE_NAME");
                 t_strTableComment = t_rsTables.getString("REMARKS");
 
-                if (passesFilter(t_strTableName, tableNames, caseSensitiveness))
+                if (passesFilter(t_strTableName, caseSensitiveness, tableNames))
                 {
                     t_Table =
                         new TableIncompleteValueObject(
@@ -593,5 +594,17 @@ public class JdbcMetadataManager
     public boolean requiresCustomClobHandling()
     {
         return false;
+    }
+
+    /**
+     * Retrieves the {@link org.acmsl.queryj.tools.metadata.TableDAO} instance.
+     *
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public TableDAO getTableDAO()
+    {
+        return new JdbcTableDAO(this);
     }
 }
