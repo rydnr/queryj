@@ -39,6 +39,8 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.tools.templates.TableTemplate;
+import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplate;
 import org.acmsl.queryj.tools.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.templates.TemplateMappingManager;
@@ -53,9 +55,7 @@ import java.util.Map;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds the repository DAO factory implementation if requested.
@@ -74,40 +74,6 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         return RepositoryDAOFactoryTemplateGenerator.getInstance();
     }
     
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    protected RepositoryDAOFactoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final RepositoryDAOFactoryTemplateGenerator templateFactory,
-        @NotNull final String projectPackage,
-        @NotNull final String packageName,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation,
-        @NotNull final Map parameters)
-      throws  QueryJBuildException
-    {
-        return
-            templateFactory.createTemplate(
-                metadataManager,
-                customSqlProvider,
-                packageName,
-                projectPackage,
-                repository,
-                header,
-                implementMarkerInterfaces,
-                jmx,
-                tableNames,
-                jndiLocation);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -138,5 +104,44 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         parameters.put(
             TemplateMappingManager.REPOSITORY_DAO_FACTORY_TEMPLATE,
             template);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void buildTemplate(
+        @NotNull final Map parameters,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final RepositoryDAOFactoryTemplateGenerator templateFactory,
+        @NotNull final String packageName,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        @NotNull final List<TableTemplate> tableTemplates)
+        throws QueryJBuildException
+    {
+        if  (definesRepositoryScopedSql(
+            customSqlProvider,
+            getAllowEmptyRepositoryDAOSetting(parameters)))
+        {
+            super.buildTemplate(
+                parameters,
+                metadataManager,
+                customSqlProvider,
+                templateFactory,
+                packageName,
+                projectPackage,
+                repository,
+                header,
+                implementMarkerInterfaces,
+                jmx,
+                jndiLocation,
+                tableTemplates);
+        }
     }
 }

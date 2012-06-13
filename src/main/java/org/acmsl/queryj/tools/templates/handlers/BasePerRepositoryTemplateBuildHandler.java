@@ -43,6 +43,8 @@ package org.acmsl.queryj.tools.templates.handlers;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJCommand;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
+import org.acmsl.queryj.tools.customsql.Sql;
+import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -56,6 +58,8 @@ import org.acmsl.queryj.tools.templates.TableTemplate;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -304,6 +308,75 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         {
             result = new ArrayList<TableTemplate>(0);
         }
+
+        return result;
+    }
+
+    /**
+     * Checks whether there's any custom SQL for the whole repository.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param allowEmptyRepositoryDAO whether to generate the repository DAO
+     * in any case.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean definesRepositoryScopedSql(
+        @Nullable final CustomSqlProvider customSqlProvider,
+        final boolean allowEmptyRepositoryDAO)
+    {
+        boolean result = allowEmptyRepositoryDAO;
+
+        if  (!result)
+        {
+            @Nullable Collection t_cElements =
+                (customSqlProvider != null)
+                ?  customSqlProvider.getCollection()
+                :  null;
+
+            @Nullable Iterator t_Iterator =
+                (t_cElements != null) ? t_cElements.iterator() : null;
+
+            if  (t_Iterator != null)
+            {
+                Object t_Item;
+                Sql t_Sql;
+
+                while  (t_Iterator.hasNext())
+                {
+                    t_Item = t_Iterator.next();
+
+                    if  (t_Item instanceof Sql)
+                    {
+                        t_Sql = (Sql) t_Item;
+
+                        if  (t_Sql.getRepositoryScope() != null)
+                        {
+                            result = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether empty repository DAO is allowed explicitly.
+     * @param parameters the parameters.
+     * @return <code>true</code> in such case.
+     * @precondition parameters != null
+     */
+    protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map parameters)
+    {
+        boolean result;
+
+        @Nullable Boolean t_Result =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.ALLOW_EMPTY_REPOSITORY_DAO);
+
+        result = (t_Result != null) && t_Result;
 
         return result;
     }
