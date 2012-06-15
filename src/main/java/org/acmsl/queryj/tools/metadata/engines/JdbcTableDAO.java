@@ -38,11 +38,15 @@ package org.acmsl.queryj.tools.metadata.engines;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
 * Importing JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,4 +76,95 @@ public class JdbcTableDAO
     {
         return getMetadataManager().getTableNames();
     }
+
+    /**
+     * Retrieves all tables.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public List<Table> findAllTables()
+    {
+        return getMetadataManager().getTables();
+    }
+
+    /**
+     * Retrieves the table matching given name.
+     * @param name the table name.
+     * @param catalog the catalog.
+     * @param schema the schema.
+     * @return the associated {@link Table} instance, if the table is found.
+     */
+    @Nullable
+    public Table findByName(
+        @NotNull final String name, @Nullable final String catalog, @Nullable final String schema)
+    {
+        @Nullable Table result = null;
+
+        final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
+
+        for (@Nullable Table t_Table : getMetadataManager().getTables())
+        {
+            if (t_Table != null)
+            {
+                if (   (t_bCaseSensitive)
+                    && (t_Table.getName().equals(name)))
+                {
+                    result = t_Table;
+                    break;
+                }
+                else if (   (!t_bCaseSensitive)
+                         && (t_Table.getName().equalsIgnoreCase(name)))
+                {
+                    result = t_Table;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the list of tables with foreign keys to given table.
+     * @param target the target table.
+     * @return the list of referring tables.
+     */
+    @Override
+    @NotNull
+    public List<Table> findReferringTables(@NotNull final String target)
+    {
+        @NotNull final List<Table> result = new ArrayList<Table>(1);
+
+        final boolean t_bCaseSensitive = getMetadataManager().isCaseSensitive();
+
+        for (@Nullable Table t_Table : getMetadataManager().getTables())
+        {
+            if (t_Table != null)
+            {
+                for (@Nullable ForeignKey t_ForeignKey : t_Table.getForeignKeys())
+                {
+                    if (t_ForeignKey != null)
+                    {
+                        if (   (t_bCaseSensitive)
+                            && (t_ForeignKey.getTargetTableName().equals(target)))
+                        {
+                            result.add(t_Table);
+                            break;
+                        }
+                        else if (   (!t_bCaseSensitive)
+                                 && (t_ForeignKey.getTargetTableName().equalsIgnoreCase(target)))
+                        {
+                            result.add(t_Table);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+
 }

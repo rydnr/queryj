@@ -107,19 +107,6 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     }
 
     /**
-     * Retrieves all tables.
-     *
-     * @return such information.
-     */
-    @NotNull
-    @Override
-    public List<Table> findAllTables()
-    {
-        // TODO
-        return new ArrayList<Table>();
-    }
-
-    /**
      * Retrieves the table matching given name.
      * @param name the table name.
      * @param catalog the catalog.

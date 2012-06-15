@@ -93,6 +93,7 @@ public interface TableDAO
      * @param target the target table.
      * @return the list of referring tables.
      */
+    @SuppressWarnings("unused")
     @NotNull
     List<Table> findReferringTables(@NotNull final String target);
 

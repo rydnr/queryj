@@ -56,6 +56,7 @@ import org.acmsl.commons.patterns.Factory;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -143,7 +144,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated table for the concrete template.
      */
-    @NotNull
+    @Nullable
     public TableDecorator createTableDecorator(
         @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
@@ -163,6 +164,7 @@ public interface DecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the attribute list
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Attribute> decoratePrimaryKey(
         @NotNull final String table, @NotNull final MetadataManager metadataManager);

@@ -207,6 +207,7 @@ public class CachingDecoratorFactory
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the decorated table for the concrete template.
      */
+    @Override
     @Nullable
     public TableDecorator createTableDecorator(
         @NotNull final String table, @NotNull final MetadataManager metadataManager)

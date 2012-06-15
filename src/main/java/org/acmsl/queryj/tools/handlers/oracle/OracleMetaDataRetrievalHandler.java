@@ -138,7 +138,7 @@ public class OracleMetaDataRetrievalHandler
                     new MetadataExtractionLogger(),
                     catalog,
                     schema,
-                    null, // TODO: String[] tableNames
+                    null, // TODO: explicit tables
                     tables,
                     disableTableExtraction,
                     lazyTableExtraction,

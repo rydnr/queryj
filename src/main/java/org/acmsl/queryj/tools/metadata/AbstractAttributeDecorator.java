@@ -657,10 +657,9 @@ public abstract class AbstractAttributeDecorator
         final String tableName,
         final MetadataManager metadataManager)
     {
-        // TODO
-        //metadataManager.getExternallyManagedFieldRetrievalQuery(
-        //    tableName, name);
         return null;
+        // TODO    metadataManager. getExternallyManagedFieldRetrievalQuery(
+        //    tableName, name);
 
     }
 
