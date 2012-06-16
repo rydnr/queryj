@@ -54,7 +54,6 @@ import java.util.Collection;
  */
 public abstract class AbstractRowDecorator
     extends AbstractRow
-    implements java.lang.Comparable
 {
     /**
      * The decorated row.

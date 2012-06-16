@@ -116,7 +116,6 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
             try
             {
                 result = handle((QueryJCommand) command);
-                result = false;
             }
             catch (@NotNull final QueryJBuildException templateError)
             {

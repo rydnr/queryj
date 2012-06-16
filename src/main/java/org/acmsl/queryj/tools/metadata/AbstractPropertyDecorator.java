@@ -38,8 +38,13 @@ package org.acmsl.queryj.tools.metadata;
  */
 import org.acmsl.queryj.tools.customsql.Property;
 import org.acmsl.queryj.tools.customsql.PropertyElement;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
+import java.util.Locale;
 
 /**
  * Decorates &lt;property&gt; elements in <i>custom-sql</i> models.
@@ -105,7 +110,8 @@ public abstract class AbstractPropertyDecorator
      * Specifies the <code>Property</code> to decorate.
      * @param property such property.
      */
-    protected void setProperty(final Property property)
+    @SuppressWarnings("unused")
+    protected void setProperty(@NotNull final Property property)
     {
         immutableSetProperty(property);
     }
@@ -125,7 +131,7 @@ public abstract class AbstractPropertyDecorator
      * @param metadataManager such instance.
      */
     protected final void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         m__MetadataManager = metadataManager;
     }
@@ -134,8 +140,9 @@ public abstract class AbstractPropertyDecorator
      * Specifies the metadata manager.
      * @param metadataManager such instance.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         immutableSetMetadataManager(metadataManager);
     }
@@ -144,6 +151,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the metadata manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
@@ -154,7 +162,7 @@ public abstract class AbstractPropertyDecorator
      * @param metadataTypeManager such instance.
      */
     protected final void immutableSetMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         m__MetadataTypeManager = metadataTypeManager;
     }
@@ -163,8 +171,9 @@ public abstract class AbstractPropertyDecorator
      * Specifies the metadata type manager.
      * @param metadataTypeManager such instance.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         immutableSetMetadataTypeManager(metadataTypeManager);
     }
@@ -173,6 +182,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the metadata type manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataTypeManager getMetadataTypeManager()
     {
         return m__MetadataTypeManager;
@@ -211,17 +221,8 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the Object type of the property.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getObjectType()
-    {
-        return retrieveObjectType();
-    }
-
-    /**
-     * Retrieves the Object type of the property.
-     * @return such information.
-     */
-    protected String retrieveObjectType()
     {
         return
             retrieveObjectType(
@@ -234,10 +235,9 @@ public abstract class AbstractPropertyDecorator
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param allowsNull whether it allows nulls.
      * @return such information.
-     * @precondition metadataManager != null
      */
     protected String retrieveObjectType(
-        final String type,
+        @NotNull final String type,
         @NotNull final MetadataManager metadataManager,
         final boolean allowsNull)
     {
@@ -256,12 +256,11 @@ public abstract class AbstractPropertyDecorator
      * @param allowsNull whether it allows nulls.
      * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
      * @return such information.
-     * @precondition metadataTypeManager != null
-     * @precondition metadataTypeUtils != null
      */
+    @SuppressWarnings("unused")
     protected String retrieveObjectType(
-        final String type,
-        final MetadataTypeManager metadataTypeManager,
+        @NotNull final String type,
+        @NotNull final MetadataTypeManager metadataTypeManager,
         final boolean allowsNull,
         @NotNull final MetadataTypeUtils metadataTypeUtils)
     {
@@ -282,6 +281,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the name, in upper case.
      * @return such information.
      */
+    @NotNull
     public String getNameUppercased()
     {
         return uppercase(getName());
@@ -291,6 +291,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the name, capitalized.
      * @return such information.
      */
+    @NotNull
     public String getNameCapitalized()
     {
         return capitalize(getName());
@@ -300,30 +301,30 @@ public abstract class AbstractPropertyDecorator
      * Lowers the case of given value.
      * @param value the value.
      * @return the value, after being processed.
-     * @precondition value != null
      */
+    @NotNull
     protected String lowercase(@NotNull final String value)
     {
-        return value.toLowerCase();
+        return value.toLowerCase(Locale.US);
     }
 
     /**
      * Uppers the case of given value.
      * @param value the value.
      * @return the value, after being processed.
-     * @precondition value != null
      */
+    @NotNull
     protected String uppercase(@NotNull final String value)
     {
-        return value.toUpperCase();
+        return value.toUpperCase(Locale.US);
     }
 
     /**
      * Capitalizes given value.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
+    @NotNull
     protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
@@ -334,9 +335,8 @@ public abstract class AbstractPropertyDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String capitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
@@ -348,11 +348,10 @@ public abstract class AbstractPropertyDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeCapitalize(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(decorationUtils.normalize(value));
     }
@@ -362,11 +361,10 @@ public abstract class AbstractPropertyDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeUncapitalize(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(decorationUtils.normalize(value));
     }
@@ -375,6 +373,8 @@ public abstract class AbstractPropertyDecorator
      * Retrieves whether this attribute can be modelled as a primitive or not.
      * @return <code>false</code> if no primitive matches.
      */
+    @SuppressWarnings("unused")
+    @NotNull
     public Boolean isPrimitive()
     {
         return isPrimitive(getType(), getMetadataTypeManager());
@@ -385,14 +385,12 @@ public abstract class AbstractPropertyDecorator
      * @param type the attribute type.
      * @param metadataTypeManager the metadata type manager.
      * @return <code>false</code> if no primitive matches.
-     * @precondition metadataTypeManager != null
      */
+    @NotNull
     protected Boolean isPrimitive(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
-        return
-            (metadataTypeManager.isPrimitive(type)
-             ?  Boolean.TRUE : Boolean.FALSE);
+        return metadataTypeManager.isPrimitive(type);
     }
 
     /**
@@ -411,10 +409,9 @@ public abstract class AbstractPropertyDecorator
      * @param type the type.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such condition.
-     * @precondition metadataManager != null
      */
     protected boolean isNumberSmallerThanInt(
-        final String type, @NotNull final MetadataManager metadataManager)
+        @NotNull final String type, @NotNull final MetadataManager metadataManager)
     {
         return
             isNumberSmallerThanInt(
@@ -427,10 +424,9 @@ public abstract class AbstractPropertyDecorator
      * @param type the type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such condition.
-     * @precondition metadataTypeManager != null
      */
     protected boolean isNumberSmallerThanInt(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isNumberSmallerThanInt(type);
     }
@@ -439,6 +435,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the capitalized column name.
      * @return such name.
      */
+    @NotNull
     public String getColumnNameCapitalized()
     {
         return
@@ -450,6 +447,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the capitalized normalized column name.
      * @return such name.
      */
+    @NotNull
     public String getColumnNameNormalizedCapitalized()
     {
         return
@@ -461,6 +459,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the uncapitalized normalized column name.
      * @return such name.
      */
+    @NotNull
     public String getColumnNameNormalizedUncapitalized()
     {
         return
@@ -470,7 +469,7 @@ public abstract class AbstractPropertyDecorator
 
     /**
      * Retrieves whether the attribute is a date or not.
-     * return such information.
+     * @return such information.
      */
     public boolean isDate()
     {
@@ -482,15 +481,91 @@ public abstract class AbstractPropertyDecorator
      * @param type the type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code>
      * instance.
-     * return such information.
-     * @precondition metadataTypeManager != null
+     * @return such information.
      */
     protected boolean isDate(
-        final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return
             metadataTypeManager.isDate(
                 metadataTypeManager.getJavaType(type));
+    }
+
+    /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isTimestamp()
+    {
+        return isTimestamp(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is a timestamp or not.
+     * @param type the type.
+     * @param metadataTypeManager the <code>MetadataTypeManager</code>
+     * instance.
+     * @return such information.
+     */
+    protected boolean isTimestamp(
+        @NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return
+            metadataTypeManager.isTimestamp(
+                metadataTypeManager.getJavaType(type));
+    }
+
+    /**
+     * Retrieves whether the attribute is boolean or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isBoolean()
+    {
+        return isBoolean(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the attribute is boolean or not.
+     * @param type the attribute type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return such information.
+     */
+    protected boolean isBoolean(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isBoolean(metadataTypeManager.getJavaType(type));
+    }
+
+    /**
+     * Retrieves whether the property allows null or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean getAllowsNull()
+    {
+        return isNullable();
+    }
+    /**
+     * Retrieves whether the property is a binary LOB or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isBlob()
+    {
+        return isBlob(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the property is a binary LOB or not.
+     * @param type the attribute type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected boolean isBlob(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isBlob(type);
     }
 
     /**
@@ -530,7 +605,14 @@ public abstract class AbstractPropertyDecorator
      */
     public boolean equals(final Object object)
     {
-        return equals(getProperty(), object);
+        boolean result = false;
+
+        if (object instanceof AbstractPropertyDecorator)
+        {
+            result = equals(getProperty(), object);
+        }
+
+        return result;
     }
 
     /**
@@ -538,7 +620,6 @@ public abstract class AbstractPropertyDecorator
      * @param property the decorated property.
      * @param object the object to compare to.
      * @return the result of such comparison.
-     * @precondition property != null
      */
     protected boolean equals(@NotNull final Property property, final Object object)
     {
@@ -565,8 +646,8 @@ public abstract class AbstractPropertyDecorator
      * @return the result of such comparison.
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
-     * @precondition property != null
      */
+    @SuppressWarnings("unchecked")
     protected int compareTo(@NotNull final Property property, final Property object)
         throws  ClassCastException
     {

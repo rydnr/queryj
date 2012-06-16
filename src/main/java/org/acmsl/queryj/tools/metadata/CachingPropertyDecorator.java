@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,6 +36,10 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.tools.customsql.Property;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,6 +52,7 @@ public class CachingPropertyDecorator
     implements Comparable<Property>
 {
     private static final long serialVersionUID = -3484708648329474308L;
+
     /**
      * The cached Java type.
      */
@@ -103,8 +107,6 @@ public class CachingPropertyDecorator
      * Creates a <code>CachingPropertyDecorator</code> to decorate given
      * property.
      * @param property the property to decorate.
-     * @precondition property != null
-     * @precondition metadataManager != null
      */
     public CachingPropertyDecorator(
         @NotNull final Property property, @NotNull final MetadataManager metadataManager)
@@ -116,7 +118,7 @@ public class CachingPropertyDecorator
      * Specifies the cached Java type.
      * @param type such type.
      */
-    protected final void immutableSetCachedType(final String type)
+    protected final void immutableSetCachedType(@NotNull final String type)
     {
         m__strCachedType = type;
     }
@@ -125,7 +127,8 @@ public class CachingPropertyDecorator
      * Specifies the cached Java type.
      * @param type such type.
      */
-    protected void setCachedType(final String type)
+    @SuppressWarnings("unused")
+    protected void setCachedType(@NotNull final String type)
     {
         immutableSetCachedType(type);
     }
@@ -134,6 +137,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached Java type.
      * @return such type.
      */
+    @Nullable
     public String getCachedType()
     {
         return m__strCachedType;
@@ -144,7 +148,6 @@ public class CachingPropertyDecorator
      * @return such information.
      */
     @NotNull
-    @Nullable
     public String getType()
     {
         @Nullable String result = getCachedType();
@@ -163,7 +166,7 @@ public class CachingPropertyDecorator
      * @param nameLowercased such value.
      */
     protected final void immutableSetCachedNameLowercased(
-        final String nameLowercased)
+        @NotNull final String nameLowercased)
     {
         m__strCachedNameLowercased = nameLowercased;
     }
@@ -172,8 +175,9 @@ public class CachingPropertyDecorator
      * Specifies the cached name lowercased.
      * @param nameLowercased such value.
      */
+    @SuppressWarnings("unused")
     protected void setCachedNameLowercased(
-        final String nameLowercased)
+        @NotNull final String nameLowercased)
     {
         immutableSetCachedNameLowercased(nameLowercased);
     }
@@ -182,6 +186,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached name lowercased.
      * @return such value.
      */
+    @Nullable
     public String getCachedNameLowercased()
     {
         return m__strCachedNameLowercased;
@@ -194,7 +199,7 @@ public class CachingPropertyDecorator
     @NotNull
     public String getNameLowercased()
     {
-        String result = getCachedNameLowercased();
+        @Nullable String result = getCachedNameLowercased();
 
         if  (result == null)
         {
@@ -210,7 +215,7 @@ public class CachingPropertyDecorator
      * @param nameUppercased such value.
      */
     protected final void immutableSetCachedNameUppercased(
-        final String nameUppercased)
+        @NotNull final String nameUppercased)
     {
         m__strCachedNameUppercased = nameUppercased;
     }
@@ -219,8 +224,9 @@ public class CachingPropertyDecorator
      * Specifies the cached name uppercased.
      * @param nameUppercased such value.
      */
+    @SuppressWarnings("unused")
     protected void setCachedNameUppercased(
-        final String nameUppercased)
+        @NotNull final String nameUppercased)
     {
         immutableSetCachedNameUppercased(nameUppercased);
     }
@@ -229,6 +235,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached name uppercased.
      * @return such value.
      */
+    @Nullable
     public String getCachedNameUppercased()
     {
         return m__strCachedNameUppercased;
@@ -238,9 +245,10 @@ public class CachingPropertyDecorator
      * Retrieves the name, in upper case.
      * @return such information.
      */
+    @NotNull
     public String getNameUppercased()
     {
-        String result = getCachedNameUppercased();
+        @Nullable String result = getCachedNameUppercased();
 
         if  (result == null)
         {
@@ -256,7 +264,7 @@ public class CachingPropertyDecorator
      * @param nameCapitalized such value.
      */
     protected final void immutableSetCachedNameCapitalized(
-        final String nameCapitalized)
+        @NotNull final String nameCapitalized)
     {
         m__strCachedNameCapitalized = nameCapitalized;
     }
@@ -265,8 +273,9 @@ public class CachingPropertyDecorator
      * Specifies the cached name capitalized.
      * @param nameCapitalized such value.
      */
+    @SuppressWarnings("unused")
     protected void setCachedNameCapitalized(
-        final String nameCapitalized)
+        @NotNull final String nameCapitalized)
     {
         immutableSetCachedNameCapitalized(nameCapitalized);
     }
@@ -275,6 +284,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached name capitalized.
      * @return such value.
      */
+    @Nullable
     public String getCachedNameCapitalized()
     {
         return m__strCachedNameCapitalized;
@@ -284,9 +294,10 @@ public class CachingPropertyDecorator
      * Retrieves the name, in lower case.
      * @return such information.
      */
+    @NotNull
     public String getNameCapitalized()
     {
-        String result = getCachedNameCapitalized();
+        @Nullable String result = getCachedNameCapitalized();
 
         if  (result == null)
         {
@@ -302,7 +313,7 @@ public class CachingPropertyDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedObjectType(
-        final String value)
+        @NotNull final String value)
     {
         m__strCachedObjectType = value;
     }
@@ -311,7 +322,8 @@ public class CachingPropertyDecorator
      * Specifies the cached object type.
      * @param value the value to cache.
      */
-    protected void setCachedObjectType(final String value)
+    @SuppressWarnings("unused")
+    protected void setCachedObjectType(@NotNull final String value)
     {
         immutableSetCachedObjectType(value);
     }
@@ -320,6 +332,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached object type.
      * @return such value.
      */
+    @Nullable
     public String getCachedObjectType()
     {
         return m__strCachedObjectType;
@@ -329,7 +342,7 @@ public class CachingPropertyDecorator
      * Retrieves the object type.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getObjectType()
     {
         @Nullable String result = getCachedObjectType();
@@ -349,7 +362,7 @@ public class CachingPropertyDecorator
      * @param flag such condition.
      */
     protected final void immutableSetCachedNumberSmallerThanInt(
-        final Boolean flag)
+        @NotNull final Boolean flag)
     {
         m__bCachedNumberSmallerThanInt = flag;
     }
@@ -359,8 +372,9 @@ public class CachingPropertyDecorator
      * number smaller than an int.
      * @param flag such condition.
      */
+    @SuppressWarnings("unused")
     protected void setCachedNumberSmallerThanInt(
-        final Boolean flag)
+        @NotNull final Boolean flag)
     {
         immutableSetCachedNumberSmallerThanInt(flag);
     }
@@ -370,6 +384,7 @@ public class CachingPropertyDecorator
      * number smaller than an int.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getCachedNumberSmallerThanInt()
     {
         return m__bCachedNumberSmallerThanInt;
@@ -380,21 +395,19 @@ public class CachingPropertyDecorator
      * number smaller than an int.
      * @return such condition.
      */
+    @SuppressWarnings("unused")
     public boolean getNumberSmallerThanInt()
     {
         Boolean result = getCachedNumberSmallerThanInt();
 
         if  (result == null)
         {
-            result =
-                (super.isNumberSmallerThanInt())
-                ?  Boolean.TRUE
-                :  Boolean.FALSE;
+            result = super.isNumberSmallerThanInt();
 
             setCachedNumberSmallerThanInt(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 
     /**
@@ -402,7 +415,7 @@ public class CachingPropertyDecorator
      * @param name such name.
      */
     protected final void immutableSetCachedColumnNameNormalizedCapitalized(
-        final String name)
+        @NotNull final String name)
     {
         m__strCachedColumnNameNormalizedCapitalized = name;
     }
@@ -412,7 +425,7 @@ public class CachingPropertyDecorator
      * @param name such name.
      */
     protected void setCachedColumnNameNormalizedCapitalized(
-        final String name)
+        @NotNull final String name)
     {
         immutableSetCachedColumnNameNormalizedCapitalized(name);
     }
@@ -421,6 +434,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached capitalized normalized column name.
      * @return such name.
      */
+    @Nullable
     public String getCachedColumnNameNormalizedCapitalized()
     {
         return m__strCachedColumnNameNormalizedCapitalized;
@@ -430,9 +444,10 @@ public class CachingPropertyDecorator
      * Retrieves the capitalized normalized column name.
      * @return such name.
      */
+    @NotNull
     public String getColumnNameNormalizedCapitalized()
     {
-        String result = getCachedColumnNameNormalizedCapitalized();
+        @Nullable String result = getCachedColumnNameNormalizedCapitalized();
 
         if  (result == null)
         {
@@ -448,7 +463,7 @@ public class CachingPropertyDecorator
      * @param name such name.
      */
     protected final void immutableSetCachedColumnNameCapitalized(
-        final String name)
+        @NotNull final String name)
     {
         m__strCachedColumnNameCapitalized = name;
     }
@@ -457,8 +472,9 @@ public class CachingPropertyDecorator
      * Specifies the cached capitalized column name.
      * @param name such name.
      */
+    @SuppressWarnings("unused")
     protected void setCachedColumnNameCapitalized(
-        final String name)
+        @NotNull final String name)
     {
         immutableSetCachedColumnNameCapitalized(name);
     }
@@ -467,6 +483,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached capitalized column name.
      * @return such name.
      */
+    @Nullable
     public String getCachedColumnNameCapitalized()
     {
         return m__strCachedColumnNameCapitalized;
@@ -476,9 +493,10 @@ public class CachingPropertyDecorator
      * Retrieves the capitalized column name.
      * @return such name.
      */
+    @NotNull
     public String getColumnNameCapitalized()
     {
-        String result = getCachedColumnNameCapitalized();
+        @Nullable String result = getCachedColumnNameCapitalized();
 
         if  (result == null)
         {
@@ -494,7 +512,7 @@ public class CachingPropertyDecorator
      * @param name such information.
      */
     protected final void immutableSetCachedColumnNameNormalizedUncapitalized(
-        final String name)
+        @NotNull final String name)
     {
         m__strCachedColumnNameNormalizedUncapitalized = name;
     }
@@ -503,8 +521,9 @@ public class CachingPropertyDecorator
      * Specifies the cached column name normalized uncapitalized.
      * @param name such information.
      */
+    @SuppressWarnings("unused")
     protected void setCachedColumnNameNormalizedUncapitalized(
-        final String name)
+        @NotNull final String name)
     {
         immutableSetCachedColumnNameNormalizedUncapitalized(name);
     }
@@ -513,6 +532,7 @@ public class CachingPropertyDecorator
      * Retrieves the cached column name normalized uncapitalized.
      * @return such information.
      */
+    @Nullable
     public String getCachedColumnNameNormalizedUncapitalized()
     {
         return m__strCachedColumnNameNormalizedUncapitalized;
@@ -522,9 +542,10 @@ public class CachingPropertyDecorator
      * Retrieves the column name normalized uncapitalized.
      * @return such information.
      */
+    @NotNull
     public String getColumnNameNormalizedUncapitalized()
     {
-        String result = getCachedColumnNameNormalizedUncapitalized();
+        @Nullable String result = getCachedColumnNameNormalizedUncapitalized();
 
         if  (result == null)
         {
@@ -539,7 +560,7 @@ public class CachingPropertyDecorator
      * Caches whether the property is a Date or not.
      * @param flag such flag.
      */
-    protected final void immutableSetCachedDate(final Boolean flag)
+    protected final void immutableSetCachedDate(@NotNull final Boolean flag)
     {
         m__bCachedDate = flag;
     }
@@ -548,7 +569,7 @@ public class CachingPropertyDecorator
      * Caches whether the property is a Date or not.
      * @param flag such flag.
      */
-    protected void setCachedDate(final Boolean flag)
+    protected void setCachedDate(@NotNull final Boolean flag)
     {
         immutableSetCachedDate(flag);
     }
@@ -558,6 +579,7 @@ public class CachingPropertyDecorator
      * Date or not.
      * @return such information.
      */
+    @Nullable
     protected Boolean getCachedDate()
     {
         return m__bCachedDate;
@@ -573,11 +595,11 @@ public class CachingPropertyDecorator
 
         if  (result == null)
         {
-            result = super.isDate() ? Boolean.TRUE : Boolean.FALSE;
+            result = super.isDate();
 
             setCachedDate(result);
         }
 
-        return result.booleanValue();
+        return result;
     }
 }

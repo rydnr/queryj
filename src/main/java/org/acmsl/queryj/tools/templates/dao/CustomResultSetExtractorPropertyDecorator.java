@@ -120,6 +120,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the Java type of the property.
      * @return such information.
      */
+    @NotNull
     public String getType()
     {
         String result = getCachedType();
@@ -187,7 +188,7 @@ public class CustomResultSetExtractorPropertyDecorator
      * Retrieves the object type.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getObjectType()
     {
         @Nullable String result = getCachedObjectType();

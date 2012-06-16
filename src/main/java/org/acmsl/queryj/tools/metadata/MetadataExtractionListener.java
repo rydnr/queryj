@@ -38,14 +38,20 @@
 package org.acmsl.queryj.tools.metadata;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some project classes.
  */
-//import org.acmsl.commons.patterns.Listener;
-
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing some JDK classes.
+ */
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -54,7 +60,7 @@ import java.util.List;
            >Jose San Leandro</a>
  */
 public interface MetadataExtractionListener
-//    extends  Listener
+    extends Serializable
 {
     /**
      * Notifies all table name extraction have been started.
@@ -170,6 +176,7 @@ public interface MetadataExtractionListener
      * @param table the table name.
      * @param primaryKey the primary key.
      */
+    @SuppressWarnings("unused")
     public void primaryKeyExtracted(
         @NotNull final String table, @NotNull final List<Attribute> primaryKey);
 
@@ -187,6 +194,7 @@ public interface MetadataExtractionListener
      * Notifies a foreign key has been extracted.
      * @param foreignKey the foreign key.
      */
+    @SuppressWarnings("unused")
     public void foreignKeyExtracted(@NotNull final ForeignKey foreignKey);
 
     /**
