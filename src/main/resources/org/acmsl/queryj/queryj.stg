@@ -63,7 +63,7 @@ java_header(years,description,timestamp) ::= <<
 /*
                         QueryJ
 
-    Copyright (C) <years; separator="-"> Jose San Leandro Armendariz
+    Copyright (C) <years; separator="-">-today Jose San Leandro Armendariz
                               chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -106,6 +106,17 @@ package_declaration(packageNames) ::= <<
 <! Generates the package declaration !>
 <! @param packageNames the package names !>
 package <packageNames; separator=".">;
+>>
+
+checkers_import_preamble() ::= <<
+/*
+ * Importing JSR-308 (http://types.cs.washington.edu/checker-framework/) annotations.
+ */
+>>
+
+class_common_javadoc() ::= <<
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
+ * @since <input.timestamp>
 >>
 
 precondition_notnull(name) ::= <<

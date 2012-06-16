@@ -113,6 +113,7 @@ public class ParameterValidationHandler
     /**
      * The missing password error message.
      */
+    @SuppressWarnings("unused")
     public static final String PASSWORD_MISSING = "JDBC password is missing.";
 
     /**
@@ -123,6 +124,7 @@ public class ParameterValidationHandler
     /**
      * The missing catalog error message.
      */
+    @SuppressWarnings("unused")
     public static final String CATALOG_MISSING = "JDBC catalog is missing.";
 
     /**
@@ -476,13 +478,13 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unused,unchecked")
     protected void validateParameters(
         @Nullable final String driver,
         @Nullable final String url,
         @Nullable final String username,
-        final String password,
-        final String catalog,
+        @Nullable final String password,
+        @Nullable final String catalog,
         @Nullable final String schema,
         @Nullable final String repository,
         @Nullable final String packageName,
@@ -693,11 +695,12 @@ public class ParameterValidationHandler
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
+    @SuppressWarnings("unused,unchecked")
     protected void validateAntParameters(
         @Nullable final AntTablesElement tables,
         @Nullable final AntExternallyManagedFieldsElement externallyManagedFields,
         @Nullable final Path classpath,
-        final Map parameters)
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         if  (classpath == null) 

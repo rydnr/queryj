@@ -51,7 +51,6 @@ import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateFactory;
-import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 
 /*
@@ -166,7 +165,6 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param tableTemplates the table templates.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unused")
     protected void buildTemplate(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -182,28 +180,29 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final List<TableTemplate> tableTemplates)
       throws  QueryJBuildException
     {
-        @NotNull List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
-
-        BasePerTableTemplateContext t_Context;
-
-        @Nullable T t_Template =
-            createTemplate(
-                metadataManager,
-                customSqlProvider,
-                templateFactory,
-                packageName,
-                projectPackage,
-                repository,
-                header,
-                implementMarkerInterfaces,
-                jmx,
-                t_lTableNames,
-                retrieveJNDILocation(parameters),
-                parameters);
-
-        if (t_Template != null)
+        if (definesRepositoryScopedSql(customSqlProvider, getAllowEmptyRepositoryDAOSetting(parameters)))
         {
-            storeTemplate(t_Template, parameters);
+            @NotNull List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
+
+            @Nullable T t_Template =
+                createTemplate(
+                    metadataManager,
+                    customSqlProvider,
+                    templateFactory,
+                    packageName,
+                    projectPackage,
+                    repository,
+                    header,
+                    implementMarkerInterfaces,
+                    jmx,
+                    t_lTableNames,
+                    retrieveJNDILocation(parameters),
+                    parameters);
+
+            if (t_Template != null)
+            {
+                storeTemplate(t_Template, parameters);
+            }
         }
     }
 
@@ -319,6 +318,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * in any case.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unchecked")
     protected boolean definesRepositoryScopedSql(
         @Nullable final CustomSqlProvider customSqlProvider,
         final boolean allowEmptyRepositoryDAO)
@@ -365,8 +365,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * Checks whether empty repository DAO is allowed explicitly.
      * @param parameters the parameters.
      * @return <code>true</code> in such case.
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected boolean getAllowEmptyRepositoryDAOSetting(@NotNull final Map parameters)
     {
         boolean result;

@@ -69,6 +69,10 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName
   ])>
 
+<checkers_import_preamble()>
+import checkers.nullness.quals.NonNull;
+import checkers.nullness.quals.Nullable;
+
 <class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
 >>
 
@@ -123,7 +127,7 @@ public class <input.tr_name_capitalized>DataAccessManager
     /**
      * Public constructor to allow reflective access.
      */
-    public <input.tr_name_capitalized>DataAccessManager() {};
+    public <input.tr_name_capitalized>DataAccessManager() {}
 
     /**
      * Singleton implementation to avoid double-checked locking.
@@ -138,6 +142,7 @@ public class <input.tr_name_capitalized>DataAccessManager
      * Retrieves a \<code\><input.tr_name_capitalized>DataAccessManager\</code\> instance.
      * @return such instance.
      */
+    @NonNull
     public static <input.tr_name_capitalized>DataAccessManager getInstance()
     {
         return <input.tr_name_capitalized>DataAccessManagerSingletonContainer.SINGLETON;
@@ -186,7 +191,8 @@ dao_methods(table) ::= <<
  * Specifies the new {@link <table.voName>DAO} reference to keep.
  * @param dao the new DAO.
  */
-protected void set<table.voName>DAOReference(final <table.voName>DAO dao)
+@SuppressWarnings("unused")
+protected void set<table.voName>DAOReference(@NonNull final <table.voName>DAO dao)
 {
     m__<table.voName>DAO = dao;
 }
@@ -195,6 +201,7 @@ protected void set<table.voName>DAOReference(final <table.voName>DAO dao)
  * Retrieves the existing {@link <table.voName>DAO} reference.
  * @return a DAO instance for accessing <table.name> information.
  */
+@Nullable
 protected <table.voName>DAO get<table.voName>DAOReference()
 {
     return m__<table.voName>DAO;
@@ -204,19 +211,50 @@ protected <table.voName>DAO get<table.voName>DAOReference()
  * Retrieves a {@link <table.voName>DAO}.
  * @return a DAO instance for accessing <table.name> information.
  */
+@NonNull
 public <table.voName>DAO get<table.voName>DAO()
 {
-    <table.voName>DAO result = get<table.voName>DAOReference();
+    return get<table.voName>DAO(get<table.voName>DAOReference());
+}
+
+/**
+ * Retrieves a {@link <table.voName>DAO}.
+ * @param factory the {@link <table.voName>DAOFactory}.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+@Nullable
+protected <table.voName>DAO get<table.voName>DAO(@Nullable <table.voName>DAOFactory factory)
+{
+    <table.voName>DAO result;
+
+    if  (factory != null)
+    {
+        result = factory.create<table.voName>DAO();
+    }
+
+    return result;
+}
+
+/**
+ * Retrieves a {@link <table.voName>DAO}.
+ * @param dao the {@link <table.voName>DAO}.
+ * @return a DAO instance for accessing <table.name> information.
+ */
+@NonNull
+protected <table.voName>DAO get<table.voName>DAO(@Nullable final <table.voName>DAO dao)
+{
+    <table.voName>DAO result = dao;
 
     if  (result == null)
     {
-        <table.voName>DAOFactory t_<table.voName>DAOFactory =
-            <table.voName>DAOFactory.getInstance();
+        result = get<table.voName>DAO(<table.voName>DAOFactory.getInstance());
 
-        if  (t_<table.voName>DAOFactory != null)
+        if (result == null)
         {
-            result = t_<table.voName>DAOFactory.create<table.voName>DAO();
-
+            throw new RuntimeException("DAO layer misconfigured");
+        }
+        else
+        {
             set<table.voName>DAOReference(result);
         }
     }
@@ -235,6 +273,7 @@ repository_dao_methods(repository, repositoryCapitalized) ::= <<
  * Specifies the new {@link <repositoryCapitalized>DAO} reference to keep.
  * @param dao the new DAO.
  */
+@SuppressWarnings("unused")
 protected void set<repositoryCapitalized>DAOReference(final <repositoryCapitalized>DAO dao)
 {
     m__<repositoryCapitalized>DAO = dao;
@@ -244,6 +283,7 @@ protected void set<repositoryCapitalized>DAOReference(final <repositoryCapitaliz
  * Retrieves the existing {@link <repositoryCapitalized>DAO} reference.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
+@Nullable
 protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
 {
     return m__<repositoryCapitalized>DAO;
@@ -253,19 +293,53 @@ protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
  * Retrieves a {@link <repositoryCapitalized>DAO}.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
+@NonNull
 public <repositoryCapitalized>DAO get<repositoryCapitalized>DAO()
 {
-    <repositoryCapitalized>DAO result = get<repositoryCapitalized>DAOReference();
+    return get<repositoryCapitalized>DAO(get<repositoryCapitalized>DAOReference());
+}
+
+/**
+ * Retrieves a {@link <repositoryCapitalized>DAO}.
+ * @param factory the {@link <repositoryCapitalized>DAOFactory} instance.
+ * @return a DAO instance for accessing the <repository>-wide DAO.
+ */
+@Nullable
+protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAO(
+    @Nullable final <repositoryCapitalized>DAOFactory factory)
+{
+    <repositoryCapitalized>DAO result = dao;
+
+        if  (factory != null)
+        {
+            result = t_<repositoryCapitalized>DAOFactory.create<repositoryCapitalized>DAO();
+        }
+    }
+
+    return result;
+}
+
+/**
+ * Retrieves a {@link <repositoryCapitalized>DAO}.
+ * @param dao the {@link <repositoryCapitalized>DAO} instance.
+ * @return a DAO instance for accessing the <repository>-wide DAO.
+ */
+@NonNull
+protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAO(
+    @Nullable final <repositoryCapitalized>DAO dao)
+{
+    <repositoryCapitalized>DAO result = dao;
 
     if  (result == null)
     {
-        <repositoryCapitalized>DAOFactory t_<repositoryCapitalized>DAOFactory =
-            <repositoryCapitalized>DAOFactory.getInstance();
+        result = get<repositoryCapitalized>DAO(<repositoryCapitalized>DAOFactory.getInstance());
 
-        if  (t_<repositoryCapitalized>DAOFactory != null)
+        if (result == null)
         {
-            result = t_<repositoryCapitalized>DAOFactory.create<repositoryCapitalized>DAO();
-
+            throw new RuntimeException("DAO layer misconfigured");
+        }
+        else
+        {
             set<repositoryCapitalized>DAOReference(result);
         }
     }

@@ -1589,7 +1589,7 @@ public class QueryJChain
             setAllowEmptyRepositoryDAO(t_strResult);
         }
 
-        return toBoolean(t_strResult);
+        return toBoolean(t_strResult, false);
     }
 
     /**
