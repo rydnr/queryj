@@ -94,7 +94,7 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
      * @param outputDir the output dir.
      * @throws IOException if the information could not be written to disk.
      */
-    protected void cache(@NotNull MetadataManager manager, final File outputDir)
+    protected void cache(@NotNull MetadataManager manager, @NotNull final File outputDir)
         throws IOException
     {
         @NotNull File t_CacheFile = retrieveCacheFile(outputDir);

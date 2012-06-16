@@ -59,6 +59,8 @@ import org.jetbrains.annotations.NotNull;
 public class BasePerCustomResultTemplateContext
     extends AbstractTemplateContext
 {
+
+    private static final long serialVersionUID = 5193168262427622240L;
     /**
      * The result.
      */

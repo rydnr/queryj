@@ -101,7 +101,7 @@ public class TableDecoratorHelper
     public List<Attribute> removeOverridden(
         @NotNull final List<Attribute> firstAttributes,
         @NotNull final List<Attribute> secondAttributes,
-        @NotNull final String parentTableName,
+        @Nullable final String parentTableName,
         @NotNull final MetadataManager metadataManager)
     {
         List<Attribute> result = new ArrayList<Attribute>();
@@ -132,7 +132,7 @@ public class TableDecoratorHelper
     protected boolean isOverridden(
         @NotNull final Attribute attribute,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final String parentTableName)
+        @Nullable final String parentTableName)
     {
         boolean result = false;
 

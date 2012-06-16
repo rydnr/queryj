@@ -2276,12 +2276,7 @@ public class AntProjectAdapter
             case MSG_WARN:
                 log.warn(t_strMessage);
                 break;
-            case MSG_INFO:
-                log.info(t_strMessage);
-                break;
             case MSG_VERBOSE:
-                log.debug(t_strMessage);
-                break;
             case MSG_DEBUG:
                 log.debug(t_strMessage);
                 break;
@@ -2326,12 +2321,7 @@ public class AntProjectAdapter
             case MSG_WARN:
                 log.warn(t_strMessage, throwable);
                 break;
-            case MSG_INFO:
-                log.info(t_strMessage, throwable);
-                break;
             case MSG_VERBOSE:
-                log.debug(t_strMessage, throwable);
-                break;
             case MSG_DEBUG:
                 log.debug(t_strMessage, throwable);
                 break;
@@ -2371,12 +2361,7 @@ public class AntProjectAdapter
             case MSG_WARN:
                 log.warn(t_strMessage);
                 break;
-            case MSG_INFO:
-                log.info(t_strMessage);
-                break;
             case MSG_VERBOSE:
-                log.debug(t_strMessage);
-                break;
             case MSG_DEBUG:
                 log.debug(t_strMessage);
                 break;
@@ -2421,13 +2406,8 @@ public class AntProjectAdapter
             case MSG_WARN:
                 log.warn(t_strMessage, throwable);
                 break;
-            case MSG_INFO:
-                log.info(t_strMessage, throwable);
-                break;
             case MSG_VERBOSE:
                 log.debug(t_strMessage, throwable);
-                break;
-            case MSG_DEBUG:
                 log.debug(t_strMessage, throwable);
                 break;
             default:

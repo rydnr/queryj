@@ -40,6 +40,8 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Locale;
+
 /**
  * Provides some useful methods when generating DAOChooser class.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -63,7 +65,7 @@ public class DAOChooserTemplateUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DAOChooserTemplateUtils() {};
+    protected DAOChooserTemplateUtils() {}
 
     /**
      * Retrieves a <code>DAOChooserTemplateUtils</code> instance.
@@ -85,6 +87,6 @@ public class DAOChooserTemplateUtils
     @NotNull
     public String retrievePropertiesFileName(@NotNull final String repository)
     {
-        return repository.toLowerCase() + "-queryj.properties";
+        return repository.toLowerCase(Locale.US) + "-queryj.properties";
     }
 }

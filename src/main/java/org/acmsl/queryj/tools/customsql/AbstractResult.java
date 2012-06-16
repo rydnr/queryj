@@ -44,6 +44,8 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Commons logic for all &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -61,7 +63,7 @@ public abstract class AbstractResult
     /**
      * The <i>property-ref> elements.
      */
-    private Collection m__cPropertyRefs;
+    private List<PropertyRefElement> m__lPropertyRefs;
 
     /**
      * Creates a <code>AbstractResult</code> with given information.
@@ -89,6 +91,7 @@ public abstract class AbstractResult
      * Specifies the <i>matches</i> attribute.
      * @param matches such value.
      */
+    @SuppressWarnings("unused")
     protected void setMatches(final String matches)
     {
         immutableSetMatches(matches);
@@ -98,6 +101,7 @@ public abstract class AbstractResult
      * Retrieves the <i>matches</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getMatches()
     {
         return m__strMatches;
@@ -105,29 +109,49 @@ public abstract class AbstractResult
 
     /**
      * Specifies the &lt;property-ref&gt; elements.
-     * @param collection such elements.
+     * @param propertyRefs such elements.
      */
-    protected final void immutableSetPropertyRefs(final Collection collection)
+    protected final void immutableSetPropertyRefs(@NotNull final List<PropertyRefElement> propertyRefs)
     {
-        m__cPropertyRefs = collection;
+        m__lPropertyRefs = propertyRefs;
     }
 
     /**
      * Specifies the &lt;property-ref&gt; elements.
-     * @param collection such elements.
+     * @param propertyRefs such elements.
      */
-    protected void setPropertyRefs(final Collection collection)
+    @SuppressWarnings("unused")
+    protected void setPropertyRefs(@NotNull final List<PropertyRefElement> propertyRefs)
     {
-        immutableSetPropertyRefs(collection);
+        immutableSetPropertyRefs(propertyRefs);
     }
 
     /**
      * Retrieves the &lt;property-ref&gt; elements.
      * @return such elements.
      */
-    public Collection getPropertyRefs()
+    @Nullable
+    protected final List<PropertyRefElement> immutableGetPropertyRefs()
     {
-        return m__cPropertyRefs;
+        return m__lPropertyRefs;
+    }
+
+    /**
+     * Retrieves the &lt;property-ref&gt; elements.
+     * @return such elements.
+     */
+    @NotNull
+    public List<PropertyRefElement> getPropertyRefs()
+    {
+        List<PropertyRefElement> result = immutableGetPropertyRefs();
+
+        if (result == null)
+        {
+            result = new ArrayList<PropertyRefElement>(0);
+            setPropertyRefs(result);
+        }
+
+        return result;
     }
 
     /**
@@ -145,17 +169,9 @@ public abstract class AbstractResult
      * @param propertyRefs thhe &ltproperty-ref&gt; elements.
      */
     protected synchronized void add(
-        final PropertyRefElement propertyRef, final Collection propertyRefs)
+        @NotNull final PropertyRefElement propertyRef, @NotNull final List<PropertyRefElement> propertyRefs)
     {
-        Collection t_cPropertyRefs = propertyRefs;
-
-        if  (t_cPropertyRefs == null)
-        {
-            t_cPropertyRefs = new ArrayList();
-            setPropertyRefs(t_cPropertyRefs);
-        }
-
-        t_cPropertyRefs.add(propertyRef);
+        propertyRefs.add(propertyRef);
     }
 
     /**
@@ -183,7 +199,7 @@ public abstract class AbstractResult
     {
         return
             (id + "@#" + matches + "@#" + propertyRefs)
-                .toLowerCase().hashCode();
+                .toLowerCase(Locale.US).hashCode();
     }
 
     /**
@@ -193,12 +209,19 @@ public abstract class AbstractResult
      */
     public boolean equals(final Object instance)
     {
-        return
-            equals(
-                instance,
-                getId(),
-                getMatches(),
-                getPropertyRefs());
+        boolean result = false;
+
+        if (instance instanceof Result)
+        {
+            result =
+                equals(
+                    instance,
+                    getId(),
+                    getMatches(),
+                    getPropertyRefs());
+        }
+
+        return result;
     }
 
     /**

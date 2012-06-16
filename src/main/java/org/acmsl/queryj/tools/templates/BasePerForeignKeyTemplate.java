@@ -37,9 +37,10 @@ package org.acmsl.queryj.tools.templates;
  */
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.DecorationUtils;
+import org.acmsl.queryj.tools.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.vo.AttributeValueObject;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -59,9 +60,8 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -77,11 +77,6 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTemplateContext>
     extends  AbstractBasePerForeignKeyTemplate<C>
 {
-    /**
-     * An empty String array.
-     */
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
     /**
      * Builds a <code>BasePerForeignKeyTemplate</code> using given
      * information.
@@ -157,37 +152,28 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param englishGrammarUtils the EnglishGrammarUtils instance.
      * @param metaLanguageUtils the <code>MetaLanguageUtils</code> instance.
      * @return such code.
-     * @precondition foreignKey != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     * @precondition stringUtils != null
-     * @precondition defaultThemeUtils != null
-     * @precondition packageUtils != null
-     * @precondition stringValidator != null
-     * @precondition englishGrammarUtils != null
-     * @precondition metaLanguageUtils != null
      */
+    @SuppressWarnings("unused")
     protected String generateOutput(
         @NotNull final ForeignKey foreignKey,
-        final MetadataManager metadataManager,
-        final String packageName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
         @NotNull final String engineName,
-        final String engineVersion,
-        final String quote,
-        final String basePackageName,
-        final String repositoryName,
-        final MetadataTypeManager metadataTypeManager,
-        final String header,
-        final DecoratorFactory decoratorFactory,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @NotNull final MetadataTypeManager metadataTypeManager,
+        @NotNull final String header,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final StringUtils stringUtils,
-        final DefaultThemeUtils defaultThemeUtils,
+        @NotNull final DefaultThemeUtils defaultThemeUtils,
         @NotNull final PackageUtils packageUtils,
-        final StringValidator stringValidator,
-        final EnglishGrammarUtils englishGrammarUtils,
-        final MetaLanguageUtils metaLanguageUtils)
+        @NotNull final StringValidator stringValidator,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
     {
-        String result = "";
+        String result;
 
         @Nullable StringTemplateGroup t_Group = retrieveGroup();
 
@@ -202,9 +188,9 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
             new Integer[]
             {
                 STARTING_YEAR,
-                Integer.valueOf(retrieveCurrentYear())
+                retrieveCurrentYear()
             },
-            foreignKey,
+            new ForeignKeyDecorator(foreignKey, metadataManager, decoratorFactory),
             engineName,
             engineVersion,
             basePackageName,
@@ -252,33 +238,22 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param header the header.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param stringUtils the <code>StringUtils</code> instance.
-     * @precondition input != null
-     * @precondition template != null
-     * @precondition copyrightYears != null
-     * @precondition foreignKey != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
-     * @precondition timestamp != null
-     * @precondition tableRepositoryName != null
-     * @precondition decoratorFactory != null
-     * @precondition stringUtils != null
      */
+    @SuppressWarnings("unused")
     protected void fillParameters(
         @NotNull final Map input,
         @NotNull final StringTemplate template,
-        final Integer[] copyrightYears,
+        @NotNull final Integer[] copyrightYears,
         @NotNull final ForeignKey foreignKey,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String subpackageName,
-        final String timestamp,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final String timestamp,
         @NotNull final String tableRepositoryName,
-        final String header,
-        final DecoratorFactory decoratorFactory,
-        final StringUtils stringUtils)
+        @NotNull final String header,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final StringUtils stringUtils)
     {
         template.setAttribute("input", input);
 
@@ -313,16 +288,13 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param foreignKey the foreign key.
      * @param engineName the engine name.
      * @param engineVersion the engine version.
-     * @precondition input != null
-     * @precondition tableName != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
      */
+    @SuppressWarnings("unchecked")
     protected void fillCommonParameters(
         @NotNull final Map input,
         @NotNull final ForeignKey foreignKey,
-        final String engineName,
-        final String engineVersion)
+        @NotNull final String engineName,
+        @NotNull final String engineVersion)
     {
         input.put("table_name",  foreignKey.getSourceTableName());
         input.put("foreign_key", foreignKey);
@@ -336,15 +308,13 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param header the header.
      * @param copyrightYears the copyright years.
      * @param timestamp the timestamp.
-     * @precondition input != null
-     * @precondition copyrightYears != null
-     * @precondition timestamp != null
      */
+    @SuppressWarnings("unchecked")
     protected void fillJavaHeaderParameters(
         @NotNull final Map input,
         @Nullable final String header,
-        final Integer[] copyrightYears,
-        final String timestamp)
+        @NotNull final Integer[] copyrightYears,
+        @NotNull final String timestamp)
     {
         input.put("copyright_years", copyrightYears);
         input.put("timestamp", timestamp);
@@ -361,16 +331,13 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param basePackageName the base package name.
      * @param subpackageName the subpackage.
      * @param tableName the table name.
-     * @precondition input != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
-     * @precondition tableName != null
      */
+    @SuppressWarnings("unchecked")
     protected void fillPackageDeclarationParameters(
         @NotNull final Map input,
-        final String basePackageName,
-        final String subpackageName,
-        final String tableName)
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final String tableName)
     {
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
@@ -385,17 +352,13 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param basePackageName the base package.
      * @param subpackageName the name of the subpackage.
      * @param fkAttributes the foreign-key attributes.
-     * @precondition input != null
-     * @precondition basePackageName != null
-     * @precondition subpackageName != null
-     * @precondition tableName != null
-     * @precondition fkAttributes != null
      */
+    @SuppressWarnings("unchecked")
     protected void fillProjectImportsParameters(
         @NotNull final Map input,
-        final String basePackageName,
-        final String subpackageName,
-        final Collection fkAttributes)
+        @NotNull final String basePackageName,
+        @NotNull final String subpackageName,
+        @NotNull final List<Attribute> fkAttributes)
     {
         input.put("base_package_name", basePackageName);
         input.put("subpackage_name", subpackageName);
@@ -410,19 +373,14 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
      * @param engineVersion the engine version.
      * @param timestamp the timestamp.
      * @param tableRepositoryName the table repository name.
-     * @precondition input != null
-     * @precondition foreignKey != null
-     * @precondition engineName != null
-     * @precondition engineVersion != null
-     * @precondition timestamp != null
-     * @precondition tableRepositoryName != null
      */
+    @SuppressWarnings("unchecked,unused")
     protected void fillClassParameters(
         @NotNull final Map input,
-        final ForeignKey foreignKey,
-        final String engineName,
-        final String engineVersion,
-        final String timestamp,
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String timestamp,
         @NotNull final String tableRepositoryName)
     {
         input.put("engine_name", engineName);
@@ -432,235 +390,6 @@ public abstract class BasePerForeignKeyTemplate<C extends BasePerForeignKeyTempl
         input.put("tr_name", tableRepositoryName);
         input.put("tr_name_normalized", normalize(tableRepositoryName));
         input.put("tr_name_capitalized", capitalize(tableRepositoryName));
-    }
-
-    /**
-     * Retrieves the foreign key attributes.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the foreign key attributes.
-     * @precondition foreignKey != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     */
-    @NotNull
-    protected Collection retrieveForeignKeyAttributes(
-        @NotNull final ForeignKey foreignKey,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        return
-            buildAttributes(
-                (String[])
-                    foreignKey.getAttributes().toArray(EMPTY_STRING_ARRAY),
-                foreignKey.getSourceTableName(),
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     */
-    @NotNull
-    protected Collection buildAttributes(
-        @NotNull final String[] columnNames,
-        final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                new String[columnNames.length],
-                tableName,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param columnValues the column values.
-     * @param tableName the table name.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition columnValues != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     */
-    @NotNull
-    protected Collection buildAttributes(
-        final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                columnValues,
-                tableName,
-                null,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param tableName the table name.
-     * @param allowsNullAsAWhole whether given column names can be null
-     * as a whole or not.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     */
-    @NotNull
-    protected Collection buildAttributes(
-        @NotNull final String[] columnNames,
-        final String tableName,
-        final Boolean allowsNullAsAWhole,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        return
-            buildAttributes(
-                columnNames,
-                new String[columnNames.length],
-                tableName,
-                allowsNullAsAWhole,
-                metadataManager,
-                metadataTypeManager,
-                decoratorFactory);
-    }
-
-    /**
-     * Builds the attributes associated to given column names.
-     * @param columnNames the column names.
-     * @param columnValues the column values.
-     * @param tableName the table name.
-     * @param allowsNullAsAWhole whether given column names can be null
-     * as a whole or not.
-     * @param metadataManager the <code>MetadataManager</code>
-     * instance.
-     * @param metadataTypeManager the <code>MetadataTypeManager</code>
-     * instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @return the attribute collection.
-     * @precondition columnNames != null
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition decoratorFactory != null
-     */
-    @NotNull
-    protected Collection buildAttributes(
-        @Nullable final String[] columnNames,
-        final String[] columnValues,
-        final String tableName,
-        @Nullable final Boolean allowsNullAsAWhole,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager,
-        @NotNull final DecoratorFactory decoratorFactory)
-    {
-        // TODO: Refactor this
-        @NotNull Collection result = new ArrayList();
-
-        int t_iLength = (columnNames != null) ? columnNames.length : 0;
-
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-        {
-            int t_iType = -1;
-//                metadataManager.getColumnType(
-//                    tableName, columnNames[t_iIndex]);
-
-            @Nullable String t_strNativeType =
-                metadataTypeManager.getNativeType(t_iType);
-
-            boolean t_bAllowsNull = false;
-
-            if  (allowsNullAsAWhole != null)
-            {
-                t_bAllowsNull = allowsNullAsAWhole.booleanValue();
-            }
-            else
-            {
-                t_bAllowsNull = false;
-//                    metadataManager.allowsNull(
-//                        tableName, columnNames[t_iIndex]);
-            }
-
-            boolean t_bIsBool = false; //metadataManager.isBoolean(tableName, columnNames[t_iIndex]);
-
-            String t_strFieldType =
-                metadataTypeManager.getFieldType(t_iType, t_bAllowsNull, t_bIsBool);
-
-            boolean t_bManagedExternally = false;
-//                metadataManager.isManagedExternally(
-//                    tableName, columnNames[t_iIndex]);
-
-            result.add(
-                decoratorFactory.createDecorator(
-                    new AttributeValueObject(
-                        columnNames[t_iIndex],
-                        t_iType,
-                        t_strNativeType,
-                        tableName,
-                        null, //metadataManager.getTableComment(tableName),
-                        t_iIndex + 1, // ordinal position
-                        -1, // length
-                        -1, // precision
-                        null, //t_strKeyword,
-                        null, //t_strRetrievalQuery,
-                        t_bAllowsNull,
-                        columnValues[t_iIndex],
-                        false, //metadataManager.isReadOnly(tableName, columnNames[t_iIndex]),
-                        false, //metadataManager.isBoolean(tableName, columnNames[t_iIndex]),
-                        null, //metadataManager.getBooleanTrue(tableName, columnNames[t_iIndex]),
-                        null, //metadataManager.getBooleanFalse(tableName, columnNames[t_iIndex]),
-                        null), //metadataManager.getBooleanNull(tableName, columnNames[t_iIndex])),
-                    metadataManager));
-        }
-
-        return result;
     }
 
     /**

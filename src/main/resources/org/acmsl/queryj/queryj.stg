@@ -35,9 +35,6 @@
 //
 // Description: Defines the common template rules in QueryJ theme.
 //
-// Version: $Revision: 2493 $ ($Author: jjuan $ at $Date: 2008-07-10 11:45:12 +0200 (Thu, 10 Jul 2008) $)
-//
-// $Id: queryj.stg 2493 2008-07-10 09:45:12Z jjuan $
 group queryj;
 
 typeInitMap ::= [
@@ -1412,5 +1409,5 @@ type_checker(attribute) ::= <<
 <!
  Type checker for given attribute
  @param attribute the attribute.
-!><if(attribute.nullable)>/*@Nullable*/ <else><if(!attribute.primitive)>/*@NonNull*/ <endif><endif>
+!><if(attribute.nullable)>@Nullable <else><if(!attribute.primitive)>@NonNull <endif><endif>
 >>

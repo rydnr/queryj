@@ -50,6 +50,9 @@ import java.util.List;
 public class TableIncompleteValueObject
     extends AbstractTable
 {
+
+    private static final long serialVersionUID = -9077871583769430337L;
+
     /**
      * Creates a {@link TableIncompleteValueObject}.
      * @param name the table name.

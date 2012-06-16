@@ -49,6 +49,9 @@ import org.jetbrains.annotations.Nullable;
 public class AttributeIncompleteValueObject
     extends AbstractAttribute
 {
+
+    private static final long serialVersionUID = -8585509128283241379L;
+
     /**
      * Creates an <code>AbstractAttribute</code> with the following
      * information.

@@ -42,6 +42,7 @@ import org.acmsl.queryj.tools.customsql.Result;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -73,6 +74,7 @@ public interface ResultDecorator
      * Retrieves the properties.
      * @return such information.
      */
+    @NotNull
     public Collection getProperties();
 
     /**

@@ -105,6 +105,7 @@ public class ResultElement
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getClassValue()
     {
         return m__strClass;

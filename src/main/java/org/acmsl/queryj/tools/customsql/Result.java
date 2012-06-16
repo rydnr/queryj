@@ -38,11 +38,13 @@ package org.acmsl.queryj.tools.customsql;
  */
 import org.acmsl.queryj.tools.customsql.AbstractIdElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Models &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -71,23 +73,26 @@ public interface Result
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getClassValue();
 
     /**
      * Retrieves the <i>matches</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getMatches();
 
     /**
      * Retrieves the &lt;property-ref&gt; elements.
      * @return such elements.
      */
-    public Collection<PropertyRefElement> getPropertyRefs();
+    @NotNull
+    public List<PropertyRefElement> getPropertyRefs();
 
     /**
      * Adds a new &lt;property-ref&gt; element.
      * @param propertyRef such element.
      */
-    public void add(final PropertyRefElement propertyRef);
+    public void add(@NotNull final PropertyRefElement propertyRef);
 }

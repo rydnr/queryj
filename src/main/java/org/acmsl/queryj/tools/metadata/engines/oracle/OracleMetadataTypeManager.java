@@ -60,7 +60,6 @@ import java.sql.Types;
  */
 public class OracleMetadataTypeManager
     extends  JdbcMetadataTypeManager
-    implements  Singleton
 {
     private static final long serialVersionUID = -5734188707115499051L;
 

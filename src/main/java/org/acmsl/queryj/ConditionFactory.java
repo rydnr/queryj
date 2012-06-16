@@ -1206,21 +1206,5 @@ public class ConditionFactory
         {
             return prefix + condition + suffix;
         }
-
-        /**
-         * {@inheritDoc}
-         */
-        public boolean equals(final Object object)
-        {
-            return super.equals(object);
-        }
-
-        /**
-         * {@inheritDoc}
-         */
-        public int hashCode()
-        {
-            return super.hashCode();
-        }
     }
 }

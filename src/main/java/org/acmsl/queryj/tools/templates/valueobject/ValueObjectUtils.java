@@ -32,15 +32,30 @@
  */
 package org.acmsl.queryj.tools.templates.valueobject;
 
-import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
+/*
+ * Importing some project classes.
+ */
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Table;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing some JDK classes.
+ */
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Provides some useful methods for ValueObject-related templates.
@@ -173,7 +188,7 @@ public class ValueObjectUtils
     {
         return
             stringUtils.capitalize(
-                englishGrammarUtils.getSingular(tableName.toLowerCase()),
+                englishGrammarUtils.getSingular(tableName.toLowerCase(Locale.US)),
                 '_');
     }
 

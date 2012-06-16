@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -44,6 +43,7 @@ package org.acmsl.queryj.tools.metadata.vo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -52,7 +52,8 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface ForeignKey
-    extends Comparable<ForeignKey>
+    extends Comparable<ForeignKey>,
+            Serializable
 {
     /**
      * Retrieves the foreign key name (optional).

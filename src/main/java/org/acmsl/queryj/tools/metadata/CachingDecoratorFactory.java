@@ -307,9 +307,10 @@ public class CachingDecoratorFactory
      * Creates a <code>ForeignKeyDecorator</code>.
      *
      * @param sourceTableName the name of the source table.
-     * @param attributes      the foreign key attributes.
+     * @param attributes the foreign key attributes.
      * @param targetTableName the name of the target table.
-     * @param allowsNull      whether the fk can be null as a whole.
+     * @param allowsNull whether the fk can be null as a whole.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorator instance.
      */
     @NotNull
@@ -317,9 +318,11 @@ public class CachingDecoratorFactory
         @NotNull final String sourceTableName,
         @NotNull final List<Attribute> attributes,
         @NotNull final String targetTableName,
-        final boolean allowsNull)
+        final boolean allowsNull,
+        @NotNull final MetadataManager metadataManager)
     {
-        return new ForeignKeyDecorator(sourceTableName, attributes, targetTableName, allowsNull);
+        return
+            new ForeignKeyDecorator(sourceTableName, attributes, targetTableName, allowsNull, metadataManager, this);
     }
 
     /**

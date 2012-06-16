@@ -151,7 +151,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         /**
          * The singleton instance.
          */
-        protected static final FinalizingThread THREAD =
+        private static final FinalizingThread THREAD =
             new FinalizingThread();
 
         /**

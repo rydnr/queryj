@@ -122,6 +122,7 @@ public abstract class AbstractRowDecorator
      * Specifies the row to decorate.
      * @param row the row.
      */
+    @SuppressWarnings("unused")
     protected void setRow(final Row row)
     {
         immutableSetRow(row);
@@ -131,6 +132,7 @@ public abstract class AbstractRowDecorator
      * Retrieves the decorated row.
      * @return such row.
      */
+    @NotNull
     public Row getRow()
     {
         return m__Row;
@@ -141,7 +143,7 @@ public abstract class AbstractRowDecorator
      * @param metadataTypeManager such instance.
      */
     protected final void immutableSetMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         m__MetadataTypeManager = metadataTypeManager;
     }
@@ -150,6 +152,7 @@ public abstract class AbstractRowDecorator
      * Specifies the metadata type manager.
      * @param metadataTypeManager such instance.
      */
+    @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
         final MetadataTypeManager metadataTypeManager)
     {
@@ -160,6 +163,7 @@ public abstract class AbstractRowDecorator
      * Retrieves the metadata type manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataTypeManager getMetadataTypeManager()
     {
         return m__MetadataTypeManager;

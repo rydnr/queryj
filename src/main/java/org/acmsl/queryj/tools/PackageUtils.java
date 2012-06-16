@@ -47,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Provides some useful methods for retrieving package information about
@@ -798,7 +799,7 @@ public class PackageUtils
     @NotNull
     public String retrieveDAOSubpackage(@NotNull final String engineName)
     {
-        return engineName.toLowerCase();
+        return engineName.toLowerCase(Locale.US);
     }
 
     /**
@@ -842,7 +843,7 @@ public class PackageUtils
             retrieveFolder(
                     retrieveRdbFolder(
                             parentFolder, packageName, useSubfolders),
-                    engineName.toLowerCase());
+                    engineName.toLowerCase(Locale.US));
     }
 
     /**
@@ -1469,8 +1470,8 @@ public class PackageUtils
                     retrieveDAOPackage(
                             packageName, engineName),
                     stringUtils.capitalize(
-                            tableName.toLowerCase(),
-                            '_').toLowerCase());
+                            tableName.toLowerCase(Locale.US),
+                            '_').toLowerCase(Locale.US));
     }
 
     /**
@@ -1533,8 +1534,8 @@ public class PackageUtils
                     retrieveDAOFolder(
                             parentFolder, packageName, engineName, useSubFolders),
                     stringUtils.capitalize(
-                            tableName.toLowerCase(),
-                            '_').toLowerCase());
+                            tableName.toLowerCase(Locale.US),
+                            '_').toLowerCase(Locale.US));
     }
 
     /**

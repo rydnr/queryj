@@ -59,6 +59,8 @@ import org.jetbrains.annotations.NotNull;
 public class BasePerCustomSqlTemplateContext
     extends AbstractTemplateContext
 {
+
+    private static final long serialVersionUID = -1302836113779801668L;
     /**
      * The Sql.
      */

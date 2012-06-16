@@ -55,6 +55,9 @@ import java.util.Date;
 public class CurrentYearHandler
     extends AbstractFillHandler<String>
 {
+
+    private static final long serialVersionUID = 7430921687554545807L;
+
     /**
      * Returns "current_year".
      * @return such placeholder.

@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
@@ -53,6 +54,7 @@ import java.util.List;
  * instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public class CachingForeignKeyDecorator
     extends  AbstractForeignKeyDecorator
 {
@@ -75,11 +77,16 @@ public class CachingForeignKeyDecorator
      * Creates a <code>CachingForeignKeyDecorator</code> with the
      * <code>ForeignKey</code> information to decorate.
      * @param foreignKey the foreign key.
-     * @precondition foreignKey != null
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} implementation.
      */
-    public CachingForeignKeyDecorator(@NotNull final ForeignKey foreignKey)
+    @SuppressWarnings("unused")
+    public CachingForeignKeyDecorator(
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(foreignKey);
+        super(foreignKey, metadataManager, decoratorFactory);
     }
 
     /**
@@ -89,17 +96,19 @@ public class CachingForeignKeyDecorator
      * @param attributes the attributes.
      * @param targetTableName the target table name.
      * @param allowsNull whether the foreign key allows null values.
-     * @precondition sourceTableName != null
-     * @precondition attributes != null
-     * @precondition targetTableName != null
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} implementation.
      */
+    @SuppressWarnings("unused")
      protected CachingForeignKeyDecorator(
-        final String sourceTableName,
-        final List attributes,
-        final String targetTableName,
-        final boolean allowsNull)
+        @NotNull final String sourceTableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final String targetTableName,
+        final boolean allowsNull,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(sourceTableName, attributes, targetTableName, allowsNull);
+        super(sourceTableName, attributes, targetTableName, allowsNull, metadataManager, decoratorFactory);
     }
 
     /**
@@ -134,6 +143,7 @@ public class CachingForeignKeyDecorator
      * Retrieves the source table name, uncapitalized.
      * @return such value.
      */
+    @NotNull
     public String getSourceTableNameUncapitalized()
     {
         String result = getCachedSourceTableNameUncapitalized();
@@ -179,6 +189,7 @@ public class CachingForeignKeyDecorator
      * Retrieves the source value-object name.
      * @return such value.
      */
+    @NotNull
     public String getSourceVoName()
     {
         String result = getCachedSourceVoName();
@@ -223,6 +234,7 @@ public class CachingForeignKeyDecorator
      * Retrieves the target value-object name.
      * @return such value.
      */
+    @NotNull
     public String getTargetVoName()
     {
         String result = getCachedTargetVoName();

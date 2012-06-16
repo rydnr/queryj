@@ -140,8 +140,6 @@ public class CustomSqlProvisioningHandler
 
         List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
 
-        int t_iTableCount = t_lTables.size();
-
         String t_strTableName;
         String t_strResultName;
         String[] t_astrAttributeNames;

@@ -58,7 +58,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ResultSetExtractorDecoratorFactory
     extends  CachingDecoratorFactory
-    implements  Singleton
 {
     private static final long serialVersionUID = 2967743483239756492L;
 

@@ -43,22 +43,25 @@ import org.acmsl.queryj.tools.customsql.PropertyElement;
 import org.acmsl.queryj.tools.customsql.PropertyRefElement;
 import org.acmsl.queryj.tools.customsql.Result;
 import org.acmsl.queryj.tools.customsql.ResultElement;
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
+
+/*
+ * Importing Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-
-/*
- * Importing Apache Commons Logging classes.
- */
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.apache.commons.logging.LogFactory;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -102,9 +105,9 @@ public abstract class AbstractResultDecorator
      */
     public AbstractResultDecorator(
         @NotNull final Result result,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         super(
             result.getId(),
@@ -121,7 +124,7 @@ public abstract class AbstractResultDecorator
      * Specifies the result.
      * @param result the result.
      */
-    protected final void immutableSetResult(final Result result)
+    protected final void immutableSetResult(@NotNull final Result result)
     {
         m__Result = result;
     }
@@ -130,7 +133,8 @@ public abstract class AbstractResultDecorator
      * Specifies the result.
      * @param result the result.
      */
-    protected void setResult(final Result result)
+    @SuppressWarnings("unused")
+    protected void setResult(@NotNull final Result result)
     {
         immutableSetResult(result);
     }
@@ -139,6 +143,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the result.
      * @return such element.
      */
+    @NotNull
     public Result getResult()
     {
         return m__Result;
@@ -149,7 +154,7 @@ public abstract class AbstractResultDecorator
      * @param customSqlProvider such provider.
      */
     protected final void immutableSetCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         m__CustomSqlProvider = customSqlProvider;
     }
@@ -158,8 +163,9 @@ public abstract class AbstractResultDecorator
      * Specifies the custom SQL provider.
      * @param customSqlProvider such provider.
      */
+    @SuppressWarnings("unused")
     protected void setCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         immutableSetCustomSqlProvider(customSqlProvider);
     }
@@ -168,6 +174,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the custom SQL provider.
      * @return such provider.
      */
+    @NotNull
     protected CustomSqlProvider getCustomSqlProvider()
     {
         return m__CustomSqlProvider;
@@ -178,7 +185,7 @@ public abstract class AbstractResultDecorator
      * @param metadataManager such instance.
      */
     protected final void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         m__MetadataManager = metadataManager;
     }
@@ -188,7 +195,7 @@ public abstract class AbstractResultDecorator
      * @param metadataManager such instance.
      */
     protected void setMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         immutableSetMetadataManager(metadataManager);
     }
@@ -197,6 +204,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the metadata manager.
      * @return such instance.
      */
+    @NotNull
     public MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
@@ -227,8 +235,7 @@ public abstract class AbstractResultDecorator
      * Specifies the decorator factory.
      * @param factory such instance.
      */
-    protected final void immutableSetDecoratorFactory(
-        final DecoratorFactory factory)
+    protected final void immutableSetDecoratorFactory(@NotNull final DecoratorFactory factory)
     {
         m__DecoratorFactory = factory;
     }
@@ -237,8 +244,8 @@ public abstract class AbstractResultDecorator
      * Specifies the decorator factory.
      * @param factory such instance.
      */
-    protected void setDecoratorFactory(
-        final DecoratorFactory factory)
+    @SuppressWarnings("unused")
+    protected void setDecoratorFactory(@NotNull final DecoratorFactory factory)
     {
         immutableSetDecoratorFactory(factory);
     }
@@ -247,6 +254,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return m__DecoratorFactory;
@@ -256,6 +264,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the id, normalized.
      * @return such information.
      */
+    @NotNull
     public String getIdNormalized()
     {
         return normalize(getId(), DecorationUtils.getInstance());
@@ -265,6 +274,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the id capitalized.
      * @return such information.
      */
+    @NotNull
     public String getIdCapitalized()
     {
         return capitalize(getId(), DecorationUtils.getInstance());
@@ -275,9 +285,8 @@ public abstract class AbstractResultDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the value, after being processed.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String capitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
@@ -289,11 +298,10 @@ public abstract class AbstractResultDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such information.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalize(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -302,6 +310,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the id, normalized and upper-cased.
      * @return such information.
      */
+    @NotNull
     public String getIdNormalizedUppercased()
     {
         return normalizeUppercase(getId(), DecorationUtils.getInstance());
@@ -312,11 +321,10 @@ public abstract class AbstractResultDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such information.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeUppercase(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeUppercase(value);
     }
@@ -347,6 +355,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the properties.
      * @return such information.
      */
+    @NotNull
     public Collection getProperties()
     {
         return
@@ -372,7 +381,7 @@ public abstract class AbstractResultDecorator
      */
     @NotNull
     public List<Property> getProperties(
-        @Nullable final Collection propertyRefs,
+        @Nullable final List<PropertyRefElement> propertyRefs,
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -381,75 +390,61 @@ public abstract class AbstractResultDecorator
     {
         @NotNull List<Property> result = new ArrayList<Property>();
 
-        @Nullable Iterator t_PropertyRefIterator =
-            (propertyRefs != null) ? propertyRefs.iterator() : null;
+        @Nullable Property t_Property ;
 
-        if  (t_PropertyRefIterator != null)
+        for (@Nullable PropertyRefElement t_PropertyRef : propertyRefs)
         {
-            @Nullable PropertyRefElement t_PropertyRef = null;
-            @Nullable Property t_Property = null;
-
-            while  (t_PropertyRefIterator.hasNext())
+            if  (t_PropertyRef != null)
             {
-                t_PropertyRef =
-                    (PropertyRefElement) t_PropertyRefIterator.next();
+                t_Property =
+                    customSqlProvider.resolveReference(t_PropertyRef);
 
-                if  (t_PropertyRef != null)
-                {
-                    t_Property =
-                            customSqlProvider.resolveReference(t_PropertyRef);
-
-                    if  (t_Property != null)
-                    {
-                        result.add(
-                            decoratorFactory.createDecorator(
-                                t_Property, resultElement, customSqlProvider, metadataManager));
-                    }
-                    else
-                    {
-                        try
-                        {
-                            // todo throw something.
-                            LogFactory.getLog(ResultDecorator.class).warn(
-                                "Referenced property not found:"
-                                + t_PropertyRef.getId());
-                        }
-                        catch  (@NotNull final Throwable throwable)
-                        {
-                            // class-loading problem.
-                        }
-                    }
-                }
-            }
-        }
-        else
-        {
-            @Nullable String t_strTable =
-                customResultUtils.retrieveTable(
-                    resultElement,
-                    customSqlProvider,
-                    metadataManager);
-
-            MetadataTypeManager t_MetadataTypeManager =
-                metadataManager.getMetadataTypeManager();
-            
-            if  (   (t_strTable != null)
-                 && (t_MetadataTypeManager != null))
-            {
-                for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable, null, null))
+                if  (t_Property != null)
                 {
                     result.add(
                         decoratorFactory.createDecorator(
-                            new PropertyElement(
-                                t_strTable + "." + t_Attribute.getName(),
-                                t_Attribute.getName(),
-                                t_Attribute.getOrdinalPosition(),
-                                t_Attribute.getName(),
-                                t_Attribute.getType(),
-                                t_Attribute.isNullable()),
-                            resultElement,
-                            customSqlProvider,
-                            metadataManager));
+                            t_Property, resultElement, customSqlProvider, metadataManager));
+                }
+                else
+                {
+                    try
+                    {
+                        // todo throw something.
+                        LogFactory.getLog(ResultDecorator.class).warn(
+                            "Referenced property not found:"
+                            + t_PropertyRef.getId());
+                    }
+                    catch  (@NotNull final Throwable throwable)
+                    {
+                        // class-loading problem.
+                    }
+                }
+            }
+            else
+            {
+                @Nullable String t_strTable =
+                    customResultUtils.retrieveTable(
+                        resultElement,
+                        customSqlProvider,
+                        metadataManager);
+
+                if  (t_strTable != null)
+                {
+                    for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable, null, null))
+                    {
+                        result.add(
+                            decoratorFactory.createDecorator(
+                                new PropertyElement(
+                                    t_strTable + "." + t_Attribute.getName(),
+                                    t_Attribute.getName(),
+                                    t_Attribute.getOrdinalPosition(),
+                                    t_Attribute.getName(),
+                                    t_Attribute.getType(),
+                                    t_Attribute.isNullable()),
+                                resultElement,
+                                customSqlProvider,
+                                metadataManager));
+                    }
                 }
             }
         }
@@ -476,13 +471,10 @@ public abstract class AbstractResultDecorator
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @param metadataUtils the <code>MetadataUtils</code> instance.
      * @return such collection.
-     * @precondition properties != null
-     * @precondition metadataTypeManager != null
-     * @precondition metadataUtils != null
      */
     @NotNull
-    protected Collection filterLobProperties(
-        final Collection properties,
+    protected Collection<Property> filterLobProperties(
+        final Collection<Property> properties,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final MetadataUtils metadataUtils)
     {

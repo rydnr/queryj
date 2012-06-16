@@ -59,6 +59,8 @@ import org.jetbrains.annotations.Nullable;
 public class LazyAttribute
     extends  AbstractAttribute
 {
+    private static final long serialVersionUID = -3002626986582985895L;
+
     /**
      * The cached type.
      */

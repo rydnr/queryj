@@ -139,6 +139,7 @@ public class CachingResultDecorator
      * Retrieves the id, normalized.
      * @return such information.
      */
+    @NotNull
     public String getIdNormalized()
     {
         String result = getCachedIdNormalized();
@@ -184,6 +185,7 @@ public class CachingResultDecorator
      * Retrieves the id capitalized.
      * @return such information.
      */
+    @NotNull
     public String getIdCapitalized()
     {
         String result = getCachedIdCapitalized();
@@ -229,6 +231,7 @@ public class CachingResultDecorator
      * Retrieves the id, normalized and upper-cased.
      * @return such information.
      */
+    @NotNull
     public String getIdNormalizedUppercased()
     {
         String result = getCachedIdNormalizedUppercased();
@@ -318,6 +321,7 @@ public class CachingResultDecorator
      * Retrieves the properties.
      * @return such information.
      */
+    @NotNull
     public Collection getProperties()
     {
         Collection result = getCachedProperties();

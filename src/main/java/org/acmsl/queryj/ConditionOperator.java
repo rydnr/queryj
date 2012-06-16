@@ -34,10 +34,8 @@
 package org.acmsl.queryj;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.Condition;
-import org.acmsl.queryj.Field;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,6 +73,7 @@ public class ConditionOperator
      * Specifies the operator symbol.
      * @param symbol the symbol.
      */
+    @SuppressWarnings("unused")
     protected void setSymbol(final String symbol)
     {
         immutableSetSymbol(symbol);
@@ -105,7 +104,14 @@ public class ConditionOperator
      */
     public boolean equals(final Object candidate)
     {
-        return equals(candidate, getSymbol());
+        boolean result = false;
+
+        if (candidate instanceof ConditionOperator)
+        {
+            result = equals(candidate, getSymbol());
+        }
+
+        return result;
     }
 
     /**
@@ -128,20 +134,15 @@ public class ConditionOperator
         {
             @NotNull ConditionOperator t_Candidate = (ConditionOperator) candidate;
 
-            result = (t_Candidate.getSymbol() == symbol);
+            result = (t_Candidate.getSymbol() != null);
 
-            if  (!result)
+            if  (result)
             {
-                result = (t_Candidate.getSymbol() != null);
-
-                if  (result) 
-                {
-                    result = (t_Candidate.getSymbol().equals(symbol));
-                }
-                else
-                {
-                    result = (symbol == null);
-                }
+                result = (t_Candidate.getSymbol().equals(symbol));
+            }
+            else
+            {
+                result = (symbol == null);
             }
         }
 

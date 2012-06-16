@@ -48,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.io.Serializable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
@@ -57,6 +58,7 @@ import java.sql.SQLException;
  * @since 2012/06/06
  */
 public interface MetadataManager
+    extends Serializable
 {
     /**
      * Retrieves the name identifying the manager instance.

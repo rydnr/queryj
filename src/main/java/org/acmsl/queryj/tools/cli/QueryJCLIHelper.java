@@ -415,7 +415,7 @@ public class QueryJCLIHelper
 
                 if  (result == null)
                 {
-                    stream = getClass().getResourceAsStream(configurationFile);
+                    stream = QueryJCLIHelper.class.getResourceAsStream(configurationFile);
                     result = readConfigurationSettings(stream, true);
 
                     if  (result != null)

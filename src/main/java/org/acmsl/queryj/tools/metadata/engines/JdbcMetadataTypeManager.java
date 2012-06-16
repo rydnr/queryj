@@ -56,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.io.Serializable;
 import java.sql.Types;
+import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -87,7 +88,7 @@ public class JdbcMetadataTypeManager
     /**
      * The native to Java type mapping.
      */
-    private Map m__mNative2JavaTypeMapping;
+    private transient Map m__mNative2JavaTypeMapping;
 
     /**
      * Creates an empty <code>JdbcMetadataTypeManager</code>.
@@ -286,7 +287,7 @@ public class JdbcMetadataTypeManager
             if  (!(t_Result instanceof Integer))
             {
                 t_Result =
-                    t_mNative2JavaTypesMap.get(dataType.toUpperCase());
+                    t_mNative2JavaTypesMap.get(dataType.toUpperCase(Locale.US));
             }
 
             if  (t_Result instanceof Integer)

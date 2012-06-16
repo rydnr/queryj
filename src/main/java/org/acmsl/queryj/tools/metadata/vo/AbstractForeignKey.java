@@ -49,6 +49,8 @@ import java.util.List;
 public abstract class AbstractForeignKey
     implements ForeignKey
 {
+    private static final long serialVersionUID = -671217258820687779L;
+
     /**
      * (Optional) the foreign key name.
      */

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -46,7 +45,6 @@ import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
-import org.acmsl.queryj.tools.metadata.DecorationUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -54,8 +52,15 @@ import org.acmsl.queryj.tools.metadata.DecorationUtils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -66,21 +71,28 @@ import java.util.Locale;
  *         >Jose San Leandro</a>
  */
 public class ForeignKeyDecorator
-    extends AbstractForeignKey
+    extends AbstractForeignKeyDecorator
 {
     /**
      * Creates a <code>ForeignKeyDecorator</code> with the
      * <code>ForeignKey</code> information to decorate.
      * @param foreignKey the foreign key.
-     * @precondition foreignKey != null
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
-    public ForeignKeyDecorator(final ForeignKey foreignKey)
+    @SuppressWarnings("unused")
+    public ForeignKeyDecorator(
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         this(
             foreignKey.getSourceTableName(),
             foreignKey.getAttributes(),
             foreignKey.getTargetTableName(),
-            foreignKey.isNullable());
+            foreignKey.isNullable(),
+            metadataManager,
+            decoratorFactory);
     }
 
     /**
@@ -90,109 +102,17 @@ public class ForeignKeyDecorator
      * @param attributes the attributes.
      * @param targetTableName the target table name.
      * @param allowsNull whether the foreign key allows null values.
-     * @precondition sourceTableName != null
-     * @precondition attributes != null
-     * @precondition targetTableName != null
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     public ForeignKeyDecorator(
-        final String sourceTableName,
-        final List<Attribute> attributes,
-        final String targetTableName,
-        final boolean allowsNull)
+        @NotNull final String sourceTableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final String targetTableName,
+        final boolean allowsNull,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(sourceTableName, attributes, targetTableName, allowsNull);
-    }
-
-    /**
-     * Retrieves the source table name, uncapitalized.
-     * @return such value.
-     */
-    public String getSourceTableNameUncapitalized()
-    {
-        return
-            uncapitalize(
-                getSourceTableName(), DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the source value-object name.
-     * @return such value.
-     */
-    public String getSourceVoName()
-    {
-        return
-            toVo(
-                getSourceTableName(),
-                SingularPluralFormConverter.getInstance(),
-                DecorationUtils.getInstance());
-    }
-
-    /**
-     * Retrieves the target value-object name.
-     * @return such value.
-     */
-    public String getTargetVoName()
-    {
-        return
-            toVo(
-                getTargetTableName(),
-                SingularPluralFormConverter.getInstance(),
-                DecorationUtils.getInstance());
-    }
-
-    /**
-     * Converts given table name to its value-object version.
-     * @param tableName the table name.
-     * @param singularPluralFormConverter the <code>SingularPluralFormConverter</code>
-     * instance.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the value-object name.
-     * @precondition tableName != null
-     * @precondition singularPluralFormConverter != null
-     * @precondition decorationUtils != null
-     */
-    protected String toVo(
-        final String tableName,
-        final EnglishGrammarUtils singularPluralFormConverter,
-        final DecorationUtils decorationUtils)
-    {
-        Locale t_Locale = Locale.getDefault();
-
-        return
-            capitalize(
-                singularPluralFormConverter.getSingular(
-                    tableName.toLowerCase(t_Locale)),
-                decorationUtils);
-    }
-
-    /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
-     */
-    protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
-    {
-        Locale t_Locale = Locale.getDefault();
-
-        return
-            decorationUtils.uncapitalize(value.toLowerCase(t_Locale));
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
-     */
-    protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
+        super(sourceTableName, attributes, targetTableName, allowsNull, metadataManager, decoratorFactory);
     }
 }

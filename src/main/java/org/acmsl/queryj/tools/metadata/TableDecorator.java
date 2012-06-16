@@ -41,7 +41,9 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -61,149 +63,174 @@ public interface TableDecorator
      * Retrieves the name, in upper case.
      * @return such value.
      */
+    @NotNull
     public String getNameUppercased();
     
     /**
      * Retrieves the capitalized name.
      * @return such name.
      */
+    @NotNull
     public String getNameCapitalized();
 
     /**
      * Retrieves the name, in lower case.
      * @return such value.
      */
+    @NotNull
     public String getNameLowercased();
 
     /**
      * Retrieves the table name, uncapitalized.
      * @return such value.
      */
+    @NotNull
     public String getUncapitalizedName();
 
     /**
      * Retrieves the value-object name associated to the table name.
      * @return such name.
      */
+    @NotNull
     public String getVoName();
 
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
+    @NotNull
     public String getNameNormalizedLowercased();
 
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
+    @NotNull
     public String getSingularNameNormalizedLowercased();
 
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
+    @NotNull
     public String getNameNormalized();
 
     /**
      * Retrieves the table's name once normalized.
      * @return such information.
      */
+    @NotNull
     public String getSingularNameCapitalized();
 
     /**
      * Retrieves the singular table's name, upper-cased.
      * @return such information.
      */
+    @NotNull
     public String getSingularNameUppercased();
 
     /**
      * Retrieves the singular table's name, lower-cased.
      * @return such information.
      */
+    @SuppressWarnings("unused")
+    @NotNull
     public String getSingularNameLowercased();
 
     /**
      * Retrieves all attributes, including the parent's.
      * @return such attributes.
      */
-    public List getAllAttributes();
+    @NotNull
+    public List<Attribute> getAllAttributes();
 
     /**
      * Retrieves all parent tables.
      * @return such tables.
      */
-    public List getAllParentTables();
+    @NotNull
+    public List<Table> getAllParentTables();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.
      * @return such attributes.
      */
-    public List getAllNonManagedExternallyAttributes();
+    @NotNull
+    public List<Attribute> getAllNonManagedExternallyAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
      * plus primary key.
      * @return such attributes.
      */
-    public List getAllNonManagedExternallyPlusPkAttributes();
+    @NotNull
+    public List<Attribute> getAllNonManagedExternallyPlusPkAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
      * or read-only, plus primary key.
      * @return such attributes.
      */
-    public List getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+    @NotNull
+    public List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the non-parent attributes.
      * @return such attributes.
      */
-    public List getNonParentAttributes();
+    @NotNull
+    public List<Attribute> getNonParentAttributes();
 
     /**
      * Retrieves the non-read-only attributes.
      * @return such attributes.
      */
-    public List getNonReadOnlyAttributes();
+    @NotNull
+    public List<Attribute> getNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of non-parent, non-externally-managed
      * attributes.
      * @return such list.
      */
-    public List getNonParentNonManagedExternallyAttributes();
+    @NotNull
+    public List<Attribute> getNonParentNonManagedExternallyAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent own attributes.
      * @return such list.
      */
-    public List getAllParentAndNonParentAttributes();
+    @NotNull
+    public List<Attribute> getAllParentAndNonParentAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
      * non-managed-externally, non-read-only own attributes.
      * @return such list.
      */
-    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+    @NotNull
+    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
      * non-managed-externally, non-read-only own attributes, plus the primary key.
      * @return such list.
      */
-    public List getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
+    @NotNull
+    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent,
      * non-read-only own attributes.
      * @return such list.
      */
-    public List getAllParentAndNonParentNonReadOnlyAttributes();
+    @NotNull
+    public List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes();
 
     /**
      * Retrieves the parent's and non parent's read-only attributes.
      * @return such information.
      */
-    public List getAllParentAndNonParentReadOnlyAttributes();
+    @NotNull
+    public List<Attribute> getAllParentAndNonParentReadOnlyAttributes();
 }

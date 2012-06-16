@@ -49,6 +49,7 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 /**
  * Provides some useful decoration methods.
@@ -97,7 +98,7 @@ public class DecorationUtils
      */
     public String upperCase(@NotNull final String value)
     {
-        return value.toUpperCase();
+        return value.toUpperCase(Locale.US);
     }
     
     /**
@@ -108,7 +109,7 @@ public class DecorationUtils
      */
     public String lowerCase(@NotNull final String value)
     {
-        return value.toLowerCase();
+        return value.toLowerCase(Locale.US);
     }
 
     /**
@@ -158,7 +159,7 @@ public class DecorationUtils
     protected String capitalize(
         @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
-        return stringUtils.capitalize(value.toLowerCase());
+        return stringUtils.capitalize(value.toLowerCase(Locale.US));
     }
 
     /**
@@ -169,7 +170,7 @@ public class DecorationUtils
      */
     public String normalizeLowercase(final String value)
     {
-        return normalize(value).toLowerCase();
+        return normalize(value).toLowerCase(Locale.US);
     }
     
     /**
@@ -180,7 +181,7 @@ public class DecorationUtils
      */
     public String normalizeUppercase(final String value)
     {
-        return normalize(value).toUpperCase();
+        return normalize(value).toUpperCase(Locale.US);
     }
     
     /**
@@ -191,7 +192,7 @@ public class DecorationUtils
      */
     public String softNormalizeUppercase(final String value)
     {
-        return softNormalize(value).toUpperCase();
+        return softNormalize(value).toUpperCase(Locale.US);
     }
     
     /**

@@ -44,8 +44,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class AttributeValueObject
     extends AbstractAttribute
-    implements Attribute
 {
+
+    private static final long serialVersionUID = 8975433666493838327L;
+
     /**
      * Creates an <code>AttributeValueObject</code> with the following
      * information.

@@ -74,9 +74,9 @@ public class   SingleConnectionDataSource
     /**
      * Creates a <code>SingleConnectionDataSource</code> to wrap given connection.
      * @param connection the connection to wrap.
-     * @precondition connection != null
      */
-    public SingleConnectionDataSource(final Connection connection)
+    @SuppressWarnings("unused")
+    public SingleConnectionDataSource(@NotNull final Connection connection)
     {
         immutableSetWrappedConnection(connection);
     }
@@ -85,7 +85,7 @@ public class   SingleConnectionDataSource
      * Specifies the connection.
      * @param connection the connection to wrap.
      */
-    private void immutableSetWrappedConnection(final Connection connection)
+    protected final void immutableSetWrappedConnection(@NotNull final Connection connection)
     {
         m__Connection = connection;
     }
@@ -94,7 +94,8 @@ public class   SingleConnectionDataSource
      * Specifies the connection.
      * @param connection the connection to wrap.
      */
-    protected void setWrappedConnection(final Connection connection)
+    @SuppressWarnings("unused")
+    protected void setWrappedConnection(@NotNull final Connection connection)
     {
         immutableSetWrappedConnection(connection);
     }
@@ -103,6 +104,7 @@ public class   SingleConnectionDataSource
      * Retrieves the connection.
      * @return such instance.
      */
+    @NotNull
     public Connection getWrappedConnection()
     {
         return m__Connection;
@@ -113,6 +115,7 @@ public class   SingleConnectionDataSource
      * @return a Connection to the database
      * @throws SQLException if a database-access error occurs.
      */
+    @NotNull
     public Connection getConnection()
         throws SQLException
     {
@@ -121,16 +124,15 @@ public class   SingleConnectionDataSource
 
     /**
      * Attempts to establish a database connection.
-     * @param user the database user on whose behalf the Connection
+     * @param username the database user on whose behalf the Connection
      * is being made.
      * @param password the user's password.
      * @return a Connection to the database.
      * @throws SQLException if a database-access error occurs.
-     * @precondition username != null
      */
     @NotNull
     public Connection getConnection(
-        @NotNull final String username, final String password)
+        @NotNull final String username, @NotNull final String password)
       throws SQLException
     {
         return
@@ -148,18 +150,15 @@ public class   SingleConnectionDataSource
      * @param connection the connection.
      * @return a Connection to the database.
      * @throws SQLException if a database-access error occurs.
-     * @precondition username != null
-     * @precondition connection != null
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected Connection getConnection(
         @NotNull final String username,
-        final String password,
+        @NotNull final String password,
         @NotNull final Connection connection)
       throws SQLException
     {
-        @NotNull Connection result = connection;
-
         @Nullable SQLException exceptionToThrow = null;
 
         @Nullable DatabaseMetaData databaseMetaData = null;
@@ -193,16 +192,16 @@ public class   SingleConnectionDataSource
             throw exceptionToThrow;
         }
 
-        return result;
+        return connection;
     }
 
     /**
      * Specifies the log writer.
      * @param out such stream.
      */
-    private void immutableSetLogWriter(final PrintWriter printWriter)
+    private void immutableSetLogWriter(final PrintWriter out)
     {
-        m__pwLogWriter = printWriter;
+        m__pwLogWriter = out;
     }
 
     /**

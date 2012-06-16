@@ -62,7 +62,6 @@ import java.sql.Types;
  */
 public class MySQL4xMetadataTypeManager
     extends  JdbcMetadataTypeManager
-    implements  Manager
 {
     private static final long serialVersionUID = 465592675402130675L;
 

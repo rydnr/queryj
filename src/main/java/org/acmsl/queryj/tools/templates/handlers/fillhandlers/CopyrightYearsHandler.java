@@ -54,6 +54,8 @@ import java.util.Calendar;
 public class CopyrightYearsHandler
     extends AbstractFillHandler<Integer[]>
 {
+    private static final long serialVersionUID = 1992543204063604784L;
+
     /**
      * The starting year.
      */

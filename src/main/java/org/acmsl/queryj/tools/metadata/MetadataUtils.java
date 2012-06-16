@@ -455,7 +455,7 @@ public class MetadataUtils
 
         if (t_Table != null)
         {
-            for (ForeignKey t_ForeignKey : t_Table.getForeignKeys())
+            for (@Nullable ForeignKey t_ForeignKey : t_Table.getForeignKeys())
             {
                 if (   (t_ForeignKey != null)
                     && (t_ForeignKey.getTargetTableName().equals(targetTableName)))

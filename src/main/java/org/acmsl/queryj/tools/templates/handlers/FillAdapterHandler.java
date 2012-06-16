@@ -109,19 +109,23 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      */
     public boolean handle(@NotNull final Command command)
     {
-        boolean result = false;
+        boolean result = true;
 
-        try
+        if (command instanceof QueryJCommand)
         {
-            result = handle((QueryJCommand) command);
-        }
-        catch (@NotNull final QueryJBuildException templateError)
-        {
-            Log t_Log = UniqueLogFactory.getLog(TemplateContextFillAdapterHandler.class);
-
-            if (t_Log != null)
+            try
             {
-                t_Log.fatal("Cannot process template using " + getFillHandler(), templateError);
+                result = handle((QueryJCommand) command);
+                result = false;
+            }
+            catch (@NotNull final QueryJBuildException templateError)
+            {
+                Log t_Log = UniqueLogFactory.getLog(TemplateContextFillAdapterHandler.class);
+
+                if (t_Log != null)
+                {
+                    t_Log.fatal("Cannot process template using " + getFillHandler(), templateError);
+                }
             }
         }
 

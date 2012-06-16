@@ -175,6 +175,7 @@ public interface DecoratorFactory
      * @param attributes the foreign key attributes.
      * @param targetTableName the name of the target table.
      * @param allowsNull whether the fk can be null as a whole.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @return the decorator instance.
      */
     @NotNull
@@ -182,5 +183,6 @@ public interface DecoratorFactory
         @NotNull final String sourceTableName,
         @NotNull final List<Attribute> attributes,
         @NotNull final String targetTableName,
-        final boolean allowsNull);
+        final boolean allowsNull,
+        @NotNull final MetadataManager metadataManager);
 }

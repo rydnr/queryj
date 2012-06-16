@@ -85,7 +85,7 @@ public class QueryJCommand
      * Constructs an empty map command.
      * @param log the log instance.
      */
-    public QueryJCommand(final QueryJLog log)
+    public QueryJCommand(@NotNull final QueryJLog log)
     {
         this();
         immutableSetLog(log);
@@ -150,6 +150,7 @@ public class QueryJCommand
      * @param name the attribute name.
      * @return the value or <code>null</code> if it wasn't found.
      */
+    @SuppressWarnings("unused")
     @Nullable
     public Object getAttribute(@NotNull final String name)
     {
@@ -227,7 +228,7 @@ public class QueryJCommand
      * Retrieves the log instance.
      * @return such instance.
      */
-    @NotNull
+    @Nullable
     public QueryJLog getLog()
     {
         return m__Log;
