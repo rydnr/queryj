@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -59,8 +58,6 @@ public class FkStatementSetterAttributeDecorator
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
-     * @precondition attribute != null
-     * @precondition metadataManager != null
      */
     public FkStatementSetterAttributeDecorator(
         final Attribute attribute,
@@ -104,7 +101,6 @@ public class FkStatementSetterAttributeDecorator
      * @param type the attribute type.
      * @param metadataTypeManager the metadata type manager.
      * @return such type.
-     * @precondition metadataTypeManager != null
      */
     @Nullable
     protected String getObjectType(

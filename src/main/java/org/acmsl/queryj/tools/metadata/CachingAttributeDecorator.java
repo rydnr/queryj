@@ -157,8 +157,6 @@ public class CachingAttributeDecorator
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
-     * @precondition attribute != null
-     * @precondition metadataManager != null
      */
     public CachingAttributeDecorator(
         @NotNull final Attribute attribute,

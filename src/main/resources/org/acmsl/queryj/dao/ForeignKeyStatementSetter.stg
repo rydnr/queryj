@@ -92,10 +92,6 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
  */
 import javax.sql.DataSource;
 
-<checkers_import_preamble()>
-import checkers.nullness.quals.NonNull;
-import checkers.nullness.quals.Nullable;
-
 /*
  * Importing some JDK classes.
  */
@@ -280,7 +276,7 @@ attribute_query_specification(attr) ::= <<
  Generates the code to specify the attribute into the query.
  @param attr the attribute.
 !>
-<if(attr.allowsNull)>
+<if(attr.nullable)>
 if  (<attr.nameLowercased> == null)
 {
     preparedStatement.setNull(<attr.ordinalPosition>, <attr.type>);

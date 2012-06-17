@@ -78,14 +78,11 @@ source(input) ::= <<
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trName=input.tr_name_capitalized)>
 
+<checkers_import()>
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
-
-<checkers_import_preamble()>
-import checkers.nullness.quals.NonNull;
-import checkers.nullness.quals.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -141,10 +138,6 @@ import <result.classValue>ValueObjectFactory;
 <endif>
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
-
-<checkers_import_preamble()>
-import checkers.nullness.quals.NonNull;
-import checkers.nullness.quals.Nullable;
 
 >>
 
