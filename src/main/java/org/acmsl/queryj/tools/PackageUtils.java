@@ -1879,7 +1879,6 @@ public class PackageUtils
      * Retrieves the package name for base abstract DAO templates.
      * @param packageName the original package.
      * @return the package for the associated base DAO interface.
-     * @precondition packageName != null
      */
     @NotNull
     public String retrieveBaseAbstractDAOPackage(

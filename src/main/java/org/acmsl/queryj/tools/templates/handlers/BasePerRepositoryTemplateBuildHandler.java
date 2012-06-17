@@ -180,7 +180,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final List<TableTemplate> tableTemplates)
       throws  QueryJBuildException
     {
-        if (definesRepositoryScopedSql(customSqlProvider, getAllowEmptyRepositoryDAOSetting(parameters)))
+        if (isGenerationEnabled(customSqlProvider, parameters))
         {
             @NotNull List<String> t_lTableNames = metadataManager.getTableDAO().findAllTableNames();
 
@@ -204,6 +204,16 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 storeTemplate(t_Template, parameters);
             }
         }
+    }
+
+    /**
+     * Checks whether template generation is enabled for this kind of template.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isGenerationEnabled(
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
+    {
+        return definesRepositoryScopedSql(customSqlProvider, getAllowEmptyRepositoryDAOSetting(parameters));
     }
 
     /**

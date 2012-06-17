@@ -40,6 +40,7 @@ package org.acmsl.queryj.tools.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplate;
 import org.acmsl.queryj.tools.templates.dao.DAOListenerTemplateGenerator;
@@ -66,6 +67,17 @@ public class DAOListenerTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <DAOListenerTemplate, DAOListenerTemplateGenerator, BasePerRepositoryTemplateContext>
 {
+    /**
+     * Checks whether template generation is enabled for this kind of template.
+     * @return <code>true</code> in such case.
+     */
+    @Override
+    protected boolean isGenerationEnabled(
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
+    {
+        return true;
+    }
+
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
