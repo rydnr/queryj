@@ -271,6 +271,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param parameters the parameters.
      * @return the array of table names.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected List<Table> retrieveExplicitTableNames(@NotNull final Map parameters)
     {
@@ -375,16 +376,13 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 @NotNull AntTableElement t_Table =
                     (AntTableElement) t_itTableElements.next();
 
-                if  (t_Table != null)
-                {
-                    t_cFieldElements = t_Table.getFields();
+                t_cFieldElements = t_Table.getFields();
 
-                    if  (   (t_cFieldElements != null)
-                        && (t_cFieldElements.size() > 0))
-                    {
-                        result = false;
-                        break;
-                    }
+                if  (   (t_cFieldElements != null)
+                     && (t_cFieldElements.size() > 0))
+                {
+                    result = false;
+                    break;
                 }
             }
         }
@@ -432,6 +430,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
      * @param explicitTables the {@link AntTablesElement} instance.
      * @param fieldMap a map to store field information.
      */
+    @SuppressWarnings("unused,unchecked")
     protected void processExplicitSchema(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -448,127 +447,112 @@ public abstract class DatabaseMetaDataRetrievalHandler
 
         @Nullable Iterator t_itTableElements = null;
 
-        @Nullable Collection t_cFieldElements = null;
+        @Nullable Collection t_cFieldElements;
 
-        int t_iTableIndex = 0;
-
-        Collection t_cTables;
+        Collection<String> t_cTables;
 
         if  (t_cTableElements != null)
         {
             t_itTableElements = t_cTableElements.iterator();
         }
 
-        if  (   (t_itTableElements != null)
-             && (metadataTypeManager != null))
+        if  (t_itTableElements != null)
         {
             while  (t_itTableElements.hasNext())
             {
                 @NotNull AntTableElement t_Table =
                     (AntTableElement) t_itTableElements.next();
 
-                if  (t_Table != null)
+                t_cTables = (Collection<String>) fieldMap.get(buildTableKey());
+
+                if  (t_cTables == null)
                 {
-                    t_cTables = (Collection) fieldMap.get(buildTableKey());
+                    t_cTables = new ArrayList();
+                    fieldMap.put(buildTableKey(), t_cTables);
+                }
 
-                    if  (t_cTables == null)
-                    {
-                        t_cTables = new ArrayList();
-                        fieldMap.put(buildTableKey(), t_cTables);
-                    }
+                t_cTables.add(t_Table.getName());
 
-                    t_cTables.add(t_Table.getName());
+                t_cFieldElements = t_Table.getFields();
 
-                    t_cFieldElements = t_Table.getFields();
+                if  (   (t_cFieldElements  != null)
+                     && (t_cFieldElements.size() > 0))
+                {
+                    @NotNull String[] t_astrTableFieldNames =
+                        new String[t_cFieldElements.size()];
 
-                    if  (   (t_cFieldElements  != null)
-                        && (t_cFieldElements.size() > 0))
-                    {
-                        @NotNull String[] t_astrTableFieldNames =
-                            new String[t_cFieldElements.size()];
+                    Iterator t_itFieldElements = t_cFieldElements.iterator();
 
-                        Iterator t_itFieldElements = t_cFieldElements.iterator();
+                    int t_iFieldIndex = 0;
 
-                        int t_iFieldIndex = 0;
-
-                        while  (   (t_itFieldElements != null)
+                    while  (   (t_itFieldElements != null)
                             && (t_itFieldElements.hasNext()))
+                    {
+                        @NotNull AntFieldElement t_Field =
+                            (AntFieldElement) t_itFieldElements.next();
+
+                        t_astrTableFieldNames[t_iFieldIndex] =
+                            t_Field.getName();
+
+                        @SuppressWarnings("unchecked")
+                        @Nullable List<Attribute> t_lFields =
+                            (List<Attribute>)
+                                fieldMap.get(
+                                    buildTableFieldsKey(
+                                        t_Table.getName()));
+
+                        if  (t_lFields == null)
                         {
-                            @NotNull AntFieldElement t_Field =
-                                (AntFieldElement) t_itFieldElements.next();
+                            t_lFields = new ArrayList<Attribute>(4);
 
-                            if  (t_Field != null)
-                            {
-                                t_astrTableFieldNames[t_iFieldIndex] =
-                                    t_Field.getName();
-
-                                @SuppressWarnings("unchecked")
-                                @Nullable List<Attribute> t_lFields =
-                                    (List<Attribute>)
-                                        fieldMap.get(
-                                            buildTableFieldsKey(
-                                                t_Table.getName()));
-
-                                if  (t_lFields == null)
-                                {
-                                    t_lFields = new ArrayList<Attribute>(4);
-
-                                    fieldMap.put(
-                                        buildTableFieldsKey(
-                                            t_Table.getName()), t_lFields);
-                                }
-
-                                t_lFields.add(t_Field);
-
-                                if  (t_Field.isPk())
-                                {
-                                    @Nullable List<Attribute> t_lPks =
-                                        (List<Attribute>)
-                                            fieldMap.get(
-                                                buildPkKey(t_Table.getName()));
-
-                                    if  (t_lPks == null)
-                                    {
-                                        t_lPks = new ArrayList<Attribute>(1);
-                                        fieldMap.put(
-                                            buildPkKey(
-                                                t_Table.getName()), t_lPks);
-                                    }
-
-                                    t_lPks.add(t_Field);
-
-                                    fieldMap.put(
-                                        buildPkKey(
-                                            t_Table.getName(),
-                                            t_Field.getName()),
-                                        t_Field.getName());
-                                }
-
-                                Collection t_cFieldFks =
-                                    t_Field.getFieldFks();
-
-                                if  (t_cFieldFks != null)
-                                {
-                                    fieldMap.put(
-                                        buildFkKey(
-                                            t_Table.getName(),
-                                            t_Field.getName()),
-                                        t_cFieldFks);
-                                }
-
-                                metadataManager.getColumnDAO().insert(
-                                    t_Table.getName(),
-                                    t_Field.getName(),
-                                    metadataTypeManager.getJavaType(
-                                        t_Field.getType()),
-                                    null,
-                                    null);
-                            }
-
-                            t_iFieldIndex++;
+                            fieldMap.put(
+                                buildTableFieldsKey(
+                                    t_Table.getName()), t_lFields);
                         }
 
+                        t_lFields.add(t_Field);
+
+                        if  (t_Field.isPk())
+                        {
+                            @Nullable List<Attribute> t_lPks =
+                                (List<Attribute>)
+                                    fieldMap.get(
+                                        buildPkKey(t_Table.getName()));
+
+                            if  (t_lPks == null)
+                            {
+                                t_lPks = new ArrayList<Attribute>(1);
+                                fieldMap.put(
+                                    buildPkKey(
+                                        t_Table.getName()), t_lPks);
+                            }
+
+                            t_lPks.add(t_Field);
+
+                            fieldMap.put(
+                                buildPkKey(
+                                    t_Table.getName(),
+                                    t_Field.getName()),
+                                t_Field.getName());
+                        }
+
+                        @NotNull Collection t_cFieldFks =
+                            t_Field.getFieldFks();
+
+                        fieldMap.put(
+                            buildFkKey(
+                                t_Table.getName(),
+                                t_Field.getName()),
+                            t_cFieldFks);
+
+                        metadataManager.getColumnDAO().insert(
+                            t_Table.getName(),
+                            t_Field.getName(),
+                            metadataTypeManager.getJavaType(
+                                t_Field.getType()));
                     }
+
+                    t_iFieldIndex++;
                 }
 
                 @Nullable List<Attribute> t_lFields =
@@ -581,9 +565,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                 {
                     metadataManager.getPrimaryKeyDAO().insert(
                         t_Table.getName(),
-                        t_lFields,
-                        null,
-                        null);
+                        t_lFields);
                 }
             }
         }
@@ -675,9 +657,7 @@ public abstract class DatabaseMetaDataRetrievalHandler
                                             t_lFk.add(
                                                 metadataManager.getColumnDAO().findColumn(
                                                     t_FieldFk.getTable(),
-                                                    t_FieldFk.getField(),
-                                                    null,
-                                                    null));
+                                                    t_FieldFk.getField()));
                                         }
                                     }
 
@@ -877,63 +857,57 @@ public abstract class DatabaseMetaDataRetrievalHandler
             {
                 @NotNull String t_strTableName = (String) t_itTables.next();
 
-                if  (t_strTableName != null)
+                @NotNull Collection t_cFields =
+                    (Collection)
+                        extractedMap.get(
+                            buildTableFieldsKey(t_strTableName));
+
+                Iterator t_itFields = t_cFields.iterator();
+
+                if  (t_itFields != null)
                 {
-                    @NotNull Collection t_cFields =
-                        (Collection)
-                            extractedMap.get(
-                                buildTableFieldsKey(t_strTableName));
-
-                    if  (t_cFields != null)
+                    while  (t_itFields.hasNext())
                     {
-                        Iterator t_itFields = t_cFields.iterator();
+                        @NotNull String t_strFieldName =
+                            (String) t_itFields.next();
 
-                        if  (t_itFields != null)
+                        @NotNull Collection t_cFieldFks =
+                            (Collection)
+                                extractedMap.get(
+                                    buildFkKey(
+                                        t_strTableName,
+                                        t_strFieldName));
+
+                        @Nullable Iterator t_itFieldFks = null;
+
+                        if  (t_cFieldFks != null)
                         {
-                            while  (t_itFields.hasNext())
-                            {
-                                @NotNull String t_strFieldName =
-                                    (String) t_itFields.next();
+                            t_itFieldFks =
+                                t_cFieldFks.iterator();
+                        }
 
-                                @NotNull Collection t_cFieldFks =
-                                    (Collection)
-                                        extractedMap.get(
-                                            buildFkKey(
-                                                t_strTableName,
-                                                t_strFieldName));
-
-                                @Nullable Iterator t_itFieldFks = null;
-
-                                if  (t_cFieldFks != null)
-                                {
-                                    t_itFieldFks =
-                                        t_cFieldFks.iterator();
-                                }
-
-//                                if  (t_itFieldFks != null)
-//                                {
-//                                    while  (t_itFieldFks.hasNext())
-//                                    {
-//                                        @NotNull AntFieldFkElement t_FieldFk =
-//                                            (AntFieldFkElement)
-//                                                t_itFieldFks.next();
-
-//                                        if  (t_FieldFk != null)
-//                                        {
-                                            // TODO
-//                                            metadataManager.addForeignKey(
-//                                                t_strTableName,
-//                                                new String[] {t_strFieldName},
-//                                                t_FieldFk.getTable(),
-//                                                new String[]
-//                                                {
-//                                                    t_FieldFk.getField()
-//                                                });
-//                                        }
+//                        if  (t_itFieldFks != null)
+//                        {
+//                            while  (t_itFieldFks.hasNext())
+//                            {
+//                                  @NotNull AntFieldFkElement t_FieldFk =
+//                                      (AntFieldFkElement)
+//                                          t_itFieldFks.next();
+//
+//                                  if  (t_FieldFk != null)
+//                                  {
+                                        // TODO
+//                                        metadataManager.addForeignKey(
+//                                            t_strTableName,
+//                                            new String[] {t_strFieldName},
+//                                            t_FieldFk.getTable(),
+//                                            new String[]
+//                                            {
+//                                                t_FieldFk.getField()
+//                                            });
 //                                    }
 //                                }
-                            }
-                        }
+//                            }
                     }
                 }
             }

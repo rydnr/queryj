@@ -109,7 +109,7 @@ public class MetadataUtils
         List<Attribute> result;
 
         Table t_Table =
-            metadataManager.getTableDAO().findByName(tableName, null, null);
+            metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -136,7 +136,7 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -170,7 +170,7 @@ public class MetadataUtils
     {
         @Nullable List<ForeignKey> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -197,7 +197,7 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -224,7 +224,7 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -264,7 +264,7 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -386,7 +386,7 @@ public class MetadataUtils
     {
         boolean result = false;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -421,7 +421,7 @@ public class MetadataUtils
     {
         @Nullable List<ForeignKey> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
@@ -451,7 +451,7 @@ public class MetadataUtils
     {
         @Nullable List<ForeignKey> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(sourceTableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(sourceTableName);
 
         if (t_Table != null)
         {
@@ -536,7 +536,7 @@ public class MetadataUtils
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

@@ -109,17 +109,13 @@ public class MetadataManagerColumnDAO
      * Retrieves a concrete column in a given table.
      * @param table the table name.
      * @param columnName the column name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return the {@link Attribute column}.
      */
     @NotNull
     @Override
     public Attribute findColumn(
         @NotNull final String table,
-        @NotNull final String columnName,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+        @NotNull final String columnName)
     {
         // TODO
         return null;
@@ -128,16 +124,11 @@ public class MetadataManagerColumnDAO
     /**
      * Retrieves the columns for given table.
      * @param table the table name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
     @Override
-    public List<Attribute> findColumns(
-        @NotNull final String table,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+    public List<Attribute> findColumns(@NotNull final String table)
     {
         // TODO
         return new ArrayList<Attribute>(0);
@@ -146,14 +137,11 @@ public class MetadataManagerColumnDAO
     /**
      * Retrieves the columns for given table, including parent's, if any.
      * @param table the table name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return the list of {@link Attribute columns}.
      */
     @NotNull
     @Override
-    public List<Attribute> findAllColumns(
-        @NotNull final String table, @Nullable final String catalog, @Nullable final String schema)
+    public List<Attribute> findAllColumns(@NotNull final String table)
     {
         // TODO
         return new ArrayList<Attribute>(0);
@@ -164,16 +152,12 @@ public class MetadataManagerColumnDAO
      * @param table the table name.
      * @param columnName the column name.
      * @param typeId the column type id.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     @Override
     public void insert(
         @NotNull final String table,
         @NotNull final String columnName,
-        final int typeId,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+        final int typeId)
     {
         // TODO
     }
@@ -199,9 +183,7 @@ public class MetadataManagerColumnDAO
         final boolean isBoolean,
         @Nullable final String booleanTrue,
         @Nullable final String booleanFalse,
-        @Nullable final String booleanNull,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+        @Nullable final String booleanNull)
     {
         // TODO
     }

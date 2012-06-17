@@ -68,50 +68,34 @@ public interface ColumnDAO
      * Retrieves a concrete column in a given table.
      * @param table the table name.
      * @param columnName the column name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     @Nullable
-    Attribute findColumn(
-        @NotNull final String table,
-        @NotNull final String columnName,
-        @Nullable final String catalog,
-        @Nullable final String schema);
+    Attribute findColumn(@NotNull final String table, @NotNull final String columnName);
 
     /**
      * Retrieves the columns for given table.
      * @param table the table name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     @NotNull
-    List<Attribute> findColumns(
-        @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
+    List<Attribute> findColumns(@NotNull final String table);
 
     /**
      * Retrieves the columns for given table, including parent's, if any.
      * @param table the table name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     @NotNull
-    List<Attribute> findAllColumns(
-        @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
+    List<Attribute> findAllColumns(@NotNull final String table);
 
     /**
      * Inserts a new column (needed when processing manually-defined schemas)
      * @param table the table name.
      * @param columnName the column name.
      * @param typeId the column type id.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     void insert(
         @NotNull final String table,
         @NotNull final String columnName,
-        final int typeId,
-        @Nullable final String catalog,
-        @Nullable final String schema);
+        final int typeId);
 
     /**
      * Updates a given column.
@@ -132,8 +116,6 @@ public interface ColumnDAO
      * @param booleanTrue the value representing <code>true</code>.
      * @param booleanFalse the value representing <code>false</code>.
      * @param booleanNull if nullable, the value representing <code>null</code>.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     void update(
         @NotNull final String table,
@@ -152,7 +134,5 @@ public interface ColumnDAO
         final boolean isBoolean,
         @Nullable final String booleanTrue,
         @Nullable final String booleanFalse,
-        @Nullable final String booleanNull,
-        @Nullable final String catalog,
-        @Nullable final String schema);
+        @Nullable final String booleanNull);
 }

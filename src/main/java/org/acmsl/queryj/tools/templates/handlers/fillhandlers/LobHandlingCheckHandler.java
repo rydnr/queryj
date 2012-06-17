@@ -118,7 +118,7 @@ public class LobHandlingCheckHandler
     {
         boolean result = false;
 
-        for (@Nullable Attribute t_Column : metadataManager.getColumnDAO().findColumns(tableName, null, null))
+        for (@Nullable Attribute t_Column : metadataManager.getColumnDAO().findColumns(tableName))
         {
             if (t_Column != null)
             {

@@ -214,7 +214,7 @@ public class CachingDecoratorFactory
     {
         @Nullable TableDecorator result = null;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table, null, null);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
@@ -236,7 +236,7 @@ public class CachingDecoratorFactory
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {
@@ -275,7 +275,7 @@ public class CachingDecoratorFactory
     {
         @Nullable List<Attribute> result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(table);
 
         if (t_Table != null)
         {

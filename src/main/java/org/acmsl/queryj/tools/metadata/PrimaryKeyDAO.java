@@ -49,7 +49,6 @@ import org.acmsl.commons.patterns.dao.DAO;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -68,38 +67,26 @@ public interface PrimaryKeyDAO
      * Retrieves the primary key for given table.
      *
      * @param table the table.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return the {@link Attribute} of the primary key for given table.
      */
     @NotNull
-    List<Attribute> findPrimaryKey(
-        @NotNull final String table, @Nullable final String catalog, @Nullable final String schema);
+    List<Attribute> findPrimaryKey(@NotNull final String table);
 
     /**
      * Retrieves whether given {@link Attribute column} is part of the primary key for the table, or not.
      * @param table the table name.
      * @param column the column name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return <code>true</code> if the column is part of the primary key.
      */
     boolean isPartOfPrimaryKey(
-        @NotNull final String table,
-        @NotNull final String column,
-        @Nullable final String catalog,
-        @Nullable final String schema);
+        @NotNull final String table, @NotNull final String column);
 
     /**
      * Inserts a new primary key (needed when processing manual schemas).
      * @param table the table name.
      * @param primaryKey the primary key.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     void insert(
         @NotNull final String table,
-        @NotNull final List<Attribute> primaryKey,
-        @Nullable final String catalog,
-        @Nullable final String schema);
+        @NotNull final List<Attribute> primaryKey);
 }

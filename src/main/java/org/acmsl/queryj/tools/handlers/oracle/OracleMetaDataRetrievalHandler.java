@@ -113,8 +113,8 @@ public class OracleMetaDataRetrievalHandler
     @Nullable
     protected MetadataManager buildMetadataManager(
         @NotNull final Map parameters,
-        @Nullable final List<Table> tables,
-        @Nullable final String[] procedureNames,
+        @NotNull final List<Table> tables,
+        @NotNull final String[] procedureNames,
         final boolean disableTableExtraction,
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,

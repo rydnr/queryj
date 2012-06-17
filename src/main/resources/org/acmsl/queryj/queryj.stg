@@ -105,40 +105,17 @@ package_declaration(packageNames) ::= <<
 package <packageNames; separator=".">;
 >>
 
-checkers_import_preamble() ::= <<
+checkers_import() ::= <<
 /*
  * Importing JSR-308 (http://types.cs.washington.edu/checker-framework/) annotations.
  */
+import checkers.nullness.quals.NonNull;
+import checkers.nullness.quals.Nullable;
 >>
 
 class_common_javadoc() ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
  * @since <input.timestamp>
->>
-
-precondition_notnull(name) ::= <<
-<!
-  Writes the Javadoc precondition for a concrete parameter.
-  @param name the name of the parameter.
-!>
-* @precondition <name> != null
->>
-
-precondition_instanceof(name, className) ::= <<
-<!
-  Writes the Javadoc precondition for a concrete parameter.
-  @param name the name of the parameter.
-  @param className the class name.
-!>
-* @precondition <name> instanceof <className>
->>
-
-precondition(expression) ::= <<
-<!
-  Writes the Javadoc precondition for given expression.
-  @param expression the expression
-!>
-* @precondition <expression>
 >>
 
 attribute_javadoc(name) ::= <<
@@ -246,11 +223,8 @@ public <cs.resultClass> <cs.nameUncapitalized>(
  * @param dataSource the {@link DataSource{@link  instance.
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
- <precondition_notnull("preparedStatementCreatorFactory")>
- <precondition_notnull("params")>
- <precondition_notnull("dataSource")>
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicit)>
 protected <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
@@ -263,9 +237,9 @@ protected <cs.resultClass>Decorator <cs.nameUncapitalized>(
 protected <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
-    /*@NonNull*/ final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    /*@Nulable*/ final Object[] params,
-    /*@NonNull*/ final DataSource dataSource)
+    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    <nullable()>final Object[] params,
+    <notnull()>final DataSource dataSource)
   throws DataAccessException
 {
     return
@@ -288,11 +262,8 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * instance.
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
- <precondition_notnull("preparedStatementCreatorFactory")>
- <precondition_notnull("params")>
- <precondition_notnull("transactionManager")>
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicit)>
 protected <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
@@ -305,9 +276,9 @@ protected <cs.resultClass>Decorator <cs.nameUncapitalized>(
 protected <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
-    /*@NonNull*/ final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    /*@Nullable*/ final Object[] params,
-    /*@NonNull*/ final PlatformTransactionManager transactionManager)
+    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    <nullable()>final Object[] params,
+    <notnull()>final PlatformTransactionManager transactionManager)
   throws DataAccessException
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
@@ -334,9 +305,6 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * instance.
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
- <precondition_notnull("preparedStatementCreatorFactory")>
- <precondition_notnull("params")>
- <precondition_notnull("transactionTemplate")>
  */
 <cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
 protected <cs.resultClass> <cs.nameUncapitalized>(
@@ -351,9 +319,9 @@ protected <cs.resultClass>Decorator <cs.nameUncapitalized>(
 protected <cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
-    /*@NonNull*/ final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
-    /*@Nullable*/ final Object[] params,
-    /*@NonNull*/ final TransactionTemplate transactionTemplate)
+    <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
+    <nullable()>final Object[] params,
+    <notnull()>final TransactionTemplate transactionTemplate)
   throws DataAccessException
 {
     <custom_select_result_declaration(sql=cs, result=cs.result, table=table)>
@@ -420,7 +388,7 @@ public int <cs.nameUncapitalized>(
 {
     int result = -10;
 
-    PreparedStatementCreatorFactory
+    final PreparedStatementCreatorFactory
         preparedStatementCreatorFactory =
             new PreparedStatementCreatorFactory(
                 auditSql(<cs.idAsConstant>_SQL));
@@ -435,7 +403,7 @@ public int <cs.nameUncapitalized>(
     <cs.parameters:custom_select_parameter_type_specification(
       type=it.sqlType); separator="\n">
 
-    Object[] params =
+    final Object[] params =
        new Object[]
        {
            <cs.parameters:custom_select_parameter_value(
@@ -444,12 +412,12 @@ public int <cs.nameUncapitalized>(
              object=it.object); separator=",\n">
         };
 
-     DataSourceTransactionManager transactionManager =
+    final DataSourceTransactionManager transactionManager =
         new DataSourceTransactionManager(getDataSource());
-    TransactionTemplate transactionTemplate =
+    final TransactionTemplate transactionTemplate =
         new TransactionTemplate(transactionManager);
 
-    Object t_Result =
+    final Object t_Result =
         transactionTemplate.execute(
             new UpdateTransactionCallback(
                 preparedStatementCreatorFactory
@@ -584,9 +552,9 @@ protected static class AbstractTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      */
     public AbstractTransactionCallback(
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final <daoName>DAO dao)
     {
         immutableSetPreparedStatementCreator(creator);
         immutableSetPreparedStatementSetter(setter);
@@ -598,7 +566,7 @@ protected static class AbstractTransactionCallback
      * @param creator such instance.
      */
     private void immutableSetPreparedStatementCreator(
-        /*@NonNull*/ final PreparedStatementCreator creator)
+        <notnull()>final PreparedStatementCreator creator)
     {
         m__PreparedStatementCreator = creator;
     }
@@ -608,7 +576,7 @@ protected static class AbstractTransactionCallback
      * @param creator such instance.
      */
     protected void setPreparedStatementCreator(
-        /*@NonNull*/ final PreparedStatementCreator creator)
+        <notnull()>final PreparedStatementCreator creator)
     {
         immutableSetPreparedStatementCreator(creator);
     }
@@ -617,7 +585,7 @@ protected static class AbstractTransactionCallback
      * Retrieves the {@link PreparedStatementCreator} instance.
      * @return such instance.
      */
-    /*@NonNull*/
+    <notnull()>
     public PreparedStatementCreator getPreparedStatementCreator()
     {
         return m__PreparedStatementCreator;
@@ -628,7 +596,7 @@ protected static class AbstractTransactionCallback
      * @param setter such instance.
      */
     private void immutableSetPreparedStatementSetter(
-        /*@NonNull*/ final PreparedStatementSetter setter)
+        <notnull()>final PreparedStatementSetter setter)
     {
         m__PreparedStatementSetter = setter;
     }
@@ -638,7 +606,7 @@ protected static class AbstractTransactionCallback
      * @param setter such instance.
      */
     protected void setPreparedStatementSetter(
-        /*@NonNull*/ final PreparedStatementSetter setter)
+        <notnull()>final PreparedStatementSetter setter)
     {
         immutableSetPreparedStatementSetter(setter);
     }
@@ -647,7 +615,7 @@ protected static class AbstractTransactionCallback
      * Retrieves the {@link PreparedStatementSetter} instance.
      * @return such instance.
      */
-    /*@NonNull*/
+    <notnull()>
     public PreparedStatementSetter getPreparedStatementSetter()
     {
         return m__PreparedStatementSetter;
@@ -657,7 +625,7 @@ protected static class AbstractTransactionCallback
      * Specifies the {@link <daoName>DAO} instance.
      * @param dao the DAO instance.
      */
-    private void immutableSet<daoName>DAO(/*@NonNull*/ final <daoName>DAO dao)
+    private void immutableSet<daoName>DAO(<notnull()>final <daoName>DAO dao)
     {
         m__<daoName>DAO = dao;
     }
@@ -667,7 +635,7 @@ protected static class AbstractTransactionCallback
      * @param dao the DAO instance.
      */
     @SuppressWarnings("unused")
-    protected void set<daoName>DAO(/*@NonNull*/ final <daoName>DAO dao)
+    protected void set<daoName>DAO(<notnull()>final <daoName>DAO dao)
     {
         immutableSet<daoName>DAO(dao);
     }
@@ -676,7 +644,7 @@ protected static class AbstractTransactionCallback
      * Retrieves the {@link <daoName>DAO} instance.
      * @return such DAO.
      */
-    /*@NonNull*/
+    <notnull()>
     public <daoName>DAO get<daoName>DAO()
     {
         return m__<daoName>DAO;
@@ -687,8 +655,8 @@ protected static class AbstractTransactionCallback
      * @param status the transaction status.
      * @return the transaction result.
      */
-    /*@Nullable*/
-    public Object doInTransaction(/*@NonNull*/ final TransactionStatus status)
+    <nullable()>
+    public Object doInTransaction(<notnull()>final TransactionStatus status)
     {
         return
             doInTransaction(
@@ -708,12 +676,12 @@ protected static class AbstractTransactionCallback
      * to be overriden by subclasses, but cannot be defined \<i>abstract\</i>
      * since the inner class is \<i>static\</i>.
      */
-    /*@Nullable*/
+    <nullable()>
     protected Object doInTransaction(
-        /*@NonNull*/ final TransactionStatus status,
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final TransactionStatus status,
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final <daoName>DAO dao)
     {
         return null;
     }
@@ -733,9 +701,9 @@ protected static class UpdateTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      */
     public UpdateTransactionCallback(
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final <daoName>DAO dao)
     {
         super(creator, setter, dao);
     }
@@ -748,12 +716,12 @@ protected static class UpdateTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
-    /*@Nullable*/
+    <nullable()>
     protected Object doInTransaction(
-        /*@NonNull*/ final TransactionStatus status,
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final TransactionStatus status,
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final <daoName>DAO dao)
     {
         return new Integer(dao.update(creator, setter));
     }
@@ -769,13 +737,13 @@ protected static class QueryTransactionCallback
     /**
      * The optional SQL.
      */
-    /*@Nullable*/
+    <nullable()>
     private String m__strSQL;
 
     /**
      * The {@link ResultSetExtractor}.
      */
-    /*@NotNull*/
+    <notnull()>
     private ResultSetExtractor m__ResultSetExtractor;
 
     /**
@@ -785,9 +753,9 @@ protected static class QueryTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      */
     public QueryTransactionCallback(
-        /*@Nullable*/ final String sql,
-        /*@NonNull*/ final ResultSetExtractor extractor,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <nullable()>final String sql,
+        <notnull()>final ResultSetExtractor extractor,
+        <notnull()>final <daoName>DAO dao)
     {
         super(null, null, dao);
         immutableSetSQL(sql);
@@ -802,10 +770,10 @@ protected static class QueryTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      */
     public QueryTransactionCallback(
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final ResultSetExtractor extractor,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final ResultSetExtractor extractor,
+        <notnull()>final <daoName>DAO dao)
     {
         super(creator, setter, dao);
         immutableSetResultSetExtractor(extractor);
@@ -815,7 +783,7 @@ protected static class QueryTransactionCallback
      * Specifies the SQL sentence.
      * @param sql such sentence.
      */
-    private void immutableSetSQL(/*@Nullable*/ final String sql)
+    private void immutableSetSQL(<nullable()>final String sql)
     {
         m__strSQL = sql;
     }
@@ -825,7 +793,7 @@ protected static class QueryTransactionCallback
      * @param sql such sentence.
      */
     @SuppressWarnings("unused")
-    protected void setSQL(/*@Nullable*/ final String sql)
+    protected void setSQL(<nullable()>final String sql)
     {
         immutableSetSQL(sql);
     }
@@ -834,7 +802,7 @@ protected static class QueryTransactionCallback
      * Retrieves the SQL sentence.
      * @return such sentence.
      */
-    /*@Nullable*/
+    <nullable()>
     public String getSQL()
     {
         return m__strSQL;
@@ -845,7 +813,7 @@ protected static class QueryTransactionCallback
      * @param extractor such instance.
      */
     private void immutableSetResultSetExtractor(
-        /*@NonNull*/ final ResultSetExtractor extractor)
+        <notnull()>final ResultSetExtractor extractor)
     {
         m__ResultSetExtractor = extractor;
     }
@@ -856,7 +824,7 @@ protected static class QueryTransactionCallback
      */
     @SuppressWarnings("unused")
     protected void setResultSetExtractor(
-        /*@NonNull*/ final ResultSetExtractor extractor)
+        <notnull()>final ResultSetExtractor extractor)
     {
         immutableSetResultSetExtractor(extractor);
     }
@@ -865,7 +833,7 @@ protected static class QueryTransactionCallback
      * Retrieves the {@link ResultSetExtractor} instance.
      * @return such instance.
      */
-    /*@NonNull*/
+    <notnull()>
     public ResultSetExtractor getResultSetExtractor()
     {
         return m__ResultSetExtractor;
@@ -879,12 +847,12 @@ protected static class QueryTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
-    /*@Nullable*/
+    <nullable()>
     protected Object doInTransaction(
-        /*@NonNull*/ final TransactionStatus status,
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final TransactionStatus status,
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final <daoName>DAO dao)
     {
         return
             doInTransaction(
@@ -906,14 +874,14 @@ protected static class QueryTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      * @result the transaction result.
      */
-    /*@Nullable*/
+    <nullable()>
     protected Object doInTransaction(
-        /*@NonNull*/ final TransactionStatus status,
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@Nullable*/ final String sql,
-        /*@NonNull*/ final ResultSetExtractor extractor,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final TransactionStatus status,
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <nullable()>final String sql,
+        <notnull()>final ResultSetExtractor extractor,
+        <notnull()>final <daoName>DAO dao)
     {
         Object result = null;
 
@@ -944,7 +912,7 @@ protected static class SelectForUpdateTransactionCallback
      * The result of the query. This make the class stateful, so
      * instances cannot be reused.
      */
-    /*@Nullable*/
+    <nullable()>
     private <voName> m__Result;
 
     /**
@@ -956,10 +924,10 @@ protected static class SelectForUpdateTransactionCallback
      * instance.
      */
     public SelectForUpdateTransactionCallback(
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final PreparedStatementSetter setter,
-        /*@NonNull*/ final ResultSetExtractor extractor,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final PreparedStatementSetter setter,
+        <notnull()>final ResultSetExtractor extractor,
+        <notnull()>final <daoName>DAO dao)
     {
         super(creator, setter, extractor, dao);
     }
@@ -969,7 +937,7 @@ protected static class SelectForUpdateTransactionCallback
      * @param operationResult such information.
      */
     protected final void immutableSetOperationResult(
-        /*@NonNull*/ final <voName> operationResult)
+        <notnull()>final <voName> operationResult)
     {
         m__Result = operationResult;
     }
@@ -980,7 +948,7 @@ protected static class SelectForUpdateTransactionCallback
      */
     @SuppressWarnings("unused")
     protected void setOperationResult(
-        /*@NonNull*/ final <voName> operationResult)
+        <notnull()>final <voName> operationResult)
     {
         immutableSetOperationResult(operationResult);
     }
@@ -989,7 +957,7 @@ protected static class SelectForUpdateTransactionCallback
      * Specifies the result of the operation.
      * @return such information.
      */
-    /*@NonNull*/
+    <notnull()>
     public <voName> getOperationResult()
     {
         return m__Result;
@@ -1000,8 +968,8 @@ protected static class SelectForUpdateTransactionCallback
      * @param status the transaction status.
      * @return the transaction result.
      */
-    /*@Nullable*/
-    public Object doInTransaction(/*@NonNull*/ final TransactionStatus status)
+    <nullable()>
+    public Object doInTransaction(<notnull()>final TransactionStatus status)
     {
         return
             doInTransaction(
@@ -1017,11 +985,11 @@ protected static class SelectForUpdateTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
-    /*@Nullable*/
+    <nullable()>
     protected Object doInTransaction(
-        /*@NonNull*/ final TransactionStatus status,
-        /*@NonNull*/ final PreparedStatementCreator creator,
-        /*@NonNull*/ final <daoName>DAO dao)
+        <notnull()>final TransactionStatus status,
+        <notnull()>final PreparedStatementCreator creator,
+        <notnull()>final <daoName>DAO dao)
     {
         return dao.execute(creator, (PreparedStatementCallback) this);
     }
@@ -1034,9 +1002,9 @@ protected static class SelectForUpdateTransactionCallback
      * @throws DataAccessException if the data cannot be accessed for some
      * reason.
      */
-    /*@Nullable*/
+    <nullable()>
     public Object doInPreparedStatement(
-        /*@NonNull*/ final PreparedStatement preparedStatement)
+        <notnull()>final PreparedStatement preparedStatement)
       throws SQLException,
              DataAccessException
     {
@@ -1057,15 +1025,15 @@ protected static class SelectForUpdateTransactionCallback
      * @throws DataAccessException if the data cannot be accessed for some
      * reason.
      */
-    /*@Nullable*/
+    <nullable()>
     protected Object doInPreparedStatement(
-        /*@NonNull*/ final PreparedStatement preparedStatement,
-        /*@NonNull*/ final PreparedStatementSetter preparedStatementSetter,
-        /*@NonNull*/ final ResultSetExtractor resultSetExtractor)
+        <notnull()>final PreparedStatement preparedStatement,
+        <notnull()>final PreparedStatementSetter preparedStatementSetter,
+        <notnull()>final ResultSetExtractor resultSetExtractor)
       throws SQLException,
              DataAccessException
     {
-        /*@Nullable*/ Object result = null;
+        <nullable()>Object result = null;
 
         // taken from Spring's JdbcTemplate.
         ResultSet t_ResultSet = null;
@@ -1405,9 +1373,17 @@ primitive_to_Object_value(input) ::= <<
 !><input.value>
 >>
 
+notnull() ::= <<
+@NonNull 
+>>
+
+nullable() ::= <<
+@Nullable 
+>>
+
 type_checker(attribute) ::= <<
 <!
  Type checker for given attribute
  @param attribute the attribute.
-!><if(attribute.nullable)>@Nullable <else><if(!attribute.primitive)>@NonNull <endif><endif>
+!><if(attribute.nullable)><nullable()> <else><if(!attribute.primitive)><notnull()> <endif><endif>
 >>

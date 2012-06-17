@@ -81,12 +81,10 @@ public interface TableDAO
     /**
      * Retrieves the table matching given name.
      * @param name the table name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return the associated {@link Table} instance, if the table is found.
      */
     @Nullable
-    Table findByName(@NotNull final String name, @Nullable final String catalog, @Nullable final String schema);
+    Table findByName(@NotNull final String name);
 
     /**
      * Retrieves the list of tables with foreign keys to given table.

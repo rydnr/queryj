@@ -46,7 +46,6 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -109,14 +108,11 @@ public class MetadataManagerPrimaryKeyDAO
      * Retrieves the primary key for given table.
      *
      * @param table the table.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return the {@link Attribute} of the primary key for given table.
      */
     @NotNull
     @Override
-    public List<Attribute> findPrimaryKey(
-        @NotNull final String table, @Nullable final String catalog, @Nullable final String schema)
+    public List<Attribute> findPrimaryKey(@NotNull final String table)
     {
         // TODO
         return new ArrayList<Attribute>(0);
@@ -127,16 +123,10 @@ public class MetadataManagerPrimaryKeyDAO
      * for the table, or not.
      * @param table the table name.
      * @param column the column name.
-     * @param catalog the catalog.
-     * @param schema the schema.
      * @return <code>true</code> if the column is part of the primary key.
      */
     @Override
-    public boolean isPartOfPrimaryKey(
-        @NotNull final String table,
-        @NotNull final String column,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+    public boolean isPartOfPrimaryKey(@NotNull final String table, @NotNull final String column)
     {
         // TODO
         return false;
@@ -146,14 +136,9 @@ public class MetadataManagerPrimaryKeyDAO
      * Inserts a new primary key (needed when processing manual schemas).
      * @param table the table name.
      * @param primaryKey the primary key.
-     * @param catalog the catalog.
-     * @param schema the schema.
      */
     public void insert(
-        @NotNull final String table,
-        @NotNull final List<Attribute> primaryKey,
-        @Nullable final String catalog,
-        @Nullable final String schema)
+        @NotNull final String table, @NotNull final List<Attribute> primaryKey)
     {
         // TODO
     }

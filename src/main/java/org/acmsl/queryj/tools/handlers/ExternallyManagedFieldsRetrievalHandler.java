@@ -151,9 +151,7 @@ public class ExternallyManagedFieldsRetrievalHandler
                             @Nullable Attribute t_Attribute =
                                 metadataManager.getColumnDAO().findColumn(
                                     t_Field.getTableName(),
-                                    t_Field.getName(),
-                                    null,
-                                    null);
+                                    t_Field.getName());
 
                             if (t_Attribute != null)
                             {
@@ -174,9 +172,7 @@ public class ExternallyManagedFieldsRetrievalHandler
                                     t_Attribute.isBoolean(),
                                     t_Attribute.getBooleanTrue(),
                                     t_Attribute.getBooleanFalse(),
-                                    t_Attribute.getBooleanNull(),
-                                    null,
-                                    null);
+                                    t_Attribute.getBooleanNull());
 
                             }
                         }

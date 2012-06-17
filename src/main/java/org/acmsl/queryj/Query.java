@@ -547,8 +547,8 @@ public abstract class Query
      * @param clob the clob to convert.
      * @return the clob contents.
      * @throws SQLException if the clob cannot be processed.
-     * @precondition clob != null
      */
+    @SuppressWarnings("unused")
     protected String clobToString(@NotNull final Clob clob)
       throws  SQLException
     {
@@ -1450,7 +1450,7 @@ public abstract class Query
      * previously specified variable condition.
      * @param condition the variable condition.
      * @param value the time value.
-     * @see java.sql.PreparedStatement#setDate(int,java.sql.Time)
+     * @see java.sql.PreparedStatement#setDate(int,Date)
      * @throws SQLException if an error occurs.
      * @precondition variableCondition != null
      */
@@ -1479,7 +1479,7 @@ public abstract class Query
 
     /**
      * See java.sql.PreparedStatement#setDate(int,Date).
-     * @see java.sql.PreparedStatement#setDate(int,java.util.Date)
+     * @see java.sql.PreparedStatement#setDate(int,Date)
      * @param index (Taken from Sun's Javadoc) the first parameter
      * is 1, the second is 2, ...
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
@@ -1494,7 +1494,7 @@ public abstract class Query
 
     /**
      * See java.sql.PreparedStatement#setDate(int,Date).
-     * @see java.sql.PreparedStatement#setDate(int,java.util.Date)
+     * @see java.sql.PreparedStatement#setDate(int,Date)
      * @param index (Taken from Sun's Javadoc) the first parameter
      * is 1, the second is 2, ...
      * @param value (Taken from Sun's Javadoc) the parameter value (!!).
@@ -1526,8 +1526,8 @@ public abstract class Query
      * @param value the time value.
      * @see java.sql.PreparedStatement#setTime(int,java.sql.Time)
      * @throws SQLException if an error occurs.
-     * @precondition variableCondition != null
      */
+    @SuppressWarnings("unused")
     public void setDate(final VariableCondition condition, final java.util.Date value)
         throws  SQLException
     {
@@ -1726,6 +1726,7 @@ public abstract class Query
     /**
      * {@inheritDoc}
      */
+    @Deprecated
     public void setUnicodeStream(
         final int index,
         final InputStream inputStream,
@@ -3486,7 +3487,6 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setNClob(int, java.sql.NClob)
      * @param index the parameter index.
      * @param nclob the Clob reader.
-     * @param length the length.
      * @param preparedStatement the actual prepared statement.
      * @throws SQLException if the operation fails.
      * @precondition preparedStatement != null
@@ -3742,7 +3742,7 @@ public abstract class Query
     }
 
     /**
-     * @see java.sql.PreparedStatement#setAsciiStream(int, java.io.InputStream, length)
+     * @see java.sql.PreparedStatement#setAsciiStream(int, InputStream, int)
      * @param index the parameter index.
      * @param stream the input stream.
      * @param length the length.
@@ -3798,7 +3798,6 @@ public abstract class Query
      * @see java.sql.PreparedStatement#setNString(int, String)
      * @param index the parameter index.
      * @param nstring the NString.
-     * @param length the length.
      * @param preparedStatement the actual prepared statement.
      * @throws SQLException if the operation fails.
      * @precondition preparedStatement != null
@@ -3872,7 +3871,6 @@ public abstract class Query
      * @see java.sql.Statement#setPoolable(boolean)
      * @param flag the flag.
      * @param statement the statement.
-     * @return such information.
      * @throws SQLException if the check fails.
      * @precondition statement != null
      */

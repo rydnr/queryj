@@ -109,15 +109,48 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
     /**
      * Retrieves the table matching given name.
      * @param name the table name.
-     * @param catalog the catalog.
-     * @param schema  the schema.
-     * @return the associated {@link org.acmsl.queryj.tools.metadata.vo.Table} instance, if the table is found.
+     * @return the associated {@link Table} instance, if the table is found.
      */
     @Override
-    public Table findByName(@NotNull final String name, @Nullable final String catalog, @Nullable final String schema)
+    @Nullable
+    public Table findByName(@NotNull final String name)
     {
-        // TODO
-        return null;
+        return findByName(name, getMetadataManager().isCaseSensitive());
+    }
+
+    /**
+     * Retrieves the table matching given name.
+     * @param name the table name.
+     * @param caseSensitiveness whether the engine is case sensitive or not.
+     * @return the associated {@link Table} instance, if the table is found.
+     */
+    @Nullable
+    protected Table findByName(@NotNull final String name, final boolean caseSensitiveness)
+    {
+        @Nullable Table result = null;
+
+        @NotNull final List<Table> t_Tables = findAllTables();
+
+        for (@Nullable Table t_Table : t_Tables)
+        {
+            if (t_Table != null)
+            {
+                if (   (caseSensitiveness)
+                    && (t_Table.getName().equals(name)))
+                {
+                    result = t_Table;
+                    break;
+                }
+                else if (   (!caseSensitiveness)
+                         && (t_Table.getName().equalsIgnoreCase(name)))
+                {
+                    result = t_Table;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

@@ -886,7 +886,7 @@ public class CachingTableDecorator
     {
         TableDecorator result = null;
 
-        Table t_ParentTable = metadataManager.getTableDAO().findByName(parentTable, null, null);
+        Table t_ParentTable = metadataManager.getTableDAO().findByName(parentTable);
 
         if (t_ParentTable != null)
         {

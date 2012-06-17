@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -48,6 +47,7 @@ import org.acmsl.queryj.tools.metadata.vo.Attribute;
 /*
  * Importing Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -60,7 +60,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -78,7 +77,6 @@ public abstract class AbstractResultDecorator
 
     /**
      * The custom sql provider.
-     * @todo remove this.
      */
     private CustomSqlProvider m__CustomSqlProvider;
 
@@ -99,9 +97,6 @@ public abstract class AbstractResultDecorator
      * to decorate referred parameters.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @precondition result != null
-     * @precondition customSqlProvider != null
-     * @precondition decoratorFactory != null
      */
     public AbstractResultDecorator(
         @NotNull final Result result,
@@ -223,7 +218,6 @@ public abstract class AbstractResultDecorator
      * Retrieves the metadata type manager.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such manager.
-     * @precondition metadataManager != null
      */
     protected MetadataTypeManager getMetadataTypeManager(
         @NotNull final MetadataManager metadataManager)
@@ -355,8 +349,9 @@ public abstract class AbstractResultDecorator
      * Retrieves the properties.
      * @return such information.
      */
+    @Override
     @NotNull
-    public Collection getProperties()
+    public List<Property> getProperties()
     {
         return
             getProperties(
@@ -370,7 +365,6 @@ public abstract class AbstractResultDecorator
 
     /**
      * Retrieves the properties.
-     * @todo fix reference to customSqlProvider.
      * @param propertyRefs the property references.
      * @param resultElement the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>.
@@ -381,7 +375,7 @@ public abstract class AbstractResultDecorator
      */
     @NotNull
     public List<Property> getProperties(
-        @Nullable final List<PropertyRefElement> propertyRefs,
+        @NotNull final List<PropertyRefElement> propertyRefs,
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -430,7 +424,7 @@ public abstract class AbstractResultDecorator
 
                 if  (t_strTable != null)
                 {
-                    for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable, null, null))
+                    for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable))
                     {
                         result.add(
                             decoratorFactory.createDecorator(
@@ -456,7 +450,8 @@ public abstract class AbstractResultDecorator
      * Retrieves the large-object-block properties.
      * @return such collection.
      */
-    public Collection getLobProperties()
+    @NotNull
+    public List<Property> getLobProperties()
     {
         return
             filterLobProperties(
@@ -473,14 +468,134 @@ public abstract class AbstractResultDecorator
      * @return such collection.
      */
     @NotNull
-    protected Collection<Property> filterLobProperties(
-        final Collection<Property> properties,
+    protected List<Property> filterLobProperties(
+        final List<Property> properties,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final MetadataUtils metadataUtils)
     {
         return
             metadataUtils.filterLobProperties(
                 properties, metadataTypeManager);
+    }
+
+    /**
+     * Checks whether the result is 'implicit' (associated to a table) or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isImplicit()
+    {
+        boolean result = false;
+
+        @NotNull final List<Property> t_lImplicitProperties =
+            getImplicitProperties();
+
+        if (t_lImplicitProperties.size() > 0)
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the implicit properties.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Property> getImplicitProperties()
+    {
+        return
+            getImplicitProperties(
+                getResult(),
+                getCustomSqlProvider(),
+                getMetadataManager(),
+                getDecoratorFactory(),
+                CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the implicit properties.
+     * @param sqlResult the {@link Result} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    public List<Property> getImplicitProperties(
+        @NotNull final Result sqlResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+        @Nullable List<Property> result = null;
+
+        @Nullable final String t_strTable =
+            customResultUtils.retrieveTable(sqlResult, customSqlProvider, metadataManager);
+
+        if (t_strTable != null)
+        {
+            @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(t_strTable);
+
+            if (t_Table != null)
+            {
+                result =
+                    convert(
+                        t_Table.getAttributes(), sqlResult, customSqlProvider, metadataManager, decoratorFactory);
+            }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Property>(0);
+        }
+
+        return result;
+    }
+
+    /**
+     * Converts given {@link Attribute attributes} to a list of {@link Property properties}.
+     * @param attributes the attributes to convert.
+     * @param sqlResult the {@link Result} element.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the resulting properties.
+     */
+    @NotNull
+    protected List<Property> convert(
+        @NotNull final List<Attribute> attributes,
+        @NotNull final Result sqlResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        @NotNull final List<Property> result = new ArrayList<Property>(attributes.size());
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (t_Attribute != null)
+            {
+                result.add(
+                    decoratorFactory.createDecorator(
+                        new PropertyElement(
+                            "implicit." + t_Attribute.getTableName() + "." + t_Attribute.getName(),
+                            t_Attribute.getName(),
+                            t_Attribute.getOrdinalPosition(),
+                            t_Attribute.getTableName(),
+                            t_Attribute.getType(),
+                            t_Attribute.isNullable()),
+                        sqlResult,
+                        customSqlProvider,
+                        metadataManager));
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -519,7 +634,6 @@ public abstract class AbstractResultDecorator
      * Retrieves the hashcode of given instance.
      * @param result the decoreated result.
      * @return such value.
-     * @precondition result != null
      */
     protected final int hashCode(@NotNull final Result result)
     {
@@ -533,7 +647,14 @@ public abstract class AbstractResultDecorator
      */
     public boolean equals(final Object object)
     {
-        return equals(getResult(), object);
+        boolean result = false;
+
+        if (object instanceof Result)
+        {
+            result = equals(getResult(), object);
+        }
+
+        return result;
     }
 
     /**
@@ -541,7 +662,7 @@ public abstract class AbstractResultDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    protected boolean equals(@NotNull final Result result, final Object object)
+    protected boolean equals(@NotNull final Result result, @Nullable final Object object)
     {
         return result.equals(object);
     }
@@ -566,8 +687,8 @@ public abstract class AbstractResultDecorator
      * @return the result of such comparison.
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
-     * @precondition result != null
      */
+    @SuppressWarnings("unchecked")
     protected int compareTo(@NotNull final Result result, final Object object)
         throws  ClassCastException
     {

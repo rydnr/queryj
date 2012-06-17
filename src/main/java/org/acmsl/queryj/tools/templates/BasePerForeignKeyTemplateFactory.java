@@ -72,7 +72,7 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
      * @param foreignKey the foreign key.
      */
     @NotNull
-    public T createTemplate(
+    T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
@@ -89,5 +89,5 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
      * @return such instance.
      */
     @NotNull
-    public DecoratorFactory getDecoratorFactory();
+    DecoratorFactory getDecoratorFactory();
 }

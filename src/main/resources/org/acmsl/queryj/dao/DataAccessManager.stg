@@ -35,10 +35,6 @@
 //
 // Description: Defines the rules to generate the DataAccessManager class.
 //
-// Version: $Revision: 1905 $ ($Author: chous $ at $Date: 2007-08-02 11:20:27 +0200 (Thu, 02 Aug 2007) $)
-//
-// $Id: DataAccessManager.stg 1905 2007-08-02 09:20:27Z chous $
-//
 group DataAccessManager;
 
 source(input) ::= <<
@@ -69,9 +65,7 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName
   ])>
 
-<checkers_import_preamble()>
-import checkers.nullness.quals.NonNull;
-import checkers.nullness.quals.Nullable;
+<checkers_import()>
 
 <class(input=input,foreign_keys_by_table=input.foreign_keys_by_table)>
 >>
@@ -111,7 +105,7 @@ class(input) ::= <<
       first_line_description(model=input.tr_name),
       second_line_description(model=input.tr_name)
     ]:{line |<line>}; separator="\n * ")>
-  <class_common_javadoc()>
+<class_common_javadoc()>
  */
 public class <input.tr_name_capitalized>DataAccessManager
 {
@@ -141,7 +135,7 @@ public class <input.tr_name_capitalized>DataAccessManager
      * Retrieves a \<code\><input.tr_name_capitalized>DataAccessManager\</code\> instance.
      * @return such instance.
      */
-    @NonNull
+    <notnull()>
     public static <input.tr_name_capitalized>DataAccessManager getInstance()
     {
         return <input.tr_name_capitalized>DataAccessManagerSingletonContainer.SINGLETON;
@@ -191,7 +185,7 @@ dao_methods(table) ::= <<
  * @param dao the new DAO.
  */
 @SuppressWarnings("unused")
-protected void set<table.voName>DAOReference(@NonNull final <table.voName>DAO dao)
+protected void set<table.voName>DAOReference(<notnull()>final <table.voName>DAO dao)
 {
     m__<table.voName>DAO = dao;
 }
@@ -200,7 +194,7 @@ protected void set<table.voName>DAOReference(@NonNull final <table.voName>DAO da
  * Retrieves the existing {@link <table.voName>DAO} reference.
  * @return a DAO instance for accessing <table.name> information.
  */
-@Nullable
+<nullable()>
 protected <table.voName>DAO get<table.voName>DAOReference()
 {
     return m__<table.voName>DAO;
@@ -210,7 +204,7 @@ protected <table.voName>DAO get<table.voName>DAOReference()
  * Retrieves a {@link <table.voName>DAO}.
  * @return a DAO instance for accessing <table.name> information.
  */
-@NonNull
+<notnull()>
 public <table.voName>DAO get<table.voName>DAO()
 {
     return get<table.voName>DAO(get<table.voName>DAOReference());
@@ -221,8 +215,8 @@ public <table.voName>DAO get<table.voName>DAO()
  * @param factory the {@link <table.voName>DAOFactory}.
  * @return a DAO instance for accessing <table.name> information.
  */
-@Nullable
-protected <table.voName>DAO get<table.voName>DAO(@Nullable <table.voName>DAOFactory factory)
+<nullable()>
+protected <table.voName>DAO get<table.voName>DAO(<nullable()><table.voName>DAOFactory factory)
 {
     <table.voName>DAO result;
 
@@ -239,8 +233,8 @@ protected <table.voName>DAO get<table.voName>DAO(@Nullable <table.voName>DAOFact
  * @param dao the {@link <table.voName>DAO}.
  * @return a DAO instance for accessing <table.name> information.
  */
-@NonNull
-protected <table.voName>DAO get<table.voName>DAO(@Nullable final <table.voName>DAO dao)
+<notnull()>
+protected <table.voName>DAO get<table.voName>DAO(<nullable()>final <table.voName>DAO dao)
 {
     <table.voName>DAO result = dao;
 
@@ -282,7 +276,7 @@ protected void set<repositoryCapitalized>DAOReference(final <repositoryCapitaliz
  * Retrieves the existing {@link <repositoryCapitalized>DAO} reference.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
-@Nullable
+<nullable()>
 protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
 {
     return m__<repositoryCapitalized>DAO;
@@ -292,7 +286,7 @@ protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAOReference()
  * Retrieves a {@link <repositoryCapitalized>DAO}.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
-@NonNull
+<notnull()>
 public <repositoryCapitalized>DAO get<repositoryCapitalized>DAO()
 {
     return get<repositoryCapitalized>DAO(get<repositoryCapitalized>DAOReference());
@@ -303,9 +297,9 @@ public <repositoryCapitalized>DAO get<repositoryCapitalized>DAO()
  * @param factory the {@link <repositoryCapitalized>DAOFactory} instance.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
-@Nullable
+<nullable()>
 protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAO(
-    @Nullable final <repositoryCapitalized>DAOFactory factory)
+    <nullable()>final <repositoryCapitalized>DAOFactory factory)
 {
     <repositoryCapitalized>DAO result = dao;
 
@@ -323,9 +317,9 @@ protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAO(
  * @param dao the {@link <repositoryCapitalized>DAO} instance.
  * @return a DAO instance for accessing the <repository>-wide DAO.
  */
-@NonNull
+<notnull()>
 protected <repositoryCapitalized>DAO get<repositoryCapitalized>DAO(
-    @Nullable final <repositoryCapitalized>DAO dao)
+    <nullable()>final <repositoryCapitalized>DAO dao)
 {
     <repositoryCapitalized>DAO result = dao;
 

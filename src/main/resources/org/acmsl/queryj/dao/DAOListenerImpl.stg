@@ -2,7 +2,7 @@
 //
 //                      QueryJ
 //
-//  Copyright (C) 2002-2007  ACM-SL
+//  Copyright (C) 2002-today  ACM-SL
 //                           chous@acm-sl.org
 //
 //  This library is free software; you can redistribute it and/or
@@ -34,10 +34,6 @@
 // Author: Jose San Leandro Armendariz
 //
 // Description: Defines the rules to generate DAO listener implementations.
-//
-// Version: $Revision: 1905 $ ($Author: chous $ at $Date: 2007-08-02 11:20:27 +0200 (Thu, 02 Aug 2007) $)
-//
-// $Id: DAOListenerImpl.stg 1905 2007-08-02 09:20:27Z chous $
 //
 group DAOListenerImpl;
 
@@ -73,6 +69,7 @@ source(input) ::= <<
     typeInitMap.rdbSubpackageName
   ])>
 
+<checkers_import()>
 /*
  * Importing Spring classes.
  */
@@ -101,9 +98,7 @@ class(input) ::= <<
  * <[
       first_line_description(repository=input.tr_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
- * @since <input.timestamp>
+<class_common_javadoc()>
  */
 public class <input.tr_name_capitalized>DAOListenerImpl
     implements  <input.tr_name_capitalized>DAOListener
@@ -113,10 +108,9 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * layer takes place.
      * @param sql the sql sentence.
      * @param parameters the sql parameters.
-     * @precondition sql != null
      */
     public void preparedStatementExecuted(
-        final String sql, final Object[] parameters)
+        <notnull()>final String sql, <nullable()>final Object[] parameters)
     {
         annotatePreparedStatementExecuted(
             sql,
@@ -128,15 +122,13 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Annotates whenever a prepared statement is executed.
      * @param sql the sql sentence.
      * @param parameters the sql parameters.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
-     * @precondition sql != null
-     * @precondition daoStatisticsProvider != null
      */
     protected void annotatePreparedStatementExecuted(
-        final String sql,
-        final Object[] parameters,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final String sql,
+        <nullable()>final Object[] parameters,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotatePreparedStatementExecuted(
             sql, parameters);
@@ -146,7 +138,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Receives notifications whenever a connection is retrieved.
      * @param sql the sql sentence.
      */
-    public void connectionRetrieved(final String sql)
+    public void connectionRetrieved(<notnull()>final String sql)
     {
         annotateConnectionRetrieved(
             sql, <input.tr_name_capitalized>StatisticsProvider.getInstance());
@@ -155,12 +147,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Annotates when a connection is retrieved.
      * @param sql the sql sentence.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     protected void annotateConnectionRetrieved(
-        final String sql,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final String sql,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateConnectionRetrieved(sql);
     }
@@ -169,7 +161,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Receives notifications whenever a connection is released.
      * @param sql the SQL sentence.
      */
-    public void connectionReleased(final String sql)
+    public void connectionReleased(<notnull()>final String sql)
     {
         annotateConnectionReleased(
             sql,
@@ -179,12 +171,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Annotates a connection is released.
      * @param sql the SQL sentence.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     public void annotateConnectionReleased(
-        final String sql,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final String sql,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateConnectionReleased(sql);
     }
@@ -195,8 +187,8 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * @param preparedStatementCreator the statement creator.
      */
     public void statementCreated(
-        final String sql,
-        final PreparedStatementCreator preparedStatementCreator)
+        <notnull()>final String sql,
+        <notnull()>final PreparedStatementCreator preparedStatementCreator)
     {
         annotateStatementCreated(
             sql,
@@ -208,13 +200,13 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Annotates a statement is created.
      * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     protected void annotateStatementCreated(
-        final String sql,
-        final PreparedStatementCreator preparedStatementCreator,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final String sql,
+        <notnull()>final PreparedStatementCreator preparedStatementCreator,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementCreated(
             sql, preparedStatementCreator);
@@ -224,7 +216,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Receives notifications whenever a statement is prepared.
      * @param sql the sql.
      */
-    public void statementPrepared(final String sql)
+    public void statementPrepared(<notnull()>final String sql)
     {
         annotateStatementPrepared(
             sql, <input.tr_name_capitalized>StatisticsProvider.getInstance());
@@ -233,12 +225,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Annotates a statement is prepared.
      * @param sql the sql.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     protected void annotateStatementPrepared(
-        final String sql,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final String sql,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementPrepared(sql);
     }
@@ -249,7 +241,8 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * @param preparedStatementCreator the statement creator.
      */
     public void statementReleased(
-        final String sql, final PreparedStatementCreator preparedStatementCreator)
+        <notnull()>final String sql,
+        <notnull()>final PreparedStatementCreator preparedStatementCreator)
     {
         annotateStatementReleased(
             sql,
@@ -261,13 +254,13 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * Annotates a statement is released.
      * @param sql the SQL sentence.
      * @param preparedStatementCreator the statement creator.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     protected void annotateStatementReleased(
-        final String sql,
-        final PreparedStatementCreator preparedStatementCreator,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final String sql,
+        <notnull()>final PreparedStatementCreator preparedStatementCreator,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateStatementReleased(
             sql, preparedStatementCreator);
@@ -278,7 +271,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * @param resultSetExtractor the ResultSet extractor.
      */
     public void resultSetMovedForward(
-        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
+        <notnull()>final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
     {
         annotateResultSetMovedForward(
             resultSetExtractor,
@@ -288,12 +281,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Annotates whenever a result-set moves forward one row.
      * @param resultSetExtractor the ResultSet extractor.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     protected void annotateResultSetMovedForward(
-        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateResultSetMovedForward(
             resultSetExtractor);
@@ -304,7 +297,7 @@ public class <input.tr_name_capitalized>DAOListenerImpl
      * @param resultSetExtractor the ResultSet extractor.
      */
     public void resultSetClosed(
-        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
+        <notnull()>final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor)
     {
         annotateResultSetClosed(
             resultSetExtractor,
@@ -314,12 +307,12 @@ public class <input.tr_name_capitalized>DAOListenerImpl
     /**
      * Annotates whenever a result-set is closed.
      * @param resultSetExtractor the ResultSet extractor.
-     * @param statisticsProvider the \<code><input.tr_name_capitalized>StatisticsProvider\</code>
+     * @param statisticsProvider the {@link <input.tr_name_capitalized>StatisticsProvider}
      * instance.
      */
     public void annotateResultSetClosed(
-        final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor,
-        final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
+        <notnull()>final <input.tr_name_capitalized>ResultSetExtractor resultSetExtractor,
+        <notnull()>final <input.tr_name_capitalized>StatisticsProvider statisticsProvider)
     {
         statisticsProvider.annotateResultSetClosed(
             resultSetExtractor);

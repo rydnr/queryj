@@ -71,9 +71,7 @@ source(input) ::= <<
     typeInitMap.baseDAOSubpackageName
   ])>
 
-<checkers_import_preamble()>
-import checkers.nullness.quals.NonNull;
-import checkers.nullness.quals.Nullable;
+<checkers_import()>
 
 /*
  * Importing some JDK classes.
@@ -133,7 +131,7 @@ class(input) ::= <<
       third_line_description(repository=input.tr_name_capitalized),
       fourth_line_description(repository=input.tr_name_capitalized)
     ]:{line |<line>}; separator="\n * ">
-  <class_common_javadoc()>
+<class_common_javadoc()>
  */
 public class <input.tr_name_capitalized>DAOChooser
 {
@@ -178,7 +176,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * Retrieves a {@link <input.tr_name_capitalized>DAOChooser} instance.
      * @return such instance.
      */
-    @NonNull
+    <notnull()>
     public static <input.tr_name_capitalized>DAOChooser getInstance()
     {
         return <input.tr_name_capitalized>DAOChooserSingletonContainer.SINGLETON;
@@ -188,7 +186,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * Specifies the properties.
      * @param properties the new properties.
      */
-    private void immutableSetProperties(@NonNull final Properties properties)
+    private void immutableSetProperties(<notnull()>final Properties properties)
     {
         m__Properties = properties;
     }
@@ -198,7 +196,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * @param properties the new properties.
      */
     @SuppressWarnings("unused")
-    protected void setProperties(@NonNull final Properties properties)
+    protected void setProperties(<notnull()>final Properties properties)
     {
         immutableSetProperties(properties);
     }
@@ -207,7 +205,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * Retrieves the configuration settings.
      * @return the properties.
      */
-    @NonNull
+    <notnull()>
     private Properties immutableGetProperties()
     {
         Properties result = getProperties();
@@ -226,7 +224,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * Retrieves the properties.
      * @return such information.
      */
-     @Nullable
+     <nullable()>
      protected Properties getProperties()
      {
          return m__Properties;
@@ -237,7 +235,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * @param key the property key.
      * @return the configuration value associated to such setting.
      */
-    private String getProperty(@NonNull final String key)
+    private String getProperty(<notnull()>final String key)
     {
         // This is safe since immutableGetProperties() is private and ensures
         // a new object if the instance's is null.
@@ -248,7 +246,7 @@ public class <input.tr_name_capitalized>DAOChooser
      * Loads the configuration from a property file.
      * @param properties where to store the settings.
      */
-    private synchronized void loadProperties(@NonNull final Properties properties)
+    private synchronized void loadProperties(<notnull()>final Properties properties)
     {
         InputStream t_isProperties;
 
@@ -371,7 +369,7 @@ dao_factory_getters(table, repository) ::= <<
  * @return such class name.
  */
 @SuppressWarnings("unused")
-@NonNull
+<notnull()>
 public String get<table.singularNameCapitalized>DAOFactoryClassName()
 {
     return getProperty(<repository>_<table.singularNameUppercased>_DAO);
@@ -390,7 +388,7 @@ repository_dao_factory_getters(
  * Retrieves the {@link <repositoryCapitalized>DAOFactory} class name.
  * @return such class name.
  */
-@NonNull
+<notnull()>
 @SuppressWarnings("unused")
 public String get<repositoryCapitalized>DAOFactoryClassName()
 {

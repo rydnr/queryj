@@ -377,7 +377,7 @@ public abstract class AbstractTableDecorator
     {
         @Nullable List<ForeignKey> result;
 
-        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(name, null, null);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(name);
 
         if (t_Table != null)
         {
@@ -1215,7 +1215,7 @@ public abstract class AbstractTableDecorator
 
         if  (result == null)
         {
-            @Nullable Table t_Table = metadataManager.getTableDAO().findByName(name, null, null);
+            @Nullable Table t_Table = metadataManager.getTableDAO().findByName(name);
 
             if (t_Table != null)
             {
@@ -1825,7 +1825,7 @@ public abstract class AbstractTableDecorator
     {
         @NotNull final List<Table> result = new ArrayList<Table>(0);
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

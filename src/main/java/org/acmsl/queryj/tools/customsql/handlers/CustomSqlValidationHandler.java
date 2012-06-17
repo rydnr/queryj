@@ -1046,7 +1046,7 @@ public class CustomSqlValidationHandler
         if  (t_strTable != null)
         {
             @Nullable List<Attribute> t_lColumns =
-                metadataManager.getColumnDAO().findAllColumns(t_strTable, null, null);
+                metadataManager.getColumnDAO().findAllColumns(t_strTable);
 
             int t_iCount = t_lColumns.size();
 

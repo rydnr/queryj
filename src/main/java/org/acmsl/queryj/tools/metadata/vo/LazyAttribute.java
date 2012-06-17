@@ -807,7 +807,7 @@ public class LazyAttribute
     {
         @Nullable Attribute result = null;
 
-        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        @Nullable Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

@@ -515,7 +515,7 @@ public class MetaLanguageUtils
     {
         boolean result = false;
 
-        Table t_Table = metadataManager.getTableDAO().findByName(tableName, null, null);
+        Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {
