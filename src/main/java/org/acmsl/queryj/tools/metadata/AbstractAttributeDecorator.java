@@ -853,7 +853,6 @@ public abstract class AbstractAttributeDecorator
      * @param allowsNull whether the attribute allows null.
      * @param isBool whether the attribute is declared as boolean.
      * @return such information.
-     * @precondition metadataManager != null
      */
     protected String retrieveType(
         final int type,
@@ -881,15 +880,13 @@ public abstract class AbstractAttributeDecorator
      * @param isBool whether the attribute is declared as boolean.
      * @param metadataTypeUtils the <code>MetadataTypeUtils</code> instance.
      * @return such information.
-     * @precondition metadataTypeManager != null
-     * @precondition metadataTypeUtils != null
      */
     protected String retrieveType(
         final int type,
-        final MetadataTypeManager metadataTypeManager,
+        @NotNull final MetadataTypeManager metadataTypeManager,
         final boolean allowsNull,
         final boolean isBool,
-        final MetadataTypeUtils metadataTypeUtils)
+        @NotNull final MetadataTypeUtils metadataTypeUtils)
     {
         String result =
             metadataTypeManager.getNativeType(type, allowsNull, isBool);

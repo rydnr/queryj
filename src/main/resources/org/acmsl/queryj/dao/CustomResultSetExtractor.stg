@@ -265,7 +265,7 @@ public class <result.idCapitalized>Extractor
 <endif>
 
 <if(result.implicit)>
-                <implicit_nullable_attribute_extraction(result=result, attr=result.implicitProperty)>
+                <result.implicitProperties:implicit_nullable_attribute_extraction(result=result, attr=it)>
 <else>
                 factory.createValueObject(
                     <result.properties:attribute_extraction(

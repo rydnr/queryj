@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -546,6 +545,7 @@ public abstract class AbstractPropertyDecorator
     {
         return isNullable();
     }
+
     /**
      * Retrieves whether the property is a binary LOB or not.
      * @return such information.
@@ -566,6 +566,28 @@ public abstract class AbstractPropertyDecorator
     protected boolean isBlob(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.isBlob(type);
+    }
+
+    /**
+     * Retrieves whether the property is a binary LOB or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isNumeric()
+    {
+        return isNumeric(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the property is a binary LOB or not.
+     * @param type the attribute type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected boolean isNumeric(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isNumeric(type);
     }
 
     /**
