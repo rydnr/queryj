@@ -1062,11 +1062,28 @@ public abstract class AbstractTableDecorator
     
     /**
      * Decorates the attributes.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @return the decorated attributes.
+     */
+    @NotNull
+    protected List<Attribute> decorateAttributes(
+        @NotNull final List<Attribute> attributes,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        return decoratorFactory.decorateAttributes(attributes, metadataManager);
+    }
+
+    /**
+     * Decorates the attributes.
      * @param name the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the decorated attributes.
      */
+    @NotNull
     protected List<Attribute> decorateAttributes(
         @NotNull final String name,
         @NotNull final MetadataManager metadataManager,
@@ -1074,7 +1091,7 @@ public abstract class AbstractTableDecorator
     {
         return decoratorFactory.decorateAttributes(name, metadataManager);
     }
-    
+
     /**
      * Retrieves the attributes.
      * @return such information.
@@ -1168,14 +1185,13 @@ public abstract class AbstractTableDecorator
     {
         List<Attribute> result = super.getAttributes();
 
-        if  (result.size() == 0)
+        if (!alreadyDecorated(result))
         {
             result =
                 decorateAttributes(
-                    table, metadataManager, decoratorFactory);
+                    result, metadataManager, decoratorFactory);
         
-            if  (   (result != null)
-                 && (attributesShouldBeCleanedUp))
+            if  (attributesShouldBeCleanedUp)
             {
                 result =
                     removeOverridden(
@@ -1186,6 +1202,27 @@ public abstract class AbstractTableDecorator
                         TableDecoratorHelper.getInstance());
 
                 super.setAttributes(result);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether the attributes are already decorated or not.
+     * @param attributes the {@link Attribute} list.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean alreadyDecorated(@NotNull final List<Attribute> attributes)
+    {
+        boolean result = false;
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (t_Attribute instanceof AttributeDecorator)
+            {
+                result = true;
+                break;
             }
         }
 

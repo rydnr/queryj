@@ -159,6 +159,16 @@ public interface DecoratorFactory
         @NotNull final String table, @NotNull final MetadataManager metadataManager);
 
     /**
+     * Retrieves the decorated list of attributes.
+     * @param attributes the attributes.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated version of the attribute list.
+     */
+    @NotNull
+    public List<Attribute> decorateAttributes(
+        @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager);
+
+    /**
      * Retrieves the decorated list of attributes of given table.
      * @param table the table.
      * @param metadataManager the <code>MetadataManager</code> instance.

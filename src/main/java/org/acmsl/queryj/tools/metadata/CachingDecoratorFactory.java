@@ -240,18 +240,40 @@ public class CachingDecoratorFactory
 
         if (t_Table != null)
         {
-            for (Attribute t_Attribute : t_Table.getAttributes())
-            {
-                if (t_Attribute != null)
-                {
-                    if (result == null)
-                    {
-                        result = new ArrayList<Attribute>(t_Table.getAttributes().size());
-                    }
+            result = decorateAttributes(t_Table.getAttributes(), metadataManager);
+        }
 
-                    result.add(
-                        new CachingAttributeDecorator(t_Attribute, metadataManager));
+        if (result == null)
+        {
+            result = new ArrayList<Attribute>(0);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the decorated list of attributes.
+     * @param attributes the attributes to decorate.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @return the decorated version of the attribute list.
+     */
+    @NotNull
+    public List<Attribute> decorateAttributes(
+        @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager)
+    {
+        @Nullable List<Attribute> result = null;
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (t_Attribute != null)
+            {
+                if (result == null)
+                {
+                    result = new ArrayList<Attribute>(attributes.size());
                 }
+
+                result.add(
+                    new CachingAttributeDecorator(t_Attribute, metadataManager));
             }
         }
 

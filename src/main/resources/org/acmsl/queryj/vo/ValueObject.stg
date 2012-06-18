@@ -65,6 +65,7 @@ source() ::= <<
     typeInitMap.voSubpackageName
   ])>
 
+<checkers_import()>
 /*
  * Importing some JDK classes.
  */
@@ -119,7 +120,7 @@ public interface <table.voName>
     <table.nonParentAttributes:attribute_getter(attribute=it);
       separator="\n\n">
 <else>
-    <table.attributes:attribute_getter(attribute=it);
+    <table.allAttributes:attribute_getter(attribute=it);
       separator="\n\n">
 <endif>
 
