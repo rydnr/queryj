@@ -89,7 +89,6 @@ public class DAOTemplate
      * {@inheritDoc}
      */
     @SuppressWarnings("unused,unchecked")
-    @Override
     protected void fillParameters(
         @NotNull final Map input,
         @NotNull final StringTemplate template,
@@ -135,33 +134,6 @@ public class DAOTemplate
         {
             input.put("cached_rows", t_lStaticValues);
         }
-
-        super.fillClassParameters(
-            input,
-            voName,
-            engineName,
-            engineVersion,
-            timestamp,
-            staticAttributeName != null,
-            tableRepositoryName,
-            tableName,
-            primaryKeyAttributes,
-            nonPrimaryKeyAttributes,
-            foreignKeyAttributes,
-            referringKeys,
-            attributes,
-            externallyManagedAttributes,
-            allButExternallyManagedAttributes,
-            lobAttributes,
-            allButLobAttributes,
-            foreignKeys,
-            staticAttributeName,
-            staticAttributeType,
-            customSelects,
-            customUpdatesOrInserts,
-            customSelectsForUpdate,
-            customResults,
-            metadataManager);
 
     }
 

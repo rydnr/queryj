@@ -121,8 +121,7 @@ public class DataAccessContextLocalTemplate
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
      */
-    @SuppressWarnings("unchecked")
-    @Override
+    @SuppressWarnings("unchecked,unused")
     protected void fillCoreParameters(
         @NotNull final Map input,
         @NotNull final MetadataManager metadataManager,
@@ -136,19 +135,6 @@ public class DataAccessContextLocalTemplate
         @NotNull final String timestamp,
         @NotNull final StringUtils stringUtils)
     {
-        super.fillCoreParameters(
-            input,
-            metadataManager,
-            customSqlProvider,
-            decoratorFactory,
-            basePackageName,
-            subpackageName,
-            tableRepositoryName,
-            engineName,
-            tables,
-            timestamp,
-            stringUtils);
-
         input.put("engine_name", engineName);
         input.put("engine_name_lowercased", engineName.toLowerCase());
         @Nullable String t_strProcessedHeader = getProcessedHeader(input);

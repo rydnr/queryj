@@ -106,7 +106,7 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * @param copyrightYears the copyright years.
      * @param stringUtils the <code>StringUtils</code> instance.
      */
-    @Override
+    @SuppressWarnings("unchecked,unused")
     protected void fillParameters(
         @NotNull final Map input,
         @NotNull final StringTemplate template,
@@ -124,23 +124,6 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
         @NotNull final Integer[] copyrightYears,
         @NotNull final StringUtils stringUtils)
     {
-        super.fillParameters(
-            input,
-            template,
-            header,
-            metadataManager,
-            metadataTypeManager,
-            customSqlProvider,
-            decoratorFactory,
-            subpackageName,
-            basePackageName,
-            tableRepositoryName,
-            engineName,
-            tables,
-            timestamp,
-            copyrightYears,
-            stringUtils);
-
         fillParameters(
             input,
             template,

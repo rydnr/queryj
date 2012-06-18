@@ -92,8 +92,7 @@ public class CustomValueObjectTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      */
-    @SuppressWarnings("unchecked")
-    @Override
+    @SuppressWarnings("unchecked,unused")
     protected void fillCommonParameters(
         @NotNull final Map input,
         @NotNull final Result result,
@@ -103,15 +102,6 @@ public class CustomValueObjectTemplate
         @NotNull final String engineName,
         @NotNull final String engineVersion)
     {
-        super.fillCommonParameters(
-            input,
-            result,
-            customSqlProvider,
-            metadataManager,
-            decoratorFactory,
-            engineName,
-            engineVersion);
-
         @Nullable String t_strVoName = extractClassName(result.getClassValue());
 
         if  (t_strVoName != null)

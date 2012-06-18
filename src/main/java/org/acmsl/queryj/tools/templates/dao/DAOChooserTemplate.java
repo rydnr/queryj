@@ -100,8 +100,7 @@ public class DAOChooserTemplate
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
      */
-    @SuppressWarnings("unchecked")
-    @Override
+    @SuppressWarnings("unchecked,unused")
     protected void fillCoreParameters(
         @NotNull final Map input,
         @NotNull final MetadataManager metadataManager,
@@ -115,19 +114,6 @@ public class DAOChooserTemplate
         @NotNull final String timestamp,
         @NotNull final StringUtils stringUtils)
     {
-        super.fillCoreParameters(
-            input,
-            metadataManager,
-            customSqlProvider,
-            decoratorFactory,
-            basePackageName,
-            subpackageName,
-            tableRepositoryName,
-            engineName,
-            tables,
-            timestamp,
-            stringUtils);
-
         @NotNull DecorationUtils decorationUtils = DecorationUtils.getInstance();
 
         input.put(

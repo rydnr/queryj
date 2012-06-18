@@ -112,8 +112,7 @@ public class KeywordRepositoryTemplate
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
      */
-    @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked,unused")
     protected void fillCoreParameters(
         @NotNull final Map input,
         @NotNull final MetadataManager metadataManager,
@@ -127,19 +126,6 @@ public class KeywordRepositoryTemplate
         @NotNull final String timestamp,
         @NotNull final StringUtils stringUtils)
     {
-        super.fillCoreParameters(
-            input,
-            metadataManager,
-            customSqlProvider,
-            decoratorFactory,
-            subpackageName,
-            basePackageName,
-            tableRepositoryName,
-            engineName,
-            tables,
-            timestamp,
-            stringUtils);
-
         input.put("keywords", getKeywords());
         input.put("keyword_types", retrieveKeywordTypes());
         input.put("keywords_uncapitalized", retrieveKeywordsUncapitalized());

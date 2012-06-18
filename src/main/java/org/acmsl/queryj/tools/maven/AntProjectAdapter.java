@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: QueryJMojo.java
+ * Filename: AntProjectAdapter.java
  *
  * Author: Jose San Leandro Armendariz/Jose Juan.
  *
- * Description: Executes QueryJ.
+ * Description: Adapts Ant's Project class to use Maven's Log mechanism.
  */
 package org.acmsl.queryj.tools.maven;
 
@@ -51,6 +50,10 @@ import org.apache.tools.ant.Task;
 import org.apache.tools.ant.types.FilterSet;
 import org.apache.tools.ant.types.Path;
 import org.apache.tools.ant.types.Resource;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -61,7 +64,6 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Vector;
 
 /**
@@ -105,6 +107,7 @@ public class AntProjectAdapter
      * Specifies the {@link Project} instance.
      * @param project such instance.
      */
+    @SuppressWarnings("unused")
     protected void setProject(final Project project)
     {
         immutableSetProject(project);
@@ -141,6 +144,7 @@ public class AntProjectAdapter
      * Specifies the {@link Log} instance.
      * @param log such instance.
      */
+    @SuppressWarnings("unused")
     protected void setLog(final Log log)
     {
         immutableSetLog(log);
@@ -722,25 +726,6 @@ public class AntProjectAdapter
      * {@inheritDoc}
      */
     @Override
-    public void setDefaultTarget(final String defaultTarget)
-    {
-        setDefaultTarget(defaultTarget, getProject());
-    }
-
-    /**
-     * Specifies the default target.
-     * @param defaultTarget such target.
-     * @param project the {@link Project} instance.
-     */
-    protected void setDefaultTarget(final String defaultTarget, @NotNull final Project project)
-    {
-        project.setDefaultTarget(defaultTarget);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public String getDefaultTarget()
     {
         return getDefaultTarget(getProject());
@@ -848,45 +833,6 @@ public class AntProjectAdapter
     protected String getDescription(@NotNull final Project project)
     {
         return project.getDescription();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addFilter(final String token, final String value)
-    {
-        addFilter(token, value, getProject());
-    }
-
-    /**
-     * Adds a filter.
-     * @param token the token.
-     * @param value the replacement.
-     * @param project the {@link Project} instance.
-     */
-    protected void addFilter(final String token, final String value, @NotNull final Project project)
-    {
-        project.addFilter(token, value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Hashtable getFilters()
-    {
-        return getFilters(getProject());
-    }
-
-    /**
-     * Retrieves the filters.
-     * @param project the {@link Project} instance.
-     * @return such information.
-     */
-    protected Hashtable getFilters(@NotNull final Project project)
-    {
-        return project.getFilters();
     }
 
     /**
@@ -1421,7 +1367,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#demuxOuput(String, boolean)}
+     * @see {@link Project#demuxOutput(String, boolean)}
      * @param output the output.
      * @param isWarning whether the text represents a warning.
      * @param project the {@link Project} instance.
@@ -1498,7 +1444,6 @@ public class AntProjectAdapter
      * @param output the output.
      * @param isError whether the output represents an error message.
      * @param project the {@link Project} instance.
-     * @throws IOException in some cases.
      */
     protected void demuxFlush(
         final String output, final boolean isError, @NotNull final Project project)
@@ -1554,27 +1499,6 @@ public class AntProjectAdapter
      * {@inheritDoc}
      */
     @Override
-    public File resolveFile(final String fileName, final File rootDir)
-    {
-        return resolveFile(fileName, rootDir, getProject());
-    }
-
-    /**
-     * @see {@link Project#resolveFile(String, File)}.
-     * @param fileName the file name.
-     * @param rootDir the root dir.
-     * @param project the {@link Project} instance.
-     * @return the file.
-     */
-    protected File resolveFile(final String fileName, final File rootDir, @NotNull final Project project)
-    {
-        return project.resolveFile(fileName, rootDir);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public File resolveFile(final String fileName)
     {
         return resolveFile(fileName, getProject());
@@ -1595,284 +1519,13 @@ public class AntProjectAdapter
      * {@inheritDoc}
      */
     @Override
-    public void copyFile(final String sourceFile, final String destFile)
-      throws IOException
-    {
-        copyFile(sourceFile, destFile, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(String, String)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final String sourceFile, final String destFile, @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(final String sourceFile, final String destFile, final boolean filtering)
-        throws IOException
-    {
-        copyFile(sourceFile, destFile, filtering, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(String, String, boolean)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param filtering whether to filter or not.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final String sourceFile,
-        final String destFile,
-        final boolean filtering,
-        @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile, filtering);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(
-        final String sourceFile,
-        final String destFile,
-        final boolean filtering,
-        final boolean overwrite)
-      throws IOException
-    {
-        copyFile(sourceFile, destFile, filtering, overwrite, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(String, String, boolean, boolean)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param filtering whether to filter or not.
-     * @param overwrite whether to overwrite or not.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final String sourceFile,
-        final String destFile,
-        final boolean filtering,
-        final boolean overwrite,
-        @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile, filtering, overwrite);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(
-        final String sourceFile,
-        final String destFile,
-        final boolean filtering,
-        final boolean overwrite,
-        final boolean preserveLastModified)
-      throws IOException
-    {
-        copyFile(
-            sourceFile, destFile, filtering, overwrite, preserveLastModified, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(String, String, boolean, boolean, boolean)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param filtering whether to filter or not.
-     * @param overwrite whether to overwrite or not.
-     * @param preserveLastModified whether to preserve the last-modified timestamp or not.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final String sourceFile,
-        final String destFile,
-        final boolean filtering,
-        final boolean overwrite,
-        final boolean preserveLastModified,
-        @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile, filtering, overwrite, preserveLastModified);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(final File sourceFile, final File destFile)
-        throws IOException
-    {
-        copyFile(sourceFile, destFile, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(File, File)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final File sourceFile, final File destFile, @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(final File sourceFile, final File destFile, final boolean filtering)
-        throws IOException
-    {
-        copyFile(sourceFile, destFile, filtering, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(File, File, boolean)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param filtering whether to filter or not.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final File sourceFile,
-        final File destFile,
-        final boolean filtering,
-        @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile, filtering);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(
-        final File sourceFile,
-        final File destFile,
-        final boolean filtering,
-        final boolean overwrite)
-      throws IOException
-    {
-        copyFile(sourceFile, destFile, filtering, overwrite, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(File, File, boolean, boolean)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param filtering whether to filter or not.
-     * @param overwrite whether to overwrite or not.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final File sourceFile,
-        final File destFile,
-        final boolean filtering,
-        final boolean overwrite,
-        @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile, filtering, overwrite);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void copyFile(
-        final File sourceFile,
-        final File destFile,
-        final boolean filtering,
-        final boolean overwrite,
-        final boolean preserveLastModified)
-      throws IOException
-    {
-        copyFile(
-            sourceFile, destFile, filtering, overwrite, preserveLastModified, getProject());
-    }
-
-    /**
-     * @see {@link Project#copyFile(File, File, boolean, boolean, boolean)}.
-     * @param sourceFile the source file.
-     * @param destFile the dest file.
-     * @param filtering whether to filter or not.
-     * @param overwrite whether to overwrite or not.
-     * @param preserveLastModified whether to preserve the last-modified timestamp or not.
-     * @param project the {@link Project} instance.
-     * @throws IOException if the file cannot be copied.
-     */
-    protected void copyFile(
-        final File sourceFile,
-        final File destFile,
-        final boolean filtering,
-        final boolean overwrite,
-        final boolean preserveLastModified,
-        @NotNull final Project project)
-      throws IOException
-    {
-        project.copyFile(sourceFile, destFile, filtering, overwrite, preserveLastModified);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setFileLastModified(final File file, final long time)
-        throws BuildException
-    {
-        setFileLastModified(file, time, getProject());
-    }
-
-    /**
-     * @see {@link Project#setFileLastModified(File, long)}.
-     * @param file the file.
-     * @param time the last-modified timestamp.
-     * @param project the {@link Project} instance.
-     * @throws BuildException if the last-modified cannot be modified.
-     */
-    protected void setFileLastModified(final File file, final long time, @NotNull final Project project)
-        throws BuildException
-    {
-        project.setFileLastModified(file, time);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void inheritIDReferences(final Project parent)
     {
         inheritIDReferences(parent, getProject());
     }
 
     /**
-     * @see {@link Parent#inheritIDReferences(Project)}.
+     * @see {@link Project#inheritIDReferences(Project)}.
      * @param parent the parent project.
      * @param project the {@link Project} instance.
      */
@@ -1891,7 +1544,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Parent#addIdReference(String, Object)}.
+     * @see {@link Project#addIdReference(String, Object)}.
      * @param id the id.
      * @param value the reference.
      * @param project the {@link Project} instance.
@@ -1911,7 +1564,7 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Project#addReference(referenceName, value)}.
+     * @see {@link Project#addReference(String, Object)}.
      * @param referenceName the reference name.
      * @param value the value.
      * @param project the {@link Project} instance.
@@ -2185,8 +1838,8 @@ public class AntProjectAdapter
     /**
      * @see {@link Project#log(String)}.
      * @param message the message.
-     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
-     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
+     * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
     protected void log(final String message, final int msgLevel, @NotNull final Log log)
@@ -2219,11 +1872,11 @@ public class AntProjectAdapter
     }
 
     /**
-     * @see {@link Log.log(String, Throwable)}.
+     * @see {@link #log(String, Throwable, int)}.
      * @param message the message.
      * @param throwable the error.
-     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
-     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
+     * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
     protected void log(
@@ -2260,8 +1913,8 @@ public class AntProjectAdapter
      * @see {@link Project#log(Task, String, int)}.
      * @param task the task.
      * @param message the message.
-     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
-     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
+     * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
     protected void log(@NotNull final Task task, final String message, final int msgLevel, @NotNull final Log log)
@@ -2301,8 +1954,8 @@ public class AntProjectAdapter
      * @param task the task.
      * @param message the message.
      * @param throwable the error.
-     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
-     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
+     * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
     protected void log(
@@ -2344,8 +1997,8 @@ public class AntProjectAdapter
      * @see {@link Project#log(Target, String, int)}.
      * @param target the target.
      * @param message the message.
-     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
-     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
+     * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
     protected void log(
@@ -2386,8 +2039,8 @@ public class AntProjectAdapter
      * @param target the target.
      * @param message the message.
      * @param throwable the error.
-     * @param msgLevel either {@link Project.MSG_ERR}, {@link Project.MSG_WARN},
-     * {@link Project.MSG_INFO}, {@link Project.MSG_VERBOSE}, or {@link Project.MSG_DEBUG}.
+     * @param msgLevel either {@link Project#MSG_ERR}, {@link Project#MSG_WARN},
+     * {@link Project#MSG_INFO}, {@link Project#MSG_VERBOSE}, or {@link Project#MSG_DEBUG}.
      * @param log the {@link Log} instance.
      */
     protected void log(

@@ -100,8 +100,7 @@ public class ConfigurationPropertiesTemplate
      * @param timestamp the timestamp.
      * @param stringUtils the <code>StringUtils</code> instance.
      */
-    @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked,unused")
     protected void fillCoreParameters(
         @NotNull final Map input,
         @NotNull final MetadataManager metadataManager,
@@ -115,19 +114,6 @@ public class ConfigurationPropertiesTemplate
         @NotNull final String timestamp,
         @NotNull final StringUtils stringUtils)
     {
-        super.fillCoreParameters(
-            input,
-            metadataManager,
-            customSqlProvider,
-            decoratorFactory,
-            basePackageName,
-            subpackageName,
-            tableRepositoryName,
-            engineName,
-            tables,
-            timestamp,
-            stringUtils);
-
         input.put("engine_name", engineName);
         input.put("engine_name_lowercased", engineName.toLowerCase());
 

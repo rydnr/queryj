@@ -90,8 +90,7 @@ public class CustomResultSetExtractorTemplate
      * @param engineName the engine name.
      * @param engineVersion the engine version.
      */
-    @Override
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked,unused")
     protected void fillCommonParameters(
         @NotNull final Map input,
         @NotNull final Result result,
@@ -101,15 +100,6 @@ public class CustomResultSetExtractorTemplate
         @NotNull final String engineName,
         @NotNull final String engineVersion)
     {
-        super.fillCommonParameters(
-            input,
-            result,
-            customSqlProvider,
-            metadataManager,
-            decoratorFactory,
-            engineName,
-            engineVersion);
-
         @Nullable String t_strTable =
             retrieveTable(
                 result,

@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: BasePerCustomResultFillTemplateChain.java
+ * Filename: BasePerForeignKeyFillTemplateChain.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
  * Description: Sets up the chain required to provide placeholder replacements
- *              for per-custom-result templates.
+ *              for per-foreign-key templates.
  *
- * Date: 6/17/12
+ * Date: 6/3/12
  * Time: 12:38 PM
  *
  */
@@ -39,7 +39,7 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
-import org.acmsl.queryj.tools.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.tools.templates.FillTemplateChain;
 
 /*
@@ -54,29 +54,29 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
- * {@link org.acmsl.queryj.tools.templates.BasePerCustomResultTemplate per-custom-result templates}.
+ * {@link org.acmsl.queryj.tools.templates.BasePerForeignKeyTemplate per-foreign-key templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/17
+ * @since 2012/06/18
  */
-public class BasePerCustomResultFillTemplateChain
-    extends FillTemplateChain<BasePerCustomResultTemplateContext>
+public class BasePerForeignKeyFillTemplateChain
+    extends FillTemplateChain<BasePerForeignKeyTemplateContext>
 {
     /**
-     * Creates a {@link org.acmsl.queryj.tools.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain} using given context.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
+     * @param context the {@link BasePerForeignKeyTemplateContext context}.
      */
-    public BasePerCustomResultFillTemplateChain(@NotNull final BasePerCustomResultTemplateContext context)
+    public BasePerForeignKeyFillTemplateChain(@NotNull final BasePerForeignKeyTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Adds additional per-custom-result handlers.
+     * Adds additional per-foreign-key handlers.
      * @param chain the chain to be configured.
-     * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param context the {@link BasePerForeignKeyTemplateContext context}.
      */
     @Override
-    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerCustomResultTemplateContext context)
+    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerForeignKeyTemplateContext context)
     {
         // TODO
     }
