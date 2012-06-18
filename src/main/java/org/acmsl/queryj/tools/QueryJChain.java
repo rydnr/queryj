@@ -1995,13 +1995,15 @@ public class QueryJChain
 
             chain.add(new ExternallyManagedFieldsRetrievalHandler());
 
-            chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
-            chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
-
-            chain.add(new RepositoryDAOTemplateHandlerBundle());
-            chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
-
             chain.add(new TableTemplateHandlerBundle());
+
+            // TODO: Enable all templates
+//            chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
+//            chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
+
+//            chain.add(new RepositoryDAOTemplateHandlerBundle());
+//            chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
+
 
             //chain.add(new TableRepositoryTemplateHandlerBundle());
 
@@ -2009,23 +2011,23 @@ public class QueryJChain
 
             //chain.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            chain.add(new DAOBundle(generateMock, generateXML));
+//            chain.add(new DAOBundle(generateMock, generateXML));
 
             chain.add(new ValueObjectTemplateHandlerBundle());
 
-            chain.add(new ValueObjectFactoryTemplateHandlerBundle());
+//            chain.add(new BaseValueObjectTemplateHandlerBundle());
 
-            chain.add(new BaseValueObjectTemplateHandlerBundle());
+//            chain.add(new ValueObjectFactoryTemplateHandlerBundle());
 
-            chain.add(new ValueObjectImplTemplateHandlerBundle());
+//            chain.add(new ValueObjectImplTemplateHandlerBundle());
 
-            chain.add(new CustomValueObjectTemplateHandlerBundle());
+//            chain.add(new CustomValueObjectTemplateHandlerBundle());
 
-            chain.add(new CustomBaseValueObjectTemplateHandlerBundle());
+//            chain.add(new CustomBaseValueObjectTemplateHandlerBundle());
 
-            chain.add(new CustomValueObjectImplTemplateHandlerBundle());
+//            chain.add(new CustomValueObjectImplTemplateHandlerBundle());
 
-            chain.add(new CustomValueObjectFactoryTemplateHandlerBundle());
+//            chain.add(new CustomValueObjectFactoryTemplateHandlerBundle());
 
             chain.add(new JdbcConnectionClosingHandler());
         }
@@ -2099,7 +2101,6 @@ public class QueryJChain
      * @param command the command to be initialized.
      * @param settings the properties file.
      * @return the initialized command.
-     * @precondition command != null
      */
     @NotNull
     protected QueryJCommand buildCommandFromSettingsIfPossible(

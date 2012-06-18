@@ -79,5 +79,8 @@ public class BasePerCustomResultFillTemplateChain
     protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerCustomResultTemplateContext context)
     {
         // TODO
+        int a = 0;
+
+        a++;
     }
 }

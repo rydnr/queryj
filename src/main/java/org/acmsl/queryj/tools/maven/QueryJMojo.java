@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -75,7 +74,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @goal queryj
  * @execute phase="generate-sources"
+ * @threadsafe
  */
+@SuppressWarnings("unused")
 public class QueryJMojo
     extends AbstractMojo
     implements Mojo
@@ -1129,7 +1130,7 @@ public class QueryJMojo
 
         File outputDirPath = getOutputDir();
 
-        @Nullable QueryJTask task = null;
+        @Nullable QueryJTask task;
 
         if  (outputDirPath != null)
         {
@@ -1145,18 +1146,11 @@ public class QueryJMojo
             //execute task
             task = buildTask(log);
 
-            if  (task != null)
-            {
-                log.info("Running QueryJ " + version);
+            log.info("Running QueryJ " + version);
 
-                task.execute();
+            task.execute();
 
-                running = true;
-            }
-            else
-            {
-                log.warn("task is null");
-            }
+            running = true;
         }
         else
         {
@@ -1306,6 +1300,7 @@ public class QueryJMojo
      * Builds the external managed fields list.
      * @param task the task.
      */
+    @SuppressWarnings("unchecked")
     protected void buildExternallyManagedFields(
         @NotNull final QueryJTask task)
     {
@@ -1316,31 +1311,37 @@ public class QueryJMojo
         ExternallyManagedField field;
         @Nullable AntFieldElement fieldElement;
 
-        if  (count > 0)
+        if  (array != null)
         {
             element =
                 (AntExternallyManagedFieldsElement) task.createDynamicElement(
                     "externally-managed-fields");
 
-            for (int index = 0; index < count; index++)
+            if (element != null)
             {
-                field = array[index];
-
-                if  (field != null)
+                for (int index = 0; index < count; index++)
                 {
-                    fieldElement =
-                        (AntFieldElement) element.createDynamicElement("field");
+                    field = array[index];
 
-                    fieldElement.setDynamicAttribute("name", field.getName());
+                    if  (field != null)
+                    {
+                        fieldElement =
+                            (AntFieldElement) element.createDynamicElement("field");
 
-                    fieldElement.setDynamicAttribute(
-                        "table-name", field.getTableName());
+                        if (fieldElement != null)
+                        {
+                            fieldElement.setDynamicAttribute("name", field.getName());
 
-                    fieldElement.setDynamicAttribute(
-                        "keyword", field.getKeyword());
+                            fieldElement.setDynamicAttribute(
+                                "table-name", field.getTableName());
 
-                    fieldElement.setDynamicAttribute(
-                        "retrieval-query", field.getRetrievalQuery());
+                            fieldElement.setDynamicAttribute(
+                                "keyword", field.getKeyword());
+
+                            fieldElement.setDynamicAttribute(
+                                "retrieval-query", field.getRetrievalQuery());
+                        }
+                    }
                 }
             }
         }
@@ -1363,38 +1364,51 @@ public class QueryJMojo
 
         int count = (array == null) ? 0 : array.length;
 
-        if  (count > 0)
+        if  (array != null)
         {
             element =
                 (AntTablesElement) task.createDynamicElement("tables");
 
-            for (int index = 0; index < count; index++)
+            if (element != null)
             {
-                table = array[index];
-
-                tableElement =
-                    (AntTableElement) element.createDynamicElement("table");
-
-                tableElement.setDynamicAttribute("name", table.getName());
-
-                fields = table.getFields();
-
-                fieldCount = (fields == null) ? 0 : fields.size();
-
-                for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++)
+                for (int index = 0; index < count; index++)
                 {
-                    field = fields.get(fieldIndex);
+                    table = array[index];
 
-                    if  (field != null)
+                    tableElement =
+                        (AntTableElement) element.createDynamicElement("table");
+
+                    if (tableElement != null)
                     {
-                        fieldElement =
-                            (AntFieldElement) tableElement.createDynamicElement("field");
-                        fieldElement.setDynamicAttribute(
-                            "name", field.getName());
-                        fieldElement.setDynamicAttribute(
-                            "type", field.getType());
-                        fieldElement.setDynamicAttribute(
-                            "pk", field.getPk());
+                        tableElement.setDynamicAttribute("name", table.getName());
+
+                        fields = table.getFields();
+
+                        fieldCount = (fields == null) ? 0 : fields.size();
+
+                        if (fields != null)
+                        {
+                            for (int fieldIndex = 0; fieldIndex < fieldCount; fieldIndex++)
+                            {
+                                field = fields.get(fieldIndex);
+
+                                if  (field != null)
+                                {
+                                    fieldElement =
+                                        (AntFieldElement) tableElement.createDynamicElement("field");
+
+                                    if (fieldElement != null)
+                                    {
+                                        fieldElement.setDynamicAttribute(
+                                            "name", field.getName());
+                                        fieldElement.setDynamicAttribute(
+                                            "type", field.getType());
+                                        fieldElement.setDynamicAttribute(
+                                            "pk", field.getPk());
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

@@ -101,9 +101,17 @@ public abstract class BasePerTableTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplate(parameters, retrieveMetadataManager(parameters));
+        boolean result = true;
 
-        return false;
+        MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+
+        if (t_MetadataManager != null)
+        {
+            buildTemplate(parameters, t_MetadataManager);
+            result = false;
+        }
+
+        return result;
     }
 
     /**

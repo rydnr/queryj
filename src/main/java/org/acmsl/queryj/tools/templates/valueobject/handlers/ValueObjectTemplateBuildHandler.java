@@ -83,8 +83,6 @@ public class ValueObjectTemplateBuildHandler
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process fails.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected String retrievePackage(
@@ -102,8 +100,6 @@ public class ValueObjectTemplateBuildHandler
      * Stores the template collection in given attribute map.
      * @param templates the templates.
      * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
      */
     @SuppressWarnings("unchecked")
     protected void storeTemplates(

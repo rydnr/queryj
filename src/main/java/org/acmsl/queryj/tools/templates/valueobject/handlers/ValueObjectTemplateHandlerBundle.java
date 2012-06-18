@@ -51,10 +51,6 @@ public class ValueObjectTemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
      */
     public ValueObjectTemplateHandlerBundle()
     {

@@ -94,7 +94,7 @@ public class TableTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @Nullable final List<Table> tables)
+        @NotNull final List<Table> tables)
         throws  QueryJBuildException
     {
         List<Table> t_lTables = tables;

@@ -61,6 +61,16 @@ public interface MetadataManager
     extends Serializable
 {
     /**
+     * The system property prefix to disable generation for concrete (or all, with *) tables.
+     */
+    public static final String TABLES_DISABLED = "queryj.tables.disabled";
+
+    /**
+     * The system property to enable generation for concrete (or all, with * or missing property) tables.
+     */
+    public static final String TABLES_ENABLED = "queryj.tables.enabled";
+
+    /**
      * Retrieves the name identifying the manager instance.
      * @return such name.
      */

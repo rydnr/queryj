@@ -79,5 +79,8 @@ public class BasePerRepositoryFillTemplateChain
     protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerRepositoryTemplateContext context)
     {
         // TODO
+        int a = 0;
+
+        a++;
     }
 }

@@ -79,5 +79,8 @@ public class BasePerForeignKeyFillTemplateChain
     protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerForeignKeyTemplateContext context)
     {
         // TODO
+        int a = 0;
+
+        a++;
     }
 }

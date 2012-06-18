@@ -79,6 +79,7 @@ import org.stringtemplate.v4.ST.AttributeList;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -1317,14 +1318,117 @@ public abstract class AbstractJdbcMetadataManager
 
     /**
      * Checks whether the generation phase is enabled for given table.
-     *
      * @param tableName the table name.
      * @return <code>true</code> in such case.
      */
     @Override
     public boolean isGenerationAllowedForTable(@NotNull final String tableName)
     {
-        return false;
+        return
+            isGenerationAllowedForTable(
+                retrieveExplicitlyEnabledTables(),
+                retrieveExplicitlyDisabledTables(),
+                tableName);
+    }
+
+    /**
+     * Retrieves the explicitly enabled table names, via environment property. This means
+     * no other tables should be processed.
+     * @return such list.
+     */
+    @NotNull
+    public String[] retrieveExplicitlyEnabledTables()
+    {
+        String[] result = null;
+
+        String t_strProperty = System.getProperty(TABLES_ENABLED);
+
+        if (t_strProperty != null)
+        {
+            result = parseExplicitTables(t_strProperty);
+        }
+
+        if (result == null)
+        {
+            result = new String[0];
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the explicitly disabled table names, via environment property. This means
+     * no other tables should be processed.
+     * @return such list.
+     */
+    @NotNull
+    public String[] retrieveExplicitlyDisabledTables()
+    {
+        String[] result = null;
+
+        String t_strProperty = System.getProperty(TABLES_DISABLED);
+
+        if (t_strProperty != null)
+        {
+            result = parseExplicitTables(t_strProperty);
+        }
+
+        if (result == null)
+        {
+            result = new String[0];
+        }
+
+        return result;
+    }
+
+    /**
+     * Parses given environment property to find out whether some tables are
+     * explicitly specified.
+     * @param environmentProperty the environment propery.
+     * @return the tables specified in given environment property.
+     */
+    @NotNull
+    protected String[] parseExplicitTables(@NotNull final String environmentProperty)
+    {
+        return environmentProperty.split(",");
+    }
+
+    /**
+     * Checks whether the generation phase is enabled for given table.
+     * @param tablesEnabled the explicitly-enabled tables.
+     * @param tablesDisabled the explicitly-disabled tables.
+     * @param tableName the table name.
+     * @return <code>true</code> in such case.
+     */
+    protected final boolean isGenerationAllowedForTable(
+        @Nullable final String[] tablesEnabled,
+        @Nullable final String[] tablesDisabled,
+        @NotNull final String tableName)
+    {
+        boolean result = true;
+
+        boolean t_bExplicitlyEnabled = false;
+
+        if (tablesEnabled != null)
+        {
+            t_bExplicitlyEnabled = Arrays.asList(tablesEnabled).contains(tableName);
+
+            result = t_bExplicitlyEnabled;
+        }
+
+        if (   (!t_bExplicitlyEnabled)
+            && (tablesEnabled != null)
+            && (tablesDisabled != null))
+        {
+            List<String> t_lTablesDisabled = Arrays.asList(tablesDisabled);
+
+            result =
+                !(   (t_lTablesDisabled.contains("*"))
+                  || (tablesEnabled.length > 0))
+                && !Arrays.asList(tablesDisabled).contains(tableName);
+        }
+
+        return result;
     }
 
     /**
