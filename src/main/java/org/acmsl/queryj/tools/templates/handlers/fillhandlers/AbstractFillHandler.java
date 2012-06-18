@@ -129,7 +129,12 @@ public abstract class AbstractFillHandler<P>
     {
         boolean result = true;
 
-        map.put(placeHolder, getValue());
+        P value = getValue();
+
+        if (value != null)
+        {
+            map.put(placeHolder, value);
+        }
 
         return result;
     }

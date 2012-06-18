@@ -23,38 +23,59 @@
 
  ******************************************************************************
  *
- * Filename: TableTemplateHandlerBundle.java
+ * Filename: TimestampHandler.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Bundles a pair of TableTemplate template build and writing
- *              handlers.
+ * Description: Handler to provide 'timestamp' placeholder in templates.
+ *
+ * Date: 6/18/12
+ * Time: 7:00 AM
  *
  */
-package org.acmsl.queryj.tools.templates.handlers;
+package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 
 /*
- * Importing some project classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateWritingHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
+import org.jetbrains.annotations.NotNull;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
- * Bundles a pair of TableTemplate template build and writing
- * handlers.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Handler to provide 'timestamp' placeholder in templates.
+ * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @since 2012/06/18
  */
-public class TableTemplateHandlerBundle
-    extends  TemplateHandlerBundle
+public class TimestampHandler
+    extends AbstractFillHandler<String>
 {
     /**
-     * Builds a bundle with given handlers.
+     * Retrieves the placeholder.
+     *
+     * @return such placeholder.
      */
-    public TableTemplateHandlerBundle()
+    @NotNull
+    @Override
+    public String getPlaceHolder()
     {
-        super(
-            new TableTemplateBuildHandler(),
-            new TableTemplateWritingHandler());
+        return "timestamp";
+    }
+
+    /**
+     * Retrieves the timestamp.
+     *
+     * @return the dynamic value.
+     */
+    @Override
+    @NotNull
+    public String getValue()
+    {
+        return new SimpleDateFormat("yyyy/MM/dd HH:mm", Locale.US).format(new Date());
     }
 }

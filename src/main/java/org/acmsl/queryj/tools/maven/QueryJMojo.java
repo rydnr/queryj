@@ -74,7 +74,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @goal queryj
  * @execute phase="generate-sources"
- * @threadsafe
+ * @threadSafe
  */
 @SuppressWarnings("unused")
 public class QueryJMojo

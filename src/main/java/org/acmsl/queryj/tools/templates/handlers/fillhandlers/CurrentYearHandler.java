@@ -51,7 +51,6 @@ import java.util.Date;
  * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
  * @since 2012/05/13
  */
-@SuppressWarnings("unused")
 public class CurrentYearHandler
     extends AbstractFillHandler<String>
 {

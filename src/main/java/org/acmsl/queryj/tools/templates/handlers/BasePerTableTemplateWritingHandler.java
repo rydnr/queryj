@@ -111,8 +111,6 @@ public abstract class BasePerTableTemplateWritingHandler
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
      */
     protected void writeTemplates(
         @NotNull final Map parameters, @NotNull final String engineName)

@@ -115,7 +115,7 @@ import checkers.nullness.quals.Nullable;
 
 class_common_javadoc() ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
- * @since <input.timestamp>
+ * @since <timestamp>
 >>
 
 attribute_javadoc(name) ::= <<
@@ -158,21 +158,19 @@ attribute_isolated_declaration_impl(attr) ::= <<
 <type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.type><endif> <attr.nameLowercased>,
 >>
 
-indirect_template(name, input, extra1, extra2) ::= <<
+indirect_template(name, extra1, extra2) ::= <<
 <!
-  Calls the template matching given name, passing the input as argument.
+  Calls the template matching given name, passing the value as argument.
   @param name the template name.
-  @param input the arguments.
 !>
-<(name)(input=input, extra1=extra1, extra2=extra2)>
+<(name)(extra1=extra1, extra2=extra2)>
 >>
 
-custom_select(cs, table, input) ::= <<
+custom_select(cs, table) ::= <<
 <!
  Writes the code for a custom select query.
  @param cs the custom select.
  @param table the table.
- @param input the input.
 !>
 <if(!cs.dynamic)>
 /**
@@ -368,11 +366,10 @@ new <objectType>(<name>)
 <endif>
 >>
 
-custom_update_or_insert(cs, input) ::= <<
+custom_update_or_insert(cs) ::= <<
 <!
  Writes the subtemplate for custom updates or inserts.
   @param cs the custom sql.
-  @param input the input.
 !>
 <if(!cs.dynamic)>
 /**
@@ -446,12 +443,11 @@ public int <cs.nameUncapitalized>(
 <endif>
 >>
 
-custom_select_for_update(cs, table, input) ::= <<
+custom_select_for_update(cs, table) ::= <<
 <!
  Writes the code for a custom select for update.
  @param cs the custom select.
  @param table the table.
- @param input the input.
 !>
 <if(!cs.dynamic)>
 /**
@@ -1204,173 +1200,173 @@ transactionTemplate.execute(
         this))
 >>
 
-Integer_to_primitive(input) ::= <<
+Integer_to_primitive(value) ::= <<
 <!
  Generates the method call to convert the attribute into an int primitive.
- @param input the attribute.
-!><input.nameLowercased>.intValue()>>
+ @param value the attribute.
+!><value.nameLowercased>.intValue()>>
 
-primitive_to_Integer(input) ::= <<
+primitive_to_Integer(value) ::= <<
 <!
  Generates the method call to convert the primitive into an Integer.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Integer.valueOf(<input.nameLowercased>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Integer.valueOf(<value.nameLowercased>)<endif>
 >>
 
-primitive_to_Integer_value(input) ::= <<
+primitive_to_Integer_value(value) ::= <<
 <!
  Generates the method call to convert the primitive into an Integer.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Integer.valueOf(<input.value>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Integer.valueOf(<value.value>)<endif>
 >>
 
-Long_to_primitive(input) ::= <<
+Long_to_primitive(value) ::= <<
 <!
  Generates the method call to convert the attribute into a long primitive.
- @param input the attribute.
-!><input.nameLowercased>.longValue()>>
+ @param value the attribute.
+!><value.nameLowercased>.longValue()>>
 
-primitive_to_Long(input) ::= <<
+primitive_to_Long(value) ::= <<
 <!
  Generates the method call to convert the primitive into a Long.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Long.valueOf(<input.nameLowercased>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Long.valueOf(<value.nameLowercased>)<endif>
 >>
 
-primitive_to_Long_value(input) ::= <<
+primitive_to_Long_value(value) ::= <<
 <!
  Generates the method call to convert the primitive into a Long.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Long.valueOf(<input.value>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Long.valueOf(<value.value>)<endif>
 >>
 
-Float_to_primitive(input) ::= <<
+Float_to_primitive(value) ::= <<
 <!
  Generates the method call to convert the attribute into a float primitive.
- @param input the attribute.
-!><input.nameLowercased>.floatValue()>>
+ @param value the attribute.
+!><value.nameLowercased>.floatValue()>>
 
-primitive_to_Float(input) ::= <<
+primitive_to_Float(value) ::= <<
 <!
  Generates the method call to convert the primitive into a Float.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Float.valueOf(<input.nameLowercased>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Float.valueOf(<value.nameLowercased>)<endif>
 >>
 
-primitive_to_Float_value(input) ::= <<
+primitive_to_Float_value(value) ::= <<
 <!
  Generates the method call to convert the primitive into a Float.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Float.valueOf(<input.value>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Float.valueOf(<value.value>)<endif>
 >>
 
-Double_to_primitive(input) ::= <<
+Double_to_primitive(value) ::= <<
 <!
  Generates the method call to convert the attribute into a double primitive.
- @param input the attribute.
-!><input.nameLowercased>.doubleValue()>>
+ @param value the attribute.
+!><value.nameLowercased>.doubleValue()>>
 
-primitive_to_Double(input) ::= <<
+primitive_to_Double(value) ::= <<
 <!
  Generates the method call to convert the primitive into a Double.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Double.valueOf(<input.nameLowercased>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Double.valueOf(<value.nameLowercased>)<endif>
 >>
 
-primitive_to_Double_value(input) ::= <<
+primitive_to_Double_value(value) ::= <<
 <!
  Generates the method call to convert the primitive into a Double.
- @param input the attribute.
-!><if(input.valueNull)>null<else>Double.valueOf(<input.value>)<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>Double.valueOf(<value.value>)<endif>
 >>
 
-String_to_primitive(input) ::= <<
+String_to_primitive(value) ::= <<
 <!
  Don't try to convert the String to anything.
- @param input the attribute.
-!><Object_to_primitive(input=input)>
+ @param value the attribute.
+!><Object_to_primitive(value=value)>
 >>
 
-primitive_to_String(input) ::= <<
+primitive_to_String(value) ::= <<
 <!
  Don't try to convert the primitive to anything.
- @param input the attribute.
-!><primitive_to_Object(input=input)>
+ @param value the attribute.
+!><primitive_to_Object(value=value)>
 >>
 
-primitive_to_String_value(input) ::= <<
+primitive_to_String_value(value) ::= <<
 <!
  Don't try to convert the primitive to anything.
- @param input the attribute.
-!>"<primitive_to_Object_value(input=input)>"
+ @param value the attribute.
+!>"<primitive_to_Object_value(value=value)>"
 >>
 
-BigDecimal_to_primitive(input) ::= <<
+BigDecimal_to_primitive(value) ::= <<
 <!
  Don't try to convert the BigDecimal to anything.
- @param input the attribute.
-!><Object_to_primitive(input=input)>
+ @param value the attribute.
+!><Object_to_primitive(value=value)>
 >>
 
-primitive_to_BigDecimal(input) ::= <<
+primitive_to_BigDecimal(value) ::= <<
 <!
  Don't try to convert the primitive to anything.
- @param input the attribute.
-!><if(input.valueNull)>null<else>new BigDecimal("<input.nameLowerCased>")<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>new BigDecimal("<value.nameLowerCased>")<endif>
 >>
 
-primitive_to_BigDecimal_value(input) ::= <<
+primitive_to_BigDecimal_value(value) ::= <<
 <!
  Don't try to convert the primitive to anything.
- @param input the attribute.
-!><if(input.valueNull)>null<else>new BigDecimal("<input.value>")<endif>
+ @param value the attribute.
+!><if(value.valueNull)>null<else>new BigDecimal("<value.value>")<endif>
 >>
 
-Timestamp_to_primitive(input) ::= <<
+Timestamp_to_primitive(value) ::= <<
 <!
  Don't try to convert the Timestamp to anything.
- @param input the attribute.
+ @param value the attribute.
 !>
-<if(input.date)>
-new Timestamp(<input.nameLowercased>.getTime())
+<if(value.date)>
+new Timestamp(<value.nameLowercased>.getTime())
 <else>
-<Object_to_primitive(input=input)>
+<Object_to_primitive(value=value)>
 <endif>
 >>
 
-primitive_to_Timestamp(input) ::= <<
+primitive_to_Timestamp(value) ::= <<
 <!
  Don't try to convert the primitive to anything.
- @param input the attribute.
-!><primitive_to_Object(input=input)>
+ @param value the attribute.
+!><primitive_to_Object(value=value)>
 >>
 
-primitive_to_Timestamp_value(input) ::= <<
+primitive_to_Timestamp_value(value) ::= <<
 <!
  Don't try to convert the primitive to anything.
- @param input the attribute.
-!><primitive_to_Object_value(input=input)>
+ @param value the attribute.
+!><primitive_to_Object_value(value=value)>
 >>
 
-Object_to_primitive(input) ::= <<
+Object_to_primitive(value) ::= <<
 <!
  Don't try to convert the attribute to anything.
- @param input the attribute.
-!><input.nameLowercased>
+ @param value the attribute.
+!><value.nameLowercased>
 >>
 
-primitive_to_Object(input) ::= <<
+primitive_to_Object(value) ::= <<
 <!
  Don't try to convert the attribute to anything.
- @param input the attribute.
-!><input.nameLowercased>
+ @param value the attribute.
+!><value.nameLowercased>
 >>
 
-primitive_to_Object_value(input) ::= <<
+primitive_to_Object_value(value) ::= <<
 <!
  Don't try to convert the attribute to anything.
- @param input the attribute.
-!><input.value>
+ @param value the attribute.
+!><value.value>
 >>
 
 notnull() ::= <<

@@ -46,6 +46,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base implementation of {@link TemplateFillHandler}.
@@ -106,7 +107,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
      *
      * @return the dynamic value.
      */
-    @NotNull
+    @Nullable
     @Override
     public P getValue()
     {
@@ -117,7 +118,7 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
      * Retrieves the template value for this placeholder.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     protected abstract P getValue(@NotNull final C context);
 
     @Override

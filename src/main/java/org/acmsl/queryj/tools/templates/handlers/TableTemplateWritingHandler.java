@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.tools.templates.TableTemplate;
 import org.acmsl.queryj.tools.templates.TableTemplateGenerator;
@@ -65,6 +66,20 @@ public class TableTemplateWritingHandler
      * Creates a TableTemplateWritingHandler.
      */
     public TableTemplateWritingHandler() {}
+
+    /**
+     * Writes the templates.
+     * @param parameters the parameters.
+     * @param engineName the engine name.
+     * @throws QueryJBuildException if the build process cannot be performed.
+     */
+    @Override
+    protected void writeTemplates(
+        @NotNull final Map parameters, @NotNull final String engineName)
+        throws QueryJBuildException
+    {
+        // Disabled
+    }
 
     /**
      * Retrieves the template generator.

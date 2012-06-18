@@ -51,6 +51,10 @@ import org.acmsl.queryj.tools.templates.handlers.fillhandlers.DatabaseEngineVers
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.DecoratedString;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.HeaderHandler;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.IsRepositoryDAOHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.ProjectPackageHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.RepositoryNameHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.SubPackageNameHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.TimestampHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -60,11 +64,11 @@ import org.acmsl.commons.patterns.Chain;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.tools.templates.handlers.fillhandlers.ProjectPackageHandler;
-import org.acmsl.queryj.tools.templates.handlers.fillhandlers.RepositoryNameHandler;
-import org.acmsl.queryj.tools.templates.handlers.fillhandlers.SubPackageNameHandler;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing some JDK classes.
+ */
 import java.util.Map;
 
 /**
@@ -190,6 +194,9 @@ public abstract class FillTemplateChain<C extends TemplateContext>
 
         chain.add(
             new FillAdapterHandler<CurrentYearHandler,String>(new CurrentYearHandler()));
+
+        chain.add(
+            new FillAdapterHandler<TimestampHandler,String>(new TimestampHandler()));
 
         chain.add(
             new TemplateContextFillAdapterHandler<TemplateContext,DAOSubpackageNameHandler,String>(

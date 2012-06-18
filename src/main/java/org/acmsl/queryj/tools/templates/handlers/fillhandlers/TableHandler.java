@@ -47,6 +47,7 @@ import org.acmsl.queryj.tools.templates.BasePerTableTemplateContext;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Resolves "table" placeholders.
@@ -82,7 +83,7 @@ public class TableHandler
      * @param context such context.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     @Override
     protected TableDecorator getValue(@NotNull final BasePerTableTemplateContext context)
     {
@@ -96,7 +97,7 @@ public class TableHandler
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @return the decorated table.
      */
-    @NotNull
+    @Nullable
     protected TableDecorator decorate(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,

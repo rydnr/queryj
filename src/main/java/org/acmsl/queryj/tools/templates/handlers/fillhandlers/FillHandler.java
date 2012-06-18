@@ -38,19 +38,18 @@ package org.acmsl.queryj.tools.templates.handlers.fillhandlers;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.templates.Template;
 import org.acmsl.queryj.tools.templates.handlers.TemplateHandler;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * Used to fill the template's dynamic parameters based on a chain-of-responsibility pattern,
@@ -73,5 +72,6 @@ public interface FillHandler<P>
      * Retrieves the template value for that placeholder.
      * @return the dynamic value.
      */
-    @NotNull P getValue();
+    @Nullable
+    P getValue();
 }
