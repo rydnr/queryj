@@ -106,6 +106,9 @@ package <packageNames; separator=".">;
 >>
 
 checkers_import() ::= <<
+>>
+
+checkers_import_enabled() ::= <<
 /*
  * Importing JSR-308 (http://types.cs.washington.edu/checker-framework/) annotations.
  */
@@ -1370,11 +1373,11 @@ primitive_to_Object_value(value) ::= <<
 >>
 
 notnull() ::= <<
-@NonNull 
+/*@NonNull*/
 >>
 
 nullable() ::= <<
-@Nullable 
+/*@Nullable*/
 >>
 
 type_checker(attribute) ::= <<

@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools;
  */
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
 import org.acmsl.queryj.tools.handlers.JdbcMetaDataRetrievalHandler;
@@ -46,20 +47,8 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.templates.dao.DAOBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.RepositoryDAOTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.dao.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.BaseValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomBaseValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectFactoryTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectImplTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.CustomValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectImplTemplateHandlerBundle;
 
 /*
  * Importing some ACM-SL classes.
@@ -1954,7 +1943,7 @@ public class QueryJChain
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
-    protected Chain buildChain(final Chain chain)
+    protected Chain buildChain(@NotNull final Chain chain)
     {
         return
             buildChain(
@@ -1970,6 +1959,7 @@ public class QueryJChain
      * @param generateXML whether to include XML implementations.
      * @return the updated chain.
      */
+    @SuppressWarnings("unused")
     protected Chain buildChain(
         final Chain chain,
         final boolean generateMock,
@@ -1978,6 +1968,8 @@ public class QueryJChain
         if  (chain != null)
         {
             chain.add(new ParameterValidationHandler());
+
+            chain.add(new Log4JInitializerHandler());
 
             chain.add(new JdbcConnectionOpeningHandler());
             chain.add(new CustomSqlProviderRetrievalHandler());
@@ -2172,7 +2164,6 @@ public class QueryJChain
      * @param grammarBundle the grammar with irregular singular and plural
      * forms of the table names.
      * @param encoding the encoding.
-     * @precondition attributes != null
      */
     @SuppressWarnings("unchecked")
     protected void mapAttributes(

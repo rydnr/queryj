@@ -356,6 +356,11 @@ public class ParameterValidationHandler
     public static final String JMX = "jmx";
 
     /**
+     * The log instance.
+     */
+    public static final String LOG = "log";
+
+    /**
      * Creates a {@link ParameterValidationHandler} instance.
      */
     public ParameterValidationHandler() {}

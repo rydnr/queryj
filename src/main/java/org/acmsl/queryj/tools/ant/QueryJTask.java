@@ -143,7 +143,7 @@ public class QueryJTask
      * @param file such file.
      * @param delegee the delegee.
      */
-    protected void setSettingsFile(final File file, @NotNull final QueryJChain delegee)
+    protected void setSettingsFile(@NotNull final File file, @NotNull final QueryJChain delegee)
     {
         delegee.setSettingsFile(file);
     }

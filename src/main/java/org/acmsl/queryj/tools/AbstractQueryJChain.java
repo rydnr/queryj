@@ -75,7 +75,7 @@ public abstract class AbstractQueryJChain
      * Specifies the chain.
      * @param chain the new chain.
      */
-    private void immutableSetChain(final Chain chain)
+    protected final void immutableSetChain(@NotNull final Chain chain)
     {
         m__Chain = chain;
     }
@@ -85,7 +85,7 @@ public abstract class AbstractQueryJChain
      * @param chain the new chain.
      */
     @SuppressWarnings("unused")
-    protected void setChain(final Chain chain)
+    protected void setChain(@NotNull final Chain chain)
     {
         immutableSetChain(chain);
     }
@@ -94,6 +94,7 @@ public abstract class AbstractQueryJChain
      * Retrieves the chain.
      * @return such chain.
      */
+    @NotNull
     public Chain getChain()
     {
         return m__Chain;
@@ -115,7 +116,7 @@ public abstract class AbstractQueryJChain
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
-    protected abstract Chain buildChain(final Chain chain);
+    protected abstract Chain buildChain(@NotNull final Chain chain);
 
     /**
      * Builds the command.

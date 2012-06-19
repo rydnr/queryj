@@ -1137,8 +1137,8 @@ public class QueryJMojo
             //initialize directories
             File outputDir = outputDirPath.getAbsoluteFile();
 
-	    if (   (!outputDir.exists())
-		&& (!outputDir.mkdirs()))
+            if (   (!outputDir.exists())
+                && (!outputDir.mkdirs()))
             {
                 log.warn("Cannot create output folder: " + outputDir);
             }
