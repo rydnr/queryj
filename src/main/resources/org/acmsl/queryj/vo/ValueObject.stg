@@ -70,11 +70,7 @@ source() ::= <<
  * Importing some JDK classes.
  */
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+<column_type_imports:import(type=it)>
 
 <class(table=table)>
 >>
@@ -118,10 +114,10 @@ public interface <table.voName>
 {
 <if(parent)> 
     <table.nonParentAttributes:attribute_getter(attribute=it);
-      separator="\n\n">
+      separator="\n">
 <else>
     <table.allAttributes:attribute_getter(attribute=it);
-      separator="\n\n">
+      separator="\n">
 <endif>
 
 }

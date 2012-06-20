@@ -124,5 +124,9 @@ public class BasePerTableFillTemplateChain
         chain.add(
             new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,ValueObjectNameHandler,DecoratedString>(
                 new ValueObjectNameHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,TableAttributeTypeImportsHandler,List<String>>(
+                new TableAttributeTypeImportsHandler(context)));
     }
 }

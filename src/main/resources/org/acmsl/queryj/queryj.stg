@@ -1386,3 +1386,10 @@ type_checker(attribute) ::= <<
  @param attribute the attribute.
 !><if(attribute.nullable)><nullable()> <else><if(!attribute.primitive)><notnull()> <endif><endif>
 >>
+
+import(type) ::= <<
+<!
+  Imports given type.
+!>
+import <type>;
+>>

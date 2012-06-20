@@ -43,6 +43,8 @@ package org.acmsl.queryj.tools.metadata;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Manager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some useful methods when working with database metadata.
@@ -86,6 +88,7 @@ public interface MetadataTypeManager
      * @param precision the precision.
      * @return the associated native type.
      */
+    @SuppressWarnings("unused")
     public String getNativeType(
         final int dataType,
         final boolean allowsNull,
@@ -146,6 +149,7 @@ public interface MetadataTypeManager
      * @param paramName the parameter name.
      * @return the associated setter method name.
      */
+    @SuppressWarnings("unused")
     public String getSetterMethod(
         final int dataType, final int paramIndex, final String paramName);
 
@@ -155,6 +159,7 @@ public interface MetadataTypeManager
      * @param paramIndex the parameter index.
      * @return the associated getter method name.
      */
+    @SuppressWarnings("unused")
     public String getGetterMethod(final int dataType, final int paramIndex);
 
     /**
@@ -178,6 +183,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated result type.
      */
+    @SuppressWarnings("unused")
     public String getProcedureResultType(final int dataType, final boolean isBool);
 
     /**
@@ -186,6 +192,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
+    @SuppressWarnings("unused")
     public String getProcedureDefaultValue(final int dataType, final boolean isBool);
 
     /**
@@ -218,6 +225,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated object type.
      */
+    @SuppressWarnings("unused")
     public String getSmartObjectRetrievalType(final int dataType, final boolean isBool);
 
     /**
@@ -226,6 +234,7 @@ public interface MetadataTypeManager
      * @param isBool whether the attribute is marked as boolean.
      * @return the associated default value.
      */
+    @SuppressWarnings("unused")
     public String getDefaultValue(final int dataType, final boolean isBool);
 
     /**
@@ -249,6 +258,7 @@ public interface MetadataTypeManager
      * @return <code>true</code> if such data type can be managed as an
      * integer.
      */
+    @SuppressWarnings("unused")
     public boolean isInteger(final int dataType);
 
     /**
@@ -281,6 +291,7 @@ public interface MetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * timestamp.
      */
+    @SuppressWarnings("unused")
     public boolean isTimestamp(final String dataType);
 
     /**
@@ -321,6 +332,7 @@ public interface MetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * primitive wrapper.
      */
+    @SuppressWarnings("unused")
     public boolean isPrimitiveWrapper(final String dataType);
 
     /**
@@ -385,4 +397,30 @@ public interface MetadataTypeManager
      */
     public boolean isNumeric(final String dataType);
 
+    /**
+     * Checks if given data type represents large objects of any kind.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * Lob.
+     */
+    @SuppressWarnings("unused")
+    boolean isLob(final int dataType);
+
+    /**
+     * Checks if given data type represents large objects of any kind.
+     * @param dataType the data type.
+     * @return <code>true</code> if such data type can be managed as a
+     * Lob.
+     */
+    @SuppressWarnings("unused")
+    boolean isLob(final String dataType);
+
+    /**
+     * Retrieves the object type of given data type when retrieving information.
+     * @param dataType the data type.
+     * @param isBool whether the type represents boolean values.
+     * @return the associated object type.
+     */
+    @NotNull
+    public String getFullyQualifiedType(final int dataType, final boolean isBool);
 }

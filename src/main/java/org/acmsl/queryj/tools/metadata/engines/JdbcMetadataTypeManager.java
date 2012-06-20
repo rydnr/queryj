@@ -55,6 +55,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Locale;
 import java.util.Map;
@@ -209,7 +210,7 @@ public class JdbcMetadataTypeManager
     public String getNativeType(
         final int dataType, final boolean allowsNull, final boolean isBool)
     {
-        String result = "null";
+        String result;
 
         if (isBool)
         {
@@ -304,17 +305,18 @@ public class JdbcMetadataTypeManager
      * @return such mapping.
      */
     @NotNull
+    @SuppressWarnings("unchecked")
     protected Map buildNative2JavaTypeMap()
     {
         @NotNull Map result = new HashMap();
 
-        Integer t_Numeric = Integer.valueOf(Types.NUMERIC);
-        Integer t_Integer = Integer.valueOf(Types.INTEGER);
-        Integer t_Long = Integer.valueOf(Types.BIGINT);
-        Integer t_Double = Integer.valueOf(Types.REAL);
-        Integer t_Time = Integer.valueOf(Types.TIME);
-        Integer t_TimeStamp = Integer.valueOf(Types.TIMESTAMP);
-        Integer t_Text = Integer.valueOf(Types.VARCHAR);
+        Integer t_Numeric = Types.NUMERIC;
+        Integer t_Integer = Types.INTEGER;
+        Integer t_Long = Types.BIGINT;
+        Integer t_Double = Types.REAL;
+        Integer t_Time = Types.TIME;
+        Integer t_TimeStamp = Types.TIMESTAMP;
+        Integer t_Text = Types.VARCHAR;
 
         result.put("DECIMAL"    , t_Numeric);
         result.put("BigDecimal" , t_Numeric);
@@ -668,7 +670,7 @@ public class JdbcMetadataTypeManager
     @Nullable
     public String getObjectType(final int dataType, final boolean isBool)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         if (isBool)
         {
@@ -770,7 +772,7 @@ public class JdbcMetadataTypeManager
     @Nullable
     public String getSmartObjectType(final int dataType, final boolean isBool)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         if (isBool)
         {
@@ -831,9 +833,10 @@ public class JdbcMetadataTypeManager
      * @return the associated object type.
      */
     @Nullable
+    @Override
     public String getSmartObjectRetrievalType(final int dataType, final boolean isBool)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         if (isBool)
         {
@@ -888,15 +891,80 @@ public class JdbcMetadataTypeManager
     }
 
     /**
+     * Retrieves the object type of given data type when retrieving information.
+     * @param dataType the data type.
+     * @param isBool whether the type represents boolean values.
+     * @return the associated object type.
+     */
+    @NotNull
+    @Override
+    public String getFullyQualifiedType(final int dataType, final boolean isBool)
+    {
+        @Nullable String result;
+
+        if (isBool)
+        {
+            result = "boolean";
+        }
+        else
+        {
+            switch (dataType)
+            {
+                case Types.NUMERIC:
+                case Types.DECIMAL:
+                    result = java.math.BigDecimal.class.getName();
+                    break;
+
+                case Types.BIT:
+                case Types.TINYINT:
+                case Types.SMALLINT:
+                case Types.INTEGER:
+                    result = Integer.class.getName();
+                    break;
+
+                case Types.BIGINT:
+                    result = Long.class.getName();
+                    break;
+
+                case Types.REAL:
+                case Types.FLOAT:
+                case Types.DOUBLE:
+                    result = Double.class.getName();
+                    break;
+
+                case Types.TIME:
+                case Types.DATE:
+                case Types.TIMESTAMP:
+                case 11:
+                    result = Timestamp.class.getName();
+                    break;
+
+                case Types.CHAR:
+                case Types.VARCHAR:
+                case Types.LONGVARCHAR:
+                case Types.BINARY:
+                case Types.VARBINARY:
+                case Types.LONGVARBINARY:
+                default:
+                    result = String.class.getName();
+                    break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the default value of given data type.
      * @param dataType the data type.
      * @param isBool whether the type represents boolean values or not.
      * @return the associated default value.
      */
+    @Override
     @NotNull
     public String getDefaultValue(final int dataType, final boolean isBool)
     {
-        @NotNull String result = "null";
+        @NotNull String result;
 
         if (isBool)
         {
@@ -934,10 +1002,11 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return the associated constant name.
      */
+    @Override
     @Nullable
     public String getConstantName(final int dataType)
     {
-        @Nullable String result = null;
+        @Nullable String result;
 
         switch (dataType)
         {
@@ -1031,6 +1100,7 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * String.
      */
+    @Override
     public boolean isString(final int dataType)
     {
         boolean result = false;
@@ -1059,6 +1129,7 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as an
      * integer.
      */
+    @Override
     public boolean isInteger(final int dataType)
     {
         boolean result = false;
@@ -1087,6 +1158,7 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * date.
      */
+    @Override
     public boolean isDate(final int dataType)
     {
         boolean result = false;
@@ -1110,6 +1182,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return <code>true</code> in such case.
      */
+    @Override
     public boolean isDate(@NotNull final String dataType)
     {
         boolean result = false;
@@ -1128,6 +1201,7 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * timestamp.
      */
+    @Override
     public boolean isTimestamp(final int dataType)
     {
         boolean result = isDate(dataType);
@@ -1156,6 +1230,7 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * timestamp.
      */
+    @Override
     public boolean isTimestamp(@NotNull final String dataType)
     {
         boolean result = isDate(dataType);
@@ -1178,7 +1253,8 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as an
      * object.
      */
-    public boolean isObject(int dataType)
+    @Override
+    public boolean isObject(final int dataType)
     {
         boolean result = false;
 
@@ -1341,6 +1417,8 @@ public class JdbcMetadataTypeManager
      * @return <code>true</code> if such data type can be managed as a
      * Lob.
      */
+    @SuppressWarnings("unused")
+    @Override
     public boolean isLob(final int dataType)
     {
         return isClob(dataType) || isBlob(dataType);
@@ -1365,7 +1443,7 @@ public class JdbcMetadataTypeManager
      */
     public boolean isNumberSmallerThanInt(final int dataType)
     {
-        boolean result = false;
+        boolean result;
 
         switch (dataType)
         {
@@ -1435,7 +1513,7 @@ public class JdbcMetadataTypeManager
      * @param dataType the data type.
      * @return <code>true</code> in such case.
      */
-    public boolean isNumeric(@NotNull final int dataType)
+    public boolean isNumeric(final int dataType)
     {
         boolean result;
 
