@@ -197,6 +197,17 @@ public class BasePerTableTemplateContext
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     * @return
+     */
+    @Override
+    @NotNull
+    public String getTemplateName()
+    {
+        return getTableName();
+    }
+
     @Override
     public int hashCode()
     {

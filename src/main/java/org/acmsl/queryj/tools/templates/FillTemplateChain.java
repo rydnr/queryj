@@ -53,6 +53,7 @@ import org.acmsl.queryj.tools.templates.handlers.fillhandlers.HeaderHandler;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.IsRepositoryDAOHandler;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.ProjectPackageHandler;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.RepositoryNameHandler;
+import org.acmsl.queryj.tools.templates.handlers.fillhandlers.SerialVersionUIDHandler;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.SubPackageNameHandler;
 import org.acmsl.queryj.tools.templates.handlers.fillhandlers.TimestampHandler;
 
@@ -174,7 +175,7 @@ public abstract class FillTemplateChain<C extends TemplateContext>
      */
     @Override
     @NotNull
-    protected final Chain buildChain(final Chain chain)
+    protected final Chain buildChain(@NotNull final Chain chain)
     {
         return buildChain(chain, getTemplateContext());
     }
@@ -229,6 +230,10 @@ public abstract class FillTemplateChain<C extends TemplateContext>
         chain.add(
             new TemplateContextFillAdapterHandler<TemplateContext,SubPackageNameHandler,DecoratedString>(
                 new SubPackageNameHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,SerialVersionUIDHandler,Long>(
+                new SerialVersionUIDHandler(context)));
 
         addHandlers(chain, context);
 

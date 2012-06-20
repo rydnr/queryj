@@ -136,6 +136,16 @@ public class BasePerCustomResultTemplateContext
         return m__Result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return getResult().getId();
+    }
+
     @Override
     public int hashCode()
     {

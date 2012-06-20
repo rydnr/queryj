@@ -99,14 +99,15 @@ public class ValueObjectImplTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     public ValueObjectImplTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean jmx,
         final boolean implementMarkerInterfaces,
         @NotNull final String jndiLocation,

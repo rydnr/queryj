@@ -158,6 +158,16 @@ public class BasePerRepositoryTemplateContext
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return getRepositoryName();
+    }
+
     @Override
     public int hashCode()
     {

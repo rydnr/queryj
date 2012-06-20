@@ -136,6 +136,16 @@ public class BasePerCustomSqlTemplateContext
         return m__Sql;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    public String getTemplateName()
+    {
+        return getSql().getId();
+    }
+
     @Override
     public int hashCode()
     {

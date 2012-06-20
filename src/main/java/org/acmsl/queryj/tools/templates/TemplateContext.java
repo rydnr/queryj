@@ -56,6 +56,12 @@ import org.jetbrains.annotations.NotNull;
 public interface TemplateContext
 {
     /**
+     * Retrieves the template name.
+     */
+    @NotNull
+    String getTemplateName();
+
+    /**
      * Retrieves the {@link MetadataManager} instance.
      * @return such instance.
      */
