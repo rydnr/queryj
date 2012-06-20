@@ -112,8 +112,6 @@ public class TemplateHandlerBundle
      * @param firstBundle the first bundle.
      * @param secondBundle the second bundle, typically
      * related to test templates associated to the first one's.
-     * @precondition firstBundle != null
-     * @precondition secondBundle != null
      */
     public TemplateHandlerBundle(
         final TemplateHandlerBundle firstBundle,

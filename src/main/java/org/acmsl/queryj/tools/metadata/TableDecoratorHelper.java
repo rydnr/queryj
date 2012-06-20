@@ -110,7 +110,7 @@ public class TableDecoratorHelper
         {
             if  (t_Attribute != null)
             {
-                if  (   (isOverridden(t_Attribute, metadataManager, parentTableName))
+                if  (   (!isOverridden(t_Attribute, metadataManager, parentTableName))
                      || (!contains(firstAttributes, t_Attribute)))
                 {
                     result.add(t_Attribute);

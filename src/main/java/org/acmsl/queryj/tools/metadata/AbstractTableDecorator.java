@@ -282,7 +282,7 @@ public abstract class AbstractTableDecorator
 
         return result;
     }
-    
+
     /**
      * Specifies whether the attributes should be cleaned up.
      * @param flag such flag.
@@ -340,6 +340,7 @@ public abstract class AbstractTableDecorator
     {
         return m__lChildAttributes;
     }
+
 
     /**
      * Retrieves the foreign keys.

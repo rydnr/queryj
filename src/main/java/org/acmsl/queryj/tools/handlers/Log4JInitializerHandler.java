@@ -53,6 +53,7 @@ import org.apache.commons.logging.Log;
 /*
  * Importing some Log4J classes.
  */
+import org.apache.log4j.Level;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.WriterAppender;
 
@@ -130,6 +131,8 @@ public class Log4JInitializerHandler
             new WriterAppender(
                 new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN),
                 new WriterAdapter()));
+
+        root.setLevel(Level.WARN);
     }
 
     /**
@@ -151,7 +154,7 @@ public class Log4JInitializerHandler
 
             if (t_Log != null)
             {
-                t_Log.debug(new String(cbuf, off, len));
+                t_Log.warn(new String(cbuf, off, len));
             }
         }
 

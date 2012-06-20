@@ -48,7 +48,7 @@ import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
+import org.acmsl.queryj.tools.templates.valueobject.VOBundle;
 
 /*
  * Importing some ACM-SL classes.
@@ -2005,21 +2005,7 @@ public class QueryJChain
 
 //            chain.add(new DAOBundle(generateMock, generateXML));
 
-            chain.add(new ValueObjectTemplateHandlerBundle());
-
-//            chain.add(new BaseValueObjectTemplateHandlerBundle());
-
-//            chain.add(new ValueObjectFactoryTemplateHandlerBundle());
-
-//            chain.add(new ValueObjectImplTemplateHandlerBundle());
-
-//            chain.add(new CustomValueObjectTemplateHandlerBundle());
-
-//            chain.add(new CustomBaseValueObjectTemplateHandlerBundle());
-
-//            chain.add(new CustomValueObjectImplTemplateHandlerBundle());
-
-//            chain.add(new CustomValueObjectFactoryTemplateHandlerBundle());
+            chain.add(new VOBundle(generateMock, generateXML));
 
             chain.add(new JdbcConnectionClosingHandler());
         }

@@ -116,7 +116,7 @@ public interface <table.voName>
     <table.nonParentAttributes:attribute_getter(attribute=it);
       separator="\n">
 <else>
-    <table.allAttributes:attribute_getter(attribute=it);
+    <table.attributes:attribute_getter(attribute=it);
       separator="\n">
 <endif>
 

@@ -59,6 +59,7 @@ import org.acmsl.queryj.tools.templates.handlers.TemplateHandlerBundle;
  * Bundles the complete set of handlers related to DAO templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public class DAOBundle
     extends  TemplateHandlerBundle
 {
