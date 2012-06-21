@@ -391,7 +391,6 @@ public class <table.voName>AttributesStatementSetter
 
 <endif>
      * @throws SQLException intercepted by \<i>Spring\</i>.
-
      */
     protected void setValues(
         <notnull()>final PreparedStatement preparedStatement,
@@ -423,7 +422,7 @@ public class <table.voName>AttributesStatementSetter
         {
             <table.primaryKey:
               attribute_preparedstatement_specification(attr=it);
-              separator="\n">
+              separator="\n\n">
 
         }
 <else>
@@ -432,7 +431,7 @@ public class <table.voName>AttributesStatementSetter
         {
             <table.primaryKey:
               attribute_preparedstatement_specification(attr=it);
-              separator="\n">
+              separator="\n\n">
         }
 <endif>
 <endif>
@@ -442,13 +441,13 @@ public class <table.voName>AttributesStatementSetter
         {
            <table.allNonReadOnlyNonPrimaryKeyButLobAttributes:
              attribute_preparedstatement_specification(attr=it);
-             separator="\n">
+             separator="\n\n">
         }
         else
         {
            <table.nonPrimaryKeyNonReadOnlyAttributes:
              attribute_preparedstatement_specification(attr=it);
-             separator="\n">
+             separator="\n\n">
         }
 <else>
         <table.nonPrimaryKeyNonReadOnlyAttributes:
@@ -530,7 +529,6 @@ attribute_preparedstatement_specification(attr) ::= <<
  Generates the code to specify the attribute into the PreparedStatement.
  @param attr the attribute.
 !>
-
 <if(!attr.clob)>
 <if(attr.nullable)>
 if  (<attr.nameLowercased> == null)
