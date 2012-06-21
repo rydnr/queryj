@@ -143,7 +143,7 @@ public class BasePerCustomResultTemplateContext
     @Override
     public String getTemplateName()
     {
-        return getResult().getId();
+        return getResult().getClassValue();
     }
 
     @Override

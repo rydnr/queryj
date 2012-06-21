@@ -43,14 +43,17 @@ import org.acmsl.queryj.tools.metadata.MetadataManager;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Abstract implementation of {@link TemplateContext}.
@@ -452,6 +455,31 @@ public abstract class AbstractTemplateContext
     public String getJndiLocation()
     {
         return this.m__strJndiLocation;
+    }
+
+    /**
+     * Concatenates given attributes.
+     * @param attributes the attributes.
+     * @return the CSV version of given list.
+     */
+    @NotNull
+    protected String toCsv(@NotNull final List<Attribute> attributes)
+    {
+        @NotNull final StringBuilder result = new StringBuilder();
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (result.length() > 0)
+            {
+                result.append(",");
+            }
+            if (t_Attribute != null)
+            {
+                result.append(t_Attribute.getName());
+            }
+        }
+
+        return result.toString();
     }
 
     @Override

@@ -42,7 +42,6 @@ package org.acmsl.queryj.tools.templates;
 import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
@@ -55,12 +54,6 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Context information required by templates customized for each {@link ForeignKey}.
@@ -175,31 +168,6 @@ public class BasePerForeignKeyTemplateContext
         }
 
         return result;
-    }
-
-    /**
-     * Concatenates given attributes.
-     * @param attributes the attributes.
-     * @return the CSV version of given list.
-     */
-    @NotNull
-    protected String toCsv(@NotNull final List<Attribute> attributes)
-    {
-        @NotNull final StringBuilder result = new StringBuilder();
-
-        for (@Nullable Attribute t_Attribute : attributes)
-        {
-            if (result.length() > 0)
-            {
-                result.append(",");
-            }
-            if (t_Attribute != null)
-            {
-                result.append(t_Attribute.getName());
-            }
-        }
-
-        return result.toString();
     }
 
     @Override

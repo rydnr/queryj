@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.metadata.vo.Row;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -205,7 +206,30 @@ public class BasePerTableTemplateContext
     @NotNull
     public String getTemplateName()
     {
-        return getTableName();
+        return getTemplateName(getTableName(), getMetadataManager());
+    }
+
+    /**
+     * Retrieves a name based on the table name and its attributes.
+     * @param tableName the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getTemplateName(@NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+    {
+        @NotNull final StringBuilder result = new StringBuilder(tableName);
+
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+
+        if (t_Table != null)
+        {
+            result.append("(");
+            result.append(toCsv(t_Table.getAttributes()));
+            result.append(")");
+        }
+
+        return result.toString();
     }
 
     @Override
