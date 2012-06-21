@@ -93,7 +93,7 @@ public class AttributeStatementSetterAttributeDecorator
      * Retrieves the object type.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getObjectType()
     {
         return getObjectType(getTypeId(), getMetadataTypeManager());
@@ -106,7 +106,7 @@ public class AttributeStatementSetterAttributeDecorator
      * @return such type.
      * @precondition metadataTypeManager != null
      */
-    @Nullable
+    @NotNull
     protected String getObjectType(
         final int type, @NotNull final MetadataTypeManager metadataTypeManager)
     {

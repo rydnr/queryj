@@ -90,7 +90,7 @@ public class FkStatementSetterAttributeDecorator
      * Retrieves the object type.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getObjectType()
     {
         return getObjectType(getTypeId(), getMetadataTypeManager());
@@ -102,7 +102,7 @@ public class FkStatementSetterAttributeDecorator
      * @param metadataTypeManager the metadata type manager.
      * @return such type.
      */
-    @Nullable
+    @NotNull
     protected String getObjectType(
         final int type, @NotNull final MetadataTypeManager metadataTypeManager)
     {

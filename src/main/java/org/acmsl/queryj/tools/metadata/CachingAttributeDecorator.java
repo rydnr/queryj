@@ -198,6 +198,7 @@ public class CachingAttributeDecorator
      * Retrieves the name, in upper case.
      * @return such value.
      */
+    @NotNull
     public String getNameUppercased()
     {
         String result = getCachedNameUppercased();
@@ -244,6 +245,7 @@ public class CachingAttributeDecorator
      * Retrieves the capitalized name.
      * @return such name.
      */
+    @NotNull
     public String getNameCapitalized()
     {
         String result = getCachedNameCapitalized();
@@ -290,6 +292,7 @@ public class CachingAttributeDecorator
      * Retrieves the uncapitalized name.
      * @return such name.
      */
+    @NotNull
     public String getNameUncapitalized()
     {
         String result = getCachedNameUncapitalized();
@@ -335,6 +338,7 @@ public class CachingAttributeDecorator
      * Retrieves the name, in lower case.
      * @return such value.
      */
+    @NotNull
     public String getNameLowercased()
     {
         String result = getCachedNameLowercased();
@@ -380,6 +384,7 @@ public class CachingAttributeDecorator
      * Retrieves the table name, uncapitalized.
      * @return such value.
      */
+    @NotNull
     public String getUncapitalizedTableName()
     {
         String result = getCachedUncapitalizedTableName();
@@ -425,6 +430,7 @@ public class CachingAttributeDecorator
      * Retrieves the value-object name associated to the table name.
      * @return such name.
      */
+    @NotNull
     public String getVoName()
     {
         String result = getCachedVoName();
@@ -470,6 +476,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's Java name.
      * @return such information.
      */
+    @NotNull
     public String getJavaName()
     {
         String result = getCachedJavaName();
@@ -515,6 +522,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's associated getter method.
      * @return such information.
      */
+    @NotNull
     public String getGetterMethod()
     {
         String result = getCachedGetterMethod();
@@ -605,7 +613,7 @@ public class CachingAttributeDecorator
      * Retrieves the object type.
      * @return such information.
      */
-    @Nullable
+    @NotNull
     public String getObjectType()
     {
         String result = getCachedObjectType();
@@ -829,6 +837,7 @@ public class CachingAttributeDecorator
      * Retrieves the QueryJ type.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getQueryJFieldType()
     {
         String result = getCachedQueryJFieldType();
@@ -873,6 +882,7 @@ public class CachingAttributeDecorator
      * Retrieves the QueryJ type for statement setters.
      * @return the QueryJ type.
      */
+    @NotNull
     public String getStatementSetterFieldType()
     {
         String result = getCachedStatementSetterFieldType();
@@ -918,6 +928,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's table in upper-case.
      * @return such information.
      */
+    @NotNull
     public String getTableNameUppercased()
     {
         String result = getCachedTableNameUppercased();
@@ -963,6 +974,7 @@ public class CachingAttributeDecorator
      * Retrieves the attribute's table in upper-case.
      * @return such information.
      */
+    @NotNull
     public String getTableNameNormalizedLowercased()
     {
         String result = getCachedTableNameNormalizedLowercased();

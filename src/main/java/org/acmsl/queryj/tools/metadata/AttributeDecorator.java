@@ -81,4 +81,10 @@ public interface AttributeDecorator
      * @return such condition.
      */
     public boolean isNumberSmallerThanInt();
+
+    /**
+     * Retrieves the attribute type, as a {@link java.sql.Types}'s constant.
+     * @return such information.
+     */
+    int getJavaSqlType();
 }

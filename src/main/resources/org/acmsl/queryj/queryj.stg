@@ -134,7 +134,7 @@ attribute_declaration(attr) ::= <<
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.type><endif> <attr.nameLowercased>
+<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>
 >>
 
 attribute_declaration_impl(attr) ::= <<
@@ -142,7 +142,7 @@ attribute_declaration_impl(attr) ::= <<
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.type><endif> <attr.nameLowercased>
+<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>
 >>
 
 attribute_isolated_declaration(attr) ::= <<
@@ -158,7 +158,7 @@ attribute_isolated_declaration_impl(attr) ::= <<
   Writes the parameter declaration for a concrete attribute.
   @param attr the attribute.
 !>
-<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.type><endif> <attr.nameLowercased>,
+<type_checker(attribute=attr)>final <if(attr.clob)>String<else><attr.javaType><endif> <attr.nameLowercased>,
 >>
 
 indirect_template(name, extra1, extra2) ::= <<
@@ -166,7 +166,7 @@ indirect_template(name, extra1, extra2) ::= <<
   Calls the template matching given name, passing the value as argument.
   @param name the template name.
 !>
-<(name)(extra1=extra1, extra2=extra2)>
+<(name)(value=extra1, extra2=extra2)>
 >>
 
 custom_select(cs, table) ::= <<
@@ -1140,12 +1140,12 @@ List result = null;
 <endif>
 <else>
 <if(attr.numeric)>
-<attr.type> result = 0;
+<attr.javaType> result = 0;
 <else>
 <if(attr.boolean)>
-<attr.type> result = false;
+<attr.javaType> result = false;
 <else>
-<attr.type> result = null;
+<attr.javaType> result = null;
 <endif>
 <endif>
 <endif>
@@ -1161,7 +1161,7 @@ implicit_custom_select_attribute_declaration(sql, attr) ::= <<
 <if(attr.nullable)>
 <sql.resultClass> result = null;
 <else>
-<attr.type> result = null;
+<attr.javaType> result = null;
 <endif>
 
 >>
@@ -1175,8 +1175,8 @@ custom_select_template_call(sql, result, table) ::= <<
  !>
 <if(result.implicitProperty)>
 <result.implicitProperty:{attr |
-    <if(!attr.nullable)>((<attr.type>)
-    (<actual_custom_select_template_call(sql=sql, result=result)>)).<attr.type>Value();
+    <if(!attr.nullable)>((<attr.javaType>)
+    (<actual_custom_select_template_call(sql=sql, result=result)>)).<attr.javaType>Value();
 <else>(<sql.resultClass>)
      <actual_custom_select_template_call(sql=sql, result=result)>;
 <endif>}>
