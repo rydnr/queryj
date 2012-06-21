@@ -41,6 +41,7 @@ package org.acmsl.queryj.tools.metadata;
  * Importing project classes.
  */
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 
 /*
@@ -198,6 +199,11 @@ public class CachingTableDecorator
      * The cached all parent tables.
      */
     private List<Table> m__lCachedAllParentTables;
+
+    /**
+     * The cached static rows.
+     */
+    private List<Row> m__lCachedStaticContents;
 
     /**
      * Creates a <code>CachingTableDecorator</code> with the
@@ -1563,6 +1569,53 @@ public class CachingTableDecorator
         return result;
     }
 
+    /**
+     * Specifies the cached static contents.
+     * @param rows the rows.
+     */
+    protected final void immutableSetCachedStaticContent(@NotNull final List<Row> rows)
+    {
+        m__lCachedStaticContents = rows;
+    }
+
+    /**
+     * Specifies the cached static contents.
+     * @param rows the rows.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedStaticContent(@NotNull final List<Row> rows)
+    {
+        immutableSetCachedStaticContent(rows);
+    }
+
+    /**
+     * Retrieves the cached static contents.
+     * @return such rows.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public List<Row> getCachedStaticCotnent()
+    {
+        return m__lCachedStaticContents;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public List<Row> getStaticContent()
+    {
+        @Nullable List<Row> result = getCachedStaticCotnent();
+
+        if (result == null)
+        {
+            result = super.getStaticContent();
+            setCachedStaticContent(result);
+        }
+
+        return result;
+    }
     /**
      * Workaround for debugging templates.
      * @return true.

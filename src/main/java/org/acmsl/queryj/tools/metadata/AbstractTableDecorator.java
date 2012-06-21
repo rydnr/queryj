@@ -41,17 +41,25 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractTable;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.LazyAttribute;
+import org.acmsl.queryj.tools.metadata.vo.Row;
 import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.acmsl.queryj.tools.SingularPluralFormConverter;
+import org.acmsl.queryj.tools.templates.dao.DAOTemplateUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+
+/*
+ * Importing some Apache Commons Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains annotations.
@@ -62,6 +70,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1885,4 +1894,73 @@ public abstract class AbstractTableDecorator
 
         return result;
     }
+
+    /**
+     * Retrieves the static content.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Row> getStaticContent()
+    {
+        List<Row> result = null;
+
+        try
+        {
+            result =
+                retrieveStaticContent(
+                    getTable().getName(),
+                    getMetadataManager(),
+                    getDecoratorFactory(),
+                    DAOTemplateUtils.getInstance());
+        }
+        catch (@NotNull final SQLException invalidQuery)
+        {
+            @Nullable Log t_Log = UniqueLogFactory.getLog(AbstractTableDecorator.class);
+
+            if (t_Log != null)
+            {
+                t_Log.error(
+                    "Cannot retrieve contents in table " + getTable().getName(),
+                    invalidQuery);
+            }
+        }
+
+        if (result == null)
+        {
+            result = new ArrayList<Row>(0);
+        }
+
+        return result;
+    }
+    /**
+     * Retrieves the static values of given table.
+     * @param tableName the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the decorator factory.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
+     * @return such information.
+     * @throws SQLException if the operation fails.
+     */
+    @NotNull
+    protected List<Row> retrieveStaticContent(
+        @NotNull final String tableName,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
+        throws SQLException
+    {
+        List<Row> result =
+            daoTemplateUtils.queryContents(
+                tableName, metadataManager, decoratorFactory);
+
+        if (result == null)
+        {
+            result = new ArrayList<Row>(0);
+        }
+
+        return result;
+    }
+
+
 }

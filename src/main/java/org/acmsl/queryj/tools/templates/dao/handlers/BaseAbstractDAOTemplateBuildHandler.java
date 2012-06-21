@@ -54,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -127,31 +128,38 @@ public class BaseAbstractDAOTemplateBuildHandler
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {        
-        @Nullable BaseAbstractDAOTemplate result = null;
+        @Nullable BaseAbstractDAOTemplate result;
+
+        @Nullable List<Row> t_lStaticValues = null;
 
         if  (isStaticTable(tableName, metadataManager))
         {
-            @Nullable List<Row> t_lStaticValues =
+            t_lStaticValues =
                 retrieveStaticContent(
                     parameters,
                     tableName,
                     metadataManager,
                     templateFactory.getDecoratorFactory());
+        }
 
-            result =
-                templateFactory.createTemplate(
-                    metadataManager,
-                    customSqlProvider,
-                    packageName,
-                    projectPackage,
-                    repository,
+        if (t_lStaticValues == null)
+        {
+            t_lStaticValues = new ArrayList<Row>(0);
+        }
+
+        result =
+            templateFactory.createTemplate(
+                metadataManager,
+                customSqlProvider,
+                packageName,
+                projectPackage,
+                repository,
                     header,
                     implementMarkerInterfaces,
                     jmx,
                     jndiLocation,
                     tableName,
                     t_lStaticValues);
-        }
 
         return result;
     }

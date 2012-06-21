@@ -33,61 +33,54 @@
 //
 group BaseAbstractDAO;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates an abstract DAO database implementation source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
+  @param copyright_years the copyright's years.
+  @param table.name the table name.
+  @param project_package the package.
   @params project_imports
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
-    first_line_description(tableName=input.table_name),
-    second_line_description(tableName=input.table_name)
+    first_line_description(tableName=table.name),
+    second_line_description(tableName=table.name)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/BaseAbstractDAO.stg
+// Generated using org/acmsl/queryj/dao/BaseAbstractDAO.stg at <timestamp>
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName
   ])>
 
 <project_imports(
-  basePackageName=input.base_package_name,
+  basePackageName=project_package,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name)>
+  voName=table.voName)>
 
 <checkers_import()>
 /*
  * Importing some JDK classes.
  */
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+<if(column_type_imports)>
+<column_type_imports:import(type=it)>
+<endif>
 
-/*
- * Importing some JDK extension classes
- */
 import javax.sql.DataSource;
 
-<class(input=input)>
+<class()>
 >>
 
 first_line_description(tableName) ::= <<
@@ -122,38 +115,37 @@ import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<voSubpackageName>.<voName>;
 >>
 
-class(input) ::= <<
+class() ::= <<
 <!
  Generates the class body.
- @param input the input.
 !>
 /**
  * <[
-      first_line_description(tableName=input.table_name),
-      second_line_description(tableName=input.table_name)
+      first_line_description(tableName=table.name),
+      second_line_description(tableName=table.name)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc()>
 */
-public abstract class Abstract<input.vo_name>DAO
-    extends  QueryjJdbcTemplate
-    implements  <input.vo_name>DAO
+public abstract class Abstract<table.voName>DAO
+    extends  <repository.capitalized>JdbcTemplate
+    implements  <table.voName>DAO
 {
     /**
      * The whole constants.
      */
-    private static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
-        new <input.vo_name>[]
+    private static final <table.voName>[] _ALL_QUERYJ_CONSTANTS_ =
+        new <table.voName>[]
         {
-            <input.cached_rows:{<it.nameNormalizedUppercased>};
+            <table.staticContent:{<it.nameNormalizedUppercased>};
               separator=",\n">
         };
 
     /**
-     * Builds a {@link Abstract<input.vo_name>DAO} instance
+     * Builds a {@link Abstract<table.voName>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
      */
-    public Abstract<input.vo_name>DAO(<notnull()>final DataSource dataSource)
+    public Abstract<table.voName>DAO(<notnull()>final DataSource dataSource)
     {
         super(dataSource);
     }
@@ -162,10 +154,10 @@ public abstract class Abstract<input.vo_name>DAO
      * Retrieves the static (pre-cached) values.
      * @return such information.
      */
-    public <input.vo_name>[] getStaticValues()
+    public <table.voName>[] getStaticValues()
     {
-        <input.vo_name>[] result =
-            new <input.vo_name>[_ALL_QUERYJ_CONSTANTS_.length];
+        <table.voName>[] result =
+            new <table.voName>[_ALL_QUERYJ_CONSTANTS_.length];
 
         copyArray(_ALL_QUERYJ_CONSTANTS_, result);
 
@@ -173,12 +165,12 @@ public abstract class Abstract<input.vo_name>DAO
     }
 
     /**
-     * Copies given array of \{@link <input.vo_name>} instances.
+     * Copies given array of {@link <table.voName>} instances.
      * @param source the source.
      * @param target the target.
      */
     protected void copyArray(
-        <notnull()>final <input.vo_name>[] source, <notnull()>final <input.vo_name>[] target)
+        <notnull()>final <table.voName>[] source, <notnull()>final <table.voName>[] target)
     {
         int t_iCount = source.length;
 
@@ -188,10 +180,10 @@ public abstract class Abstract<input.vo_name>DAO
         }
     }
 
-    <input.static_attribute:static_table(
+    <table.staticAttributes:static_table(
       attribute=it,
-      primaryKeyAttributes=input.pk_attributes,
-      voName=input.vo_name)>
+      primaryKeyAttributes=table.primaryKey,
+      voName=table.voName)>
 }
 >>
 
@@ -208,12 +200,13 @@ static_table(
  * filtering by <attribute.name>.
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
- * @return the \{@link <voName>} instance.
+ * @return the {@link <voName>} instance.
  */
+<nullable()>
 public <voName> findConstantBy<attribute.nameCapitalized>(
-    final <attribute.javaType> <attribute.name>)
+    <type_checker(attribute=attribute)>final <attribute.javaType> <attribute.name>)
 {
-    <voName> result = null;
+    <nullable()><voName> result = null;
 
     int t_iLength =
         (_ALL_QUERYJ_CONSTANTS_ != null)
@@ -222,7 +215,7 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
 
     for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
     {
-        <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+        <nullable()><voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
 
         if  (   (t_CurrentItem != null)
              && (<attribute.nameLowercased>.equals(
@@ -240,12 +233,13 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
  <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \{@link <voName>} instance.
+ * @return the {@link <voName>} instance.
  */
+<nullable()>
 public <voName> findConstantByPk(
   <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
 {
-    <voName> result = null;
+    <nullable()><voName> result = null;
 
     int t_iLength =
         (_ALL_QUERYJ_CONSTANTS_ != null)
@@ -256,7 +250,7 @@ public <voName> findConstantByPk(
 
     for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
     {
-        <voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
+        <nullable()><voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
 
         if  (t_CurrentItem != null)
         {

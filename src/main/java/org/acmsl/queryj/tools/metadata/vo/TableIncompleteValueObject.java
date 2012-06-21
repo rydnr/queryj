@@ -102,4 +102,22 @@ public class TableIncompleteValueObject
     {
         super.setForeignKeys(foreignKeys);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setStatic(final boolean flag)
+    {
+        super.setStatic(flag);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setVoDecorated(final boolean flag)
+    {
+        super.setVoDecorated(flag);
+    }
 }

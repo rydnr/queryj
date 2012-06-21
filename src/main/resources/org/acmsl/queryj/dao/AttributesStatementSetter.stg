@@ -78,7 +78,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 
 /*
- * Importing some JDK extension classes
+ * Importing some JDK classes
  */
 <if(column_type_imports)>
 <column_type_imports:import(type=it)>

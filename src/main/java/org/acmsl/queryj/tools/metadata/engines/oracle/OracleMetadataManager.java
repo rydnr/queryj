@@ -76,6 +76,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -426,9 +427,37 @@ public class OracleMetadataManager
             }
         }
 
-        // second round: parent tables
+        // second round: fix table properties based on the table comments.
+        processTableComments(tableMap.values(), metaLanguageUtils);
+
+        // third round: parent tables
         bindParentChildRelationships(tableMap.values(), caseSensitiveness, metaLanguageUtils);
         bindAttributes(tableMap.values(), columnMap);
+    }
+
+    /**
+     * Processes the tables' comments.
+     * @param tables the list of {@link Table tables}.
+     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
+     */
+    protected void processTableComments(
+        @NotNull final Collection<TableIncompleteValueObject> tables,
+        @NotNull final MetaLanguageUtils metaLanguageUtils)
+    {
+        for (@Nullable TableIncompleteValueObject t_Table : tables)
+        {
+            if (t_Table != null)
+            {
+                if (metaLanguageUtils.isStatic(t_Table.getComment()))
+                {
+                    t_Table.setStatic(true);
+                }
+                if (metaLanguageUtils.retrieveTableDecorator(t_Table.getComment()))
+                {
+                    t_Table.setVoDecorated(true);
+                }
+            }
+        }
     }
 
     /**
