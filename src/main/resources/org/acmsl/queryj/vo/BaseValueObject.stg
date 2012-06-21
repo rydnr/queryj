@@ -65,13 +65,19 @@ source() ::= <<
     typeInitMap.voSubpackageName
   ])>
 
+/*
+ * Importing Apache Commons Lang builder classes.
+ */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 <if(column_type_imports)>
 /*
  * Importing some JDK classes.
  */
 <column_type_imports:import(type=it)>
-<endif>
 
+<endif>
 <class(table=table)>
 >>
 
@@ -158,6 +164,42 @@ public abstract class Abstract<table.voName>ValueObject
     <table.attributes:attribute_accessors(attribute=it);
      separator="\n">
 <endif>
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int hashCode()
+    {
+        return
+            new HashCodeBuilder()
+                .appendSuper(super.hashCode())
+                <table.primaryKey:{it|.append(this.m__<it.nameCapitalized>)}; separator="\n">
+                .toHashCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean equals(<nullable()>final Object obj)
+    {
+        boolean result = false;
+
+        if (obj instanceof <table.voName>)
+        {
+            <notnull()>final <table.voName> other =
+                (<table.voName>) obj;
+
+            result =
+                new EqualsBuilder()
+                    .appendSuper(super.equals(obj))
+                    <table.primaryKey:{it|.append(this.m__<it.nameCapitalized>, other.get<it.nameCapitalized>())}; separator="\n">
+                    .isEquals();
+        }
+
+        return result;
+    }
 
 }
 >>
