@@ -39,13 +39,6 @@ Spain
 package org.acmsl.queryj.tools.templates.dao;
 
 
-/*
-* Importing project classes.
-*/
-
-import org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite;
-import org.acmsl.queryj.tools.templates.dao.mock.MockSuite;
-
 
 /*
 /* Importing JUnit classes.
@@ -103,7 +96,6 @@ public class DaoSuite
     suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DataAccessManagerTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.JdbcDAOTemplateGeneratorTest.class);
     //suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.ConfigurationPropertiesTemplateTest.class);
     //suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateTest.class);
     //suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOTestTemplateGeneratorTest.class);
@@ -116,9 +108,6 @@ public class DaoSuite
     suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOChooserTemplateUtilsTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.BaseDAOFactoryTemplateGeneratorTest.class);
     //suite.addTestSuite(org.acmsl.queryj.tools.templates.dao.DAOTemplateTest.class);
-    
-    suite.addTest(org.acmsl.queryj.tools.templates.dao.handlers.HandlersSuite.suite());
-    suite.addTest(org.acmsl.queryj.tools.templates.dao.mock.MockSuite.suite());
     
     
     // JUnitDoclet begin method suite

@@ -44,7 +44,6 @@ package org.acmsl.queryj.tools.templates;
 */
 
 import org.acmsl.queryj.tools.templates.dao.DaoSuite;
-import org.acmsl.queryj.tools.templates.functions.FunctionsSuite;
 import org.acmsl.queryj.tools.templates.handlers.HandlersSuite;
 import org.acmsl.queryj.tools.templates.valueobject.ValueobjectSuite;
 
@@ -103,18 +102,13 @@ public class TemplatesSuite
     
     //suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.KeywordRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.TestSuiteTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateUtilsTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TableRepositoryTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.tools.templates.ProcedureRepositoryTemplateUtilsTest.class);
     //suite.addTestSuite(org.acmsl.queryj.tools.templates.TableTemplateTest.class);
     
     suite.addTest(org.acmsl.queryj.tools.templates.dao.DaoSuite.suite());
-    suite.addTest(org.acmsl.queryj.tools.templates.functions.FunctionsSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.handlers.HandlersSuite.suite());
     suite.addTest(org.acmsl.queryj.tools.templates.valueobject.ValueobjectSuite.suite());
     
