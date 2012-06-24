@@ -36,19 +36,16 @@ package org.acmsl.queryj.tools.cli;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.tools.cli.QueryJCLIHelper;
-import org.acmsl.queryj.tools.cli.QueryJCLIOptions;
 import org.acmsl.queryj.tools.logging.QueryJCLILog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.QueryJChain;
-import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.QueryJCommand;
 
 /*
  * Importing some Apache Commons CLI classes.
  */
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;

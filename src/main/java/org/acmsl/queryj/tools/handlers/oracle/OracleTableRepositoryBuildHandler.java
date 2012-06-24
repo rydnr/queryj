@@ -36,7 +36,7 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.templates.handlers.TableRepositoryTemplateBuildHandler;
 
 /**
  * Builds an Oracle-specific table repository.

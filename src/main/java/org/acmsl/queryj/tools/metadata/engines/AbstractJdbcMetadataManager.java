@@ -54,7 +54,7 @@ import org.acmsl.queryj.tools.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.TableValueObject;
-import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
+import org.acmsl.queryj.templates.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.

@@ -77,7 +77,7 @@ grammar PerComment;
  * Description: ANTLR parser for PerComment.g
  *
  */
-package org.acmsl.queryj.tools.antlr;
+package org.acmsl.queryj.antlr;
 
 /*
  * Importing some JDK classes.
@@ -124,7 +124,7 @@ import java.util.List;
  * Description: ANTLR lexer for PerComment.g
  *
  */
-package org.acmsl.queryj.tools.antlr;
+package org.acmsl.queryj.antlr;
 }
 
 @parser::members

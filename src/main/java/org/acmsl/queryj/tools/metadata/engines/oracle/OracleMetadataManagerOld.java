@@ -35,7 +35,6 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.Condition;
 import org.acmsl.queryj.Field;
 import org.acmsl.queryj.QueryFactory;
 import org.acmsl.queryj.QueryJException;
@@ -205,6 +204,7 @@ public class OracleMetadataManagerOld
      * @throws SQLException if any kind of SQL exception occurs.
      * @throws QueryJException if any other error occurs.
      */
+    @SuppressWarnings("unused")
     protected void extractPrimaryKeys(
         @NotNull final Connection connection,
         @Nullable final String[] tableNames)
@@ -256,65 +256,63 @@ public class OracleMetadataManagerOld
             sqlExceptionToThrow = invalidQuery;
         }
 
-        if (   (t_PreparedStatement != null)
-            && (sqlExceptionToThrow != null))
+        try
         {
-            try
+            if (t_PreparedStatement != null)
             {
                 t_rsResults = t_PreparedStatement.executeQuery();
             }
-            catch (@NotNull final SQLException queryFailed)
-            {
-                sqlExceptionToThrow = queryFailed;
-            }
+        }
+        catch (@NotNull final SQLException queryFailed)
+        {
+            sqlExceptionToThrow = queryFailed;
         }
 
-        if (   (t_rsResults != null)
-            && (sqlExceptionToThrow != null))
+        try
         {
-            try
+            if (t_rsResults != null)
             {
                 while  (t_rsResults.next())
                 {
                 }
             }
-            catch (@NotNull final SQLException errorIteratingResults)
-            {
-                sqlExceptionToThrow = errorIteratingResults;
-            }
+        }
+        catch (@NotNull final SQLException errorIteratingResults)
+        {
+            sqlExceptionToThrow = errorIteratingResults;
         }
 
-        if (t_rsResults != null)
+        try
         {
-            try
+            if (t_rsResults != null)
             {
                 t_rsResults.close();
             }
-            catch  (@NotNull final SQLException sqlException)
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            if  (t_Log != null)
             {
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot close the result set.",
-                        sqlException);
-                }
+                t_Log.error(
+                    "Cannot close the result set.",
+                    sqlException);
             }
         }
 
-        if (t_PreparedStatement != null)
+        try
         {
-            try 
+            if (t_PreparedStatement != null)
             {
                 t_PreparedStatement.close();
             }
-            catch  (@NotNull final SQLException sqlException)
+        }
+        catch  (@NotNull final SQLException sqlException)
+        {
+            if  (t_Log != null)
             {
-                if  (t_Log != null)
-                {
-                    t_Log.error(
-                        "Cannot close the statement.",
-                        sqlException);
-                }
+                t_Log.error(
+                    "Cannot close the statement.",
+                    sqlException);
             }
         }
 

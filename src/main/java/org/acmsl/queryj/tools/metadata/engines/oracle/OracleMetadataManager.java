@@ -48,7 +48,7 @@ import org.acmsl.queryj.tools.metadata.vo.AttributeIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKeyIncompleteValueObject;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
-import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
+import org.acmsl.queryj.templates.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -151,7 +151,7 @@ public class OracleMetadataManager
      * @param caseSensitiveness          whether it's case sensitive or not.
      * @param metadataExtractionListener the
      *                                   <code>MetadataExtractionListener</code> instance.
-     * @param metaLanguageUtils          the {@link org.acmsl.queryj.tools.templates.MetaLanguageUtils} instance.
+     * @param metaLanguageUtils          the {@link org.acmsl.queryj.templates.MetaLanguageUtils} instance.
      * @return the list of tables.
      * @throws java.sql.SQLException if the database operation fails.
      * @throws org.acmsl.queryj.QueryJException

@@ -41,15 +41,14 @@ package org.acmsl.queryj.tools.metadata.engines;
  * Importing some ACM-SL classes.
  */
 import org.acmsl.queryj.Field;
+import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataExtractionListener;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.MetadataManagerOld;
 import org.acmsl.queryj.tools.metadata.ProcedureMetadata;
 import org.acmsl.queryj.tools.metadata.ProcedureParameterMetadata;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.Table;
-import org.acmsl.queryj.tools.templates.MetaLanguageUtils;
-import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.templates.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL Commons classes.

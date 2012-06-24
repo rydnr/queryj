@@ -35,21 +35,21 @@
 package org.acmsl.queryj.tools.metadata.engines.oracle;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.queryj.CalendarField;
-import org.acmsl.queryj.BigDecimalField;
-import org.acmsl.queryj.DoubleField;
+import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some QueryJ-SQL classes.
+ */
 import org.acmsl.queryj.Field;
-import org.acmsl.queryj.IntField;
 import org.acmsl.queryj.LongField;
 import org.acmsl.queryj.StringField;
 import org.acmsl.queryj.Table;
 
 /*
- * Importing some ACM-SL Commons classes.
+ * Importing some JetBrains annotations.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,7 +59,7 @@ import org.jetbrains.annotations.Nullable;
  */
 
 public class OracleAllTabColumnsTable
-    extends  Table
+    extends Table
     implements  Singleton
 {
     /**
@@ -116,7 +116,7 @@ public class OracleAllTabColumnsTable
      */
     protected OracleAllTabColumnsTable()
     {
-        this(null);
+        this("ALL_TAB_COLUMNS");
     }
 
     /**
@@ -127,7 +127,7 @@ public class OracleAllTabColumnsTable
     @Nullable
     public static OracleAllTabColumnsTable getInstance(@Nullable final String alias)
     {
-        @Nullable OracleAllTabColumnsTable result = null;
+        @Nullable OracleAllTabColumnsTable result;
 
         if  (alias != null)
         {

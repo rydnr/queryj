@@ -152,7 +152,7 @@ public class JdbcMetadataManager
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         final boolean caseSensitiveness)
         throws  SQLException,
-        QueryJException
+                QueryJException
     {
         List<TableIncompleteValueObject> result = new ArrayList<TableIncompleteValueObject>();
 

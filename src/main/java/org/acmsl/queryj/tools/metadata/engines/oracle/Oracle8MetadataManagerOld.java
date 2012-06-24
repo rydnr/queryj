@@ -35,11 +35,11 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.QueryJException;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.QueryJException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

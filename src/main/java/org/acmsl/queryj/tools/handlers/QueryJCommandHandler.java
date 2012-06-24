@@ -38,7 +38,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*

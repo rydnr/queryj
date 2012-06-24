@@ -41,28 +41,22 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.SingularPluralFormConverter;
-import org.acmsl.queryj.tools.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 import org.acmsl.queryj.tools.metadata.vo.ForeignKey;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Decorates <code>ForeignKey</code> instances to provide required alternate

@@ -36,20 +36,15 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.BigDecimalField;
-import org.acmsl.queryj.CalendarField;
-import org.acmsl.queryj.DoubleField;
-import org.acmsl.queryj.Field;
-import org.acmsl.queryj.IntField;
-import org.acmsl.queryj.LongField;
-import org.acmsl.queryj.StringField;
-import org.acmsl.queryj.Table;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.Field;
+import org.acmsl.queryj.StringField;
+import org.acmsl.queryj.Table;
+    import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -57,7 +52,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class OracleUserTablesTable
-    extends  Table
+    extends Table
     implements  Singleton
 {
     /**
@@ -93,7 +88,7 @@ public class OracleUserTablesTable
      */
     protected OracleUserTablesTable()
     {
-        this(null);
+        this("USER_TABLES");
     }
 
     /**
@@ -104,7 +99,7 @@ public class OracleUserTablesTable
     @Nullable
     public static OracleUserTablesTable getInstance(@Nullable final String alias)
     {
-        @Nullable OracleUserTablesTable result = null;
+        @Nullable OracleUserTablesTable result;
 
         if  (alias != null)
         {

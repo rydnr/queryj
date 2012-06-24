@@ -36,8 +36,8 @@ package org.acmsl.queryj.tools.ant;
  */
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.QueryJSettings;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.tools.QueryJChain;
 import org.acmsl.queryj.tools.logging.QueryJAntLog;
 

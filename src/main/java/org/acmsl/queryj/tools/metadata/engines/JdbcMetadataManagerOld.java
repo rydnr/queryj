@@ -254,6 +254,7 @@ public class JdbcMetadataManagerOld
      * Checks whether the engine requires specific LOB handling.
      * @return <code>true</code> in such case.
      */
+    @SuppressWarnings("unused")
     public boolean requiresCustomLobHandling()
     {
         return requiresCustomClobHandling() || requiresCustomBlobHandling();

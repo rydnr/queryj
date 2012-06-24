@@ -38,28 +38,20 @@ package org.acmsl.queryj.tools.metadata.engines.oracle;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.BigDecimalField;
-import org.acmsl.queryj.CalendarField;
-import org.acmsl.queryj.DoubleField;
 import org.acmsl.queryj.Field;
-import org.acmsl.queryj.IntField;
-import org.acmsl.queryj.LongField;
-import org.acmsl.queryj.QueryUtils;
-import org.acmsl.queryj.StringField;
-import org.acmsl.queryj.Table;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
- * Importing some JDK classes.
+ * Importing some JetBrains annotations.
  */
-import java.math.BigDecimal;
-import java.util.Calendar;
+import org.acmsl.queryj.QueryUtils;
+import org.acmsl.queryj.StringField;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Contains the text functions supported by Oracle Oracle8i Enterprise Edition
@@ -273,7 +265,7 @@ public class OracleTextFunctions
 
         /**
          * Specifies whether the operator is a function or a variable.
-         * @param variable such flag.
+         * @param function such flag.
          */
         private void inmutableSetNoFunction(final boolean function)
         {
@@ -435,7 +427,7 @@ public class OracleTextFunctions
             
             int t_iCount = (parameters != null) ? parameters.length : 0;
 
-            @Nullable Object t_CurrentParameter = null;
+            @Nullable Object t_CurrentParameter;
 
             for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
             {

@@ -37,14 +37,11 @@ package org.acmsl.queryj.tools.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
-import org.acmsl.queryj.tools.templates.handlers.TableRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.tools.templates.handlers.TemplateBuildHandler;
+import org.acmsl.queryj.templates.handlers.TableRepositoryTemplateBuildHandler;
 
 /*
  * Importing some Ant classes.
  */
-import org.apache.tools.ant.BuildException;
 
 /**
  * Builds a table repository using database metadata.

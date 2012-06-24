@@ -34,7 +34,7 @@ package org.acmsl.queryj.tools.handlers;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.QueryJCommand;
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.tools.logging.QueryJAntLog;
 import org.acmsl.queryj.tools.logging.QueryJLog;
 

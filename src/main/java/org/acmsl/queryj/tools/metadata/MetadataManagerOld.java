@@ -41,12 +41,12 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.queryj.QueryJException;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.QueryJException;
+    import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -89,7 +89,7 @@ public interface MetadataManagerOld
      */
     public void retrieveMetadata()
         throws  SQLException,
-        QueryJException;
+                QueryJException;
 
     /**
      * Retrieves the table names.

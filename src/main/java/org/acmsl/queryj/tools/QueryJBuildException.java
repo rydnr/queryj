@@ -46,7 +46,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class QueryJBuildException
-    extends  QueryJException
+    extends QueryJException
 {
     /**
      * Builds a QueryJ build exception with a certain message.
@@ -71,6 +71,8 @@ public class QueryJBuildException
      * Outputs a text representation of this exception.
      * @return the error description.
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return toString(getMessage(), getCause());
@@ -82,9 +84,10 @@ public class QueryJBuildException
      * @param cause the cause.
      * @return the error description.
      */
-    public String toString(final String message, @Nullable final Throwable cause)
+    @NotNull
+    public String toString(@NotNull final String message, @Nullable final Throwable cause)
     {
-        @NotNull StringBuffer t_sbResult = new StringBuffer();
+        @NotNull StringBuilder t_sbResult = new StringBuilder();
 
         t_sbResult.append(message);
 

@@ -35,10 +35,8 @@ package org.acmsl.queryj.tools.handlers.mysql;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.engines.mysql.MySQL4xMetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 
@@ -57,7 +55,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 

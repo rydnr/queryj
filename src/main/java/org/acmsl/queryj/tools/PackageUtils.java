@@ -2029,7 +2029,7 @@ public class PackageUtils
 
     /**
      * Retrieves the package name for
-     * {@link org.acmsl.queryj.tools.templates.dao.BaseResultSetExtractorTemplate}
+     * {@link org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplate}
      * class.
      * @param packageName the original package.
      * @return the package for such class.

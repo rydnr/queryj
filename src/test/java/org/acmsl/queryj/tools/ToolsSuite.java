@@ -44,7 +44,7 @@ package org.acmsl.queryj.tools;
 */
 
 import org.acmsl.queryj.tools.handlers.HandlersSuite;
-import org.acmsl.queryj.tools.templates.TemplatesSuite;
+import org.acmsl.queryj.templates.TemplatesSuite;
 
 
 /*
@@ -102,7 +102,7 @@ public class ToolsSuite
     suite.addTestSuite(org.acmsl.queryj.tools.PackageUtilsTest.class);
     
     suite.addTest(org.acmsl.queryj.tools.handlers.HandlersSuite.suite());
-    suite.addTest(org.acmsl.queryj.tools.templates.TemplatesSuite.suite());
+    suite.addTest(org.acmsl.queryj.templates.TemplatesSuite.suite());
     
     
     // JUnitDoclet begin method suite

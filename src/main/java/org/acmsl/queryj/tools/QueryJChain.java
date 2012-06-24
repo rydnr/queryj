@@ -47,9 +47,9 @@ import org.acmsl.queryj.tools.handlers.JdbcConnectionClosingHandler;
 import org.acmsl.queryj.tools.handlers.ExternallyManagedFieldsRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.mysql.MySQL4xMetaDataRetrievalHandler;
 import org.acmsl.queryj.tools.handlers.oracle.OracleMetaDataRetrievalHandler;
-import org.acmsl.queryj.tools.templates.dao.DAOBundle;
-import org.acmsl.queryj.tools.templates.handlers.TableTemplateHandlerBundle;
-import org.acmsl.queryj.tools.templates.valueobject.VOBundle;
+import org.acmsl.queryj.templates.dao.DAOBundle;
+import org.acmsl.queryj.templates.handlers.TableTemplateHandlerBundle;
+import org.acmsl.queryj.templates.valueobject.VOBundle;
 
 /*
  * Importing some ACM-SL classes.
@@ -83,8 +83,8 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class QueryJChain
-    extends     AbstractQueryJChain
-    implements  QueryJSettings
+    extends org.acmsl.queryj.AbstractQueryJChain
+    implements org.acmsl.queryj.QueryJSettings
 {
     /**
      * The settings.
@@ -2020,7 +2020,7 @@ public class QueryJChain
      * @param command the command.
      */
     protected void cleanUpOnError(
-        final QueryJBuildException buildException, @NotNull final QueryJCommand command)
+        final QueryJBuildException buildException, @NotNull final org.acmsl.queryj.QueryJCommand command)
     {
         Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
@@ -2049,7 +2049,7 @@ public class QueryJChain
      * @precondition command != null
      */
     @NotNull
-    protected QueryJCommand buildCommand(@NotNull final QueryJCommand command)
+    protected org.acmsl.queryj.QueryJCommand buildCommand(@NotNull final org.acmsl.queryj.QueryJCommand command)
     {
         return buildCommand(command, getSettings());
     }
@@ -2062,8 +2062,8 @@ public class QueryJChain
      * @precondition command != null
      */
     @NotNull
-    protected QueryJCommand buildCommand(
-        @NotNull final QueryJCommand command, final Properties settings)
+    protected org.acmsl.queryj.QueryJCommand buildCommand(
+        @NotNull final org.acmsl.queryj.QueryJCommand command, final Properties settings)
     {
         @Nullable Properties t_Settings = settings;
 
@@ -2082,8 +2082,8 @@ public class QueryJChain
      * @return the initialized command.
      */
     @NotNull
-    protected QueryJCommand buildCommandFromSettingsIfPossible(
-        @NotNull final QueryJCommand command, final Properties settings)
+    protected org.acmsl.queryj.QueryJCommand buildCommandFromSettingsIfPossible(
+        @NotNull final org.acmsl.queryj.QueryJCommand command, final Properties settings)
     {
         mapAttributes(
             command.getAttributeMap(),

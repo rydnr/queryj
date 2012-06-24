@@ -38,12 +38,12 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.QueryJException;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.QueryJException;
+    import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -109,6 +109,7 @@ public interface MetadataManager
      * @return such information.
      */
     @NotNull
+    @SuppressWarnings("unused")
     String getQuote();
 
     /**

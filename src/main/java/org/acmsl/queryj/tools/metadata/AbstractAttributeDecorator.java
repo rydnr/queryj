@@ -41,7 +41,7 @@ package org.acmsl.queryj.tools.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.tools.SingularPluralFormConverter;
+import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.tools.metadata.vo.AbstractAttribute;
 import org.acmsl.queryj.tools.metadata.vo.Attribute;
 

@@ -35,11 +35,15 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.tools.metadata.MetadataManager;
 import org.acmsl.queryj.tools.metadata.vo.Table;
 import org.acmsl.queryj.tools.QueryJBuildException;
+
+/*
+ * Importing some ACM-SL Commons.
+ */
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Apache Commons-Logging classes.
@@ -47,7 +51,7 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 import org.apache.commons.logging.Log;
 
 /*
- * Importing jetbrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

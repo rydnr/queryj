@@ -1,7 +1,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002  Jose San Leandro Armendáriz
+    Copyright (C) 2002  Jose San Leandro Armendï¿½riz
                         jsanleandro@yahoo.es
                         chousz@yahoo.com
 
@@ -22,7 +22,7 @@
     Thanks to ACM S.L. for distributing this library under the GPL license.
     Contact info: jsanleandro@yahoo.es
     Postal Address: c/Playa de Lagoa, 1
-                    Urb. Valdecabañas
+                    Urb. Valdecabaï¿½as
                     Boadilla del monte
                     28660 Madrid
                     Spain
@@ -31,7 +31,7 @@
  *
  * Filename: $RCSfile$
  *
- * Author: Jose San Leandro Armendáriz
+ * Author: Jose San Leandro Armendï¿½riz
  *
  * Description: Traces method calls.
  *
@@ -49,21 +49,15 @@ package aspects.org.acmsl.queryj;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.Condition;
-import org.acmsl.queryj.SelectQuery;
 import org.acmsl.queryj.tools.OracleMetaDataManager;
 
 /*
  * Importing JDK classes.
  */
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * Importing Jakarta Commons classes.
  */
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /**
  * Traces method calls.
