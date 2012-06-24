@@ -39,9 +39,9 @@ package org.acmsl.queryj.tools.handlers;
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
-import org.acmsl.queryj.tools.customsql.CustomSqlProvider;
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
+import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL classes.

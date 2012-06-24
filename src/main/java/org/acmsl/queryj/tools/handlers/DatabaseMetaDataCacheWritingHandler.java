@@ -35,14 +35,13 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.

@@ -37,7 +37,7 @@ package org.acmsl.queryj.tools.ant;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.vo.AbstractField;
+import org.acmsl.queryj.metadata.vo.AbstractField;
 
 /*
  * Importing some Ant classes.

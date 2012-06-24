@@ -41,13 +41,13 @@ import org.acmsl.queryj.tools.ant.AntFieldFkElement;
 import org.acmsl.queryj.tools.ant.AntTableElement;
 import org.acmsl.queryj.tools.ant.AntTablesElement;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.metadata.MetadataExtractionLogger;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
-import org.acmsl.queryj.tools.metadata.MetadataTypeManager;
-import org.acmsl.queryj.tools.metadata.engines.JdbcMetadataManager;
-import org.acmsl.queryj.tools.metadata.vo.Attribute;
-import org.acmsl.queryj.tools.metadata.vo.Table;
-import org.acmsl.queryj.tools.metadata.vo.TableIncompleteValueObject;
+import org.acmsl.queryj.metadata.MetadataExtractionLogger;
+import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.MetadataTypeManager;
+import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
+import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 
 /*
  * Importing some ACM-SL Commons classes.

@@ -35,8 +35,8 @@ package org.acmsl.queryj.tools.handlers.oracle;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataExtractionLogger;
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.MetadataExtractionLogger;
+import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataRetrievalHandler;
 
 /*
@@ -47,8 +47,8 @@ import org.acmsl.commons.version.VersionUtils;
 /*
  * Importing some Ant classes.
  */
-import org.acmsl.queryj.tools.metadata.engines.oracle.OracleMetadataManager;
-import org.acmsl.queryj.tools.metadata.vo.Table;
+import org.acmsl.queryj.metadata.engines.oracle.OracleMetadataManager;
+import org.acmsl.queryj.metadata.vo.Table;
 import org.apache.tools.ant.BuildException;
 
 /*

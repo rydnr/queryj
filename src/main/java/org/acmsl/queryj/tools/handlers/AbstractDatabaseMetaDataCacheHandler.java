@@ -35,7 +35,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing jetbrains annotations.

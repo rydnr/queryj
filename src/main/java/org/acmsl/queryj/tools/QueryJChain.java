@@ -35,8 +35,8 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlProviderRetrievalHandler;
-import org.acmsl.queryj.tools.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
+import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;

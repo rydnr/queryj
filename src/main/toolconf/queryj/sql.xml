@@ -109,7 +109,7 @@
   <result-list>
     <result
       id="multiple.q_sql.result"
-      class="org.acmsl.queryj.tools.customsql.QSqlValueObject"
+      class="org.acmsl.queryj.customsql.QSqlValueObject"
       matches="multiple">
       <property-ref
         id="q_sql.sql_id.property"/>
