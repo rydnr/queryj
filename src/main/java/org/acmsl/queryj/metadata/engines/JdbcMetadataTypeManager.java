@@ -89,7 +89,7 @@ public class JdbcMetadataTypeManager
     /**
      * The native to Java type mapping.
      */
-    private transient Map m__mNative2JavaTypeMapping;
+    private Map m__mNative2JavaTypeMapping;
 
     /**
      * Creates an empty <code>JdbcMetadataTypeManager</code>.

@@ -41,6 +41,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.AbstractTable;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -1962,5 +1963,16 @@ public abstract class AbstractTableDecorator
         return result;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public List<Sql> getDynamicQueries()
+    {
+        // TODO
+        return new ArrayList<Sql>(0);
+    }
 
 }

@@ -53,6 +53,9 @@ import java.util.List;
 public class ForeignKeyIncompleteValueObject
     extends AbstractForeignKey
 {
+
+    private static final long serialVersionUID = 6949444359297510253L;
+
     /**
      * Creates a {@link ForeignKeyIncompleteValueObject} with given information.
      * @param fkName the name of the foreign key.

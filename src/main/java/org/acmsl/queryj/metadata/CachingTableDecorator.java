@@ -40,6 +40,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -204,6 +205,11 @@ public class CachingTableDecorator
      * The cached static rows.
      */
     private List<Row> m__lCachedStaticContents;
+
+    /**
+     * The cached dynamic queries.
+     */
+    private List<Sql> m__lCachedDynamicQueries;
 
     /**
      * Creates a <code>CachingTableDecorator</code> with the
@@ -1616,6 +1622,54 @@ public class CachingTableDecorator
 
         return result;
     }
+
+    /**
+     * Specifies the cached dynamic queries.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedDynamicQueries(@NotNull final List<Sql> list)
+    {
+        m__lCachedDynamicQueries = list;
+    }
+
+    /**
+     * Specifies the cached dynamic queries.
+     * @param list such list.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedDynamicQueries(@NotNull final List<Sql> list)
+    {
+        immutableSetCachedDynamicQueries(list);
+    }
+
+    /**
+     * Retrieves the cached dynamic queries.
+     * @return such information.
+     */
+    @Nullable
+    protected List<Sql> getCachedDynamicQueries()
+    {
+        return m__lCachedDynamicQueries;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public List<Sql> getDynamicQueries()
+    {
+        List<Sql> result = getCachedDynamicQueries();
+
+        if (result == null)
+        {
+            result = super.getDynamicQueries();
+            setCachedDynamicQueries(result);
+        }
+
+        return result;
+    }
+
     /**
      * Workaround for debugging templates.
      * @return true.

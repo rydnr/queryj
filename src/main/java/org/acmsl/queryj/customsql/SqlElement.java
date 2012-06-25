@@ -37,12 +37,14 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Models &lt;sql&gt; elements in <i>custom-sql</i> models, which
@@ -91,6 +93,11 @@ public class SqlElement
     private boolean m__bValidate = true;
 
     /**
+     * The <i>dynamic</i> attribute.
+     */
+    private boolean m__bDynamic = false;
+
+    /**
      * The <i>description</i> attribute.
      */
     private String m__strDescription;
@@ -103,7 +110,7 @@ public class SqlElement
     /**
      * The <i>parameter-ref</i> elements.
      */
-    private Collection m__cParameterRefs;
+    private List<ParameterRefElement> m__lParameterRefs;
 
     /**
      * The <i>result-ref</i> element.
@@ -133,21 +140,19 @@ public class SqlElement
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
-     * @precondition id != null
-     * @precondition dao != null
-     * @precondition name != null
-     * @precondition type != null
-     * @precondition implementation != null
+     * @param dynamic the <i>dynamic</i> attribute.
      */
+    @SuppressWarnings("unused")
     public SqlElement(
-        final String id,
-        final String dao,
-        final String name,
-        final String type,
-        final String implementation,
-        final boolean validate)
+        @NotNull final String id,
+        @NotNull final String dao,
+        @NotNull final String name,
+        @NotNull final String type,
+        @NotNull final String implementation,
+        final boolean validate,
+        final boolean dynamic)
     {
-        this(id, dao, null, name, type, implementation, validate);
+        this(id, dao, null, name, type, implementation, validate, dynamic);
     }
 
     /**
@@ -157,23 +162,21 @@ public class SqlElement
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
+     * @param dynamic the <i>dynamic</i> attribute.
      * @param repositoryScope the <i>repositoryScope</i> attribute.
-     * @precondition id != null
-     * @precondition name != null
-     * @precondition type != null
-     * @precondition implementation != null
-     * @precondition repositoryScope != null
      */
+    @SuppressWarnings("unused")
     public SqlElement(
-        final String id,
-        final String name,
-        final String type,
-        final String implementation,
+        @NotNull final String id,
+        @NotNull final String name,
+        @NotNull final String type,
+        @NotNull final String implementation,
         final boolean validate,
-        final String repositoryScope)
+        final boolean dynamic,
+        @NotNull final String repositoryScope)
     {
         this(
-            id, null, repositoryScope, name, type, implementation, validate);
+            id, null, repositoryScope, name, type, implementation, validate, dynamic);
     }
 
     /**
@@ -185,20 +188,17 @@ public class SqlElement
      * @param type the <i>type</i> attribute.
      * @param implementation the <i>implementation</i> attribute.
      * @param validate the <i>validate</i> attribute.
-     * @precondition id != null
-     * @precondition (dao != null) || (repositoryScope != null)
-     * @precondition name != null
-     * @precondition type != null
-     * @precondition implementation != null
+     * @param dynamic the <i>dynamic</i> attribute.
      */
     protected SqlElement(
-        final String id,
-        final String dao,
-        final String repositoryScope,
-        final String name,
-        final String type,
-        final String implementation,
-        final boolean validate)
+        @NotNull final String id,
+        @Nullable final String dao,
+        @Nullable final String repositoryScope,
+        @NotNull final String name,
+        @NotNull final String type,
+        @NotNull final String implementation,
+        final boolean validate,
+        final boolean dynamic)
     {
         super(id);
         immutableSetDAO(dao);
@@ -207,12 +207,14 @@ public class SqlElement
         immutableSetType(type);
         immutableSetImplementation(implementation);
         immutableSetValidate(validate);
+        immutableSetDynamic(dynamic);
     }
 
     /**
      * Retrieves the <i>description</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getDescription()
     {
         return m__strDescription;
@@ -231,6 +233,7 @@ public class SqlElement
      * Specifies the <i>dao</i> attribute.
      * @param dao such value.
      */
+    @SuppressWarnings("unused")
     protected void setDao(final String dao)
     {
         immutableSetDAO(dao);
@@ -240,6 +243,7 @@ public class SqlElement
      * Retrieves the <i>dao</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getDao()
     {
         return m__strDAO;
@@ -259,6 +263,7 @@ public class SqlElement
      * Specifies the <i>repositoryScope</i> attribute.
      * @param repositoryScope such attribute.
      */
+    @SuppressWarnings("unused")
     protected void setRepositoryScope(final String repositoryScope)
     {
         immutableSetRepositoryScope(repositoryScope);
@@ -268,6 +273,7 @@ public class SqlElement
      * Retrieves the <i>repositoryScope</i> attribute.
      * @return such information.
      */
+    @NotNull
     public String getRepositoryScope()
     {
         return m__strRepositoryScope;
@@ -286,6 +292,7 @@ public class SqlElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
+    @SuppressWarnings("unused")
     protected void setName(final String name)
     {
         immutableSetName(name);
@@ -295,6 +302,7 @@ public class SqlElement
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getName()
     {
         return m__strName;
@@ -313,6 +321,7 @@ public class SqlElement
      * Specifies the <i>type</i> attribute.
      * @param type such value.
      */
+    @SuppressWarnings("unused")
     protected void setType(final String type)
     {
         immutableSetType(type);
@@ -322,6 +331,7 @@ public class SqlElement
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getType()
     {
         return m__strType;
@@ -340,6 +350,7 @@ public class SqlElement
      * Specifies the <i>implementation</i> attribute.
      * @param implementation such value.
      */
+    @SuppressWarnings("unused")
     protected void setImplementation(final String implementation)
     {
         immutableSetImplementation(implementation);
@@ -349,6 +360,7 @@ public class SqlElement
      * Retrieves the <i>implementation</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getImplementation()
     {
         return m__strImplementation;
@@ -367,6 +379,7 @@ public class SqlElement
      * Specifies the <i>validate</i> attribute.
      * @param validate such flag.
      */
+    @SuppressWarnings("unused")
     protected void setValidate(final boolean validate)
     {
         immutableSetValidate(validate);
@@ -376,6 +389,7 @@ public class SqlElement
      * Specifies the <i>validate</i> attribute.
      * @param validate such flag.
      */
+    @SuppressWarnings("unused")
     protected void isValidate(final boolean validate)
     {
         immutableSetValidate(validate);
@@ -400,6 +414,34 @@ public class SqlElement
     }
 
     /**
+     * Specifies whether the query is dynamic or not.
+     * @param dynamic whether the query is dynamic.
+     */
+    protected final void immutableSetDynamic(final boolean dynamic)
+    {
+        m__bDynamic = dynamic;
+    }
+
+    /**
+     * Specifies whether the query is dynamic or not.
+     * @param dynamic whether the query is dynamic.
+     */
+    @SuppressWarnings("unused")
+    protected void setDynamic(final boolean dynamic)
+    {
+        immutableSetDynamic(dynamic);
+    }
+
+    /**
+     * Retrieves whether the query is dynamic or not.
+     * @return such information.
+     */
+    public boolean isDynamic()
+    {
+        return m__bDynamic;
+    }
+
+    /**
      * Specifies the <i>description</i> attribute.
      * @param description such value.
      */
@@ -412,6 +454,7 @@ public class SqlElement
      * Specifies the <i>description</i> attribute.
      * @param description such value.
      */
+    @SuppressWarnings("unused")
     public void setDescription(final String description)
     {
         immutableSetDescription(description);
@@ -430,6 +473,7 @@ public class SqlElement
      * Specifies the &lt;value&gt; element.
      * @param value such value.
      */
+    @SuppressWarnings("unused")
     public void setValue(final String value)
     {
         immutableSetValue(value);
@@ -439,6 +483,7 @@ public class SqlElement
      * Retrieves the &lt;value&gt; element.
      * @return such value.
      */
+    @NotNull
     public String getValue()
     {
         return m__strValue;
@@ -446,37 +491,38 @@ public class SqlElement
 
     /**
      * Specifies the &lt;parameter-ref&gt; elements.
-     * @param parameterRefs such elements.
+     * @param list such elements.
      */
     protected final void immutableSetParameterRefs(
-        final Collection collection)
+        final List<ParameterRefElement> list)
     {
-        m__cParameterRefs = collection;
+        m__lParameterRefs = list;
     }
 
     /**
      * Specifies the &lt;parameter-ref&gt; elements.
-     * @param parameterRefs such elements.
+     * @param list such elements.
      */
-    protected void setParameterRefs(final Collection collection)
+    protected void setParameterRefs(@NotNull final List<ParameterRefElement> list)
     {
-        immutableSetParameterRefs(collection);
+        immutableSetParameterRefs(list);
     }
 
     /**
      * Retrieves the &lt;parameter-ref&gt; elements.
      * @return such elements.
      */
-    public Collection getParameterRefs()
+    @NotNull
+    public List<ParameterRefElement> getParameterRefs()
     {
-        return m__cParameterRefs;
+        return m__lParameterRefs;
     }
 
     /**
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    public void add(final ParameterRefElement parameterRef)
+    public void add(@NotNull final ParameterRefElement parameterRef)
     {
         add(parameterRef, getParameterRefs());
     }
@@ -487,17 +533,17 @@ public class SqlElement
      * @param parameterRefs thhe &ltparameter-ref&gt; elements.
      */
     protected synchronized void add(
-        final ParameterRefElement parameterRef, final Collection parameterRefs)
+        @NotNull final ParameterRefElement parameterRef, @Nullable final List<ParameterRefElement> parameterRefs)
     {
-        Collection t_cParameterRefs = parameterRefs;
+        List<ParameterRefElement> t_lParameterRefs = parameterRefs;
 
-        if  (t_cParameterRefs == null)
+        if  (t_lParameterRefs == null)
         {
-            t_cParameterRefs = new ArrayList();
-            setParameterRefs(t_cParameterRefs);
+            t_lParameterRefs = new ArrayList<ParameterRefElement>();
+            setParameterRefs(t_lParameterRefs);
         }
 
-        t_cParameterRefs.add(parameterRef);
+        t_lParameterRefs.add(parameterRef);
     }
 
     /**
@@ -514,6 +560,7 @@ public class SqlElement
      * Specifies the &lt;result-ref&gt; element.
      * @param resultRef such element.
      */
+    @SuppressWarnings("unused")
     public void setResultRef(final ResultRefElement resultRef)
     {
         immutableSetResultRef(resultRef);
@@ -542,6 +589,7 @@ public class SqlElement
      * Specifies the &lt;connection-flags-ref&gt; element.
      * @param connectionflagsRef such element.
      */
+    @SuppressWarnings("unused")
     public void setConnectionFlagsRef(final ConnectionFlagsRefElement connectionflagsRef)
     {
         immutableSetConnectionFlagsRef(connectionflagsRef);
@@ -551,6 +599,7 @@ public class SqlElement
      * Retrieves the &lt;connection-flags-ref&gt; element.
      * @return such element.
      */
+    @NotNull
     public ConnectionFlagsRefElement getConnectionFlagsRef()
     {
         return m__ConnectionFlagsRef;
@@ -570,6 +619,7 @@ public class SqlElement
      * Specifies the &lt;statement-flags-ref&gt; element.
      * @param statementflagsRef such element.
      */
+    @SuppressWarnings("unused")
     public void setStatementFlagsRef(final StatementFlagsRefElement statementflagsRef)
     {
         immutableSetStatementFlagsRef(statementflagsRef);
@@ -579,6 +629,7 @@ public class SqlElement
      * Retrieves the &lt;statement-flags-ref&gt; element.
      * @return such element.
      */
+    @NotNull
     public StatementFlagsRefElement getStatementFlagsRef()
     {
         return m__StatementFlagsRef;
@@ -598,6 +649,7 @@ public class SqlElement
      * Specifies the &lt;resultset-flags-ref&gt; element.
      * @param resultsetflagsRef such element.
      */
+    @SuppressWarnings("unused")
     public void setResultSetFlagsRef(final ResultSetFlagsRefElement resultsetflagsRef)
     {
         immutableSetResultSetFlagsRef(resultsetflagsRef);

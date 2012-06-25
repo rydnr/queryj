@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,13 +33,15 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing some JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Models &lt;sql&gt; elements in <i>custom-sql</i> models, which
@@ -59,133 +60,155 @@ public interface Sql
     /**
      * The <b>select</b> value for <i>type</i> attribute.
      */
-    public static final String SELECT = "select";
+    static final String SELECT = "select";
 
     /**
      * The <b>insert</b> value for <i>type</i> attribute.
      */
-    public static final String INSERT = "insert";
+    static final String INSERT = "insert";
 
     /**
      * The <b>update</b> value for <i>type</i> attribute.
      */
-    public static final String UPDATE = "update";
+    static final String UPDATE = "update";
 
     /**
      * The <b>delete</b> value for <i>type</i> attribute.
      */
-    public static final String DELETE = "delete";
+    static final String DELETE = "delete";
 
     /**
      * The <b>select-for-update</b> value for <i>type</i> attribute.
      */
-    public static final String SELECT_FOR_UPDATE = "select-for-update";
+    static final String SELECT_FOR_UPDATE = "select-for-update";
 
     /**
      * The <b>mysql</b> value for <i>type</i> attribute.
      */
-    public static final String MYSQL = "mysql";
+    @SuppressWarnings("unused")
+    static final String MYSQL = "mysql";
 
     /**
      * The <b>oracle</b> value for <i>type</i> attribute.
      */
-    public static final String ORACLE = "oracle";
+    @SuppressWarnings("unused")
+    static final String ORACLE = "oracle";
 
     /**
      * The <b>postgres</b> value for <i>type</i> attribute.
      */
-    public static final String POSTGRES = "postgres";
+    @SuppressWarnings("unused")
+    static final String POSTGRES = "postgres";
 
     /**
      * The <b>odbc</b> value for <i>type</i> attribute.
      */
-    public static final String ODBC = "odbc";
+    @SuppressWarnings("unused")
+    static final String ODBC = "odbc";
 
     /**
      * The <b>all-jdbc</b> value for <i>type</i> attribute.
      */
-    public static final String ALL_JDBC = "all-jdbc";
+    @SuppressWarnings("unused")
+    static final String ALL_JDBC = "all-jdbc";
 
     /**
      * The <b>mock</b> value for <i>type</i> attribute.
      */
-    public static final String MOCK = "mock";
+    @SuppressWarnings("unused")
+    static final String MOCK = "mock";
 
     /**
      * The <b>xml</b> value for <i>type</i> attribute.
      */
-    public static final String XML = "xml";
+    static final String XML = "xml";
 
     /**
      * The <b>all</b> value for <i>type</i> attribute.
      */
-    public static final String ALL = "all";
+    @SuppressWarnings("unused")
+    static final String ALL = "all";
 
     /**
      * Retrieves the <i>description</i> attribute.
      * @return such value.
      */
-    public String getDescription();
+    @NotNull
+    String getDescription();
 
     /**
      * Retrieves the <i>dao</i> attribute.
      * @return such value.
      */
-    public String getDao();
+    @NotNull
+    String getDao();
 
     /**
      * Retrieves the <i>repositoryScope</i> attribute.
      * @return such value.
      */
-    public String getRepositoryScope();
+    @NotNull
+    String getRepositoryScope();
 
     /**
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
-    public String getName();
+    @NotNull
+    String getName();
 
     /**
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
-    public String getType();
+    @NotNull
+    String getType();
 
     /**
      * Retrieves the <i>implementation</i> attribute.
      * @return such value.
      */
-    public String getImplementation();
+    @NotNull
+    String getImplementation();
 
     /**
      * Retrieves the <i>validate</i> attribute.
      * @return such information.
      */
-    public boolean getValidate();
+    boolean getValidate();
 
     /**
      * Retrieves the <i>validate</i> attribute.
      * @return such information.
      */
-    public boolean isValidate();
+    boolean isValidate();
+
+    /**
+     * Retrieves whether  the query is dynamic or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    boolean isDynamic();
 
     /**
      * Retrieves the &lt;value&gt; element.
      * @return such value.
      */
-    public String getValue();
+    @NotNull
+    String getValue();
 
     /**
      * Retrieves the &lt;parameter-ref&gt; elements.
      * @return such elements.
      */
-    public Collection getParameterRefs();
+    @NotNull
+    public List<ParameterRefElement> getParameterRefs();
 
     /**
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    public void add(final ParameterRefElement parameterRef);
+    void add(@NotNull final ParameterRefElement parameterRef);
 
     /**
      * Retrieves the &lt;result-ref&gt; element.
@@ -197,17 +220,20 @@ public interface Sql
      * Retrieves the &lt;connection-flags-ref&gt; element.
      * @return such element.
      */
-    public ConnectionFlagsRefElement getConnectionFlagsRef();
+    @Nullable
+    ConnectionFlagsRefElement getConnectionFlagsRef();
 
     /**
      * Retrieves the &lt;statement-flags-ref&gt; element.
      * @return such element.
      */
-    public StatementFlagsRefElement getStatementFlagsRef();
+    @Nullable
+    StatementFlagsRefElement getStatementFlagsRef();
 
     /**
      * Retrieves the &lt;resultset-flags-ref&gt; element.
      * @return such element.
      */
-    public ResultSetFlagsRefElement getResultSetFlagsRef();
+    @Nullable
+    ResultSetFlagsRefElement getResultSetFlagsRef();
 }

@@ -41,6 +41,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
@@ -64,70 +65,70 @@ public interface TableDecorator
      * @return such value.
      */
     @NotNull
-    public String getNameUppercased();
+    String getNameUppercased();
     
     /**
      * Retrieves the capitalized name.
      * @return such name.
      */
     @NotNull
-    public String getNameCapitalized();
+    String getNameCapitalized();
 
     /**
      * Retrieves the name, in lower case.
      * @return such value.
      */
     @NotNull
-    public String getNameLowercased();
+    String getNameLowercased();
 
     /**
      * Retrieves the table name, uncapitalized.
      * @return such value.
      */
     @NotNull
-    public String getUncapitalizedName();
+    String getUncapitalizedName();
 
     /**
      * Retrieves the value-object name associated to the table name.
      * @return such name.
      */
     @NotNull
-    public String getVoName();
+    String getVoName();
 
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
     @NotNull
-    public String getNameNormalizedLowercased();
+    String getNameNormalizedLowercased();
 
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
     @NotNull
-    public String getSingularNameNormalizedLowercased();
+    String getSingularNameNormalizedLowercased();
 
     /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */
     @NotNull
-    public String getNameNormalized();
+    String getNameNormalized();
 
     /**
      * Retrieves the table's name once normalized.
      * @return such information.
      */
     @NotNull
-    public String getSingularNameCapitalized();
+    String getSingularNameCapitalized();
 
     /**
      * Retrieves the singular table's name, upper-cased.
      * @return such information.
      */
     @NotNull
-    public String getSingularNameUppercased();
+    String getSingularNameUppercased();
 
     /**
      * Retrieves the singular table's name, lower-cased.
@@ -135,28 +136,28 @@ public interface TableDecorator
      */
     @SuppressWarnings("unused")
     @NotNull
-    public String getSingularNameLowercased();
+    String getSingularNameLowercased();
 
     /**
      * Retrieves all attributes, including the parent's.
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllAttributes();
+    List<Attribute> getAllAttributes();
 
     /**
      * Retrieves all parent tables.
      * @return such tables.
      */
     @NotNull
-    public List<Table> getAllParentTables();
+    List<Table> getAllParentTables();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed.
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyAttributes();
+    List<Attribute> getAllNonManagedExternallyAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
@@ -164,7 +165,7 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyPlusPkAttributes();
+    List<Attribute> getAllNonManagedExternallyPlusPkAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
@@ -172,21 +173,21 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+    List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the non-parent attributes.
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonParentAttributes();
+    List<Attribute> getNonParentAttributes();
 
     /**
      * Retrieves the non-read-only attributes.
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getNonReadOnlyAttributes();
+    List<Attribute> getNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of non-parent, non-externally-managed
@@ -194,14 +195,14 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonManagedExternallyAttributes();
+    List<Attribute> getNonParentNonManagedExternallyAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent own attributes.
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentAttributes();
+    List<Attribute> getAllParentAndNonParentAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
@@ -209,7 +210,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+    List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
@@ -217,7 +218,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
+    List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent,
@@ -225,12 +226,20 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes();
+    List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes();
 
     /**
      * Retrieves the parent's and non parent's read-only attributes.
      * @return such information.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentReadOnlyAttributes();
+    List<Attribute> getAllParentAndNonParentReadOnlyAttributes();
+
+    /**
+     * Retrieves the list of dynamic queries.
+     * @return such list.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    List<Sql> getDynamicQueries();
 }

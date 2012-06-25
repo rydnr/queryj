@@ -178,7 +178,7 @@ public class <engine_name><table.voName>DAOFactory
     /**
      * The data source JNDI location.
      */
-    public static final String JNDI_LOCATION = "<input.jndi_location>";
+    public static final String JNDI_LOCATION = "<jndi_location>";
 
     /**
      * Singleton implemented to avoid the

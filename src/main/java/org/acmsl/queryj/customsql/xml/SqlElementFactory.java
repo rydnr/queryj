@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -68,7 +67,7 @@ public class SqlElementFactory
     /**
      * Creates a SqlElementFactory instance.
      */
-    public SqlElementFactory() {};
+    public SqlElementFactory() {}
 
     /**
      * Creates a SqlElement instance from given SAX attributes.
@@ -88,7 +87,7 @@ public class SqlElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable SqlElement result = null;
+        @Nullable SqlElement result;
 
         String t_strId = attributes.getValue("id");
 
@@ -111,6 +110,15 @@ public class SqlElementFactory
             t_bValidate = conversionUtils.toBoolean(t_strValidate);
         }
 
+        boolean t_bDynamic = false;
+
+        String t_strDynamic = attributes.getValue("dynamic");
+
+        if  (t_strDynamic != null)
+        {
+            t_bDynamic = conversionUtils.toBoolean(t_strDynamic);
+        }
+
         if  (t_strRepositoryScope == null)
         {
             result =
@@ -120,7 +128,8 @@ public class SqlElementFactory
                     t_strName,
                     t_strType,
                     t_strImplementation,
-                    t_bValidate);
+                    t_bValidate,
+                    t_bDynamic);
         }
         else
         {
@@ -131,6 +140,7 @@ public class SqlElementFactory
                     t_strType,
                     t_strImplementation,
                     t_bValidate,
+                    t_bDynamic,
                     t_strRepositoryScope);
         }
 
