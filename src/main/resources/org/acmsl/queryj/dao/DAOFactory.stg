@@ -37,52 +37,51 @@
 //
 group DAOFactory;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a DAOFactory source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package_name the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
+  @param copyright_years the copyright's years.
+  @param table.name the table name.
+  @param project_package the package.
+  @param dao_class_name the DAO class name.
+  @param dao_implementation_class_name the DAO implementation class name.
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
     first_line_description(
-      className=input.dao_implementation_class_name,
-      engineName=input.engine_name),
+      className=dao_implementation_class_name,
+      engineName=engine_name),
     second_line_description(
-      className=input.dao_implementation_class_name,
-      engineName=input.engine_name)
+      className=dao_implementation_class_name,
+      engineName=engine_name)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
 // Generated using org/acmsl/queryj/dao/DAOFactory.stg
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    input.subpackage_name
+    sub_package_name
   ])>
 
 <project_imports(
-  basePackageName=input.base_package_name,
+  basePackageName=project_package,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
-  subpackageName=input.subpackage_name,
-  engineName=input.engine_name,
-  voName=input.vo_name,
-  trName=input.tr_name_capitalized)>
+  subpackageName=sub_package_name,
+  engineName=engine_name,
+  voName=table.voName,
+  trName=repository.capitalized)>
 
 <checkers_import()>
 /*
@@ -101,7 +100,7 @@ import javax.sql.DataSource;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input, table=input.table)>
+<class(table=table)>
 >>
 
 first_line_description(className, engineName) ::= <<
@@ -153,32 +152,28 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>Jnd
 
 >>
 
-class(input, table) ::= <<
+class(table) ::= <<
 <!
   Generates the class body.
-  @param input.dao_factory_implementation_class_name the class name.
-  @param input.engine_name the engine name.
-  @param input.timestamp the timestamp.
-  @param input.dao_factory_implementation_class_name the DAO factory
-  implementation class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.jndi_location the JNDI location.
-  @param input.table_name the table name.
+  @param engine_name the engine name.
+  @param timestamp the timestamp.
+  @param jndi_location the JNDI location.
+  @param table.name the table name.
   @param table the table.
 !>
 /**
  * <[
       first_line_description(
-        className=input.dao_implementation_class_name,
-        engineName=input.engine_name),
+        className=dao_implementation_class_name,
+        engineName=engine_name),
       second_line_description(
-        className=input.dao_implementation_class_name,
-        engineName=input.engine_name)
+        className=dao_implementation_class_name,
+        engineName=engine_name)
     ]:{ line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
-public class <input.engine_name><input.vo_name>DAOFactory
-    extends  <input.vo_name>DAOFactory
+public class <engine_name><table.voName>DAOFactory
+    extends  <table.voName>DAOFactory
 {
     /**
      * The data source JNDI location.
@@ -190,64 +185,64 @@ public class <input.engine_name><input.vo_name>DAOFactory
      * \<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/jsr-133-faq.html#dcl"
      * >double-checked locking\</a>.
      */
-    private static class <input.engine_name><input.vo_name>DAOFactorySingletonContainer
+    private static class <engine_name><table.voName>DAOFactorySingletonContainer
     {
         /**
          * The concrete singleton instance.
          */
-        public static final <input.engine_name><input.vo_name>DAOFactory SINGLETON =
-            new <input.engine_name><input.vo_name>DAOFactory();
+        public static final <engine_name><table.voName>DAOFactory SINGLETON =
+            new <engine_name><table.voName>DAOFactory();
     }
 
     /**
      * Public constructor to allow reflective instantiation.
      */
-    public <input.engine_name><input.vo_name>DAOFactory() {}
+    public <engine_name><table.voName>DAOFactory() {}
 
     /**
-     * Retrieves a {@link <input.engine_name><input.vo_name>DAOFactory}
+     * Retrieves a {@link <engine_name><table.voName>DAOFactory}
      * instance.
      * @return such instance.
      */
     <notnull()>
-    public static <input.engine_name><input.vo_name>DAOFactory get<input.engine_name>Instance()
+    public static <engine_name><table.voName>DAOFactory get<engine_name>Instance()
     {
-        return <input.engine_name><input.vo_name>DAOFactorySingletonContainer.SINGLETON;
+        return <engine_name><table.voName>DAOFactorySingletonContainer.SINGLETON;
     }
 
     /**
-     * Creates <input.engine_name>-specific <input.table_name> DAO.
+     * Creates <engine_name>-specific <table.name> DAO.
      * @return such DAO.
      */
     <nullable()>
-    public <input.vo_name>DAO create<input.vo_name>DAO()
+    public <table.voName>DAO create<table.voName>DAO()
     {
-        return create<input.vo_name>DAO(getDataSource());
+        return create<table.voName>DAO(getDataSource());
     }
 
     /**
-     * Creates <input.engine_name>-specific <input.table_name> DAO
+     * Creates <engine_name>-specific <table.name> DAO
      * using given data source.
      * @param dataSource the data source.
      * @return such DAO.
      */
     <nullable()>
-    protected <input.vo_name>DAO create<input.vo_name>DAO(<notnull()>final DataSource dataSource)
+    protected <table.voName>DAO create<table.voName>DAO(<notnull()>final DataSource dataSource)
     {
-        <input.vo_name>DAO result = null;
+        <table.voName>DAO result = null;
 
         if  (dataSource != null)
         {
             result =
 <if(input.dynamic_queries)>
-                new <input.engine_name><input.vo_name>DAOImpl(
+                new <engine_name><table.voName>DAOImpl(
 <else>
-                new <input.engine_name><input.vo_name>DAO(
+                new <engine_name><table.voName>DAO(
 <endif>
 
                     dataSource,
                     null);
-                    //new <input.tr_name_capitalized>DAOListenerImpl());
+                    //new <repository.capitalized>DAOListenerImpl());
         }
 
         return result;
@@ -260,16 +255,16 @@ public class <input.engine_name><input.vo_name>DAOFactory
     <nullable()>
     protected DataSource getDataSource()
     {
-        return getDataSource(<input.tr_name_capitalized>JndiUtils.getInstance());
+        return getDataSource(<repository.capitalized>JndiUtils.getInstance());
     }
 
     /**
      * Retrieves the data source.
-     * @param jndiUtils the {@link <input.tr_name_capitalized>JndiUtils} instance.
+     * @param jndiUtils the {@link <repository.capitalized>JndiUtils} instance.
      * @return such data source.
      */
     <nullable()>
-    protected DataSource getDataSource(<notnull>final <input.tr_name_capitalized>JndiUtils jndiUtils)
+    protected DataSource getDataSource(<notnull>final <repository.capitalized>JndiUtils jndiUtils)
     {
         DataSource result = null;
 
@@ -296,13 +291,13 @@ public class <input.engine_name><input.vo_name>DAOFactory
 
 //        if  (result == null)
 //        {
-////            result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper();
+////            result = new <repository.capitalized>ThreadAwareDataSourceWrapper();
 //        }
 //        else
 //        {
 //            try
 //            {
-////                result = new <input.tr_name_capitalized>ThreadAwareDataSourceWrapper(result);
+////                result = new <repository.capitalized>ThreadAwareDataSourceWrapper(result);
 //                result = new TransactionAwareDataSourceProxy(result);
 //            }
 //            catch  (final CannotGetJdbcConnectionException exception)
