@@ -102,28 +102,17 @@ public class BaseDAOTemplateGenerator
     }
 
     /**
-     * Generates a BaseDAO template.
-     * @param metadataManager the metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the name of the repository.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param tableName the table name.
-     * @return a template.
+     * {@inheritDoc}
      */
+    @Override
     @NotNull
     public BaseDAOTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,

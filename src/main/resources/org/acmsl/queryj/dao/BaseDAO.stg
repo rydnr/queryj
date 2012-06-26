@@ -38,44 +38,44 @@
 //
 group BaseDAO;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a DAO database implementation source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
+  @param copyright_years the copyright's years.
+  @param table_name the table name.
+  @param package the package.
+  @param dao_class_name the DAO class name.
+  @param dao_factory_class_name the DAO factory class name.
+  @param dao_implementation_class_name the DAO implementation class name.
   @params project_imports
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
-    first_line_description(tableName=input.table_name),
-    second_line_description(tableName=input.table_name)
+    first_line_description(tableName=table.name),
+    second_line_description(tableName=table.name)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
 // Generated using org/acmsl/queryj/dao/BaseDAO.stg
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName
   ])>
 
 <project_imports(
-  basePackageName=input.base_package_name,
+  basePackageName=project_package,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name,
-  table=input.table)>
+  voName=table.voName,
+  table=table)>
 
 <checkers_import()>
 /*
@@ -87,7 +87,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-<class(input=input, table=input.table)>
+<class(table=table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -126,95 +126,93 @@ import <basePackageName>.<voSubpackageName>.<voName>DecoratorImpl;
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
 >>
 
-class(input, table) ::= <<
+class(table) ::= <<
 <!
  Generates the class body.
- @param input the input.
  @param table the table.
 !>
-<classImpl(input=input, table=table, parent=table.parentTable)>
+<classImpl(table=table, parent=table.parentTable)>
 >>
 
-classImpl(input, table, parent) ::= <<
+classImpl(table, parent) ::= <<
 <!
  Generates the class body.
- @param input the input.
  @param table the table.
  @param parent the parent table.
 !>
 /**
  * <[
-      first_line_description(tableName=input.table_name),
-      second_line_description(tableName=input.table_name)
+      first_line_description(tableName=table.name),
+      second_line_description(tableName=table.name)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
-public interface <input.vo_name>DAO
+public interface <table.voName>DAO
 {
 <if(table.static)>
-    <input.cached_rows:cached_constants(
-      row=it, voName=input.vo_name); separator="\n\n">
+    <table.cached_rows:cached_constants(
+      row=it, voName=table.voName); separator="\n\n">
 
     /**
      * The static constants.
      */
 <if(table.voDecorated)>
-    public static final <input.vo_name>Decorator[] FIXED_CONSTANTS =
+    public static final <table.voName>Decorator[] FIXED_CONSTANTS =
 <else>
-    public static final <input.vo_name>[] FIXED_CONSTANTS =
+    public static final <table.voName>[] FIXED_CONSTANTS =
 <endif>
 
 <if(table.voDecorated)>
-        new <input.vo_name>Decorator[]
+        new <table.voName>Decorator[]
 <else>
-        new <input.vo_name>[]
+        new <table.voName>[]
 <endif>
 
         {
-            <input.cached_rows:{<it.nameNormalizedUppercased>};
+            <table.cached_rows:{<it.nameNormalizedUppercased>};
               separator=",\n">
         };
 
     /**
      * The static constants.
-     * @deprecated Use <input.vo_name>DAO.FIXED_CONSTANTS instead.
+     * @deprecated Use <table.voName>DAO.FIXED_CONSTANTS instead.
      */
 <if(table.voDecorated)>
-    public static final <input.vo_name>Decorator[] _ALL_QUERYJ_CONSTANTS_ =
+    public static final <table.voName>Decorator[] _ALL_QUERYJ_CONSTANTS_ =
 <else>
-    public static final <input.vo_name>[] _ALL_QUERYJ_CONSTANTS_ =
+    public static final <table.voName>[] _ALL_QUERYJ_CONSTANTS_ =
 <endif>
 
         FIXED_CONSTANTS;
 
-    <input.static_attribute:find_constant_methods(
+    <table.staticAttributes:find_constant_methods(
       attribute=it,
-      primaryKeyAttributes=input.pk_attributes,
-      voName=input.vo_name)>
+      primaryKeyAttributes=table.primaryKey,
+      voName=table.voName)>
 <endif>
 
     /**
-     * Retrieves \{@link <input.vo_name>} information
+     * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-     * @return the \{@link <input.vo_name>} matching given
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @return the {@link <table.voName>} matching given
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-public <input.vo_name>Decorator findByPrimaryKey(
+public <table.voName>Decorator findByPrimaryKey(
 <else>
-public <input.vo_name> findByPrimaryKey(
+public <table.voName> findByPrimaryKey(
 <endif>
 
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">);
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
     /**
-     * Persists \{@link <input.vo_name>} information.
+     * Persists {@link <table.voName>} information.
 <if(parent)>
      <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
 <else>
-     <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+     <table.allNonReadonlyButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -224,42 +222,42 @@ public <input.vo_name> findByPrimaryKey(
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">);
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">);
+        <table.allNonReadonlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
 <endif>
 
 
     /**
      * Inserts and retrieves the newly-inserted
-     * \{@link <input.vo_name>} instance.
+     * \{@link <table.voName>} instance.
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator=",\n">
 <else>
-     <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+     <table.allNonReadonlyButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
 <endif>
 
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    public <input.vo_name>Decorator create(
+    public <table.voName>Decorator create(
 <else>
-    public <input.vo_name> create(
+    public <table.voName> create(
 <endif>
 
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">);
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">);
+        <table.allNonReadonlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
 <endif>
 
 
     /**
-     * Updates \{@link <input.vo_name>} information.
+     * Updates {@link <table.voName>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
 <else>
-     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonReadonlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @return the number of entities updated.
@@ -270,28 +268,28 @@ public <input.vo_name> findByPrimaryKey(
         <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
           separator=",\n">);
 <else>
-        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">);
+        <table.nonReadonlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
 <endif>
 
 
     /**
-     * Deletes \{@link <input.vo_name>} information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.voName>} information.
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">);
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
-    <input.foreign_keys:fk_delete_method(
-      foreignKey=it, input=input); separator="\n">
+    <table.foreignKeys:fk_delete_method(
+      foreignKey=it, table=table); separator="\n">
 
-    <input.custom_selects:custom_select(
-      cs=it, table=input.table, input=input); separator="\n\n">
+    <table.customSelects:custom_select(
+      cs=it, table=table); separator="\n\n">
 
-    <input.custom_updates_or_inserts:custom_update_or_insert(
-      cs=it, input=input); separator="\n\n">
+    <table.customUpdatesOrInserts:custom_update_or_insert(
+      cs=it, table=table); separator="\n\n">
 
-    <input.custom_selects_for_update:custom_select_for_update(
-      cs=it, table=input.table, input=input); separator="\n\n">
+    <table.customSelectsForUpdate:custom_select_for_update(
+      cs=it, table=table); separator="\n\n">
 }
 >>
 
@@ -382,27 +380,25 @@ public <voName> findConstantByPk(
 
 >>
 
-fk_delete_method(foreignKey,input) ::= <<
+fk_delete_method(foreignKey, table) ::= <<
 <!
   Writes the deleteByXX method for a concrete foreign key.
-  @param input.table_name the table name.
   @param foreignKey the foreign key.
 !>
 /**
- * Deletes <input.table_name> information from the persistence layer filtering
+ * Deletes <table.name> information from the persistence layer filtering
  * by given foreign keys.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
 public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-    <foreignKey:attribute_declaration(attr=it); separator=",\n">);
+    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">);
 >>
 
-custom_select(cs, table, input) ::= <<
+custom_select(cs, table) ::= <<
 <!
  Writes the code for a custom select query.
  @param cs the custom select.
  @param table the table.
- @param input the input.
 !>
 /**
  * Custom select \<i><cs.id>\</i>:\<br/>
@@ -440,11 +436,10 @@ public <cs.resultClass> <cs.nameUncapitalized>(
 <endif>);
 >>
 
-custom_update_or_insert(cs, input) ::= <<
+custom_update_or_insert(cs, table) ::= <<
 <!
  Writes the subtemplate for custom updates or inserts.
   @param cs the custom sql.
-  @param input the input.
 !>
 /**
  * Custom sql \<i><cs.id>\</i>:\<br/>
@@ -470,12 +465,11 @@ public int <cs.nameUncapitalized>(
 
 >>
 
-custom_select_for_update(cs, table, input) ::= <<
+custom_select_for_update(cs, table) ::= <<
 <!
  Writes the code for a custom select for update.
  @param cs the custom sql.
  @param table the table.
- @param input the input.
 !>
 /**
  * Custom select for update \<i><cs.id>\</i>:\<br/>
