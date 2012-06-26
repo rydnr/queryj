@@ -64,6 +64,7 @@ public interface CustomSqlProvider
      * Retrieves the {@link SqlDAO} instance.
      * @return such instance.
      */
+    @SuppressWarnings("unused")
     @NotNull
     SqlDAO getSqlDAO();
 
@@ -71,6 +72,7 @@ public interface CustomSqlProvider
      * Retrieves the {@link SqlResultDAO} instance.
      * @return such instance.
      */
+    @SuppressWarnings("unused")
     @NotNull
     SqlResultDAO getSqlResultDAO();
 
@@ -78,6 +80,7 @@ public interface CustomSqlProvider
      * Retrieves the {@link SqlParameterDAO} instance.
      * @return such instance.
      */
+    @SuppressWarnings("unused")
     @NotNull
     SqlParameterDAO getSqlParameterDAO();
 
@@ -86,7 +89,7 @@ public interface CustomSqlProvider
      * Retrieves the custom sql element collection.
      * return such collection.
      */
-    public Collection getCollection();
+    Collection getCollection();
 
     /**
      * Resolves the parameter reference.
@@ -94,7 +97,7 @@ public interface CustomSqlProvider
      * @return the referenced parameter.
      */
     @Nullable
-    public ParameterElement resolveReference(
+    Parameter resolveReference(
         final ParameterRefElement reference);
 
     /**
@@ -103,8 +106,8 @@ public interface CustomSqlProvider
      * @return the referenced result.
      */
     @Nullable
-    public ResultElement resolveReference(
-        final ResultRefElement reference);
+    Result resolveReference(
+        @NotNull final ResultRef reference);
 
     /**
      * Resolves the property reference.
@@ -112,8 +115,8 @@ public interface CustomSqlProvider
      * @return the referenced property.
      */
     @Nullable
-    public PropertyElement resolveReference(
-        final PropertyRefElement reference);
+    PropertyElement resolveReference(
+        @NotNull final PropertyRefElement reference);
 
     /**
      * Adds a new property.
@@ -121,33 +124,36 @@ public interface CustomSqlProvider
      * @param name the property name.
      * @param type the property type.
      */
-    public void addProperty(
-        final String id, final String name, final String type);
+    void addProperty(
+        @NotNull final String id, @NotNull final String name, @NotNull final String type);
 
     /**
      * Adds a new result.
      * @param id the id of the result.
      * @param result the result information.
      */
-    public void addResult(final String id, final Result result);
+    @SuppressWarnings("unused")
+    void addResult(@NotNull final String id, @NotNull final Result result);
 
     /**
      * Resolves the connection-flags reference.
      * @param reference such reference.
      * @return the referenced property.
      */
+    @SuppressWarnings("unused")
     @Nullable
-    public ConnectionFlagsElement resolveReference(
-        final ConnectionFlagsRefElement reference);
+    ConnectionFlagsElement resolveReference(
+        @NotNull final ConnectionFlagsRefElement reference);
 
     /**
      * Resolves the connection-flags reference.
      * @param reference such reference.
      * @return the referenced property.
      */
+    @SuppressWarnings("unused")
     @Nullable
-    public StatementFlagsElement resolveReference(
-        final StatementFlagsRefElement reference);
+    StatementFlagsElement resolveReference(
+        @NotNull final StatementFlagsRefElement reference);
 
     /**
      * Resolves the statement-flags reference.
@@ -155,7 +161,8 @@ public interface CustomSqlProvider
      * @return the referenced property.
      */
     @Nullable
-    public ResultSetFlagsElement resolveReference(
-        final ResultSetFlagsRefElement reference);
+    @SuppressWarnings("unused")
+    ResultSetFlagsElement resolveReference(
+        @NotNull final ResultSetFlagsRefElement reference);
 }
 

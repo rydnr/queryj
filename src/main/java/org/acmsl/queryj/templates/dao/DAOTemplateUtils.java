@@ -35,16 +35,7 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.IdentifiableElement;
-import org.acmsl.queryj.customsql.ConnectionFlagsElement;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.CustomResultUtils;
-import org.acmsl.queryj.customsql.PropertyElement;
-import org.acmsl.queryj.customsql.PropertyRefElement;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.ResultSetFlagsElement;
-import org.acmsl.queryj.customsql.SqlElement;
-import org.acmsl.queryj.customsql.StatementFlagsElement;
+import org.acmsl.queryj.customsql.*;
 import org.acmsl.queryj.metadata.CachingRowDecorator;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
@@ -258,7 +249,7 @@ public class DAOTemplateUtils
      * @param customSqlProvider the CustomSqlProvider instance.
      * @return the connection flags for given operation.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings("unused,unchecked")
     @NotNull
     public String[] retrieveConnectionFlagsForFindByPrimaryKeyOperation(
         @Nullable final CustomSqlProvider customSqlProvider)
@@ -441,8 +432,8 @@ public class DAOTemplateUtils
      * @param contents such contents.
      * @param idFilter the id filter.
      * @return the statement flags.
-     * @precondition contents != null
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     protected Collection filterStatementFlags(
         @NotNull final Collection contents, final String idFilter)
@@ -522,8 +513,8 @@ public class DAOTemplateUtils
      * @param contents such contents.
      * @param idFilter the id filter.
      * @return the resultset flags.
-     * @precondition contents != null
      */
+    @SuppressWarnings("unchecked")
     @NotNull
     protected Collection filterResultSetFlags(
         @NotNull final Collection contents, final String idFilter)
@@ -587,7 +578,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public SqlElement[] findSqlElementsByResultId(
+    public Sql[] findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -607,7 +598,7 @@ public class DAOTemplateUtils
      * @return all such entities.
      */
     @NotNull
-    protected SqlElement[] findSqlElementsByResultId(
+    protected Sql[] findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final CustomResultUtils customResultUtils)
@@ -658,7 +649,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public SqlElement[] retrieveSqlElementsByType(
+    public Sql[] retrieveSqlElementsByType(
         final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
@@ -675,7 +666,7 @@ public class DAOTemplateUtils
      * @return such elements.
      */
     @NotNull
-    protected SqlElement[] retrieveSqlElementsByType(
+    protected Sql[] retrieveSqlElementsByType(
         final CustomSqlProvider customSqlProvider,
         @NotNull final String type,
         @NotNull final CustomResultUtils customResultUtils)
@@ -694,7 +685,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public SqlElement[] retrieveSqlElementsByResultId(
+    public Sql[] retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId)
     {
@@ -714,7 +705,7 @@ public class DAOTemplateUtils
      * @return such elements.
      */
     @NotNull
-    protected SqlElement[] retrieveSqlElementsByResultId(
+    protected Sql[] retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId,
         @NotNull final CustomResultUtils customResultUtils)

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,8 +33,9 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Models &lt;result-ref&gt; elements in <i>custom-sql</i> models, which
@@ -48,6 +48,7 @@ package org.acmsl.queryj.customsql;
  */
 public class ResultRefElement
     extends  AbstractIdElement
+    implements ResultRef
 {
     private static final long serialVersionUID = -4772977255913187237L;
 
@@ -56,7 +57,7 @@ public class ResultRefElement
      * @param id the <i>id</i> attribute.
      * @precondition id != null
      */
-    public ResultRefElement(final String id)
+    public ResultRefElement(@NotNull final String id)
     {
         super(id);
     }

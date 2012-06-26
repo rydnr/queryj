@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.TableDecorator;
@@ -87,7 +88,12 @@ public class TableHandler
     @Override
     protected TableDecorator getValue(@NotNull final BasePerTableTemplateContext context)
     {
-        return  decorate(context.getTableName(), context.getMetadataManager(), context.getDecoratorFactory());
+        return
+            decorate(
+                context.getTableName(),
+                context.getMetadataManager(),
+                context.getDecoratorFactory(),
+                context.getCustomSqlProvider());
     }
 
     /**
@@ -95,14 +101,16 @@ public class TableHandler
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table.
      */
     @Nullable
     protected TableDecorator decorate(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        return decoratorFactory.createTableDecorator(table, metadataManager);
+        return decoratorFactory.createTableDecorator(table, metadataManager, customSqlProvider);
     }
 }

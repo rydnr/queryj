@@ -41,6 +41,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.AbstractTable;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -99,7 +100,12 @@ public abstract class AbstractTableDecorator
      * The decorator factory.
      */
     private DecoratorFactory m__DecoratorFactory;
-    
+
+    /**
+     * The custom sql provider.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
+
     /**
      * The foreign keys.
      */
@@ -124,17 +130,17 @@ public abstract class AbstractTableDecorator
     /**
      * Creates an <code>AbstractTableDecorator</code> with the
      * <code>Table</code> to decorate.
-     * @param table the table.
-     * @param metadataManager the metadata manager.
-     * @param decoratorFactory the decorator factory.
-     * @precondition table != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
+     * @param table the {@link Table table}.
+     * @param metadataManager the {@link MetadataManager metadata manager}.
+     * @param decoratorFactory the {@link DecoratorFactory decorator factory}.
+     * @param customSqlProvider the {@link CustomSqlProvider custom-sql provider}.
      */
+    @SuppressWarnings("unused")
     public AbstractTableDecorator(
-        final Table table,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory)
+        @NotNull final Table table,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         this(
             table,
@@ -146,7 +152,8 @@ public abstract class AbstractTableDecorator
             table.isStatic(),
             table.isVoDecorated(),
             metadataManager,
-            decoratorFactory);
+            decoratorFactory,
+            customSqlProvider);
     }
 
     /**
@@ -159,8 +166,9 @@ public abstract class AbstractTableDecorator
      * @param parentTable the parent table.
      * @param isStatic whether the table is static.
      * @param voDecorated whether the value-object should be decorated.
-     * @param metadataManager the metadata manager.
-     * @param decoratorFactory the decorator factory.
+     * @param metadataManager the {@link MetadataManager metadata manager}.
+     * @param decoratorFactory the {@link DecoratorFactory decorator factory}.
+     * @param customSqlProvider the {@link CustomSqlProvider custom-sql provider}.
      */
     public AbstractTableDecorator(
         @NotNull final Table table,
@@ -172,7 +180,8 @@ public abstract class AbstractTableDecorator
         final boolean isStatic,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         super(
             name, table.getComment(), primaryKey, attributes, foreignKeys, parentTable, isStatic, voDecorated);
@@ -180,6 +189,7 @@ public abstract class AbstractTableDecorator
         immutableSetTable(table);
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
+        immutableSetCustomSqlProvider(customSqlProvider);
     }
 
     /**
@@ -205,6 +215,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the decorated table.
      * @return such table.
      */
+    @NotNull
     protected final Table immutableGetTable()
     {
         return this.m__Table;
@@ -214,6 +225,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the decorated table.
      * @return such table.
      */
+    @NotNull
     public Table getTable()
     {
         return immutableGetTable();
@@ -224,7 +236,7 @@ public abstract class AbstractTableDecorator
      * @param metadataManager such instance.
      */
     protected final void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         m__MetadataManager = metadataManager;
     }
@@ -234,7 +246,7 @@ public abstract class AbstractTableDecorator
      * @param metadataManager such instance.
      */
     protected void setMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         immutableSetMetadataManager(metadataManager);
     }
@@ -243,6 +255,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the metadata manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
@@ -253,7 +266,7 @@ public abstract class AbstractTableDecorator
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
     protected final void immutableSetDecoratorFactory(
-        final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         m__DecoratorFactory = decoratorFactory;
     }
@@ -262,7 +275,7 @@ public abstract class AbstractTableDecorator
      * Specifies the decorator factory.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      */
-    protected void setDecoratorFactory(final DecoratorFactory decoratorFactory)
+    protected void setDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
     {
         immutableSetDecoratorFactory(decoratorFactory);
     }
@@ -271,6 +284,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @Nullable
     protected final DecoratorFactory immutableGetDecoratorFactory()
     {
         return m__DecoratorFactory;
@@ -280,6 +294,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the decorator factory.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         DecoratorFactory result = immutableGetDecoratorFactory();
@@ -291,6 +306,35 @@ public abstract class AbstractTableDecorator
         }
 
         return result;
+    }
+
+    /**
+     * Specifies the {@link CustomSqlProvider}.
+     * @param provider the {@link CustomSqlProvider provider}.
+     */
+    protected final void immutableSetCustomSqlProvider(@NotNull final CustomSqlProvider provider)
+    {
+        m__CustomSqlProvider = provider;
+    }
+
+    /**
+     * Specifies the {@link CustomSqlProvider}.
+     * @param provider the {@link CustomSqlProvider provider}.
+     */
+    @SuppressWarnings("unused")
+    protected void setCustomSqlProvider(@NotNull final CustomSqlProvider provider)
+    {
+        immutableSetCustomSqlProvider(provider);
+    }
+
+    /**
+     * Retrieves the {@link CustomSqlProvider}.
+     * @return such instance.
+     */
+    @NotNull
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return m__CustomSqlProvider;
     }
 
     /**
@@ -1112,7 +1156,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getAllAttributes(
-                getName(), getMetadataManager(), getDecoratorFactory());
+                getName(), getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
     }
 
     /**
@@ -1120,12 +1164,14 @@ public abstract class AbstractTableDecorator
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such information.
      */
     protected List<Attribute> getAllAttributes(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         List<Attribute> result = new ArrayList<Attribute>();
 
@@ -1143,7 +1189,7 @@ public abstract class AbstractTableDecorator
             {
                 t_ParentDecorator =
                     createTableDecorator(
-                        t_ParentTable, metadataManager, decoratorFactory);
+                        t_ParentTable, metadataManager, decoratorFactory, customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1366,6 +1412,7 @@ public abstract class AbstractTableDecorator
      * @param voDecorated whether the value-object is decorated.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such decorator.
      */
     @SuppressWarnings("unused")
@@ -1376,20 +1423,23 @@ public abstract class AbstractTableDecorator
         final boolean isStatic,
         final boolean voDecorated,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory);
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider);
     
     /**
      * Creates a table decorator.
      * @param parentTable the parent table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such decorator.
      */
     @Nullable
     protected abstract TableDecorator createTableDecorator(
         @NotNull final Table parentTable,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory);
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider);
 
     /**
      * Retrieves the list of non-parent, non-externally-managed
@@ -1481,7 +1531,8 @@ public abstract class AbstractTableDecorator
                 getParentTable(),
                 getNonParentAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                getCustomSqlProvider());
     }
 
     /**
@@ -1490,6 +1541,7 @@ public abstract class AbstractTableDecorator
      * @param nonParentAttributes the non-parent attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such list.
      */
     @NotNull
@@ -1497,7 +1549,8 @@ public abstract class AbstractTableDecorator
         @Nullable final Table parent,
         @NotNull final List<Attribute> nonParentAttributes,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
@@ -1513,7 +1566,7 @@ public abstract class AbstractTableDecorator
             {
                 t_ParentDecorator =
                     createTableDecorator(
-                        parent, metadataManager, decoratorFactory);
+                        parent, metadataManager, decoratorFactory, customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1540,7 +1593,8 @@ public abstract class AbstractTableDecorator
                 getParentTable(),
                 getNonParentNonManagedExternallyAttributes(),
                 getMetadataManager(),
-                getDecoratorFactory());
+                getDecoratorFactory(),
+                getCustomSqlProvider());
     }
 
     /**
@@ -1551,6 +1605,7 @@ public abstract class AbstractTableDecorator
      * own attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such list.
      */
     @NotNull
@@ -1558,7 +1613,8 @@ public abstract class AbstractTableDecorator
         @Nullable final Table parent,
         @NotNull final List<Attribute> nonParentNonManagedExternallyAttributes,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
@@ -1574,7 +1630,7 @@ public abstract class AbstractTableDecorator
             {
                 t_ParentDecorator =
                     createTableDecorator(
-                        parent, metadataManager, decoratorFactory);
+                        parent, metadataManager, decoratorFactory, customSqlProvider);
             }
 
             if (t_ParentDecorator != null)
@@ -1798,6 +1854,7 @@ public abstract class AbstractTableDecorator
                 getNonParentNonManagedExternallyPlusPkAttributes(),
                 getMetadataManager(),
                 getDecoratorFactory(),
+                getCustomSqlProvider(),
                 TableDecoratorHelper.getInstance());
     }
 
@@ -1809,6 +1866,7 @@ public abstract class AbstractTableDecorator
      * own attributes, plus the primary key.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param tableDecoratorHelper the <code>TableDecoratorHelper</code> instance.
      * @return such list.
      */
@@ -1818,6 +1876,7 @@ public abstract class AbstractTableDecorator
         @NotNull final List<Attribute> nonParentNonManagedExternallyPlusPkAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
@@ -1834,7 +1893,7 @@ public abstract class AbstractTableDecorator
             {
                 t_ParentDecorator =
                     createTableDecorator(
-                        parent, metadataManager, decoratorFactory);
+                        parent, metadataManager, decoratorFactory, customSqlProvider);
             }
 
             if (t_ParentDecorator != null)

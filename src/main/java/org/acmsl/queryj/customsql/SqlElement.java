@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -115,7 +114,7 @@ public class SqlElement
     /**
      * The <i>result-ref</i> element.
      */
-    private ResultRefElement m__ResultRef;
+    private ResultRef m__ResultRef;
 
     /**
      * The <i>connection-flags-ref</i> element.
@@ -551,7 +550,7 @@ public class SqlElement
      * @param resultRef such element.
      */
     protected final void immutableSetResultRef(
-        final ResultRefElement resultRef)
+        @NotNull final ResultRef resultRef)
     {
         m__ResultRef = resultRef;
     }
@@ -561,7 +560,7 @@ public class SqlElement
      * @param resultRef such element.
      */
     @SuppressWarnings("unused")
-    public void setResultRef(final ResultRefElement resultRef)
+    public void setResultRef(@NotNull final ResultRef resultRef)
     {
         immutableSetResultRef(resultRef);
     }
@@ -570,7 +569,8 @@ public class SqlElement
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
-    public ResultRefElement getResultRef()
+    @NotNull
+    public ResultRef getResultRef()
     {
         return m__ResultRef;
     }
@@ -715,7 +715,7 @@ public class SqlElement
         final String implementation,
         final String value,
         final Collection parameterRefs,
-        final ResultRefElement resultRef,
+        final ResultRef resultRef,
         final ConnectionFlagsRefElement connectionFlagsRef,
         final StatementFlagsRefElement statementFlagsRef,
         final ResultSetFlagsRefElement resultSetFlagsRef)

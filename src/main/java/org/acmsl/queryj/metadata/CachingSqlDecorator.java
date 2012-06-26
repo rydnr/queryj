@@ -38,14 +38,19 @@ package org.acmsl.queryj.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Adds a simple caching mechanism while decorating <code>sql</code>
@@ -84,7 +89,7 @@ public class CachingSqlDecorator
     /**
      * The cached parameters.
      */
-    private Collection m__cCachedParameters;
+    private List<Parameter> m__cCachedParameters;
 
     /**
      * The cached result class.
@@ -137,6 +142,7 @@ public class CachingSqlDecorator
      * Retrieves the cached splitted quoted value.
      * @return such value.
      */
+    @Nullable
     protected final String[] immutableGetCachedSplittedQuotedValue()
     {
         return m__astrCachedSplittedQuotedValue;
@@ -146,7 +152,7 @@ public class CachingSqlDecorator
      * Retrieves the cached splitted quoted value.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     public String[] getCachedSplittedQuotedValue()
     {
         return clone(immutableGetCachedSplittedQuotedValue());
@@ -156,6 +162,7 @@ public class CachingSqlDecorator
      * Retrieves the value, in multiple lines.
      * @return such output.
      */
+    @NotNull
     public String[] getSplittedQuotedValue()
     {
         String[] result = getCachedSplittedQuotedValue();
@@ -175,7 +182,7 @@ public class CachingSqlDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedIdAsConstant(
-        final String value)
+        @NotNull final String value)
     {
         m__strCachedIdAsConstant = value;
     }
@@ -202,6 +209,7 @@ public class CachingSqlDecorator
      * Retrieves the id formatted as constant.
      * @return such information.
      */
+    @NotNull
     public String getIdAsConstant()
     {
         String result = getCachedIdAsConstant();
@@ -247,6 +255,7 @@ public class CachingSqlDecorator
      * Retrieves the id capitalized.
      * @return such information.
      */
+    @NotNull
     public String getIdCapitalized()
     {
         String result = getCachedIdCapitalized();
@@ -292,6 +301,7 @@ public class CachingSqlDecorator
      * Retrieves the name, (un)capitalized.
      * @return such information.
      */
+    @NotNull
     public String getNameUncapitalized()
     {
         String result = getCachedNameUncapitalized();
@@ -310,7 +320,7 @@ public class CachingSqlDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedParameters(
-        final Collection value)
+        @NotNull final List<Parameter> value)
     {
         m__cCachedParameters = value;
     }
@@ -319,7 +329,7 @@ public class CachingSqlDecorator
      * Specifies the cached parameters.
      * @param value the value to cache.
      */
-    protected void setCachedParameters(final Collection value)
+    protected void setCachedParameters(@NotNull final List<Parameter> value)
     {
         immutableSetCachedParameters(value);
     }
@@ -328,7 +338,8 @@ public class CachingSqlDecorator
      * Retrieves the cached parameters.
      * @return such value.
      */
-    public Collection getCachedParameters()
+    @Nullable
+    public List<Parameter> getCachedParameters()
     {
         return m__cCachedParameters;
     }
@@ -337,9 +348,10 @@ public class CachingSqlDecorator
      * Retrieves the parameters.
      * @return such information.
      */
-    public Collection getParameters()
+    @NotNull
+    public List<Parameter> getParameters()
     {
-        Collection result = getCachedParameters();
+        List<Parameter> result = getCachedParameters();
 
         if  (result == null)
         {
@@ -451,16 +463,11 @@ public class CachingSqlDecorator
     {
         @NotNull String[] result = EMPTY_STRING_ARRAY;
 
-        int t_iCount = (array != null) ? array.length : 0;
-
-        if  (t_iCount > 0)
+        if (array != null)
         {
-            result = new String[t_iCount];
+            result = new String[array.length];
 
-            for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
-            {
-                result[t_iIndex] = array[t_iIndex];
-            }
+            System.arraycopy(array, 0, result, 0, array.length);
         }
 
         return result;

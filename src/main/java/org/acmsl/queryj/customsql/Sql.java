@@ -140,14 +140,14 @@ public interface Sql
      * Retrieves the <i>dao</i> attribute.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     String getDao();
 
     /**
      * Retrieves the <i>repositoryScope</i> attribute.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     String getRepositoryScope();
 
     /**
@@ -202,7 +202,7 @@ public interface Sql
      * @return such elements.
      */
     @NotNull
-    public List<ParameterRefElement> getParameterRefs();
+    List<ParameterRefElement> getParameterRefs();
 
     /**
      * Adds a new &lt;parameter-ref&gt; element.
@@ -214,7 +214,8 @@ public interface Sql
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
-    public ResultRefElement getResultRef();
+    @NotNull
+    ResultRef getResultRef();
 
     /**
      * Retrieves the &lt;connection-flags-ref&gt; element.

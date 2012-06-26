@@ -205,12 +205,15 @@ public class CachingDecoratorFactory
      *
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table for the concrete template.
      */
     @Override
     @Nullable
     public TableDecorator createTableDecorator(
-        @NotNull final String table, @NotNull final MetadataManager metadataManager)
+        @NotNull final String table,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         @Nullable TableDecorator result = null;
 
@@ -218,7 +221,7 @@ public class CachingDecoratorFactory
 
         if (t_Table != null)
         {
-            result = new CachingTableDecorator(t_Table, metadataManager, this);
+            result = new CachingTableDecorator(t_Table, metadataManager, this, customSqlProvider);
         }
 
         return result;

@@ -36,17 +36,8 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.*;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.customsql.CustomResultUtils;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.ParameterElement;
-import org.acmsl.queryj.customsql.ParameterRefElement;
-import org.acmsl.queryj.customsql.Property;
-import org.acmsl.queryj.customsql.PropertyElement;
-import org.acmsl.queryj.customsql.PropertyRefElement;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.ResultRefElement;
-import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -293,8 +284,7 @@ public class CustomSqlValidationHandler
                 {
                     t_ResultSet = t_PreparedStatement.executeQuery();
 
-                    ResultRefElement t_ResultRef =
-                        sql.getResultRef();
+                    ResultRef t_ResultRef = sql.getResultRef();
                     
                     if  (t_ResultRef != null)
                     {
@@ -415,12 +405,12 @@ public class CustomSqlValidationHandler
     {
         @Nullable QueryJBuildException exceptionToThrow = null;
 
-        ParameterElement[] t_aParameters =
+        Parameter[] t_aParameters =
             retrieveParameterElements(sql, customSqlProvider);
 
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
 
-        @Nullable ParameterElement t_Parameter;
+        @Nullable Parameter t_Parameter;
 
         @Nullable Method t_Method;
 
@@ -694,29 +684,27 @@ public class CustomSqlValidationHandler
      * @precondition sql != null
      * @precondition customSqlProvider != null
      */
-    protected ParameterElement[] retrieveParameterElements(
+    protected Parameter[] retrieveParameterElements(
         @NotNull final Sql sql, @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull Collection<ParameterElement> t_cResult = new ArrayList<ParameterElement>();
+        @NotNull Collection<Parameter> t_cResult = new ArrayList<Parameter>();
 
-        Collection t_cParameterRefs = sql.getParameterRefs();
+        Parameter t_Parameter;
 
-        if  (t_cParameterRefs != null)
+        for (@Nullable ParameterRefElement t_ParameterRef : sql.getParameterRefs())
         {
-            Iterator t_itParameterRefs = t_cParameterRefs.iterator();
-
-            if  (t_itParameterRefs != null)
+            if (t_ParameterRef != null)
             {
-                while  (t_itParameterRefs.hasNext())
+                t_Parameter = customSqlProvider.resolveReference(t_ParameterRef);
+
+                if (t_Parameter != null)
                 {
-                    t_cResult.add(
-                        customSqlProvider.resolveReference(
-                            (ParameterRefElement) t_itParameterRefs.next()));
+                    t_cResult.add(t_Parameter);
                 }
             }
         }
 
-        return t_cResult.toArray(new ParameterElement[t_cResult.size()]);
+        return t_cResult.toArray(new Parameter[t_cResult.size()]);
     }
 
     /**
@@ -945,28 +933,15 @@ public class CustomSqlValidationHandler
         @Nullable Collection<PropertyRefElement> t_cPropertyRefs =
             (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
 
-        if  (   (t_cPropertyRefs == null)
-             && (sqlResult != null))
-        {
-            result =
-                retrieveImplicitProperties(
-                    sqlResult,
-                    customSqlProvider,
-                    metadataManager,
-                    metadataTypeManager);
-        }
-        else if (t_cPropertyRefs != null)
-        {
-            Iterator<PropertyRefElement> t_Iterator = t_cPropertyRefs.iterator();
+        @Nullable Property t_Property;
 
-            @Nullable Property t_Property;
-
-            if  (t_Iterator != null)
+        if (t_cPropertyRefs != null)
+        {
+            for (@Nullable PropertyRefElement t_PropertyRef : t_cPropertyRefs)
             {
-                while  (t_Iterator.hasNext())
+                if (t_PropertyRef != null)
                 {
-                    t_Property =
-                        customSqlProvider.resolveReference(t_Iterator.next());
+                    t_Property = customSqlProvider.resolveReference(t_PropertyRef);
 
                     if  (t_Property != null)
                     {
@@ -987,12 +962,8 @@ public class CustomSqlValidationHandler
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such properties.
      * @throws QueryJBuildException if the properties cannot be retrieved..
-     * @precondition sql != null
-     * @precondition sqlResult != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected Collection<Property> retrieveImplicitProperties(
         @NotNull final Result sqlResult,
@@ -1019,12 +990,6 @@ public class CustomSqlValidationHandler
      * @param customResultUtils the <code>CustomResultUtils</code> instance.
      * @return such properties.
      * @throws QueryJBuildException if the properties cannot be retrieved..
-     * @precondition sql != null
-     * @precondition sqlResult != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
-     * @precondition customResultUtils != null
      */
     @NotNull
     protected Collection<Property> retrieveImplicitProperties(

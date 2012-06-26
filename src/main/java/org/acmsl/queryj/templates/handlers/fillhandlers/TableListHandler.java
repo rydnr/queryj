@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.TableDecorator;
@@ -47,6 +48,7 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -94,7 +96,12 @@ public class TableListHandler
     @Override
     protected List<TableDecorator> getValue(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return decorateTables(context.getTableNames(), context.getMetadataManager(), context.getDecoratorFactory());
+        return
+            decorateTables(
+                    context.getTableNames(),
+                    context.getMetadataManager(),
+                    context.getDecoratorFactory(),
+                    context.getCustomSqlProvider());
     }
 
     /**
@@ -102,19 +109,26 @@ public class TableListHandler
      * @param tables the tables.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated tables.
      */
     @NotNull
     protected List<TableDecorator> decorateTables(
         @NotNull final List<String> tables,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         @NotNull List<TableDecorator> result = new ArrayList<TableDecorator>(tables.size());
 
         for (String t_strTable: tables)
         {
-            result.add(decorate(t_strTable, metadataManager,decoratorFactory));
+            TableDecorator t_Table = decorate(t_strTable, metadataManager, decoratorFactory, customSqlProvider);
+
+            if (t_Table != null)
+            {
+                result.add(t_Table);
+            }
         }
 
         return result;
@@ -125,14 +139,16 @@ public class TableListHandler
      * @param table the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table.
      */
-    @NotNull
+    @Nullable
     protected TableDecorator decorate(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        return decoratorFactory.createTableDecorator(table, metadataManager);
+        return decoratorFactory.createTableDecorator(table, metadataManager, customSqlProvider);
     }
 }

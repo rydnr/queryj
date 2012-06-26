@@ -76,14 +76,11 @@ public class SqlElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;sql&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
-        final Digester digester,
+        @NotNull final Digester digester,
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {

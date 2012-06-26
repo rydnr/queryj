@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -47,7 +48,6 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 /*
  * Importing some JetBrains classes.
  */
-import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,9 +56,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -70,21 +68,6 @@ public class CustomResultUtils
     implements  Singleton,
                 Utils
 {
-    /**
-     * An empty SqlElement array.
-     */
-    public static final SqlElement[] EMPTY_SQLELEMENT_ARRAY = new SqlElement[0];
-
-    /**
-     * An empty Result array.
-     */
-    public static final Result[] EMPTY_RESULT_ARRAY = new Result[0];
-
-    /**
-     * An empty String array.
-     */
-    public static final String[] EMPTY_STRING_ARRAY = new String[0];
-
     /**
      * The system property prefix to disable generation for concrete (or all, with *) custom results.
      */
@@ -169,19 +152,7 @@ public class CustomResultUtils
     @NotNull
     protected String[] parseExplicitResults(@NotNull final String environmentProperty)
     {
-        @NotNull String[] result = null;
-
-        if (environmentProperty != null)
-        {
-            result = environmentProperty.split(",");
-        }
-
-        if (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
-        return result;
+        return environmentProperty.split(",");
     }
 
     /**
@@ -207,18 +178,32 @@ public class CustomResultUtils
             result = t_bExplicitlyEnabled;
         }
 
+        boolean t_bCheckDisabled = false;
+
         if (   (!t_bExplicitlyEnabled)
             && (resultsDisabled != null))
         {
             List<String> t_lResultsDisabled = Arrays.asList(resultsDisabled);
 
-            if (   (t_lResultsDisabled.contains("*"))
-                || (resultsEnabled.length > 0)) // explicitly-enabled results imply
-            // the others are disabled implicitly.
+            if (resultsEnabled != null)
             {
-                result = false;
+                if (   (resultsEnabled.length > 0)
+                    || (t_lResultsDisabled.contains("*"))) // explicitly-enabled results imply
+                // the others are disabled implicitly.
+                {
+                    result = false;
+                }
+                else
+                {
+                    t_bCheckDisabled = true;
+                }
             }
-            else if (resultsDisabled != null)
+            else
+            {
+                t_bCheckDisabled = true;
+            }
+
+            if (t_bCheckDisabled)
             {
                 result = !t_lResultsDisabled.contains(resultId);
             }
@@ -251,40 +236,31 @@ public class CustomResultUtils
             {
                 System.out.println("caught");
             }
-            List<Table> t_lTables = metadataManager.getTableDAO().findAllTables();
-
-            int t_iTableCount = t_lTables.size();
-
-            @Nullable SqlElement[] t_aSqlElements;
-
-            int t_iSqlCount;
 
             String t_strDao;
 
-            for  (int t_iTableIndex = 0;
-                     (t_iTableIndex < t_iTableCount) && (!t_bBreakLoop);
-                      t_iTableIndex++)
+            for (@Nullable Sql t_Sql : retrieveSqlElementsByResultId(customSqlProvider, resultElement.getId()))
             {
-                t_aSqlElements =
-                    retrieveSqlElementsByResultId(
-                        customSqlProvider, resultElement.getId());
-
-                t_iSqlCount = t_aSqlElements.length;
-
-                for  (int t_iSqlIndex = 0;
-                          t_iSqlIndex < t_iSqlCount;
-                          t_iSqlIndex++)
+                if (t_Sql != null)
                 {
-                    t_strDao = t_aSqlElements[t_iSqlIndex].getDao();
+                    t_strDao = t_Sql.getDao();
 
-                    if  (   (t_strDao != null)
-                         && (matches(t_lTables.get(t_iTableIndex).getName(), t_strDao)))
+                    for (@Nullable Table t_Table : metadataManager.getTableDAO().findAllTables())
                     {
-                        result = t_lTables.get(t_iTableIndex).getName();
-                        cacheEntry(resultElement.getId(), result);
-                        t_bBreakLoop = true;
-                        break;
+                        if  (   (t_Table != null)
+                             && (matches(t_Table.getName(), t_strDao)))
+                        {
+                            result = t_Table.getName();
+                            cacheEntry(resultElement.getId(), result);
+                            t_bBreakLoop = true;
+                            break;
+                        }
                     }
+                }
+
+                if (t_bBreakLoop)
+                {
+                    break;
                 }
             }
         }
@@ -305,32 +281,40 @@ public class CustomResultUtils
      * @param tableName the table name.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return <code>true</code> if it should be included.
-     * @precondition resultElement != null
-     * @precondition tableName != null
-     * @precondition customSqlProvider != null
      */
     public boolean matches(
+            @NotNull final Result resultElement,
+            @NotNull final String tableName,
+            @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return matches(resultElement, tableName, customSqlProvider, EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Checks whether given result element is suitable of being
+     * included in the DAO layer associated to a concrete table.
+     * @param resultElement the result.
+     * @param tableName the table name.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return <code>true</code> if it should be included.
+     */
+    protected boolean matches(
         @NotNull final Result resultElement,
         @NotNull final String tableName,
-        @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         boolean result = false;
 
-        @NotNull SqlElement[] t_aSqlElements =
-            findSqlElementsByResultId(
-                resultElement.getId(), customSqlProvider);
-
-        int t_iCount = (t_aSqlElements != null) ? t_aSqlElements.length : 0;
-
-        EnglishGrammarUtils t_EnglishGrammarUtils =
-            EnglishGrammarUtils.getInstance();
-
-        for  (int t_iIndex = 0; t_iIndex < t_iCount; t_iIndex++)
+        for (@Nullable Sql t_Sql : findSqlElementsByResultId(
+                resultElement.getId(), customSqlProvider))
         {
-            if  (matches(
-                     tableName,
-                     t_aSqlElements[t_iIndex].getDao(),
-                     t_EnglishGrammarUtils))
+            if (   (t_Sql != null)
+                && (matches(
+                    tableName,
+                    t_Sql.getDao(),
+                    englishGrammarUtils)))
             {
                 result = true;
                 break;
@@ -367,47 +351,44 @@ public class CustomResultUtils
         @NotNull final String daoId,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
-        boolean result = false;
+        boolean result;
 
         String t_strTableInLowerCase = tableName.trim().toLowerCase();
 
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
-        synchronized  (t_strTableInLowerCase)
+        if  (!result)
         {
-            if  (!result)
+            String t_strSingularName =
+                retrieveCachedSingularTableName(t_strTableInLowerCase);
+
+            if  (t_strSingularName == null)
             {
-                String t_strSingularName =
-                    retrieveCachedSingularTableName(t_strTableInLowerCase);
+                t_strSingularName =
+                    englishGrammarUtils.getSingular(t_strTableInLowerCase);
 
-                if  (t_strSingularName == null)
-                {
-                    t_strSingularName =
-                        englishGrammarUtils.getSingular(t_strTableInLowerCase);
-
-                    cacheSingularTableName(
-                        t_strTableInLowerCase, t_strSingularName);
-                }
-
-                result = daoId.equalsIgnoreCase(t_strSingularName);
+                cacheSingularTableName(
+                    t_strTableInLowerCase, t_strSingularName);
             }
 
-            if  (!result)
+            result = daoId.equalsIgnoreCase(t_strSingularName);
+        }
+
+        if  (!result)
+        {
+            String t_strPluralName =
+                retrieveCachedPluralTableName(t_strTableInLowerCase);
+
+            if  (t_strPluralName == null)
             {
-                String t_strPluralName =
-                    retrieveCachedPluralTableName(t_strTableInLowerCase);
+                t_strPluralName =
+                    englishGrammarUtils.getPlural(t_strTableInLowerCase);
 
-                if  (t_strPluralName == null)
-                {
-                    t_strPluralName =
-                        englishGrammarUtils.getPlural(t_strTableInLowerCase);
-
-                    cachePluralTableName(
-                        t_strTableInLowerCase, t_strPluralName);
-                }
-
-                result = daoId.equalsIgnoreCase(t_strPluralName);
+                cachePluralTableName(
+                    t_strTableInLowerCase, t_strPluralName);
             }
+
+            result = daoId.equalsIgnoreCase(t_strPluralName);
         }
 
         return result;
@@ -423,44 +404,28 @@ public class CustomResultUtils
      * @precondition resultId != null
      */
     @NotNull
-    public SqlElement[] retrieveSqlElementsByResultId(
+    public Sql[] retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId)
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        @NotNull List<Sql> t_cResult = new ArrayList<Sql>();
 
-        Collection t_cElements = customSqlProvider.getCollection();
-
-        if  (t_cElements != null)
+        for (@Nullable Object t_CurrentItem : customSqlProvider.getCollection())
         {
-            Iterator t_itElements = t_cElements.iterator();
+            @Nullable ResultRef t_ResultRef;
 
-            if  (t_itElements != null)
+            if  (t_CurrentItem instanceof Sql)
             {
-                @Nullable Object t_CurrentItem = null;
+                t_ResultRef = ((Sql) t_CurrentItem).getResultRef();
 
-                @Nullable ResultRefElement t_ResultRef = null;
-
-                while  (t_itElements.hasNext())
+                if  (resultId.equals(t_ResultRef.getId()))
                 {
-                    t_CurrentItem = t_itElements.next();
-
-                    if  (t_CurrentItem instanceof SqlElement)
-                    {
-                        t_ResultRef = ((SqlElement) t_CurrentItem).getResultRef();
-
-                        if  (   (t_ResultRef != null)
-                             && (resultId.equals(t_ResultRef.getId())))
-                        {
-                            t_cResult.add(t_CurrentItem);
-                        }
-                    }
+                    t_cResult.add((Sql) t_CurrentItem);
                 }
             }
         }
 
-        return
-            (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+        return t_cResult.toArray(new Sql[t_cResult.size()]);
     }
 
     /**
@@ -474,27 +439,25 @@ public class CustomResultUtils
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        @NotNull List<Result> t_cResult = new ArrayList<Result>();
 
-        @NotNull SqlElement[] t_aSqlElements =
-            retrieveSqlElementsByType(customSqlProvider, type);
+        @Nullable Result t_CurrentElement;
 
-        @Nullable Result t_CurrentElement = null;
-
-        for  (int t_iIndex = 0; t_iIndex < t_aSqlElements.length; t_iIndex++)
+        for (@Nullable Sql t_Sql : retrieveSqlElementsByType(customSqlProvider, type))
         {
-            t_CurrentElement =
-                customSqlProvider.resolveReference(
-                    t_aSqlElements[t_iIndex].getResultRef());
-
-            if  (t_CurrentElement != null)
+            if (t_Sql != null)
             {
-                t_cResult.add(t_CurrentElement);
+                t_CurrentElement =
+                    customSqlProvider.resolveReference(t_Sql.getResultRef());
+
+                if (t_CurrentElement != null)
+                {
+                    t_cResult.add(t_CurrentElement);
+                }
             }
         }
 
-        return
-            (Result[]) t_cResult.toArray(EMPTY_RESULT_ARRAY);
+        return t_cResult.toArray(new Result[t_cResult.size()]);
     }
 
     /**
@@ -504,42 +467,22 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public SqlElement[] retrieveSqlElementsByType(
-        @Nullable final CustomSqlProvider customSqlProvider,
+    public Sql[] retrieveSqlElementsByType(
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        @NotNull List<Sql> t_cResult = new ArrayList<Sql>();
 
-        @Nullable Collection t_cElements = null;
-
-        if  (customSqlProvider != null)
+        for (@Nullable Object t_CurrentItem : customSqlProvider.getCollection())
         {
-            t_cElements = customSqlProvider.getCollection();
-        }
-
-        if  (t_cElements != null)
-        {
-            Iterator t_itElements = t_cElements.iterator();
-
-            if  (t_itElements != null)
+            if  (   (t_CurrentItem instanceof Sql)
+                 && (type.equals(((Sql) t_CurrentItem).getType())))
             {
-                @Nullable Object t_CurrentItem = null;
-
-                while  (t_itElements.hasNext())
-                {
-                    t_CurrentItem = t_itElements.next();
-
-                    if  (   (t_CurrentItem instanceof SqlElement)
-                         && (type.equals(((SqlElement) t_CurrentItem).getType())))
-                    {
-                        t_cResult.add(t_CurrentItem);
-                    }
-                }
+                t_cResult.add((Sql) t_CurrentItem);
             }
         }
 
-        return
-            (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+        return t_cResult.toArray(new Sql[t_cResult.size()]);
     }
 
     /**
@@ -548,46 +491,29 @@ public class CustomResultUtils
      * @param resultId such id.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return all such entities.
-     * @precondition resultId != null
-     * @precondition customSqlProvider != null
      */
     @NotNull
-    public SqlElement[] findSqlElementsByResultId(
+    public Sql[] findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull Collection t_cResult = new ArrayList();
+        @NotNull List<Sql> t_cResult = new ArrayList<Sql>();
 
-        Collection t_cElements = customSqlProvider.getCollection();
-
-        if  (t_cElements != null)
+        for (@Nullable Object t_CurrentItem : customSqlProvider.getCollection())
         {
-            Iterator t_itElements = t_cElements.iterator();
-
-            if  (t_itElements != null)
+            if  (t_CurrentItem instanceof SqlElement)
             {
-                @Nullable Object t_CurrentItem = null;
+                ResultRef t_ResultRefElement =
+                    ((Sql) t_CurrentItem).getResultRef();
 
-                while  (t_itElements.hasNext())
+                if  (resultId.equals(t_ResultRefElement.getId()))
                 {
-                    t_CurrentItem = t_itElements.next();
-
-                    if  (t_CurrentItem instanceof SqlElement)
-                    {
-                        ResultRefElement t_ResultRefElement =
-                            ((SqlElement) t_CurrentItem).getResultRef();
-
-                        if  (   (t_ResultRefElement != null)
-                             && (resultId.equals(t_ResultRefElement.getId())))
-                        {
-                            t_cResult.add(t_CurrentItem);
-                        }
-                    }
+                    t_cResult.add((Sql) t_CurrentItem);
                 }
             }
         }
 
-        return (SqlElement[]) t_cResult.toArray(EMPTY_SQLELEMENT_ARRAY);
+        return t_cResult.toArray(new Sql[t_cResult.size()]);
     }
 
     /**
@@ -639,7 +565,7 @@ public class CustomResultUtils
      * @return such value.
      * @precondition tableName != null
      */
-    @NotNull
+    @Nullable
     protected String retrieveCachedSingularTableName(final String tableName)
     {
         return retrieveCachedEntry(buildSingularKey(tableName));
@@ -651,7 +577,7 @@ public class CustomResultUtils
      * @return such value.
      * @precondition tableName != null
      */
-    @NotNull
+    @Nullable
     protected String retrieveCachedPluralTableName(final String tableName)
     {
         return retrieveCachedEntry(buildPluralKey(tableName));

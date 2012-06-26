@@ -36,10 +36,8 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.Sql;
-import org.acmsl.queryj.customsql.ResultRefElement;
+import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.customsql.*;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -54,6 +52,7 @@ import org.acmsl.commons.patterns.Utils;
 /*
  * Importing some Apache Commons-Logging classes.
  */
+import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -286,7 +285,7 @@ public class TemplateUtils
     @NotNull
     public List<Sql> retrieveCustomSql(
         @Nullable final String[] types,
-        @Nullable final String tableName,
+        @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -294,69 +293,48 @@ public class TemplateUtils
     {
         @NotNull List<Sql> result = new ArrayList<Sql>();
 
-        Collection t_cContents = customSqlProvider.getCollection();
+        boolean t_bMatches;
+        Sql t_Sql;
+        String t_strDao;
 
-        if  (t_cContents != null)
+        for (@Nullable Object t_Content : customSqlProvider.getCollection())
         {
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            if  (t_itContentIterator != null)
+            if  (t_Content instanceof Sql)
             {
-                int t_iTypes = (types != null) ? types.length : 0;
+                t_Sql = (Sql) t_Content;
 
-                while  (t_itContentIterator.hasNext())
+                t_strDao = t_Sql.getDao();
+
+                if (t_strDao != null)
                 {
-                    Object t_Content = t_itContentIterator.next();
+                    t_bMatches = daoTemplateUtils.matches(tableName, t_strDao);
+                }
+                else
+                {
+                    t_bMatches = (t_Sql.getRepositoryScope() != null);
+                }
 
-                    boolean t_bMatches;
+                if  (t_bMatches)
+                {
+                    boolean t_bAdd = false;
 
-                    if  (t_Content instanceof Sql)
+                    for (@Nullable String t_strCurrentType : types)
                     {
-                        @NotNull Sql t_Sql = (Sql) t_Content;
-
-                        String t_strDao = t_Sql.getDao();
-
-                        if  (   (t_strDao != null)
-                             && (tableName != null))
+                        if  (   (t_strCurrentType != null)
+                             && (t_strCurrentType.equals(t_Sql.getType())))
                         {
-                            t_bMatches =
-                                daoTemplateUtils.matches(
-                                    tableName, t_strDao);
+                            t_bAdd = true;
+                            break;
                         }
-                        else
-                        {
-                            t_bMatches = (t_Sql.getRepositoryScope() != null);
-                        }
+                    }
 
-                        if  (t_bMatches)
-                        {
-                            boolean t_bAdd = false;
-
-                            @Nullable String t_strCurrentType;
-
-                            for  (int t_iIndex = 0;
-                                      t_iIndex < t_iTypes;
-                                      t_iIndex++)
-                            {
-                                t_strCurrentType = types[t_iIndex];
-
-                                if  (   (t_strCurrentType != null)
-                                     && (t_strCurrentType.equals(
-                                             t_Sql.getType())))
-                                {
-                                    t_bAdd = true;
-                                }
-                            }
-
-                            if  (t_bAdd)
-                            {
-                                result.add(
-                                    decoratorFactory.createDecorator(
-                                        t_Sql,
-                                        customSqlProvider,
-                                        metadataManager));
-                            }
-                        }
+                    if  (t_bAdd)
+                    {
+                        result.add(
+                            decoratorFactory.createDecorator(
+                                t_Sql,
+                                    customSqlProvider,
+                                    metadataManager));
                     }
                 }
             }
@@ -402,14 +380,10 @@ public class TemplateUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom results.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     * @precondition daoTemplateUtils != null
      */
     @NotNull
     public List<Result> retrieveCustomResults(
-        @Nullable final String tableName,
+        @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -417,101 +391,93 @@ public class TemplateUtils
     {
         @NotNull List<Result> result = new ArrayList<Result>();
 
-        Collection t_cContents = customSqlProvider.getCollection();
+        @Nullable Sql t_Sql;
+        @Nullable ResultRef t_ResultRef;
+        @Nullable Result t_ResultElement;
+        String t_strDao;
+        boolean t_bMatches;
 
-        if  (t_cContents != null)
+        for (@Nullable Object t_Content : customSqlProvider.getCollection())
         {
-            @Nullable Object t_Content;
-            @Nullable Sql t_Sql;
-            @Nullable ResultRefElement t_ResultRefElement;
-            @Nullable Result t_ResultElement;
-            String t_strDao;
-            boolean t_bMatches;
-
-            Iterator t_itContentIterator = t_cContents.iterator();
-
-            if  (t_itContentIterator != null)
+            if  (t_Content instanceof Sql)
             {
-                while  (t_itContentIterator.hasNext())
+                t_Sql = (Sql) t_Content;
+
+                t_strDao = t_Sql.getDao();
+
+                if  (t_strDao != null)
                 {
-                    t_Content = t_itContentIterator.next();
+                    t_bMatches = daoTemplateUtils.matches(tableName, t_strDao);
+                }
+                else
+                {
+                    t_bMatches = (t_Sql.getRepositoryScope() != null);
+                }
 
-                    if  (t_Content instanceof Sql)
+                if  (t_bMatches)
+                {
+                    t_ResultRef = t_Sql.getResultRef();
+
+                    if  (t_ResultRef != null)
                     {
-                        t_Sql = (Sql) t_Content;
+                        t_ResultElement =
+                            customSqlProvider.resolveReference(t_ResultRef);
 
-                        t_strDao = t_Sql.getDao();
-
-                        if  (   (t_strDao != null)
-                             && (tableName != null))
+                        if  (t_ResultElement != null)
                         {
-                            t_bMatches =
-                                daoTemplateUtils.matches(
-                                    tableName, t_strDao);
+                            if  (!result.contains(t_ResultElement))
+                            {
+                                result.add(
+                                    new CachingResultDecorator(
+                                        t_ResultElement,
+                                            customSqlProvider,
+                                            metadataManager,
+                                            decoratorFactory));
+                            }
                         }
                         else
                         {
-                            t_bMatches = (t_Sql.getRepositoryScope() != null);
+                            try
+                            {
+                                // todo throw something.
+                                Log t_Log = UniqueLogFactory.getLog(TemplateUtils.class);
+
+                                if (t_Log != null)
+                                {
+                                    t_Log.warn(
+                                          "Referenced result not found:"
+                                        + t_ResultRef.getId());
+                                }
+                            }
+                            catch  (@NotNull final Throwable throwable)
+                            {
+                                // class-loading problem.
+                                System.err.println(
+                                       "Referenced result not found:"
+                                     + t_ResultRef.getId());
+                            }
                         }
-
-                        if  (t_bMatches)
+                    }
+                    else
+                    {
+                        try
                         {
-                            t_ResultRefElement = t_Sql.getResultRef();
+                            // todo throw something.
+                            Log t_Log = UniqueLogFactory.getLog(TemplateUtils.class);
 
-                            if  (t_ResultRefElement != null)
+                            if (t_Log != null)
                             {
-                                t_ResultElement =
-                                    customSqlProvider.resolveReference(
-                                        t_ResultRefElement);
-
-                                if  (t_ResultElement != null)
-                                {
-                                    if  (!result.contains(t_ResultElement))
-                                    {
-                                        result.add(
-                                            new CachingResultDecorator(
-                                                t_ResultElement,
-                                                customSqlProvider,
-                                                metadataManager,
-                                                decoratorFactory));
-                                    }
-                                }
-                                else
-                                {
-                                    try
-                                    {
-                                        // todo throw something.
-                                        LogFactory.getLog(TemplateUtils.class)
-                                            .warn(
-                                                "Referenced result not found:"
-                                                + t_ResultRefElement.getId());
-                                    }
-                                    catch  (@NotNull final Throwable throwable)
-                                    {
-                                        // class-loading problem.
-                                        System.err.println(
-                                              "Referenced result not found:"
-                                            + t_ResultRefElement.getId());
-                                    }
-                                }
+                                t_Log.warn(
+                                      "Referenced result not found for sql:"
+                                    + t_Sql.getId());
                             }
-                            else
-                            {
-                                try
-                                {
-                                    // todo throw something.
-                                    LogFactory.getLog(TemplateUtils.class).warn(
-                                          "Referenced result not found for sql:"
-                                        + t_Sql.getId());
-                                }
-                                catch  (@NotNull final Throwable throwable)
-                                {
-                                    // class-loading problem.
-                                    System.err.println(
-                                          "Referenced result not found for sql:"
-                                        + t_Sql.getId());
-                                }
-                            }
+                        }
+                        catch  (@NotNull final Throwable throwable)
+                        {
+                            // class-loading problem.
+                            System.err.println(
+                                  "Referenced result not found for sql:"
+                                + t_Sql.getId());
                         }
                     }
                 }

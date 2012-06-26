@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models elements in <i>custom-sql</i> models, which
@@ -82,15 +83,13 @@ public abstract class AbstractParameterElement
      * @param index the <i>index</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
-     * @precondition id != null
-     * @precondition type != null
      */
     protected AbstractParameterElement(
-        final String id,
-        final String columnName,
+        @NotNull final String id,
+        @NotNull final String columnName,
         final int index,
-        final String name,
-        final String type)
+        @NotNull final String name,
+        @NotNull final String type)
     {
         super(id);
         immutableSetColumnName(columnName);
@@ -103,7 +102,7 @@ public abstract class AbstractParameterElement
      * Specifies the <i>column_name</i> attribute.
      * @param columnName such value.
      */
-    protected final void immutableSetColumnName(final String columnName)
+    protected final void immutableSetColumnName(@NotNull final String columnName)
     {
         m__strColumnName = columnName;
     }
@@ -112,7 +111,8 @@ public abstract class AbstractParameterElement
      * Specifies the <i>column_name</i> attribute.
      * @param columnName such value.
      */
-    protected void setColumnName(final String columnName)
+    @SuppressWarnings("unused")
+    protected void setColumnName(@NotNull final String columnName)
     {
         immutableSetColumnName(columnName);
     }
@@ -121,6 +121,7 @@ public abstract class AbstractParameterElement
      * Retrieves the <i>column_name</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getColumnName()
     {
         return m__strColumnName;
@@ -139,6 +140,7 @@ public abstract class AbstractParameterElement
      * Specifies the <i>index</i> attribute.
      * @param index such value.
      */
+    @SuppressWarnings("unused")
     protected void setIndex(final int index)
     {
         immutableSetIndex(index);
@@ -157,7 +159,7 @@ public abstract class AbstractParameterElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -166,7 +168,7 @@ public abstract class AbstractParameterElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
-    protected void setName(final String name)
+    protected void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -175,6 +177,7 @@ public abstract class AbstractParameterElement
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getName()
     {
         return m__strName;
@@ -184,7 +187,7 @@ public abstract class AbstractParameterElement
      * Specifies the <i>type</i> attribute.
      * @param type such value.
      */
-    protected final void immutableSetType(final String type)
+    protected final void immutableSetType(@NotNull final String type)
     {
         m__strType = type;
     }
@@ -193,7 +196,8 @@ public abstract class AbstractParameterElement
      * Specifies the <i>type</i> attribute.
      * @param type such value.
      */
-    protected void setType(final String type)
+    @SuppressWarnings("unused")
+    protected void setType(@NotNull final String type)
     {
         immutableSetType(type);
     }
@@ -202,6 +206,7 @@ public abstract class AbstractParameterElement
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getType()
     {
         return m__strType;
@@ -305,7 +310,7 @@ public abstract class AbstractParameterElement
      * @return the result of such comparison.
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@NotNull final Parameter object)
+    public int compareTo(@Nullable final Parameter object)
     {
         return
             new org.apache.commons.lang.builder.CompareToBuilder()

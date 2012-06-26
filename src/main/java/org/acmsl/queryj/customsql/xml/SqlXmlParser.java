@@ -36,25 +36,7 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.customsql.AbstractIdElement;
-import org.acmsl.queryj.customsql.ConnectionFlagsElement;
-import org.acmsl.queryj.customsql.ConnectionFlagsRefElement;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.CustomSqlProviderSqlDAO;
-import org.acmsl.queryj.customsql.CustomSqlProviderSqlParameterDAO;
-import org.acmsl.queryj.customsql.CustomSqlProviderSqlResultDAO;
-import org.acmsl.queryj.customsql.ParameterElement;
-import org.acmsl.queryj.customsql.ParameterRefElement;
-import org.acmsl.queryj.customsql.PropertyElement;
-import org.acmsl.queryj.customsql.PropertyRefElement;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.ResultElement;
-import org.acmsl.queryj.customsql.ResultRefElement;
-import org.acmsl.queryj.customsql.ResultSetFlagsElement;
-import org.acmsl.queryj.customsql.ResultSetFlagsRefElement;
-import org.acmsl.queryj.customsql.StatementFlagsElement;
-import org.acmsl.queryj.customsql.StatementFlagsRefElement;
-import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.*;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -98,7 +80,7 @@ import org.jetbrains.annotations.Nullable;
 public class SqlXmlParser
     implements  CustomSqlProvider
 {
-    private static final long serialVersionUID = 4622172516611441363L;
+    public static final long serialVersionUID = 4622172516611441363L;
     /**
      * The complete sql.xml contents.
      */
@@ -490,26 +472,26 @@ public class SqlXmlParser
 
                 if  (t_Object != null)
                 {
-                    if  (t_Object instanceof SqlElement)
+                    if  (t_Object instanceof Sql)
                     {
                         map.put(
                             buildSqlKey(t_Object), t_Object);
                     }
-                    else if  (t_Object instanceof ParameterElement)
+                    else if  (t_Object instanceof Parameter)
                     {
                         map.put(
                             buildParameterKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof ResultElement)
+                    else if  (t_Object instanceof Result)
                     {
                         map.put(
                             buildResultKey(
                                 (AbstractIdElement) t_Object),
                             t_Object);
                     }
-                    else if  (t_Object instanceof PropertyElement)
+                    else if  (t_Object instanceof Property)
                     {
                         map.put(
                             buildPropertyKey(
@@ -712,7 +694,7 @@ public class SqlXmlParser
      * @precondition reference != null
      */
     @Nullable
-    public ParameterElement resolveReference(
+    public Parameter resolveReference(
         @NotNull final ParameterRefElement reference)
     {
         return resolveReference(reference, getMap());
@@ -726,7 +708,7 @@ public class SqlXmlParser
      * @precondition reference != null
      */
     @Nullable
-    protected ParameterElement resolveReference(
+    protected Parameter resolveReference(
         @NotNull final ParameterRefElement reference,
         @Nullable final Map map)
     {
@@ -749,8 +731,8 @@ public class SqlXmlParser
      * @precondition reference != null
      */
     @Nullable
-    public ResultElement resolveReference(
-        @NotNull final ResultRefElement reference)
+    public Result resolveReference(
+        @NotNull final ResultRef reference)
     {
         return resolveReference(reference, getMap());
     }
@@ -760,19 +742,19 @@ public class SqlXmlParser
      * @param reference such reference.
      * @param map the map.
      * @return the referenced result.
-     * @precondition reference != null
      */
+    @SuppressWarnings("unchecked")
     @Nullable
-    protected ResultElement resolveReference(
-        @NotNull final ResultRefElement reference,
+    protected Result resolveReference(
+        @NotNull final ResultRef reference,
         @Nullable final Map map)
     {
-        @Nullable ResultElement result = null;
+        @Nullable Result result = null;
 
         if  (map != null)
         {
             result =
-                (ResultElement)
+                (Result)
                     map.get(buildResultKey(reference.getId()));
         }
 
@@ -931,10 +913,8 @@ public class SqlXmlParser
      * Adds a new result.
      * @param id the result id.
      * @param result the <code>Result</code> instance.
-     * @precondition id != null
-     * @precondition result != null
      */
-    public void addResult(final String id, final Result result)
+    public void addResult(@NotNull final String id, @NotNull final Result result)
     {
         // TODO
     }
@@ -944,12 +924,9 @@ public class SqlXmlParser
      * @param id the property id.
      * @param name the property name.
      * @param type the property type.
-     * @precondition id != null
-     * @precondition name != null
-     * @precondition type != null
      */
     public void addProperty(
-        final String id, final String name, final String type)
+        @NotNull final String id, @NotNull final String name, @NotNull final String type)
     {
         // TODO
     }

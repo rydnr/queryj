@@ -64,7 +64,7 @@ public class ResultRefElementFactory
     /**
      * Creates a ResultRefElementFactory instance.
      */
-    public ResultRefElementFactory() {};
+    public ResultRefElementFactory() {}
 
     /**
      * Creates a ResultRefElement instance from given SAX attributes.

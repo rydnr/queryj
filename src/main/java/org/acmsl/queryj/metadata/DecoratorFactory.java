@@ -142,11 +142,14 @@ public interface DecoratorFactory
      *
      * @param table the table name.
      * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorated table for the concrete template.
      */
     @Nullable
     public TableDecorator createTableDecorator(
-        @NotNull final String table, @NotNull final MetadataManager metadataManager);
+        @NotNull final String table,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider);
 
     /**
      * Retrieves the decorated list of attributes of given table.

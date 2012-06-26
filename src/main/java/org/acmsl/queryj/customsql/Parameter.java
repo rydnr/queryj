@@ -37,6 +37,9 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Models elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
@@ -57,30 +60,33 @@ public interface Parameter
      * Retrieves the <i>column_name</i> attribute.
      * @return such value.
      */
-    public String getColumnName();
+    @NotNull
+    String getColumnName();
 
     /**
      * Retrieves the <i>index</i> attribute.
      * @return such value.
      */
-    public int getIndex();
+    int getIndex();
 
     /**
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
-    public String getName();
+    @NotNull
+    String getName();
 
     /**
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
-    public String getType();
+    @NotNull
+    String getType();
 
     /**
      * Retrieves the validation value.
      * @return such value.
      */
-    public String getValidationValue();
-
+    @Nullable
+    String getValidationValue();
 }
