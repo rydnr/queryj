@@ -37,50 +37,50 @@
 //
 group BaseDAOFactory;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a BaseDAOFactory source file.
-  @param input.copyright_years the copyright's years.
-  @param input.base_package_name the package.
-  @param input.vo_name the value-object name.
+  @param copyright_years the copyright's years.
+  @param project_package the package.
+  @param table.voName the value-object name.
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
-    first_line_description(voName=input.vo_name),
-    second_line_description(voName=input.vo_name)
+    first_line_description(voName=table.voName),
+    second_line_description(voName=table.voName)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
 // Generated using org/acmsl/queryj/dao/BaseDAOFactory.stg
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName
   ])>
 
 <project_imports(
   daoPackage=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName
   ],
-  voName=input.vo_name,
+  voName=table.voName,
   daoChooserPackage=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName
   ],
-  repository=input.tr_name_capitalized)>
+  repository=repository.capitalized)>
 
-<class(input=input)>
+<class()>
 >>
 
 first_line_description(voName) ::= <<
@@ -126,73 +126,72 @@ import java.lang.InstantiationException;
 import org.apache.commons.logging.LogFactory;
 >>
 
-class(input) ::= <<
+class() ::= <<
 <!
   Generates the class body.
-  @param input.engine_name the engine name.
-  @param input.timestamp the timestamp.
-  @param input.jndi_location the JNDI location.
-  @param input.table_name the table name.
+  @param engine_name the engine name.
+  @param timestamp the timestamp.
+  @param jndi_location the JNDI location.
+  @param table.name the table name.
 !>
-<class_impl(input=input, table=input.table)>
+<class_impl(table=table)>
 >>
 
-class_impl(input, table) ::= <<
+class_impl(table) ::= <<
 <!
   Generates the class body.
-  @param input the input parameters.
   @param table the table.
 !>
 /**
  * <[
-      first_line_description(voName=input.vo_name),
-      second_line_description(voName=input.vo_name)
+      first_line_description(voName=table.voName),
+      second_line_description(voName=table.voName)
     ]:{ line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
-public abstract class <input.vo_name>DAOFactory
+public abstract class <table.voName>DAOFactory
 {
     /**
-     * Retrieves a <input.vo_name>DAOFactory instance.
+     * Retrieves a <table.voName>DAOFactory instance.
      * @return such instance.
      */
     <nullable()>
-    public static <input.vo_name>DAOFactory getInstance()
+    public static <table.voName>DAOFactory getInstance()
     {
-        return getInstance(<input.tr_name_capitalized>DAOChooser.getInstance());
+        return getInstance(<repository.capitalized>DAOChooser.getInstance());
     }
 
     /**
-     * Retrieves a <input.vo_name>DAOFactory instance.
+     * Retrieves a <table.voName>DAOFactory instance.
      * @param daoChooser the DAOChooser instance.
      * @return such instance.
      */
     <nullable()>
     protected static <table.singularNameCapitalized>DAOFactory getInstance(
-        <notnull()>final <input.tr_name_capitalized>DAOChooser daoChooser)
+        <notnull()>final <repository.capitalized>DAOChooser daoChooser)
     {
-        <input.vo_name>DAOFactory result = null;
+        <table.voName>DAOFactory result = null;
 
-        String t_str<input.vo_name>DAOFactoryClassName =
+        String t_str<table.voName>DAOFactoryClassName =
             daoChooser.get<table.singularNameCapitalized>DAOFactoryClassName();
 
-        if  (t_str<input.vo_name>DAOFactoryClassName != null)
+        if  (t_str<table.voName>DAOFactoryClassName != null)
         {
             try
             {
                 Class t_FactoryClass =
                     Class.forName(
-                        t_str<input.vo_name>DAOFactoryClassName);
+                        t_str<table.voName>DAOFactoryClassName);
 
                 result =
-                    (<input.vo_name>DAOFactory) t_FactoryClass.newInstance();
+                    (<table.voName>DAOFactory) t_FactoryClass.newInstance();
             }
             catch  (final ClassNotFoundException classNotFoundException)
             {
                 try
                 {
-                    LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
-                        "Cannot find <input.vo_name>DAOFactory implementation class",
+                    LogFactory.getLog(<table.voName>DAOFactory.class).error(
+                        "Cannot find <table.voName>DAOFactory implementation class",
                         classNotFoundException);
                 }
                 catch  (final Throwable throwable)
@@ -204,8 +203,8 @@ public abstract class <input.vo_name>DAOFactory
             {
                 try
                 {
-                    LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
-                        "Cannot instantiate <input.vo_name>DAOFactory implementation",
+                    LogFactory.getLog(<table.voName>DAOFactory.class).error(
+                        "Cannot instantiate <table.voName>DAOFactory implementation",
                         instantiationException);
                 }
                 catch  (final Throwable throwable)
@@ -217,8 +216,8 @@ public abstract class <input.vo_name>DAOFactory
             {
                 try
                 {
-                    LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
-                        "Cannot access <input.vo_name>DAOFactory implementation",
+                    LogFactory.getLog(<table.voName>DAOFactory.class).error(
+                        "Cannot access <table.voName>DAOFactory implementation",
                         illegalAccessException);
                 }
                 catch  (final Throwable throwable)
@@ -231,8 +230,8 @@ public abstract class <input.vo_name>DAOFactory
         {
             try
             {
-                LogFactory.getLog(<input.vo_name>DAOFactory.class).error(
-                    "<input.vo_name>DAOFactory implementation not specified");
+                LogFactory.getLog(<table.voName>DAOFactory.class).error(
+                    "<table.voName>DAOFactory implementation not specified");
             }
             catch  (final Throwable throwable)
             {
@@ -244,9 +243,9 @@ public abstract class <input.vo_name>DAOFactory
     }
 
     /**
-     * Creates a <input.table_name>-specific DAO instance.
+     * Creates a <table.name>-specific DAO instance.
      * @return such DAO.
      */
-    public abstract <input.vo_name>DAO create<input.vo_name>DAO();
+    public abstract <table.voName>DAO create<table.voName>DAO();
 }
 >>

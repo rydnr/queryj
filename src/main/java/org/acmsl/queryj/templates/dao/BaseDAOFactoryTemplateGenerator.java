@@ -104,10 +104,10 @@ public class BaseDAOFactoryTemplateGenerator
      * information.
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
-     * @param header the header.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
+     * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
      * @param jmx whether to include JMX support.
@@ -120,10 +120,10 @@ public class BaseDAOFactoryTemplateGenerator
     public BaseDAOFactoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
+        @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
