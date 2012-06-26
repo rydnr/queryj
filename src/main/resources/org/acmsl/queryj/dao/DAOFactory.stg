@@ -146,7 +146,7 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAO
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListenerImpl;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAOFactory;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<engineName><voName>DAO;
+import <subpackageName>.<engineName><voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JndiUtils;
 //import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
 
@@ -234,7 +234,7 @@ public class <engine_name><table.voName>DAOFactory
         if  (dataSource != null)
         {
             result =
-<if(input.dynamic_queries)>
+<if(table.dynamic_queries)>
                 new <engine_name><table.voName>DAOImpl(
 <else>
                 new <engine_name><table.voName>DAO(
@@ -264,7 +264,7 @@ public class <engine_name><table.voName>DAOFactory
      * @return such data source.
      */
     <nullable()>
-    protected DataSource getDataSource(<notnull>final <repository.capitalized>JndiUtils jndiUtils)
+    protected DataSource getDataSource(<notnull()>final <repository.capitalized>JndiUtils jndiUtils)
     {
         DataSource result = null;
 
@@ -279,7 +279,7 @@ public class <engine_name><table.voName>DAOFactory
             // operations.
             try
             {
-                LogFactory.getLog(<input.class_name>.class).info(
+                LogFactory.getLog(<dao_factory_class_name>.class).info(
                       "DataSource not present in JNDI context. "
                     + "Assuming JNDI is not enabled.");
             }
@@ -304,7 +304,7 @@ public class <engine_name><table.voName>DAOFactory
 //            {
 //                try
 //                {
-//                    LogFactory.getLog(<input.class_name>.class).error(
+//                    LogFactory.getLog(<dao_factory_class_name>.class).error(
 //                        "Cannot retrieve connection", exception);
 //                }
 //                catch  (final Throwable throwable)
@@ -316,7 +316,7 @@ public class <engine_name><table.voName>DAOFactory
 //            {
 //                try
 //                {
-//                    LogFactory.getLog(<input.class_name>.class).error(
+//                    LogFactory.getLog(<dao_factory_class_name>.class).error(
 //                        "Cannot retrieve data source", throwable);
 //                }
 //                catch  (final Throwable anotherThrowable)

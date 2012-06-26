@@ -71,7 +71,7 @@ public class JndiLocationFillHandler
     @Override
     protected String resolveContextValue(@NotNull final TemplateContext context)
     {
-        return context.getHeader();
+        return context.getJndiLocation();
     }
 
     /**

@@ -154,12 +154,18 @@ public class DAOFactoryTemplateGenerator
     @NotNull
     public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
-        return retrieveTemplateFileName(context, StringUtils.getInstance(), EnglishGrammarUtils.getInstance());
+        return
+            retrieveTemplateFileName(
+                context,
+                context.getMetadataManager(),
+                StringUtils.getInstance(),
+                EnglishGrammarUtils.getInstance());
     }
 
     /**
      * Retrieves given template's file name.
      * @param context the {@link BasePerTableTemplateContext context}.
+     * @param metadataManager the {@link MetadataManager} instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
      * @return such name.
@@ -167,11 +173,13 @@ public class DAOFactoryTemplateGenerator
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final BasePerTableTemplateContext context,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final StringUtils stringUtils,
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
-            stringUtils.capitalize(
+              metadataManager.getEngineName()
+            + stringUtils.capitalize(
                 englishGrammarUtils.getSingular(
                     context.getTableName().toLowerCase(Locale.US)),
                 '_')

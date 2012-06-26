@@ -138,7 +138,7 @@ public class DecoratedString
      * @return the value associated to "[placeholder].capitalized".
      */
     @NotNull
-    public String capitalized()
+    public String getCapitalized()
     {
         return capitalize(getValue(), StringUtils.getInstance());
     }

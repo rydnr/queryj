@@ -98,6 +98,10 @@ public class BasePerTableFillTemplateChain
                 new DAOImplementationClassNameHandler(context)));
 
         chain.add(
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,DAOFactoryClassNameHandler,DecoratedString>(
+                new DAOFactoryClassNameHandler(context)));
+
+        chain.add(
             new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,ForeignKeyListHandler,List<ForeignKey>>(
                 new ForeignKeyListHandler(context)));
 

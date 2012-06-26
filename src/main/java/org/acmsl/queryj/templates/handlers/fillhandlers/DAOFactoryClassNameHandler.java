@@ -23,13 +23,13 @@
 
  ******************************************************************************
  *
- * Filename: DAOClassNameHandler.java
+ * Filename: DAOFactoryClassNameHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Resolves "dao_class_name" placeholders.
+ * Description: Resolves "dao_factory_class_name" placeholders.
  *
- * Date: 5/24/12
+ * Date: 6/26/12
  * Time: 5:12 AM
  *
  */
@@ -47,40 +47,44 @@ import org.acmsl.queryj.templates.DefaultThemeUtils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
-/*
+/**
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing some JetBrains annotations.
+ */
+
 /**
- * Resolves "dao_class_name" placeholders.
+ * Resolves "dao_factory_class_name" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/05/24
+ * @since 2012/06/26
  */
 @SuppressWarnings("unused")
-public class DAOClassNameHandler
+public class DAOFactoryClassNameHandler
     extends AbstractDecoratedStringHandler<BasePerTableTemplateContext>
 {
     /**
-     * Creates a new {@link DAOClassNameHandler} using
+     * Creates a new {@link DAOFactoryClassNameHandler} using
      * given {@link BasePerTableTemplateContext context}.
      * @param context the {@link BasePerTableTemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public DAOClassNameHandler(@NotNull final BasePerTableTemplateContext context)
+    public DAOFactoryClassNameHandler(@NotNull final BasePerTableTemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "dao_class_name".
+     * Returns "dao_factory_class_name".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "dao_class_name";
+        return "dao_factory_class_name";
     }
 
     /**
@@ -121,6 +125,6 @@ public class DAOClassNameHandler
                     tableName.toLowerCase()));
 
         return
-            defaultThemeUtils.buildDAOClassName(t_strSingularName);
+            defaultThemeUtils.buildDAOFactoryClassName(t_strSingularName);
     }
 }

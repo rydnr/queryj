@@ -74,7 +74,7 @@ public class DAOImplementationClassNameHandler
     }
 
     /**
-     * Returns "class_name".
+     * Returns "dao_implementation_class_name".
      * @return such placeholder.
      */
     @NotNull
