@@ -172,15 +172,11 @@ public abstract class Abstract<table.voName>DAO
     protected void copyArray(
         <notnull()>final <table.voName>[] source, <notnull()>final <table.voName>[] target)
     {
-        int t_iCount = source.length;
 
-        for  (int t_iIndex = 0; t_iIndex \< t_iCount; t_iIndex++)
-        {
-            target[t_iIndex] = source[t_iIndex];
-        }
+        System.arraycopy(source, 0, target, 0, source.length);
     }
 
-    <table.staticAttributes:static_table(
+    <table.staticContents:static_table(
       attribute=it,
       primaryKeyAttributes=table.primaryKey,
       voName=table.voName)>

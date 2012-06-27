@@ -112,6 +112,11 @@ public class CachingTableDecorator
     private String m__strCachedSingularNameCapitalized;
 
     /**
+     * The cached primary key.
+     */
+    private List<Attribute> m__lCachedPrimaryKey;
+
+    /**
      * The cached non-readonly attributes.
      */
     private List<Attribute> m__lCachedNonReadOnlyAttributes;
@@ -198,6 +203,11 @@ public class CachingTableDecorator
     private List<Attribute> m__lCachedNonParentPlusPkAttributes;
 
     /**
+     * The cached non-readonly, except the externally-managed attributes.
+     */
+    private List<Attribute> m__lCachedAllNonReadOnlyButExternallyManagedAttributes;
+
+    /**
      * The cached all parent tables.
      */
     private List<Table> m__lCachedAllParentTables;
@@ -228,6 +238,57 @@ public class CachingTableDecorator
     {
         super(table, metadataManager, decoratorFactory, customSqlProvider);
     }
+
+    /**
+     * Specifies the cached primary key.
+     * @param list the attribute list.
+     */
+    protected final void immutableSetCachedPrimaryKey(@NotNull final List<Attribute> list)
+    {
+        m__lCachedPrimaryKey = list;
+    }
+
+    /**
+     * Specifies the cached primary key.
+     * @param list the attribute list.
+     */
+    protected void setCachedPrimaryKey(@NotNull final List<Attribute> list)
+    {
+        immutableSetCachedPrimaryKey(list);
+    }
+
+    /**
+     * Retrieves the cached primary key.
+     * @return such list.
+     */
+    @Nullable
+    public List<Attribute> getCachedPrimaryKey()
+    {
+        return m__lCachedPrimaryKey;
+    }
+
+    /**
+     * Retrieves the primary key attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getPrimaryKey()
+    {
+        @Nullable List<Attribute> result = getCachedPrimaryKey();
+
+        if (result == null)
+        {
+            result = super.getPrimaryKey();
+
+            result = decorateAttributes(result, getMetadataManager(), getDecoratorFactory());
+
+            setCachedPrimaryKey(result);
+        }
+
+        return result;
+    }
+
 
     /**
      * Specifies the cached all attributes.
@@ -406,6 +467,7 @@ public class CachingTableDecorator
      * Retrieves the non-read-only attributes.
      * @return such attributes.
      */
+    @Override
     @NotNull
     public List<Attribute> getNonReadOnlyAttributes()
     {
@@ -1153,6 +1215,58 @@ public class CachingTableDecorator
         {
             result = super.getAllNonManagedExternallyAttributes();
             setCachedAllNonManagedExternallyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached non-readonly, except the externally-managed attributes.
+     * @param list such list.
+     */
+    protected final void immutableSetCachedAllNonReadOnlyButExternallyManagedAttributes(
+        @NotNull final List<Attribute> list)
+    {
+        m__lCachedAllNonReadOnlyButExternallyManagedAttributes = list;
+    }
+
+    /**
+     * Specifies the cached non-readonly, except the externally-managed attributes.
+     * @param list such list.
+     */
+    protected void setCachedAllNonReadOnlyButExternallyManagedAttributes(
+        @NotNull final List<Attribute> list)
+    {
+        immutableSetCachedAllNonReadOnlyButExternallyManagedAttributes(list);
+    }
+
+    /**
+     * Specifies the cached non-readonly, except the externally-managed attributes.
+     * @return such list.
+     */
+    @Nullable
+    public List<Attribute> getCachedAllNonReadOnlyButExternallyManagedAttributes()
+    {
+        return m__lCachedAllNonReadOnlyButExternallyManagedAttributes;
+    }
+
+    /**
+     * Specifies the cached non-readonly, except the externally-managed attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getAllNonReadOnlyButExternallyManagedAttributes()
+    {
+        @Nullable List<Attribute> result = getCachedAllNonReadOnlyButExternallyManagedAttributes();
+
+        if (result == null)
+        {
+            result = super.getAllNonReadOnlyButExternallyManagedAttributes();
+
+            result = decorateAttributes(result, getMetadataManager(), getDecoratorFactory());
+
+            setCachedAllNonReadOnlyButExternallyManagedAttributes(result);
         }
 
         return result;

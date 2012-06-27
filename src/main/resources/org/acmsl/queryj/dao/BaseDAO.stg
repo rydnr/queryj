@@ -150,7 +150,7 @@ classImpl(table, parent) ::= <<
 public interface <table.voName>DAO
 {
 <if(table.static)>
-    <table.cached_rows:cached_constants(
+    <table.staticContent:cached_constants(
       row=it, voName=table.voName); separator="\n\n">
 
     /**
@@ -169,7 +169,7 @@ public interface <table.voName>DAO
 <endif>
 
         {
-            <table.cached_rows:{<it.nameNormalizedUppercased>};
+            <table.staticContent:{<it.nameNormalizedUppercased>};
               separator=",\n">
         };
 
@@ -200,9 +200,9 @@ public interface <table.voName>DAO
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-public <table.voName>Decorator findByPrimaryKey(
+    public <table.voName>Decorator findByPrimaryKey(
 <else>
-public <table.voName> findByPrimaryKey(
+    public <table.voName> findByPrimaryKey(
 <endif>
 
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
@@ -212,30 +212,21 @@ public <table.voName> findByPrimaryKey(
 <if(parent)>
      <table.allParentAndNonParentNonManagedExternallyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
 <else>
-     <table.allNonReadonlyButExternallyManagedAttributes:attribute_javadoc(
+     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
 <endif>
 
      * @throws DataAccessException if the operation fails.
      */
     public void insert(
-<if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">);
-<else>
-        <table.allNonReadonlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
-<endif>
+        <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
 
 
     /**
      * Inserts and retrieves the newly-inserted
      * \{@link <table.voName>} instance.
-<if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator=",\n">
-<else>
-     <table.allNonReadonlyButExternallyManagedAttributes:attribute_javadoc(
+     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
-<endif>
-
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
@@ -244,32 +235,17 @@ public <table.voName> findByPrimaryKey(
     public <table.voName> create(
 <endif>
 
-<if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
-          separator=",\n">);
-<else>
-        <table.allNonReadonlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
-<endif>
+        <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
 
 
     /**
      * Updates {@link <table.voName>} information.
-<if(parent)>
-     <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=it.nameLowercased)>}; separator=",\n">
-<else>
-     <table.nonReadonlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
-<endif>
-
+     <table.allNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      */
     public int update(
-<if(parent)>
-        <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>};
-          separator=",\n">);
-<else>
-        <table.nonReadonlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
-<endif>
+        <table.allNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
 
 
     /**
@@ -376,7 +352,7 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
  * @return the \{@link <attribute.voName>} instance.
  */
 public <voName> findConstantByPk(
-  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">);
+  <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
 >>
 

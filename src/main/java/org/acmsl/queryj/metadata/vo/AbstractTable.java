@@ -240,7 +240,7 @@ public abstract class AbstractTable
     @NotNull
     public List<Attribute> getPrimaryKey()
     {
-        List<Attribute> result = immutableGetAttributes();
+        List<Attribute> result = immutableGetPrimaryKey();
 
         if (result == null)
         {

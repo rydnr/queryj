@@ -282,6 +282,28 @@ public class TableDecoratorHelper
     }
 
     /**
+     * Removes the externally-managed attributes from given list.
+     * @param attributes the attributes.
+     * @return the list without the externally-managed attributes.
+     */
+    @NotNull
+    public List<Attribute> removeExternallyManaged(@NotNull final List<Attribute> attributes)
+    {
+        List<Attribute> result = new ArrayList<Attribute>();
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if  (   (t_Attribute != null)
+                 && (!t_Attribute.isManagedExternally()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Checks whether the table contains read-only attributes.
      * @param attributes the attributes.
      * @return such information.
