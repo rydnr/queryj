@@ -36,18 +36,21 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.commons.patterns.Manager;
 import org.acmsl.queryj.metadata.vo.AbstractRow;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Decorates <code>Row</code> instances to provide required alternate
@@ -286,6 +289,49 @@ public abstract class AbstractRowDecorator
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.softNormalizeUppercase(value);
+    }
+
+    /**
+     * Retrieves the lowercased version of the name.
+     * @return such value.
+     */
+    @NotNull
+    public String getNameLowercased()
+    {
+        return lowercase(getName());
+    }
+
+    /**
+     * Lowers the case of given value.
+     * @param value the value.
+     * @return the value in lower case.
+     */
+    @NotNull
+    protected String lowercase(@NotNull final String value)
+    {
+        return value.toLowerCase(Locale.US);
+    }
+
+    /**
+     * Retrieves the capitalized version of the name.
+     * @return such value.
+     */
+    @NotNull
+    public String getNameCapitalized()
+    {
+        return capitalize(getName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param decorationUtils the {@link DecoratorFactory} instance.
+     * @return the capitalized version.
+     */
+    @NotNull
+    protected String capitalize(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(value);
     }
 
     /**

@@ -46,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Row</code>
@@ -65,7 +66,12 @@ public class CachingRowDecorator
     /**
      * The cached lowercased version of the name.
      */
-    //private String m__str
+    private String m__strCachedNameLowercased;
+
+    /**
+     * The cached capitalized version of the name.
+     */
+    private String m__strCachedNameCapitalized;
 
     /**
      * The cached decorated attributes.
@@ -154,6 +160,100 @@ public class CachingRowDecorator
         return result;
     }
 
+    /**
+     * Specifies the cached lowercased version of the name.
+     * @param value the value.
+     */
+    protected final void immutableSetCachedNameLowercased(@NotNull final String value)
+    {
+        m__strCachedNameLowercased = value;
+    }
+
+    /**
+     * Specifies the cached lowercased version of the name.
+     * @param value the value.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedNameLowercased(@NotNull final String value)
+    {
+        immutableSetCachedNameLowercased(value);
+    }
+
+    /**
+     * Retrieves the cached lowercased version of the name.
+     * @return such value.
+     */
+    @NotNull
+    public String getCachedNameLowercased()
+    {
+        return m__strCachedNameLowercased;
+    }
+
+    /**
+     * Retrieves the lowercased version of the name.
+     * @return such value.
+     */
+    @NotNull
+    public String getNameLowercased()
+    {
+        @Nullable String result = getCachedNameLowercased();
+
+        if (result == null)
+        {
+            result = super.getNameLowercased();
+            setCachedNameLowercased(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached capitalized version of the name.
+     * @param value the value.
+     */
+    protected final void immutableSetCachedNameCapitalized(@NotNull final String value)
+    {
+        m__strCachedNameCapitalized = value;
+    }
+
+    /**
+     * Specifies the cached capitalized version of the name.
+     * @param value the value.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedNameCapitalized(@NotNull final String value)
+    {
+        immutableSetCachedNameCapitalized(value);
+    }
+
+    /**
+     * Retrieves the cached capitalized version of the name.
+     * @return the value.
+     */
+    @NotNull
+    protected String getCachedNameCapitalized()
+    {
+        return m__strCachedNameCapitalized;
+    }
+
+    /**
+     * Retrieves the name, capitalized.
+     * @return such value.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getNameCapitalized()
+    {
+        @Nullable String result = getCachedNameCapitalized();
+
+        if (result == null)
+        {
+            result = super.getNameCapitalized();
+            setCachedNameCapitalized(result);
+        }
+
+        return result;
+    }
     /**
      * Specifies the cached list of decorated attributes.
      * @param list the list.

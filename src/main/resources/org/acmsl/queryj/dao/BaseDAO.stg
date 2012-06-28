@@ -320,7 +320,7 @@ primitive_to2(templateName, attr) ::= <<
  @param templateName the template name.
  @param attr the attribute.
  !>
-<indirect_template(name=templateName + "_value", input=attr)>
+<indirect_template(name=templateName + "_value", extra1=attr)>
 >>
 
 find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
