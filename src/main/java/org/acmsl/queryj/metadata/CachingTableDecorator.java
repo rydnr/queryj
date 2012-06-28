@@ -208,6 +208,11 @@ public class CachingTableDecorator
     private List<Attribute> m__lCachedAllNonReadOnlyButExternallyManagedAttributes;
 
     /**
+     * The cached non-primary-key, non-readonly attributes.
+     */
+    private List<Attribute> m__lCachedNonPrimaryKeyNonReadOnlyAttributes;
+
+    /**
      * The cached all parent tables.
      */
     private List<Table> m__lCachedAllParentTables;
@@ -221,6 +226,11 @@ public class CachingTableDecorator
      * The cached dynamic queries.
      */
     private List<Sql> m__lCachedDynamicQueries;
+
+    /**
+     * The cached non-primary-key attributes.
+     */
+    private List<Attribute> m__lCachedNonPrimaryKeyAttributes;
 
     /**
      * Creates a <code>CachingTableDecorator</code> with the
@@ -1074,6 +1084,52 @@ public class CachingTableDecorator
     }
 
     /**
+     * Specifies the cached non-primary-key attributes.
+     * @param attributes the attributes to cache.
+     */
+    protected final void immutableSetCachedNonPrimaryKeyAttributes(@NotNull final List<Attribute> attributes)
+    {
+        m__lCachedNonPrimaryKeyAttributes = attributes;
+    }
+
+    /**
+     * Specifies the cached non-primary-key attributes.
+     * @param attributes the attributes to cache.
+     */
+    protected void setCachedNonPrimaryKeyAttributes(@NotNull final List<Attribute> attributes)
+    {
+        immutableSetCachedNonPrimaryKeyAttributes(attributes);
+    }
+
+    /**
+     * Retrieves the cached non-primary-key attributes.
+     * @return the attributes to cache.
+     */
+    @Nullable
+    protected List<Attribute> getCachedNonPrimaryKeyAttributes()
+    {
+        return m__lCachedNonPrimaryKeyAttributes;
+    }
+
+    /**
+     * Retrieves the non-primary-key attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getNonPrimaryKeyAttributes()
+    {
+        @Nullable List<Attribute> result = getCachedNonPrimaryKeyAttributes();
+
+        if (result == null)
+        {
+            result = super.getNonPrimaryKeyAttributes();
+            setCachedNonPrimaryKeyAttributes(result);
+        }
+
+        return result;
+    }
+    /**
      * Specifies the cached list of parent's all attributes and the non-parent own attributes.
      * @param list such list.
      */
@@ -1818,6 +1874,53 @@ public class CachingTableDecorator
         {
             result = super.getDynamicQueries();
             setCachedDynamicQueries(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached non-primary-key, non-readonly attributes.
+     * @param attributes the attributes to cache.
+     */
+    protected final void immutableSetCachedNonPrimaryKeyNonReadOnlyAttributes(
+        @NotNull final List<Attribute> attributes)
+    {
+        m__lCachedNonPrimaryKeyNonReadOnlyAttributes = attributes;
+    }
+
+    /**
+     * Specifies the cached non-primary-key, non-readonly attributes.
+     * @param attributes the attributes to cache.
+     */
+    protected void setCachedNonPrimaryKeyNonReadOnlyAttributes(
+        @NotNull final List<Attribute> attributes)
+    {
+        immutableSetCachedNonPrimaryKeyNonReadOnlyAttributes(attributes);
+    }
+
+    /**
+     * Retrieves the cached non-primary-key, non-readonly attributes.
+     * @return the cached attributes.
+     */
+    protected List<Attribute> getCachedNonPrimaryKeyNonReadOnlyAttributes()
+    {
+        return m__lCachedNonPrimaryKeyNonReadOnlyAttributes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getNonPrimaryKeyNonReadOnlyAttributes()
+    {
+        @Nullable List<Attribute> result = getCachedNonPrimaryKeyNonReadOnlyAttributes();
+
+        if (result == null)
+        {
+            result = super.getNonPrimaryKeyNonReadOnlyAttributes();
+            setCachedNonPrimaryKeyNonReadOnlyAttributes(result);
         }
 
         return result;

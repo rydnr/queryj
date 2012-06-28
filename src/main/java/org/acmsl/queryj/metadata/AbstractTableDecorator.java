@@ -2081,4 +2081,73 @@ public abstract class AbstractTableDecorator
         return new ArrayList<Sql>(0);
     }
 
+    /**
+     * Retrieves all non-primary-key attributes.
+     * @return such list.
+     */
+    @NotNull
+    public List<Attribute> getNonPrimaryKeyAttributes()
+    {
+        return filterAttributes(getAttributes(), getPrimaryKey());
+    }
+
+    /**
+     * Retrieves the read-only attributes.
+     * @return such list.
+     */
+    @NotNull
+    public List<Attribute> getReadOnlyAttributes()
+    {
+        return filterReadOnlyAttributes(getAttributes());
+    }
+
+    /**
+     * Retrieves the read-only attributes from given list.
+     * @param attributes the attribute list.
+     * @return the read-only subset.
+     */
+    @NotNull
+    protected List<Attribute> filterReadOnlyAttributes(@NotNull final List<Attribute> attributes)
+    {
+        @NotNull final List<Attribute> result =  new ArrayList<Attribute>(0);
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (   (t_Attribute != null)
+                && (t_Attribute.isReadOnly()))
+            {
+                result.add(t_Attribute);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves all non-primary-key, non-read-only attributes.
+     * @return such list.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Attribute> getNonPrimaryKeyNonReadOnlyAttributes()
+    {
+        return filterAttributes(filterAttributes(getAttributes(), getPrimaryKey()), getReadOnlyAttributes());
+    }
+
+    /**
+     * Filters certain attributes.
+     * @param attributes the attributes.
+     * @param toExclude the attributes to exclude.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Attribute> filterAttributes(
+        @NotNull final List<Attribute> attributes, @NotNull final List<Attribute> toExclude)
+    {
+        @NotNull List<Attribute> result = new ArrayList<Attribute>(attributes);
+
+        result.removeAll(toExclude);
+
+        return result;
+    }
 }

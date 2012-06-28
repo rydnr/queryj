@@ -152,9 +152,9 @@ public interface <table.voName>DAO
      * The static constants.
      */
 <if(table.voDecorated)>
-    public static final <table.voName>Decorator[] FIXED_CONSTANTS =
+    static final <table.voName>Decorator[] FIXED_CONSTANTS =
 <else>
-    public static final <table.voName>[] FIXED_CONSTANTS =
+    static final <table.voName>[] FIXED_CONSTANTS =
 <endif>
 
 <if(table.voDecorated)>
@@ -173,17 +173,27 @@ public interface <table.voName>DAO
      * @deprecated Use <table.voName>DAO.FIXED_CONSTANTS instead.
      */
 <if(table.voDecorated)>
-    public static final <table.voName>Decorator[] _ALL_QUERYJ_CONSTANTS_ =
+    static final <table.voName>Decorator[] _ALL_QUERYJ_CONSTANTS_ =
 <else>
-    public static final <table.voName>[] _ALL_QUERYJ_CONSTANTS_ =
+    static final <table.voName>[] _ALL_QUERYJ_CONSTANTS_ =
 <endif>
 
         FIXED_CONSTANTS;
 
-    <table.staticContent:find_constant_methods(
+    <table.nonPrimaryKeyAttributes:find_constant_methods(
       attribute=it,
-      primaryKeyAttributes=table.primaryKey,
-      voName=table.voName)>
+      table=table)>
+
+    /**
+     * Loads \<i><table.name>\</i> information from the constant pool,
+     * filtering by the primary key.
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * @return the \{@link <table.voName>} instance.
+     */
+    <nullable()>
+    <table.voName> findConstantByPk(
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
+
 <endif>
 
     /**
@@ -195,9 +205,9 @@ public interface <table.voName>DAO
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    public <table.voName>Decorator findByPrimaryKey(
+    <table.voName>Decorator findByPrimaryKey(
 <else>
-    public <table.voName> findByPrimaryKey(
+    <table.voName> findByPrimaryKey(
 <endif>
 
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
@@ -213,21 +223,21 @@ public interface <table.voName>DAO
 
      * @throws DataAccessException if the operation fails.
      */
-    public void insert(
+    void insert(
         <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
 
 
     /**
      * Inserts and retrieves the newly-inserted
-     * \{@link <table.voName>} instance.
+     * {@link <table.voName>} instance.
      <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
        name=it.nameLowercased); separator="\n">
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    public <table.voName>Decorator create(
+    <table.voName>Decorator create(
 <else>
-    public <table.voName> create(
+    <table.voName> create(
 <endif>
 
         <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
@@ -239,15 +249,15 @@ public interface <table.voName>DAO
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      */
-    public int update(
-        <table.allNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
+    int update(
+        <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
 
 
     /**
      * Deletes {@link <table.voName>} information.
      <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
-    public void delete(
+    void delete(
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
     <table.foreignKeys:fk_delete_method(
@@ -274,9 +284,9 @@ cached_constants(row, voName) ::= <<
  * The <row.name> constant.
  */
 <if(table.voDecorated)>
-public static final <voName>Decorator <row.nameNormalizedUppercased> =
+static final <voName>Decorator <row.nameNormalizedUppercased> =
 <else>
-public static final <voName> <row.nameNormalizedUppercased> =
+static final <voName> <row.nameNormalizedUppercased> =
 <endif>
 
 <if(table.voDecorated)>
@@ -323,31 +333,22 @@ primitive_to2(templateName, attr) ::= <<
 <indirect_template(name=templateName + "_value", extra1=attr)>
 >>
 
-find_constant_methods(attribute, primaryKeyAttributes, voName) ::= <<
+find_constant_methods(attribute, table) ::= <<
 <!
   Declares the methods to operate directly on defined constants.
-  @param attribute the static attribute.
-  @param primaryKeyAttributes the primary key attributes.
-  @param voName the value-object name.
+  @param attribute the attribute.
+  @param table the table.
 !>
 /**
- * Loads \<i><attribute.tableName>\</i> information from the constant pool,
+ * Loads \<i><table.name>\</i> information from the constant pool,
  * filtering by <attribute.name>.
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
- * @return the {@link <voName>} instance.
+ * @return the {@link <table.voName>} instance.
  */
-public <voName> findConstantBy<attribute.nameCapitalized>(
-    final <attribute.javaType> <attribute.nameLowercased>);
-
-/**
- * Loads \<i><attribute.tableName>\</i> information from the constant pool,
- * filtering by the primary key.
- <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \{@link <attribute.voName>} instance.
- */
-public <voName> findConstantByPk(
-  <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
+<nullable()>
+<table.voName> findConstantBy<attribute.nameCapitalized>(
+    <type_checker(attr=attribute)>final <attribute.javaType> <attribute.nameLowercased>);
 
 >>
 
@@ -361,7 +362,7 @@ fk_delete_method(foreignKey, table) ::= <<
  * by given foreign keys.
  <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
-public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">);
 >>
 
@@ -386,16 +387,16 @@ custom_select(cs, table) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 <cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
-public <cs.resultClass> <cs.nameUncapitalized>(
+<cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
-public <cs.resultClass> <cs.nameUncapitalized>(
+<cs.resultClass> <cs.nameUncapitalized>(
 <else>
-public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<cs.resultClass>Decorator <cs.nameUncapitalized>(
 <endif>
 <endif>
 <else>
-public <cs.resultClass> <cs.nameUncapitalized>(
+<cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
 
 <if(cs.parameters)>
@@ -425,7 +426,7 @@ custom_update_or_insert(cs, table) ::= <<
  * @return the number of entities affected.
  * @throws DataAccessException if the operation fails.
  */
-public int <cs.nameUncapitalized>(
+int <cs.nameUncapitalized>(
 <if(cs.parameters)>
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">
 <else>
@@ -456,16 +457,16 @@ custom_select_for_update(cs, table) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 <cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
-public <cs.resultClass> <cs.nameUncapitalized>(
+<cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
-public <cs.resultClass> <cs.nameUncapitalized>(
+<cs.resultClass> <cs.nameUncapitalized>(
 <else>
-public <cs.resultClass>Decorator <cs.nameUncapitalized>(
+<cs.resultClass>Decorator <cs.nameUncapitalized>(
 <endif>
 <endif>
 <else>
-public <cs.resultClass> <cs.nameUncapitalized>(
+<cs.resultClass> <cs.nameUncapitalized>(
 <endif>}>
 <if(cs.parameters)>
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">
