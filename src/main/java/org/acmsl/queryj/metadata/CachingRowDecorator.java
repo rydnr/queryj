@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,13 +36,16 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Adds a simple caching mechanism while decorating <code>Row</code>
@@ -54,23 +56,36 @@ public class CachingRowDecorator
     extends  AbstractRowDecorator
 {
     private static final long serialVersionUID = 7506582704616898824L;
+
     /**
      * The cached normalized uppercased name.
      */
     private String m__strCachedNameNormalizedUppercased;
 
     /**
+     * The cached lowercased version of the name.
+     */
+    //private String m__str
+
+    /**
+     * The cached decorated attributes.
+     */
+    private List<Attribute> m__lCachedAttributes;
+
+    /**
      * Creates a <code>CachingRowDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param row the row.
      * @param metadataManager the metadata manager.
-     * @precondition attribute != null
-     * @precondition metadataManager != null
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
+    @SuppressWarnings("unused")
     public CachingRowDecorator(
-        @NotNull final Row row, @NotNull final MetadataManager metadataManager)
+        @NotNull final Row row,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(row, metadataManager);
+        super(row, metadataManager, decoratorFactory);
     }
 
     /**
@@ -79,19 +94,17 @@ public class CachingRowDecorator
      * @param name the name.
      * @param tableName the table name.
      * @param attributes the attributes.
-     * @param metadataTypeManager the metadata type manager.
-     * @precondition name != null
-     * @precondition tableName != null
-     * @precondition attributes != null
-     * @precondition metadataTypeManager != null
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     public CachingRowDecorator(
-        final String name,
-        final String tableName,
-        final Collection attributes,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final String name,
+        @NotNull final String tableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
-        super(name, tableName, attributes, metadataTypeManager);
+        super(name, tableName, attributes, metadataManager, decoratorFactory);
     }
 
     /**
@@ -99,7 +112,7 @@ public class CachingRowDecorator
      * @param value the value to cache.
      */
     protected final void immutableSetCachedNameNormalizedUppercased(
-        final String value)
+        @NotNull final String value)
     {
         m__strCachedNameNormalizedUppercased = value;
     }
@@ -108,7 +121,7 @@ public class CachingRowDecorator
      * Specifies the cached normalized uppercased name.
      * @param value the value to cache.
      */
-    protected void setCachedNameNormalizedUppercased(final String value)
+    protected void setCachedNameNormalizedUppercased(@NotNull final String value)
     {
         immutableSetCachedNameNormalizedUppercased(value);
     }
@@ -117,6 +130,7 @@ public class CachingRowDecorator
      * Retrieves the cached normalized uppercased name.
      * @return such value.
      */
+    @Nullable
     public String getCachedNameNormalizedUppercased()
     {
         return m__strCachedNameNormalizedUppercased;
@@ -126,6 +140,7 @@ public class CachingRowDecorator
      * Retrieves the id, normalized and upper-cased.
      * @return such information.
      */
+    @NotNull
     public String getNameNormalizedUppercased()
     {
         String result = getCachedNameNormalizedUppercased();
@@ -136,6 +151,52 @@ public class CachingRowDecorator
             setCachedNameNormalizedUppercased(result);
         }
         
+        return result;
+    }
+
+    /**
+     * Specifies the cached list of decorated attributes.
+     * @param list the list.
+     */
+    protected final void immutableSetCachedAttributes(@NotNull final List<Attribute> list)
+    {
+        m__lCachedAttributes = list;
+    }
+
+    /**
+     * Specifies the cached list of decorated attributes.
+     * @param list the list.
+     */
+    protected void setCachedAttributes(@NotNull final List<Attribute> list)
+    {
+        immutableSetCachedAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached list of decorated attributes.
+     * @return such list.
+     */
+    @Nullable
+    protected List<Attribute> getCachedAttributes()
+    {
+        return m__lCachedAttributes;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getAttributes()
+    {
+        List<Attribute> result = getCachedAttributes();
+
+        if (result == null)
+        {
+            result = super.getAttributes();
+            setCachedAttributes(result);
+        }
+
         return result;
     }
 }

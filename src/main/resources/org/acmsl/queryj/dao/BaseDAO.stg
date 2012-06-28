@@ -62,7 +62,7 @@ source() ::= <<
   ],
   timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/BaseDAO.stg
+// Generated using org/acmsl/queryj/dao/BaseDAO.stg at <timestamp>
 
 <package_declaration(
   packageNames=
@@ -78,14 +78,9 @@ source() ::= <<
   table=table)>
 
 <checkers_import()>
-/*
- * Importing some JDK classes.
- */
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+<if(column_type_imports)>
+<column_type_imports:import(type=it)>
+<endif>
 
 <class(table=table)>
 >>
@@ -185,7 +180,7 @@ public interface <table.voName>DAO
 
         FIXED_CONSTANTS;
 
-    <table.staticAttributes:find_constant_methods(
+    <table.staticContent:find_constant_methods(
       attribute=it,
       primaryKeyAttributes=table.primaryKey,
       voName=table.voName)>

@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Abstract logicless implementation of <code>Row</code> interface.
@@ -64,7 +64,7 @@ public abstract class AbstractRow
     /**
      * The attributes.
      */
-    private Collection m__cAttributes;
+    private List<Attribute> m__lAttributes;
 
     /**
      * Creates an <code>AbstractRow</code> with the following
@@ -72,14 +72,11 @@ public abstract class AbstractRow
      * @param name the name.
      * @param tableName the table name.
      * @param attributes the attributes.
-     * @precondition name != null
-     * @precondition tableName != null
-     * @precondition attributes != null
      */
     protected AbstractRow(
-        final String name,
-        final String tableName,
-        final Collection attributes)
+        @NotNull final String name,
+        @NotNull final String tableName,
+        @NotNull final List<Attribute> attributes)
     {
         immutableSetName(name);
         immutableSetTableName(tableName);
@@ -90,7 +87,7 @@ public abstract class AbstractRow
      * Specifies the name.
      * @param name such name.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -99,7 +96,7 @@ public abstract class AbstractRow
      * Specifies the name.
      * @param name such name.
      */
-    protected void setName(final String name)
+    protected void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -108,6 +105,7 @@ public abstract class AbstractRow
      * Retrieves the attribute name.
      * @return such name.
      */
+    @NotNull
     public String getName()
     {
         return m__strName;
@@ -117,7 +115,7 @@ public abstract class AbstractRow
      * Specifies the table name.
      * @param tableName such information.
      */
-    protected final void immutableSetTableName(final String tableName)
+    protected final void immutableSetTableName(@NotNull final String tableName)
     {
         m__strTableName = tableName;
     }
@@ -126,7 +124,8 @@ public abstract class AbstractRow
      * Specifies the table name.
      * @param tableName such information.
      */
-    protected void setTableName(final String tableName)
+    @SuppressWarnings("unused")
+    protected void setTableName(@NotNull final String tableName)
     {
         immutableSetTableName(tableName);
     }
@@ -135,6 +134,7 @@ public abstract class AbstractRow
      * Retrieves the table name.
      * @return such information.
      */
+    @NotNull
     public String getTableName()
     {
         return m__strTableName;
@@ -144,16 +144,17 @@ public abstract class AbstractRow
      * Specifies the attributes.
      * @param attributes such information.
      */
-    protected final void immutableSetAttributes(final Collection attributes)
+    protected final void immutableSetAttributes(@NotNull final List<Attribute> attributes)
     {
-        m__cAttributes = attributes;
+        m__lAttributes = attributes;
     }
 
     /**
      * Specifies the attributes.
      * @param attributes such information.
      */
-    protected void setAttributes(final Collection attributes)
+    @SuppressWarnings("unused")
+    protected void setAttributes(@NotNull final List<Attribute> attributes)
     {
         immutableSetAttributes(attributes);
     }
@@ -162,9 +163,10 @@ public abstract class AbstractRow
      * Retrieves the attributes.
      * @return such information.
      */
-    public Collection getAttributes()
+    @NotNull
+    public List<Attribute> getAttributes()
     {
-        return m__cAttributes;
+        return m__lAttributes;
     }
 
     /**
@@ -172,6 +174,7 @@ public abstract class AbstractRow
      * contained in this instance.
      * @return such information.
      */
+    @Override
     public String toString()
     {
         return
@@ -186,6 +189,7 @@ public abstract class AbstractRow
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -201,7 +205,8 @@ public abstract class AbstractRow
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -233,7 +238,8 @@ public abstract class AbstractRow
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    @Override
+    public int compareTo(@Nullable final Object object)
         throws  ClassCastException
     {
         int result = 1;

@@ -40,12 +40,13 @@ package org.acmsl.queryj.metadata.vo;
 /*
  * Importing JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Value-object implementation of <code>Row</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@SuppressWarnings("unused")
 public class RowValueObject
     extends  AbstractRow
 {
@@ -64,7 +65,7 @@ public class RowValueObject
     public RowValueObject(
         final String name,
         final String tableName,
-        final Collection attributes)
+        final List<Attribute> attributes)
     {
         super(name, tableName, attributes);
     }

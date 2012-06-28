@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,7 +36,7 @@ package org.acmsl.queryj.metadata.vo;
  * Importing JDK classes.
  */
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Represents <i>row</i> entities in the metadata model.
@@ -63,5 +62,5 @@ public interface Row
      * Retrieves the attributes.
      * @return such information.
      */
-    public Collection getAttributes();
+    public List<Attribute> getAttributes();
 }

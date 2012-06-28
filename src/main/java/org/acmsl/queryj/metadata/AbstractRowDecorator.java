@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,14 +36,18 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.patterns.Manager;
 import org.acmsl.queryj.metadata.vo.AbstractRow;
+import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JDK classes.
  */
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Decorates <code>Row</code> instances to provide required alternate
@@ -60,26 +63,38 @@ public abstract class AbstractRowDecorator
     private Row m__Row;
 
     /**
+     * The metadata manager.
+     */
+    private MetadataManager m__MetadataManager;
+
+    /**
      * The metadata type manager.
      */
     private MetadataTypeManager m__MetadataTypeManager;
 
     /**
+     * The decorator factory.
+     */
+    private DecoratorFactory m__DecoratorFactory;
+
+    /**
      * Creates an <code>AbstractRowDecorator</code> with the
      * <code>Attribute</code> to decorate.
      * @param row the row.
-     * @param metadataManager the metadata manager.
-     * @precondition attribute != null
-     * @precondition metadataManager != null
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     public AbstractRowDecorator(
-        @NotNull final Row row, @NotNull final MetadataManager metadataManager)
+        @NotNull final Row row,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         this(
             row.getName(),
             row.getTableName(),
             row.getAttributes(),
-            metadataManager.getMetadataTypeManager());
+            metadataManager,
+            decoratorFactory);
 
         immutableSetRow(row);
     }
@@ -90,28 +105,28 @@ public abstract class AbstractRowDecorator
      * @param name the name.
      * @param tableName the table name.
      * @param attributes the attributes.
-     * @param metadataTypeManager the metadata type manager.
-     * @precondition name != null
-     * @precondition tableName != null
-     * @precondition attributes != null
-     * @precondition metadataTypeManager != null
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      */
     protected AbstractRowDecorator(
-        final String name,
-        final String tableName,
-        final Collection attributes,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final String name,
+        @NotNull final String tableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         super(name, tableName, attributes);
 
-        immutableSetMetadataTypeManager(metadataTypeManager);
+        immutableSetMetadataManager(metadataManager);
+        immutableSetMetadataTypeManager(metadataManager.getMetadataTypeManager());
+        immutableSetDecoratorFactory(decoratorFactory);
     }
 
     /**
      * Specifies the row to decorate.
      * @param row the row.
      */
-    protected final void immutableSetRow(final Row row)
+    protected final void immutableSetRow(@NotNull final Row row)
     {
         m__Row = row;
     }
@@ -121,7 +136,7 @@ public abstract class AbstractRowDecorator
      * @param row the row.
      */
     @SuppressWarnings("unused")
-    protected void setRow(final Row row)
+    protected void setRow(@NotNull final Row row)
     {
         immutableSetRow(row);
     }
@@ -134,6 +149,37 @@ public abstract class AbstractRowDecorator
     public Row getRow()
     {
         return m__Row;
+    }
+
+    /**
+     * Specifies the metadata manager.
+     * @param metadataManager such instance.
+     */
+    protected final void immutableSetMetadataManager(
+        @NotNull final MetadataManager metadataManager)
+    {
+        m__MetadataManager = metadataManager;
+    }
+
+    /**
+     * Specifies the metadata type manager.
+     * @param metadataManager such instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setMetadataManager(
+        @NotNull final MetadataManager metadataManager)
+    {
+        immutableSetMetadataManager(metadataManager);
+    }
+
+    /**
+     * Retrieves the metadata manager.
+     * @return such instance.
+     */
+    @NotNull
+    protected MetadataManager getMetadataManager()
+    {
+        return m__MetadataManager;
     }
 
     /**
@@ -152,7 +198,7 @@ public abstract class AbstractRowDecorator
      */
     @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         immutableSetMetadataTypeManager(metadataTypeManager);
     }
@@ -168,9 +214,62 @@ public abstract class AbstractRowDecorator
     }
 
     /**
+     * Specifies the decorator factory to use.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     */
+    protected final void immutableSetDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
+    {
+        m__DecoratorFactory = decoratorFactory;
+    }
+
+    /**
+     * Specifies the decorator factory to use.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setDecoratorFactory(@NotNull final DecoratorFactory decoratorFactory)
+    {
+        immutableSetDecoratorFactory(decoratorFactory);
+    }
+
+    /**
+     * Retrieves the decorator factory to use.
+     * @return the {@link DecoratorFactory} instance.
+     */
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return m__DecoratorFactory;
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @return such attributes.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getAttributes()
+    {
+        return getAttributes(getMetadataManager(), getDecoratorFactory());
+    }
+
+    /**
+     * Retrieves the attributes.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return such attributes.
+     */
+    @NotNull
+    protected List<Attribute> getAttributes(
+        @NotNull final MetadataManager metadataManager, @NotNull final DecoratorFactory decoratorFactory)
+    {
+        return decoratorFactory.decorateAttributes(super.getAttributes(), metadataManager);
+    }
+
+    /**
      * Retrieves the id, normalized and upper-cased.
      * @return such information.
      */
+    @NotNull
     public String getNameNormalizedUppercased()
     {
         return normalizeUppercase(getName(), DecorationUtils.getInstance());
@@ -181,11 +280,10 @@ public abstract class AbstractRowDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return such information.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeUppercase(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.softNormalizeUppercase(value);
     }
@@ -195,6 +293,7 @@ public abstract class AbstractRowDecorator
      * contained in this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -206,10 +305,9 @@ public abstract class AbstractRowDecorator
      * contained in given instance.
      * @param row the decorated row.
      * @return such information.
-     * @precondition row != null
      */
     @NotNull
-    protected String toString(final Row row)
+    protected String toString(@NotNull final Row row)
     {
         return "" + row;
     }
@@ -218,6 +316,7 @@ public abstract class AbstractRowDecorator
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return hashCode(getRow());
@@ -227,7 +326,6 @@ public abstract class AbstractRowDecorator
      * Retrieves the hash code associated to given row.
      * @param row the row.
      * @return such information.
-     * @precondition row != null
      */
     protected int hashCode(@NotNull final Row row)
     {
@@ -239,9 +337,17 @@ public abstract class AbstractRowDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
-        return equals(getRow(), object);
+        boolean result = false;
+
+        if (object instanceof Row)
+        {
+            result = equals(getRow(), object);
+        }
+
+        return result;
     }
 
     /**
@@ -251,7 +357,7 @@ public abstract class AbstractRowDecorator
      * @return the result of such comparison.
      * @precondition row != null
      */
-    protected boolean equals(@NotNull final Row row, final Object object)
+    protected boolean equals(@NotNull final Row row, @NotNull final Object object)
     {
         return row.equals(object);
     }
@@ -263,6 +369,7 @@ public abstract class AbstractRowDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
+    @Override
     public int compareTo(final Object object)
         throws  ClassCastException
     {
@@ -276,8 +383,8 @@ public abstract class AbstractRowDecorator
      * @return the result of such comparison.
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
-     * @precondition row != null
      */
+    @SuppressWarnings("unchecked")
     protected int compareTo(@NotNull final Row row, final Object object)
         throws  ClassCastException
     {

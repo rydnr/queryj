@@ -1072,7 +1072,8 @@ public class DAOTemplateUtils
                             t_strRowName,
                             tableName,
                             t_lAttributes,
-                            metadataTypeManager));
+                            metadataManager,
+                            decoratorFactory));
                 }
             }
         }
@@ -1126,23 +1127,21 @@ public class DAOTemplateUtils
      * @param rowName the row name.
      * @param tableName the table name.
      * @param attributes the attributes.
-     * @param metadataTypeManager the metadata type manager.
+     * @param metadataManager the metadata manager.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @return the row.
-     * @precondition rowName != null
-     * @precondition tableName != null
-     * @precondition attributes != null
-     * @precondition metadatTypeManager != null
      */
     @NotNull
     protected Row buildRow(
-        final String rowName,
-        final String tableName,
-        final Collection attributes,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final String rowName,
+        @NotNull final String tableName,
+        @NotNull final List<Attribute> attributes,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
     {
         return
             new CachingRowDecorator(
-                rowName, tableName, attributes, metadataTypeManager);
+                rowName, tableName, attributes, metadataManager, decoratorFactory);
     }
 
     /**

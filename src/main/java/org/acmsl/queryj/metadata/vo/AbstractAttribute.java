@@ -506,6 +506,16 @@ public abstract class AbstractAttribute
     }
 
     /**
+     * Alias for {@link #isNullable()}
+     * @return whether it allows null values or not.
+     */
+    @SuppressWarnings("unused")
+    public boolean getAllowsNull()
+    {
+        return isNullable();
+    }
+
+    /**
      * Specifies the optional attribute's value, meaning
      * it doesn't just describe the metadata, but also
      * contains data.
