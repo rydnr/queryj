@@ -541,7 +541,7 @@ public class OracleMetadataManager
 
         t_lColumns.add(t_CurrentAttribute);
 
-        if (t_iPkPosition != null)
+        if (t_iPkPosition != 0)
         {
             @Nullable List<AttributeIncompleteValueObject> t_lPrimaryKey = primaryKeyMap.get(t_strTableName);
 
