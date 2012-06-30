@@ -38,68 +38,57 @@
 //
 group ResultSetExtractor;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a ResultSetExtractor source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
+  @param copyright_years the copyright's years.
+  @param table_name the table name.
+  @param package the package.
   @params project_imports
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
-    first_line_description(tableName=input.table_name)
+    first_line_description(tableName=table_name)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/ResultSetExtractor.stg
+// Generated using org/acmsl/queryj/dao/ResultSetExtractor.stg at <timestamp>
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
-    typeInitMap.baseDAOSubpackageName,
-    typeInitMap.rdbSubpackageName,
-    input.subpackage_name,
-    input.table_name_normalized_lowercased
+    sub_package_name
   ])>
 
 <project_imports(
-  basePackageName=input.base_package_name,
+  basePackageName=project_package,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name,
+  voName=table.voName,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
-  trName=input.tr_name_capitalized)>
+  trName=repository.capitalized)>
 
 <checkers_import()>
 /*
  * Importing Spring classes.
  */
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
 /*
  * Importing some JDK classes.
  */
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
+<column_type_imports:import(type=it)>
 
-/*
- * Importing Jakarta Commons Logging classes
- */
-import org.apache.commons.logging.LogFactory;
-
-<class(input=input, table=input.table)>
+<class(table=table)>
 >>
 
 first_line_description(tableName) ::= <<
@@ -135,74 +124,70 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAO
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
 >>
 
-class(input, table) ::= <<
+class(table) ::= <<
 <!
  Generates the class body.
- @param input the input.
  @param table the table.
 !>
-<classImpl(input=input, table=table, parent=table.parentTable)>
+<classImpl(table=table, parent=table.parentTable)>
 >>
 
-classImpl(input, table, parent) ::= <<
+classImpl(table, parent) ::= <<
 <!
  Generates the class body.
- @param input the input.
  @param table the table.
  @param parent the parent table.
 !>
 /**
  * <[
-      first_line_description(tableName=input.table_name)
+      first_line_description(tableName=table_name)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
-public class <input.vo_name>ResultSetExtractor
-    extends     <input.tr_name_capitalized>ResultSetExtractor
+public class <table.voName>ResultSetExtractor
+    extends     <repository.capitalized>ResultSetExtractor
     implements  ResultSetExtractor
-<!                <input.tr_name_capitalized>TableRepository !>
+<!                <repository.capitalized>TableRepository !>
 {
-<if(input.clobHandling)>
-    <indirect_template(name=input.clobHandling+"Extractor", input=input, extra1=table, extra2=parent)>
+<if(lob_handling_required)>
+    <indirect_template(name=clobHandling+"Extractor", extra1=table, extra2=parent)>
 <else>
-    <defaultExtractorImpl(input=input, table=table, parent=parent)>
+    <defaultExtractorImpl(table=table, parent=parent)>
 <endif>
 
 }
 >>
 
-defaultExtractor(input, extra1, extra2) ::= <<
+defaultExtractor(extra1, extra2) ::= <<
 <!
  Generates the default logic for the extractor.
- @param input the input.
  @param extra1 the table.
  @param extra2 the parent.
 !>
-<defaultExtractorImpl(input=input, table=extra1, parent=extra2)>
+<defaultExtractorImpl(table=extra1, parent=extra2)>
 >>
 
-defaultExtractorImpl(input, table, parent) ::= <<
+defaultExtractorImpl(table, parent) ::= <<
 <!
  Generates the default logic for the extractor.
- @param input the input.
  @param table the table.
  @param parent the parent.
 !>
 /**
- * Constructs a new \{@link <input.vo_name>ResultSetExtractor}.
+ * Constructs a new {@link <table.voName>ResultSetExtractor}.
  * @param daoListener the dao listener.
  */
-public <input.vo_name>ResultSetExtractor(
-    final <input.tr_name_capitalized>DAOListener daoListener)
+public <table.voName>ResultSetExtractor(
+    final <repository.capitalized>DAOListener daoListener)
 {
     super(daoListener);
 }
 
 /**
- * Extracts {@link <input.vo_name>} information from given result set.
+ * Extracts {@link <table.voName>} information from given result set.
  * @param resultSet the result set.
-     * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
- * @return the {@link <input.vo_name>} or
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @return the {@link <table.voName>} or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -211,7 +196,7 @@ public <input.vo_name>ResultSetExtractor(
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <input.tr_name_capitalized>DAOListener daoListener)
+    <nullable()>final <repository.capitalized>DAOListener daoListener)
   throws  SQLException,
           DataAccessException
 {
@@ -219,14 +204,14 @@ protected Object extractData(
         extractData(
             resultSet,
             daoListener,
-            <input.vo_name>ValueObjectFactory.getInstance());
+            <table.voName>ValueObjectFactory.getInstance());
 }
 
 /**
- * Extracts {@link <input.vo_name>} information from given result set.
+ * Extracts {@link <table.voName>} information from given result set.
  * @param resultSet the result set.
-     * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
- * @return the {@link <input.vo_name>} or
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @return the {@link <table.voName>} or
  * \<code>null\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
@@ -235,12 +220,12 @@ protected Object extractData(
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <input.tr_name_capitalized>DAOListener daoListener,
-    <notnull()>final <input.vo_name>ValueObjectFactory factory)
+    <nullable()>final <repository.capitalized>DAOListener daoListener,
+    <notnull()>final <table.voName>ValueObjectFactory factory)
   throws  SQLException,
           DataAccessException
 {
-    <input.vo_name> result = null;
+    <table.voName> result = null;
 
     if  (resultSet.next())
     {
@@ -251,20 +236,20 @@ protected Object extractData(
 
 <if(parent)>
         <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
-          attr=it, input=input)>
+          value=it)>
 <else>
         <table.attributes:nullable_attribute_extraction(
-          attr=it, input=input)>
+          value=it)>
 <endif>
 
 
         result =
-            factory.create<input.vo_name>ValueObject(
+            factory.create(
 <if(parent)>
-                <table.allParentAndNonParentAttributes:attribute_extraction(attr=it);
+                <table.allParentAndNonParentAttributes:attribute_extraction(value=it);
                   separator=",\n">);
 <else>
-                <table.attributes:attribute_extraction(attr=it);
+                <table.attributes:attribute_extraction(value=it);
                   separator=",\n">);
 <endif>
 
@@ -279,44 +264,40 @@ protected Object extractData(
 }
 >>
 
-oracleExtractor(input, extra1, extra2) ::= <<
+oracleExtractor(extra1, extra2) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
- @param input the input.
  @param extra1 the table.
  @param extra2 the parent.
 !>
-<oracleExtractorImpl(input=input, table=extra1, parent=extra2)>
+<oracleExtractorImpl(table=extra1, parent=extra2)>
 >>
 
-oracleExtractorImpl(input, table, parent) ::= <<
+oracleExtractorImpl(table, parent) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
- @param input the input.
  @param table the table.
  @param parent the parent.
 !>
-<oracle8ExtractorImpl(input=input, table=table, parent=parent)>
+<oracle8ExtractorImpl(table=table, parent=parent)>
 >>
 
-oracle8Extractor(input, extra1, extra2) ::= <<
+oracle8Extractor(extra1, extra2) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
- @param input the input.
  @param extra1 the table.
  @param extra2 the parent.
 !>
-<oracle8ExtractorImpl(input=input, table=extra1, parent=extra2)>
+<oracle8ExtractorImpl(table=extra1, parent=extra2)>
 >>
 
-oracle8ExtractorImpl(input, table, parent) ::= <<
+oracle8ExtractorImpl(table, parent) ::= <<
 <!
  Generates the constructor needed by Oracle8 LOB management.
- @param input the input.
  @param table the table.
  @param parent the parent.
 !>
-<input.lob_attributes:attribute_class_declaration(attr=it);
+<lob_attributes:attribute_class_declaration(value=it);
   separator="\n\n">
 
 /**
@@ -325,53 +306,53 @@ oracle8ExtractorImpl(input, table, parent) ::= <<
 private boolean m__bSelectForUpdateMode;
 
 /**
- * Creates a Oracle-based \{@link ResultSetExtractor}
- * to extract <input.vo_name> information, managing LOB stuff.
+ * Creates a Oracle-based {@link ResultSetExtractor}
+ * to extract <table.voName> information, managing LOB stuff.
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update} (required to perform some operations
  * such as \<b>insert\</b>s), or not.
- * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  */
-public <input.vo_name>ResultSetExtractor(
+public <table.voName>ResultSetExtractor(
     final boolean selectForUpdateMode,
-    final <input.tr_name_capitalized>DAOListener daoListener)
+    final <repository.capitalized>DAOListener daoListener)
 {
     super(daoListener);
     immutableSetSelectForUpdateMode(selectForUpdateMode);
 }
 
 /**
- * Creates a Oracle-based \{@link ResultSetExtractor}
- * to extract <input.vo_name> information, managing LOB stuff.
- <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
+ * Creates a Oracle-based {@link ResultSetExtractor}
+ * to extract <table.voName> information, managing LOB stuff.
+ <lob_attributes:attribute_javadoc_method_declaration(value=it);
    separator=",\n">
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update} (required to perform some operations
  * such as \<b>insert\</b>s), or not.
- * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  */
-public <input.vo_name>ResultSetExtractor(
-    <input.lob_attributes:attribute_method_declaration(attr=it);
+public <table.voName>ResultSetExtractor(
+    <lob_attributes:attribute_method_declaration(value=it);
       separator=",\n">,
     final boolean selectForUpdateMode,
-    final <input.tr_name_capitalized>DAOListener daoListener)
+    final <repository.capitalized>DAOListener daoListener)
 {
     this(selectForUpdateMode, daoListener);
-    <input.lob_attributes:attribute_setter_call(attr=it); separator="\n">
+    <table.lobAttributes:attribute_setter_call(value=it); separator="\n">
 }
 
 /**
- * Creates a Oracle-based \{@link ResultSetExtractor}
- * to extract <input.vo_name> information, managing LOB stuff.
- * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * Creates a Oracle-based {@link ResultSetExtractor}
+ * to extract <table.voName> information, managing LOB stuff.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  */
-public <input.vo_name>ResultSetExtractor(
-    final <input.tr_name_capitalized>DAOListener daoListener)
+public <table.voName>ResultSetExtractor(
+    final <repository.capitalized>DAOListener daoListener)
 {
     this(false, daoListener);
 }
 
-<input.lob_attributes:attribute_accessors(attr=it); separator="\n\n">
+<lob_attributes:attribute_accessors(value=it); separator="\n\n">
 
 /**
  * Specifies whether the extractor is retrieving results of a
@@ -381,7 +362,7 @@ public <input.vo_name>ResultSetExtractor(
 protected final void immutableSetSelectForUpdateMode(
     final boolean selectForUpdateMode)
 {
-    m__bSelectForUpdateMode = selectForUpdateMode;
+    this.selectForUpdateMode = selectForUpdateMode;
 }
 
 /**
@@ -389,6 +370,7 @@ protected final void immutableSetSelectForUpdateMode(
  * \<i>select for update\</i> or not.
  * @param selectForUpdate such behaviour.
  */
+@SuppressWarnings("unused")
 protected void setSelectForUpdateMode(final boolean selectForUpdateMode)
 {
     immutableSetSelectForUpdateMode(selectForUpdateMode);
@@ -401,47 +383,15 @@ protected void setSelectForUpdateMode(final boolean selectForUpdateMode)
  */
 public boolean getSelectForUpdateMode()
 {
-    return m__bSelectForUpdateMode;
+    return selectForUpdateMode;
 }
 
 /**
- * Extracts \<i><input.vo_name>\</i> information from given result set.
+ * Extracts \<i><table.voName>\</i> information from given result set.
  * @param resultSet the result set.
- * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
- * @return the \{@link <input.vo_name>} or
- * \{@link null} if the operation returned no data.
- * @throws SQLException intercepted by \<i>Spring\</i\>.
- * @throws DataAccessException with information about any
- * custom exception.
- */
-protected Object extractData(
-    final ResultSet resultSet,
-    final <input.tr_name_capitalized>DAOListener daoListener)
-  throws  SQLException,
-          DataAccessException
-{
-    return
-        extractData(
-            resultSet,
-            daoListener,
-            <input.lob_attributes:{get<it.nameCapitalized>()};
-              separator=",\n">,
-            getSelectForUpdateMode(),
-            <input.vo_name>ValueObjectFactory.getInstance());
-}
-
-/**
- * Extracts \<i><input.vo_name>\</i> information from given result set.
- * @param resultSet the result set.
- * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
- <input.lob_attributes:attribute_javadoc_method_declaration(attr=it);
-   separator="\n">
- * @param selectForUpdate whether the operation is a
- * \<i>select for update\</i>.
- * @param factory the \{@link <input.vo_name>ValueObjectFactory}
- * instance.
- * @return the \{@link <input.vo_name>} or
- * \{@link null} if the operation returned no data.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ * @return the {@link <table.voName>} or
+ * \<code>link\</code> if the operation returned no data.
  * @throws SQLException intercepted by \<i>Spring\</i\>.
  * @throws DataAccessException with information about any
  * custom exception.
@@ -449,15 +399,48 @@ protected Object extractData(
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <input.tr_name_capitalized>DAOListener daoListener,
-    <input.lob_attributes:attribute_method_declaration(attr=it);
-      separator=",\n">,
-    final boolean selectForUpdateMode,
-    <notnull()>final <input.vo_name>ValueObjectFactory factory)
+    <nullable()>final <repository.capitalized>DAOListener daoListener)
   throws  SQLException,
           DataAccessException
 {
-    <input.vo_name> result = null;
+    return
+        extractData(
+            resultSet,
+            daoListener,
+            <table.lobAttributes:{get<it.nameCapitalized>()};
+              separator=",\n">,
+            getSelectForUpdateMode(),
+            <table.voName>ValueObjectFactory.getInstance());
+}
+
+/**
+ * Extracts \<i><table.voName>\</i> information from given result set.
+ * @param resultSet the result set.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+ <table.lobAttributes:attribute_javadoc_method_declaration(value=it);
+   separator="\n">
+ * @param selectForUpdate whether the operation is a
+ * \<i>select for update\</i>.
+ * @param factory the {@link <table.voName>ValueObjectFactory}
+ * instance.
+ * @return the {@link <table.voName>} or
+ * \<code>null\</code> if the operation returned no data.
+ * @throws SQLException intercepted by \<i>Spring\</i\>.
+ * @throws DataAccessException with information about any
+ * custom exception.
+ */
+<notnull()>
+protected Object extractData(
+    <notnull()>final ResultSet resultSet,
+    <nullable()>final <repository.capitalized>DAOListener daoListener,
+    <table.lobAttributes:attribute_method_declaration(value=it);
+      separator=",\n">,
+    final boolean selectForUpdateMode,
+    <notnull()>final <table.voName>ValueObjectFactory factory)
+  throws  SQLException,
+          DataAccessException
+{
+    <table.voName> result = null;
 
     if  (resultSet.next())
     {
@@ -468,23 +451,23 @@ protected Object extractData(
 
 <if(parent)>
         <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
-          attr=it, input=input)>
+          value=it)>
 <else>
         <table.attributes:nullable_attribute_extraction(
-          attr=it, input=input)>
+          value=it)>
 <endif>
 
-        <input.lob_attributes:special_attribute_extraction(
-          attr=it, input=input)>
+        <table.lobAttributes:special_attribute_extraction(
+          value=it)>
 
         result =
-            factory.create<input.vo_name>ValueObject(
+            factory.create<table.voName>ValueObject(
 <if(parent)>
                 <table.allParentAndNonParentAttributes:attribute_extraction(
-                  attr=it, input=input); separator=",\n">);
+                  value=it); separator=",\n">);
 <else>
                 <table.attributes:attribute_extraction(
-                  attr=it, input=input); separator=",\n">);
+                  value=it); separator=",\n">);
 <endif>
 
     }
@@ -499,123 +482,122 @@ protected Object extractData(
 
 >>
 
-attribute_class_declaration(attr) ::= <<
+attribute_class_declaration(value) ::= <<
 <!
  Generates the attribute class declaration.
- @param attr the attribute.
+ @param value the attribute.
 !>
 /**
- * The <attr.name> attribute.
+ * The <value.name> attribute.
  */
-private <attr.objectType> m__<attr.nameCapitalized>;
+private <value.objectType> <value.nameUncapitalized>;
 >>
 
-attribute_javadoc_method_declaration(attr) ::= <<
+attribute_javadoc_method_declaration(value) ::= <<
 <!
  Generates the attribute Javadoc method declaration.
  @param attr the attribute.
 !>
-* @param <attr.nameLowercased> the \<i><attr.name>\</i> information.
+* @param <value.nameLowercased> the \<i><value.name>\</i> information.
 >>
 
-attribute_method_declaration(attr) ::= <<
+attribute_method_declaration(value) ::= <<
 <!
  Generates the attribute method declaration.
  @param attr the attribute.
 !>
-final <attr.objectType> <attr.nameLowercased>
+final <value.objectType> <value.nameLowercased>
 >>
 
-attribute_setter_call(attr) ::= <<
+attribute_setter_call(value) ::= <<
 <!
  Generates the attribute setter call.
  @param attr the attribute.
 !>
-immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
+immutableSet<value.nameCapitalized>(<value.nameLowercased>);
 >>
 
-attribute_accessors(attr) ::= <<
+attribute_accessors(value) ::= <<
 <!
  Generates the attribute accessors.
  @param attr the attribute.
 !>
 /**
- * Specifies the \<i><attr.name>\</i> information.
- * @param <attr.nameLowercased> such value.
+ * Specifies the \<i><value.name>\</i> information.
+ * @param <value.nameLowercased> such value.
  */
-protected final void immutableSet<attr.nameCapitalized>(
-    final <attr.objectType> <attr.nameLowercased>)
+protected final void immutableSet<value.nameCapitalized>(
+    <type_checker(attribute=value)>final <value.objectType> <value.nameLowercased>)
 {
-    m__<attr.nameCapitalized> = <attr.nameLowercased>;
+    <value.nameUncapitalized> = <value.nameLowercased>;
 }
 
 /**
- * Specifies the \<i><attr.name>\</i> information.
- * @param <attr.nameLowercased> such value.
+ * Specifies the \<i><value.name>\</i> information.
+ * @param <value.nameLowercased> such value.
  */
-protected void set<attr.nameCapitalized>(
-    final <attr.objectType> <attr.nameLowercased>)
+protected void set<value.nameCapitalized>(
+    <type_checker(attribute=value)>final <value.objectType> <value.nameLowercased>)
 {
-    immutableSet<attr.nameCapitalized>(<attr.nameLowercased>);
+    immutableSet<value.nameCapitalized>(<value.nameLowercased>);
 }
 
 /**
- * Specifies the \<i><attr.name>\</i> information.
- * @param <attr.nameLowercased> such value.
+ * Specifies the \<i><value.name>\</i> information.
+ * @param <value.nameLowercased> such value.
  */
-public <attr.objectType> get<attr.nameCapitalized>()
+<type_checker(attribute=value)>
+public <value.objectType> get<value.nameCapitalized>()
 {
-    return m__<attr.nameCapitalized>;
+    return <value.nameUncapitalized>;
 }
 >>
 
-nullable_attribute_extraction(attr, input) ::= <<
+nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(input.clobHandling)>
+<if(lob_handling_required)>
 <indirect_template(
-  name=input.clobHandling+"_nullable_attribute_extraction", input=attr)>
+  name=clobHandling+"_nullable_attribute_extraction", extra1=value)>
 <else>
-<default_nullable_attribute_extraction(attr=attr, input=input)>
+<default_nullable_attribute_extraction(value=value)>
 <endif>
 >>
 
-default_nullable_attribute_extraction(attr, input) ::= <<
+default_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(attr.allowsNull)>
-<if(attr.timestamp)>
-Timestamp t_<attr.nameCapitalized>AsTimestamp =
+<if(value.nullable)>
+<if(value.timestamp)>
+Timestamp <value.nameUncapitalized>AsTimestamp =
 <else>
-<attr.objectType> t_<attr.nameCapitalized>As<attr.objectType> =
+<value.objectType> <value.nameUncapitalized>As<value.objectType> =
 <endif>
 
-<if(attr.primitive)>
-<if(input.clobhandling)>
-    <object_nullable_clobhandling_attribute_extractor(attr=attr)>
+<if(value.primitive)>
+<if(lob_handling_required)>
+    <object_nullable_clobhandling_attribute_extractor(value=value)>
 <else>
-    <primitive_nullable_attribute_extractor(attr=attr)>
+    <primitive_nullable_attribute_extractor(value=value)>
 <endif>
 <else>
-<if(input.clobhandling)>
-    <indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
+<if(lob_handling_required)>
+    <indirect_template(name=value.objectType+"_nullable_clobhandling_attribute_extractor", extra1=value)>
 <else>
-    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+    <indirect_template(name=value.objectType+"_nullable_attribute_extractor", extra1=value)>
 <endif>
 <endif>
 
 if  (resultSet.wasNull())
 {
-<if(attr.timestamp)>
-    t_<attr.nameCapitalized>AsTimestamp = null;
+<if(value.timestamp)>
+    <value.nameUncapitalized>AsTimestamp = null;
 <else>
-    t_<attr.nameCapitalized>As<attr.objectType> = null;
+    <value.nameUncapitalized>As<value.objectType> = null;
 <endif>
 
 }
@@ -623,263 +605,259 @@ if  (resultSet.wasNull())
 <endif>
 >>
 
-String_nullable_attribute_extractor(input) ::= <<
+String_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a String nullable attribute.
 !>
-<object_nullable_attribute_extractor(attr=input)>
+<object_nullable_attribute_extractor(value=value)>
 >>
 
-String_nullable_clobhandling_attribute_extractor(input) ::= <<
+String_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a String nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(value=value)>
 >>
 
-Date_nullable_attribute_extractor(input) ::= <<
+Date_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(value=value)>
 >>
 
-Date_nullable_clobhandling_attribute_extractor(input) ::= <<
+Date_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(value=value)>
 >>
 
-Timestamp_nullable_attribute_extractor(input) ::= <<
+Timestamp_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(value=value)>
 >>
 
-Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
+Timestamp_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(value=value)>
 >>
 
-BigDecimal_nullable_attribute_extractor(input) ::= <<
+BigDecimal_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a BigDecimal nullable attribute.
 !>
-<object_nullable_attribute_extractor(attr=input)>
+<object_nullable_attribute_extractor(value=value)>
 >>
 
-BigDecimal_nullable_clobhandling_attribute_extractor(input) ::= <<
+BigDecimal_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a BigDecimal nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(value=value)>
 >>
 
-primitive_nullable_attribute_extractor(attr) ::= <<
+primitive_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a primitive nullable attribute.
 !>
-new <attr.objectType>(
-<if(attr.numberSmallerThanInt)>
+new <value.objectType>(
+<if(value.numberSmallerThanInt)>
     resultSet.getInt(
 <else>
-    resultSet.get<attr.objectType>(
+    resultSet.get<value.objectType>(
 <endif>
 
-        "<attr.nameUppercased>"));
+        "<value.nameUppercased>"));
 >>
 
-primitive_nullable_clobhandling_attribute_extractor(attr) ::= <<
+primitive_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a primitive nullable attribute.
 !>
-new <attr.objectType>(
-<if(attr.timestamp)>
-    resultSet.getTimestamp("<attr.nameUppercased>"));
+new <value.objectType>(
+<if(value.timestamp)>
+    resultSet.getTimestamp("<value.nameUppercased>"));
 <else>
-<if(attr.numberSmallerThanInt)>
-    resultSet.getInt("<attr.nameUppercased>"));
+<if(value.numberSmallerThanInt)>
+    resultSet.getInt("<value.nameUppercased>"));
 <else>
-    resultSet.get<attr.objectType>("<attr.nameUppercased>"));
+    resultSet.get<value.objectType>("<value.nameUppercased>"));
 <endif>
 <endif>
 
 >>
 
-object_nullable_attribute_extractor(attr) ::= <<
+object_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-<if(attr.timestamp)>
+<if(value.timestamp)>
 resultSet.getTimestamp(
 <else>
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
 resultSet.getInt(
 <else>
-resultSet.get<attr.objectType>(
+resultSet.get<value.objectType>(
 <endif>
 <endif>
 
-    "<attr.nameUppercased>");
+    "<value.nameUppercased>");
 >>
 
-object_nullable_clobhandling_attribute_extractor(attr) ::= <<
+object_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-<if(attr.timestamp)>
-resultSet.getTimestamp("<attr.nameUppercased>");
+<if(value.timestamp)>
+resultSet.getTimestamp("<value.nameUppercased>");
 <else>
-<if(attr.numberSmallerThanInt)>
-resultSet.getInt("<attr.nameUppercased>");
+<if(value.numberSmallerThanInt)>
+resultSet.getInt("<value.nameUppercased>");
 <else>
-resultSet.get<attr.objectType>("<attr.nameUppercased>");
+resultSet.get<value.objectType>("<value.nameUppercased>");
 <endif>
 <endif>
 
 >>
 
-attribute_extraction(attr, input) ::= <<
+attribute_extraction(value) ::= <<
 <!
  Generates the code to extract attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(input.clobHandling)>
+<if(lob_handling_required)>
 <indirect_template(
-  name=input.clobHandling+"_attribute_extraction", input=attr)>
+  name=clobHandling+"_attribute_extraction", extra1=value)>
 <else>
-<default_attribute_extraction(attr)>
+<default_attribute_extraction(value)>
 <endif>
 >>
 
-default_attribute_extraction(attr) ::= <<
+default_attribute_extraction(value) ::= <<
 <!
  Generates the member declaration for a concrete attribute.
  @param attr the attribute.
 !>
-<if(attr.allowsNull)>
-<if(attr.timestamp)>
-t_<attr.nameCapitalized>AsTimestamp
+<if(value.nullable)>
+<if(value.timestamp)>
+<value.nameUncapitalized>AsTimestamp
 <else>
-t_<attr.nameCapitalized>As<attr.objectType>
+<value.nameUncapitalized>As<value.objectType>
 <endif>
 <else>
-<if(attr.numberSmallerThanInt)>
-resultSet.getInt(<attr.tableNameUppercased>.<attr.nameUppercased>)
+<if(value.numberSmallerThanInt)>
+resultSet.getInt(<value.tableNameUppercased>.<value.nameUppercased>)
 <else>
-<if(attr.timestamp)>
-resultSet.getTimestamp("<attr.nameUppercased>")
+<if(value.timestamp)>
+resultSet.getTimestamp("<value.nameUppercased>")
 <else>
-resultSet.get<attr.objectType>("<attr.nameUppercased>")
+resultSet.get<value.objectType>("<value.nameUppercased>")
 <endif>
 <endif>
 <endif>
 
 >>
 
-default_clobhandling_attribute_extraction(attr) ::= <<
+default_clobhandling_attribute_extraction(value) ::= <<
 <!
  Generates the member declaration for a concrete attribute.
  @param attr the attribute.
 !>
-<if(attr.timestamp)>
-resultSet.getTimestamp("<attr.nameUppercased>")
+<if(value.timestamp)>
+resultSet.getTimestamp("<value.nameUppercased>")
 <else>
-<if(attr.allowsNull)>
-t_<attr.nameCapitalized>As<attr.objectType>
+<if(value.nullable)>
+<value.nameUncapitalized>As<value.objectType>
 <else>
-<if(attr.numberSmallerThanInt)>
-resultSet.getInt("<attr.nameUppercased>")
+<if(value.numberSmallerThanInt)>
+resultSet.getInt("<value.nameUppercased>")
 <else>
-resultSet.get<attr.objectType>("<attr.nameUppercased>")
+resultSet.get<value.objectType>("<value.nameUppercased>")
 <endif>
 <endif>
 <endif>
 
 >>
 
-special_attribute_extraction(attr, input) ::= <<
+special_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract special attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(input.clobHandling)>
+<if(lob_handling_required)>
 <indirect_template(
-  name=input.clobHandling+"_special_attribute_extraction", input=attr)>
+  name=clobHandling+"_special_attribute_extraction", extra1=value)>
 <endif>
 >>
 
-oracle_nullable_attribute_extraction(input) ::= <<
+oracle_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle.
- @param input the attribute.
 !>
-<oracle8_nullable_attribute_extraction(input=input)>
+<oracle8_nullable_attribute_extraction(value=value)>
 >>
 
-oracle8_nullable_attribute_extraction(input) ::= <<
+oracle8_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle8.
  @param input the attribute.
 !>
-<if(!input.clob)>
-<default_nullable_attribute_extraction(attr=input)>
+<if(!lob_handling_required)>
+<default_nullable_attribute_extraction(value=value)>
 <endif>
 >>
 
-oracle_special_attribute_extraction(input) ::= <<
+oracle_special_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract special attributes for Oracle.
  @param input the attribute.
 !>
-<oracle8_special_attribute_extraction(input=input)>
+<oracle8_special_attribute_extraction(value=value)>
 >>
 
-oracle8_special_attribute_extraction(input) ::= <<
+oracle8_special_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract special attributes for Oracle8.
- @param input the attribute.
 !>
-<if(input.clob)>
-oracle.sql.CLOB t_<input.nameCapitalized> =
-    (oracle.sql.CLOB) resultSet.getClob("<attr.nameUppercased>");
+<if(lob_handling_required)>
+oracle.sql.CLOB <value.nameUncapitalized> =
+    (oracle.sql.CLOB) resultSet.getClob("<value.nameUppercased>");
 
 if  (selectForUpdateMode)
 {
-    t_<input.nameCapitalized>.putString(1, <input.nameLowercased>);
+    <value.nameUncapitalized>.putString(<value.ordinalPosition>, <value.nameLowercased>);
 }
 <else>
 if  (resultSet.wasNull())
 {
-    t_<input.nameCapitalized>As<input.objectType> = null;
+    <value.nameUncapitalized>As<value.objectType> = null;
 }
 <endif>
 >>
 
-oracle_attribute_extraction(input) ::= <<
+oracle_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract the attributes for Oracle.
  @param input the attribute.
 !>
-<oracle8_attribute_extraction(input=input)>
+<oracle8_attribute_extraction(value=value)>
 >>
 
-oracle8_attribute_extraction(input) ::= <<
+oracle8_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract the attributes for Oracle8.
  @param input the attribute.
 !>
-<if(input.clob)>
+<if(lob_handling_required)>
 (selectForUpdateMode)
-?  <input.nameLowercased>
-:  t_<input.nameCapitalized>.getSubString(1, (int) t_<input.nameCapitalized>.length())
+?  <value.nameLowercased>
+:  <value.nameUncapitalized>.getSubString(<value.ordinalPosition>, (int) <value.nameUncapitalized>.length())
 <else>
-<default_clobhandling_attribute_extraction(attr=input)>
+<default_clobhandling_attribute_extraction(value=value)>
 <endif>
 >>
