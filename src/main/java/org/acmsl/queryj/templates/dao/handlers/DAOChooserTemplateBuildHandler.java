@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,6 +35,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.DAOChooserTemplate;
@@ -65,6 +65,17 @@ public class DAOChooserTemplateBuildHandler
      * Creates a DAOChooserTemplateBuildHandler.
      */
     public DAOChooserTemplateBuildHandler() {}
+
+    /**
+     * Checks whether template generation is enabled for this kind of template.
+     * @return <code>true</code> for {@link DAOChooserTemplate}, always.
+     */
+    @Override
+    protected boolean isGenerationEnabled(
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
+    {
+        return true;
+    }
 
     /**
      * Retrieves the template factory.

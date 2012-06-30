@@ -160,7 +160,7 @@ public class DecoratedString
      * @return the value associated to "[placeholder].lowercased".
      */
     @NotNull
-    public String lowercased()
+    public String getLowercased()
     {
         return lowercase(getValue());
     }
@@ -177,11 +177,32 @@ public class DecoratedString
     }
 
     /**
+     * Retrieves the "uppercased" version.
+     * @return the value associated to "[placeholder].uppercased".
+     */
+    @NotNull
+    public String getUppercased()
+    {
+        return uppercase(getValue());
+    }
+
+    /**
+     * Retrieves the "uppercased" version.
+     * @param value the original value.
+     * @return the value associated to "[placeholder].uppercased".
+     */
+    @NotNull
+    protected String uppercase(@NotNull final String value)
+    {
+        return value.toUpperCase(Locale.US);
+    }
+
+    /**
      * Retrieves the "normalized" version.
      * @return the value associated to "[placeholder].normalized".
      */
     @NotNull
-    public String normalized()
+    public String getNormalized()
     {
         return normalize(getValue(), DecorationUtils.getInstance());
     }

@@ -39,9 +39,10 @@ package org.acmsl.queryj.templates;
  * Importing project classes.
  */
 import org.acmsl.queryj.AbstractQueryJChain;
+import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.templates.handlers.fillhandlers.DAOChooserPropertiesFileNameHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.JndiLocationFillHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.templates.handlers.FillAdapterHandler;
 import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.CopyrightYearsHandler;
@@ -239,6 +240,10 @@ public abstract class FillTemplateChain<C extends TemplateContext>
         chain.add(
             new TemplateContextFillAdapterHandler<TemplateContext,JndiLocationFillHandler,DecoratedString>(
                 new JndiLocationFillHandler(context)));
+
+        chain.add(
+            new TemplateContextFillAdapterHandler<TemplateContext,DAOChooserPropertiesFileNameHandler,DecoratedString>(
+                new DAOChooserPropertiesFileNameHandler(context)));
 
         addHandlers(chain, context);
 

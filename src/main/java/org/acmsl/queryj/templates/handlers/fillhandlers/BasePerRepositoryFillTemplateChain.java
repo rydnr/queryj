@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
+import org.acmsl.queryj.metadata.TableDecorator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
 
@@ -50,7 +51,10 @@ import org.acmsl.commons.patterns.Chain;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -78,9 +82,8 @@ public class BasePerRepositoryFillTemplateChain
     @Override
     protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerRepositoryTemplateContext context)
     {
-        // TODO
-        int a = 0;
-
-        a++;
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerRepositoryTemplateContext,TableListHandler,List<TableDecorator>>(
+                new TableListHandler(context)));
     }
 }

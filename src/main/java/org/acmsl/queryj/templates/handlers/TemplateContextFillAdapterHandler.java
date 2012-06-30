@@ -62,6 +62,7 @@ public class TemplateContextFillAdapterHandler<C extends TemplateContext, F exte
      * {@link TemplateContextFillHandler fill handler}.
      * @param fillHandler the fill handler to adapt.
      */
+    @SuppressWarnings("unchecked")
     public TemplateContextFillAdapterHandler(@NotNull final F fillHandler)
     {
         super(fillHandler);

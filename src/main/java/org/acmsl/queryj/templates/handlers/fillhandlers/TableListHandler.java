@@ -61,7 +61,6 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/24
  */
-@SuppressWarnings("unused")
 public class TableListHandler
     extends AbstractTemplateContextFillHandler<BasePerRepositoryTemplateContext, List<TableDecorator>>
 {
@@ -70,7 +69,6 @@ public class TableListHandler
      * {@link BasePerRepositoryTemplateContext context}.
      * @param context the {@link BasePerRepositoryTemplateContext context}.
      */
-    @SuppressWarnings("unused")
     public TableListHandler(@NotNull final BasePerRepositoryTemplateContext context)
     {
         super(context);
