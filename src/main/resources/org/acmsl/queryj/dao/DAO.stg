@@ -92,9 +92,6 @@ sourceImpl(table) ::= <<
 <package_declaration(
   packageNames=
   [
-    project_package,
-    typeInitMap.baseDAOSubpackageName,
-    typeInitMap.rdbSubpackageName,
     sub_package_name
   ])>
 
@@ -249,9 +246,9 @@ project_imports(
 /*
  * Importing project-specific classes.
  */
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>AttributesStatementSetter;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>PkStatementSetter;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
+import <subpackageName>.<tableNameLowercased>.<voName>AttributesStatementSetter;
+import <subpackageName>.<tableNameLowercased>.<voName>PkStatementSetter;
+import <subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
@@ -367,7 +364,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
         +   "<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
         + "FROM <table.nameUppercased>, <table.allParentTables:{ table | <table.nameUppercased>}; separator=", "> "
         + "WHERE "
-<pk_attributes:{pk |
+<table.primaryKey:{pk |
         +   "<attr.tableNameUppercased>.<pk.nameUppercased> = ? }; separator=" AND \"\n">"
         <find_by_pk_sql_join(table=table, parent=table.parentTable)>
         <table.allParentTables:{ table | <if(table.parentTable)><find_by_pk_sql_join(table=table, parent=table.parentTable)><endif>}>;
@@ -483,22 +480,21 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 }; separator="\n\n">
                
     /**
-     * Builds a {@link <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voName>DAO} instance
+     * Builds a {@link <engine_name><table.voName>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      */
     public <engine_name><table.voName>DAO(
         <notnull()>final DataSource dataSource,
-        <notnull()>final <repository.capitalized>DAOListener daoListener)
+        <nullable()>final <repository.capitalized>DAOListener daoListener)
     {
         super(dataSource, daoListener);
     }
 
 <if(table.static)>
-    <table.staticContent:static_table(
-      attribute=it,
-      primaryKeyAttributes=table.primaryKey,
+    <static_table(
+      primaryKey=table.primaryKey,
       voName=table.voName)>
 <endif>
 
@@ -521,11 +517,11 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     public <table.voName> findByPrimaryKey(
 <endif>
 
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">)
     {
         return
             findByPrimaryKey(
-                <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.primaryKey:{<it.nameLowercased>}; separator=",\n">,
                 auditSql(_FIND_BY_PK_SQL),
                 getDataSource());
     }
@@ -533,7 +529,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     /**
      * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param dataSource the {@link DataSource} instance.
 <if(table.voDecorated)>
@@ -551,13 +547,13 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     protected <table.voName> findByPrimaryKey(
 <endif>
 
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final DataSource dataSource)
     {
         return
             findByPrimaryKey(
-                <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.primaryKey:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new DataSourceTransactionManager(dataSource));
     }
@@ -565,7 +561,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     /**
      * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param transactionManager the {@link PlatformTransactionManager}
      * instance.
@@ -584,13 +580,13 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     protected <table.voName> findByPrimaryKey(
 <endif>
 
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final PlatformTransactionManager transactionManager)
     {
         return
             findByPrimaryKey(
-                <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.primaryKey:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager),
                 getDAOListener());
@@ -599,7 +595,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     /**
      * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param transactionTemplate the {@link TransactionTemplate}
      * instance.
@@ -620,7 +616,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     protected <table.voName> findByPrimaryKey(
 <endif>
 
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final TransactionTemplate transactionTemplate,
         <nullable()>final <repository.capitalized>DAOListener daoListener)
@@ -637,7 +633,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
                         new <repository.capitalized>QueryPreparedStatementCreator(
                             query, daoListener),
                         new <table.voName>PkStatementSetter(
-                            <pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">),
                         new <table.voName>ResultSetExtractor(daoListener),
                         this));
     }
@@ -811,7 +807,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <else>
-        <<table.nonReadOnlyAttributes>:attribute_declaration_impl(attr=it); separator=",\n">,
+        <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
         <notnull()>final String query,
@@ -839,10 +835,10 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <if(parent)>
                         <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                        <<table.nonReadOnlyAttributes>:{<it.nameLowercased>}; separator=",\n">,
+                        <table.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-<if(clobHandling)>
+<if(lob_handling_required)>
                         true,
                         false,
                         false),
@@ -863,13 +859,13 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     /**
      * Deletes {@link <table.voName>} information.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     protected void deleteNoFk(
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">)
     {
         deleteNoFk(
-            <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">,
             auditSql(_DELETE_SQL),
 <if(parent)>
             getDataSource(),
@@ -882,7 +878,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     /**
      * Deletes {@link <table.voName>} information.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param dataSource the {@link DataSource{@link  instance.
 <if(parent)>
@@ -890,7 +886,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <endif>
      */
     protected void deleteNoFk(
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
 <if(parent)>
         <notnull()>final DataSource dataSource,
@@ -901,7 +897,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     {
         deleteNoFk(
-            <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">,
             query,
 <if(parent)>
             new DataSourceTransactionManager(dataSource),
@@ -914,7 +910,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     /**
      * Deletes {@link <table.voName>} information.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionManager the {@link PlatformTransactionManager{@link 
      * instance.
@@ -923,7 +919,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <endif>
      */
     protected void deleteNoFk(
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
 <if(parent)>
         <notnull()>final PlatformTransactionManager transactionManager,
@@ -934,7 +930,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     {
         deleteNoFk(
-            <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager),
 <if(parent)>
@@ -946,7 +942,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     /**
      * Deletes {@link <table.voName>} information.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
      * @param transactionTemplate the {@link TransactionTemplate{@link 
      * instance.
@@ -957,7 +953,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      */
     protected void deleteNoFk(
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final TransactionTemplate transactionTemplate,
 <if(parent)>
@@ -971,7 +967,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
                 new <repository.capitalized>QueryPreparedStatementCreator(
                     query, daoListener),
                 new <table.voName>PkStatementSetter(
-                    <pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                    <table.primaryKey:{<it.nameLowercased>}; separator=",\n">),
                 this));
 <if(parent)>
         parentDAO.delete(
@@ -982,27 +978,27 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
     /**
      * Deletes {@link <table.voName>} information.
-     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
-        <pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <table.primaryKey:attribute_declaration(attr=it); separator=",\n">)
     {
-<if(fk_attributes)>
-        <fk_attributes:fk_dao_delete_call(
-          foreignKey=it, pkAttributes=pk_attributes);
+<if(table.foreignKeys)>
+        <table.foreignKeys:fk_dao_delete_call(
+          foreignKey=it, pkAttributes=table.primaryKey);
           separator="\n\n">
 <endif>
 
         deleteNoFk(
-            <pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">);
     }
-    <foreign_keys:fk_delete_method(
+    <table.foreignKeys:fk_delete_method(
       foreignKey=it); separator="\n">
 
-    <custom_selects:custom_select(
+    <table.customSelects:custom_select(
       cs=it, table=table); separator="\n">
 
-    <custom_updates_or_inserts:custom_update_or_insert(
+    <table.customUpdatesOrInserts:custom_update_or_insert(
       cs=it); separator="\n">
 
     /**
@@ -1051,7 +1047,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
                 int index = 1;
 
-                <pk_attributes:pk_resultset_extractor_parameter_retrieval(
+                <table.primaryKey:pk_resultset_extractor_parameter_retrieval(
                   name=it.nameLowercased,
                   getterMethod=it.getterMethod,
                   objectType=it.objectType,
@@ -1097,7 +1093,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     <inner_transaction_callbacks(
       daoName=engine_name+table.voName,
       voName=table.voName,
-      clobHandling=clobHandling)>
+      lobHandlingRequired=lob_handling_required)>
 }
 >>
 
@@ -1141,24 +1137,28 @@ result.put(
 <endif>
 >>
 
-static_table(
-  attribute, primaryKeyAttributes, voName) ::= <<
+static_table(primaryKey, voName) ::= <<
 <!
   Generates the method to operate directly on defined constants.
-  @param attribute the static attribute.
-  @param primaryKeyAttributes the primary key.
+  @param primaryKey the primary key.
   @param voName the value object name.
 !>
+
+<primaryKey.attributes:find_constant_by(attribute=it,voName=voName)>
+
+<find_constant_by_pk(primaryKey=primaryKey, voName=voName)>
+>>
+
+find_constant_by(attribute, voName) ::= <<
 /**
  * Loads \<i\><voName>\</i\> information from the constant pool,
- * filtering by <attribute.name>.
- * @param <attribute.nameLowercased> the <attribute.name>
- * to filter.
+ * filtering by <attribute.nameLowercased>.
+ * @param <attribute.nameLowercased> the <attribute.name> value to filter.
  * @return the {@link <voName>} instance.
  */
 <nullable()>
 public <voName> findConstantBy<attribute.nameCapitalized>(
-    <notnull()>final <attribute.type> <attribute.name>)
+    <notnull()>final <attribute.javaType> <attribute.nameLowercased>)
 {
     <nullable()><voName> result = null;
 
@@ -1175,16 +1175,18 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
 
     return result;
 }
+>>
 
+find_constant_by_pk(primaryKey, voName) ::= <<
 /**
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
- <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the {@link <voName>} instance.
  */
 <nullable()>
 public <voName> findConstantByPk(
-  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
+  <primaryKey:attribute_declaration(attr=it); separator=",\n">)
 {
     <nullable()><voName> result = null;
 
@@ -1196,7 +1198,7 @@ public <voName> findConstantByPk(
         {
             found = true;
 
-            <primaryKeyAttributes:static_attribute_check(attr=it);
+            <primaryKey:static_attribute_check(attr=it);
               separator="\n">
 
             if  (found)
@@ -1272,18 +1274,18 @@ em_attribute_value_retrieval(
   @param type the type.
   @param table the table.
 !>
-t_mMap =
-    (Map)
-        transactionTemplate.execute(
-            new QueryTransactionCallback(
-                "<query>",
-                new <nameCapitalized><table.voName>ResultSetExtractor(
-                "<nameLowercased>",
-                getDAOListener()),
-                this));
+map =
+   (Map)
+       transactionTemplate.execute(
+           new QueryTransactionCallback(
+               "<query>",
+               new <nameCapitalized><table.voName>ResultSetExtractor(
+               "<nameLowercased>",
+               getDAOListener()),
+               this));
 
 <nativeType> <nameLowercased> =
-    ((<type>) t_mMap.get("<nameLowercased>")).<nativeType>Value();
+    ((<type>) map.get("<nameLowercased>")).<nativeType>Value();
 >>
 
 fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
@@ -1400,6 +1402,13 @@ public void insert(
         getDataSource());
 }
 
+<jdbcInsert2(table=table, parent=parent)>
+>>
+
+jdbcInsert2(table, parent) ::= <<
+<!
+ Generates the JDBC insert logic overloaded 2.
+ !>
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
@@ -1417,7 +1426,7 @@ protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <table.allNonReadonlyButExternallyManagedAttributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1438,6 +1447,13 @@ protected void insert(
         new DataSourceTransactionManager(dataSource));
 }
 
+<jdbcInsert3(table=table, parent=parent)>
+>>
+
+jdbcInsert3(table, parent) ::= <<
+<!
+ Generates the JDBC insert logic overloaded 3.
+ !>
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
@@ -1449,7 +1465,7 @@ protected void insert(
 
  * @param query the query to insert the values.
 <if(parent)>
- * @param dataAccessManager the \<tt\><repository.capitalized>DataAccessManager\</tt\> instance.
+ * @param dataAccessManager the {@link <repository.capitalized>DataAccessManager} instance.
 <endif>
 
  * @param transactionManager the {@link PlatformTransactionManager}
@@ -1487,6 +1503,14 @@ protected void insert(
         getDAOListener());
 }
 
+<jdbcInsert4(table=table, parent=parent)>
+>>
+
+jdbcInsert4(table, parent) ::= <<
+<!
+ Generates the JDBC insert logic overloaded 4.
+ !>
+
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
@@ -1506,6 +1530,7 @@ protected void insert(
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @throws DataAccessException if the operation fails.
  */
+@SuppressWarnings("unchecked")
 protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
@@ -1531,7 +1556,7 @@ protected void insert(
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
 
 <else>
-    Map t_mMap = null;
+    Map map = null;
 
     <table.externallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
@@ -1541,7 +1566,6 @@ protected void insert(
       type=it.objectType,
       table=table); separator="\n">
 <endif>
-
     transactionTemplate.execute(
         new UpdateTransactionCallback(
             new <repository.capitalized>QueryPreparedStatementCreator(
@@ -1550,13 +1574,21 @@ protected void insert(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-                <<table.nonReadOnlyAttributes>:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
+
                 false,
                 true),
             this));
 }
 
+<create(table=table, parent=parent)>
+>>
+
+create(table, parent) ::= <<
+<!
+ Generates the JDBC create logic.
+ !>
 /**
  * Inserts and retrieves the newly-inserted
  * {@link <table.voName>} instance.
@@ -1595,6 +1627,13 @@ public <table.voName> create(
             getDataSource(),
             <table.voName>ValueObjectFactory.getInstance());
 }
+<create2(table=table, parent=parent)>
+>>
+
+create2(table, parent) ::= <<
+<!
+ Generates the JDBC create logic, overloaded 2.
+ !>
 
 /**
  * Inserts and retrieves the newly-inserted
@@ -1636,6 +1675,7 @@ protected <table.voName> create(
 <else>
             <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
+
             query,
             new DataSourceTransactionManager(dataSource),
 <if(parent)>
@@ -1644,6 +1684,13 @@ protected <table.voName> create(
 
             factory);
 }
+<create3(table=table, parent=parent)>
+>>
+
+create3(table, parent) ::= <<
+<!
+ Generates the JDBC create logic, overloaded 3.
+ !>
 
 /**
  * Inserts and retrieves the newly-inserted
@@ -1659,7 +1706,7 @@ protected <table.voName> create(
  * @param transactionManager the {@link PlatformTransactionManager}
  * instance.
 <if(parent)>
- * @param dataAccessManager the \<tt\><repository.capitalized>DataAccessManager\</tt\> instance.
+ * @param dataAccessManager the {@link <repository.capitalized>DataAccessManager} instance.
 <endif>
 
  * @param factory the {@link <table.voName>ValueObjectFactory}
@@ -1707,6 +1754,13 @@ protected <table.voName> create(
             getDAOListener());
 }
 
+<create4(table=table, parent=parent)>
+>>
+
+create4(table, parent) ::= <<
+<!
+ Generates the JDBC create logic, overloaded 4.
+ !>
 /**
  * Inserts and retrieves the newly-inserted
  * {@link <table.voName>} instance.
@@ -1729,6 +1783,7 @@ protected <table.voName> create(
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @throws DataAccessException if the operation fails.
  */
+@SuppressWarnings("unchecked")
 <if(table.voDecorated)>
 protected <table.voName>Decorator create(
 <else>
@@ -1756,6 +1811,7 @@ protected <table.voName> create(
     <table.voName> result = null;
 <endif>
 
+
 <if(parent)>
     <parent.voName> <parent.nameLowercased> =
         <parent.nameLowercased>DAO.create(
@@ -1765,7 +1821,7 @@ protected <table.voName> create(
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
 
 <else>
-    Map t_mMap = null;
+    Map map = null;
 
     <table.externallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
@@ -1785,7 +1841,7 @@ protected <table.voName> create(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                <<table.nonReadOnlyAttributes>:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 false,
@@ -1795,7 +1851,7 @@ protected <table.voName> create(
     result =
 <if(table.allParentAndNonParentReadOnlyAttributes)>
         findByPrimaryKey(
-            <pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+            <table.primaryKey:{<it.nameLowercased>}; separator=",\n">);
 <else>
         factory.create<table.voName>(
             <table.allParentAndNonParentAttributes:{<it.nameLowercased>}; separator=",\n">);
@@ -1876,7 +1932,7 @@ public <table.voName> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <<table.nonReadOnlyAttributes>:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <table.nonReadOnlyAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             getDataSource());
@@ -1915,7 +1971,7 @@ protected <table.voName> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <<table.nonReadOnlyAttributes>:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <table.nonReadOnlyAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             new DataSourceTransactionManager(dataSource));
@@ -1959,7 +2015,7 @@ protected <table.voName> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <<table.nonReadOnlyAttributes>:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <table.nonReadOnlyAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             new TransactionTemplate(transactionManager),
@@ -2004,7 +2060,7 @@ protected <table.voName> create(
     <table.voName> result = null;
 <endif>
 
-    Map t_mMap = null;
+    Map map = null;
 
     <table.externallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
@@ -2023,7 +2079,7 @@ protected <table.voName> create(
                 <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n"> " +
 <else>
-                <<table.nonReadOnlyAttributes>:{"<it.nameUppercased>};
+                <table.nonReadOnlyAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <endif>
 
@@ -2032,7 +2088,7 @@ protected <table.voName> create(
                 <table.allParentAndNonParentNonReadOnlyAttributes:insert_attribute(attr=it);
                   separator=", \" +\n">",
 <else>
-                <<table.nonReadOnlyAttributes>:insert_attribute(attr=it);
+                <table.nonReadOnlyAttributes:insert_attribute(attr=it);
                   separator=",\" +\n">)",
 <endif>
 
@@ -2042,7 +2098,7 @@ protected <table.voName> create(
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>};
                   separator=",\n">,
 <else>
-                <<table.nonReadOnlyAttributes>:{<it.nameLowercased>};
+                <table.nonReadOnlyAttributes:{<it.nameLowercased>};
                   separator=",\n">,
 <endif>
                 false,
@@ -2058,21 +2114,21 @@ protected <table.voName> create(
                 <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <else>
-                <<table.nonReadOnlyAttributes>:{"<it.nameUppercased>};
+                <table.nonReadOnlyAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <endif>
 
                 " FROM <table.nameUppercased>" +
                 " WHERE " +
-                <pk_attributes:{"<it.nameUppercased> = ?};
+                <table.primaryKey:{"<it.nameUppercased> = ?};
                   separator=" AND \" +\n">" +
                 " FOR UPDATE",
                 daoListener),
             new <table.voName>PkStatementSetter(
-                <pk_attributes:{<it.nameLowercased>};
+                <table.primaryKey:{<it.nameLowercased>};
                   separator=",\n">),
             new <table.voName>ResultSetExtractor(
-                <lob_attributes:{<it.nameLowercased>};
+                <table.lobAttributes:{<it.nameLowercased>};
                   separator=",\n">,
                 true,
                 daoListener),

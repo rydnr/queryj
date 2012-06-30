@@ -515,12 +515,12 @@ public void <cs.nameUncapitalized>(
 <endif>
 >>
 
-inner_transaction_callbacks(daoName, voName, clobHandling) ::= <<
+inner_transaction_callbacks(daoName, voName, lobHandlingRequired) ::= <<
 <!
  Generates the inner classes for transaction callbacks.
  @param daoName the DAO name.
  @param voName the value object for select-for-update operations.
- @param clobHandling whether the CLOBs need to be handled or not.
+ @param lobHandlingRequired whether the CLOBs need to be handled or not.
 !>
 /**
  * Transaction callback implementation to perform
@@ -897,7 +897,7 @@ protected static class QueryTransactionCallback
     }
 }
 
-<if(clobHandling)>
+<if(lobHandlingRequired)>
 <if(voName)>
 /**
  * Transaction callback implementation to perform a
@@ -919,8 +919,7 @@ protected static class SelectForUpdateTransactionCallback
      * @param creator the {@link PreparedStatementCreator} instance.
      * @param setter the {@link PreparedStatementSetter} instance.
      * @param extractor the {@link ResultSetExtractor} instance.
-     * @param dao the {@link <daoName>DAO}
-     * instance.
+     * @param dao the {@link <daoName>DAO} instance.
      */
     public SelectForUpdateTransactionCallback(
         <notnull()>final PreparedStatementCreator creator,
