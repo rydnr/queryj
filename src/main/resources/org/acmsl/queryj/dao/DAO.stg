@@ -38,82 +38,82 @@
 //
 group DAO;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a DAO database implementation source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
+  @param copyright_years the copyright's years.
+  @param table the table.
+  @param package the package.
+  @param dao_class_name the DAO class name.
+  @param dao_factory_class_name the DAO factory class name.
+  @param dao_implementation_class_name the DAO implementation class name.
   @params project_imports
   @params class
 !>
-<sourceImpl(table=input.table, input=input)>
+<sourceImpl(table=table)>
 >>
 
-sourceImpl(table, input) ::= <<
+sourceImpl(table) ::= <<
 <!
   Generates a DAO database implementation source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
-  @param input.dao_class_name the DAO class name.
-  @param input.dao_factory_class_name the DAO factory class name.
-  @param input.dao_implementation_class_name the DAO implementation class name.
+  @param copyright_years the copyright's years.
+  @param table_name the table name.
+  @param package the package.
+  @param dao_class_name the DAO class name.
+  @param dao_factory_class_name the DAO factory class name.
+  @param dao_implementation_class_name the DAO implementation class name.
   @params project_imports
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
     first_line_description(
-      tableName=input.table_name,
-      engineName=input.engine_name,
-      engineVersion=input.engine_version),
+      tableName=table_name,
+      engineName=engine_name,
+      engineVersion=engine_version),
     second_line_description(
-      tableName=input.table_name,
-      engineName=input.engine_name,
-      engineVersion=input.engine_version),
+      tableName=table_name,
+      engineName=engine_name,
+      engineVersion=engine_version),
     third_line_description(
-      tableName=input.table_name,
-      engineName=input.engine_name,
-      engineVersion=input.engine_version)
+      tableName=table_name,
+      engineName=engine_name,
+      engineVersion=engine_version)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
 // Generated using org/acmsl/queryj/dao/DAO.stg
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    input.subpackage_name
+    sub_package_name
   ])>
 
 <project_imports(
-  basePackageName=input.base_package_name,
-  subpackageName=input.subpackage_name,
-  tableName=input.table_name,
-  tableNameLowercased=input.table_name_normalized_lowercased,
+  basePackageName=project_package,
+  subpackageName=sub_package_name,
+  tableName=table_name,
+  tableNameLowercased=table.nameNormalizedLowercased,
   jdbcOperationsSubpackageName=typeInitMap.jdbcOperationsSubpackageName,
-  customResults=input.custom_results,
+  customResults=table.customResults,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name,
+  voName=table.voName,
   voFactorySubpackageName=typeInitMap.voFactorySubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
-  trName=input.tr_name_capitalized,
+  trName=repository.capitalized,
   damSubpackageName=typeInitMap.dataAccessManagerSubpackageName,
   fkssSubpackageName=typeInitMap.foreignKeyStatementSetterSubpackageName,
-  fkAttributes=input.fk_attributes,
+  fkAttributes=table.foreignKeys,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   table=table,
   parent=table.parentTable)>
@@ -174,7 +174,7 @@ import javax.sql.DataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input,foreign_keys_by_table=input.foreign_keys_by_table, table=input.table)>
+<class(foreign_keys=table.foreignKeys, table=table)>
 >>
 
 first_line_description(tableName, engineName, engineVersion) ::= <<
@@ -274,7 +274,7 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAO
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JdbcTemplate;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>QueryPreparedStatementCreator;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
-//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+<!//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;!>
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
@@ -297,7 +297,7 @@ foreignkey_statementsetter_import(
   statement setter.
   @param foreignKey the foreign key.
 !>
-//import <basePackageName>.<fkssSubpackageName>.<foreignKey.targetVoName>By<foreignKey.sourceVoName>StatementSetter;
+<!//import <basePackageName>.<fkssSubpackageName>.<foreignKey.targetVoName>By<foreignKey.sourceVoName>StatementSetter;!>
 >>
 
 foreignkey_dao_import(
@@ -312,55 +312,50 @@ foreignkey_dao_import(
 import <basePackageName>.<baseDAOSubpackageName>.<referredVOName>DAO;
 >>
 
-class(input, foreign_keys_by_table, table) ::= <<
+class(foreign_keys, table) ::= <<
 <!
  Generates the class body.
- @param input.vo_name the value object name.
- @param input.engine_name the engine name.
- @param input.engine_version the engine version.
- @param input.timestamp the timestamp.
- @param input.custom_results the results for the custom queries.
- @param input.tr_name the table repository name.
- @param foreign_keys_by_table a map of table-name->foreign_key
+ @param engine_name the engine name.
+ @param engine_version the engine version.
+ @param timestamp the timestamp.
+ @param custom_results the results for the custom queries.
+ @param repository the table repository name.
  @param table the table.
 !>
-<classImpl(input=input, foreign_keys_by_table=foreign_keys_by_table, table=table, parent=table.parentTable)>
+<classImpl(foreign_keys=table.foreignKeys, table=table, parent=table.parentTable)>
 >>
 
-classImpl(input, foreign_keys_by_table, table, parent) ::= <<
+classImpl(foreign_keys, table, parent) ::= <<
 <!
  Generates the class body.
- @param input.vo_name the value object name.
- @param input.engine_name the engine name.
- @param input.engine_version the engine version.
- @param input.timestamp the timestamp.
- @param input.custom_results the results for the custom queries.
- @param input.tr_name the table repository name.
- @param foreign_keys_by_table a map of table-name->foreign_key
+ @param engine_name the engine name.
+ @param engine_version the engine version.
+ @param timestamp the timestamp.
+ @param repository the table repository name.
  @param table the table.
  @param parent the parent table.
 !>
 /**
  * <[
       first_line_description(
-        tableName=input.table_name,
-        engineName=input.engine_name,
-        engineVersion=input.engine_version),
+        tableName=table_name,
+        engineName=engine_name,
+        engineVersion=engine_version),
       second_line_description(
-        tableName=input.table_name,
-        engineName=input.engine_name,
-        engineVersion=input.engine_version),
+        tableName=table_name,
+        engineName=engine_name,
+        engineVersion=engine_version),
       third_line_description(
-        tableName=input.table_name,
-        engineName=input.engine_name,
-        engineVersion=input.engine_version)
+        tableName=table_name,
+        engineName=engine_name,
+        engineVersion=engine_version)
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
-public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><input.vo_name>DAO
-  extends     <input.tr_name_capitalized>JdbcTemplate
-  implements  <input.vo_name>DAO
-//              <input.tr_name_capitalized>TableRepository
+public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voName>DAO
+  extends     <repository.capitalized>JdbcTemplate
+  implements  <table.voName>DAO
+<!//              <repository.capitalized>TableRepository!>
 {
     /**
      * The SQL to find by primary key.
@@ -370,18 +365,18 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <if(parent)>
 <table.allParentAndNonParentAttributes:{ attr |
         +   "<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
-        + "FROM <input.table_name_uppercased>, <table.allParentTables:{ table | <table.nameUppercased>}; separator=", "> "
+        + "FROM <table.nameUppercased>, <table.allParentTables:{ table | <table.nameUppercased>}; separator=", "> "
         + "WHERE "
-<input.pk_attributes:{pk |
+<pk_attributes:{pk |
         +   "<attr.tableNameUppercased>.<pk.nameUppercased> = ? }; separator=" AND \"\n">"
         <find_by_pk_sql_join(table=table, parent=table.parentTable)>
         <table.allParentTables:{ table | <if(table.parentTable)><find_by_pk_sql_join(table=table, parent=table.parentTable)><endif>}>;
 <else>
-<input.attributes:{attr |
+<table.attributes:{attr |
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
-        + "FROM <input.table_name_uppercased> "
+        + "FROM <table.nameUppercased> "
         + "WHERE "
-<input.pk_attributes:{attr |
+<table.primaryKey:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <endif>
 
@@ -389,22 +384,22 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
      * The SQL to update.
      */
     public static final String _UPDATE_SQL =
-          "UPDATE <input.table_name_uppercased> "
+          "UPDATE <table.nameUppercased> "
         + "SET "
-<if(input.nonpk_non_readonly_attributes)>
-<input.nonpk_non_readonly_attributes:{attr|
+<if(table.nonPrimaryKeyNonReadOnlyAttributes)>
+<table.nonPrimaryKeyNonReadOnlyAttributes:{attr|
         +   "<attr.nameUppercased> = ?}; separator=", \"\n"> "
 <else>
-<input.pk_attributes:{attr|
+<table.primaryKey:{attr|
         +   "<attr.nameUppercased> = ?}; separator=", \"\n"> "
 <endif>
 
         + "WHERE "
-<if(input.pk_attributes)>
-<input.pk_attributes:{attr |
+<if(table.primaryKey)>
+<table.primaryKey:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <else>
-<input.attributes:{attr |
+<table.attributes:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <endif>
 
@@ -413,13 +408,13 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
       */
      public static final String _DELETE_SQL =
           "DELETE "
-        + "FROM <input.table_name_uppercased> "
+        + "FROM <table.nameUppercased> "
         + "WHERE "
-<if(input.pk_attributes)>
-<input.pk_attributes:{attr |
+<if(table.primaryKey)>
+<table.primaryKey:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <else>
-<input.attributes:{attr |
+<table.attributes:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <endif>
 
@@ -428,32 +423,32 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
        */
       public static final String _INSERT_SQL =
           "INSERT "
-        + "INTO <input.table_name_uppercased> "
+        + "INTO <table.nameUppercased> "
         + "( "
-<if(input.non_readonly_attributes)>
-<input.non_readonly_attributes:{attr|
+<if(table.nonReadOnlyAttributes)>
+<table.nonReadOnlyAttributes:{attr|
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
 <else>
-<input.attributes:{attr|
+<table.attributes:{attr|
         +   "<attr.nameUppercased>}; separator=", \"\n"> "
 <endif>
         + ") "
         + "VALUES "
         + "( "
-<if(input.non_readonly_attributes)>
-<input.non_readonly_attributes:{attr|
+<if(table.nonReadOnlyAttributes)>
+<table.nonReadOnlyAttributes:{attr|
         +   "?}; separator=", \"\n"> "
 <else>
-<input.attributes:{attr|
+<table.attributes:{attr|
         +   "?}; separator=", \"\n"> "
 <endif>
         + ")";
 
-    <input.foreign_keys:delete_by_fk_sql(foreignKey=it, input=input); separator="\n\n">
+    <table.foreignKeys:delete_by_fk_sql(foreignKey=it); separator="\n\n">
 
       // custom selects
 
-<input.custom_selects:{sql|
+<table.customSelects:{sql|
 <if(!sql.dynamic)>
 <if(sql.splittedQuotedValue)>
       /**
@@ -466,7 +461,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 }; separator="\n\n">
 
       // custom selects-for-update
-<input.custom_selects_for_update:{sql|
+<table.customSelectsForUpdate:{sql|
 <if(!sql.dynamic)>
       /**
        * The <sql.id> SQL.
@@ -475,7 +470,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
          <sql.splittedQuotedValue; separator=" +\n"><endif>;}; separator="\n\n">
                
       // custom updates or inserts
-<input.custom_updates_or_inserts:{sql|
+<table.customUpdatesOrInserts:{sql|
 <if(!sql.dynamic)>
 <if(sql.splittedQuotedValue)>
       /**
@@ -488,193 +483,185 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 }; separator="\n\n">
                
     /**
-     * Builds a \{@link <input.class_name>} instance
+     * Builds a {@link <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voName>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
-     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      */
-    public <input.class_name>(
+    public <engine_name><table.voName>DAO(
         <notnull()>final DataSource dataSource,
-        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
         super(dataSource, daoListener);
     }
 
-<if(input.static_table)>
-    <input.static_attribute:static_table(
+<if(table.static)>
+    <table.staticContent:static_table(
       attribute=it,
-      primaryKeyAttributes=input.pk_attributes,
-      voName=input.vo_name)>
+      primaryKeyAttributes=table.primaryKey,
+      voName=table.voName)>
 <endif>
 
     /**
-     * Retrieves \{@link <input.vo_name>} information
+     * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <if(table.voDecorated)>
-     * @return the \{@link <input.vo_name>Decorator} matching given
+     * @return the {@link <table.voName>Decorator} matching given
 <else>
-     * @return the \{@link <input.vo_name>} matching given
+     * @return the {@link <table.voName>} matching given
 <endif>
 
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    public <input.vo_name>Decorator findByPrimaryKey(
+    public <table.voName>Decorator findByPrimaryKey(
 <else>
-    public <input.vo_name> findByPrimaryKey(
+    public <table.voName> findByPrimaryKey(
 <endif>
 
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">)
     {
         return
             findByPrimaryKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 auditSql(_FIND_BY_PK_SQL),
                 getDataSource());
     }
 
     /**
-     * Retrieves {@link <input.vo_name>} information
+     * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param dataSource the {@link DataSource} instance.
 <if(table.voDecorated)>
-     * @return the {@link <input.vo_name>Decorator} matching given
+     * @return the {@link <table.voName>Decorator} matching given
 <else>
-     * @return the {@link <input.vo_name>} matching given
+     * @return the {@link <table.voName>} matching given
 <endif>
 
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    protected <input.vo_name>Decorator findByPrimaryKey(
+    protected <table.voName>Decorator findByPrimaryKey(
 <else>
-    protected <input.vo_name> findByPrimaryKey(
+    protected <table.voName> findByPrimaryKey(
 <endif>
 
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final DataSource dataSource)
     {
         return
             findByPrimaryKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new DataSourceTransactionManager(dataSource));
     }
 
     /**
-     * Retrieves {@link <input.vo_name>} information
+     * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
      * @param transactionManager the {@link PlatformTransactionManager}
      * instance.
 <if(table.voDecorated)>
-     * @return the {@link <input.vo_name>Decorator} matching given
+     * @return the {@link <table.voName>Decorator} matching given
 <else>
-     * @return the {@link <input.vo_name>} matching given
+     * @return the {@link <table.voName>} matching given
 <endif>
 
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
 <if(table.voDecorated)>
-    protected <input.vo_name>Decorator findByPrimaryKey(
+    protected <table.voName>Decorator findByPrimaryKey(
 <else>
-    protected <input.vo_name> findByPrimaryKey(
+    protected <table.voName> findByPrimaryKey(
 <endif>
 
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final PlatformTransactionManager transactionManager)
     {
-<if(table.voDecorated)>
-        <input.vo_name>Decorator result = null;
-<else>
-        <input.vo_name> result = null;
-<endif>
-
-
-        result =
+        return
             findByPrimaryKey(
-                <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new TransactionTemplate(transactionManager),
                 getDAOListener());
-
-        return result;
     }
 
     /**
-     * Retrieves {@link <input.vo_name>} information
+     * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query to find by primary key.
-     * @param transactionTemplate the \{@link TransactionTemplate}
+     * @param transactionTemplate the {@link TransactionTemplate}
      * instance.
-     * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
 <if(table.voDecorated)>
-     * @return the {@link <input.vo_class_name>Decorator} matching given
+     * @return the {@link <table.voName>Decorator} matching given
 <else>
-     * @return the {@link <input.vo_class_name>} matching given
+     * @return the {@link <table.voName>} matching given
 <endif>
 
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+    @SuppressWarnings("unchecked")
 <if(table.voDecorated)>
-    protected <input.vo_name>Decorator findByPrimaryKey(
+    protected <table.voName>Decorator findByPrimaryKey(
 <else>
-    protected <input.vo_name> findByPrimaryKey(
+    protected <table.voName> findByPrimaryKey(
 <endif>
 
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final TransactionTemplate transactionTemplate,
-        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <nullable()>final <repository.capitalized>DAOListener daoListener)
     {
         return
 <if(table.voDecorated)>
-            (<input.vo_name>Decorator)
+            (<table.voName>Decorator)
 <else>
-            (<input.vo_name>)
+            (<table.voName>)
 <endif>
 
                 transactionTemplate.execute(
                     new QueryTransactionCallback(
-                        new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                        new <repository.capitalized>QueryPreparedStatementCreator(
                             query, daoListener),
-                        new <input.vo_name>PkStatementSetter(
-                            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
-                        new <input.vo_name>ResultSetExtractor(daoListener),
+                        new <table.voName>PkStatementSetter(
+                            <pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                        new <table.voName>ResultSetExtractor(daoListener),
                         this));
     }
 
-<if(input.clobHandling)>
-    <indirect_template(name=input.clobHandling+"Insert", input=input)>
+<if(lob_handling_required)>
+    <indirect_template(name=lob_handling_required+"Insert")>
 <else>
-    <defaultInsert(input=input, table=table, parent=parent)>
+    <defaultInsert(table=table, parent=parent)>
 <endif>
 
-    <input.externally_managed_attributes:attribute_resultset_extractor_class(
+    <table.externallyManagedAttributes:attribute_resultset_extractor_class(
       table=table,
-      trNameCapitalized=input.tr_name_capitalized,
+      trNameCapitalized=repository.capitalized,
       nameCapitalized=it.nameCapitalized,
       getterMethod=it.getterMethod,
       objectType=it.objectType,
       isPrimitive=it.primitive)>
 
     /**
-     * Updates {@link <input.vo_name>} information.
+     * Updates {@link <table.voName>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @return the number of entities updated.
@@ -684,7 +671,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <else>
-        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">)
+        <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">)
 <endif>
 
     {
@@ -695,9 +682,9 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
                 auditSql(_UPDATE_SQL),
                 getDataSource(),
-                <input.tr_name_capitalized>DataAccessManager.getInstance());
+                <repository.capitalized>DataAccessManager.getInstance());
 <else>
-                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
                 auditSql(_UPDATE_SQL),
                 getDataSource());
 <endif>
@@ -705,17 +692,17 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Updates \{@link <input.vo_name>} information.
+     * Updates {@link <table.voName>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param dataSource the \{@link DataSource\{@link  instance.
+     * @param dataSource the {@link DataSource{@link  instance.
 <if(parent)>
-     * @param dataAccessManager the \<tt><input.tr_name_capitalized>DataAccessManager\</tt> instance.
+     * @param dataAccessManager the \<tt><repository.capitalized>DataAccessManager\</tt> instance.
 <endif>
 
      * @return the number of entities updated.
@@ -726,9 +713,9 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final DataSource dataSource,
-        <notnull()>final <input.tr_name_capitalized>DataAccessManager dataAccessManager)
+        <notnull()>final <repository.capitalized>DataAccessManager dataAccessManager)
 <else>
-        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final DataSource dataSource)
 <endif>
@@ -742,7 +729,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
                 new DataSourceTransactionManager(dataSource),
                 dataAccessManager.get<parent.voName>DAO());
 <else>
-                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
                 query,
                 new DataSourceTransactionManager(dataSource));
 <endif>
@@ -750,15 +737,15 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Updates \{@link <input.vo_name>} information.
+     * Updates {@link <table.voName>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param transactionManager the \{@link PlatformTransactionManager\{@link 
+     * @param transactionManager the {@link PlatformTransactionManager{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
@@ -774,7 +761,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         <notnull()>final PlatformTransactionManager transactionManager,
         <notnull()>final <parent.voName>DAO parentDAO)
 <else>
-        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final PlatformTransactionManager transactionManager)
 <endif>
@@ -787,7 +774,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <table.nonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 query,
@@ -802,21 +789,21 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Updates \{@link <input.vo_name>} information.
+     * Updates {@link <table.voName>} information.
 <if(parent)>
      <table.allParentAndNonParentNonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <else>
-     <input.non_readonly_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     <table.nonReadOnlyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param transactionManager the \{@link PlatformTransactionManager\{@link 
+     * @param transactionManager the {@link PlatformTransactionManager{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
 <endif>
 
-     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      * @return the number of entities updated.
      * @throws DataAccessException if the operation fails.
      */
@@ -824,7 +811,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 <if(parent)>
         <table.allParentAndNonParentNonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">,
 <else>
-        <input.non_readonly_attributes:attribute_declaration_impl(attr=it); separator=",\n">,
+        <<table.nonReadOnlyAttributes>:attribute_declaration_impl(attr=it); separator=",\n">,
 <endif>
 
         <notnull()>final String query,
@@ -833,7 +820,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         <notnull()>final <parent.voName>DAO parentDAO,
 <endif>
 
-        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
         int result = -10;
 
@@ -846,16 +833,16 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         Object t_Result =
             transactionTemplate.execute(
                 new UpdateTransactionCallback(
-                    new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                    new <repository.capitalized>QueryPreparedStatementCreator(
                         query, daoListener),
-                    new <input.vo_name>AttributesStatementSetter(
+                    new <table.voName>AttributesStatementSetter(
 <if(parent)>
                         <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                        <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                        <<table.nonReadOnlyAttributes>:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
-<if(input.clobHandling)>
+<if(clobHandling)>
                         true,
                         false,
                         false),
@@ -875,18 +862,18 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \{@link <input.vo_name>} information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.voName>} information.
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">)
     {
         deleteNoFk(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             auditSql(_DELETE_SQL),
 <if(parent)>
             getDataSource(),
-            <input.tr_name_capitalized>DataAccessManager.getInstance());
+            <repository.capitalized>DataAccessManager.getInstance());
 <else>
             getDataSource());
 <endif>
@@ -894,27 +881,27 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \{@link <input.vo_name>} information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.voName>} information.
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param dataSource the \{@link DataSource\{@link  instance.
+     * @param dataSource the {@link DataSource{@link  instance.
 <if(parent)>
-     * @param dataAccessManager the \<tt><input.tr_name_capitalized>DataAccessManager\</tt> instance.
+     * @param dataAccessManager the \<tt><repository.capitalized>DataAccessManager\</tt> instance.
 <endif>
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
 <if(parent)>
         <notnull()>final DataSource dataSource,
-        <notnull()>final <input.tr_name_capitalized>DataAccessManager dataAccessManager)
+        <notnull()>final <repository.capitalized>DataAccessManager dataAccessManager)
 <else>
         <notnull()>final DataSource dataSource)
 <endif>
 
     {
         deleteNoFk(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
 <if(parent)>
             new DataSourceTransactionManager(dataSource),
@@ -926,17 +913,17 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \{@link <input.vo_name>} information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.voName>} information.
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param transactionManager the \{@link PlatformTransactionManager\{@link 
+     * @param transactionManager the {@link PlatformTransactionManager{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
 <endif>
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
 <if(parent)>
         <notnull()>final PlatformTransactionManager transactionManager,
@@ -947,7 +934,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
     {
         deleteNoFk(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <pk_attributes:{<it.nameLowercased>}; separator=",\n">,
             query,
             new TransactionTemplate(transactionManager),
 <if(parent)>
@@ -958,33 +945,33 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \{@link <input.vo_name>} information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.voName>} information.
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param transactionTemplate the \{@link TransactionTemplate\{@link 
+     * @param transactionTemplate the {@link TransactionTemplate{@link 
      * instance.
 <if(parent)>
      * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
 <endif>
 
-     * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      */
     protected void deleteNoFk(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">,
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">,
         <notnull()>final String query,
         <notnull()>final TransactionTemplate transactionTemplate,
 <if(parent)>
         <notnull()>final <parent.voName>DAO parentDAO,
 <endif>
 
-        <nullable()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <nullable()>final <repository.capitalized>DAOListener daoListener)
     {
         transactionTemplate.execute(
             new UpdateTransactionCallback(
-                new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+                new <repository.capitalized>QueryPreparedStatementCreator(
                     query, daoListener),
-                new <input.vo_name>PkStatementSetter(
-                    <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">),
+                new <table.voName>PkStatementSetter(
+                    <pk_attributes:{<it.nameLowercased>}; separator=",\n">),
                 this));
 <if(parent)>
         parentDAO.delete(
@@ -994,54 +981,53 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     /**
-     * Deletes \{@link <input.vo_name>} information.
-     <input.pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+     * Deletes {@link <table.voName>} information.
+     <pk_attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
      */
     public void delete(
-        <input.pk_attributes:attribute_declaration(attr=it); separator=",\n">)
+        <pk_attributes:attribute_declaration(attr=it); separator=",\n">)
     {
-<if(input.fk_attributes)>
-        <input.fk_attributes:fk_dao_delete_call(
-          foreignKey=it, pkAttributes=input.pk_attributes);
+<if(fk_attributes)>
+        <fk_attributes:fk_dao_delete_call(
+          foreignKey=it, pkAttributes=pk_attributes);
           separator="\n\n">
 <endif>
 
         deleteNoFk(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+            <pk_attributes:{<it.nameLowercased>}; separator=",\n">);
     }
-    <input.foreign_keys:fk_delete_method(
-      foreignKey=it, input=input); separator="\n">
+    <foreign_keys:fk_delete_method(
+      foreignKey=it); separator="\n">
 
-    <input.custom_selects:custom_select(
-      cs=it, table=input.table, input=input); separator="\n">
+    <custom_selects:custom_select(
+      cs=it, table=table); separator="\n">
 
-    <input.custom_updates_or_inserts:custom_update_or_insert(
-      cs=it,
-      input=input); separator="\n">
+    <custom_updates_or_inserts:custom_update_or_insert(
+      cs=it); separator="\n">
 
     /**
-     * Extracts \<i><input.vo_name>\</i> value objects from result sets.
+     * Extracts \<i><table.voName>\</i> value objects from result sets.
      * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
      */
-    public static class <input.vo_name>PkResultSetExtractor
-        extends  <input.tr_name_capitalized>ResultSetExtractor
+    public static class <table.voName>PkResultSetExtractor
+        extends  <repository.capitalized>ResultSetExtractor
     {
         /**
-         * Constructs a new {@link <input.vo_name>ResultSetExtractor}.
+         * Constructs a new {@link <table.voName>ResultSetExtractor}.
          * @param daoListener the dao listener.
          */
-        public <input.vo_name>PkResultSetExtractor(
-            <nullable()>final <input.tr_name_capitalized>DAOListener daoListener)
+        public <table.voName>PkResultSetExtractor(
+            <nullable()>final <repository.capitalized>DAOListener daoListener)
         {
             super(daoListener);
         }
 
         // \<extract data>
         /**
-         * Extracts \<i><input.vo_name>\</i> information from given result set.
+         * Extracts \<i><table.voName>\</i> information from given result set.
          * @param resultSet the result set.
-         * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
-         * @return the \{@link <input.vo_name>} or \{@link null}
+         * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+         * @return the {@link <table.voName>} or {@link null}
          * if the operation returned no data.
          * @throws SQLException intercepted by \<i>Spring\</i>.
          * @throws DataAccessException with information about any
@@ -1050,7 +1036,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
         <notnull()>
         protected Object extractData(
             <notnull()>final ResultSet resultSet,
-            <nullable()>final <input.tr_name_capitalized>DAOListener daoListener)
+            <nullable()>final <repository.capitalized>DAOListener daoListener)
         throws  SQLException,
                 DataAccessException
         {
@@ -1065,7 +1051,7 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
                 int index = 1;
 
-                <input.pk_attributes:pk_resultset_extractor_parameter_retrieval(
+                <pk_attributes:pk_resultset_extractor_parameter_retrieval(
                   name=it.nameLowercased,
                   getterMethod=it.getterMethod,
                   objectType=it.objectType,
@@ -1084,8 +1070,8 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
     /**
      * Executes the update method on JdbcTemplate class.
-     * @param creator the \{@link PreparedStatementCreator} instance.
-     * @param setter the \{@link PreparedStatementSetter} instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
      */
     public int update(
         final PreparedStatementCreator creator,
@@ -1096,9 +1082,9 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
 
     /**
      * Executes the query method on JdbcTemplate class.
-     * @param creator the \{@link PreparedStatementCreator} instance.
-     * @param setter the \{@link PreparedStatementSetter} instance.
-     * @param extractor the \{@link ResultSetExtractor} instance.
+     * @param creator the {@link PreparedStatementCreator} instance.
+     * @param setter the {@link PreparedStatementSetter} instance.
+     * @param extractor the {@link ResultSetExtractor} instance.
      */
     public Object query(
         final PreparedStatementCreator creator,
@@ -1109,9 +1095,9 @@ public <if(input.dynamic_queries)>abstract <endif>class <input.engine_name><inpu
     }
 
     <inner_transaction_callbacks(
-      daoName=input.engine_name+input.vo_name,
-      voName=input.vo_name,
-      clobHandling=input.clobHandling)>
+      daoName=engine_name+table.voName,
+      voName=table.voName,
+      clobHandling=clobHandling)>
 }
 >>
 
@@ -1125,12 +1111,13 @@ pk_resultset_extractor_parameter_retrieval(
   @param isPrimitive whether the attribute is modelled as an instance or as
   a primitive type.
 !>
+index = index + 1;
 result.put(
     "<name>",
 <if(isPrimitive)>
-    new <objectType>(resultSet.<getterMethod>(index++)));
+    new <objectType>(resultSet.<getterMethod>(index)));
 <else>
-    resultSet.<getterMethod>(index++));
+    resultSet.<getterMethod>(index));
 <endif>
 >>
 
@@ -1144,12 +1131,13 @@ resultset_extractor_parameter_retrieval(
   @param isPrimitive whether the attribute is modelled as an instance or as
   a primitive type.
 !>
+index = index + 1;
 result.put(
     fieldName,
 <if(isPrimitive)>
-    new <objectType>(resultSet.<getterMethod>(index++)));
+    new <objectType>(resultSet.<getterMethod>(index)));
 <else>
-    resultSet.<getterMethod>(index++));
+    resultSet.<getterMethod>(index));
 <endif>
 >>
 
@@ -1166,26 +1154,21 @@ static_table(
  * filtering by <attribute.name>.
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
- * @return the \<code\><voName>\</code\> instance.
+ * @return the {@link <voName>} instance.
  */
 <nullable()>
 public <voName> findConstantBy<attribute.nameCapitalized>(
-    final <attribute.javaType> <attribute.name>)
+    <notnull()>final <attribute.type> <attribute.name>)
 {
-    <voName> result = null;
+    <nullable()><voName> result = null;
 
-    int t_iLength =
-        (FIXED_CONSTANTS != null) ? FIXED_CONSTANTS.length : 0;
-
-    for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+    for  (<nullable()><voName> item : FIXED_CONSTANTS)
     {
-        <voName> t_CurrentItem = FIXED_CONSTANTS[t_iIndex];
-
-        if  (   (t_CurrentItem != null)
-             && (<attribute.nameLowercased>.equals(
-                    t_CurrentItem.get<attribute.nameCapitalized>())))
+        if  (   (item != null)
+             && (item.get<attribute.nameCapitalized>().equals(
+                    <attribute.nameLowercased>)))
         {
-            result = t_CurrentItem;
+            result = item;
             break;
         }
     }
@@ -1197,32 +1180,28 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
  <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the \{@link <voName>} instance.
+ * @return the {@link <voName>} instance.
  */
+<nullable()>
 public <voName> findConstantByPk(
   <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
 {
-    <voName> result = null;
+    <nullable()><voName> result = null;
 
-    int t_iLength =
-        (FIXED_CONSTANTS != null) ? FIXED_CONSTANTS.length : 0;
+    boolean found = false;
 
-    boolean t_bFound = false;
-
-    for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+    for (<nullable()><voName> item : FIXED_CONSTANTS)
     {
-        <voName> t_CurrentItem = FIXED_CONSTANTS[t_iIndex];
-
-        if  (t_CurrentItem != null)
+        if  (item != null)
         {
-            t_bFound = true;
+            found = true;
 
             <primaryKeyAttributes:static_attribute_check(attr=it);
               separator="\n">
 
-            if  (t_bFound)
+            if  (found)
             {
-                result = t_CurrentItem;
+                result = item;
                 break;
             }
         }
@@ -1251,9 +1230,9 @@ static_primitive_attribute_check(attr) ::= <<
  Generates the code to perform the static check on given primitive attribute.
  @param attr the attribute
 !>
-t_bFound =
-    (   (t_bFound)
-     && (t_CurrentItem.get<attr.nameCapitalized>() == <attr.nameLowercased>));
+found =
+    (   (found)
+     && (item.get<attr.nameCapitalized>() == <attr.nameLowercased>));
 >>
 
 static_object_attribute_check(attr) ::= <<
@@ -1261,18 +1240,18 @@ static_object_attribute_check(attr) ::= <<
  Generates the code to perform the static check on given primitive attribute.
  @param attr the attribute
 !>
-if  (t_bFound)
+if  (found)
 {
     Object t_<attr.nameCapitalized> =
         t_CurrentItem.get<attr.nameCapitalized>();
 
     if  (t_<attr.nameCapitalized> == null)
     {
-        t_bFound = (<attr.name> == null);
+        found = (<attr.name> == null);
     }
     else
     {
-        t_bFound = t_<attr.nameCapitalized>.equals(<attr.name>);
+        found = t_<attr.nameCapitalized>.equals(<attr.name>);
     }
 }
 >>
@@ -1340,35 +1319,34 @@ dao_declaration(name,uncapitalizedName) ::= <<
 final <name>DAO <uncapitalizedName>DAO
 >>
 
-fk_delete_query(foreignKey, input) ::= <<
+fk_delete_query(foreignKey) ::= <<
 <!
  Defines the SQL to delete referred entities.
  @param foreignKey the foreign key.
- @param input the input.
 !>
 /**
  * The SQL to delete <foreignKey>-associated entities.
  */
 public static final String _DELETE_BY_<foreignKey.nameUppercased>_SQL =
       "DELETE "
-    + "FROM <input.table_name_uppercased> "
+    + "FROM <table.nameUppercased> "
     + "WHERE "
 <foreignKey:{attr|
     +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 
 >>
 
-fk_delete_method(foreignKey,input) ::= <<
+fk_delete_method(foreignKey) ::= <<
 <!
   Writes the deleteByXX method for a concrete foreign key.
-  @param input.table_name the table name.
+  @param table_name the table name.
   @param foreignKey the foreign key.
 !>
 /**
- * Deletes <input.table_name> information from the persistence layer filtering
+ * Deletes <table_name> information from the persistence layer filtering
  * by given foreign keys.
  * \<br/>\<b>This method is not implemented yet\</b>.
- <input.foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
 public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
     <foreignKey:attribute_declaration(attr=it); separator=",\n">)
@@ -1378,27 +1356,25 @@ public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
 }
 >>
 
-defaultInsert(input, table, parent) ::= <<
+defaultInsert(table, parent) ::= <<
 <!
  Generates the default insert logic.
- @param input the input.
  @param table the table.
  @param parent the parent.
 !>
-<jdbcInsert(input=input, table=table, parent=parent)>
+<jdbcInsert(table=table, parent=parent)>
 >>
 
-jdbcInsert(input, table, parent) ::= <<
+jdbcInsert(table, parent) ::= <<
 <!
  Generates the JDBC insert logic.
- @param input the input.
  !>
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <table.allButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1408,7 +1384,7 @@ public void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1417,7 +1393,7 @@ public void insert(
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+        <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
         _INSERT_SQL,
@@ -1425,23 +1401,23 @@ public void insert(
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_but_externally_managed_attributes:attribute_javadoc(
+ <table.allButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param query the query to insert the values.
- * @param dataSource the \{@link DataSource} instance.
+ * @param dataSource the {@link DataSource} instance.
  * @throws DataAccessException if the operation fails.
  */
 protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadonlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1452,31 +1428,31 @@ protected void insert(
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+        <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
         query,
 <if(parent)>
-        <input.tr_name_capitalized>DataAccessManager.getInstance(),
+        <repository.capitalized>DataAccessManager.getInstance(),
 <endif>
         new DataSourceTransactionManager(dataSource));
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param query the query to insert the values.
 <if(parent)>
- * @param dataAccessManager the \<tt\><input.tr_name_capitalized>DataAccessManager\</tt\> instance.
+ * @param dataAccessManager the \<tt\><repository.capitalized>DataAccessManager\</tt\> instance.
 <endif>
 
- * @param transactionManager the \{@link PlatformTransactionManager}
+ * @param transactionManager the {@link PlatformTransactionManager}
  * instance.
  * @throws DataAccessException if the operation fails.
  */
@@ -1484,13 +1460,13 @@ protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
     <notnull()>final String query,
 <if(parent)>
-    <notnull()>final <input.tr_name_capitalized>DataAccessManager dataAccessManager,
+    <notnull()>final <repository.capitalized>DataAccessManager dataAccessManager,
 <endif>
 
     <notnull()>final PlatformTransactionManager transactionManager)
@@ -1499,7 +1475,7 @@ protected void insert(
 <if(parent)>
         <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-        <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+        <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
         query,
@@ -1512,29 +1488,29 @@ protected void insert(
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param query the query to insert the values.
- * @param transactionTemplate the \{@link TransactionTemplate}
+ * @param transactionTemplate the {@link TransactionTemplate}
  * instance.
 <if(parent)>
  * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
 <endif>
 
- * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @throws DataAccessException if the operation fails.
  */
 protected void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1544,7 +1520,7 @@ protected void insert(
     <notnull()>final <parent.voName>DAO <parent.nameLowercased>DAO,
 <endif>
 
-    <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
 {
 <if(parent)>
     <parent.voName> <parent.nameLowercased> =
@@ -1557,7 +1533,7 @@ protected void insert(
 <else>
     Map t_mMap = null;
 
-    <input.externally_managed_attributes:em_attribute_value_retrieval(
+    <table.externallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
@@ -1568,13 +1544,13 @@ protected void insert(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>QueryPreparedStatementCreator(
                 query, daoListener),
-            new <input.vo_name>AttributesStatementSetter(
+            new <table.voName>AttributesStatementSetter(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <<table.nonReadOnlyAttributes>:{<it.nameLowercased>}; separator=",\n">,
 <endif>
                 false,
                 true),
@@ -1583,26 +1559,26 @@ protected void insert(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \{@link <input.vo_name>} instance.
+ * {@link <table.voName>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-public <input.vo_name>Decorator create(
+public <table.voName>Decorator create(
 <else>
-public <input.vo_name> create(
+public <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1612,58 +1588,58 @@ public <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
             _INSERT_SQL,
             getDataSource(),
-            <input.vo_name>ValueObjectFactory.getInstance());
+            <table.voName>ValueObjectFactory.getInstance());
 }
 
 /**
  * Inserts and retrieves the newly-inserted
- * \{@link <input.vo_name>} instance.
+ * {@link <table.voName>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param query the query required to insert given information.
  * @param dataSource the data source.
- * @param factory the \{@link <input.vo_name>ValueObjectFactory}
+ * @param factory the {@link <table.voName>ValueObjectFactory}
  * instance.
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-protected <input.vo_name>Decorator create(
+protected <table.voName>Decorator create(
 <else>
-protected <input.vo_name> create(
+protected <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
     <notnull()>final String query,
     <notnull()>final DataSource dataSource,
-    <notnull()>final <input.vo_name>ValueObjectFactory factory)
+    <notnull()>final <table.voName>ValueObjectFactory factory)
 {
     return
         create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
             query,
             new DataSourceTransactionManager(dataSource),
 <if(parent)>
-            <input.tr_name_capitalized>DataAccessManager.getInstance(),
+            <repository.capitalized>DataAccessManager.getInstance(),
 <endif>
 
             factory);
@@ -1671,45 +1647,45 @@ protected <input.vo_name> create(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \{@link <input.vo_name>} instance.
+ * {@link <table.voName>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param query the query required to insert given information.
- * @param transactionManager the \{@link PlatformTransactionManager}
+ * @param transactionManager the {@link PlatformTransactionManager}
  * instance.
 <if(parent)>
- * @param dataAccessManager the \<tt\><input.tr_name_capitalized>DataAccessManager\</tt\> instance.
+ * @param dataAccessManager the \<tt\><repository.capitalized>DataAccessManager\</tt\> instance.
 <endif>
 
- * @param factory the \{@link <input.vo_name>ValueObjectFactory}
+ * @param factory the {@link <table.voName>ValueObjectFactory}
  * instance.
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-protected <input.vo_name>Decorator create(
+protected <table.voName>Decorator create(
 <else>
-protected <input.vo_name> create(
+protected <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
     <notnull()>final String query,
     <notnull()>final PlatformTransactionManager transactionManager,
 <if(parent)>
-    <notnull()>final <input.tr_name_capitalized>DataAccessManager dataAccessManager,
-    <notnull()>final <input.vo_name>ValueObjectFactory factory)
+    <notnull()>final <repository.capitalized>DataAccessManager dataAccessManager,
+    <notnull()>final <table.voName>ValueObjectFactory factory)
 <else>
-    <notnull()>final <input.vo_name>ValueObjectFactory factory)
+    <notnull()>final <table.voName>ValueObjectFactory factory)
 <endif>
 
 {
@@ -1718,7 +1694,7 @@ protected <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.all_non_readonly_but_externally_managed_attributes:{<it.nameLowercased>}; separator=",\n">,
+            <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
             query,
@@ -1733,51 +1709,51 @@ protected <input.vo_name> create(
 
 /**
  * Inserts and retrieves the newly-inserted
- * \{@link <input.vo_name>} instance.
+ * {@link <table.voName>} instance.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param query the query required to insert given information.
- * @param transactionTemplate the \{@link TransactionTemplate\{@link 
+ * @param transactionTemplate the {@link TransactionTemplate{@link 
  * instance.
- * @param factory the \{@link <input.vo_name>ValueObjectFactory}
+ * @param factory the {@link <table.voName>ValueObjectFactory}
  * instance.
 <if(parent)>
  * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
 <endif>
 
- * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-protected <input.vo_name>Decorator create(
+protected <table.voName>Decorator create(
 <else>
-protected <input.vo_name> create(
+protected <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(attr=it); separator=",\n">,
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">,
 <endif>
 
     <notnull()>final String query,
     <notnull()>final TransactionTemplate transactionTemplate,
-    <notnull()>final <input.vo_name>ValueObjectFactory factory,
+    <notnull()>final <table.voName>ValueObjectFactory factory,
 <if(parent)>
     <notnull()>final <parent.voName>DAO <parent.nameLowercased>DAO,
 <endif>
 
-    <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
 {
 <if(table.voDecorated)>
-    <input.vo_name>Decorator result = null;
+    <table.voName>Decorator result = null;
 <else>
-    <input.vo_name> result = null;
+    <table.voName> result = null;
 <endif>
 
 <if(parent)>
@@ -1791,7 +1767,7 @@ protected <input.vo_name> create(
 <else>
     Map t_mMap = null;
 
-    <input.externally_managed_attributes:em_attribute_value_retrieval(
+    <table.externallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
@@ -1803,13 +1779,13 @@ protected <input.vo_name> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>QueryPreparedStatementCreator(
                 query, daoListener),
-            new <input.vo_name>AttributesStatementSetter(
+            new <table.voName>AttributesStatementSetter(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">,
 <else>
-                <input.non_readonly_attributes:{<it.nameLowercased>}; separator=",\n">,
+                <<table.nonReadOnlyAttributes>:{<it.nameLowercased>}; separator=",\n">,
 <endif>
 
                 false,
@@ -1819,9 +1795,9 @@ protected <input.vo_name> create(
     result =
 <if(table.allParentAndNonParentReadOnlyAttributes)>
         findByPrimaryKey(
-            <input.pk_attributes:{<it.nameLowercased>}; separator=",\n">);
+            <pk_attributes:{<it.nameLowercased>}; separator=",\n">);
 <else>
-        factory.create<input.vo_name>(
+        factory.create<table.voName>(
             <table.allParentAndNonParentAttributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
@@ -1830,25 +1806,23 @@ protected <input.vo_name> create(
 }
 >>
 
-oracleInsert(input) ::= <<
+oracleInsert() ::= <<
 <!
   Generates the insert logic for Oracle.
-  @param input the input.
 !>
-<oracle8Insert(input=input)>
+<oracle8Insert()>
 >>
 
-oracle8Insert(input) ::= <<
+oracle8Insert() ::= <<
 <!
   Generates the insert logic for Oracle8.
-  @param input the input.
 !>
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
  * @throws DataAccessException if the operation fails.
@@ -1857,7 +1831,7 @@ public void insert(
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1872,11 +1846,11 @@ public void insert(
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1884,15 +1858,15 @@ public void insert(
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-public <input.vo_name>Decorator create(
+public <table.voName>Decorator create(
 <else>
-public <input.vo_name> create(
+public <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
 <endif>
 
@@ -1902,18 +1876,18 @@ public <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <<table.nonReadOnlyAttributes>:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             getDataSource());
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1922,15 +1896,15 @@ public <input.vo_name> create(
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-protected <input.vo_name>Decorator create(
+protected <table.voName>Decorator create(
 <else>
-protected <input.vo_name> create(
+protected <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
@@ -1941,18 +1915,18 @@ protected <input.vo_name> create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <<table.nonReadOnlyAttributes>:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             new DataSourceTransactionManager(dataSource));
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1961,31 +1935,31 @@ protected <input.vo_name> create(
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-protected <input.vo_name>Decorator create(
+protected <table.voName>Decorator create(
 <else>
-protected <input.vo_name> create(
+protected <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
     <notnull()>final PlatformTransactionManager transactionManager)
 {
 <if(table.voDecorated)>
-    <input.vo_name>Decorator result =
+    <table.voName>Decorator result =
 <else>
-    <input.vo_name> result =
+    <table.voName> result =
 <endif>
 
         create(
 <if(parent)>
             <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
-            <input.non_readonly_attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
+            <<table.nonReadOnlyAttributes>:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
 
             new TransactionTemplate(transactionManager),
@@ -1995,44 +1969,44 @@ protected <input.vo_name> create(
 }
 
 /**
- * Persists \{@link <input.vo_name>} information.
+ * Persists {@link <table.voName>} information.
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <input.all_non_readonly_but_externally_managed_attributes:attribute_javadoc(
+ <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
  * @param transactionTemplate the transaction template.
- * @param daoListener the \{@link <input.tr_name_capitalized>DAOListener} instance.
+ * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
 <if(table.voDecorated)>
-protected <input.vo_name>Decorator create(
+protected <table.voName>Decorator create(
 <else>
-protected <input.vo_name> create(
+protected <table.voName> create(
 <endif>
 
 <if(parent)>
     <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
-    <input.all_non_readonly_but_externally_managed_attributes:attribute_declaration(
+    <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
 <endif>
 
     final TransactionTemplate transactionTemplate,
-    final <input.tr_name_capitalized>DAOListener daoListener)
+    final <repository.capitalized>DAOListener daoListener)
 {
 <if(table.voDecorated)>
-    <input.vo_name>Decorator result = null;
+    <table.voName>Decorator result = null;
 <else>
-    <input.vo_name> result = null;
+    <table.voName> result = null;
 <endif>
 
     Map t_mMap = null;
 
-    <input.externally_managed_attributes:em_attribute_value_retrieval(
+    <table.externallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
@@ -2042,14 +2016,14 @@ protected <input.vo_name> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
-                "insert into <input.table_name_uppercased>" +
+            new <repository.capitalized>QueryPreparedStatementCreator(
+                "insert into <table.nameUppercased>" +
                 " (" +
 <if(parent)>
                 <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n"> " +
 <else>
-                <input.non_readonly_attributes:{"<it.nameUppercased>};
+                <<table.nonReadOnlyAttributes>:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <endif>
 
@@ -2058,17 +2032,17 @@ protected <input.vo_name> create(
                 <table.allParentAndNonParentNonReadOnlyAttributes:insert_attribute(attr=it);
                   separator=", \" +\n">",
 <else>
-                <input.non_readonly_attributes:insert_attribute(attr=it);
+                <<table.nonReadOnlyAttributes>:insert_attribute(attr=it);
                   separator=",\" +\n">)",
 <endif>
 
                 daoListener),
-            new <input.vo_name>AttributesStatementSetter(
+            new <table.voName>AttributesStatementSetter(
 <if(parent)>
                 <table.allParentAndNonParentNonReadOnlyAttributes:{<it.nameLowercased>};
                   separator=",\n">,
 <else>
-                <input.non_readonly_attributes:{<it.nameLowercased>};
+                <<table.nonReadOnlyAttributes>:{<it.nameLowercased>};
                   separator=",\n">,
 <endif>
                 false,
@@ -2078,36 +2052,36 @@ protected <input.vo_name> create(
 
     SelectForUpdateTransactionCallback t_Callback =
         new SelectForUpdateTransactionCallback(
-            new <input.tr_name_capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>QueryPreparedStatementCreator(
                 "SELECT " +
 <if(parent)>
                 <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <else>
-                <input.non_readonly_attributes:{"<it.nameUppercased>};
+                <<table.nonReadOnlyAttributes>:{"<it.nameUppercased>};
                   separator=", \" +\n">" +
 <endif>
 
-                " FROM <input.table_name_uppercased>" +
+                " FROM <table.nameUppercased>" +
                 " WHERE " +
-                <input.pk_attributes:{"<it.nameUppercased> = ?};
+                <pk_attributes:{"<it.nameUppercased> = ?};
                   separator=" AND \" +\n">" +
                 " FOR UPDATE",
                 daoListener),
-            new <input.vo_name>PkStatementSetter(
-                <input.pk_attributes:{<it.nameLowercased>};
+            new <table.voName>PkStatementSetter(
+                <pk_attributes:{<it.nameLowercased>};
                   separator=",\n">),
-            new <input.vo_name>ResultSetExtractor(
-                <input.lob_attributes:{<it.nameLowercased>};
+            new <table.voName>ResultSetExtractor(
+                <lob_attributes:{<it.nameLowercased>};
                   separator=",\n">,
                 true,
                 daoListener),
             this);
 
 <if(table.voDecorated)>
-    result = (<input.vo_name>Decorator) transactionTemplate.execute(t_Callback);
+    result = (<table.voName>Decorator) transactionTemplate.execute(t_Callback);
 <else>
-    result = (<input.vo_name>) transactionTemplate.execute(t_Callback);
+    result = (<table.voName>) transactionTemplate.execute(t_Callback);
 <endif>
 
     //result = t_Callback.getResult();
@@ -2128,17 +2102,16 @@ insert_attribute(attr) ::= <<
 <endif>
 >>
 
-delete_by_fk_sql(foreignKey, input) ::= <<
+delete_by_fk_sql(foreignKey) ::= <<
 <!
  Generates the constant with the SQL to delete by given fk.
  @param foreignKey the foreign key.
- @param input the input.
 !>
  /**
   * The SQL to delete by <foreignKey>.
   */
 //public static final String DELETE_BY_<foreignKey>_SQL =
-//    "DELETE FROM <input.table_name_uppercased> "
+//    "DELETE FROM <table.nameUppercased> "
 //    + "WHERE "
 //<foreignKey:{attr|
 //    + "<attr.nameUppercased> = ? "}; separator="\n    + \" AND \"">;
@@ -2180,21 +2153,29 @@ attribute_resultset_extractor_class(
  @param isPrimitive whether it's primitive.
 !>
 /**
- * Extracts \<i><input.vo_name>\</i> value objects from result sets.
- * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
+ * <[
+      first_line_description(
+        className=dao_implementation_class_name,
+        engineName=engine_name),
+      second_line_description(
+        className=dao_implementation_class_name,
+        engineName=engine_name)
+    ]:{ line |<line>}; separator="\n * ">
+<class_common_javadoc()>
+ * Extracts \<i><table.voName>\</i> value objects from result sets.
  */
 public static class <nameCapitalized><table.voName>ResultSetExtractor
     extends  <trNameCapitalized>ResultSetExtractor
 {
-    private String m__strFieldName;
+    private String fieldName;
 
     /**
-     * Constructs a new \{@link <nameCapitalized><table.voName>ResultSetExtractor}.
+     * Constructs a new {@link <nameCapitalized><table.voName>ResultSetExtractor}.
      * @param daoListener the dao listener.
      */
     public <nameCapitalized><table.voName>ResultSetExtractor(
-        final String fieldName,
-        final <trNameCapitalized>DAOListener daoListener)
+        <notnull()>final String fieldName,
+        <nullable()>final <trNameCapitalized>DAOListener daoListener)
     {
         super(daoListener);
         immutableSetFieldName(fieldName);
@@ -2204,16 +2185,16 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * Specifies the field name.
      * @param fieldName the field name.
      */
-    protected final void immutableSetFieldName(final String fieldName)
+    protected final void immutableSetFieldName(<notnull()>final String fieldName)
     {
-        m__strFieldName = fieldName;
+        this.fieldName = fieldName;
     }
 
     /**
      * Specifies the field name.
      * @param fieldName the field name.
      */
-    protected void setFieldName(final String fieldName)
+    protected void setFieldName(<notnull()>final String fieldName)
     {
         immutableSetFieldName(fieldName);
     }
@@ -2222,6 +2203,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * Retrieves the field name.
      * @return such information.
      */
+    <notnull()>
     public String getFieldName()
     {
         return m__strFieldName;
@@ -2229,10 +2211,10 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
 
     // \<extract data>
     /**
-     * Extracts \<i><table.voName>.<nameCapitalized>\</i> information from given result set.
+     * Extracts \<i><table.voName>\</i> information from given result set.
      * @param resultSet the result set.
-     * @param daoListener the \{@link <trNameCapitalized>DAOListener} instance.
-     * @return the \{@link <table.voName>} or \{@link null}
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+     * @return the {@link <table.voName>} or \<code>null\</code>
      * if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      * @throws DataAccessException with information about any
@@ -2256,8 +2238,8 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * Extracts \<i><table.voName>\</i> information from given result set.
      * @param resultSet the result set.
      * @param fieldName the field name.
-     * @param daoListener the \{@link <trNameCapitalized>DAOListener} instance.
-     * @return the \{@link <table.voName>} or \{@link null}
+     * @param daoListener the {@link <trNameCapitalized>DAOListener} instance.
+     * @return the {@link <table.voName>} or \<code>null\</code>
      * if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      * @throws DataAccessException with information about any
@@ -2270,7 +2252,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
     throws  SQLException,
             DataAccessException
     {
-        final Map result = new HashMap();
+        <notnull()>final Map result = new HashMap();
 
         if  (resultSet.next())
         {
