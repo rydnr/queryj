@@ -37,8 +37,6 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.dao.handlers.DAOChooserTemplateBuildHandler;
-import org.acmsl.queryj.templates.dao.handlers.DAOChooserTemplateWritingHandler;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
 /**
@@ -50,11 +48,7 @@ public class DAOChooserTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
-     * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
+     * Builds a bundle composed of {@link DAOChooserTemplateBuildHandler} and {@link DAOChooserTemplateWritingHandler}.
      */
     public DAOChooserTemplateHandlerBundle()
     {

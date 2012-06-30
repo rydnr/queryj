@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,6 +36,7 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.queryj.templates.BasePerTableTemplate;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 
 /*
@@ -56,7 +56,7 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOFactoryTemplate
-     extends AbstractDAOFactoryTemplate<BasePerTableTemplateContext>
+     extends BasePerTableTemplate<BasePerTableTemplateContext>
 {
     private static final long serialVersionUID = -836140578744901008L;
 
@@ -67,6 +67,30 @@ public class DAOFactoryTemplate
     public DAOFactoryTemplate(@NotNull final BasePerTableTemplateContext context)
     {
         super(context);
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @return such header.
+     */
+    @NotNull
+    @Override
+    protected String buildHeader()
+    {
+        return buildHeader(getTemplateContext());
+    }
+
+    /**
+     * Builds the header for logging purposes.
+     * @param context the {@link org.acmsl.queryj.templates.BasePerTableTemplateContext context}.
+     * @return such header.
+     */
+    @NotNull
+    protected String buildHeader(@NotNull final BasePerTableTemplateContext context)
+    {
+        return
+            "Generating DAOFactory for "
+            + context.getTableName() + ".";
     }
 
     /**
@@ -90,6 +114,4 @@ public class DAOFactoryTemplate
     {
         return "DAOFactory";
     }
-
-
 }

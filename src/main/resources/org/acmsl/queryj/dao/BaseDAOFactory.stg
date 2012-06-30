@@ -107,12 +107,6 @@ project_imports(daoPackage, voName, daoChooserPackage, repository) ::= <<
   @param daoChooserPackage the DAOChooser package.
   @param repository the repository, capitalized.
 !>
-/*
- * Importing some project classes.
- */
-import <daoPackage:{<it>}; separator=".">.<voName>DAO;
-import <daoChooserPackage:{<it>}; separator=".">.<repository>DAOChooser;
-
 <checkers_import()>
 /*
  * Importing some JDK classes.

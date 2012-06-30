@@ -35,6 +35,10 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.templates.dao.DAOFactoryTemplateGenerator;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.dao.BaseDAOFactoryTemplate;
@@ -64,6 +68,34 @@ public class BaseDAOFactoryTemplateBuildHandler
      * Creates a <code>BaseDAOFactoryTemplateBuildHandler</code> instance.
      */
     public BaseDAOFactoryTemplateBuildHandler() {}
+
+    protected void buildTemplate(
+        @NotNull final Map parameters,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final BaseDAOFactoryTemplateGenerator templateFactory,
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final String header,
+        final boolean implementMarkerInterfaces,
+        final boolean jmx,
+        @NotNull final String jndiLocation,
+        @NotNull final List<Table> tables)
+        throws QueryJBuildException
+    {
+        super.buildTemplate(
+            parameters,
+            metadataManager,
+            customSqlProvider,
+            templateFactory,
+            projectPackage,
+            repository,
+            header,
+            implementMarkerInterfaces,
+            jmx,
+            jndiLocation,
+            tables);
+    }
 
     /**
      * {@inheritDoc}
