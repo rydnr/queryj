@@ -30,7 +30,7 @@
  * Description: Is able to generate the DAO repository interface.
  *
  */
-package org.acmsl.queryj.templates;
+package org.acmsl.queryj.templates.dao;
 
 /*
  * Importing some project-specific classes.
@@ -47,6 +47,11 @@ import org.acmsl.commons.patterns.Singleton;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplate;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -59,9 +64,9 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOFactoryTemplateGenerator
-    extends     AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<BaseRepositoryDAOFactoryTemplate>,
+    extends AbstractTemplateGenerator<BaseRepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
+    implements BasePerRepositoryTemplateGenerator<BaseRepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>,
+               BasePerRepositoryTemplateFactory<BaseRepositoryDAOFactoryTemplate>,
                 Singleton
 {
     /**

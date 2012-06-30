@@ -1909,6 +1909,39 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the package name for JndiUtils templates.
+     * @param packageName the original package.
+     * @return the package for the associated class.
+     */
+    @NotNull
+    public String retrieveJndiUtilsPackage(
+        @NotNull final String packageName)
+    {
+        return retrieveRdbPackage(packageName);
+    }
+
+    /**
+     * Retrieves the folder for JndiUtils templates.
+     * @param parentFolder the parent folder.
+     * @param packageName the original package.
+     * @param useSubFolders whether to use sub folders.
+     * @return the folder in which the associated class should be
+     * generated.
+     */
+    @NotNull
+    public File retrieveJndiUtilsFolder(
+        @NotNull final File parentFolder,
+        @NotNull final String packageName,
+        final boolean useSubFolders)
+    {
+        return
+            retrieveRdbFolder(
+                parentFolder,
+                packageName,
+                useSubFolders);
+    }
+
+    /**
      * Retrieves the package name for DAOListener templates.
      * @param packageName the original package.
      * @param engineName the engine.

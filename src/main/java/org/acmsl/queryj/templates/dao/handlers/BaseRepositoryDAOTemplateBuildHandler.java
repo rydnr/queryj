@@ -36,8 +36,8 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BaseRepositoryDAOTemplate;
-import org.acmsl.queryj.templates.BaseRepositoryDAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplate;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 

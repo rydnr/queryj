@@ -68,9 +68,6 @@ source() ::= <<
 <package_declaration(
   packageNames=
   [
-    project_package,
-    typeInitMap.baseDAOSubpackageName,
-    typeInitMap.rdbSubpackageName,
     sub_package_name
   ])>
 
@@ -88,7 +85,7 @@ source() ::= <<
  * Importing some Spring classes.
  */
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
-//import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+<! import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy; !>
 
 /*
  * Importing some extension classes.
@@ -142,14 +139,11 @@ project_imports(
 /*
  * Importing project-specific classes.
  */
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListenerImpl;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAOFactory;
-import <subpackageName>.<engineName><voName>DAO;
+<! import <subpackageName>.<engineName><voName>DAO; !>
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JndiUtils;
-//import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper;
-
+<! import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ThreadAwareDataSourceWrapper; !>
 >>
 
 class(table) ::= <<
@@ -204,6 +198,7 @@ public class <engine_name><table.voName>DAOFactory
      * instance.
      * @return such instance.
      */
+    @SuppressWarnings("unused")
     <notnull()>
     public static <engine_name><table.voName>DAOFactory get<engine_name>Instance()
     {
@@ -266,7 +261,7 @@ public class <engine_name><table.voName>DAOFactory
     <nullable()>
     protected DataSource getDataSource(<notnull()>final <repository.capitalized>JndiUtils jndiUtils)
     {
-        DataSource result = null;
+        <nullable()>DataSource result = null;
 
         try
         {
@@ -289,6 +284,7 @@ public class <engine_name><table.voName>DAOFactory
             }
         }
 
+<!
 //        if  (result == null)
 //        {
 ////            result = new <repository.capitalized>ThreadAwareDataSourceWrapper();
@@ -325,7 +321,7 @@ public class <engine_name><table.voName>DAOFactory
 //                }
 //            }
 //        }
-
+!>
         return result;
     }
 }

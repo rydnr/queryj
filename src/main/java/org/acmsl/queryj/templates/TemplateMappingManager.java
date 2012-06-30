@@ -183,6 +183,12 @@ public class TemplateMappingManager
         "dao.chooser.template";
 
     /**
+     * The JndiUtils template attribute name.
+     */
+    public static final String JNDI_UTILS_TEMPLATE =
+        "jndi.utils.template";
+
+    /**
      * The configuration properties template attribute name.
      */
     public static final String CONFIGURATION_PROPERTIES_TEMPLATE =

@@ -110,7 +110,7 @@ class_impl(table, parent) ::= <<
 public class <table.voName>ValueObject
     extends  Abstract<table.voName>ValueObject
 {
-    public static final long serialVersionUID = <serialVersionUID>L;
+    private static final long serialVersionUID = <serialVersionUID>L;
 
     /**
      * Creates a {@link <table.voName>ValueObject} instance.

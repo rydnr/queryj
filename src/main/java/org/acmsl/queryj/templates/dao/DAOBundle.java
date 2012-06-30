@@ -40,6 +40,8 @@ import org.acmsl.queryj.templates.dao.handlers.AttributesStatementSetterTemplate
 import org.acmsl.queryj.templates.dao.handlers.BaseAbstractDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ConfigurationPropertiesTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.CustomResultSetExtractorTemplateHandlerBundle;
@@ -51,6 +53,7 @@ import org.acmsl.queryj.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DataAccessContextLocalTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.FkStatementSetterTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.JndiUtilsTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
@@ -96,7 +99,9 @@ public class DAOBundle
 // TODO                new ThreadLocalBagTemplateHandlerBundle(),
 //                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
 //                new TransactionManagerTemplateHandlerBundle(),
-//                new JndiUtilsTemplateHandlerBundle(),
+                new JndiUtilsTemplateHandlerBundle(),
+                new BaseRepositoryDAOFactoryTemplateHandlerBundle(),
+                new BaseRepositoryDAOTemplateHandlerBundle(),
 //                new DataSourceTransactionTokenTemplateHandlerBundle(),
 //                new StatisticsProviderTemplateHandlerBundle(),
 //                new BaseResultSetExtractorTemplateHandlerBundle()

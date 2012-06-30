@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOTemplateWritingHandler.java
+ * Filename: JndiUtilsTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the repository DAO interface.
+ * Description: Builds the JndiUtils class if requested.
  *
  */
 package org.acmsl.queryj.templates.dao.handlers;
@@ -36,74 +35,75 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplate;
-import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplate;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplateGenerator;
+import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the DAO repository interface.
+ * Builds the JndiUtils class if requested.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOTemplateWritingHandler
-    extends BasePerRepositoryTemplateWritingHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+public class JndiUtilsTemplateBuildHandler
+      extends BasePerRepositoryTemplateBuildHandler
+                  <JndiUtilsTemplate, JndiUtilsTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
-     * {@inheritDoc}
+     * Checks whether template generation is enabled for this kind of template.
+     * @return <code>true</code> in such case.
      */
-    @NotNull
     @Override
-    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateGenerator()
+    protected boolean isGenerationEnabled(
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
     {
-        return BaseRepositoryDAOTemplateGenerator.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    @SuppressWarnings("unchecked")
-    protected BaseRepositoryDAOTemplate retrieveTemplate(
-        @NotNull final Map parameters)
-    {
-        return
-            (BaseRepositoryDAOTemplate)
-                parameters.get(
-                    TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE);
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
     @NotNull
+    protected JndiUtilsTemplateGenerator retrieveTemplateFactory()
+    {
+        return JndiUtilsTemplateGenerator.getInstance();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
     @Override
-    protected File retrieveOutputDir(
-        @NotNull final File projectFolder,
-        @NotNull final String projectPackage,
-        final boolean useSubfolders,
+    protected String retrievePackage(
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
-        return
-            packageUtils.retrieveBaseRepositoryDAOFolder(
-                projectFolder,
-                projectPackage,
-                useSubfolders);
+        return packageUtils.retrieveJndiUtilsPackage(projectPackage);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void storeTemplate(
+        final @NotNull JndiUtilsTemplate template, @NotNull final Map parameters)
+    {
+        parameters.put(
+            TemplateMappingManager.JNDI_UTILS_TEMPLATE,
+            template);
     }
 }

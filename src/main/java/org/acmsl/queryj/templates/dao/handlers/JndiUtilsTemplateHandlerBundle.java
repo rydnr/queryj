@@ -23,12 +23,12 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOTemplateHandlerBundle.java
+ * Filename: JndiUtilsTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles a pair of BaseRepositoryDAO template build and writing
- *              handlers.
+ * Description: Bundles a pair of JndiUtils template build
+ *              and writing handlers.
  *
  */
 package org.acmsl.queryj.templates.dao.handlers;
@@ -39,20 +39,20 @@ package org.acmsl.queryj.templates.dao.handlers;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of BaseRepositoryDAO template build and writing
+ * Bundles a pair of JndiUtils template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOTemplateHandlerBundle
+public class JndiUtilsTemplateHandlerBundle
     extends TemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
      */
-    public BaseRepositoryDAOTemplateHandlerBundle()
+    public JndiUtilsTemplateHandlerBundle()
     {
         super(
-            new BaseRepositoryDAOTemplateBuildHandler(),
-            new BaseRepositoryDAOTemplateWritingHandler());
+            new JndiUtilsTemplateBuildHandler(),
+            new JndiUtilsTemplateWritingHandler());
     }
 }

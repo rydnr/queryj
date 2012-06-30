@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOTemplateWritingHandler.java
+ * Filename: JndiUtilsTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes the repository DAO interface.
+ * Description: Writes the JndiUtils class.
  *
  */
 package org.acmsl.queryj.templates.dao.handlers;
@@ -36,16 +35,16 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplate;
-import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplate;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplateGenerator;
+import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,20 +55,21 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes the DAO repository interface.
+ * Writes the JndiUtils class.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOTemplateWritingHandler
-    extends BasePerRepositoryTemplateWritingHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+public class JndiUtilsTemplateWritingHandler
+    extends BasePerRepositoryTemplateWritingHandler
+                <JndiUtilsTemplate, JndiUtilsTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateGenerator()
+    protected JndiUtilsTemplateGenerator retrieveTemplateGenerator()
     {
-        return BaseRepositoryDAOTemplateGenerator.getInstance();
+        return JndiUtilsTemplateGenerator.getInstance();
     }
 
     /**
@@ -78,13 +78,12 @@ public class BaseRepositoryDAOTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected BaseRepositoryDAOTemplate retrieveTemplate(
-        @NotNull final Map parameters)
+    protected JndiUtilsTemplate retrieveTemplate(@NotNull final Map parameters)
     {
         return
-            (BaseRepositoryDAOTemplate)
+            (JndiUtilsTemplate)
                 parameters.get(
-                    TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE);
+                    TemplateMappingManager.JNDI_UTILS_TEMPLATE);
     }
 
     /**
@@ -101,7 +100,7 @@ public class BaseRepositoryDAOTemplateWritingHandler
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveBaseRepositoryDAOFolder(
+            packageUtils.retrieveJndiUtilsFolder(
                 projectFolder,
                 projectPackage,
                 useSubfolders);

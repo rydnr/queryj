@@ -38,8 +38,8 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BaseRepositoryDAOFactoryTemplate;
-import org.acmsl.queryj.templates.BaseRepositoryDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplate;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
 /*

@@ -37,15 +37,15 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BaseRepositoryDAOFactoryTemplate;
-import org.acmsl.queryj.templates.BaseRepositoryDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplate;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -59,7 +59,7 @@ import java.util.Map;
  */
 public class BaseRepositoryDAOFactoryTemplateBuildHandler
       extends BasePerRepositoryTemplateBuildHandler<BaseRepositoryDAOFactoryTemplate,
-                             BaseRepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
+                                   BaseRepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}

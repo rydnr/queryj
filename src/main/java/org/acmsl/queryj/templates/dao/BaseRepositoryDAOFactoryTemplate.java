@@ -32,11 +32,13 @@
  *              to database metadata.
  *
  */
-package org.acmsl.queryj.templates;
+package org.acmsl.queryj.templates.dao;
 
 /*
  * Importing some StringTemplate classes.
  */
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.templates.RepositoryDAOTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -51,14 +53,14 @@ import org.jetbrains.annotations.Nullable;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOFactoryTemplate
-    extends  RepositoryDAOTemplate<BasePerRepositoryTemplateContext>
+    extends RepositoryDAOTemplate<BasePerRepositoryTemplateContext>
 {
     private static final long serialVersionUID = -607618292235033006L;
 
     /**
      * Builds a <code>BaseRepositoryDAOFactoryTemplate</code> using given
      * information.
-     * @param context thre {@link BasePerRepositoryTemplateContext} instance.
+     * @param context thre {@link org.acmsl.queryj.templates.BasePerRepositoryTemplateContext} instance.
      */
     public BaseRepositoryDAOFactoryTemplate(@NotNull final BasePerRepositoryTemplateContext context)
     {

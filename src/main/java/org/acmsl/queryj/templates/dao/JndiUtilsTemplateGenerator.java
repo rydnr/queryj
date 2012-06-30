@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: BaseRepositoryDAOTemplateGenerator.java
+ * Filename: JndiUtilsTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate the DAO repository interface.
+ * Description: Is able to generate the JndiUtils helper class.
  *
  */
-package org.acmsl.queryj.templates;
+package org.acmsl.queryj.templates.dao;
 
 /*
  * Importing some project-specific classes.
@@ -38,6 +38,10 @@ package org.acmsl.queryj.templates;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
@@ -58,37 +62,37 @@ import java.util.List;
  * Is able to generate the repository DAO interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
-public class BaseRepositoryDAOTemplateGenerator
-    extends AbstractTemplateGenerator<BaseRepositoryDAOTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<BaseRepositoryDAOTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<BaseRepositoryDAOTemplate>,
+public class JndiUtilsTemplateGenerator
+    extends AbstractTemplateGenerator<JndiUtilsTemplate, BasePerRepositoryTemplateContext>
+    implements BasePerRepositoryTemplateGenerator<JndiUtilsTemplate, BasePerRepositoryTemplateContext>,
+               BasePerRepositoryTemplateFactory<JndiUtilsTemplate>,
                 Singleton
 {
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class BaseRepositoryDAOTemplateGeneratorSingletonContainer
+    private static class JndiUtilsTemplateGeneratorSingletonContainer
     {
         /**
          * The actual singleton.
          */
-        public static final BaseRepositoryDAOTemplateGenerator SINGLETON =
-            new BaseRepositoryDAOTemplateGenerator();
+        public static final JndiUtilsTemplateGenerator SINGLETON =
+            new JndiUtilsTemplateGenerator();
     }
 
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected BaseRepositoryDAOTemplateGenerator() {}
+    protected JndiUtilsTemplateGenerator() {}
 
     /**
-     * Retrieves a {@link RepositoryDAOTemplateGenerator} instance.
+     * Retrieves a {@link org.acmsl.queryj.templates.dao.JndiUtilsTemplateGenerator} instance.
      * @return such instance.
      */
     @NotNull
-    public static BaseRepositoryDAOTemplateGenerator getInstance()
+    public static JndiUtilsTemplateGenerator getInstance()
     {
-        return BaseRepositoryDAOTemplateGeneratorSingletonContainer.SINGLETON;
+        return JndiUtilsTemplateGeneratorSingletonContainer.SINGLETON;
     }
 
     /**
@@ -96,7 +100,7 @@ public class BaseRepositoryDAOTemplateGenerator
      */
     @NotNull
     @Override
-    public BaseRepositoryDAOTemplate createTemplate(
+    public JndiUtilsTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String packageName,
@@ -109,7 +113,7 @@ public class BaseRepositoryDAOTemplateGenerator
         @NotNull final String jndiLocation)
     {
         return
-            new BaseRepositoryDAOTemplate(
+            new JndiUtilsTemplate(
                 new BasePerRepositoryTemplateContext(
                     metadataManager,
                     customSqlProvider,
@@ -127,8 +131,8 @@ public class BaseRepositoryDAOTemplateGenerator
     /**
      * {@inheritDoc}
      */
-    @Override
     @NotNull
+    @Override
     public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
@@ -136,14 +140,16 @@ public class BaseRepositoryDAOTemplateGenerator
 
     /**
      * Retrieves the template's file name.
-     * @param context the {@link BasePerRepositoryTemplateContext context}.
-     * @param decorationUtils the {@link DecorationUtils} instance.
-     * @return such file name.
+     * @param context the template.
+     * @param decorationUtils the {@link org.acmsl.queryj.metadata.DecorationUtils} instance.
+     * @return the template's file name.
      */
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)
     {
-        return decorationUtils.capitalize(context.getRepositoryName()) + "DAO.java";
+        return
+              decorationUtils.capitalize(context.getRepositoryName())
+            + "JndiUtils.java";
     }
 }
