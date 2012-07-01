@@ -116,8 +116,8 @@ import checkers.nullness.quals.NonNull;
 import checkers.nullness.quals.Nullable;
 >>
 
-class_common_javadoc() ::= <<
- * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\>
+class_common_javadoc(template) ::= <<
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\> <if(template)>(<template>)<endif>
  * @since <timestamp>
 >>
 
