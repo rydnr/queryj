@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: BaseResultSetExtractorTemplateHandlerBundle.java
+ * Filename: BasePreparedStatementCreatorTemplateHandlerBundle.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Bundles a pair of BaseResultSetExtractor template
+ * Description: Bundles a pair of BasePreparedStatementCreator template
  *              build and writing handlers.
  *
  */
@@ -44,20 +44,21 @@ package org.acmsl.queryj.templates.dao.handlers;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
 /**
- * Bundles a pair of BaseResultSetExtractor template build and writing
+ * Bundles a pair of BasePreparedStatementCreator template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/07/01 (recovered)
  */
-public class BaseResultSetExtractorTemplateHandlerBundle
+public class BasePreparedStatementCreatorTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
      */
-    public BaseResultSetExtractorTemplateHandlerBundle()
+    public BasePreparedStatementCreatorTemplateHandlerBundle()
     {
         super(
-            new BaseResultSetExtractorTemplateBuildHandler(),
-            new BaseResultSetExtractorTemplateWritingHandler());
+            new BasePreparedStatementCreatorTemplateBuildHandler(),
+            new BasePreparedStatementCreatorTemplateWritingHandler());
     }
 }

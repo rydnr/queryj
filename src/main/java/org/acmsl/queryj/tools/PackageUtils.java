@@ -2065,6 +2065,23 @@ public class PackageUtils
     }
 
     /**
+     * Retrieves the folder for BasePreparedStatementCreator class.
+     * @param parentFolder the parent folder.
+     * @param packageName the package name.
+     * @param useSubFolders whether to use subFolders.
+     * @return the folder in which the associated rdb classes should be
+     * generated.
+     */
+    @NotNull
+    public File retrieveBasePreparedStatementCreatorFolder(
+        @NotNull final File parentFolder,
+        @NotNull final String packageName,
+        final boolean useSubFolders)
+    {
+        return retrieveRdbFolder(parentFolder, packageName, useSubFolders);
+    }
+
+    /**
      * Retrieves the package name for StatisticsProvider class.
      * @param packageName the original package.
      * @return the package for such class.

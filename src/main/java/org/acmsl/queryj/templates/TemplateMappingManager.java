@@ -88,6 +88,7 @@ public class TemplateMappingManager
     /**
      * The JDBC DAO template type.
      */
+    @SuppressWarnings("unused")
     public static final String JDBC_DAO_TEMPLATE = "jdbc.dao.template";
 
     /**
@@ -246,6 +247,12 @@ public class TemplateMappingManager
      */
     public static final String JDBC_TEMPLATE_TEMPLATE =
         "jdbc.template.template";
+
+    /**
+     * The BasePreparedStatementCreator template type.
+     */
+    public static final String BASE_PREPARED_STATEMENT_CREATOR_TEMPLATE =
+        "base.prepared.statement.creator.template";
 
     /**
      * Singleton implemented to avoid the double-checked locking.

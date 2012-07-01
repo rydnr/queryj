@@ -40,6 +40,7 @@ import org.acmsl.queryj.templates.dao.handlers.AttributesStatementSetterTemplate
 import org.acmsl.queryj.templates.dao.handlers.BaseAbstractDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseDAOTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.BasePreparedStatementCreatorTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.BaseResultSetExtractorTemplateHandlerBundle;
@@ -94,9 +95,9 @@ public class DAOBundle
                 new DataAccessContextLocalTemplateHandlerBundle(),
                 new FkStatementSetterTemplateHandlerBundle(),
                 new JdbcTemplateTemplateHandlerBundle(),
-//                new JdbcDAOTemplateHandlerBundle(),
                 new PkStatementSetterTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
+                new BasePreparedStatementCreatorTemplateHandlerBundle(),
 //                new JdbcDAOTemplateHandlerBundle(),
 // TODO                new ThreadLocalBagTemplateHandlerBundle(),
 //                new ThreadAwareDataSourceWrapperTemplateHandlerBundle(),
