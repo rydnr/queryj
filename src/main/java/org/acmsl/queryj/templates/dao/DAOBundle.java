@@ -53,6 +53,7 @@ import org.acmsl.queryj.templates.dao.handlers.DAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DataAccessManagerTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.DataAccessContextLocalTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.FkStatementSetterTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.JdbcTemplateTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.JndiUtilsTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
@@ -92,6 +93,7 @@ public class DAOBundle
                 new DataAccessManagerTemplateHandlerBundle(),
                 new DataAccessContextLocalTemplateHandlerBundle(),
                 new FkStatementSetterTemplateHandlerBundle(),
+                new JdbcTemplateTemplateHandlerBundle(),
 //                new JdbcDAOTemplateHandlerBundle(),
                 new PkStatementSetterTemplateHandlerBundle(),
                 new ResultSetExtractorTemplateHandlerBundle(),
@@ -101,10 +103,9 @@ public class DAOBundle
 //                new TransactionManagerTemplateHandlerBundle(),
                 new JndiUtilsTemplateHandlerBundle(),
                 new BaseRepositoryDAOFactoryTemplateHandlerBundle(),
-                new BaseRepositoryDAOTemplateHandlerBundle(),
+                new BaseRepositoryDAOTemplateHandlerBundle()
 //                new DataSourceTransactionTokenTemplateHandlerBundle(),
 //                new StatisticsProviderTemplateHandlerBundle(),
-//                new BaseResultSetExtractorTemplateHandlerBundle()
             });
     }
 }

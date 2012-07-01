@@ -242,6 +242,12 @@ public class TemplateMappingManager
         "base.resultset.extractor.template";
 
     /**
+     * The JdbcTemplate template type.
+     */
+    public static final String JDBC_TEMPLATE_TEMPLATE =
+        "jdbc.template.template";
+
+    /**
      * Singleton implemented to avoid the double-checked locking.
      */
     private static class TemplateMappingManagerSingletonContainer
