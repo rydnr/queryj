@@ -96,6 +96,13 @@ public interface TableDecorator
     String getVoName();
 
     /**
+     * Retrieves the value-object name associated to the table name, uncapitalized.
+     * @return such name.
+     */
+    @NotNull
+    String getVoNameUncapitalized();
+
+    /**
      * Retrieves the table's name in lower-case, once normalized.
      * @return such information.
      */

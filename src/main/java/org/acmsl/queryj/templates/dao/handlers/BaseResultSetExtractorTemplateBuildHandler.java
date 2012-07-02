@@ -72,6 +72,7 @@ public class BaseResultSetExtractorTemplateBuildHandler
      * Checks whether template generation is enabled for this kind of template.
      * @return <code>true</code> in such case.
      */
+    @Override
     protected boolean isGenerationEnabled(
         @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
     {

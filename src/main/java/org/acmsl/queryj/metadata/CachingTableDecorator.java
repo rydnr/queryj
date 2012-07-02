@@ -233,6 +233,11 @@ public class CachingTableDecorator
     private List<Attribute> m__lCachedNonPrimaryKeyAttributes;
 
     /**
+     * The cached value-object name, uncapitalized;
+     */
+    private String m__strCachedVoNameUncapitalized;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -772,6 +777,55 @@ public class CachingTableDecorator
             setCachedVoName(result);
         }
         
+        return result;
+    }
+
+    /**
+     * Caches the value-object name, uncapitalized.
+     * @param value the value to cache.
+     */
+    protected final void immutableSetCachedVoNameUncapitalized(@NotNull final String value)
+    {
+        m__strCachedVoNameUncapitalized = value;
+    }
+
+    /**
+     * Caches the value-object name, uncapitalized.
+     * @param value the value to cache.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedVoNameUncapitalized(@NotNull final String value)
+    {
+        immutableSetCachedVoNameUncapitalized(value);
+    }
+
+    /**
+     * Retrieves the cached value-object name, uncapitalized.
+     * @return the cached value.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    protected String getCachedVoNameUncapitalized()
+    {
+        return m__strCachedVoNameUncapitalized;
+    }
+
+    /**
+     * Retrieves the value-object name associated to the table name, uncapitalized.
+     * @return such name.
+     */
+    @Override
+    @NotNull
+    public String getVoNameUncapitalized()
+    {
+        String result = getCachedVoNameUncapitalized();
+
+        if (result == null)
+        {
+            result = super.getVoNameUncapitalized();
+            setCachedVoNameUncapitalized(result);
+        }
+
         return result;
     }
 

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,6 +36,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.DataAccessManagerTemplate;
@@ -68,9 +68,21 @@ public class DataAccessManagerTemplateBuildHandler
     public DataAccessManagerTemplateBuildHandler() {}
 
     /**
+     * Checks whether template generation is enabled for this kind of template.
+     * @return <code>true</code> in such case.
+     */
+    @Override
+    protected boolean isGenerationEnabled(
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
+    {
+        return true;
+    }
+
+    /**
      * Retrieves the template factory.
      * @return such instance.
      */
+    @Override
     @NotNull
     protected DataAccessManagerTemplateGenerator retrieveTemplateFactory()
     {
@@ -80,6 +92,7 @@ public class DataAccessManagerTemplateBuildHandler
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     protected String retrievePackage(
         @NotNull final String engineName,
@@ -94,10 +107,9 @@ public class DataAccessManagerTemplateBuildHandler
      * Stores the template in given attribute map.
      * @param template the template.
      * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
      */
     @SuppressWarnings("unchecked")
+    @Override
     protected void storeTemplate(
         @NotNull final DataAccessManagerTemplate template, @NotNull final Map parameters)
     {

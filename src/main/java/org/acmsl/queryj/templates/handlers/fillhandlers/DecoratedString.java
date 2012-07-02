@@ -218,4 +218,26 @@ public class DecoratedString
     {
         return decorationUtils.normalize(value);
     }
+
+    /**
+     * Retrieves the "uncapitalized" version.
+     * @return the value associated to "[placeholder].uncapitalized".
+     */
+    @NotNull
+    public String getUncapitalized()
+    {
+        return uncapitalize(getValue(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the "uncapitalized" version.
+     * @param value the original value.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return the value associated to "[placeholder].uncapitalized".
+     */
+    @NotNull
+    protected String uncapitalize(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.uncapitalize(value);
+    }
 }

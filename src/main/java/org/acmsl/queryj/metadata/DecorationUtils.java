@@ -43,6 +43,7 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -76,7 +77,7 @@ public class DecorationUtils
     /**
      * Protected constructor to avoid accidental instantiation.
      */
-    protected DecorationUtils() {};
+    protected DecorationUtils() {}
 
     /**
      * Retrieves a <code>DecorationUtils</code> instance.
@@ -92,8 +93,8 @@ public class DecorationUtils
      * Converts given value to upper-case.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
+    @NotNull
     public String upperCase(@NotNull final String value)
     {
         return value.toUpperCase(Locale.US);
@@ -103,8 +104,8 @@ public class DecorationUtils
      * Converts given value to lower-case.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
+    @NotNull
     public String lowerCase(@NotNull final String value)
     {
         return value.toLowerCase(Locale.US);
@@ -114,9 +115,9 @@ public class DecorationUtils
      * Uncapitalizes given value.
      * @param value the value.
      * @return the modified version of the value.
-     * @precondition value != null
      */
-    public String uncapitalize(final String value)
+    @NotNull
+    public String uncapitalize(@NotNull final String value)
     {
         return uncapitalize(value, StringUtils.getInstance());
     }
@@ -126,11 +127,10 @@ public class DecorationUtils
      * @param value the value.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the modified version of the value.
-     * @precondition value != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String uncapitalize(
-        final String value, @NotNull final StringUtils stringUtils)
+        @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.unCapitalizeStart(stringUtils.capitalize(value));
     }
@@ -139,8 +139,8 @@ public class DecorationUtils
      * Capitalizes given value.
      * @param value the value.
      * @return the modified version of the value.
-     * @precondition value != null
      */
+    @NotNull
     public String capitalize(@NotNull final String value)
     {
         return capitalize(value, StringUtils.getInstance());
@@ -151,9 +151,8 @@ public class DecorationUtils
      * @param value the value.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the modified version of the value.
-     * @precondition value != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String capitalize(
         @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
@@ -164,9 +163,9 @@ public class DecorationUtils
      * Normalizes given value.
      * @param value the value.
      * @return the normalized value.
-     * @precondition value != null
      */
-    public String normalizeLowercase(final String value)
+    @NotNull
+    public String normalizeLowercase(@NotNull final String value)
     {
         return normalize(value).toLowerCase(Locale.US);
     }
@@ -175,9 +174,9 @@ public class DecorationUtils
      * Normalizes given value, in upper case.
      * @param value the value.
      * @return the normalized value.
-     * @precondition value != null
      */
-    public String normalizeUppercase(final String value)
+    @NotNull
+    public String normalizeUppercase(@NotNull final String value)
     {
         return normalize(value).toUpperCase(Locale.US);
     }
@@ -186,20 +185,20 @@ public class DecorationUtils
      * Normalizes given value, in upper case.
      * @param value the value.
      * @return the normalized value.
-     * @precondition value != null
      */
-    public String softNormalizeUppercase(final String value)
+    @NotNull
+    public String softNormalizeUppercase(@NotNull final String value)
     {
         return softNormalize(value).toUpperCase(Locale.US);
     }
     
     /**
-     * Normalizes given value,.
+     * Normalizes given value.
      * @param value the value.
      * @return the normalized value.
-     * @precondition value != null
      */
-    public String normalize(final String value)
+    @NotNull
+    public String normalize(@NotNull final String value)
     {
         return normalize(value, StringUtils.getInstance());
     }
@@ -209,11 +208,10 @@ public class DecorationUtils
      * @param value the value.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the normalized value.
-     * @precondition value != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String normalize(
-        final String value, @NotNull final StringUtils stringUtils)
+        @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.normalize(value, '_');
     }
@@ -222,9 +220,9 @@ public class DecorationUtils
      * Soft-normalizes given value.
      * @param value the value.
      * @return the normalized value.
-     * @precondition value != null
      */
-    public String softNormalize(final String value)
+    @NotNull
+    public String softNormalize(@NotNull final String value)
     {
         return softNormalize(value, StringUtils.getInstance());
     }
@@ -234,11 +232,10 @@ public class DecorationUtils
      * @param value the value.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the normalized value.
-     * @precondition value != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String softNormalize(
-        final String value, @NotNull final StringUtils stringUtils)
+        @NotNull final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.softNormalize(value);
     }
@@ -247,9 +244,9 @@ public class DecorationUtils
      * Splits given value into multiple lines.
      * @param value the value.
      * @return such output.
-     * @precondition value != null
      */
-    public String[] split(final String value)
+    @NotNull
+    public String[] split(@NotNull final String value)
     {
         return split(value, StringUtils.getInstance());
     }
@@ -260,10 +257,9 @@ public class DecorationUtils
      * @param stringUtils the <code>StringUtils</code> instance.
      * will be the one used.
      * @return such output.
-     * @precondition value != null
-     * @precondition stringUtils != null
      */
-    public String[] split(final String value, @NotNull final StringUtils stringUtils)
+    @NotNull
+    public String[] split(@NotNull final String value, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.split(value);
     }
@@ -274,13 +270,12 @@ public class DecorationUtils
      * @param leftSeparator the left-side separator.
      * @param rightSeparator the right-side separator.
      * @return the quoted values.
-     * @precondition values != null
-     * @precondition separator != null
      */
+    @NotNull
     public String[] surround(
-        final String[] values,
-        final String leftSeparator,
-        final String rightSeparator)
+        @NotNull final String[] values,
+        @NotNull final String leftSeparator,
+        @NotNull final String rightSeparator)
     {
         return
             surround(
@@ -297,14 +292,12 @@ public class DecorationUtils
      * @param rightSeparator the right-side separator.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the quoted values.
-     * @precondition values != null
-     * @precondition separator != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String[] surround(
-        final String[] values,
-        final String leftSeparator,
-        final String rightSeparator,
+        @NotNull final String[] values,
+        @NotNull final String leftSeparator,
+        @NotNull final String rightSeparator,
         @NotNull final StringUtils stringUtils)
     {
         return stringUtils.surround(values, leftSeparator, rightSeparator);
@@ -314,9 +307,9 @@ public class DecorationUtils
      * Trims given values.
      * @param values the values.
      * @return the trimmed lines.
-     * @precondition values != null
      */
-    public String[] trim(final String[] values)
+    @NotNull
+    public String[] trim(@NotNull final String[] values)
     {
         return trim(values, StringUtils.getInstance());
     }
@@ -326,11 +319,10 @@ public class DecorationUtils
      * @param values the values.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the trimmed lines.
-     * @precondition values != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String[] trim(
-        final String[] values, @NotNull final StringUtils stringUtils)
+        @NotNull final String[] values, @NotNull final StringUtils stringUtils)
     {
         return stringUtils.trim(values);
     }
@@ -340,9 +332,9 @@ public class DecorationUtils
      * @param value the value.
      * @param charToEscape the char to escape.
      * @return the processed value.
-     * @precondition value != null
      */
-    public String escape(final String value, final char charToEscape)
+    @NotNull
+    public String escape(@NotNull final String value, final char charToEscape)
     {
         return escape(value, charToEscape, StringUtils.getInstance());
     }
@@ -353,11 +345,10 @@ public class DecorationUtils
      * @param charToEscape the char to escape.
      * @param stringUtils the <code>StringUtils</code> instance.
      * @return the processed value.
-     * @precondition value != null
-     * @precondition stringUtils != null
      */
+    @NotNull
     protected String escape(
-        final String value,
+        @NotNull final String value,
         final char charToEscape,
         @NotNull final StringUtils stringUtils)
     {
@@ -368,6 +359,7 @@ public class DecorationUtils
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -381,7 +373,8 @@ public class DecorationUtils
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 

@@ -675,9 +675,9 @@ public abstract class AbstractTableDecorator
      * Capitalizes given value.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
-    protected String capitalize(final String value)
+    @NotNull
+    protected String capitalize(@NotNull final String value)
     {
         return
             capitalize(value, DecorationUtils.getInstance());
@@ -688,11 +688,10 @@ public abstract class AbstractTableDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String capitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(lowercase(value));
     }
@@ -701,9 +700,9 @@ public abstract class AbstractTableDecorator
      * Converts given value to upper-case.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
-    protected String uppercase(final String value)
+    @NotNull
+    protected String uppercase(@NotNull final String value)
     {
         return uppercase(value, DecorationUtils.getInstance());
     }
@@ -713,11 +712,10 @@ public abstract class AbstractTableDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String uppercase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.upperCase(value);
     }
@@ -726,9 +724,9 @@ public abstract class AbstractTableDecorator
      * Normalizes given value to lower-case.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
-    protected String normalizeLowercase(final String value)
+    @NotNull
+    protected String normalizeLowercase(@NotNull final String value)
     {
         return normalizeLowercase(value, DecorationUtils.getInstance());
     }
@@ -738,11 +736,10 @@ public abstract class AbstractTableDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeLowercase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -751,9 +748,9 @@ public abstract class AbstractTableDecorator
      * Normalizes given value.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
-    protected String normalize(final String value)
+    @NotNull
+    protected String normalize(@NotNull final String value)
     {
         return normalize(value, DecorationUtils.getInstance());
     }
@@ -763,11 +760,10 @@ public abstract class AbstractTableDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -786,9 +782,9 @@ public abstract class AbstractTableDecorator
      * Converts given value to lower-case.
      * @param value the value.
      * @return the alternate version of the value.
-     * @precondition value != null
      */
-    protected String lowercase(final String value)
+    @NotNull
+    protected String lowercase(@NotNull final String value)
     {
         return lowercase(value, DecorationUtils.getInstance());
     }
@@ -798,11 +794,10 @@ public abstract class AbstractTableDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the alternate version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String lowercase(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.lowerCase(value);
     }
@@ -814,18 +809,7 @@ public abstract class AbstractTableDecorator
     @NotNull
     public String getUncapitalizedName()
     {
-        return uncapitalize(getName());
-    }
-
-    /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @return the modified version of the value.
-     * @precondition value != null
-     */
-    protected String uncapitalize(final String value)
-    {
-        return uncapitalize(value, DecorationUtils.getInstance());
+        return uncapitalize(getName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -833,11 +817,10 @@ public abstract class AbstractTableDecorator
      * @param value the value.
      * @param decorationUtils the <code>DecorationUtils</code> instance.
      * @return the modified version of the value.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String uncapitalize(
-        final String value, final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
     }
@@ -850,6 +833,16 @@ public abstract class AbstractTableDecorator
     public String getVoName()
     {
         return getSingularNameCapitalized();
+    }
+
+    /**
+     * Retrieves the value-object name associated to the table name, uncapitalized.
+     * @return such name.
+     */
+    @NotNull
+    public String getVoNameUncapitalized()
+    {
+        return uncapitalize(getVoName(), DecorationUtils.getInstance());
     }
 
     /**
@@ -896,9 +889,9 @@ public abstract class AbstractTableDecorator
      * Retrieves the singular of given word.
      * @param word the word.
      * @return the singular.
-     * @precondition word != null
      */
-    protected String getSingular(final String word)
+    @NotNull
+    protected String getSingular(@NotNull final String word)
     {
         return getSingular(word, SingularPluralFormConverter.getInstance());
     }
@@ -909,12 +902,11 @@ public abstract class AbstractTableDecorator
      * @param singularPluralFormConverter the
      * <code>SingularPluralFormConverter</code> instance.
      * @return the singular.
-     * @precondition word != null
-     * @precondition singularPluralFormConverter != null
      */
+    @NotNull
     protected String getSingular(
-        final String word,
-        final EnglishGrammarUtils singularPluralFormConverter)
+        @NotNull final String word,
+        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
     {
         return singularPluralFormConverter.getSingular(word);
     }
@@ -970,14 +962,14 @@ public abstract class AbstractTableDecorator
     @SuppressWarnings("unused")
     @NotNull
     protected List<Attribute> getNonReadOnlyAttributes(
-        final String name,
-        final List<Attribute> attributes,
-        final Table parentTable,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
-        final TableDecoratorHelper tableDecoratorHelper)
+        @NotNull final String name,
+        @NotNull final List<Attribute> attributes,
+        @Nullable final Table parentTable,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        List<Attribute> result = attributes;
+        @NotNull List<Attribute> result = attributes;
 
         if  (parentTable != null)
         {
@@ -1024,12 +1016,12 @@ public abstract class AbstractTableDecorator
     @SuppressWarnings("unused")
     @NotNull
     protected List<Attribute> getAllNonReadOnlyButExternallyManagedAttributes(
-        final String name,
-        final List<Attribute> attributes,
-        final Table parentTable,
-        final MetadataManager metadataManager,
-        final DecoratorFactory decoratorFactory,
-        final TableDecoratorHelper tableDecoratorHelper)
+        @NotNull final String name,
+        @NotNull final List<Attribute> attributes,
+        @Nullable final Table parentTable,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         List<Attribute> result =
             getNonReadOnlyAttributes(
@@ -1077,7 +1069,7 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        List<Attribute> result = attributes;
+        @NotNull List<Attribute> result = attributes;
 
         if  (parentTable != null)
         {
@@ -1132,7 +1124,7 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        List<Attribute> result = attributes;
+        @NotNull List<Attribute> result = attributes;
 
         if  (parentTable != null)
         {
@@ -1155,6 +1147,7 @@ public abstract class AbstractTableDecorator
      * Decorates the attributes.
      * @return the decorated attributes.
      */
+    @NotNull
     protected List<Attribute> decorateAttributes()
     {
         return
@@ -1214,13 +1207,14 @@ public abstract class AbstractTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such information.
      */
+    @NotNull
     protected List<Attribute> getAllAttributes(
         @NotNull final String table,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
         Table t_ParentTable = getParentTable();
 
@@ -1280,6 +1274,7 @@ public abstract class AbstractTableDecorator
      * from the attribute list.
      * @return such information.
      */
+    @NotNull
     protected List<Attribute> getAttributes(
         @NotNull final String table,
         @NotNull final List<Attribute> childAttributes,
@@ -1287,7 +1282,7 @@ public abstract class AbstractTableDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         final boolean attributesShouldBeCleanedUp)
     {
-        List<Attribute> result = super.getAttributes();
+        @NotNull List<Attribute> result = super.getAttributes();
 
         if (!alreadyDecorated(result))
         {
@@ -1376,6 +1371,7 @@ public abstract class AbstractTableDecorator
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return the cleaned-up attributes.
      */
+    @NotNull
     public List<Attribute> removeOverridden(
         @NotNull final List<Attribute> firstAttributes,
         @NotNull final List<Attribute> secondAttributes,
@@ -1463,6 +1459,7 @@ public abstract class AbstractTableDecorator
      * @return such decorator.
      */
     @SuppressWarnings("unused")
+    @Nullable
     protected abstract TableDecorator createTableDecorator(
         @Nullable final String parentTable,
         @NotNull final List<Attribute> primaryKey,
@@ -1551,7 +1548,7 @@ public abstract class AbstractTableDecorator
         @NotNull final List<Attribute> nonParentAttributes,
         @NotNull final List<Attribute> primaryKey)
     {
-        List<Attribute> result = new ArrayList<Attribute>();
+        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
         for (@Nullable Attribute t_Attribute : nonParentAttributes)
         {
