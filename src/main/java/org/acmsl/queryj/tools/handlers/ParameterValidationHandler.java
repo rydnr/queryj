@@ -64,10 +64,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.IllegalCharsetNameException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Validates the parameters of an Ant task.
@@ -321,16 +318,32 @@ public class ParameterValidationHandler
     public static final String CUSTOM_SQL_MODEL_XML = "xml";
 
     /**
+     * The grammar folder.
+     */
+    public static final String GRAMMAR_FOLDER = "grammarFolder";
+
+    /**
      * The grammar bundle name.
      */
-    public static final String GRAMMAR_BUNDLE_NAME = "grammarBundle";
-    
+    public static final String GRAMMAR_NAME = "grammarName";
+
+    /**
+     * The grammar suffix.
+     */
+    public static final String GRAMMAR_SUFFIX = "grammarSuffix";
+
+    /**
+     * The missing grammar folder error message.
+     */
+    public static final String GRAMMAR_FOLDER_NOT_FOUND =
+        "Specified grammar folder cannot be found";
+
     /**
      * The missing grammar bundle error message.
      */
     public static final String GRAMMAR_BUNDLE_NOT_FOUND =
-        "Specified grammar bundle cannot be found";
-    
+            "Specified grammar bundle cannot be found";
+
     /**
      * The file encoding.
      */
@@ -355,11 +368,6 @@ public class ParameterValidationHandler
      * Whether to generate JMX support or not.
      */
     public static final String JMX = "jmx";
-
-    /**
-     * The log instance.
-     */
-    public static final String LOG = "log";
 
     /**
      * Creates a {@link ParameterValidationHandler} instance.
@@ -441,7 +449,9 @@ public class ParameterValidationHandler
             (Boolean) parameters.get(GENERATE_MOCK_DAO),
             (String) parameters.get(CUSTOM_SQL_MODEL),
             (File) parameters.get(SQL_XML_FILE),
-            (String) parameters.get(GRAMMAR_BUNDLE_NAME),
+            (File) parameters.get(GRAMMAR_FOLDER),
+            (String) parameters.get(GRAMMAR_NAME),
+            (String) parameters.get(GRAMMAR_SUFFIX),
             (String) parameters.get(ENCODING),
             parameters,
             usingAnt);
@@ -476,7 +486,9 @@ public class ParameterValidationHandler
      * @param generateMockDAO the generate-mock-dao-implementation setting.
      * @param customSqlModel the model for custom-sql information.
      * @param sqlXmlFile the sql.xml file.
+     * @param grammarFolder the grammar folder.
      * @param grammarBundleName the grammar bundle name.
+     * @param grammarSuffix the grammar suffix.
      * @param encoding the file encoding.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
@@ -503,7 +515,9 @@ public class ParameterValidationHandler
         final Boolean generateMockDAO,
         final String customSqlModel,
         @Nullable final File sqlXmlFile,
+        @Nullable final File grammarFolder,
         @Nullable final String grammarBundleName,
+        @Nullable final String grammarSuffix,
         @Nullable final String encoding,
         @NotNull final Map parameters,
         final boolean usingAnt)
@@ -648,13 +662,38 @@ public class ParameterValidationHandler
         }
 
         // Not mandatory
-        if  (grammarBundleName != null)
+        if  (grammarFolder != null)
         {
-            try
+            if (!grammarFolder.exists())
             {
-                ResourceBundle.getBundle(grammarBundleName);
+                throw new QueryJBuildException(GRAMMAR_FOLDER_NOT_FOUND);
             }
-            catch  (@NotNull final MissingResourceException missingResourceException)
+
+            String suffix = grammarSuffix;
+
+            if (grammarSuffix == null)
+            {
+                suffix = "";
+            }
+
+            File file =
+                new File(
+                      grammarFolder + File.separator
+                    + grammarBundleName
+                    + "_"
+                    + Locale.getDefault().getLanguage().toLowerCase(Locale.getDefault())
+                    + suffix);
+
+            if (!file.exists())
+            {
+                file =
+                    new File(
+                          grammarFolder + File.separator
+                        + grammarBundleName
+                        + suffix);
+            }
+
+            if (!file.exists())
             {
                 throw new QueryJBuildException(GRAMMAR_BUNDLE_NOT_FOUND);
             }

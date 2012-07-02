@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
@@ -64,6 +65,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
@@ -233,9 +235,19 @@ public class QueryJChain
     private File m__SqlXmlFile;
 
     /**
-     * The "grammar-bundle" property.
+     * The "grammar-folder" property.
      */
-    private String m__strGrammarBundleName;
+    private File m__GrammarFolder;
+
+    /**
+     * The "grammar-name" property.
+     */
+    private String m__strGrammarName;
+
+    /**
+     * The "grammar-suffix" property.
+     */
+    private String m__strGrammarSuffix;
 
     /**
      * The <i>allowEmptyRepositoryDAO</i> flag.
@@ -317,8 +329,10 @@ public class QueryJChain
      * @param customSqlModel the format of the custom SQL file.
      * @param disableCustomSqlValidation to disable validation of custom sql.
      * @param sqlXmlFile the file containing the custom SQL.
-     * @param grammarBundle the grammar with irregular singular and plural
+     * @param grammarFolder the grammar folder.
+     * @param grammarName the grammar with irregular singular and plural
      * forms of the table names.
+     * @param grammarSuffix the grammar suffix.
      * @param encoding the file encoding.
      */
     @SuppressWarnings("unused")
@@ -347,7 +361,9 @@ public class QueryJChain
         final String customSqlModel,
         final boolean disableCustomSqlValidation,
         final File sqlXmlFile,
-        final String grammarBundle,
+        final File grammarFolder,
+        final String grammarName,
+        final String grammarSuffix,
         final String encoding)
     {
         immutableSetSettingsFile(settings);
@@ -376,7 +392,9 @@ public class QueryJChain
         immutableSetCustomSqlModel(customSqlModel);
         immutableSetDisableCustomSqlValidationFlag(disableCustomSqlValidation);
         immutableSetSqlXmlFile(sqlXmlFile);
-        immutableSetGrammarbundle(grammarBundle);
+        immutableSetGrammarFolder(grammarFolder);
+        immutableSetGrammarName(grammarName);
+        immutableSetGrammarSuffix(grammarSuffix);
         immutableSetEncoding(encoding);
     }
 
@@ -1845,31 +1863,81 @@ public class QueryJChain
     }
 
     /**
-     * Specifies the grammar bundle.
-     * @param grammarBundle the new grammar bundle.
+     * Specifies the grammar folder.
+     * @param grammarFolder the new grammar folder.
      */
-    protected final void immutableSetGrammarbundle(
-        final String grammarBundle)
+    protected final void immutableSetGrammarFolder(
+            final File grammarFolder)
     {
-        m__strGrammarBundleName = grammarBundle;
+        m__GrammarFolder = grammarFolder;
     }
 
     /**
-     * Specifies the grammar bundle.
-     * @param grammarBundle the new grammar bundle.
+     * Specifies the grammar folder.
+     * @param grammarFolder the new grammar folder.
      */
-    public void setGrammarbundle(final String grammarBundle)
+    public void setGrammarFolder(final File grammarFolder)
     {
-        immutableSetGrammarbundle(grammarBundle);
+        immutableSetGrammarFolder(grammarFolder);
     }
 
     /**
-     * Retrieves the grammar bundle.
+     * Retrieves the grammar name.
      * @return such information.
      */
-    public String getGrammarbundle()
+    public File getGrammarFolder()
     {
-        return m__strGrammarBundleName;
+        return m__GrammarFolder;
+    }
+
+    /**
+     * Retrieves the grammar folder, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected File getGrammarFolder(@Nullable final Properties properties)
+    {
+        File result = getGrammarFolder();
+
+        if  (   (result == null)
+                && (properties != null))
+        {
+            result = new File(properties.getProperty(GRAMMAR_FOLDER));
+
+            setGrammarFolder(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the grammar name.
+     * @param grammarBundle the new grammar bundle.
+     */
+    protected final void immutableSetGrammarName(
+            final String grammarBundle)
+    {
+        m__strGrammarName = grammarBundle;
+    }
+
+    /**
+     * Specifies the grammar name.
+     * @param grammarBundle the new grammar bundle.
+     */
+    public void setGrammarName(final String grammarBundle)
+    {
+        immutableSetGrammarName(grammarBundle);
+    }
+
+    /**
+     * Retrieves the grammar name.
+     * @return such information.
+     */
+    public String getGrammarName()
+    {
+        return m__strGrammarName;
     }
 
     /**
@@ -1878,15 +1946,65 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
-    protected String getGrammarbundle(@Nullable final Properties properties)
+    @SuppressWarnings("unused")
+    protected String getGrammarName(@Nullable final Properties properties)
     {
-        String result = getGrammarbundle();
+        String result = getGrammarName();
+
+        if  (   (result == null)
+                && (properties != null))
+        {
+            result = properties.getProperty(GRAMMAR_NAME);
+            setGrammarName(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the grammar suffix.
+     * @param suffix the new grammar suffix.
+     */
+    protected final void immutableSetGrammarSuffix(
+        @NotNull final String suffix)
+    {
+        m__strGrammarSuffix = suffix;
+    }
+
+    /**
+     * Specifies the grammar suffix.
+     * @param suffix the new grammar suffix.
+     */
+    public void setGrammarSuffix(@NotNull final String suffix)
+    {
+        immutableSetGrammarSuffix(suffix);
+    }
+
+    /**
+     * Retrieves the grammar suffix.
+     * @return such information.
+     */
+    public String getGrammarSuffix()
+    {
+        return m__strGrammarSuffix;
+    }
+
+    /**
+     * Retrieves the grammar suffix, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected String getGrammarSuffix(@Nullable final Properties properties)
+    {
+        String result = getGrammarSuffix();
 
         if  (   (result == null)
              && (properties != null))
         {
-            result = properties.getProperty(GRAMMAR_BUNDLE);
-            setGrammarbundle(result);
+            result = properties.getProperty(GRAMMAR_SUFFIX);
+            setGrammarSuffix(result);
         }
 
         return result;
@@ -2110,7 +2228,9 @@ public class QueryJChain
             getCustomSqlModel(settings),
             getDisableCustomSqlValidationFlag(settings),
             getSqlXmlFile(settings),
-            getGrammarbundle(settings),
+            getGrammarFolder(settings),
+            getGrammarName(settings),
+            getGrammarSuffix(settings),
             getEncoding(settings));
 
         return command;
@@ -2148,8 +2268,10 @@ public class QueryJChain
      * @param disableCustomSqlValidation whether to disable custom sql
      * validation.
      * @param sqlXmlFile the file containing the custom SQL.
-     * @param grammarBundle the grammar with irregular singular and plural
+     * @param grammarFolder the grammar folder.
+     * @param grammarName the grammar with irregular singular and plural
      * forms of the table names.
+     * @param grammarSuffix the suffix grammar.
      * @param encoding the encoding.
      */
     @SuppressWarnings("unchecked")
@@ -2178,7 +2300,9 @@ public class QueryJChain
         @Nullable final String customSqlModel,
         final boolean disableCustomSqlValidation,
         @Nullable final File sqlXmlFile,
-        @Nullable final String grammarBundle,
+        @Nullable final File grammarFolder,
+        @Nullable final String grammarName,
+        @Nullable final String grammarSuffix,
         @Nullable final String encoding)
     {
         if  (attributes != null)
@@ -2334,11 +2458,38 @@ public class QueryJChain
                     sqlXmlFile);
             }
 
-            if  (grammarBundle != null)
+            if  (grammarFolder != null)
             {
                 attributes.put(
-                    ParameterValidationHandler.GRAMMAR_BUNDLE_NAME,
-                    grammarBundle);
+                    ParameterValidationHandler.GRAMMAR_FOLDER,
+                    grammarFolder);
+            }
+
+            if  (grammarName != null)
+            {
+                attributes.put(
+                    ParameterValidationHandler.GRAMMAR_NAME,
+                    grammarName);
+            }
+
+            if  (grammarSuffix != null)
+            {
+                attributes.put(
+                        ParameterValidationHandler.GRAMMAR_SUFFIX,
+                        grammarSuffix);
+            }
+
+            if (   (grammarFolder != null)
+                && (grammarName != null)
+                && (grammarSuffix != null))
+            {
+                File t_GrammarFile =
+                    new File(
+                          grammarFolder + File.separator + grammarName
+                        + "_" + Locale.getDefault().getLanguage().toLowerCase(Locale.getDefault())
+                        + grammarSuffix);
+
+                SingularPluralFormConverter.setGrammarBundle(t_GrammarFile);
             }
 
             if  (encoding != null)

@@ -43,6 +43,7 @@ package org.acmsl.queryj;
 import org.acmsl.commons.BundleI14able;
 import org.acmsl.commons.CachingBundleI14able;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -92,7 +93,7 @@ public class SingularPluralFormConverter
      * @param bundleName the bundle name.
      */
     protected static void immutableSetGrammarBundle(
-        final File bundleName)
+        @NotNull final File bundleName)
     {
         m__GrammarBundle = bundleName;
     }
@@ -101,7 +102,8 @@ public class SingularPluralFormConverter
      * Specifies the specific bundle name.
      * @param bundleName the bundle name.
      */
-    public static void setGrammarBundle(final File bundleName)
+    @SuppressWarnings("unused")
+    public static void setGrammarBundle(@NotNull final File bundleName)
     {
         immutableSetGrammarBundle(bundleName);
     }
@@ -110,6 +112,7 @@ public class SingularPluralFormConverter
      * Retrieves the bundle name.
      * @return such information.
      */
+    @NotNull
     public static File getGrammarBundle()
     {
         return m__GrammarBundle;
@@ -119,6 +122,7 @@ public class SingularPluralFormConverter
      * Retrieves a <code>SingularPluralFormConverter</code> instance.
      * @return such instance.
      */
+    @NotNull
     public static EnglishGrammarUtils getInstance()
     {
         return SingularPluralFormConverterSingletonContainer.SINGLETON;
@@ -162,14 +166,11 @@ public class SingularPluralFormConverter
      * @param bundleProperty the bundle property.
      * @param bundleName the bundle name.
      * @return the <code>BundleI14able</code> instance.
-     * @precondition messageKey != null
-     * @precondition bundleProperty != null
-     * @precondition bundleName != null
      */
     protected BundleI14able createBundleI14able(
-        final String messageKey,
-        final String bundleProperty,
-        final String bundleName)
+        @NotNull final String messageKey,
+        @NotNull final String bundleProperty,
+        @NotNull final String bundleName)
     {
         return createBundleI14able(messageKey, bundleProperty, bundleName, getCacheTtl());
     }
@@ -181,14 +182,11 @@ public class SingularPluralFormConverter
      * @param bundleName the bundle name.
      * @param cacheTtl the cache TTL.
      * @return the <code>BundleI14able</code> instance.
-     * @precondition messageKey != null
-     * @precondition bundleProperty != null
-     * @precondition bundleName != null
      */
     protected BundleI14able createBundleI14able(
-        final String messageKey,
-        final String bundleProperty,
-        final String bundleName,
+        @NotNull final String messageKey,
+        @NotNull final String bundleProperty,
+        @NotNull final String bundleName,
         final long cacheTtl)
     {
         return

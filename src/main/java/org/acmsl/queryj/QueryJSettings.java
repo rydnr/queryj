@@ -157,9 +157,19 @@ public interface QueryJSettings
     public static final String SQL_XML_FILE = PREFIX + "sqlXml";
 
     /**
-     * The grammar bundle.
+     * The grammar folder.
      */
-    public static final String GRAMMAR_BUNDLE = PREFIX + "grammarBundle";
+    public static final String GRAMMAR_FOLDER = PREFIX + "grammarFolder";
+
+    /**
+     * The grammar name.
+     */
+    public static final String GRAMMAR_NAME = PREFIX + "grammarName";
+
+    /**
+     * The grammar suffix.
+     */
+    public static final String GRAMMAR_SUFFIX = PREFIX + "grammarSuffix";
 
     /**
      * Whether to disable custom sql validation completely.

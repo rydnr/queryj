@@ -1112,23 +1112,23 @@ public class QueryJTask
     }
 
     /**
-     * Specifies the grammar bundle.
-     * @param grammarBundle the new grammar bundle.
+     * Specifies the grammar name.
+     * @param folder the new grammar name.
      */
-    public void setGrammarbundle(final String grammarBundle)
+    public void setGrammarFolder(final File folder)
     {
-        setGrammarbundle(grammarBundle, getQueryJChain());
+        setGrammarFolder(folder, getQueryJChain());
     }
 
     /**
-     * Specifies the grammar bundle.
-     * @param grammarBundle the new grammar bundle.
+     * Specifies the grammar folder.
+     * @param folder the new grammar folder.
      * @param delegee the delegee.
      */
-    protected void setGrammarbundle(
-        final String grammarBundle, @NotNull final QueryJChain delegee)
+    protected void setGrammarFolder(
+        final File folder, @NotNull final QueryJChain delegee)
     {
-        delegee.setGrammarbundle(grammarBundle);
+        delegee.setGrammarFolder(folder);
     }
 
     /**
@@ -1136,9 +1136,49 @@ public class QueryJTask
      * @return such information.
      */
     @SuppressWarnings("unused")
-    public String getGrammarbundle()
+    public File getGrammarFolder()
     {
-        return getGrammarbundle(getQueryJChain());
+        return getGrammarFolder(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the grammar folder.
+     * @param delegee the delegee.
+     * @return such information.
+     */
+    protected File getGrammarFolder(@NotNull final QueryJChain delegee)
+    {
+        return delegee.getGrammarFolder();
+    }
+
+    /**
+     * Specifies the grammar name.
+     * @param grammarName the new grammar name.
+     */
+    public void setGrammarName(final String grammarName)
+    {
+        setGrammarName(grammarName, getQueryJChain());
+    }
+
+    /**
+     * Specifies the grammar name.
+     * @param grammarName the new grammar name.
+     * @param delegee the delegee.
+     */
+    protected void setGrammarName(
+        final String grammarName, @NotNull final QueryJChain delegee)
+    {
+        delegee.setGrammarName(grammarName);
+    }
+
+    /**
+     * Retrieves the grammar bundle.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public String getGrammarName()
+    {
+        return getGrammarName(getQueryJChain());
     }
 
     /**
@@ -1146,9 +1186,49 @@ public class QueryJTask
      * @param delegee the delegee.
      * @return such information.
      */
-    protected String getGrammarbundle(@NotNull final QueryJChain delegee)
+    protected String getGrammarName(@NotNull final QueryJChain delegee)
     {
-        return delegee.getGrammarbundle();
+        return delegee.getGrammarName();
+    }
+
+    /**
+     * Specifies the grammar suffix.
+     * @param grammarSuffix the new grammar suffix.
+     */
+    public void setGrammarSuffix(final String grammarSuffix)
+    {
+        setGrammarSuffix(grammarSuffix, getQueryJChain());
+    }
+
+    /**
+     * Specifies the grammar suffix.
+     * @param grammarSuffix the new grammar suffix.
+     * @param delegee the delegee.
+     */
+    protected void setGrammarSuffix(
+        final String grammarSuffix, @NotNull final QueryJChain delegee)
+    {
+        delegee.setGrammarSuffix(grammarSuffix);
+    }
+
+    /**
+     * Retrieves the grammar suffix.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public String getGrammarSuffix()
+    {
+        return getGrammarSuffix(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the grammar suffix.
+     * @param delegee the delegee.
+     * @return such information.
+     */
+    protected String getGrammarSuffix(@NotNull final QueryJChain delegee)
+    {
+        return delegee.getGrammarSuffix();
     }
 
     /**
@@ -1375,8 +1455,10 @@ public class QueryJTask
          * @param disableCustomSqlValidation whether to disable custom sql
          * validation.
          * @param sqlXmlFile the file containing the custom SQL.
-         * @param grammarBundle the grammar with irregular singular and plural
+         * @param grammarFolder the grammar folder.
+         * @param grammarName the grammar with irregular singular and plural
          * forms of the table names.
+         * @param grammarSuffix the grammar suffix.
          * @param encoding the file encoding.
          */
         protected void mapAttributes(
@@ -1404,7 +1486,9 @@ public class QueryJTask
             final String customSqlModel,
             final boolean disableCustomSqlValidation,
             final File sqlXmlFile,
-            final String grammarBundle,
+            final File grammarFolder,
+            final String grammarName,
+            final String grammarSuffix,
             final String encoding)
         {
             super.mapAttributes(
@@ -1432,7 +1516,9 @@ public class QueryJTask
                 customSqlModel,
                 disableCustomSqlValidation,
                 sqlXmlFile,
-                grammarBundle,
+                grammarFolder,
+                grammarName,
+                grammarSuffix,
                 encoding);
 
             mapAttributes(

@@ -63,6 +63,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.Locale;
 import java.util.Properties;
 import java.io.File;
 import java.io.IOException;
@@ -202,11 +203,22 @@ public class QueryJMojo
     private ExternallyManagedField[] externallyManagedFields;
 
     /**
-     * The grammar bundle file.
-     * @parameter property="grammarbundle"
+     * The grammar folder.
+     * @parameter property="grammarFolder"
      */
-    private String m__strGrammarbundle;
+    private File m__GrammarFolder;
 
+    /**
+     * The grammar bundle.
+     * @parameter property="grammarName"
+     */
+    private String m__strGrammarName;
+
+    /**
+     * The grammar suffix.
+     * @parameter property="grammarSuffix"
+     */
+    private String m__strGrammarSuffix;
 
     /**
      * Whether to use <code>main</code> and <code>test</code> subfolders
@@ -929,39 +941,114 @@ public class QueryJMojo
     }
 
     /**
-     * Specifies the grammar bundle.
-     * @param bundle such bundle.
+     * Specifies the grammar folder.
+     * @param folder such folder.
      */
-    protected final void immutableSetGrammarbundle(final String bundle)
+    protected final void immutableSetGrammarFolder(final File folder)
     {
-        m__strGrammarbundle = bundle;
+        m__GrammarFolder = folder;
     }
 
     /**
-     * Specifies the grammar bundle.
-     * @param bundle such bundle.
+     * Specifies the grammar folder.
+     * @param folder such folder.
      */
-    public void setGrammarbundle(final String bundle)
+    @SuppressWarnings("unused")
+    public void setGrammarFolder(final File folder)
     {
-        immutableSetGrammarbundle(bundle);
+        immutableSetGrammarFolder(folder);
+    }
+
+    /**
+     * Returns the grammar folder.
+     * @return such folder.
+     */
+    protected final File immutableGetGrammarFolder()
+    {
+        return m__GrammarFolder;
     }
 
     /**
      * Returns the grammar bundle.
      * @return such resource.
      */
-    protected final String immutableGetGrammarbundle()
+    protected File getGrammarFolder()
     {
-        return m__strGrammarbundle;
+        return immutableGetGrammarFolder();
+    }
+
+    /**
+     * Specifies the grammar bundle.
+     * @param bundle such bundle.
+     */
+    protected final void immutableSetGrammarName(final String bundle)
+    {
+        m__strGrammarName = bundle;
+    }
+
+    /**
+     * Specifies the grammar bundle.
+     * @param bundle such bundle.
+     */
+    @SuppressWarnings("unused")
+    public void setGrammarName(final String bundle)
+    {
+        immutableSetGrammarName(bundle);
     }
 
     /**
      * Returns the grammar bundle.
      * @return such resource.
      */
-    protected String getGrammarbundle()
+    protected final String immutableGetGrammarName()
     {
-        return immutableGetGrammarbundle();
+        return m__strGrammarName;
+    }
+
+    /**
+     * Returns the grammar bundle.
+     * @return such resource.
+     */
+    protected String getGrammarName()
+    {
+        return immutableGetGrammarName();
+    }
+
+    /**
+     * Specifies the grammar suffix.
+     * @param suffix such suffix.
+     */
+    protected final void immutableSetGrammarSuffix(final String suffix)
+    {
+        m__strGrammarSuffix = suffix;
+    }
+
+    /**
+     * Specifies the grammar suffix.
+     * @param suffix such suffix.
+     */
+    @SuppressWarnings("unused")
+    public void setGrammarSuffix(final String suffix)
+    {
+        immutableSetGrammarSuffix(suffix);
+    }
+
+    /**
+     * Returns the grammar suffix.
+     * @return such resource.
+     */
+    protected final String immutableGetGrammarSuffix()
+    {
+        return m__strGrammarSuffix;
+    }
+
+    /**
+     * Returns the grammar suffix.
+     * @return such resource.
+     */
+    protected String getGrammarSuffix()
+    {
+        return immutableGetGrammarSuffix();
     }
 
     /**
@@ -1271,9 +1358,14 @@ public class QueryJMojo
         result.setExtractProcedures(
             "" + getExtractProcedures());
 
-        log.debug("Grammar bundle: " + getGrammarbundle());
+        log.debug(
+            "Grammar bundle: " + getGrammarFolder() + File.separator
+            + getGrammarName() + "(_" + Locale.getDefault().getLanguage().toLowerCase(Locale.getDefault())
+            + ")" + getGrammarSuffix());
 
-        result.setGrammarbundle(getGrammarbundle());
+        result.setGrammarFolder(getGrammarFolder());
+        result.setGrammarName(getGrammarName());
+        result.setGrammarSuffix(getGrammarSuffix());
 
         log.debug("Output subfolders: " + getUseOutputSubfolders());
         result.setOutputdirsubfolders("" + getUseOutputSubfolders());

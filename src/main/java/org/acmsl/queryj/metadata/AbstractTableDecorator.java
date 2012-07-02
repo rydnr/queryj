@@ -908,7 +908,13 @@ public abstract class AbstractTableDecorator
         @NotNull final String word,
         @NotNull final EnglishGrammarUtils singularPluralFormConverter)
     {
-        return singularPluralFormConverter.getSingular(word);
+        if (word.endsWith("categories"))
+        {
+            int a = 0;
+        }
+        String result = singularPluralFormConverter.getSingular(word);
+
+        return result;
     }
 
     /**
