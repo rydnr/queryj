@@ -269,7 +269,7 @@ import <basePackageName>.<voFactorySubpackageName>.<voName>ValueObjectFactory;
 import <basePackageName>.<baseDAOSubpackageName>.<voName>DAO;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JdbcTemplate;
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>QueryPreparedStatementCreator;
+import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>PreparedStatementCreator;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
 <!//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;!>
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
@@ -630,7 +630,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 
                 transactionTemplate.execute(
                     new QueryTransactionCallback(
-                        new <repository.capitalized>QueryPreparedStatementCreator(
+                        new <repository.capitalized>PreparedStatementCreator(
                             query, daoListener),
                         new <table.voName>PkStatementSetter(
                             <table.primaryKey:{<it.nameLowercased>}; separator=",\n">),
@@ -829,7 +829,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
         Object t_Result =
             transactionTemplate.execute(
                 new UpdateTransactionCallback(
-                    new <repository.capitalized>QueryPreparedStatementCreator(
+                    new <repository.capitalized>PreparedStatementCreator(
                         query, daoListener),
                     new <table.voName>AttributesStatementSetter(
 <if(parent)>
@@ -964,7 +964,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     {
         transactionTemplate.execute(
             new UpdateTransactionCallback(
-                new <repository.capitalized>QueryPreparedStatementCreator(
+                new <repository.capitalized>PreparedStatementCreator(
                     query, daoListener),
                 new <table.voName>PkStatementSetter(
                     <table.primaryKey:{<it.nameLowercased>}; separator=",\n">),
@@ -1568,7 +1568,7 @@ protected void insert(
 <endif>
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <repository.capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>PreparedStatementCreator(
                 query, daoListener),
             new <table.voName>AttributesStatementSetter(
 <if(parent)>
@@ -1835,7 +1835,7 @@ protected <table.voName> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <repository.capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>PreparedStatementCreator(
                 query, daoListener),
             new <table.voName>AttributesStatementSetter(
 <if(parent)>
@@ -2072,7 +2072,7 @@ protected <table.voName> create(
 
     transactionTemplate.execute(
         new UpdateTransactionCallback(
-            new <repository.capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>PreparedStatementCreator(
                 "insert into <table.nameUppercased>" +
                 " (" +
 <if(parent)>
@@ -2108,7 +2108,7 @@ protected <table.voName> create(
 
     SelectForUpdateTransactionCallback t_Callback =
         new SelectForUpdateTransactionCallback(
-            new <repository.capitalized>QueryPreparedStatementCreator(
+            new <repository.capitalized>PreparedStatementCreator(
                 "SELECT " +
 <if(parent)>
                 <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
