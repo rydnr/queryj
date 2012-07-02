@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: JdbcTemplateTemplateWritingHandler.java
+ * Filename: ThreadLocalBagTemplateBuildHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes JdbcTemplate templates.
+ * Description: Builds ThreadLocalBagTemplate instances.
  *
  */
 package org.acmsl.queryj.templates.dao.handlers;
@@ -40,62 +40,43 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
-import org.acmsl.queryj.templates.dao.JdbcTemplateTemplate;
-import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateGenerator;
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
+import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.io.File;
 import java.util.Map;
 
 /**
- * Writes {@link org.acmsl.queryj.templates.dao.JdbcTemplateTemplate} templates.
- * @author <a href="mailto:chous@acm-sl.org"
-           >Jose San Leandro</a>
- * @since 2012/07/01 (recovered)
+ * Builds {@link ThreadLocalBagTemplate} instances.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/07/02 (recovered)
  */
-public class JdbcTemplateTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler
-                 <JdbcTemplateTemplate,
-                     JdbcTemplateTemplateGenerator,
-                     BasePerRepositoryTemplateContext>
+public class ThreadLocalBagTemplateBuildHandler
+    extends  BasePerRepositoryTemplateBuildHandler
+                 <ThreadLocalBagTemplate,
+                     ThreadLocalBagTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
-     * {@inheritDoc}
+     * Checks whether template generation is enabled for this kind of template.
+     * @return <code>true</code> in such case.
      */
-    @NotNull
     @Override
-    protected JdbcTemplateTemplateGenerator retrieveTemplateGenerator()
+    protected boolean isGenerationEnabled(
+        @NotNull final CustomSqlProvider customSqlProvider, @NotNull final Map parameters)
     {
-        return JdbcTemplateTemplateGenerator.getInstance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    @Override
-    @SuppressWarnings("unchecked")
-    protected JdbcTemplateTemplate retrieveTemplate(
-        @NotNull final Map parameters)
-    {
-        return
-            (JdbcTemplateTemplate)
-                parameters.get(
-                    TemplateMappingManager.JDBC_TEMPLATE_TEMPLATE);
+        return true;
     }
 
     /**
@@ -103,18 +84,37 @@ public class JdbcTemplateTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected File retrieveOutputDir(
-        @NotNull final File projectFolder,
-        @NotNull final String projectPackage,
-        final boolean useSubFolders,
+    protected ThreadLocalBagTemplateGenerator retrieveTemplateFactory()
+    {
+        return ThreadLocalBagTemplateGenerator.getInstance();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @NotNull
+    @Override
+    protected String retrievePackage(
         @NotNull final String engineName,
-        @NotNull final Map parameters,
+        @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveJdbcTemplateFolder(
-                projectFolder,
-                projectPackage,
-                useSubFolders);
+            packageUtils.retrieveThreadLocalBagExtractorPackage(
+                projectPackage);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void storeTemplate(
+        @NotNull final ThreadLocalBagTemplate template, @NotNull final Map parameters)
+    {
+        parameters.put(
+            TemplateMappingManager.THREAD_LOCAL_BAG_TEMPLATE,
+            template);
+    }
+
 }

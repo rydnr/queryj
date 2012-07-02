@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: JdbcTemplateTemplateWritingHandler.java
+ * Filename: ThreadLocalBagTemplateWritingHandler.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Writes JdbcTemplate templates.
+ * Description: Writes ThreadLocalBag templates.
  *
  */
 package org.acmsl.queryj.templates.dao.handlers;
@@ -40,14 +40,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
-import org.acmsl.queryj.templates.dao.JdbcTemplateTemplate;
-import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateGenerator;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-
 
 /*
  * Importing some JetBrains annotations.
@@ -62,15 +60,15 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Writes {@link org.acmsl.queryj.templates.dao.JdbcTemplateTemplate} templates.
+ * Writes {@link ThreadLocalBagTemplate} templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
- * @since 2012/07/01 (recovered)
+ * @since 2012/07/02 (recovered)
  */
-public class JdbcTemplateTemplateWritingHandler
+public class ThreadLocalBagTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
-                 <JdbcTemplateTemplate,
-                     JdbcTemplateTemplateGenerator,
+                 <ThreadLocalBagTemplate,
+                     ThreadLocalBagTemplateGenerator,
                      BasePerRepositoryTemplateContext>
 {
     /**
@@ -78,9 +76,9 @@ public class JdbcTemplateTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected JdbcTemplateTemplateGenerator retrieveTemplateGenerator()
+    protected ThreadLocalBagTemplateGenerator retrieveTemplateGenerator()
     {
-        return JdbcTemplateTemplateGenerator.getInstance();
+        return ThreadLocalBagTemplateGenerator.getInstance();
     }
 
     /**
@@ -89,13 +87,13 @@ public class JdbcTemplateTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected JdbcTemplateTemplate retrieveTemplate(
+    protected ThreadLocalBagTemplate retrieveTemplate(
         @NotNull final Map parameters)
     {
         return
-            (JdbcTemplateTemplate)
+            (ThreadLocalBagTemplate)
                 parameters.get(
-                    TemplateMappingManager.JDBC_TEMPLATE_TEMPLATE);
+                    TemplateMappingManager.THREAD_LOCAL_BAG_TEMPLATE);
     }
 
     /**
@@ -112,7 +110,7 @@ public class JdbcTemplateTemplateWritingHandler
         @NotNull final PackageUtils packageUtils)
     {
         return
-            packageUtils.retrieveJdbcTemplateFolder(
+            packageUtils.retrieveThreadLocalBagFolder(
                 projectFolder,
                 projectPackage,
                 useSubFolders);

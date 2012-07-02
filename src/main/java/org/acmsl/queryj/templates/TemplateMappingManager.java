@@ -255,6 +255,12 @@ public class TemplateMappingManager
         "base.prepared.statement.creator.template";
 
     /**
+     * The ThreadLocalBag template type.
+     */
+    public static final String THREAD_LOCAL_BAG_TEMPLATE =
+        "thread.local.bag.template";
+
+    /**
      * Singleton implemented to avoid the double-checked locking.
      */
     private static class TemplateMappingManagerSingletonContainer

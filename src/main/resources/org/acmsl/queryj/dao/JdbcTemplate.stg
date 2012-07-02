@@ -826,7 +826,7 @@ public class <repository.capitalized>JdbcTemplate
         {
             TransactionSynchronizationManager.unbindResource(this.dataSource);
 
-            DataSourceUtils.closeConnectionIfNecessary(
+            DataSourceUtils.releaseConnection(
                 this.connectionHolder.getConnection(), this.dataSource);
         }
     }
