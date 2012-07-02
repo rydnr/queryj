@@ -681,7 +681,7 @@ public class ParameterValidationHandler
                       grammarFolder + File.separator
                     + grammarBundleName
                     + "_"
-                    + Locale.getDefault().getLanguage().toLowerCase(Locale.getDefault())
+                    + Locale.US.getLanguage().toLowerCase(Locale.US)
                     + suffix);
 
             if (!file.exists())

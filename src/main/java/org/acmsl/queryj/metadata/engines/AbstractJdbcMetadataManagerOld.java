@@ -5602,7 +5602,7 @@ public abstract class AbstractJdbcMetadataManagerOld
         final String columnName,
         final boolean isCaseSensitive)
     {
-        Locale t_Locale = Locale.getDefault();
+        Locale t_Locale = Locale.US;
 
         return
               "[[column-bools]]"
@@ -5683,7 +5683,7 @@ public abstract class AbstractJdbcMetadataManagerOld
     protected Object buildTableStaticKey(
         final String table)
     {
-        Locale t_Locale = Locale.getDefault();
+        Locale t_Locale = Locale.US;
 
         return "[[table-static]]" + table.toLowerCase(t_Locale);
     }
@@ -5759,7 +5759,7 @@ public abstract class AbstractJdbcMetadataManagerOld
     protected Object buildTableDecoratedKey(
         final String table)
     {
-        Locale t_Locale = Locale.getDefault();
+        Locale t_Locale = Locale.US;
 
         return "[[table-decorated]]" + table.toLowerCase(t_Locale);
     }

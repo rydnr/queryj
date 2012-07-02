@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
@@ -1896,17 +1897,21 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
-    @SuppressWarnings("unused")
+    @Nullable
     protected File getGrammarFolder(@Nullable final Properties properties)
     {
         File result = getGrammarFolder();
 
         if  (   (result == null)
-                && (properties != null))
+             && (properties != null))
         {
-            result = new File(properties.getProperty(GRAMMAR_FOLDER));
+            @Nullable final String t_strGrammarFolder = properties.getProperty(GRAMMAR_FOLDER);
 
-            setGrammarFolder(result);
+            if (t_strGrammarFolder != null)
+            {
+                result = new File(t_strGrammarFolder);
+                setGrammarFolder(result);
+            }
         }
 
         return result;
@@ -1916,8 +1921,7 @@ public class QueryJChain
      * Specifies the grammar name.
      * @param grammarBundle the new grammar bundle.
      */
-    protected final void immutableSetGrammarName(
-            final String grammarBundle)
+    protected final void immutableSetGrammarName(@NotNull final String grammarBundle)
     {
         m__strGrammarName = grammarBundle;
     }
@@ -1926,7 +1930,7 @@ public class QueryJChain
      * Specifies the grammar name.
      * @param grammarBundle the new grammar bundle.
      */
-    public void setGrammarName(final String grammarBundle)
+    public void setGrammarName(@NotNull final String grammarBundle)
     {
         immutableSetGrammarName(grammarBundle);
     }
@@ -1935,6 +1939,7 @@ public class QueryJChain
      * Retrieves the grammar name.
      * @return such information.
      */
+    @Nullable
     public String getGrammarName()
     {
         return m__strGrammarName;
@@ -1947,12 +1952,13 @@ public class QueryJChain
      * @return such information.
      */
     @SuppressWarnings("unused")
+    @Nullable
     protected String getGrammarName(@Nullable final Properties properties)
     {
-        String result = getGrammarName();
+        @Nullable String result = getGrammarName();
 
         if  (   (result == null)
-                && (properties != null))
+             && (properties != null))
         {
             result = properties.getProperty(GRAMMAR_NAME);
             setGrammarName(result);
@@ -1984,6 +1990,7 @@ public class QueryJChain
      * Retrieves the grammar suffix.
      * @return such information.
      */
+    @Nullable
     public String getGrammarSuffix()
     {
         return m__strGrammarSuffix;
@@ -1996,6 +2003,7 @@ public class QueryJChain
      * @return such information.
      */
     @SuppressWarnings("unused")
+    @Nullable
     protected String getGrammarSuffix(@Nullable final Properties properties)
     {
         String result = getGrammarSuffix();
@@ -2014,7 +2022,7 @@ public class QueryJChain
      * Specifies the file encoding.
      * @param encoding the encoding.
      */
-    protected final void immutableSetEncoding(final String encoding)
+    protected final void immutableSetEncoding(@NotNull final String encoding)
     {
         m__strEncoding = encoding;
     }
@@ -2023,7 +2031,7 @@ public class QueryJChain
      * Specifies the file encoding.
      * @param encoding the encoding.
      */
-    public void setEncoding(final String encoding)
+    public void setEncoding(@NotNull final String encoding)
     {
         immutableSetEncoding(encoding);
     }
@@ -2032,6 +2040,7 @@ public class QueryJChain
      * Retrieves the file encoding.
      * @return such encoding.
      */
+    @Nullable
     public String getEncoding()
     {
         return m__strEncoding;
@@ -2043,6 +2052,7 @@ public class QueryJChain
      * @param properties the properties.
      * @return such information.
      */
+    @Nullable
     protected String getEncoding(@Nullable final Properties properties)
     {
         String result = getEncoding();
@@ -2062,6 +2072,7 @@ public class QueryJChain
      * @param chain the chain to be configured.
      * @return the updated chain.
      */
+    @NotNull
     protected Chain buildChain(@NotNull final Chain chain)
     {
         return
@@ -2078,37 +2089,35 @@ public class QueryJChain
      * @param generateXML whether to include XML implementations.
      * @return the updated chain.
      */
-    @SuppressWarnings("unused")
+    @NotNull
     protected Chain buildChain(
-        final Chain chain,
+        @NotNull final Chain chain,
         final boolean generateMock,
         final boolean generateXML)
     {
-        if  (chain != null)
-        {
-            chain.add(new ParameterValidationHandler());
+        chain.add(new ParameterValidationHandler());
 
-            chain.add(new Log4JInitializerHandler());
+        chain.add(new Log4JInitializerHandler());
 
-            chain.add(new JdbcConnectionOpeningHandler());
-            chain.add(new CustomSqlProviderRetrievalHandler());
+        chain.add(new JdbcConnectionOpeningHandler());
+        chain.add(new CustomSqlProviderRetrievalHandler());
 
-            // chain.add(new DatabaseMetaDataCacheReadingHandler());
+        // chain.add(new DatabaseMetaDataCacheReadingHandler());
 
-            chain.add(new MySQL4xMetaDataRetrievalHandler());
-            chain.add(new OracleMetaDataRetrievalHandler());
-            chain.add(new JdbcMetaDataRetrievalHandler());
-            chain.add(new CustomSqlValidationHandler());
+        chain.add(new MySQL4xMetaDataRetrievalHandler());
+        chain.add(new OracleMetaDataRetrievalHandler());
+        chain.add(new JdbcMetaDataRetrievalHandler());
+        chain.add(new CustomSqlValidationHandler());
 
-            chain.add(new DatabaseMetaDataCacheWritingHandler());
+        chain.add(new DatabaseMetaDataCacheWritingHandler());
 
-            chain.add(new DatabaseMetaDataLoggingHandler());
+        chain.add(new DatabaseMetaDataLoggingHandler());
 
-            chain.add(new ExternallyManagedFieldsRetrievalHandler());
+        chain.add(new ExternallyManagedFieldsRetrievalHandler());
 
-            chain.add(new TableTemplateHandlerBundle());
+        chain.add(new TableTemplateHandlerBundle());
 
-            // TODO: Enable all templates
+        // TODO: Enable all templates
 //            chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
 //            chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
 
@@ -2122,12 +2131,11 @@ public class QueryJChain
 
             //chain.add(new KeywordRepositoryTemplateHandlerBundle());
 
-            chain.add(new DAOBundle(generateMock, generateXML));
+        chain.add(new DAOBundle(generateMock, generateXML));
 
-            chain.add(new VOBundle(generateMock, generateXML));
+        chain.add(new VOBundle(generateMock, generateXML));
 
-            chain.add(new JdbcConnectionClosingHandler());
-        }
+        chain.add(new JdbcConnectionClosingHandler());
 
         return chain;
     }
@@ -2138,7 +2146,7 @@ public class QueryJChain
      * @param command the command.
      */
     protected void cleanUpOnError(
-        final QueryJBuildException buildException, @NotNull final org.acmsl.queryj.QueryJCommand command)
+        @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
         Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
@@ -2164,10 +2172,9 @@ public class QueryJChain
      * Builds the command.
      * @param command the command to be initialized.
      * @return the initialized command.
-     * @precondition command != null
      */
     @NotNull
-    protected org.acmsl.queryj.QueryJCommand buildCommand(@NotNull final org.acmsl.queryj.QueryJCommand command)
+    protected QueryJCommand buildCommand(@NotNull final QueryJCommand command)
     {
         return buildCommand(command, getSettings());
     }
@@ -2177,11 +2184,10 @@ public class QueryJChain
      * @param command the command to be initialized.
      * @param settings the already-loaded settings.
      * @return the initialized command.
-     * @precondition command != null
      */
     @NotNull
-    protected org.acmsl.queryj.QueryJCommand buildCommand(
-        @NotNull final org.acmsl.queryj.QueryJCommand command, final Properties settings)
+    protected QueryJCommand buildCommand(
+        @NotNull final QueryJCommand command, @Nullable final Properties settings)
     {
         @Nullable Properties t_Settings = settings;
 
@@ -2201,7 +2207,7 @@ public class QueryJChain
      */
     @NotNull
     protected org.acmsl.queryj.QueryJCommand buildCommandFromSettingsIfPossible(
-        @NotNull final org.acmsl.queryj.QueryJCommand command, final Properties settings)
+        @NotNull final QueryJCommand command, @Nullable final Properties settings)
     {
         mapAttributes(
             command.getAttributeMap(),
@@ -2486,7 +2492,7 @@ public class QueryJChain
                 File t_GrammarFile =
                     new File(
                           grammarFolder + File.separator + grammarName
-                        + "_" + Locale.getDefault().getLanguage().toLowerCase(Locale.getDefault())
+                        + "_" + Locale.US.getLanguage().toLowerCase(Locale.US)
                         + grammarSuffix);
 
                 SingularPluralFormConverter.setGrammarBundle(t_GrammarFile);

@@ -1360,7 +1360,7 @@ public class QueryJMojo
 
         log.debug(
             "Grammar bundle: " + getGrammarFolder() + File.separator
-            + getGrammarName() + "(_" + Locale.getDefault().getLanguage().toLowerCase(Locale.getDefault())
+            + getGrammarName() + "(_" + Locale.US.getLanguage().toLowerCase(Locale.US)
             + ")" + getGrammarSuffix());
 
         result.setGrammarFolder(getGrammarFolder());

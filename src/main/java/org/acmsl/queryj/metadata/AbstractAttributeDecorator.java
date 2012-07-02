@@ -310,7 +310,7 @@ public abstract class AbstractAttributeDecorator
     protected String capitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
-        @NotNull final Locale t_Locale = Locale.getDefault();
+        @NotNull final Locale t_Locale = Locale.US;
 
         return decorationUtils.capitalize(value.toLowerCase(t_Locale));
     }
@@ -335,7 +335,7 @@ public abstract class AbstractAttributeDecorator
     protected String uncapitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
-        @NotNull final Locale t_Locale = Locale.getDefault();
+        @NotNull final Locale t_Locale = Locale.US;
 
         return decorationUtils.uncapitalize(value.toLowerCase(t_Locale));
     }
