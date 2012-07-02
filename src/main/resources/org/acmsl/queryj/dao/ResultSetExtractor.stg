@@ -175,17 +175,20 @@ defaultExtractorImpl(table, parent) ::= <<
 !>
 /**
  * Constructs a new {@link <table.voName>ResultSetExtractor}.
+ * @param sql the original SQL.
  * @param daoListener the dao listener.
  */
 public <table.voName>ResultSetExtractor(
-    final <repository.capitalized>DAOListener daoListener)
+    <notnull()>final String sql,
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
 {
-    super(daoListener);
+    super(sql, daoListener);
 }
 
 /**
  * Extracts {@link <table.voName>} information from given result set.
  * @param resultSet the result set.
+ * @param sql the original SQL.
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @return the {@link <table.voName>} or
  * \<code>null\</code> if the operation returned no data.
@@ -193,16 +196,19 @@ public <table.voName>ResultSetExtractor(
  * @throws DataAccessException with information about any
  * custom exception.
  */
+@Override
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <repository.capitalized>DAOListener daoListener)
+    <notnull()>final String sql,
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
   throws  SQLException,
           DataAccessException
 {
     return
         extractData(
             resultSet,
+            sql,
             daoListener,
             <table.voName>ValueObjectFactory.getInstance());
 }
@@ -220,19 +226,21 @@ protected Object extractData(
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <repository.capitalized>DAOListener daoListener,
+    <notnull()>final String sql,
+    <notnull()>final <repository.capitalized>DAOListener daoListener,
     <notnull()>final <table.voName>ValueObjectFactory factory)
   throws  SQLException,
           DataAccessException
 {
     <table.voName> result = null;
 
+    int t_iRowCount = 0;
+
     if  (resultSet.next())
     {
-        if  (daoListener != null)
-        {
-            daoListener.resultSetMovedForward(this);
-        }
+        t_iRowCount++;
+
+        daoListener.resultSetMovedForward(sql, t_iRowCount);
 
 <if(parent)>
         <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
@@ -255,10 +263,7 @@ protected Object extractData(
 
     }
 
-    if  (daoListener != null)
-    {
-        daoListener.resultSetClosed(this);
-    }
+    daoListener.resultSetClosed(sql, t_iRowCount);
 
     return result;
 }
@@ -389,6 +394,7 @@ public boolean getSelectForUpdateMode()
 /**
  * Extracts \<i><table.voName>\</i> information from given result set.
  * @param resultSet the result set.
+ * @param sql the original SQL.
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @return the {@link <table.voName>} or
  * \<code>link\</code> if the operation returned no data.
@@ -396,16 +402,19 @@ public boolean getSelectForUpdateMode()
  * @throws DataAccessException with information about any
  * custom exception.
  */
+@Override
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <repository.capitalized>DAOListener daoListener)
+    <notnull()>final String sql,
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
   throws  SQLException,
           DataAccessException
 {
     return
         extractData(
             resultSet,
+            sql,
             daoListener,
             <table.lobAttributes:{get<it.nameCapitalized>()};
               separator=",\n">,
@@ -416,6 +425,7 @@ protected Object extractData(
 /**
  * Extracts \<i><table.voName>\</i> information from given result set.
  * @param resultSet the result set.
+ * @param sql the original SQL.
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  <table.lobAttributes:attribute_javadoc_method_declaration(value=it);
    separator="\n">
@@ -432,7 +442,8 @@ protected Object extractData(
 <notnull()>
 protected Object extractData(
     <notnull()>final ResultSet resultSet,
-    <nullable()>final <repository.capitalized>DAOListener daoListener,
+    <notnull()>final String sql,
+    <notnull()>final <repository.capitalized>DAOListener daoListener,
     <table.lobAttributes:attribute_method_declaration(value=it);
       separator=",\n">,
     final boolean selectForUpdateMode,
@@ -442,12 +453,13 @@ protected Object extractData(
 {
     <table.voName> result = null;
 
+    int t_iRowCount = 0;
+
     if  (resultSet.next())
     {
-        if  (daoListener != null)
-        {
-            daoListener.resultSetMovedForward(this);
-        }
+        t_iRowCount++;
+
+        daoListener.resultSetMovedForward(sql, t_iRowCount);
 
 <if(parent)>
         <table.allParentAndNonParentAttributes:nullable_attribute_extraction(
@@ -472,10 +484,7 @@ protected Object extractData(
 
     }
 
-    if  (daoListener != null)
-    {
-        daoListener.resultSetClosed(this);
-    }
+    daoListener.resultSetClosed(sql, t_iRowCount);
 
     return result;
 }

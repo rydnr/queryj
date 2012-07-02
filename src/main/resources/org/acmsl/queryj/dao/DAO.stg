@@ -347,7 +347,7 @@ classImpl(foreign_keys, table, parent) ::= <<
         engineName=engine_name,
         engineVersion=engine_version)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg")>
  */
 public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voName>DAO
   extends     <repository.capitalized>JdbcTemplate
@@ -1010,40 +1010,47 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
     {
         /**
          * Constructs a new {@link <table.voName>ResultSetExtractor}.
+         * @param sql the original sql used.
          * @param daoListener the dao listener.
          */
         public <table.voName>PkResultSetExtractor(
+            <notnull()>final String sql,
             <nullable()>final <repository.capitalized>DAOListener daoListener)
         {
-            super(daoListener);
+            super(sql, daoListener);
         }
 
         // \<extract data>
         /**
          * Extracts \<i><table.voName>\</i> information from given result set.
          * @param resultSet the result set.
+         * @param sql the original SQL.
          * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
-         * @return the {@link <table.voName>} or {@link null}
+         * @return the {@link <table.voName>} or \<code>null\<code>
          * if the operation returned no data.
          * @throws SQLException intercepted by \<i>Spring\</i>.
          * @throws DataAccessException with information about any
          * custom exception.
          */
+        @Override
+        @SuppressWarnings("unchecked")
         <notnull()>
         protected Object extractData(
             <notnull()>final ResultSet resultSet,
-            <nullable()>final <repository.capitalized>DAOListener daoListener)
+            <notnull()>final String sql,
+            <notnull()>final <repository.capitalized>DAOListener daoListener)
         throws  SQLException,
                 DataAccessException
         {
             final Map result = new HashMap();
 
+            int t_iRowCount = 0;
+
             if  (resultSet.next())
             {
-                if  (daoListener != null)
-                {
-                    daoListener.resultSetMovedForward(this);
-                }
+                t_iRowCount++;
+
+                daoListener.resultSetMovedForward(sql, t_iRowCount);
 
                 int index = 1;
 
@@ -1054,10 +1061,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
                   isPrimitive=it.primitive)>
             }
 
-            if  (daoListener != null)
-            {
-                daoListener.resultSetClosed(this);
-            }
+            daoListener.resultSetClosed(sql, t_iRowCount);
 
             return result;
         }
@@ -2227,13 +2231,16 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
 
     /**
      * Constructs a new {@link <nameCapitalized><table.voName>ResultSetExtractor}.
+     * @param fieldName the field name.
+     * @param sql the original SQL.
      * @param daoListener the dao listener.
      */
     public <nameCapitalized><table.voName>ResultSetExtractor(
         <notnull()>final String fieldName,
+        <notnull()>final String sql,
         <nullable()>final <trNameCapitalized>DAOListener daoListener)
     {
-        super(daoListener);
+        super(sql, daoListener);
         immutableSetFieldName(fieldName);
     }
 
@@ -2250,6 +2257,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * Specifies the field name.
      * @param fieldName the field name.
      */
+    @SuppressWarnings("unused")
     protected void setFieldName(<notnull()>final String fieldName)
     {
         immutableSetFieldName(fieldName);
@@ -2269,6 +2277,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
     /**
      * Extracts \<i><table.voName>\</i> information from given result set.
      * @param resultSet the result set.
+     * @param sql the SQL used.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      * @return the {@link <table.voName>} or \<code>null\</code>
      * if the operation returned no data.
@@ -2276,10 +2285,12 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * @throws DataAccessException with information about any
      * custom exception.
      */
+    @Override
     <notnull()>
     protected Object extractData(
         <notnull()>final ResultSet resultSet,
-        <nullable()>final <trNameCapitalized>DAOListener daoListener)
+        <notnull()>final String sql,
+        <notnull()>final <trNameCapitalized>DAOListener daoListener)
     throws  SQLException,
             DataAccessException
     {
@@ -2287,6 +2298,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
             extractData(
                 resultSet,
                 getFieldName(),
+                getSql(),
                 daoListener);
     }
 
@@ -2294,6 +2306,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * Extracts \<i><table.voName>\</i> information from given result set.
      * @param resultSet the result set.
      * @param fieldName the field name.
+     * @param sql the SQL used.
      * @param daoListener the {@link <trNameCapitalized>DAOListener} instance.
      * @return the {@link <table.voName>} or \<code>null\</code>
      * if the operation returned no data.
@@ -2301,21 +2314,25 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
      * @throws DataAccessException with information about any
      * custom exception.
      */
+    @SuppressWarnings("unchecked")
+    <notnull()>
     protected Object extractData(
         <notnull()>final ResultSet resultSet,
         <notnull()>final String fieldName,
-        <nullable()>final <trNameCapitalized>DAOListener daoListener)
+        <notnull()>final String sql,
+        <notnull()>final <trNameCapitalized>DAOListener daoListener)
     throws  SQLException,
             DataAccessException
     {
         <notnull()>final Map result = new HashMap();
 
+        int t_iRowCount = 0;
+
         if  (resultSet.next())
         {
-            if  (daoListener != null)
-            {
-                daoListener.resultSetMovedForward(this);
-            }
+            t_iRowCount++;
+
+            daoListener.resultSetMovedForward(sql, t_iRowCount);
 
             int index = 1;
 
@@ -2325,10 +2342,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
               isPrimitive=isPrimitive)>
         }
 
-        if  (daoListener != null)
-        {
-            daoListener.resultSetClosed(this);
-        }
+        daoListener.resultSetClosed(sql, t_iRowCount);
 
         return result;
     }

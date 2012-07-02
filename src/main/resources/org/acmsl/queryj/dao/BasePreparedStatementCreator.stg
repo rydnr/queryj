@@ -210,7 +210,7 @@ public class <repository.capitalized>PreparedStatementCreator
      * Retrieves the DAO listener.
      * @return such instance.
      */
-    <nullable()>
+    <notnull()>
     protected <repository.capitalized>DAOListener getDAOListener()
     {
         return daoListener;
@@ -250,16 +250,13 @@ public class <repository.capitalized>PreparedStatementCreator
     protected PreparedStatement createPreparedStatement(
         <notnull()>final Connection connection,
         <notnull()>final String sql,
-        <nullable()>final <repository.capitalized>DAOListener daoListener)
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
       throws SQLException
     {
         <notnull()>final PreparedStatement result =
             connection.prepareStatement(sql);
 
-        if  (daoListener != null)
-        {
-//            daoListener.statementPrepared(sql);
-        }
+        daoListener.statementPrepared(sql);
 
         return result;
     }

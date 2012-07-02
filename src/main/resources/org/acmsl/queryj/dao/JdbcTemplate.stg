@@ -296,15 +296,17 @@ public class <repository.capitalized>JdbcTemplate
         return
             execute(
                 action,
+                getSql(action),
                 getDataSource(),
                 getDAOListener(),
                 getNativeJdbcExtractor(),
-                 getExceptionTranslator());
+                getExceptionTranslator());
     }
 
     /**
      * Executes a operation, taking into account a proper connection handling.
      * @param action the {@link ConnectionCallback} instance.
+     * @param sql the original SQL.
      * @param dataSource the {@link DataSource} instance.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      * @param nativeJdbcExtractor the native JDBC extractor.
@@ -315,6 +317,7 @@ public class <repository.capitalized>JdbcTemplate
     <nullable()>
     protected Object execute(
         <notnull()>final ConnectionCallback action,
+        <notnull()>final String sql,
         <notnull()>final DataSource dataSource,
         <nullable()>final <repository.capitalized>DAOListener daoListener,
         <nullable()>final NativeJdbcExtractor nativeJdbcExtractor,
@@ -352,10 +355,7 @@ public class <repository.capitalized>JdbcTemplate
                 closeConnection = true;
             }
 
-//            if  (daoListener != null)
-//            {
-//                daoListener.connectionRetrieved(getSql(action));
-//            }
+            daoListener.connectionRetrieved(sql);
 
             if  (   (closeConnection)
                  && (TransactionSynchronizationManager.isSynchronizationActive()))
@@ -385,7 +385,7 @@ public class <repository.capitalized>JdbcTemplate
             throw
                 exceptionTranslator.translate(
                     "executing ConnectionCallback",
-                    getSql(action),
+                    sql,
                     sqlException);
         }
         finally
@@ -405,10 +405,7 @@ public class <repository.capitalized>JdbcTemplate
                 }
             }
 
-//            if  (daoListener != null)
-//            {
-//                daoListener.connectionReleased(getSql(action));
-//            }
+            daoListener.connectionReleased(sql);
         }
 
         return result;
@@ -426,6 +423,7 @@ public class <repository.capitalized>JdbcTemplate
         return
             execute(
                 action,
+                getSql(action),
                 getDataSource(),
                 getDAOListener(),
                 getNativeJdbcExtractor(),
@@ -435,6 +433,7 @@ public class <repository.capitalized>JdbcTemplate
     /**
      * Executes a operation, taking into account a proper connection handling.
      * @param action the {@link StatementCallback} instance.
+     * @param sql the original SQL.
      * @param dataSource the {@link DataSource} instance.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      * @param nativeJdbcExtractor the native JDBC extractor.
@@ -445,6 +444,7 @@ public class <repository.capitalized>JdbcTemplate
     <nullable()>
     protected Object execute(
         <notnull()>final StatementCallback action,
+        <notnull()>final String sql,
         <notnull()>final DataSource dataSource,
         <nullable()>final <repository.capitalized>DAOListener daoListener,
         <nullable()>final NativeJdbcExtractor nativeJdbcExtractor,
@@ -484,10 +484,7 @@ public class <repository.capitalized>JdbcTemplate
                 closeConnection = true;
             }
 
-//            if  (daoListener != null)
-//            {
-//                daoListener.connectionRetrieved(getSql(action));
-//            }
+            daoListener.connectionRetrieved(sql);
 
             if  (   (closeConnection)
                  && (TransactionSynchronizationManager.isSynchronizationActive()))
@@ -535,7 +532,7 @@ public class <repository.capitalized>JdbcTemplate
         catch (<notnull()>final SQLException sqlException)
         {
             throw exceptionTranslator.translate(
-                "executing StatementCallback", getSql(action), sqlException);
+                "executing StatementCallback", sql, sqlException);
         }
         finally
         {
@@ -556,10 +553,7 @@ public class <repository.capitalized>JdbcTemplate
                 }
             }
 
-//            if  (daoListener != null)
-//            {
-//                daoListener.connectionReleased(getSql(action));
-//            }
+            daoListener.connectionReleased(sql);
         }
 
         return result;
@@ -581,6 +575,7 @@ public class <repository.capitalized>JdbcTemplate
             execute(
                 preparedStatementCreator,
                 action,
+                getSql(action),
                 getDataSource(),
                 getDAOListener(),
                 getNativeJdbcExtractor(),
@@ -589,11 +584,12 @@ public class <repository.capitalized>JdbcTemplate
 
     /**
      * Executes a operation, taking into account a proper connection handling.
-     * @param preparedStatementCreator the \<code>PreparedStatementCreator\</code>
+     * @param preparedStatementCreator the {@link PreparedStatementCreator}
      * instance.
-     * @param action the \<code>PreparedStatementCallback\</code> instance.
-     * @param dataSource the \<code>DataSource\</code> instance.
-     * @param daoListener the \<code><repository.capitalized>DAOListener\</code> instance.
+     * @param action the {@link PreparedStatementCallback} instance.
+     * @param sql the original SQL.
+     * @param dataSource the {@link DataSource} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      * @param nativeJdbcExtractor the native JDBC extractor.
      * @param exceptionTranslator the exception translator.
      * @return the result of the operation.
@@ -603,8 +599,9 @@ public class <repository.capitalized>JdbcTemplate
     protected Object execute(
         <notnull()>final PreparedStatementCreator preparedStatementCreator,
         <notnull()>final PreparedStatementCallback action,
+        <notnull()>final String sql,
         <notnull()>final DataSource dataSource,
-        <nullable()>final <repository.capitalized>DAOListener daoListener,
+        <notnull()>final <repository.capitalized>DAOListener daoListener,
         <nullable()>final NativeJdbcExtractor nativeJdbcExtractor,
         <notnull()>final SQLExceptionTranslator exceptionTranslator)
       throws DataAccessException
@@ -641,10 +638,7 @@ public class <repository.capitalized>JdbcTemplate
                 closeConnection = true;
             }
 
-//            if  (daoListener != null)
-//            {
-//                daoListener.connectionRetrieved(getSql(action));
-//            }
+            daoListener.connectionRetrieved(sql);
 
             if  (   (closeConnection)
                  && (TransactionSynchronizationManager.isSynchronizationActive()))
@@ -675,11 +669,7 @@ public class <repository.capitalized>JdbcTemplate
                 preparedStatementCreator.createPreparedStatement(
                     connectionToUse);
 
-            if  (daoListener != null)
-            {
-                daoListener.statementCreated(
-                    getSql(action), preparedStatementCreator);
-            }
+            daoListener.statementPrepared(sql);
 
             DataSourceUtils.applyTransactionTimeout(
                 preparedStatement, dataSource);
@@ -706,7 +696,7 @@ public class <repository.capitalized>JdbcTemplate
                 exceptionTranslator.translate(
                       "executing PreparedStatementCallback ["
                     + preparedStatementCreator + "]",
-                    getSql(preparedStatementCreator),
+                    sql,
                     sqlException);
         }
         finally
@@ -719,11 +709,7 @@ public class <repository.capitalized>JdbcTemplate
 
             JdbcUtils.closeStatement(preparedStatement);
 
-            if  (daoListener != null)
-            {
-                daoListener.statementReleased(
-                    getSql(action), preparedStatementCreator);
-            }
+            daoListener.statementReleased(sql);
 
             if  (   (closeConnection)
                  && (connection != null))
@@ -740,10 +726,7 @@ public class <repository.capitalized>JdbcTemplate
                 }
             }
 
-//            if  (daoListener != null)
-//            {
-//                daoListener.connectionReleased(getSql(action));
-//            }
+            daoListener.connectionReleased(sql);
         }
 
         return result;

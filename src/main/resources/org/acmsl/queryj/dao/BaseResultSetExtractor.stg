@@ -112,6 +112,11 @@ public abstract class <repository.capitalized>ResultSetExtractor
     implements  ResultSetExtractor
 {
     /**
+     * The SQL used.
+     */
+    private String sql;
+
+    /**
      * The DAOListener instance.
      */
     private <repository.capitalized>DAOListener daoListener;
@@ -121,9 +126,40 @@ public abstract class <repository.capitalized>ResultSetExtractor
      * @param daoListener the dao listener.
      */
     public <repository.capitalized>ResultSetExtractor(
+        <notnull()>final String sql,
         <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
+        immutableSetSql(sql);
         immutableSetDAOListener(daoListener);
+    }
+
+    /**
+     * Specifies the SQL used in the query.
+     * @param query the query.
+     */
+    protected final void immutableSetSql(<notnull()>final String query)
+    {
+        this.sql = query;
+    }
+
+    /**
+     * Specifies the SQL used in the query.
+     * @param query the query.
+     */
+    @SuppressWarnings("unused")
+    protected void setSql(<notnull()>final String query)
+    {
+        immutableSetSql(query);
+    }
+
+    /**
+     * Retrieves the SQL used in the query.
+     * @return such information.
+     */
+    <notnull()>
+    public String getSql()
+    {
+        return this.sql;
     }
 
     /**
@@ -151,7 +187,7 @@ public abstract class <repository.capitalized>ResultSetExtractor
      * Retrieves the DAO listener.
      * @return such instance.
      */
-    <nullable()>
+    <notnull()>
     protected <repository.capitalized>DAOListener getDAOListener()
     {
         return this.daoListener;
@@ -171,16 +207,17 @@ public abstract class <repository.capitalized>ResultSetExtractor
         throws  SQLException,
                 DataAccessException
     {
-        return extractData(resultSet, getDAOListener());
+        return extractData(resultSet, getSql(), getDAOListener());
     }
 
 
     /**
      * Extracts information from given result set.
      * @param resultSet the result set.
-     * @param daoListener the \{@link <repository.capitalized>DAOListener} instance.
+     * @param sql the original SQL.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
      * @return the associated value-object, or
-     * \{@link null} if the operation returned no data.
+     * \<code>null\</code> if the operation returned no data.
      * @throws SQLException intercepted by \<i>Spring\</i\>.
      * @throws DataAccessException with information about any
      * custom exception.
@@ -188,7 +225,8 @@ public abstract class <repository.capitalized>ResultSetExtractor
     <notnull()>
     protected abstract Object extractData(
         <notnull()>final ResultSet resultSet,
-        <nullable()>final <repository.capitalized>DAOListener daoListener)
+        <notnull()>final String sql,
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
       throws  SQLException,
               DataAccessException;
 }

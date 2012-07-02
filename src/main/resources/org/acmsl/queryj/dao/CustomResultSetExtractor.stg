@@ -152,7 +152,7 @@ class(result, input) ::= <<
       first_line_description(result=result),
       second_line_description(result=result)
     ]:{line |<line>}; separator="\n * ")>
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/DAOListener.stg")>
  */
 public class <result.idCapitalized>Extractor
     extends  <input.tr_name_capitalized>ResultSetExtractor
@@ -162,7 +162,8 @@ public class <result.idCapitalized>Extractor
      * @param daoListener the dao listener.
      */
     public <result.idCapitalized>Extractor(
-        final <input.tr_name_capitalized>DAOListener daoListener)
+        <notnull()>final String sql,
+        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
     {
         super(daoListener);
     }
@@ -171,6 +172,7 @@ public class <result.idCapitalized>Extractor
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
+     * @param sql the original sql.
      * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
 <if(result.multiple)>
      * @return the \<i><input.className>\</i> instances or {@link null}
@@ -184,9 +186,12 @@ public class <result.idCapitalized>Extractor
      * @throws DataAccessException with information about any
      * custom exception.
      */
+    @Override
+    <notnull()>
     public Object extractData(
         <notnull()>final ResultSet resultSet,
-        <nullable()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <notnull()>final String sql,
+        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
       throws  SQLException,
               DataAccessException
     {
@@ -194,6 +199,7 @@ public class <result.idCapitalized>Extractor
         return
             extractData(
                 resultSet,
+                sql,
                 daoListener,
                 <result.classValue>ValueObjectFactory.getInstance());
     }
@@ -201,6 +207,7 @@ public class <result.idCapitalized>Extractor
     /**
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
+     * @param sql the original sql.
      * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
 <if(!result.implicit)>
      * @param factory the value object factory.
@@ -220,7 +227,8 @@ public class <result.idCapitalized>Extractor
      */
     protected Object extractData(
         <notnull()>final ResultSet resultSet,
-        <nullable()>final <input.tr_name_capitalized>DAOListener daoListener,
+        <notnull()>final String sql,
+        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener,
         <notnull()>final <result.classValue>ValueObjectFactory factory)
       throws  SQLException,
               DataAccessException
@@ -239,7 +247,7 @@ public class <result.idCapitalized>Extractor
 <endif>
 <endif>
 
-
+        int t_iRowCount = 0;
 
 <if(result.multiple)>
         while  (resultSet.next())
@@ -248,10 +256,9 @@ public class <result.idCapitalized>Extractor
 <endif>
 
         {
-            if  (daoListener != null)
-            {
-                daoListener.resultSetMovedForward(this);
-            }
+            t_iRowCount++;
+
+            daoListener.resultSetMovedForward(sql, t_iRowCount);
 
             <result.properties:nullable_attribute_extraction(
               attr=it, input=input)>
@@ -274,10 +281,7 @@ public class <result.idCapitalized>Extractor
 
         }
 
-        if  (daoListener != null)
-        {
-            daoListener.resultSetClosed(this);
-        }
+        daoListener.resultSetClosed(sql, t_iRowCount);
 
 
 <if(result.implicit)>

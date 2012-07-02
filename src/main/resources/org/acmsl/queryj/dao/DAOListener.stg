@@ -100,89 +100,42 @@ class() ::= <<
 public interface <repository.capitalized>DAOListener
 {
     /**
-     * Receives notifications whenever a operation on the persistence
-     * layer takes place.
-     * @param sql the sql sentence.
-     * @param parameters the sql parameters.
+     * Receives notifications whenever a connection is requested.
+     * @param sql the SQL query the connection is needed for.
      */
-    @SuppressWarnings("unused")
-    void preparedStatementExecuted(
-        <notnull()>final String sql, <notnull()>final Object[] parameters);
-
-    /**
-     * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual {@link <repository.capitalized>JdbcTemplate}.
-     * @param connectionCallback the {@link ConnectionCallback connection callback}.
-     */
-    @SuppressWarnings("unused")
-    void connectionRetrieved(
-        <notnull()>final <repository.capitalized>JdbcTemplate jdbcTemplate,
-        <notnull()>final ConnectionCallback connectionCallback);
+    connectionRetrieved(<notnull()>final String sql);
 
     /**
      * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual {@link <repository.capitalized>JdbcTemplate}.
-     * @param connectionCallback the {@link ConnectionCallback connection callback}.
+     * @param sql the SQL query the connection was needed for.
      */
-    @SuppressWarnings("unused")
-    void connectionReleased(
-        <notnull()>final <repository.capitalized>JdbcTemplate jdbcTemplate,
-        <notnull()>final ConnectionCallback connectionCallback);
+    connectionReleased(<notnull()>final String sql);
 
     /**
-     * Receives notifications whenever a connection is retrieved.
-     * @param jdbcTemplate the actual {@link <repository.capitalized>JdbcTemplate}.
-     * @param statementCallback the {@link StatementCallback statement callback}.
+     * Receives notifications whenerver a statement has been prepared.
+     * @param sql the SQL query.
      */
-    @SuppressWarnings("unused")
-    void connectionRetrieved(
-        <notnull()>final <repository.capitalized>JdbcTemplate jdbcTemplate,
-        <notnull()>final StatementCallback statementCallback);
+    statementPrepared(<notnull()>final String sql);
 
     /**
-     * Receives notifications whenever a connection is released.
-     * @param jdbcTemplate the actual {@link <repository.capitalized>JdbcTemplate}.
-     * @param statementCallback the {@link StatementCallback statement callback}.
+     * Receives notifications whenerver a statement has been released.
+     * @param sql the SQL query.
      */
-    @SuppressWarnings("unused")
-    void connectionReleased(
-        <notnull()>final <repository.capitalized>JdbcTemplate jdbcTemplate,
-        <notnull()>final StatementCallback statementCallback);
-
-    /**
-     * Receives notifications whenever a statement is created.
-     * @param jdbcTemplate the actual {@link <repository.capitalized>JdbcTemplate}.
-     * @param preparedStatementCreator the {@link PreparedStatementCreator statement creator}.
-     */
-    @SuppressWarnings("unused")
-    void statementCreated(
-        <notnull()>final <repository.capitalized>JdbcTemplate jdbcTemplate,
-        <notnull()>final PreparedStatementCreator preparedStatementCreator);
-
-    /**
-     * Receives notifications whenever a statement is released.
-     * @param jdbcTemplate the actual {@link <repository.capitalized>JdbcTemplate}.
-     * @param preparedStatementCreator the {@link PreparedStatementCreator statement creator}.
-     */
-    @SuppressWarnings("unused")
-    void statementReleased(
-        <notnull()>final <repository.capitalized>JdbcTemplate jdbcTemplate,
-        <notnull()>final PreparedStatementCreator preparedStatementCreator);
+    statementReleased(<notnull()>final String sql);
 
     /**
      * Receives notifications whenever a result-set moves forward one row.
-     * @param resultSetExtractor the {@link <repository.capitalized>ResultSetExtractor ResultSet extractor}.
+     * @param sql the sql used.
+     * @param the number of rows retrieved so far.
      */
-    @SuppressWarnings("unused")
-    void resultSetMovedForward(
-        <notnull()>final <repository.capitalized>ResultSetExtractor resultSetExtractor);
+    void resultSetMovedForward(<notnull()>final String sql, final int rowCount);
 
     /**
      * Receives notifications whenever a result-set is closed.
      * @param resultSetExtractor the {@link <repository.capitalized>ResultSetExtractor ResultSet extractor}.
+     * @param rowCount the total number of rows retrieved.
      */
     @SuppressWarnings("unused")
-    void resultSetClosed(
-        <notnull()>final <repository.capitalized>ResultSetExtractor resultSetExtractor);
+    void resultSetClosed(<notnull()>final String sql, final int rowCount);
 }
 >>
