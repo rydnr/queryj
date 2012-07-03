@@ -129,7 +129,7 @@ classImpl(table, parent) ::= <<
       second_line_description(tableName=table.name),
       third_line_description(tableName=table.name)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/AttributesStatementSetter.stg")>
 */
 public class <table.voName>AttributesStatementSetter
     implements  PreparedStatementSetter

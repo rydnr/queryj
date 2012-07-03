@@ -35,6 +35,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Table;
 
@@ -48,6 +49,8 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 /*
  * Importing some JetBrains classes.
  */
+import org.apache.commons.logging.Log;
+import org.apache.log4j.lf5.viewer.LogFactor5Dialog;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -129,18 +132,46 @@ public class CustomResultUtils
      * Retrieves the explicitly enabled table names, via environment property. This means
      * no other tables should be processed.
      */
+    @NotNull
     protected String[] retrieveExplicitlyEnabledResults()
     {
-        return parseExplicitResults(System.getProperty(RESULTS_ENABLED));
+        String[] result;
+
+        String property = System.getProperty(RESULTS_ENABLED);
+
+        if (property != null)
+        {
+            result = parseExplicitResults(property);
+        }
+        else
+        {
+            result = new String[0];
+        }
+
+        return result;
     }
 
     /**
      * Retrieves the explicitly disabled custom results, via environment property. This means
      * no other custom results should be processed.
      */
+    @NotNull
     protected String[] retrieveExplicitlyDisabledResults()
     {
-        return parseExplicitResults(System.getProperty(RESULTS_DISABLED));
+        String[] result;
+
+        String property = System.getProperty(RESULTS_DISABLED);
+
+        if (property != null)
+        {
+            result = parseExplicitResults(property);
+        }
+        else
+        {
+            result = new String[0];
+        }
+
+        return result;
     }
 
     /**
@@ -163,40 +194,26 @@ public class CustomResultUtils
      * @return <code>true</code> in such case.
      */
     protected final boolean isGenerationAllowedForResult(
-        @Nullable final String[] resultsEnabled,
-        @Nullable final String[] resultsDisabled,
+        @NotNull final String[] resultsEnabled,
+        @NotNull final String[] resultsDisabled,
         @NotNull final String resultId)
     {
-        boolean result = true;
+        boolean result;
 
-        boolean t_bExplicitlyEnabled = false;
+        boolean t_bExplicitlyEnabled = Arrays.asList(resultsEnabled).contains(resultId);
 
-        if (resultsEnabled != null)
-        {
-            t_bExplicitlyEnabled = Arrays.asList(resultsEnabled).contains(resultId);
-
-            result = t_bExplicitlyEnabled;
-        }
-
+        result = t_bExplicitlyEnabled;
         boolean t_bCheckDisabled = false;
 
-        if (   (!t_bExplicitlyEnabled)
-            && (resultsDisabled != null))
+        if (!t_bExplicitlyEnabled)
         {
             List<String> t_lResultsDisabled = Arrays.asList(resultsDisabled);
 
-            if (resultsEnabled != null)
-            {
-                if (   (resultsEnabled.length > 0)
-                    || (t_lResultsDisabled.contains("*"))) // explicitly-enabled results imply
+            if (   (resultsEnabled.length > 0)
+                || (t_lResultsDisabled.contains("*"))) // explicitly-enabled results imply
                 // the others are disabled implicitly.
-                {
-                    result = false;
-                }
-                else
-                {
-                    t_bCheckDisabled = true;
-                }
+            {
+                result = false;
             }
             else
             {
@@ -225,35 +242,72 @@ public class CustomResultUtils
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        @Nullable String result = retrieveCachedEntry(resultElement.getId());
+        String result = null;
+
+        String id = resultElement.getId();
+
+        if (id != null)
+        {
+            result = retrieveTable(id, customSqlProvider, metadataManager);
+        }
+        else
+        {
+            Log t_Log = UniqueLogFactory.getLog(CustomResultUtils.class);
+
+            if (t_Log != null)
+            {
+                t_Log.warn("Result with no id: " + resultElement);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table associated to the result.
+     * @param resultId the result id.
+     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param metadataManager the database metadata manager.
+     * @return the table name.
+     */
+    @Nullable
+    public String retrieveTable(
+        @NotNull final String resultId,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @Nullable String result = retrieveCachedEntry(resultId);
 
         boolean t_bBreakLoop = false;
 
         if (result == null)
         {
-            if (   (resultElement.getId().equals("draws.multiple.draw.result"))
-                || (resultElement.getId().equals("active_lottery_numbers.multiple.total_avaibles.result")))
+            if (   (resultId.equals("draws.multiple.draw.result"))
+                || (resultId.equals("active_lottery_numbers.multiple.total_avaibles.result")))
             {
                 System.out.println("caught");
             }
 
             String t_strDao;
 
-            for (@Nullable Sql t_Sql : retrieveSqlElementsByResultId(customSqlProvider, resultElement.getId()))
+            for (@Nullable Sql t_Sql : retrieveSqlElementsByResultId(customSqlProvider, resultId))
             {
                 if (t_Sql != null)
                 {
                     t_strDao = t_Sql.getDao();
 
-                    for (@Nullable Table t_Table : metadataManager.getTableDAO().findAllTables())
+                    if (t_strDao != null)
                     {
-                        if  (   (t_Table != null)
-                             && (matches(t_Table.getName(), t_strDao)))
+                        for (@Nullable Table t_Table : metadataManager.getTableDAO().findAllTables())
                         {
-                            result = t_Table.getName();
-                            cacheEntry(resultElement.getId(), result);
-                            t_bBreakLoop = true;
-                            break;
+                            if  (   (t_Table != null)
+                                 && (matches(t_Table.getName(), t_strDao)))
+                            {
+                                result = t_Table.getName();
+                                cacheEntry(resultId, result);
+                                t_bBreakLoop = true;
+                                break;
+                            }
                         }
                     }
                 }
@@ -307,14 +361,17 @@ public class CustomResultUtils
     {
         boolean result = false;
 
-        for (@Nullable Sql t_Sql : findSqlElementsByResultId(
-                resultElement.getId(), customSqlProvider))
+        for (@Nullable Sql t_Sql : findSqlElementsByResultId(resultElement.getId(), customSqlProvider))
         {
-            if (   (t_Sql != null)
-                && (matches(
-                    tableName,
-                    t_Sql.getDao(),
-                    englishGrammarUtils)))
+            String t_strDao = null;
+
+            if (t_Sql != null)
+            {
+                t_strDao = t_Sql.getDao();
+            }
+
+            if (   (t_strDao != null)
+                && (matches(tableName, t_strDao, englishGrammarUtils)))
             {
                 result = true;
                 break;
@@ -329,8 +386,6 @@ public class CustomResultUtils
      * @param tableName the table name.
      * @param daoId the DAO id.
      * @return <code>true</code> if they match.
-     * @precondition tableName != null
-     * @precondition daoId != null
      */
     public boolean matches(
         @NotNull final String tableName, @NotNull final String daoId)
@@ -400,8 +455,6 @@ public class CustomResultUtils
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param resultId the result id.
      * @return such elements.
-     * @precondition sqlProvider != null
-     * @precondition resultId != null
      */
     @NotNull
     public Sql[] retrieveSqlElementsByResultId(
@@ -418,7 +471,16 @@ public class CustomResultUtils
             {
                 t_ResultRef = ((Sql) t_CurrentItem).getResultRef();
 
-                if  (resultId.equals(t_ResultRef.getId()))
+                if (t_ResultRef == null)
+                {
+                    Log t_Log = UniqueLogFactory.getLog(CustomResultUtils.class);
+
+                    if (t_Log != null)
+                    {
+                        t_Log.warn(t_CurrentItem + " refers to an unknown (null) result-ref");
+                    }
+                }
+                else if (resultId.equals(t_ResultRef.getId()))
                 {
                     t_cResult.add((Sql) t_CurrentItem);
                 }
