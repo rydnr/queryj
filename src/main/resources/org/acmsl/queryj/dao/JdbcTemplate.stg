@@ -910,7 +910,7 @@ public class <repository.capitalized>JdbcTemplate
      */
     protected static final void immutableSetEnableAuditLog(final boolean flag)
     {
-        this.enableAuditLog = flag;
+        enableAuditLog = flag;
     }
 
     /**

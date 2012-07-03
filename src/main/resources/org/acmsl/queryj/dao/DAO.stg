@@ -483,7 +483,8 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
      * Builds a {@link <engine_name><table.voName>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
-     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener}
+     * instance.
      */
     public <engine_name><table.voName>DAO(
         <notnull()>final DataSource dataSource,
@@ -634,7 +635,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
                             query, daoListener),
                         new <table.voName>PkStatementSetter(
                             <table.primaryKey:{<it.nameLowercased>}; separator=",\n">),
-                        new <table.voName>ResultSetExtractor(daoListener),
+                        new <table.voName>ResultSetExtractor(query, daoListener),
                         this));
     }
 
@@ -696,9 +697,9 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param dataSource the {@link DataSource{@link  instance.
+     * @param dataSource the {@link DataSource} instance.
 <if(parent)>
-     * @param dataAccessManager the \<tt><repository.capitalized>DataAccessManager\</tt> instance.
+     * @param dataAccessManager the {@link <repository.capitalized>DataAccessManager} instance.
 <endif>
 
      * @return the number of entities updated.
@@ -741,10 +742,10 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param transactionManager the {@link PlatformTransactionManager{@link 
+     * @param transactionManager the {@link PlatformTransactionManager}
      * instance.
 <if(parent)>
-     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+     * @param parentDAO the {@link <parent.voName>DAO} instance.
 <endif>
 
      * @return the number of entities updated.
@@ -793,10 +794,10 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
 <endif>
 
      * @param query the query used to perform the update operation.
-     * @param transactionManager the {@link PlatformTransactionManager{@link 
+     * @param transactionManager the {@link PlatformTransactionManager}
      * instance.
 <if(parent)>
-     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+     * @param parentDAO the {@link <parent.voName>DAO} instance.
 <endif>
 
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
@@ -880,9 +881,9 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
      * Deletes {@link <table.voName>} information.
      <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param dataSource the {@link DataSource{@link  instance.
+     * @param dataSource the {@link DataSource} instance.
 <if(parent)>
-     * @param dataAccessManager the \<tt><repository.capitalized>DataAccessManager\</tt> instance.
+     * @param dataAccessManager the {@link <repository.capitalized>DataAccessManager} instance.
 <endif>
      */
     protected void deleteNoFk(
@@ -912,10 +913,10 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
      * Deletes {@link <table.voName>} information.
      <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param transactionManager the {@link PlatformTransactionManager{@link 
+     * @param transactionManager the {@link PlatformTransactionManager}
      * instance.
 <if(parent)>
-     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+     * @param parentDAO the {@link <parent.voName>DAO} instance.
 <endif>
      */
     protected void deleteNoFk(
@@ -944,10 +945,10 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
      * Deletes {@link <table.voName>} information.
      <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
      * @param query the query used to perform the delete operation.
-     * @param transactionTemplate the {@link TransactionTemplate{@link 
+     * @param transactionTemplate the {@link TransactionTemplate}
      * instance.
 <if(parent)>
-     * @param parentDAO the \<tt><parent.voName>DAO\</tt> instance.
+     * @param parentDAO the {@link <parent.voName>DAO} instance.
 <endif>
 
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
@@ -1015,7 +1016,7 @@ public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voNa
          */
         public <table.voName>PkResultSetExtractor(
             <notnull()>final String sql,
-            <nullable()>final <repository.capitalized>DAOListener daoListener)
+            <notnull()>final <repository.capitalized>DAOListener daoListener)
         {
             super(sql, daoListener);
         }
@@ -1285,6 +1286,7 @@ map =
                "<query>",
                new <nameCapitalized><table.voName>ResultSetExtractor(
                "<nameLowercased>",
+               getSql(),
                getDAOListener()),
                this));
 
@@ -1528,7 +1530,7 @@ jdbcInsert4(table, parent) ::= <<
  * @param transactionTemplate the {@link TransactionTemplate}
  * instance.
 <if(parent)>
- * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
+ * @param <parent.nameLowercased>DAO the {@link <parent.voName>DAO} instance.
 <endif>
 
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
@@ -1560,6 +1562,7 @@ protected void insert(
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
 
 <else>
+<if(table.externallyManagedAttributes)>
     Map map = null;
 
     <table.externallyManagedAttributes:em_attribute_value_retrieval(
@@ -1569,6 +1572,7 @@ protected void insert(
       nameCapitalized=it.nameCapitalized,
       type=it.objectType,
       table=table); separator="\n">
+<endif>
 <endif>
     transactionTemplate.execute(
         new UpdateTransactionCallback(
@@ -1776,12 +1780,12 @@ create4(table, parent) ::= <<
 <endif>
 
  * @param query the query required to insert given information.
- * @param transactionTemplate the {@link TransactionTemplate{@link 
+ * @param transactionTemplate the {@link TransactionTemplate}
  * instance.
  * @param factory the {@link <table.voName>ValueObjectFactory}
  * instance.
 <if(parent)>
- * @param <parent.nameLowercased>DAO the\<tt\><parent.voName>DAO\</tt\> instance.
+ * @param <parent.nameLowercased>DAO the {@link <parent.voName>DAO} instance.
 <endif>
 
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
@@ -1825,6 +1829,7 @@ protected <table.voName> create(
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
 
 <else>
+<if(table.externallyManagedAttributes)>
     Map map = null;
 
     <table.externallyManagedAttributes:em_attribute_value_retrieval(
@@ -1834,6 +1839,7 @@ protected <table.voName> create(
       nameCapitalized=it.nameCapitalized,
       type=it.objectType,
       table=table); separator="\n">
+<endif>
 <endif>
 
 
@@ -1857,7 +1863,7 @@ protected <table.voName> create(
         findByPrimaryKey(
             <table.primaryKey:{<it.nameLowercased>}; separator=",\n">);
 <else>
-        factory.create<table.voName>(
+        factory.create(
             <table.allParentAndNonParentAttributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
@@ -1951,7 +1957,7 @@ public <table.voName> create(
    name=it.nameLowercased); separator="\n">
 <endif>
 
- * @param dataSource the data source.
+ * @param dataSource the {@link DataSource data source}.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
@@ -1990,7 +1996,8 @@ protected <table.voName> create(
    name=it.nameLowercased); separator="\n">
 <endif>
 
- * @param transactionManager the transaction manager.
+ * @param transactionManager the {@link PlatformTransactionManager}
+ * instance.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
  */
@@ -2037,7 +2044,7 @@ protected <table.voName> create(
    name=it.nameLowercased); separator="\n">
 <endif>
 
- * @param transactionTemplate the transaction template.
+ * @param transactionTemplate the {@link TransactionTemplate} instance.
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  * @return the newly-inserted entity.
  * @throws DataAccessException if the operation fails.
@@ -2064,6 +2071,7 @@ protected <table.voName> create(
     <table.voName> result = null;
 <endif>
 
+<if(table.externallyManagedAttributes)>
     Map map = null;
 
     <table.externallyManagedAttributes:em_attribute_value_retrieval(
@@ -2074,6 +2082,7 @@ protected <table.voName> create(
       type=it.objectType,
       table=table); separator="\n">
 
+<endif>
     transactionTemplate.execute(
         new UpdateTransactionCallback(
             new <repository.capitalized>PreparedStatementCreator(
@@ -2110,23 +2119,26 @@ protected <table.voName> create(
                 true),
             this));
 
-    SelectForUpdateTransactionCallback t_Callback =
-        new SelectForUpdateTransactionCallback(
-            new <repository.capitalized>PreparedStatementCreator(
-                "SELECT " +
+    String sql =
+        "SELECT " +
 <if(parent)>
-                <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
-                  separator=", \" +\n">" +
+        <table.allParentAndNonParentAttributes:{"<it.nameUppercased>};
+          separator=", \" +\n">" +
 <else>
-                <table.nonReadOnlyAttributes:{"<it.nameUppercased>};
-                  separator=", \" +\n">" +
+        <table.nonReadOnlyAttributes:{"<it.nameUppercased>};
+          separator=", \" +\n">" +
 <endif>
 
-                " FROM <table.nameUppercased>" +
-                " WHERE " +
-                <table.primaryKey:{"<it.nameUppercased> = ?};
-                  separator=" AND \" +\n">" +
-                " FOR UPDATE",
+        " FROM <table.nameUppercased>" +
+        " WHERE " +
+        <table.primaryKey:{"<it.nameUppercased> = ?};
+          separator=" AND \" +\n">" +
+        " FOR UPDATE";
+
+    SelectForUpdateTransactionCallback t_Callback =
+        new SelectForUpdateTransactionCallback(
+            sql,
+            new <repository.capitalized>PreparedStatementCreator(
                 daoListener),
             new <table.voName>PkStatementSetter(
                 <table.primaryKey:{<it.nameLowercased>};
@@ -2135,6 +2147,7 @@ protected <table.voName> create(
                 <table.lobAttributes:{<it.nameLowercased>};
                   separator=",\n">,
                 true,
+                sql,
                 daoListener),
             this);
 
@@ -2238,7 +2251,7 @@ public static class <nameCapitalized><table.voName>ResultSetExtractor
     public <nameCapitalized><table.voName>ResultSetExtractor(
         <notnull()>final String fieldName,
         <notnull()>final String sql,
-        <nullable()>final <trNameCapitalized>DAOListener daoListener)
+        <notnull()>final <trNameCapitalized>DAOListener daoListener)
     {
         super(sql, daoListener);
         immutableSetFieldName(fieldName);

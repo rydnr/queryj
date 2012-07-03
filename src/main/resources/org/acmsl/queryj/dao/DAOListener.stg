@@ -103,25 +103,25 @@ public interface <repository.capitalized>DAOListener
      * Receives notifications whenever a connection is requested.
      * @param sql the SQL query the connection is needed for.
      */
-    connectionRetrieved(<notnull()>final String sql);
+    void connectionRetrieved(<notnull()>final String sql);
 
     /**
      * Receives notifications whenever a connection is released.
      * @param sql the SQL query the connection was needed for.
      */
-    connectionReleased(<notnull()>final String sql);
+    void connectionReleased(<notnull()>final String sql);
 
     /**
      * Receives notifications whenerver a statement has been prepared.
      * @param sql the SQL query.
      */
-    statementPrepared(<notnull()>final String sql);
+    void statementPrepared(<notnull()>final String sql);
 
     /**
      * Receives notifications whenerver a statement has been released.
      * @param sql the SQL query.
      */
-    statementReleased(<notnull()>final String sql);
+    void statementReleased(<notnull()>final String sql);
 
     /**
      * Receives notifications whenever a result-set moves forward one row.
@@ -135,7 +135,6 @@ public interface <repository.capitalized>DAOListener
      * @param resultSetExtractor the {@link <repository.capitalized>ResultSetExtractor ResultSet extractor}.
      * @param rowCount the total number of rows retrieved.
      */
-    @SuppressWarnings("unused")
     void resultSetClosed(<notnull()>final String sql, final int rowCount);
 }
 >>

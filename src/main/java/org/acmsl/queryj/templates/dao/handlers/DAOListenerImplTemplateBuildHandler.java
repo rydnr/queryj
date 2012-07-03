@@ -95,8 +95,6 @@ public class DAOListenerImplTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     @NotNull
     @Override
@@ -114,8 +112,6 @@ public class DAOListenerImplTemplateBuildHandler
      * Stores the template in given attribute map.
      * @param template the template.
      * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
      */
     @Override
     @SuppressWarnings("unchecked")
