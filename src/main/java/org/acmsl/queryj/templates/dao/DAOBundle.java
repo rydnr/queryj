@@ -58,6 +58,7 @@ import org.acmsl.queryj.templates.dao.handlers.JdbcTemplateTemplateHandlerBundle
 import org.acmsl.queryj.templates.dao.handlers.JndiUtilsTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.PkStatementSetterTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ResultSetExtractorTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.StatisticsProviderTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ThreadLocalBagTemplateHandlerBundle;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
@@ -105,9 +106,9 @@ public class DAOBundle
 //                new TransactionManagerTemplateHandlerBundle(),
                 new JndiUtilsTemplateHandlerBundle(),
                 new BaseRepositoryDAOFactoryTemplateHandlerBundle(),
-                new BaseRepositoryDAOTemplateHandlerBundle()
+                new BaseRepositoryDAOTemplateHandlerBundle(),
 //                new DataSourceTransactionTokenTemplateHandlerBundle(),
-//                new StatisticsProviderTemplateHandlerBundle(),
+                new StatisticsProviderTemplateHandlerBundle()
             });
     }
 }

@@ -261,6 +261,12 @@ public class TemplateMappingManager
         "thread.local.bag.template";
 
     /**
+     * The StatisticsProvider template type.
+     */
+    public static final String STATISTICS_PROVIDER_TEMPLATE =
+        "statistics.provider.template";
+
+    /**
      * Singleton implemented to avoid the double-checked locking.
      */
     private static class TemplateMappingManagerSingletonContainer
