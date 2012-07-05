@@ -35,6 +35,8 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
@@ -61,6 +63,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -599,10 +602,82 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves the value-object name.
+     * @return such value.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getVoName()
+    {
+        return getVoName(getResult(), getMetadataManager(), getCustomSqlProvider(), CustomResultUtils.getInstance());
+    }
+    /**
+     * Retrieves the value-object name.
+     * @param customResult the custom result.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return such value.
+     */
+    @NotNull
+    protected String getVoName(
+        @NotNull final Result customResult,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull CustomResultUtils customResultUtils)
+    {
+        String result = customResult.getClassValue();
+
+        String t_strTable = customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager);
+
+        if (t_strTable != null)
+        {
+            result = capitalize(getSingular(t_strTable.toLowerCase(Locale.US)), DecorationUtils.getInstance());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @return the singular.
+     */
+    @NotNull
+    protected String getSingular(@NotNull final String word)
+    {
+        return getSingular(word, SingularPluralFormConverter.getInstance());
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @param singularPluralFormConverter the
+     * <code>SingularPluralFormConverter</code> instance.
+     * @return the singular.
+     */
+    @NotNull
+    protected String getSingular(
+        @NotNull final String word,
+        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
+    {
+        if (word.endsWith("categories"))
+        {
+            int a = 0;
+        }
+
+        String result = singularPluralFormConverter.getSingular(word);
+
+        return result;
+    }
+
+
+    /**
      * Provides a text representation of the information
      * contained in this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -625,6 +700,7 @@ public abstract class AbstractResultDecorator
      * Retrieves the hashcode.
      * @return such value.
      */
+    @Override
     public final int hashCode()
     {
         return hashCode(getResult());
@@ -645,7 +721,8 @@ public abstract class AbstractResultDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -674,7 +751,8 @@ public abstract class AbstractResultDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    @Override
+    public int compareTo(@Nullable final Object object)
         throws  ClassCastException
     {
         return compareTo(getResult(), object);

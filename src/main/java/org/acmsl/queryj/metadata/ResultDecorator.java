@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -36,18 +35,23 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Decorator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
@@ -61,6 +65,7 @@ public interface ResultDecorator
      * Retrieves the result.
      * @return such element.
      */
+    @NotNull
     public Result getResult();
 
     /**
@@ -75,11 +80,12 @@ public interface ResultDecorator
      * @return such information.
      */
     @NotNull
-    public Collection getProperties();
+    public List<Property> getProperties();
 
     /**
      * Retrieves the large-object-block properties.
      * @return such collection.
      */
-    public Collection getLobProperties();
+    @NotNull
+    public List<Property> getLobProperties();
 }

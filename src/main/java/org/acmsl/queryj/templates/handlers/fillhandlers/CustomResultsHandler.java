@@ -63,7 +63,6 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/31
  */
-@SuppressWarnings("unused")
 public class CustomResultsHandler
     extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<Result>>
 {
@@ -72,7 +71,6 @@ public class CustomResultsHandler
      * in given {@link BasePerTableTemplateContext context}.
      * @param context the context.
      */
-    @SuppressWarnings("unused")
     public CustomResultsHandler(@NotNull final BasePerTableTemplateContext context)
     {
         super(context);

@@ -64,8 +64,6 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
-     * @precondition tableTemplate != null
-     * @precondition outputDir != null
      */
     void write(
         @NotNull final T template,

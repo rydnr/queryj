@@ -39,8 +39,10 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
+import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -78,9 +80,8 @@ public class BasePerCustomResultFillTemplateChain
     @Override
     protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerCustomResultTemplateContext context)
     {
-        // TODO
-        int a = 0;
-
-        a++;
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultHandler,ResultDecorator>(
+                new CustomResultHandler(context)));
     }
 }

@@ -185,7 +185,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                 {
                     t_Log.debug(
                         "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                        + fileName);
+                        + t_strOutputFile);
                 }
 
                 fileUtils.writeFile(
