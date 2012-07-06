@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.vo.Table;
 
 /*
@@ -457,37 +458,26 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public Sql[] retrieveSqlElementsByResultId(
+    public List<Sql> retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId)
     {
-        @NotNull List<Sql> t_cResult = new ArrayList<Sql>();
+        return retrieveSqlElementsByResultId(customSqlProvider.getSqlDAO(), resultId);
+    }
 
-        for (@Nullable Object t_CurrentItem : customSqlProvider.getCollection())
-        {
-            @Nullable ResultRef t_ResultRef;
-
-            if  (t_CurrentItem instanceof Sql)
-            {
-                t_ResultRef = ((Sql) t_CurrentItem).getResultRef();
-
-                if (t_ResultRef == null)
-                {
-                    Log t_Log = UniqueLogFactory.getLog(CustomResultUtils.class);
-
-                    if (t_Log != null)
-                    {
-                        t_Log.warn(t_CurrentItem + " refers to an unknown (null) result-ref");
-                    }
-                }
-                else if (resultId.equals(t_ResultRef.getId()))
-                {
-                    t_cResult.add((Sql) t_CurrentItem);
-                }
-            }
-        }
-
-        return t_cResult.toArray(new Sql[t_cResult.size()]);
+    /**
+     * Retrieves all {@link SqlElement} instances associated to
+     * given result id.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param resultId the result id.
+     * @return such elements.
+     */
+    @NotNull
+    protected List<Sql> retrieveSqlElementsByResultId(
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final String resultId)
+    {
+        return sqlDAO.findByResultId(resultId);
     }
 
     /**
@@ -529,22 +519,25 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public Sql[] retrieveSqlElementsByType(
+    public List<Sql> retrieveSqlElementsByType(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
-        @NotNull List<Sql> t_cResult = new ArrayList<Sql>();
+        return retrieveSqlElementsByType(customSqlProvider.getSqlDAO(), type);
+    }
 
-        for (@Nullable Object t_CurrentItem : customSqlProvider.getCollection())
-        {
-            if  (   (t_CurrentItem instanceof Sql)
-                 && (type.equals(((Sql) t_CurrentItem).getType())))
-            {
-                t_cResult.add((Sql) t_CurrentItem);
-            }
-        }
-
-        return t_cResult.toArray(new Sql[t_cResult.size()]);
+    /**
+     * Retrieves all {@link SqlElement} instances of given type.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param type the type.
+     * @return such elements.
+     */
+    @NotNull
+    public List<Sql> retrieveSqlElementsByType(
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final String type)
+    {
+        return sqlDAO.findByType(type);
     }
 
     /**
@@ -555,27 +548,26 @@ public class CustomResultUtils
      * @return all such entities.
      */
     @NotNull
-    public Sql[] findSqlElementsByResultId(
+    public List<Sql> findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull List<Sql> t_cResult = new ArrayList<Sql>();
+        return findSqlElementsByResultId(resultId, customSqlProvider.getSqlDAO());
+    }
 
-        for (@Nullable Object t_CurrentItem : customSqlProvider.getCollection())
-        {
-            if  (t_CurrentItem instanceof SqlElement)
-            {
-                ResultRef t_ResultRefElement =
-                    ((Sql) t_CurrentItem).getResultRef();
-
-                if  (resultId.equals(t_ResultRefElement.getId()))
-                {
-                    t_cResult.add((Sql) t_CurrentItem);
-                }
-            }
-        }
-
-        return t_cResult.toArray(new Sql[t_cResult.size()]);
+    /**
+     * Finds all {@link SqlElement} instances associated to given
+     * result element.
+     * @param resultId such id.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @return all such entities.
+     */
+    @NotNull
+    public List<Sql> findSqlElementsByResultId(
+        @NotNull final String resultId,
+        @NotNull final SqlDAO sqlDAO)
+    {
+        return sqlDAO.findByResultId(resultId);
     }
 
     /**

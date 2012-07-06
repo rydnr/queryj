@@ -51,6 +51,8 @@ import org.acmsl.commons.patterns.dao.DAO;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * Provides methods to access {@link Result} information.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
@@ -90,4 +92,12 @@ public interface SqlResultDAO
      */
     @Nullable
     Result findBySqlId(@NotNull final String sqlId);
+
+    /**
+     * Retrieves the {@link Result results} matching given type.
+     * @param type the type.
+     * @return the list of matching {@link Result} instances.
+     */
+    @NotNull
+    List<Result> findByType(@NotNull final String type);
 }

@@ -130,7 +130,7 @@ public class SqlXmlParserImpl
     @Override
     public SqlResultDAO getSqlResultDAO()
     {
-        return new CustomSqlProviderSqlResultDAO(this);
+        return new SqlXmlParserResultDAO(this);
     }
 
     /**

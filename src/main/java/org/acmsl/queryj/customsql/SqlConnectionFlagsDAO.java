@@ -57,5 +57,5 @@ public interface SqlConnectionFlagsDAO
      * @return such information.
      */
     @Nullable
-    List<ResultSetFlags> findByPrimaryKeyOperation();
+    List<ConnectionFlags> findByPrimaryKeyOperation();
 }

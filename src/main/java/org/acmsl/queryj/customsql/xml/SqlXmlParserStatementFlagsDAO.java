@@ -131,7 +131,7 @@ public class SqlXmlParserStatementFlagsDAO
     protected List<StatementFlags> filterStatementFlags(
         @NotNull final List<? extends IdentifiableElement> contents, @NotNull final String idFilter)
     {
-        return (List<StatementFlags>) filterItems(contents, StatementFlags.class, idFilter);
+        return this.filterItems(contents, StatementFlags.class, idFilter);
     }
 
 }

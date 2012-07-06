@@ -125,11 +125,10 @@ public class SqlXmlParserResultSetFlagsDAO
      * @param idFilter the id filter.
      * @return the connection flags.
      */
-    @SuppressWarnings("unchecked")
     @NotNull
     protected List<ResultSetFlags> filterResultSetFlags(
         @NotNull final List<? extends IdentifiableElement> contents, @NotNull final String idFilter)
     {
-        return (List<ResultSetFlags>) filterItems(contents, ResultSetFlags.class, idFilter);
+        return this.filterItems(contents, ResultSetFlags.class, idFilter);
     }
 }

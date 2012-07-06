@@ -40,6 +40,7 @@ import org.acmsl.queryj.customsql.IdentifiableElement;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.customsql.Sql;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,6 +101,54 @@ public abstract class AbstractSqlXmlParserDAO
     }
 
     /**
+     * Retrieves the element matching given id.
+     * @param id the id.
+     * @return the element, if any.
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    protected <T> T findById(@NotNull final String id, @NotNull final Class<T> type)
+    {
+        @Nullable T result = null;
+
+        for (@Nullable Object t_Item : parser.getCollection())
+        {
+            if  (   (t_Item != null)
+                && (t_Item.getClass().isAssignableFrom(type)))
+            {
+                result = (T) t_Item;
+                break;
+            }
+        }
+
+        return result;
+
+    }
+
+    /**
+     * Retrieves all elements of a given type.
+     * @param parser the parser.
+     * @return such list.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    protected <T> List<T> findAll(@NotNull final SqlXmlParser parser, @NotNull final Class<T> type)
+    {
+        @NotNull List<T> result = new ArrayList<T>();
+
+        for (@Nullable Object t_Item : parser.getCollection())
+        {
+            if  (   (t_Item != null)
+                 && (t_Item.getClass().isAssignableFrom(type)))
+            {
+                result.add((T) t_Item);
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Filters given CustomSqlProvider contents according to given class name
      * and filter (optional).
      * @param contents such contents.
@@ -110,7 +159,7 @@ public abstract class AbstractSqlXmlParserDAO
     @NotNull
     protected <I extends IdentifiableElement> List<I> filterItems(
         @NotNull final List<? extends IdentifiableElement> contents,
-        @NotNull final Class itemClass,
+        @NotNull final Class<I> itemClass,
         @Nullable final String idFilter)
     {
         @NotNull List<I> result = new ArrayList<I>(contents.size());

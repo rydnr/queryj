@@ -38,6 +38,7 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.xml.AbstractSqlXmlParserDAO;
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
 import org.acmsl.queryj.metadata.SqlDAO;
 
@@ -59,49 +60,16 @@ import java.util.List;
  * @since 2012/06/06
  */
 public class SqlXmlParserSqlDAO
+    extends AbstractSqlXmlParserDAO
     implements SqlDAO
 {
-    /**
-     * The {@link SqlXmlParser} instance.
-     */
-    private SqlXmlParser m__SqlXmlParser;
-
     /**
      * Creates a new {@link SqlXmlParser} with given {@link SqlXmlParser}.
      * @param parser the {@link SqlXmlParser} instance.
      */
     public SqlXmlParserSqlDAO(@NotNull final SqlXmlParser parser)
     {
-        immutableSetSqlXmlParser(parser);
-    }
-
-    /**
-     * Specifies the {@link SqlXmlParser} instance.
-     * @param parser such {@link SqlXmlParser instance}.
-     */
-    protected final void immutableSetSqlXmlParser(@NotNull final SqlXmlParser parser)
-    {
-        m__SqlXmlParser = parser;
-    }
-
-    /**
-     * Specifies the {@link SqlXmlParser} instance.
-     * @param parser such {@link SqlXmlParser instance}.
-     */
-    @SuppressWarnings("unused")
-    protected void setSqlXmlParser(@NotNull final SqlXmlParser parser)
-    {
-        immutableSetSqlXmlParser(parser);
-    }
-
-    /**
-     * Retrieves the {@link SqlXmlParser} instance.
-     * @return the underlying {@link SqlXmlParser instance}.
-     */
-    @NotNull
-    protected SqlXmlParser getSqlXmlParser()
-    {
-        return m__SqlXmlParser;
+        super(parser);
     }
 
     /**
@@ -278,6 +246,7 @@ public class SqlXmlParserSqlDAO
      * @param list the list of queries.
      * @return the select-only ones.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected List<Sql> filterSelects(@NotNull final List<Sql> list)
     {
@@ -348,4 +317,46 @@ public class SqlXmlParserSqlDAO
         return result;
     }
 
+    /**
+     * Retrieves all SQL matching given result id.
+     *
+     * @param resultId the result id.
+     * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
+     */
+    @NotNull
+    @Override
+    public List<Sql> findByResultId(@NotNull final String resultId)
+    {
+        @NotNull List<Sql> result = new ArrayList<Sql>();
+
+        for (@Nullable Sql t_CurrentSql : findAll())
+        {
+            @Nullable ResultRef t_ResultRef;
+
+            if  (t_CurrentSql != null)
+            {
+                t_ResultRef = t_CurrentSql.getResultRef();
+
+                if (resultId.equals(t_ResultRef.getId()))
+                {
+                    result.add(t_CurrentSql);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves all SQL matching given type.
+     *
+     * @param type the type.
+     * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
+     */
+    @NotNull
+    @Override
+    public List<Sql> findByType(@NotNull final String type)
+    {
+        return filterByType(findAll(), type);
+    }
 }

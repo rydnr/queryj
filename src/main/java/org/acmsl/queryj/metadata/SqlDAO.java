@@ -118,4 +118,20 @@ public interface SqlDAO
      */
     @NotNull
     List<Sql> findAll();
+
+    /**
+     * Retrieves all SQL matching given result id.
+     * @param resultId the result id.
+     * @return the list of matching {@link Sql}.
+     */
+    @NotNull
+    List<Sql> findByResultId(@NotNull final String resultId);
+
+    /**
+     * Retrieves all SQL matching given type.
+     * @param type the type.
+     * @return the list of matching {@link Sql}.
+     */
+    @NotNull
+    List<Sql> findByType(@NotNull final String type);
 }
