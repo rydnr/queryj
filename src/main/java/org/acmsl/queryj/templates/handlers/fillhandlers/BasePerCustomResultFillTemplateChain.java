@@ -54,6 +54,8 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.templates.BasePerCustomResultTemplate per-custom-result templates}.
@@ -83,5 +85,8 @@ public class BasePerCustomResultFillTemplateChain
         chain.add(
             new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultHandler,ResultDecorator>(
                 new CustomResultHandler(context)));
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultTypeImportsHandler,List<String>>(
+                new CustomResultTypeImportsHandler(context)));
     }
 }

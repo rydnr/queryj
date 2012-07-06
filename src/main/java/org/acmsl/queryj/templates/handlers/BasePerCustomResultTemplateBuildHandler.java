@@ -237,7 +237,16 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        return customResultUtils.isGenerationAllowedForResult(customResult.getId());
+        boolean result =
+            customResultUtils.isGenerationAllowedForResult(customResult.getId());
+
+        if (result)
+        {
+            result =
+                customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager) != null;
+        }
+
+        return result;
     }
 
     /**

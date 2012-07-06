@@ -54,11 +54,13 @@ public interface Result
     /**
      * The <b>none</b> value for <i>matches</i> attribute.
      */
+    @SuppressWarnings("unused")
     public static final String NONE = "none";
 
     /**
      * The <b>single</b> value for <i>matches</i> attribute.
      */
+    @SuppressWarnings("unused")
     public static final String SINGLE = "single";
 
     /**

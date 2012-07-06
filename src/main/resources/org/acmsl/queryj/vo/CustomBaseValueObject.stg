@@ -67,15 +67,12 @@ source() ::= <<
     typeInitMap.voSubpackageName
   ])>
 
+<if(column_type_imports)>
 /*
  * Importing some JDK classes.
  */
-import java.io.InputStream;
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+<column_type_imports:import(type=it)>
+<endif>
 
 <class(result=result)>
 >>

@@ -51,7 +51,6 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -98,17 +97,11 @@ public class TableTemplateBuildHandler
     {
         List<Table> t_lTables = tables;
 
-        if (   (t_lTables != null)
-            && (t_lTables.size() == 0))
+        if (t_lTables.size() == 0)
         {
             t_lTables = metadataManager.getTableDAO().findAllTables();
 
             storeTables(t_lTables, parameters);
-        }
-
-        if (t_lTables == null)
-        {
-            t_lTables = new ArrayList<Table>(0);
         }
 
         super.buildTemplate(

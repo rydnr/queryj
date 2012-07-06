@@ -163,29 +163,12 @@ public class TableAttributeTypeImportsHandler
                     metadataTypeManager.getFullyQualifiedType(
                         t_Attribute.getTypeId(), t_Attribute.isBoolean());
 
-                if (   (!inJavaLang(t_strImport))
+                if (   (!metadataTypeManager.inJavaLang(t_strImport))
                     && (!result.contains(t_strImport)))
                 {
                     result.add(t_strImport);
                 }
             }
-        }
-
-        return result;
-    }
-
-    /**
-     * Checks whether given type belongs to <code>java.lang</code> package or not.
-     * @param type the type.
-     * @return <code>true</code> in such case.
-     */
-    protected boolean inJavaLang(@NotNull final String type)
-    {
-        boolean result = type.startsWith("java.lang.");
-
-        if (result)
-        {
-            result = type.lastIndexOf(".") == "java.lang.".length() - 1;
         }
 
         return result;

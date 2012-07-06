@@ -111,4 +111,11 @@ public interface SqlDAO
      */
     @NotNull
     List<Sql> findDeletes(@NotNull final String table);
+
+    /**
+     * Retrieves all custom SQL.
+     * @return such list.
+     */
+    @NotNull
+    List<Sql> findAll();
 }

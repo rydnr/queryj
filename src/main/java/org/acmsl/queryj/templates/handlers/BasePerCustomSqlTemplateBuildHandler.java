@@ -37,6 +37,8 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.SqlElement;
@@ -45,6 +47,10 @@ import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerCustomSqlTemplate;
 import org.acmsl.queryj.templates.BasePerCustomSqlTemplateFactory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,8 +60,7 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -67,11 +72,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     implements TemplateBuildHandler
 {
     /**
-     * A cached empty Sql array.
-     */
-    public static final SqlElement[] EMPTY_SQL_ARRAY = new SqlElement[0];
-
-    /**
      * The key for storing the custom SQL in the parameter map.
      */
     public static final String CUSTOM_SQL = "..CustOMsqL:::";
@@ -79,7 +79,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     /**
      * Creates a <code>BasePerCustomSqlTemplateBuildHandler</code> instance.
      */
-    public BasePerCustomSqlTemplateBuildHandler() {};
+    public BasePerCustomSqlTemplateBuildHandler() {}
 
     /**
      * Handles given information.
@@ -93,9 +93,18 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        buildTemplates(parameters, retrieveDatabaseMetaData(parameters));
+        boolean result = true;
 
-        return false;
+        @Nullable DatabaseMetaData t_DatabaseMetadata = retrieveDatabaseMetaData(parameters);
+
+        if (t_DatabaseMetadata != null)
+        {
+            buildTemplates(parameters, t_DatabaseMetadata);
+
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -103,8 +112,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param parameters the parameters.
      * @param metaData the database metadata.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metaData != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters, @NotNull final DatabaseMetaData metaData)
@@ -224,30 +231,26 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final MetadataManager metadataManager,
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final String engineName,
+        @NotNull final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final BasePerCustomSqlTemplateFactory templateFactory,
-        final String projectPackage,
-        final String repository,
-        @Nullable final SqlElement[] sqlElements,
-        final String header)
+        @NotNull final String projectPackage,
+        @NotNull final String repository,
+        @NotNull final List<Sql> sqlElements,
+        @NotNull final String header)
       throws  QueryJBuildException
     {
-        int t_iLength = (sqlElements != null) ? sqlElements.length : 0;
-        
-        @NotNull BasePerCustomSqlTemplate[] t_aTemplates =
-            new BasePerCustomSqlTemplate[t_iLength];
+        @NotNull List<BasePerCustomSqlTemplate> t_lTemplates =
+            new ArrayList<BasePerCustomSqlTemplate>(sqlElements.size());
 
         @Nullable SqlElement t_SqlElement = null;
-            
-        for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++) 
+
+        for (@Nullable Sql t_Sql : sqlElements)
         {
-            t_SqlElement = sqlElements[t_iIndex];
-                
-            t_aTemplates[t_iIndex] =
+            t_lTemplates.add(
                 templateFactory.createTemplate(
                     t_SqlElement,
                     customSqlProvider,
@@ -257,10 +260,10 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
                     engineVersion,
                     projectPackage,
                     repository,
-                    header);
+                    header));
         }
 
-        storeTemplates(t_aTemplates, parameters);
+        storeTemplates(t_lTemplates, parameters);
     }
 
     /**
@@ -296,20 +299,18 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     @NotNull
     protected abstract String retrievePackage(
-        final SqlElement customSql,
-        final String engineName,
-        final String projectPackage,
-        final PackageUtils packageUtils);
+        @NotNull final SqlElement customSql,
+        @NotNull final String engineName,
+        @NotNull final String projectPackage,
+        @NotNull final PackageUtils packageUtils);
 
     /**
      * Stores the template collection in given attribute map.
      * @param templates the templates.
      * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
      */
     protected abstract void storeTemplates(
-        final BasePerCustomSqlTemplate[] templates, final Map parameters);
+        @NotNull final List<BasePerCustomSqlTemplate> templates, @NotNull final Map parameters);
 
     /**
      * Retrieves the foreign keys.
@@ -317,35 +318,20 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param customSqlProvider the custom SQL provider.
      * @param metadataManager the database metadata manager.
      * @return such templates.
-     * @precondition parameters != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
+    @SuppressWarnings("unchecked")
     @NotNull
-    protected SqlElement[] retrieveCustomSql(
+    protected List<Sql> retrieveCustomSql(
         @NotNull final Map parameters,
         @NotNull final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
-        @NotNull SqlElement[] result = (SqlElement[]) parameters.get(CUSTOM_SQL);
+        @Nullable List<Sql> result = (List<Sql>) parameters.get(CUSTOM_SQL);
 
         if  (result == null)
         {
-            @NotNull Collection t_cCustomSql = new ArrayList();
-            
-            @NotNull SqlElement[] t_aSqlElements =
-                retrieveCustomSqlElements(customSqlProvider, metadataManager);
-
-            int t_iLength =
-                (t_aSqlElements != null) ? t_aSqlElements.length : 0;
-            
-            for  (int t_iIndex = 0; t_iIndex < t_iLength; t_iIndex++)
-            {
-                t_cCustomSql.add(t_aSqlElements[t_iIndex]);
-            }
-
             result =
-                (SqlElement[]) t_cCustomSql.toArray(EMPTY_SQL_ARRAY);
+                retrieveCustomSqlElements(customSqlProvider.getSqlDAO(), metadataManager);
         }
 
         return result;
@@ -353,41 +339,15 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
 
     /**
      * Retrieves the custom SQL elements.
-     * @param customSqlProvider the custom SQL provider.
+     * @param sqlDAO the {SqlDAO} instance.
      * @param metadataManager the database metadata manager.
      * @return such foreign keys.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
     @NotNull
-    protected SqlElement[] retrieveCustomSqlElements(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+    protected List<Sql> retrieveCustomSqlElements(
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final MetadataManager metadataManager)
     {
-        @NotNull Collection t_cResult = new ArrayList();
-        
-        Collection t_cCollection = customSqlProvider.getCollection();
-
-        if  (t_cCollection != null)
-        {
-            Iterator t_itElements = t_cCollection.iterator();
-            
-            if  (t_itElements != null)
-            {
-                @Nullable Object t_Item = null;
-
-                while  (t_itElements.hasNext())
-                {
-                    t_Item = t_itElements.next();
-                    
-                    if  (t_Item instanceof SqlElement)
-                    {
-                        t_cResult.add(t_Item);
-                    }
-                }
-            }
-        }
-        
-        return (SqlElement[]) t_cResult.toArray(EMPTY_SQL_ARRAY);
+        return sqlDAO.findAll();
     }
 }

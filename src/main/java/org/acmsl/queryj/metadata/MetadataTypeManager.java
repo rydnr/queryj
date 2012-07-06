@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -422,4 +421,11 @@ public interface MetadataTypeManager
      */
     @NotNull
     public String getFullyQualifiedType(final int dataType, final boolean isBool);
+
+    /**
+     * Checks whether given type belongs to <code>java.lang</code> package or not.
+     * @param type the type.
+     * @return <code>true</code> in such case.
+     */
+    boolean inJavaLang(@NotNull final String type);
 }

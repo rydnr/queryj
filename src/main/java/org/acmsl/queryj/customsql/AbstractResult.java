@@ -158,7 +158,7 @@ public abstract class AbstractResult
      * Adds a new &lt;property-ref&gt; element.
      * @param propertyRef such element.
      */
-    public void add(final PropertyRefElement propertyRef)
+    public void add(@NotNull final PropertyRefElement propertyRef)
     {
         add(propertyRef, getPropertyRefs());
     }

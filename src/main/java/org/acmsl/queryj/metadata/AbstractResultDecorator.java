@@ -385,6 +385,39 @@ public abstract class AbstractResultDecorator
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomResultUtils customResultUtils)
     {
+        return
+            getProperties(
+                propertyRefs,
+                resultElement,
+                customSqlProvider,
+                customSqlProvider.getSqlPropertyDAO(),
+                metadataManager,
+                decoratorFactory,
+                customResultUtils);
+    }
+
+    /**
+     * Retrieves the properties.
+     * @param propertyRefs the property references.
+     * @param resultElement the result element.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param sqlPropertyDAO the {@link SqlPropertyDAO} instance.
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param customResultUtils the <code>CustomResultUtils</code> instance.
+     * @return such information.
+     */
+    @NotNull
+    public List<Property> getProperties(
+        @NotNull final List<PropertyRefElement> propertyRefs,
+        @NotNull final Result resultElement,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final SqlPropertyDAO sqlPropertyDAO,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+
         @NotNull List<Property> result = new ArrayList<Property>();
 
         @Nullable Property t_Property ;
@@ -394,7 +427,7 @@ public abstract class AbstractResultDecorator
             if  (t_PropertyRef != null)
             {
                 t_Property =
-                    customSqlProvider.resolveReference(t_PropertyRef);
+                    sqlPropertyDAO.findByPrimaryKey(t_PropertyRef.getId());
 
                 if  (t_Property != null)
                 {
@@ -661,14 +694,7 @@ public abstract class AbstractResultDecorator
         @NotNull final String word,
         @NotNull final EnglishGrammarUtils singularPluralFormConverter)
     {
-        if (word.endsWith("categories"))
-        {
-            int a = 0;
-        }
-
-        String result = singularPluralFormConverter.getSingular(word);
-
-        return result;
+        return singularPluralFormConverter.getSingular(word);
     }
 
 
