@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,10 +36,7 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing JDK classes.
- */
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models &lt;resultSet-flags&gt; elements in <i>custom-sql</i> models, which
@@ -56,48 +52,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ResultSetFlagsElement
     extends  AbstractIdElement
+    implements ResultSetFlags
 {
-    /**
-     * The <b>TYPE_FORWARD_ONLY</b> value for
-     * <i>type</i> attribute.
-     */
-    public static final String TYPE_FORWARD_ONLY = "TYPE_FORWARD_ONLY";
-
-    /**
-     * The <b>TYPE_SCROLL_INSENSITIVE</b> value for
-     * <i>type</i> attribute.
-     */
-    public static final String TYPE_SCROLL_INSENSITIVE = "TYPE_SCROLL_INSENSITIVE";
-
-    /**
-     * The <b>TYPE_SCROLL_SENSITIVE</b> value for
-     * <i>type</i> attribute.
-     */
-    public static final String TYPE_SCROLL_SENSITIVE = "TYPE_SCROLL_SENSITIVE";
-
-    /**
-     * The <b>CONCUR_READ_ONLY</b> value for
-     * <i>concurrency</i> attribute.
-     */
-    public static final String CONCUR_READ_ONLY = "CONCUR_READ_ONLY";
-
-    /**
-     * The <b>CONCUR_UPDATABLE</b> value for
-     * <i>concurrency</i> attribute.
-     */
-    public static final String CONCUR_UPDATABLE = "CONCUR_UPDATABLE";
-
-    /**
-     * The <b>HOLD_CURSORS_OVER_COMMIT</b> value for
-     * <i>holdability</i> attribute.
-     */
-    public static final String HOLD_CURSORS_OVER_COMMIT = "HOLD_CURSORS_OVER_COMMIT";
-
-    /**
-     * The <b>CLOSE_CURSORS_AT_COMMIT</b> value for
-     * <i>holdability</i> attribute.
-     */
-    public static final String CLOSE_CURSORS_AT_COMMIT = "CLOSE_CURSORS_AT_COMMIT";
     private static final long serialVersionUID = 864474291474631746L;
 
     /**
@@ -121,13 +77,12 @@ public class ResultSetFlagsElement
      * @param type the <i>type</i> attribute.
      * @param concurrency the <i>concurrency</i> attribute.
      * @param holdability the <i>holdability</i> attribute.
-     * @precondition id != null
      */
     public ResultSetFlagsElement(
-        final String id,
-        final String type,
-        final String concurrency,
-        final String holdability)
+        @NotNull final String id,
+        @NotNull final String type,
+        @NotNull final String concurrency,
+        @NotNull final String holdability)
     {
         super(id);
         immutableSetType(type);
@@ -139,7 +94,7 @@ public class ResultSetFlagsElement
      * Specifies the <i>type</i> attribute.
      * @param value such value.
      */
-    protected final void immutableSetType(final String value)
+    protected final void immutableSetType(@NotNull final String value)
     {
         m__strType = value;
     }
@@ -148,7 +103,8 @@ public class ResultSetFlagsElement
      * Specifies the <i>type</i> attribute.
      * @param value such value.
      */
-    protected void setType(final String value)
+    @SuppressWarnings("unused")
+    protected void setType(@NotNull final String value)
     {
         immutableSetType(value);
     }
@@ -157,6 +113,8 @@ public class ResultSetFlagsElement
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
+    @Override
+    @Nullable
     public String getType()
     {
         return m__strType;
@@ -166,7 +124,7 @@ public class ResultSetFlagsElement
      * Specifies the <i>concurrency</i> attribute.
      * @param value such value.
      */
-    protected final void immutableSetConcurrency(final String value)
+    protected final void immutableSetConcurrency(@NotNull final String value)
     {
         m__strConcurrency = value;
     }
@@ -175,7 +133,8 @@ public class ResultSetFlagsElement
      * Specifies the <i>concurrency</i> attribute.
      * @param value such value.
      */
-    protected void setConcurrency(final String value)
+    @SuppressWarnings("unused")
+    protected void setConcurrency(@NotNull final String value)
     {
         immutableSetConcurrency(value);
     }
@@ -184,6 +143,8 @@ public class ResultSetFlagsElement
      * Retrieves the <i>concurrency</i> attribute.
      * @return such value.
      */
+    @Override
+    @Nullable
     public String getConcurrency()
     {
         return m__strConcurrency;
@@ -193,7 +154,7 @@ public class ResultSetFlagsElement
      * Specifies the <i>holdability</i> attribute.
      * @param value such value.
      */
-    protected final void immutableSetHoldability(final String value)
+    protected final void immutableSetHoldability(@NotNull final String value)
     {
         m__strHoldability = value;
     }
@@ -202,7 +163,8 @@ public class ResultSetFlagsElement
      * Specifies the <i>holdability</i> attribute.
      * @param value such value.
      */
-    protected void setHoldability(final String value)
+    @SuppressWarnings("unused")
+    protected void setHoldability(@NotNull final String value)
     {
         immutableSetHoldability(value);
     }
@@ -211,6 +173,8 @@ public class ResultSetFlagsElement
      * Retrieves the <i>holdability</i> attribute.
      * @return such value.
      */
+    @Override
+    @Nullable
     public String getHoldability()
     {
         return m__strHoldability;
@@ -220,6 +184,7 @@ public class ResultSetFlagsElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {
@@ -241,14 +206,15 @@ public class ResultSetFlagsElement
      */
     @NotNull
     protected String toString(
-        final String id,
-        final String type,
-        final String concurrency,
-        final String holdability)
+        @NotNull final String id,
+        @Nullable final String type,
+        @Nullable final String concurrency,
+        @Nullable final String holdability)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
+            + "[" + "type=" + type + "]"
             + "[" + "concurrency=" + concurrency + "]"
             + "[" + "holdability=" + holdability + "]";
     }

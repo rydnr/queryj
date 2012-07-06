@@ -89,5 +89,12 @@ public interface CustomSqlProvider
      */
     @NotNull
     SqlPropertyDAO getSqlPropertyDAO();
+
+    /**
+     * Retrieves the {@link ConnectionFlagsDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    SqlConnectionFlagsDAO getSqlConnectionFlagsDAO();
 }
 

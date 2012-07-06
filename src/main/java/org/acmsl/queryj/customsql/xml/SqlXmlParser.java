@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql.xml;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.customsql.ConnectionFlagsElement;
+import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.PropertyElement;
 import org.acmsl.queryj.customsql.Result;
@@ -53,7 +54,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Is able to read the contents contained in QueryJ's sql.xml files.
@@ -67,7 +68,7 @@ public interface SqlXmlParser
      * return such collection.
      */
     @NotNull
-    Collection getCollection();
+    List<? extends IdentifiableElement> getCollection();
 
     /**
      * Parses the sql.xml associated to this instance.
