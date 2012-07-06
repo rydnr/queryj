@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
@@ -75,6 +76,34 @@ public class CustomBaseValueObjectTemplateBuildHandler
     protected CustomBaseValueObjectTemplateGenerator retrieveTemplateFactory()
     {
         return new CustomBaseValueObjectTemplateGenerator();
+    }
+
+    /**
+     * Checks whether given result is not 'standard'.
+     * @param customResult the custom result.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return <code>true</code> in such case.
+     */
+    @Override
+    protected boolean isGenerationAllowedForResult(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+        boolean result =
+            super.isGenerationAllowedForResult(
+                customResult, customSqlProvider, metadataManager, customResultUtils);
+
+        if (result)
+        {
+            result =
+                customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager) != null;
+        }
+
+        return result;
     }
 
     /**

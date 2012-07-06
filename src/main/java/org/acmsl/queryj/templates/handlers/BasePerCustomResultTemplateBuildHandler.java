@@ -57,9 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -183,7 +181,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         for  (Result t_ResultElement: resultElements)
         {
             if (   (t_ResultElement != null)
-                && (customResultUtils.isGenerationAllowedForResult(t_ResultElement.getId())))
+                && (isGenerationAllowedForResult(
+                        t_ResultElement, customSqlProvider, metadataManager, customResultUtils)))
             {
                 try
                 {
@@ -221,6 +220,24 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         }
 
         storeTemplates(t_lTemplates, parameters);
+    }
+
+    /**
+     * Checks whether the generation is allowed for given result.
+     * @param customResult the custom result.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return <code>true</code> in such case.
+     */
+    @SuppressWarnings("unused")
+    protected boolean isGenerationAllowedForResult(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+        return customResultUtils.isGenerationAllowedForResult(customResult.getId());
     }
 
     /**
@@ -347,26 +364,11 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     {
         @NotNull final List<Result> result = new ArrayList<Result>();
 
-        @Nullable Collection t_cCollection =
-            customSqlProvider.getCollection();
-
-        if  (t_cCollection != null)
+        for (@Nullable Object t_Item : customSqlProvider.getCollection())
         {
-            Iterator t_itElements = t_cCollection.iterator();
-
-            if  (t_itElements != null)
+            if  (t_Item instanceof Result)
             {
-                @Nullable Object t_Item;
-
-                while  (t_itElements.hasNext())
-                {
-                    t_Item = t_itElements.next();
-
-                    if  (t_Item instanceof Result)
-                    {
-                        result.add((Result) t_Item);
-                    }
-                }
+                result.add((Result) t_Item);
             }
         }
 
