@@ -82,7 +82,6 @@ public interface DecoratorFactory
     public AttributeDecorator createDecorator(
         @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager);
 
-
     /**
      * Creates an <code>ParameterDecorator</code> for given
      * parameter instance.
@@ -189,6 +188,7 @@ public interface DecoratorFactory
      * @param targetTableName the name of the target table.
      * @param allowsNull whether the fk can be null as a whole.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorator instance.
      */
     @NotNull
@@ -197,5 +197,6 @@ public interface DecoratorFactory
         @NotNull final List<Attribute> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
-        @NotNull final MetadataManager metadataManager);
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider);
 }

@@ -39,47 +39,46 @@
 //
 group ForeignKeyStatementSetter;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a AttributeStatementSetter source file for a concrete foreign key.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
-  @param foreign_key the foreign key.
+  @param copyright_years the copyright's years.
+  @param package the package.
+  @param foreignKey the foreign key.
   @params project_imports
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
-    first_line_description(tableName=input.table_name),
-    second_line_description(tableName=input.table_name),
-    third_line_description(foreignKey=input.foreign_key)
+    first_line_description(foreignKey=foreignKey),
+    second_line_description(foreignKey=foreignKey),
+    third_line_description(foreignKey=foreignKey)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/ForeignKeyStatementSetter.stg
+// Generated using org/acmsl/queryj/dao/ForeignKeyStatementSetter.stg at <timestamp>
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    input.subpackage_name,
-    input.table_name_normalized_lowercased
+    subpackage_name,
+    table_name_normalized_lowercased
   ])>
 
 <project_imports(
-  basePackageName=input.base_package_name,
+  basePackageName=project_package,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=input.vo_name,
+  voName=foreignKey.source.voName,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
-  trName=input.tr_name_capitalized)>
+  trName=repository.capitalized)>
 
 <checkers_import()>
 /*
@@ -106,23 +105,23 @@ import java.util.Date;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(input=input, foreignKey=input.foreign_key)>
+<class(foreignKey=foreignKey)>
 >>
 
-first_line_description(tableName) ::= <<
+first_line_description(foreignKey) ::= <<
 <!
   Generates the first line of the generated file description.
-  @param tableName the table name.
+  @param foreignKey the foreign key.
 !>
 Specifies the PreparedStatement values required
 >>
 
-second_line_description(tableName) ::= <<
+second_line_description(foreignKey) ::= <<
 <!
   Generates the second line of the generated file description.
-  @param tableName the table name.
+  @param foreignKey the foreign key.
 !>
-to perform any <tableName> operation expecting
+to perform any operation expecting
 >>
 
 third_line_description(foreignKey) ::= <<
@@ -149,21 +148,20 @@ project_imports(
 //import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
 >>
 
-class(input, foreignKey) ::= <<
+class(foreignKey) ::= <<
 <!
  Generates the class body.
- @param input the input.
  @param foreignKey the foreign key.
 !>
 /**
  * <[
-      first_line_description(tableName=input.table_name),
-      second_line_description(tableName=input.table_name),
+      first_line_description(foreignKey=foreignKey),
+      second_line_description(foreignKey=foreignKey),
       third_line_description(foreignKey=foreignKey)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/ForeignKeyStatementSetter.stg")>
  */
-public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
+public class <foreignKey.source.voName>By<foreignKey.target.voName>StatementSetter
     implements  PreparedStatementSetter
 {
     <foreignKey.attributes:attribute_member_declaration(attr=it); separator="\n">
@@ -174,12 +172,12 @@ public class <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter
     private boolean m__bUpdateOperation;
 
     /**
-     * Creates a {@link <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter}
+     * Creates a {@link <foreignKey.source.voName>By<foreignKey.target.voName>StatementSetter}
      * instance.
      <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased);
         separator="\n">
      */
-    public <foreignKey.sourceVoName>By<foreignKey.targetVoName>StatementSetter(
+    public <foreignKey.source.voName>By<foreignKey.target.voName>StatementSetter(
         <foreignKey.attributes:attribute_declaration(attr=it);
           separator=",\n">)
     {
@@ -284,7 +282,7 @@ if  (<attr.nameLowercased> == null)
 else
 {
     preparedStatement.set<attr.objectType>(
-        <attr.ordinalPosition>, <indirect_template(name=attr.objectType + "_to_primitive", input=attr)>);
+        <attr.ordinalPosition>, <indirect_template(name=attr.objectType + "_to_primitive", extra1=attr)>);
 }
 <else>
 preparedStatement.set<attr.objectType>(

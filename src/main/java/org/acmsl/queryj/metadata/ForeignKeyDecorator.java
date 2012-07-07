@@ -41,6 +41,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
@@ -73,12 +74,14 @@ public class ForeignKeyDecorator
      * @param foreignKey the foreign key.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     @SuppressWarnings("unused")
     public ForeignKeyDecorator(
         @NotNull final ForeignKey foreignKey,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         this(
             foreignKey.getSourceTableName(),
@@ -86,7 +89,8 @@ public class ForeignKeyDecorator
             foreignKey.getTargetTableName(),
             foreignKey.isNullable(),
             metadataManager,
-            decoratorFactory);
+            decoratorFactory,
+            customSqlProvider);
     }
 
     /**
@@ -98,6 +102,7 @@ public class ForeignKeyDecorator
      * @param allowsNull whether the foreign key allows null values.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     public ForeignKeyDecorator(
         @NotNull final String sourceTableName,
@@ -105,8 +110,16 @@ public class ForeignKeyDecorator
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        super(sourceTableName, attributes, targetTableName, allowsNull, metadataManager, decoratorFactory);
+        super(
+            sourceTableName,
+            attributes,
+            targetTableName,
+            allowsNull,
+            metadataManager,
+            decoratorFactory,
+            customSqlProvider);
     }
 }

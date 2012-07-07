@@ -36,14 +36,11 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.queryj.metadata.vo.Table;
 
 /*
  * Importing some JetBrains annotations.
@@ -81,17 +78,24 @@ public abstract class AbstractForeignKeyDecorator
     private DecoratorFactory m__DecoratorFactory;
 
     /**
+     * The {@link CustomSqlProvider} instance.
+     */
+    private CustomSqlProvider m__CustomSqlProvider;
+
+    /**
      * Creates an <code>AbstractForeignKeyDecorator</code> with the
      * <code>ForeignKey</code> information to decorate.
      * @param foreignKey the foreign key.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     @SuppressWarnings("unused")
     public AbstractForeignKeyDecorator(
         @NotNull final ForeignKey foreignKey,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         this(
             foreignKey.getSourceTableName(),
@@ -99,7 +103,8 @@ public abstract class AbstractForeignKeyDecorator
             foreignKey.getTargetTableName(),
             foreignKey.isNullable(),
             metadataManager,
-            decoratorFactory);
+            decoratorFactory,
+            customSqlProvider);
 
         immutableSetForeignKey(foreignKey);
 
@@ -114,6 +119,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param allowsNull whether the foreign key allows null values.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     protected AbstractForeignKeyDecorator(
         @NotNull final String sourceTableName,
@@ -121,11 +127,13 @@ public abstract class AbstractForeignKeyDecorator
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         super(sourceTableName, attributes, targetTableName, allowsNull);
         immutableSetMetadataManager(metadataManager);
         immutableSetDecoratorFactory(decoratorFactory);
+        immutableSetCustomSqlProvider(customSqlProvider);
     }
 
     /**
@@ -180,16 +188,46 @@ public abstract class AbstractForeignKeyDecorator
      * Retrieves the {@link DecoratorFactory} instance.
      * @return such instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return m__DecoratorFactory;
     }
 
     /**
+     * Specifies the {@link CustomSqlProvider} instance.
+     * @param customSqlProvider such instance.
+     */
+    protected final void immutableSetCustomSqlProvider(@NotNull final CustomSqlProvider customSqlProvider)
+    {
+        m__CustomSqlProvider = customSqlProvider;
+    }
+
+    /**
+     * Specifies the {@link CustomSqlProvider} instance.
+     * @param customSqlProvider such instance.
+     */
+    @SuppressWarnings("unused")
+    protected void setCustomSqlProvider(@NotNull final CustomSqlProvider customSqlProvider)
+    {
+        immutableSetCustomSqlProvider(customSqlProvider);
+    }
+
+    /**
+     * Retrieves the {@link CustomSqlProvider} instance.
+     * @return such instance.
+     */
+    @NotNull
+    public CustomSqlProvider getCustomSqlProvider()
+    {
+        return m__CustomSqlProvider;
+    }
+
+    /**
      * Specifies the foreign key to decorate.
      * @param foreignKey the foreign key.
      */
-    protected final void immutableSetForeignKey(final ForeignKey foreignKey)
+    protected final void immutableSetForeignKey(@NotNull final ForeignKey foreignKey)
     {
         m__ForeignKey = foreignKey;
     }
@@ -199,7 +237,7 @@ public abstract class AbstractForeignKeyDecorator
      * @param foreignKey the foreign key.
      */
     @SuppressWarnings("unused")
-    protected void setForeignKey(final ForeignKey foreignKey)
+    protected void setForeignKey(@NotNull final ForeignKey foreignKey)
     {
         immutableSetForeignKey(foreignKey);
     }
@@ -208,6 +246,7 @@ public abstract class AbstractForeignKeyDecorator
      * Retrieves the decorated foreign key.
      * @return such foreign key.
      */
+    @NotNull
     public ForeignKey getForeignKey()
     {
         return m__ForeignKey;
@@ -254,89 +293,67 @@ public abstract class AbstractForeignKeyDecorator
     }
 
     /**
-     * Retrieves the source table name, uncapitalized.
-     * @return such value.
+     * Retrieves the source table.
+     * @return such information.
      */
-    @NotNull
-    public String getSourceTableNameUncapitalized()
+    @SuppressWarnings("unused")
+    @Nullable
+    public Table getSource()
     {
-        return
-            uncapitalize(
-                getSourceTableName(), DecorationUtils.getInstance());
+        return getTable(getSourceTableName(), getMetadataManager());
     }
 
     /**
-     * Retrieves the source value-object name.
-     * @return such value.
+     * Retrieves the target table.
+     * @return such information.
      */
-    @NotNull
-    public String getSourceVoName()
+    @SuppressWarnings("unused")
+    @Nullable
+    public Table getTarget()
     {
-        return
-            toVo(
-                getSourceTableName(),
-                EnglishGrammarUtils.getInstance(),
-                DecorationUtils.getInstance());
+        return getTable(getTargetTableName(), getMetadataManager());
     }
 
     /**
-     * Retrieves the target value-object name.
-     * @return such value.
+     * Retrieves the source table.
+     * @param sourceTableName the name of the source table.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return such information.
      */
-    @NotNull
-    public String getTargetVoName()
+    @Nullable
+    public Table getTable(@NotNull final String sourceTableName, @NotNull final MetadataManager metadataManager)
     {
-        return
-            toVo(
-                getTargetTableName(),
-                EnglishGrammarUtils.getInstance(),
-                DecorationUtils.getInstance());
+        return getTable(sourceTableName, metadataManager.getTableDAO());
     }
 
     /**
-     * Converts given table name to its value-object version.
-     * @param tableName the table name.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the value-object name.
+     * Retrieves the source table.
+     * @param sourceTableName the name of the source table.
+     * @param tableDAO the {@link TableDAO} instance.
+     * @return such information.
      */
-    @NotNull
-    protected String toVo(
-        @NotNull final String tableName,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils,
-        @NotNull final DecorationUtils decorationUtils)
+    @Nullable
+    public Table getTable(@NotNull final String sourceTableName, @NotNull final TableDAO tableDAO)
     {
-        return
-            capitalize(
-                englishGrammarUtils.getSingular(tableName.toLowerCase()),
-                decorationUtils);
+        Table result = tableDAO.findByName(sourceTableName);
+
+        if (result != null)
+        {
+            result = decorate(result);
+        }
+
+        return result;
     }
 
     /**
-     * Uncapitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
+     * Decorates given table.
+     * @param table the table.
+     * @return the decorated table.
      */
     @NotNull
-    protected String uncapitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    protected Table decorate(@NotNull final Table table)
     {
-        return decorationUtils.uncapitalize(value.toLowerCase());
-    }
-
-    /**
-     * Capitalizes given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the alternate version of the value.
-     */
-    @NotNull
-    protected String capitalize(
-        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.capitalize(value);
+        return new CachingTableDecorator(table, getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
     }
 
     /**
@@ -344,6 +361,7 @@ public abstract class AbstractForeignKeyDecorator
      * contained in this instance.
      * @return such information.
      */
+    @Override
     @NotNull
     public String toString()
     {

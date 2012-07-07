@@ -480,7 +480,8 @@ public abstract class AbstractTableDecorator
      * @param allowNull whether the foreign-key allows null.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
-     * @return such decorator.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+    * @return such decorator.
      */
     @SuppressWarnings("unused")
     @NotNull
@@ -490,7 +491,8 @@ public abstract class AbstractTableDecorator
         @NotNull final String targetTable,
         final boolean allowNull,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         return
             new ForeignKeyDecorator(
@@ -499,7 +501,8 @@ public abstract class AbstractTableDecorator
                 targetTable,
                 allowNull,
                 metadataManager,
-                decoratorFactory);
+                decoratorFactory,
+                customSqlProvider);
     }
 
     /**

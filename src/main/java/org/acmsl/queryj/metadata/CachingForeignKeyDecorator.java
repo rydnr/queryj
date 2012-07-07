@@ -36,13 +36,16 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -59,19 +62,14 @@ public class CachingForeignKeyDecorator
     extends  AbstractForeignKeyDecorator
 {
     /**
-     * The cached uncapitalized source table name.
+     * The cached source table.
      */
-    private String m__strCachedSourceTableNameUncapitalized;
+    private Table m__CachedSource;
 
     /**
-     * The cached source VO name.
+     * The cached target table.
      */
-    private String m__strCachedSourceVoName;
-
-    /**
-     * The cached target VO name.
-     */
-    private String m__strCachedTargetVoName;
+    private Table m__CachedTarget;
 
     /**
      * Creates a <code>CachingForeignKeyDecorator</code> with the
@@ -79,14 +77,16 @@ public class CachingForeignKeyDecorator
      * @param foreignKey the foreign key.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     @SuppressWarnings("unused")
     public CachingForeignKeyDecorator(
         @NotNull final ForeignKey foreignKey,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        super(foreignKey, metadataManager, decoratorFactory);
+        super(foreignKey, metadataManager, decoratorFactory, customSqlProvider);
     }
 
     /**
@@ -98,6 +98,7 @@ public class CachingForeignKeyDecorator
      * @param allowsNull whether the foreign key allows null values.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param decoratorFactory the {@link DecoratorFactory} implementation.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      */
     @SuppressWarnings("unused")
      protected CachingForeignKeyDecorator(
@@ -106,145 +107,119 @@ public class CachingForeignKeyDecorator
         @NotNull final String targetTableName,
         final boolean allowsNull,
         @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory)
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
-        super(sourceTableName, attributes, targetTableName, allowsNull, metadataManager, decoratorFactory);
+        super(
+            sourceTableName,
+            attributes,
+            targetTableName,
+            allowsNull,
+            metadataManager,
+            decoratorFactory,
+            customSqlProvider);
     }
 
     /**
-     * Specifies the cached uncapitalized source table name.
-     * @param value the value to cache.
+     * Specifies the cached source table.
+     * @param source such table.
      */
-    protected final void immutableSetCachedSourceTableNameUncapitalized(
-        final String value)
+    protected final void immutableSetCachedSource(@NotNull final Table source)
     {
-        m__strCachedSourceTableNameUncapitalized = value;
-    }
-    
-    /**
-     * Specifies the cached uncapitalized source table name.
-     * @param value the value to cache.
-     */
-    protected void setCachedSourceTableNameUncapitalized(final String value)
-    {
-        immutableSetCachedSourceTableNameUncapitalized(value);
+        m__CachedSource = source;
     }
 
     /**
-     * Retrieves the cached uncapitalized source table name.
-     * @return such value.
+     * Specifies the cached source table.
+     * @param source such table.
      */
-    public String getCachedSourceTableNameUncapitalized()
+    protected void setCachedSource(@NotNull final Table source)
     {
-        return m__strCachedSourceTableNameUncapitalized;
+        immutableSetCachedSource(source);
     }
 
     /**
-     * Retrieves the source table name, uncapitalized.
-     * @return such value.
+     * Retrieves the cached source table.
+     * @return such table.
      */
-    @NotNull
-    public String getSourceTableNameUncapitalized()
+    @Nullable
+    protected Table getCachedSource()
     {
-        String result = getCachedSourceTableNameUncapitalized();
-        
-        if  (result == null)
+        return m__CachedSource;
+    }
+
+    /**
+     * Retrieves the source table.
+     *
+     * @return such information.
+     */
+    @Override
+    public Table getSource()
+    {
+        @Nullable Table result = getCachedSource();
+
+        if (result == null)
         {
-            result = super.getSourceTableNameUncapitalized();
-            setCachedSourceTableNameUncapitalized(result);
+            result = super.getSource();
+
+            if (result != null)
+            {
+                setCachedSource(result);
+            }
         }
-        
+
         return result;
     }
 
+
     /**
-     * Specifies the cached source VO name.
-     * @param value the value to cache.
+     * Specifies the cached target table.
+     * @param target such table.
      */
-    protected final void immutableSetCachedSourceVoName(
-        final String value)
+    protected final void immutableSetCachedTarget(@NotNull final Table target)
     {
-        m__strCachedSourceVoName = value;
-    }
-    
-    /**
-     * Specifies the cached source VO name.
-     * @param value the value to cache.
-     */
-    protected void setCachedSourceVoName(final String value)
-    {
-        immutableSetCachedSourceVoName(value);
+        m__CachedTarget = target;
     }
 
     /**
-     * Retrieves the cached source VO name.
-     * @return such value.
+     * Specifies the cached target table.
+     * @param target such table.
      */
-    public String getCachedSourceVoName()
+    protected void setCachedTarget(@NotNull final Table target)
     {
-        return m__strCachedSourceVoName;
+        immutableSetCachedTarget(target);
     }
 
     /**
-     * Retrieves the source value-object name.
-     * @return such value.
+     * Retrieves the cached target table.
+     * @return such table.
      */
-    @NotNull
-    public String getSourceVoName()
+    @Nullable
+    protected Table getCachedTarget()
     {
-        String result = getCachedSourceVoName();
-        
-        if  (result == null)
+        return m__CachedTarget;
+    }
+
+    /**
+     * Retrieves the target table.
+     *
+     * @return such information.
+     */
+    @Override
+    public Table getTarget()
+    {
+        @Nullable Table result = getCachedTarget();
+
+        if (result == null)
         {
-            result = super.getSourceVoName();
-            setCachedSourceVoName(result);
-        }
-        
-        return result;
-    }
+            result = super.getTarget();
 
-    /**
-     * Specifies the cached target VO name.
-     * @param value the value to cache.
-     */
-    protected final void immutableSetCachedTargetVoName(
-        final String value)
-    {
-        m__strCachedTargetVoName = value;
-    }
-    
-    /**
-     * Specifies the cached target VO name.
-     * @param value the value to cache.
-     */
-    protected void setCachedTargetVoName(final String value)
-    {
-        immutableSetCachedTargetVoName(value);
-    }
-
-    /**
-     * Retrieves the cached target VO name.
-     * @return such value.
-     */
-    public String getCachedTargetVoName()
-    {
-        return m__strCachedTargetVoName;
-    }
-    /**
-     * Retrieves the target value-object name.
-     * @return such value.
-     */
-    @NotNull
-    public String getTargetVoName()
-    {
-        String result = getCachedTargetVoName();
-        
-        if  (result == null)
-        {
-            result = super.getTargetVoName();
-            setCachedTargetVoName(result);
+            if (result != null)
+            {
+                setCachedTarget(result);
+            }
         }
-        
+
         return result;
     }
 }

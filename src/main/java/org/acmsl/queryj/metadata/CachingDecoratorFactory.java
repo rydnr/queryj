@@ -336,6 +336,7 @@ public class CachingDecoratorFactory
      * @param targetTableName the name of the target table.
      * @param allowsNull whether the fk can be null as a whole.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return the decorator instance.
      */
     @NotNull
@@ -344,10 +345,18 @@ public class CachingDecoratorFactory
         @NotNull final List<Attribute> attributes,
         @NotNull final String targetTableName,
         final boolean allowsNull,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         return
-            new ForeignKeyDecorator(sourceTableName, attributes, targetTableName, allowsNull, metadataManager, this);
+            new ForeignKeyDecorator(
+                sourceTableName,
+                attributes,
+                targetTableName,
+                allowsNull,
+                metadataManager,
+                this,
+                customSqlProvider);
     }
 
     /**
