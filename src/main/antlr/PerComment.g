@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * $HeadURL: http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-2_0-0/src/main/antlr/PerComment.g $
+ * (From http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-2_0-0/src/main/antlr/PerComment.g)
  *
  * Author: Jose San Leandro Armendariz
  *
@@ -43,7 +43,7 @@ grammar PerComment;
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -78,6 +78,12 @@ grammar PerComment;
  *
  */
 package org.acmsl.queryj.antlr;
+
+/* 
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -130,11 +136,6 @@ package org.acmsl.queryj.antlr;
 @parser::members
 {
 /**
- * An empty String String array.
- */
-public static final String[][] EMPTY_STRING_STRING_ARRAY = new String[0][0];
-
-/**
  * The table comment.
  */
 private String tableComment;
@@ -162,7 +163,7 @@ private boolean tableDecorator;
 /**
  * The table relationship attribute.
  */
-private String[][] tableRelationship;
+private List<List<String>> tableRelationship;
 
 /**
  * The column comment.
@@ -187,12 +188,12 @@ private String columnBoolNull;
 /**
  * Whether the column is readonly.
  */
-private boolean columnReadOnly = false;;
+private boolean columnReadOnly = false;
 
 /**
  * The column isa-ref mappings.
  */
-private String[][] columnIsaRefs;
+private List<List<String>> columnIsaRefs;
 
 /**
  * The column oraseq attribute.
@@ -203,7 +204,7 @@ private String columnOraSeq;
  * Specifies the table comment.
  * @param comment such comment.
  */
-protected void setTableComment(final String comment)
+protected void setTableComment(@NotNull final String comment)
 {
     tableComment = trim(comment);
 }
@@ -212,6 +213,7 @@ protected void setTableComment(final String comment)
  * Retrieves the table comment.
  * @return such information.
  */
+@Nullable
 public String getTableComment()
 {
     return tableComment;
@@ -222,7 +224,7 @@ public String getTableComment()
  * static content.
  * @param name such name.
  */
-protected void setTableStatic(final String name)
+protected void setTableStatic(@NotNull final String name)
 {
     tableStatic = trim(name);
 }
@@ -232,6 +234,7 @@ protected void setTableStatic(final String name)
  * static content.
  * @return such column name.
  */
+@Nullable
 public String getTableStatic()
 {
     return tableStatic;
@@ -241,7 +244,7 @@ public String getTableStatic()
  * Specifies the table name defined as parent table.
  * @param name such name.
  */
-protected void setTableIsa(final String name)
+protected void setTableIsa(@NotNull final String name)
 {
     tableIsa = trim(name);
 }
@@ -250,6 +253,7 @@ protected void setTableIsa(final String name)
  * Retrieves the table name defined as parent table.
  * @return such table name.
  */
+@Nullable
 public String getTableIsa()
 {
     return tableIsa;
@@ -260,7 +264,7 @@ public String getTableIsa()
  * by the contents of this table.
  * @param name such name.
  */
-protected void setTableIsaType(final String name)
+protected void setTableIsaType(@NotNull final String name)
 {
     tableIsaType = trim(name);
 }
@@ -270,6 +274,7 @@ protected void setTableIsaType(final String name)
  * by the contents of this table.
  * @return such table name.
  */
+@Nullable
 public String getTableIsaType()
 {
     return tableIsaType;
@@ -299,7 +304,7 @@ public boolean getTableDecorator()
  * Specifies the relationship this table models.
  * @param relationship such content.
  */
-protected void setTableRelationship(final String[][] relationship)
+protected void setTableRelationship(final List<List<String>> relationship)
 {
     tableRelationship = relationship;
 }
@@ -308,16 +313,24 @@ protected void setTableRelationship(final String[][] relationship)
  * Retrieves whether the table models a relationship.
  * @return such information.
  */
-public String[][] getTableRelationship()
+@NotNull
+public List<List<String>> getTableRelationship()
 {
-    return tableRelationship;
+    List<List<String>> result = tableRelationship;
+
+    if (result == null)
+    {
+        result = new ArrayList<List<String>>(0);
+    }
+
+    return result;
 }
 
 /**
  * Specifies the column comment.
  * @param comment such comment.
  */
-protected void setColumnComment(final String comment)
+protected void setColumnComment(@NotNull final String comment)
 {
     columnComment = trim(comment);
 }
@@ -326,6 +339,7 @@ protected void setColumnComment(final String comment)
  * Retrieves the column comment.
  * @return such information.
  */
+@Nullable
 public String getColumnComment()
 {
     return columnComment;
@@ -336,7 +350,7 @@ public String getColumnComment()
  * and how it denotes a <code>true</code> value.
  * @param value the value denoting <code>true</code> values.
  */
-protected void setColumnBoolTrue(final String value)
+protected void setColumnBoolTrue(@NotNull final String value)
 {
     columnBoolTrue = value;
 }
@@ -347,6 +361,7 @@ protected void setColumnBoolTrue(final String value)
  * @return  the <code>true</code> value, or null if
  * the column is not defined as boolean.
  */
+@Nullable
 public String getColumnBoolTrue()
 {
     return columnBoolTrue;
@@ -357,7 +372,7 @@ public String getColumnBoolTrue()
  * and how it denotes a <code>false</code> value.
  * @param value the value denoting <code>false</code> values.
  */
-protected void setColumnBoolFalse(final String value)
+protected void setColumnBoolFalse(@NotNull final String value)
 {
     columnBoolFalse = value;
 }
@@ -368,6 +383,7 @@ protected void setColumnBoolFalse(final String value)
  * @return  the <code>false</code> value, or null if
  * the column is not defined as boolean.
  */
+@Nullable
 public String getColumnBoolFalse()
 {
     return columnBoolFalse;
@@ -378,7 +394,7 @@ public String getColumnBoolFalse()
  * and how it denotes a <code>null</code> value.
  * @param value the value denoting <code>null</code> values.
  */
-protected void setColumnBoolNull(final String value)
+protected void setColumnBoolNull(@NotNull final String value)
 {
     columnBoolNull = value;
 }
@@ -389,6 +405,7 @@ protected void setColumnBoolNull(final String value)
  * @return  the <code>null</code> value, or null if
  * the column is not defined as boolean.
  */
+@Nullable
 public String getColumnBoolNull()
 {
     return columnBoolNull;
@@ -417,7 +434,7 @@ public boolean getColumnReadOnly()
  * table names (ISA implementations).
  * @param mappings the mappings.
  */
-protected void setColumnIsaRefs(final String[][] mappings)
+protected void setColumnIsaRefs(@NotNull final List<List<String>> mappings)
 {
     columnIsaRefs = mappings;
 }
@@ -427,16 +444,24 @@ protected void setColumnIsaRefs(final String[][] mappings)
  * table names (ISA implementations).
  * @return such mappings.
  */
-public String[][] getColumnIsaRefs()
+@NotNull
+public List<List<String>> getColumnIsaRefs()
 {
-    return columnIsaRefs;
+    List<List<String>> result = columnIsaRefs;
+
+    if (result == null)
+    {
+        result = new ArrayList<List<String>>(0);
+    }
+
+    return result;
 }
 
 /**
  * Specifies the 'oraseq' attribute.
  * @param value such value.
  */
-protected void setColumnOraSeq(final String value)
+protected void setColumnOraSeq(@NotNull final String value)
 {
     columnOraSeq = trim(value);
 }
@@ -445,6 +470,7 @@ protected void setColumnOraSeq(final String value)
  * Retrieves the 'oraseq' attribute.
  * @return such information.
  */
+@Nullable
 public String getColumnOraSeq()
 {
     return columnOraSeq;
@@ -454,9 +480,10 @@ public String getColumnOraSeq()
  * Trims given value.
  * @param value the value.
  */
-protected String trim(final String value)
+@Nullable
+protected String trim(@Nullable final String value)
 {
-    String result = value;
+    @Nullable String result = value;
 
     if  (result != null)
     {
@@ -476,7 +503,7 @@ protected String trim(final String value)
  * @throws RecognitionException always.
  */
 protected void mismatch(
-    final IntStream input, final int type, final BitSet follow)
+    @NotNull final IntStream input, final int type, final BitSet follow)
   throws RecognitionException
 {
     throw new MismatchedTokenException(type, input);
@@ -532,7 +559,8 @@ fragment tab_decorator :  DECORATOR WS?;
 fragment tab_relationship
 @init
 {
-    List contents = new ArrayList();
+    List<List<String>> contents = new ArrayList<List<String>>();
+    List<String> aux;
     String first = null;
     String second = null;
 }
@@ -549,11 +577,21 @@ fragment tab_relationship
         | (f=ID) { second = $f.text; })
        WS? CLOSE_PAREN WS? COMMA?
        {
-         contents.add(new String[] { trim(first), trim(second) });
+           first = trim(first);
+           second = trim(second);
+
+           if (   (first != null)
+               && (second != null))
+           {
+               aux = new ArrayList<String>(2);
+               aux.add(first);
+               aux.add(second);
+               contents.add(aux);
+           }
        }
      )+
      {
-       setTableRelationship((String[][]) contents.toArray(new String[0][0]));
+         setTableRelationship(contents);
      }
   ;
 
@@ -571,7 +609,7 @@ fragment col_bool
   : BOOL WS
     i=ident
     {
-      setColumnBoolTrue($i.text);
+        setColumnBoolTrue($i.text);
     }
     WS? COMMA WS?
     j=ident { setColumnBoolFalse($j.text); }
@@ -593,7 +631,8 @@ fragment ident returns [String text]
 fragment col_isarefs
 @init
 {
-    List contents = new ArrayList();
+    List<List<String>> contents = new ArrayList<List<String>>();
+    List<String> aux;
     String first = null;
     String second = null;
 }
@@ -610,11 +649,20 @@ fragment col_isarefs
         | (f=ID) { second = $f.text; })
        WS? CLOSE_PAREN WS? COMMA?
        {
-         contents.add(new String[] { trim(first), trim(second) });
+           first = trim(first);
+           second = trim(second);
+           if (   (first != null)
+               && (second != null))
+           {
+               aux = new ArrayList<String>(2);
+               aux.add(first);
+               aux.add(second);
+               contents.add(aux);
+           }
        }
      )+
      {
-       setColumnIsaRefs((String[][]) contents.toArray(new String[0][0]));
+         setColumnIsaRefs(contents);
      }
   ;
 

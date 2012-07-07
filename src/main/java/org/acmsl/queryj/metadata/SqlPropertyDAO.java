@@ -80,4 +80,12 @@ public interface SqlPropertyDAO
      */
     @NotNull
     List<Property> findByResult(@NotNull final String resultId);
+
+    /**
+     * Inserts a new property.
+     * @param name the property name.
+     * @param tableName the table name.
+     * @param type the type.
+     */
+    void insert(@NotNull final String name, @NotNull final String tableName, @NotNull final String type);
 }

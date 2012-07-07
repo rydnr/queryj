@@ -37,6 +37,7 @@ package org.acmsl.queryj.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -366,21 +367,22 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @return such result elements.
      */
-    @SuppressWarnings("unchecked")
     @NotNull
     protected List<Result> retrieveCustomResultElements(
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        @NotNull final List<Result> result = new ArrayList<Result>();
+        return retrieveCustomResultElements(customSqlProvider.getSqlResultDAO());
+    }
 
-        for (@Nullable Object t_Item : customSqlProvider.getCollection())
-        {
-            if  (t_Item instanceof Result)
-            {
-                result.add((Result) t_Item);
-            }
-        }
-
-        return result;
+    /**
+     * Retrieves the custom result elements.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @return such result elements.
+     */
+    @NotNull
+    protected List<Result> retrieveCustomResultElements(
+        @NotNull final SqlResultDAO resultDAO)
+    {
+        return resultDAO.findAll();
     }
 }

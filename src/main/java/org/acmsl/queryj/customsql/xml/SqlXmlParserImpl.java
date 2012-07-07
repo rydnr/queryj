@@ -52,6 +52,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -85,7 +86,7 @@ public class SqlXmlParserImpl
     /**
      * The complete sql.xml contents.
      */
-    private Collection m__cSqlXmlContents;
+    private List<? extends IdentifiableElement> m__cSqlXmlContents;
 
     /**
      * The key-value pairs.
@@ -141,7 +142,7 @@ public class SqlXmlParserImpl
     @Override
     public SqlParameterDAO getSqlParameterDAO()
     {
-        return new CustomSqlProviderSqlParameterDAO(this);
+        return new SqlXmlParserParameterDAO(this);
     }
 
     /**
@@ -152,7 +153,7 @@ public class SqlXmlParserImpl
     @Override
     public SqlPropertyDAO getSqlPropertyDAO()
     {
-        return new CustomSqlProviderSqlPropertyDAO(this);
+        return new SqlXmlParserPropertyDAO(this);
     }
 
     /**
@@ -177,7 +178,7 @@ public class SqlXmlParserImpl
      * Specifies the sql.xml element collection.
      * @param collection the new collection.
      */
-    protected void setCollection(final Collection collection)
+    protected void setCollection(final List<? extends IdentifiableElement> collection)
     {
         m__cSqlXmlContents = collection;
     }
@@ -188,7 +189,7 @@ public class SqlXmlParserImpl
      */
     @SuppressWarnings("unchecked")
     @NotNull
-    public Collection getCollection()
+    public List<? extends IdentifiableElement> getCollection()
     {
         return m__cSqlXmlContents;
     }
@@ -268,7 +269,7 @@ public class SqlXmlParserImpl
 
         if  (digester != null)
         {
-            @NotNull Collection collection = new ArrayList();
+            @NotNull List<? extends IdentifiableElement> collection = new ArrayList<IdentifiableElement>();
 
             digester.push(collection);
 
@@ -701,220 +702,6 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Resolves the parameter reference.
-     * @param reference such reference.
-     * @return the referenced parameter.
-     */
-    @Override
-    @Nullable
-    public Parameter resolveParameterReference(
-        @NotNull final String reference)
-    {
-        return resolveParameterReference(reference, getMap());
-    }
-
-    /**
-     * Resolves the parameter reference.
-     * @param reference such reference.
-     * @param map the map.
-     * @return the referenced parameter.
-     */
-    @Nullable
-    protected Parameter resolveParameterReference(
-        @NotNull final String reference,
-        @Nullable final Map map)
-    {
-        @Nullable ParameterElement result = null;
-
-        if  (map != null)
-        {
-            result =
-                (ParameterElement)
-                    map.get(buildParameterKey(reference));
-        }
-
-        return result;
-    }
-
-    /**
-     * Resolves the result reference.
-     * @param reference such reference.
-     * @return the referenced result.
-     */
-    @Override
-    @Nullable
-    public Result resolveResultReference(
-        @NotNull final String reference)
-    {
-        return resolveResultReference(reference, getMap());
-    }
-
-    /**
-     * Resolves the result reference.
-     * @param reference such reference.
-     * @param map the map.
-     * @return the referenced result.
-     */
-    @Nullable
-    protected Result resolveResultReference(
-        @NotNull final String reference,
-        @Nullable final Map map)
-    {
-        @Nullable Result result = null;
-
-        if  (map != null)
-        {
-            result =
-                (Result)
-                    map.get(buildResultKey(reference));
-        }
-
-        return result;
-    }
-
-    /**
-     * Resolves the property reference.
-     * @param reference the reference.
-     * @return the referenced property.
-     */
-    @Override
-    @Nullable
-    public PropertyElement resolvePropertyReference(
-        @NotNull final String reference)
-    {
-        return resolvePropertyReference(reference, getMap());
-    }
-
-    /**
-     * Resolves the property reference.
-     * @param id the property id.
-     * @param map the map.
-     * @return the referenced property.
-     */
-    @Nullable
-    protected PropertyElement resolvePropertyReference(
-        @NotNull final String id,
-        @Nullable final Map map)
-    {
-        @Nullable PropertyElement result = null;
-
-        if  (map != null)
-        {
-            result = (PropertyElement) map.get(buildPropertyKey(id));
-        }
-
-        return result;
-    }
-
-    /**
-     * Resolves the connection-flags reference.
-     * @param reference such reference.
-     * @return the referenced connection flags.
-     */
-    @Override
-    @Nullable
-    public ConnectionFlagsElement resolveConnectionFlagsReference(
-        @NotNull final String reference)
-    {
-        return resolveConnectionFlagsReference(reference, getMap());
-    }
-
-    /**
-     * Resolves given connection-flags reference.
-     * @param reference such reference.
-     * @param map the map.
-     * @return the referenced connection flags.
-     */
-    @Nullable
-    protected ConnectionFlagsElement resolveConnectionFlagsReference(
-        @NotNull final String reference,
-        @Nullable final Map map)
-    {
-        @Nullable ConnectionFlagsElement result = null;
-
-        if  (map != null)
-        {
-            result =
-                (ConnectionFlagsElement)
-                    map.get(buildConnectionFlagsKey(reference));
-        }
-
-        return result;
-    }
-
-    /**
-     * Resolves the statement-flags reference.
-     * @param reference such reference.
-     * @return the referenced statement flags.
-     */
-    @Override
-    @Nullable
-    public StatementFlagsElement resolveStatementFlagsReference(
-        @NotNull final String reference)
-    {
-        return resolveStatementFlagsReference(reference, getMap());
-    }
-
-    /**
-     * Resolves given statement-flags reference.
-     * @param reference such reference.
-     * @param map the map.
-     * @return the referenced statement flags.
-     */
-    @Nullable
-    protected StatementFlagsElement resolveStatementFlagsReference(
-        @NotNull final String reference,
-        @Nullable final Map map)
-    {
-        @Nullable StatementFlagsElement result = null;
-
-        if  (map != null)
-        {
-            result =
-                (StatementFlagsElement)
-                    map.get(buildStatementFlagsKey(reference));
-        }
-
-        return result;
-    }
-
-    /**
-     * Resolves the resultset-flags reference.
-     * @param reference such reference.
-     * @return the referenced resultset flags.
-     */
-    @Override
-    @Nullable
-    public ResultSetFlagsElement resolveResultSetFlagsReference(
-        @NotNull final String reference)
-    {
-        return resolveResultSetFlagsReference(reference, getMap());
-    }
-
-    /**
-     * Resolves given resultset-flags reference.
-     * @param reference such reference.
-     * @param map the map.
-     * @return the referenced resultset flags.
-     */
-    @Nullable
-    protected ResultSetFlagsElement resolveResultSetFlagsReference(
-        @NotNull final String reference,
-        @Nullable final Map map)
-    {
-        @Nullable ResultSetFlagsElement result = null;
-
-        if  (map != null)
-        {
-            result =
-                (ResultSetFlagsElement)
-                    map.get(buildResultSetFlagsKey(reference));
-        }
-
-        return result;
-    }
-
-    /**
      * Adds a new result.
      * @param id the result id.
      * @param result the <code>Result</code> instance.
@@ -936,6 +723,39 @@ public class SqlXmlParserImpl
         @NotNull final String id, @NotNull final String name, @NotNull final String type)
     {
         // TODO
+    }
+
+    /**
+     * Retrieves the {@link SqlConnectionFlagsDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public SqlConnectionFlagsDAO getSqlConnectionFlagsDAO()
+    {
+        return new SqlXmlParserConnectionFlagsDAO(this);
+    }
+
+    /**
+     * Retrieves the {@link SqlStatementFlagsDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public SqlStatementFlagsDAO getSqlStatementFlagsDAO()
+    {
+        return new SqlXmlParserStatementFlagsDAO(this);
+    }
+
+    /**
+     * Retrieves the {@link SqlResultSetFlagsDAO} instance.
+     * @return such instance.
+     */
+    @NotNull
+    @Override
+    public SqlResultSetFlagsDAO getSqlResultSetFlagsDAO()
+    {
+        return new SqlXmlParserResultSetFlagsDAO(this);
     }
 }
 

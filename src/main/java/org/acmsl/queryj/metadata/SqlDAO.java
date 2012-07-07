@@ -134,4 +134,17 @@ public interface SqlDAO
      */
     @NotNull
     List<Sql> findByType(@NotNull final String type);
+
+    /**
+     * Retrieves all repository-scoped SQL.
+     * @return such list.
+     */
+    @NotNull
+    List<Sql> findAllRepositoryScopedSql();
+
+    /**
+     * Checks whether it contains repository-scoped SQL or not.
+     * @return <code>true</code> in such case.
+     */
+    boolean containsRepositoryScopedSql();
 }

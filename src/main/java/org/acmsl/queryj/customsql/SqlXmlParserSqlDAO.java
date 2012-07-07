@@ -359,4 +359,54 @@ public class SqlXmlParserSqlDAO
     {
         return filterByType(findAll(), type);
     }
+
+    /**
+     * Retrieves all repository-scoped SQL.
+     * @return such list.
+     */
+    @NotNull
+    @Override
+    public List<Sql> findAllRepositoryScopedSql()
+    {
+        return findAllRepositoryScopedSql(false);
+    }
+
+    /**
+     * Retrieves all repository-scoped SQL.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Sql> findAllRepositoryScopedSql(final boolean breakAtFirstOccurrence)
+    {
+        @NotNull List<Sql> result = new ArrayList<Sql>(0);
+
+        for (@Nullable Sql t_Sql : findAll())
+        {
+            if (t_Sql != null)
+            {
+                if (t_Sql.getRepositoryScope() != null)
+                {
+                    result.add(t_Sql);
+                    if (breakAtFirstOccurrence)
+                    {
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves all repository-scoped SQL.
+     * @return such list.
+     */
+    @Override
+    public boolean containsRepositoryScopedSql()
+    {
+        @NotNull List<Sql> result = findAllRepositoryScopedSql(true);
+
+        return result.size() > 0;
+    }
 }

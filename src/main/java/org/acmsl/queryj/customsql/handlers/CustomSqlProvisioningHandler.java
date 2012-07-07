@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -114,24 +115,21 @@ public class CustomSqlProvisioningHandler
     {
         return
             handle(
-                customSqlProvider,
+                customSqlProvider.getSqlPropertyDAO(),
                 metadataManager,
                 metadataManager.getMetadataTypeManager());
     }
 
     /**
      * Handles given parameters.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param sqlPropertyDAO the {@link SqlPropertyDAO} instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     protected boolean handle(
-        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final SqlPropertyDAO sqlPropertyDAO,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
@@ -158,7 +156,7 @@ public class CustomSqlProvisioningHandler
                         t_strPropertyName =
                             buildPropertyName(t_Attribute.getName());
 
-                        customSqlProvider.addProperty(
+                        sqlPropertyDAO.insert(
                             t_strPropertyName,
                             t_Table.getName(),
                             metadataTypeManager.getFieldType(

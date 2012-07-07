@@ -38,6 +38,7 @@ package org.acmsl.queryj.customsql;
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.vo.Table;
 
 /*
@@ -48,20 +49,23 @@ import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
- * Importing some JetBrains classes.
+ * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
-import org.apache.log4j.lf5.viewer.LogFactor5Dialog;
+
+/*
+ * Importing some JetBrains classes.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -409,7 +413,7 @@ public class CustomResultUtils
     {
         boolean result;
 
-        String t_strTableInLowerCase = tableName.trim().toLowerCase();
+        String t_strTableInLowerCase = tableName.trim().toLowerCase(Locale.US);
 
         result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
 
@@ -418,14 +422,11 @@ public class CustomResultUtils
             String t_strSingularName =
                 retrieveCachedSingularTableName(t_strTableInLowerCase);
 
-            if  (t_strSingularName == null)
-            {
-                t_strSingularName =
-                    englishGrammarUtils.getSingular(t_strTableInLowerCase);
+            t_strSingularName =
+                englishGrammarUtils.getSingular(t_strTableInLowerCase);
 
-                cacheSingularTableName(
-                    t_strTableInLowerCase, t_strSingularName);
-            }
+            cacheSingularTableName(
+                t_strTableInLowerCase, t_strSingularName);
 
             result = daoId.equalsIgnoreCase(t_strSingularName);
         }
@@ -435,14 +436,11 @@ public class CustomResultUtils
             String t_strPluralName =
                 retrieveCachedPluralTableName(t_strTableInLowerCase);
 
-            if  (t_strPluralName == null)
-            {
-                t_strPluralName =
-                    englishGrammarUtils.getPlural(t_strTableInLowerCase);
+            t_strPluralName =
+                englishGrammarUtils.getPlural(t_strTableInLowerCase);
 
-                cachePluralTableName(
-                    t_strTableInLowerCase, t_strPluralName);
-            }
+            cachePluralTableName(
+                t_strTableInLowerCase, t_strPluralName);
 
             result = daoId.equalsIgnoreCase(t_strPluralName);
         }
@@ -487,29 +485,25 @@ public class CustomResultUtils
      * @return such elements.
      */
     @NotNull
-    public Result[] retrieveResultsByType(
+    public List<Result> retrieveResultsByType(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
-        @NotNull List<Result> t_cResult = new ArrayList<Result>();
+        return retrieveResultsByType(customSqlProvider.getSqlResultDAO(), type);
+    }
 
-        @Nullable Result t_CurrentElement;
-
-        for (@Nullable Sql t_Sql : retrieveSqlElementsByType(customSqlProvider, type))
-        {
-            if (t_Sql != null)
-            {
-                t_CurrentElement =
-                    customSqlProvider.resolveReference(t_Sql.getResultRef());
-
-                if (t_CurrentElement != null)
-                {
-                    t_cResult.add(t_CurrentElement);
-                }
-            }
-        }
-
-        return t_cResult.toArray(new Result[t_cResult.size()]);
+    /**
+     * Retrieves all {@link Result} instances of given type.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @param type the type.
+     * @return such elements.
+     */
+    @NotNull
+    public List<Result> retrieveResultsByType(
+        @NotNull final SqlResultDAO resultDAO,
+        @NotNull final String type)
+    {
+        return resultDAO.findByType(type);
     }
 
     /**
@@ -641,10 +635,9 @@ public class CustomResultUtils
      * Retrieves the cached entry.
      * @param key the key.
      * @return the cached entry, or <code>null</code> if it's not cached.
-     * @precondition key != null
      */
     @Nullable
-    protected String retrieveCachedEntry(final String key)
+    protected String retrieveCachedEntry(@NotNull final String key)
     {
         return retrieveCachedEntry(CACHE, key);
     }
@@ -654,11 +647,8 @@ public class CustomResultUtils
      * @param map the cache.
      * @param key the key.
      * @param value the value.
-     * @precondition map != null
-     * @precondition key != null
-     * @precondition value != null
      */
-    protected void cache(@NotNull final Map<String,String> map, final String key, final String value)
+    protected void cache(@NotNull final Map<String,String> map, @NotNull final String key, @NotNull final String value)
     {
         map.put(key, value);
     }
@@ -668,11 +658,9 @@ public class CustomResultUtils
      * @param cache the cache.
      * @param key the key.
      * @return the cached entry, or <code>null</code> if it's not cached.
-     * @precondition cache != null
-     * @precondition key != null
      */
     @NotNull
-    protected String retrieveCachedEntry(@NotNull final Map<String,String> cache, final String key)
+    protected String retrieveCachedEntry(@NotNull final Map<String,String> cache, @NotNull final String key)
     {
         return cache.get(key);
     }
@@ -681,10 +669,8 @@ public class CustomResultUtils
      * Removes an entry from the cache.
      * @param cache the cache.
      * @param key the key.
-     * @precondition cache != null
-     * @precondition key != null
      */
-    protected void removeEntryFromCache(@NotNull final Map<String,String> cache, final String key)
+    protected void removeEntryFromCache(@NotNull final Map<String,String> cache, @NotNull final String key)
     {
         cache.remove(key);
     }
@@ -693,10 +679,9 @@ public class CustomResultUtils
      * Builds the singular key for given table.
      * @param tableName the table name.
      * @return such key.
-     * @precondition tableName != null
      */
     @NotNull
-    protected String buildSingularKey(final String tableName)
+    protected String buildSingularKey(@NotNull final String tableName)
     {
         return "~singular--" + tableName;
     }
@@ -705,10 +690,9 @@ public class CustomResultUtils
      * Builds the plural key for given table.
      * @param tableName the table name.
      * @return such key.
-     * @precondition tableName != null
      */
     @NotNull
-    protected String buildPluralKey(final String tableName)
+    protected String buildPluralKey(@NotNull final String tableName)
     {
         return "~plural--" + tableName;
     }
@@ -718,6 +702,8 @@ public class CustomResultUtils
      * contained in this instance.
      * @return such information.
      */
+    @Override
+    @NotNull
     public String toString()
     {
         return
@@ -730,6 +716,7 @@ public class CustomResultUtils
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -743,7 +730,7 @@ public class CustomResultUtils
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 

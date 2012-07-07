@@ -41,16 +41,13 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  */
 
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.templates.TemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Collection;
 
 /**
  * Is able to resolve "is_repository_DAO" placeholders in templates.
@@ -104,37 +101,17 @@ public class IsRepositoryDAOHandler
     protected boolean definesRepositoryScopedSql(
         @NotNull final CustomSqlProvider customSqlProvider)
     {
-        boolean result = false;
-
-        @Nullable Collection t_cContents = customSqlProvider.getCollection();
-
-        if  (t_cContents != null)
-        {
-            @Nullable Sql t_Sql;
-            String t_strDao;
-
-            for (Object t_Content : t_cContents)
-            {
-                if  (t_Content instanceof Sql)
-                {
-                    t_Sql = (Sql) t_Content;
-
-                    t_strDao = t_Sql.getDao();
-
-                    if  (t_strDao == null)
-                    {
-                        result = (t_Sql.getRepositoryScope() != null);
-
-                        if  (result)
-                        {
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        return result;
+        return definesRepositoryScopedSql(customSqlProvider.getSqlDAO());
     }
 
+    /**
+     * Checks whether given custom SQL provider defines any repository-scope
+     * SQL or not.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean definesRepositoryScopedSql(@NotNull final SqlDAO sqlDAO)
+    {
+        return sqlDAO.containsRepositoryScopedSql();
+    }
 }

@@ -37,6 +37,9 @@ package org.acmsl.queryj.customsql.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.*;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlParameterDAO;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
@@ -118,6 +121,8 @@ public class CustomSqlValidationHandler
 
         MetadataManager t_MetadataManager =
             retrieveMetadataManager(parameters);
+        CustomSqlProvider t_CustomSqlProvider =
+            retrieveCustomSqlProvider(parameters);
 
         if (t_MetadataManager == null)
         {
@@ -126,7 +131,8 @@ public class CustomSqlValidationHandler
         else if  (!retrieveDisableCustomSqlValidation(parameters))
         {
             validate(
-                retrieveCustomSqlProvider(parameters),
+                t_CustomSqlProvider,
+                t_CustomSqlProvider.getSqlDAO(),
                 retrieveConnection(parameters),
                 t_MetadataManager);
         }
@@ -136,55 +142,30 @@ public class CustomSqlValidationHandler
 
     /**
      * Validates the SQL queries.
-     * @param customSqlProvider the custom sql provider.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param connection the connection.
      * @param metadataManager the metadata manager.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition connection != null
-     * @precondition metadataManager != null
      */
     protected void validate(
-        @Nullable final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final SqlDAO sqlDAO,
         @NotNull final Connection connection,
         @NotNull final MetadataManager metadataManager)
       throws  QueryJBuildException
     {
-        @Nullable Collection t_cElements = null;
-
-        if  (customSqlProvider != null)
+        for (@Nullable Sql t_Sql : sqlDAO.findAll())
         {
-            t_cElements = customSqlProvider.getCollection();
-        }
-
-        @Nullable Iterator t_itElements =
-            (t_cElements != null)
-            ?  t_cElements.iterator()
-            :  null;
-
-        if  (t_itElements != null)
-        {
-            Object t_CurrentItem;
-
-            Sql t_Sql;
-
-            while  (t_itElements.hasNext())
+            if (   (t_Sql != null)
+                && (t_Sql.isValidate()))
             {
-                t_CurrentItem = t_itElements.next();
-
-                if  (t_CurrentItem instanceof Sql)
-                {
-                    t_Sql = (Sql) t_CurrentItem;
-
-                    if  (t_Sql.isValidate())
-                    {
-                        validate(
-                            t_Sql,
-                            customSqlProvider,
-                            connection,
-                            metadataManager,
-                            metadataManager.getMetadataTypeManager());
-                    }
-                }
+                validate(
+                    t_Sql,
+                    customSqlProvider,
+                    connection,
+                    metadataManager,
+                    metadataManager.getMetadataTypeManager());
             }
         }
     }
@@ -291,7 +272,7 @@ public class CustomSqlValidationHandler
                         validateResultSet(
                             t_ResultSet,
                             sql,
-                            customSqlProvider.resolveReference(t_ResultRef),
+                            customSqlProvider.getSqlResultDAO().findByPrimaryKey(t_ResultRef.getId()),
                             customSqlProvider,
                             metadataManager,
                             metadataTypeManager);
@@ -405,12 +386,7 @@ public class CustomSqlValidationHandler
     {
         @Nullable QueryJBuildException exceptionToThrow = null;
 
-        Parameter[] t_aParameters =
-            retrieveParameterElements(sql, customSqlProvider);
-
         Log t_Log = UniqueLogFactory.getLog(CustomSqlValidationHandler.class);
-
-        @Nullable Parameter t_Parameter;
 
         @Nullable Method t_Method;
 
@@ -420,20 +396,10 @@ public class CustomSqlValidationHandler
 
         @Nullable String t_strType;
 
-        int t_iLength = (t_aParameters != null) ? t_aParameters.length : 0;
-        
-        for  (int t_iParameterIndex = 0;
-                  t_iParameterIndex < t_iLength;
-                  t_iParameterIndex++)
+        int t_iParameterIndex = 0;
+
+        for (@Nullable Parameter t_Parameter : retrieveParameterElements(sql, customSqlProvider.getSqlParameterDAO()))
         {
-            t_Method = null;
-
-            t_Parameter = t_aParameters[t_iParameterIndex];
-
-            t_cSetterParams = new ArrayList<Class>();
-
-            t_cSetterParams.add(Integer.TYPE);
-
             if  (t_Parameter == null)
             {
                 exceptionToThrow =
@@ -445,6 +411,12 @@ public class CustomSqlValidationHandler
             }
             else
             {
+                t_Method = null;
+
+                t_cSetterParams = new ArrayList<Class>();
+
+                t_cSetterParams.add(Integer.TYPE);
+
                 // TODO: support boolean properties/parameters
                 t_strType =
                     metadataTypeManager.getObjectType(
@@ -667,6 +639,7 @@ public class CustomSqlValidationHandler
                 {
                     break;
                 }
+                t_iParameterIndex++;
             }
         }
 
@@ -679,15 +652,13 @@ public class CustomSqlValidationHandler
     /**
      * Retrieves the parameters for given sql element.
      * @param sql such element.
-     * @param customSqlProvider the custom sql provider.
+     * @param parameterDAO the {@link SqlParameterDAO} instance.
      * @return the parameter elements.
-     * @precondition sql != null
-     * @precondition customSqlProvider != null
      */
-    protected Parameter[] retrieveParameterElements(
-        @NotNull final Sql sql, @NotNull final CustomSqlProvider customSqlProvider)
+    protected List<Parameter> retrieveParameterElements(
+        @NotNull final Sql sql, @NotNull final SqlParameterDAO parameterDAO)
     {
-        @NotNull Collection<Parameter> t_cResult = new ArrayList<Parameter>();
+        @NotNull List<Parameter> result = new ArrayList<Parameter>();
 
         Parameter t_Parameter;
 
@@ -695,16 +666,16 @@ public class CustomSqlValidationHandler
         {
             if (t_ParameterRef != null)
             {
-                t_Parameter = customSqlProvider.resolveReference(t_ParameterRef);
+                t_Parameter = parameterDAO.findByPrimaryKey(t_ParameterRef.getId());
 
                 if (t_Parameter != null)
                 {
-                    t_cResult.add(t_Parameter);
+                    result.add(t_Parameter);
                 }
             }
         }
 
-        return t_cResult.toArray(new Parameter[t_cResult.size()]);
+        return result;
     }
 
     /**
@@ -807,7 +778,7 @@ public class CustomSqlValidationHandler
             retrieveProperties(
                 sql,
                 sqlResult,
-                customSqlProvider,
+                customSqlProvider.getSqlPropertyDAO(),
                 metadataManager,
                 metadataTypeManager);
         
@@ -912,7 +883,7 @@ public class CustomSqlValidationHandler
      * Retrieves the properties declared for given result.
      * @param sql the sql.
      * @param sqlResult the custom sql result.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param propertyDAO the {@link SqlPropertyDAO} instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such properties.
@@ -920,33 +891,27 @@ public class CustomSqlValidationHandler
      */
     @SuppressWarnings("unused")
     @NotNull
-    protected Collection<Property> retrieveProperties(
+    protected List<Property> retrieveProperties(
         @NotNull final Sql sql,
-        @Nullable final Result sqlResult,
-        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final Result sqlResult,
+        @NotNull final SqlPropertyDAO propertyDAO,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager)
       throws  QueryJBuildException
     {
-        @NotNull Collection<Property> result = new ArrayList<Property>();
-        
-        @Nullable Collection<PropertyRefElement> t_cPropertyRefs =
-            (sqlResult != null) ? sqlResult.getPropertyRefs() : null;
+        @NotNull List<Property> result = new ArrayList<Property>();
 
-        @Nullable Property t_Property;
+        Property t_Property;
 
-        if (t_cPropertyRefs != null)
+        for (@Nullable PropertyRefElement t_PropertyRef : sqlResult.getPropertyRefs())
         {
-            for (@Nullable PropertyRefElement t_PropertyRef : t_cPropertyRefs)
+            if (t_PropertyRef != null)
             {
-                if (t_PropertyRef != null)
-                {
-                    t_Property = customSqlProvider.resolveReference(t_PropertyRef);
+                t_Property = propertyDAO.findByPrimaryKey(t_PropertyRef.getId());
 
-                    if  (t_Property != null)
-                    {
-                        result.add(t_Property);
-                    }
+                if  (t_Property != null)
+                {
+                    result.add(t_Property);
                 }
             }
         }

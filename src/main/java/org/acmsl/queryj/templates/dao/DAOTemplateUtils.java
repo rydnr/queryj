@@ -212,7 +212,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public Sql[] findSqlElementsByResultId(
+    public List<Sql> findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
@@ -232,7 +232,7 @@ public class DAOTemplateUtils
      * @return all such entities.
      */
     @NotNull
-    protected Sql[] findSqlElementsByResultId(
+    protected List<Sql> findSqlElementsByResultId(
         @NotNull final String resultId,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final CustomResultUtils customResultUtils)
@@ -278,7 +278,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public Sql[] retrieveSqlElementsByType(
+    public List<Sql> retrieveSqlElementsByType(
         final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
@@ -295,7 +295,7 @@ public class DAOTemplateUtils
      * @return such elements.
      */
     @NotNull
-    protected Sql[] retrieveSqlElementsByType(
+    protected List<Sql> retrieveSqlElementsByType(
         final CustomSqlProvider customSqlProvider,
         @NotNull final String type,
         @NotNull final CustomResultUtils customResultUtils)
@@ -314,7 +314,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public Sql[] retrieveSqlElementsByResultId(
+    public List<Sql> retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId)
     {
@@ -334,7 +334,7 @@ public class DAOTemplateUtils
      * @return such elements.
      */
     @NotNull
-    protected Sql[] retrieveSqlElementsByResultId(
+    protected List<Sql> retrieveSqlElementsByResultId(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String resultId,
         @NotNull final CustomResultUtils customResultUtils)
@@ -352,7 +352,7 @@ public class DAOTemplateUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public Result[] retrieveResultsByType(
+    public List<Result> retrieveResultsByType(
         @NotNull final CustomSqlProvider customSqlProvider, @NotNull final String type)
     {
         return
@@ -368,7 +368,7 @@ public class DAOTemplateUtils
      * @return such elements.
      */
     @NotNull
-    protected Result[] retrieveResultsByType(
+    protected List<Result> retrieveResultsByType(
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type,
         @NotNull final CustomResultUtils customResultUtils)

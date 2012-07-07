@@ -37,10 +37,15 @@ package org.acmsl.queryj.templates;
  * Importing some project classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.queryj.customsql.*;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultRef;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.templates.dao.DAOTemplateUtils;
 
 /*
@@ -53,7 +58,6 @@ import org.acmsl.commons.patterns.Utils;
  * Importing some Apache Commons-Logging classes.
  */
 import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 /*
  * Importing some JetBrains annotations.
@@ -65,8 +69,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -154,6 +156,7 @@ public class TemplateUtils
                 },
                 tableName,
                 customSqlProvider,
+                customSqlProvider.getSqlDAO(),
                 metadataManager,
                 decoratorFactory,
                 daoTemplateUtils);
@@ -211,6 +214,7 @@ public class TemplateUtils
                 },
                 tableName,
                 customSqlProvider,
+                customSqlProvider.getSqlDAO(),
                 metadataManager,
                 decoratorFactory,
                 daoTemplateUtils);
@@ -266,6 +270,7 @@ public class TemplateUtils
                 },
                 tableName,
                 customSqlProvider,
+                customSqlProvider.getSqlDAO(),
                 metadataManager,
                 decoratorFactory,
                 daoTemplateUtils);
@@ -276,7 +281,8 @@ public class TemplateUtils
      * @param types the sql types.
      * @param tableName the table name, or <code>null</code> for
      * repository-wide results.
-     * @param customSqlProvider the provider.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param sqlDAO the {@link SqlDAO} instance.
      * @param metadataManager the database metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
@@ -284,9 +290,10 @@ public class TemplateUtils
      */
     @NotNull
     public List<Sql> retrieveCustomSql(
-        @Nullable final String[] types,
-        @NotNull final String tableName,
+        @NotNull final String[] types,
+        @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final SqlDAO sqlDAO,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
@@ -294,18 +301,16 @@ public class TemplateUtils
         @NotNull List<Sql> result = new ArrayList<Sql>();
 
         boolean t_bMatches;
-        Sql t_Sql;
         String t_strDao;
 
-        for (@Nullable Object t_Content : customSqlProvider.getCollection())
+        for (@Nullable Sql t_Sql : sqlDAO.findAll())
         {
-            if  (t_Content instanceof Sql)
+            if (t_Sql != null)
             {
-                t_Sql = (Sql) t_Content;
-
                 t_strDao = t_Sql.getDao();
 
-                if (t_strDao != null)
+                if (   (t_strDao != null)
+                    && (tableName != null))
                 {
                     t_bMatches = daoTemplateUtils.matches(tableName, t_strDao);
                 }
@@ -366,6 +371,8 @@ public class TemplateUtils
             retrieveCustomResults(
                 null,
                 customSqlProvider,
+                customSqlProvider.getSqlDAO(),
+                customSqlProvider.getSqlResultDAO(),
                 metadataManager,
                 decoratorFactory,
                 daoTemplateUtils);
@@ -375,7 +382,7 @@ public class TemplateUtils
      * Retrieves the custom results.
      * @param tableName the table name, or <code>null</code> for
      * repository-wide results.
-     * @param customSqlProvider the provider.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param metadataManager the database metadata manager.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
@@ -383,29 +390,60 @@ public class TemplateUtils
      */
     @NotNull
     public List<Result> retrieveCustomResults(
-        @NotNull final String tableName,
+        @Nullable final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
+    {
+        return
+            retrieveCustomResults(
+                tableName,
+                customSqlProvider,
+                customSqlProvider.getSqlDAO(),
+                customSqlProvider.getSqlResultDAO(),
+                metadataManager,
+                decoratorFactory,
+                daoTemplateUtils);
+    }
+
+    /**
+     * Retrieves the custom results.
+     * @param tableName the table name, or <code>null</code> for
+     * repository-wide results.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @param metadataManager the database metadata manager.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
+     * @return the custom results.
+     */
+    @NotNull
+    public List<Result> retrieveCustomResults(
+        @Nullable final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final SqlResultDAO resultDAO,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
     {
         @NotNull List<Result> result = new ArrayList<Result>();
 
-        @Nullable Sql t_Sql;
         @Nullable ResultRef t_ResultRef;
         @Nullable Result t_ResultElement;
         String t_strDao;
         boolean t_bMatches;
 
-        for (@Nullable Object t_Content : customSqlProvider.getCollection())
+        for (@Nullable Sql t_Sql : sqlDAO.findAll())
         {
-            if  (t_Content instanceof Sql)
+            if  (t_Sql != null)
             {
-                t_Sql = (Sql) t_Content;
-
                 t_strDao = t_Sql.getDao();
 
-                if  (t_strDao != null)
+                if  (   (t_strDao != null)
+                     && (tableName != null))
                 {
                     t_bMatches = daoTemplateUtils.matches(tableName, t_strDao);
                 }
@@ -420,8 +458,7 @@ public class TemplateUtils
 
                     if  (t_ResultRef != null)
                     {
-                        t_ResultElement =
-                            customSqlProvider.resolveReference(t_ResultRef);
+                        t_ResultElement = resultDAO.findByPrimaryKey(t_ResultRef.getId());
 
                         if  (t_ResultElement != null)
                         {

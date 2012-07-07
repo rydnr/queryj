@@ -58,7 +58,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Locale;
-import java.util.Map;
 import java.util.HashMap;
 
 /**
@@ -89,7 +88,7 @@ public class JdbcMetadataTypeManager
     /**
      * The native to Java type mapping.
      */
-    private Map m__mNative2JavaTypeMapping;
+    private HashMap m__mNative2JavaTypeMapping;
 
     /**
      * Creates an empty <code>JdbcMetadataTypeManager</code>.
@@ -110,7 +109,7 @@ public class JdbcMetadataTypeManager
      * Specifies the native to Java type mapping.
      * @param map such mapping.
      */
-    protected void setNative2JavaTypeMapping(final Map map)
+    protected void setNative2JavaTypeMapping(final HashMap map)
     {
         m__mNative2JavaTypeMapping = map;
     }
@@ -119,7 +118,7 @@ public class JdbcMetadataTypeManager
      * Retrieves the native to Java type mapping.
      * @return such mapping.
      */
-    protected Map getNative2JavaTypeMapping()
+    protected HashMap getNative2JavaTypeMapping()
     {
         return m__mNative2JavaTypeMapping;
     }
@@ -274,7 +273,7 @@ public class JdbcMetadataTypeManager
         {
             result = Types.OTHER;
 
-            Map t_mNative2JavaTypesMap = getNative2JavaTypeMapping();
+            HashMap t_mNative2JavaTypesMap = getNative2JavaTypeMapping();
 
             if  (t_mNative2JavaTypesMap == null)
             {
@@ -306,9 +305,9 @@ public class JdbcMetadataTypeManager
      */
     @NotNull
     @SuppressWarnings("unchecked")
-    protected Map buildNative2JavaTypeMap()
+    protected HashMap buildNative2JavaTypeMap()
     {
-        @NotNull Map result = new HashMap();
+        @NotNull HashMap result = new HashMap();
 
         Integer t_Numeric = Types.NUMERIC;
         Integer t_Integer = Types.INTEGER;
@@ -565,12 +564,19 @@ public class JdbcMetadataTypeManager
             case Types.TINYINT:
             case Types.SMALLINT:
             case Types.INTEGER:
+                result = "Int";
 
-                result = "Int" + ((param != null) ? "(" + param  + ")" : "");
+                if (param != null)
+                {
+                    result += "(" + param  + ")";
+                }
                 break;
 
             default:
-                result +=  "" + ((param != null) ? "(" + param  + ")" : "");
+                if (param != null)
+                {
+                    result += "(" + param + ")";
+                }
                 break;
         }
 

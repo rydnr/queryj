@@ -23,21 +23,22 @@
 
  ******************************************************************************
  *
- * Filename: CustomSqlProviderSqlParameterDAO.java
+ * Filename: SqlXmlParserParameterDAO.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: CustomSqlProvider-backed SqlParameterDAO implementation.
+ * Description: SqlXmlParser-backed SqlParameterDAO implementation.
  *
  * Date: 6/6/12
  * Time: 8:31 AM
  *
  */
-package org.acmsl.queryj.customsql;
+package org.acmsl.queryj.customsql.xml;
 
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.metadata.SqlParameterDAO;
 
 /*
@@ -53,54 +54,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link CustomSqlProvider}-backed {@link SqlParameterDAO} implementation.
+ * {@link SqlXmlParser}-backed {@link SqlParameterDAO} implementation.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
-public class CustomSqlProviderSqlParameterDAO
+public class SqlXmlParserParameterDAO
+    extends AbstractSqlXmlParserDAO
     implements SqlParameterDAO
 {
     /**
-     * The {@link CustomSqlProvider} instance.
+     * Creates a new {@link SqlXmlParserParameterDAO} with given {@link SqlXmlParser}.
+     * @param parser the {@link SqlXmlParser} instance.
      */
-    private CustomSqlProvider m__CustomSqlProvider;
-
-    /**
-     * Creates a new {@link CustomSqlProviderSqlDAO} with given {@link CustomSqlProvider}.
-     * @param provider the {@link CustomSqlProvider} instance.
-     */
-    public CustomSqlProviderSqlParameterDAO(@NotNull final CustomSqlProvider provider)
+    public SqlXmlParserParameterDAO(@NotNull final SqlXmlParser parser)
     {
-        immutableSetCustomSqlProvider(provider);
-    }
-
-    /**
-     * Specifies the {@link CustomSqlProvider} instance.
-     * @param provider such {@link CustomSqlProvider instance}.
-     */
-    protected final void immutableSetCustomSqlProvider(@NotNull final CustomSqlProvider provider)
-    {
-        m__CustomSqlProvider = provider;
-    }
-
-    /**
-     * Specifies the {@link CustomSqlProvider} instance.
-     * @param provider such {@link CustomSqlProvider instance}.
-     */
-    @SuppressWarnings("unused")
-    protected void setCustomSqlProvider(@NotNull final CustomSqlProvider provider)
-    {
-        immutableSetCustomSqlProvider(provider);
-    }
-
-    /**
-     * Retrieves the {@link CustomSqlProvider} instance.
-     * @return the underlying {@link CustomSqlProvider instance}.
-     */
-    @NotNull
-    protected CustomSqlProvider getCustomSqlProvider()
-    {
-        return m__CustomSqlProvider;
+        super(parser);
     }
 
     /**
@@ -113,8 +81,7 @@ public class CustomSqlProviderSqlParameterDAO
     @Nullable
     public Parameter findByPrimaryKey(@NotNull final String id)
     {
-        // TODO
-        return null;
+        return findById(id, Parameter.class);
     }
 
     /**
@@ -127,7 +94,18 @@ public class CustomSqlProviderSqlParameterDAO
     @Override
     public List<Parameter> findBySql(@NotNull final String sqlId)
     {
-        // TODO
+        // TODO: I need a SqlDAO instance.
         return new ArrayList<Parameter>(0);
+    }
+
+
+    /**
+     * Retrieves all parameters.
+     * @return such list.
+     */
+    @NotNull
+    public List<Parameter> findAll()
+    {
+        return findAll(getSqlXmlParser(), Parameter.class);
     }
 }

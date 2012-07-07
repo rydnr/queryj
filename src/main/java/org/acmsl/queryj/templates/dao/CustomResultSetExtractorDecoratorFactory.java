@@ -59,7 +59,7 @@ public class CustomResultSetExtractorDecoratorFactory
     /**
      * Singleton implemented to avoid the double-checked locking.
      */
-    private static class CustomResultSetExtractorDecoratorFactorySingletonContainer
+    protected static class CustomResultSetExtractorDecoratorFactorySingletonContainer
     {
         /**
          * The actual singleton.

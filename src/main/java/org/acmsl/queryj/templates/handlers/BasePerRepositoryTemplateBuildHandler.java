@@ -40,6 +40,7 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -54,19 +55,17 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.TableTemplate;
 
 /*
- * Importing some JDK classes.
- */
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some JDK classes.
+ */
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Builds a per-repository template using database metadata.
@@ -328,42 +327,35 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * in any case.
      * @return <code>true</code> in such case.
      */
-    @SuppressWarnings("unchecked")
     protected boolean definesRepositoryScopedSql(
-        @Nullable final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        final boolean allowEmptyRepositoryDAO)
+    {
+        return definesRepositoryScopedSql(customSqlProvider.getSqlDAO(), allowEmptyRepositoryDAO);
+    }
+
+    /**
+     * Checks whether there's any custom SQL for the whole repository.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param allowEmptyRepositoryDAO whether to generate the repository DAO
+     * in any case.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean definesRepositoryScopedSql(
+        @NotNull final SqlDAO sqlDAO,
         final boolean allowEmptyRepositoryDAO)
     {
         boolean result = allowEmptyRepositoryDAO;
 
         if  (!result)
         {
-            @Nullable Collection t_cElements =
-                (customSqlProvider != null)
-                ?  customSqlProvider.getCollection()
-                :  null;
-
-            @Nullable Iterator t_Iterator =
-                (t_cElements != null) ? t_cElements.iterator() : null;
-
-            if  (t_Iterator != null)
+            for (@Nullable Sql t_Sql : sqlDAO.findAll())
             {
-                Object t_Item;
-                Sql t_Sql;
-
-                while  (t_Iterator.hasNext())
+                if (   (t_Sql != null)
+                    && (t_Sql.getRepositoryScope() != null))
                 {
-                    t_Item = t_Iterator.next();
-
-                    if  (t_Item instanceof Sql)
-                    {
-                        t_Sql = (Sql) t_Item;
-
-                        if  (t_Sql.getRepositoryScope() != null)
-                        {
-                            result = true;
-                            break;
-                        }
-                    }
+                    result = true;
+                    break;
                 }
             }
         }

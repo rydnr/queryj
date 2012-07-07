@@ -100,4 +100,11 @@ public interface SqlResultDAO
      */
     @NotNull
     List<Result> findByType(@NotNull final String type);
+
+    /**
+     * Retrieves all {@link Result results}.
+     * @return such list.
+     */
+    @NotNull
+    List<Result> findAll();
 }

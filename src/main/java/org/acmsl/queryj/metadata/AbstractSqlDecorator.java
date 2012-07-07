@@ -364,45 +364,58 @@ public abstract class AbstractSqlDecorator
      */
     @NotNull
     protected List<Parameter> getParameters(
-        @Nullable final List<ParameterRefElement> parameterRefs,
+        @NotNull final List<ParameterRefElement> parameterRefs,
         @NotNull final CustomSqlProvider customSqlProvider,
+        final MetadataTypeManager metadataTypeManager)
+    {
+        return getParameters(parameterRefs, customSqlProvider.getSqlParameterDAO(), metadataTypeManager);
+    }
+
+    /**
+     * Retrieves the parameters.
+     * @param parameterRefs the parameter references.
+     * @param sqlParameterDAO the {@link SqlParameterDAO} instance.
+     * @param metadataTypeManager the metadata type manager.
+     * @return such information.
+     */
+    @NotNull
+    protected List<Parameter> getParameters(
+        @NotNull final List<ParameterRefElement> parameterRefs,
+        @NotNull final SqlParameterDAO sqlParameterDAO,
         final MetadataTypeManager metadataTypeManager)
     {
         @NotNull List<Parameter> result = new ArrayList<Parameter>();
 
-        if  (parameterRefs != null)
+        for (@NotNull ParameterRefElement t_ParameterRef : parameterRefs)
         {
-            for (@NotNull ParameterRefElement t_ParameterRef : parameterRefs)
+            @Nullable Parameter t_Parameter;
+
+            if  (t_ParameterRef != null)
             {
-                @Nullable Parameter t_Parameter;
+                t_Parameter = sqlParameterDAO.findByPrimaryKey(t_ParameterRef.getId());
 
-                if  (t_ParameterRef != null)
+                if  (t_Parameter != null)
                 {
-                    t_Parameter = customSqlProvider.resolveReference(t_ParameterRef);
-
-                    if  (t_Parameter != null)
+                    result.add(
+                        new CachingParameterDecorator(t_Parameter, metadataTypeManager));
+                }
+                else
+                {
+                    try
                     {
-                        result.add(
-                            new CachingParameterDecorator(t_Parameter, metadataTypeManager));
+                        // todo throw something.
+                        Log t_Log = UniqueLogFactory.getLog(SqlDecorator.class);
+
+                        if (t_Log != null)
+                        {
+                            t_Log.warn(
+                                "Referenced parameter not found:"
+                                + t_ParameterRef.getId());
+                        }
                     }
-                    else
+                    catch  (@NotNull final Throwable throwable)
                     {
-                        try
-                        {
-                            // todo throw something.
-                            Log t_Log = UniqueLogFactory.getLog(SqlDecorator.class);
-
-                            if (t_Log != null)
-                            {
-                                t_Log.warn(
-                                    "Referenced parameter not found:"
-                                    + t_ParameterRef.getId());
-                            }
-                        }
-                        catch  (@NotNull final Throwable throwable)
-                        {
-                            // class-loading problem.
-                        }
+                        // class-loading problem.
                     }
                 }
             }
@@ -432,12 +445,25 @@ public abstract class AbstractSqlDecorator
         @Nullable final ResultRef resultRef,
         @NotNull final CustomSqlProvider customSqlProvider)
     {
+        return getResultClass(resultRef, customSqlProvider.getSqlResultDAO());
+    }
+
+    /**
+     * Retrieves the result class.
+     * @param resultRef the result ref.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @return such information.
+     */
+    @Nullable
+    protected String getResultClass(
+        @Nullable final ResultRef resultRef,
+        @NotNull final SqlResultDAO resultDAO)
+    {
         @Nullable String result = null;
 
         if  (resultRef != null)
         {
-            @Nullable Result t_Result =
-                customSqlProvider.resolveReference(resultRef);
+            @Nullable Result t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {
@@ -502,12 +528,27 @@ public abstract class AbstractSqlDecorator
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecorationUtils decorationUtils)
     {
+        return getResultIdAsConstant(resultRef, customSqlProvider.getSqlResultDAO(), decorationUtils);
+    }
+
+    /**
+     * Retrieves the result id as constant.
+     * @param resultRef the result ref.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @param decorationUtils the <code>DecorationUtils</code> instance.
+     * @return such information.
+     */
+    @Nullable
+    protected String getResultIdAsConstant(
+        @Nullable final ResultRef resultRef,
+        @NotNull final SqlResultDAO resultDAO,
+        @NotNull final DecorationUtils decorationUtils)
+    {
         @Nullable String result = null;
 
         if  (resultRef != null)
         {
-            @Nullable Result t_Result =
-                customSqlProvider.resolveReference(resultRef);
+            @Nullable Result t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
 
             if  (t_Result != null)
             {

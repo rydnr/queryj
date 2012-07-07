@@ -389,14 +389,7 @@ public class OracleTextFunctions
 
                 String t_strOtherToString = other.toString();
 
-                if  (t_strThisToString == null)
-                {
-                    result = (t_strOtherToString == null);
-                }
-                else
-                {
-                    result = t_strThisToString.equals(t_strOtherToString);
-                }
+                result = t_strThisToString.equals(t_strOtherToString);
             }
 
             return result;

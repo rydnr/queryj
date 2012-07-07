@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql.xml;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.customsql.ConnectionFlagsElement;
+import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.PropertyElement;
@@ -62,6 +63,7 @@ import java.util.List;
  * @since 2012/07/06 07:08
  */
 public interface SqlXmlParser
+    extends CustomSqlProvider
 {
     /**
      * Retrieves the sql.xml element collection.
@@ -76,61 +78,6 @@ public interface SqlXmlParser
      */
     void parse()
         throws  QueryJBuildException;
-
-    /**
-     * Resolves the parameter reference.
-     * @param reference such reference.
-     * @return the referenced parameter.
-          */
-    @Nullable
-    Parameter resolveParameterReference(
-        @NotNull final String reference);
-
-    /**
-     * Resolves the result reference.
-     * @param reference such reference.
-     * @return the referenced result.
-     */
-    @Nullable
-    Result resolveResultReference(
-        @NotNull final String reference);
-
-    /**
-     * Resolves the property reference.
-     * @param reference the reference.
-     * @return the referenced property.
-     */
-    @Nullable
-    PropertyElement resolvePropertyReference(
-        @NotNull final String reference);
-
-    /**
-     * Resolves the connection-flags reference.
-     * @param reference such reference.
-     * @return the referenced connection flags.
-     */
-    @SuppressWarnings("unused")
-    @Nullable
-    ConnectionFlagsElement resolveConnectionFlagsReference(
-        @NotNull final String reference);
-
-    /**
-     * Resolves the statement-flags reference.
-     * @param reference such reference.
-     * @return the referenced statement flags.
-     */
-    @Nullable
-    StatementFlagsElement resolveStatementFlagsReference(
-        @NotNull final String reference);
-
-    /**
-     * Resolves the resultset-flags reference.
-     * @param reference such reference.
-     * @return the referenced resultset flags.
-     */
-    @Nullable
-    ResultSetFlagsElement resolveResultSetFlagsReference(
-        @NotNull final String reference);
 
     /**
      * Adds a new result.

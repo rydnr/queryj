@@ -74,7 +74,7 @@ public class CustomSqlProviderRetrievalHandler
     /**
      * Creates a <code>CustomSqlProviderRetrievalHandler</code> instance.
      */
-    public CustomSqlProviderRetrievalHandler() {};
+    public CustomSqlProviderRetrievalHandler() {}
 
     /**
      * Handles given parameters.
@@ -88,11 +88,18 @@ public class CustomSqlProviderRetrievalHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        storeCustomSqlProvider(
-            buildCustomSqlProvider(parameters),
-            parameters);
+        boolean result = true;
 
-        return false;
+        CustomSqlProvider t_CustomSqlProvider = buildCustomSqlProvider(parameters);
+
+        if (t_CustomSqlProvider != null)
+        {
+            storeCustomSqlProvider(t_CustomSqlProvider, parameters);
+
+            result = false;
+        }
+
+        return result;
     }
 
     /**
@@ -181,7 +188,10 @@ public class CustomSqlProviderRetrievalHandler
                       task.getClassLoader());
             */
 
-            t_Parser.parse();
+            if (t_Parser != null)
+            {
+                t_Parser.parse();
+            }
 
             result = t_Parser;
         }
@@ -193,11 +203,10 @@ public class CustomSqlProviderRetrievalHandler
      * Stores the CustomSqlProvider instance.
      * @param provider the provider to store.
      * @param parameters the parameter map.
-     * @precondition provider != null
-     * @precondition parameters != null
      */
+    @SuppressWarnings("unchecked")
     protected void storeCustomSqlProvider(
-        final CustomSqlProvider provider,
+        @NotNull final CustomSqlProvider provider,
         @NotNull final Map parameters)
     {
         parameters.put(CUSTOM_SQL_PROVIDER, provider);

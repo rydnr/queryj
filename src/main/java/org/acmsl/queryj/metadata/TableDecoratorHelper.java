@@ -45,6 +45,10 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Singleton;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -135,11 +139,11 @@ public class TableDecoratorHelper
     {
         boolean result = false;
 
-        String t_strName = attribute.getName();
-        String t_strTableName = attribute.getTableName();
 
         // TODO
         /*
+        String t_strName = attribute.getName();
+        String t_strTableName = attribute.getTableName();
         result =
             (   (metadataManager.isPartOfPrimaryKey(
                      t_strTableName, t_strName))

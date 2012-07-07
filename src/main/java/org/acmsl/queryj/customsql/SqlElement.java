@@ -144,7 +144,7 @@ public class SqlElement
     @SuppressWarnings("unused")
     public SqlElement(
         @NotNull final String id,
-        @NotNull final String dao,
+        @Nullable final String dao,
         @NotNull final String name,
         @NotNull final String type,
         @NotNull final String implementation,

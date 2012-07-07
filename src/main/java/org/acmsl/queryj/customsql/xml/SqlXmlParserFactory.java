@@ -85,9 +85,8 @@ public class SqlXmlParserFactory
 
     /**
      * Protected constructor to avoid accidental instantiation.
-     * @param alias the table alias.
      */
-    protected SqlXmlParserFactory() { };
+    protected SqlXmlParserFactory() { }
 
     /**
      * Retrieves a SqlXmlParserFactory instance.
@@ -103,6 +102,7 @@ public class SqlXmlParserFactory
      * Creates a <b>sql.xml</b> parser.
      * @return such parser.
      */
+    @SuppressWarnings("unused")
     @Nullable
     public SqlXmlParser createSqlXmlParser()
     {
@@ -163,7 +163,7 @@ public class SqlXmlParserFactory
         }
         else
         {
-            result = new SqlXmlParser(t_isInput);
+            result = new SqlXmlParserImpl(t_isInput);
         }
 
         return result;
@@ -182,7 +182,7 @@ public class SqlXmlParserFactory
 
         try
         {
-            result = new SqlXmlParser(new FileInputStream(file));
+            result = new SqlXmlParserImpl(new FileInputStream(file));
         }
         catch  (@NotNull final FileNotFoundException fileNotFoundException)
         {
