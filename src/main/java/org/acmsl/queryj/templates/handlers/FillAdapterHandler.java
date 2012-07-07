@@ -44,6 +44,7 @@ import org.acmsl.queryj.tools.handlers.QueryJCommandHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.FillHandler;
 import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
@@ -160,9 +161,12 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
         boolean result = false;
 
         @NotNull String t_strPlaceHolder = fillHandler.getPlaceHolder();
-        @NotNull P t_Value = fillHandler.getValue();
+        @Nullable P t_Value = fillHandler.getValue();
 
-        attributes.put(t_strPlaceHolder, t_Value);
+        if (t_Value != null)
+        {
+            attributes.put(t_strPlaceHolder, t_Value);
+        }
 
         return result;
     }

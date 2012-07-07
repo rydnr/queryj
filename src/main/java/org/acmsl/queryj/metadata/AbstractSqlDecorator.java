@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -109,7 +108,13 @@ public abstract class AbstractSqlDecorator
         immutableSetDescription(sql.getDescription());
         immutableSetValue(sql.getValue());
         immutableSetParameterRefs(sql.getParameterRefs());
-        immutableSetResultRef(sql.getResultRef());
+
+        @Nullable ResultRef t_ResultRef = sql.getResultRef();
+        if (t_ResultRef != null)
+        {
+            immutableSetResultRef(t_ResultRef);
+        }
+
         immutableSetConnectionFlagsRef(sql.getConnectionFlagsRef());
         immutableSetStatementFlagsRef(sql.getStatementFlagsRef());
         immutableSetResultSetFlagsRef(sql.getResultSetFlagsRef());

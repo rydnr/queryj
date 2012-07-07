@@ -166,25 +166,11 @@ public class CustomResultSetExtractorTemplate
      * Normalizes and lowers the case of given value.
      * @param value the value.
      * @return the processed value.
-     * @precondition value != null
      */
-    protected String normalizeLowercase(final String value)
+    @NotNull
+    protected String normalizeLowercase(@NotNull final String value)
     {
         return normalizeLowercase(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Normalizes and lowers the case of given value.
-     * @param value the value.
-     * @param decorationUtils the <code>DecorationUtils</code> instance.
-     * @return the processed value.
-     * @precondition value != null
-     * @precondition decoratorUtils != null
-     */
-    protected String normalizeLowercase(
-        final String value, @NotNull final DecorationUtils decorationUtils)
-    {
-        return decorationUtils.normalizeLowercase(value);
     }
 
     /**

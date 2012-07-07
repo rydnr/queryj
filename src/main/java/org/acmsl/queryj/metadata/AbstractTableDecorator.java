@@ -2210,7 +2210,7 @@ public abstract class AbstractTableDecorator
      * Filters certain attributes.
      * @param attributes the attributes.
      * @param toExclude the attributes to exclude.
-     * @return such list.                                          C
+     * @return such list.
      */
     @NotNull
     protected List<Attribute> filterAttributes(
@@ -2231,7 +2231,7 @@ public abstract class AbstractTableDecorator
     @NotNull
     public List<Sql> getCustomSelects()
     {
-        return getCustomSelects(getTable(), getCustomSqlProvider());
+        return decorate(getCustomSelects(getTable(), getCustomSqlProvider()));
     }
 
     /**
@@ -2259,13 +2259,66 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Decorates given {@link Sql queries.}
+     * @param queries the queries to decorate.
+     * @return the decorated queries.
+     */
+    @NotNull
+    protected List<Sql> decorate(@NotNull final List<Sql> queries)
+    {
+        return decorate(queries, getCustomSqlProvider(), getMetadataManager());
+    }
+
+    /**
+     * Decorates given {@link Sql queries.}
+     * @param queries the queries to decorate.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the decorated queries.
+     */
+    @NotNull
+    protected List<Sql> decorate(
+        @NotNull final List<Sql> queries,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
+    {
+        @NotNull List<Sql> result = new ArrayList<Sql>(queries.size());
+
+        for (@Nullable Sql t_Sql : queries)
+        {
+            if (t_Sql != null)
+            {
+                result.add(decorate(t_Sql, customSqlProvider, metadataManager));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Decorates given {@link Sql query}.
+     * @param query the query to decorate.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the decorated query.
+     */
+    @NotNull
+    protected Sql decorate(
+        @NotNull final Sql query,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
+    {
+        return new CachingSqlDecorator(query, customSqlProvider, metadataManager);
+    }
+
+    /**
      * Retrieves the custom updates or inserts.
      * @return such information.
      */
     @NotNull
     public List<Sql> getCustomUpdatesOrInserts()
     {
-        return getCustomUpdatesOrInserts(getTable(), getCustomSqlProvider());
+        return decorate(getCustomUpdatesOrInserts(getTable(), getCustomSqlProvider()));
     }
 
     /**

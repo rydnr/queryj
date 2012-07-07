@@ -73,9 +73,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -437,47 +434,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     }
     
     /**
-     * Retrieves the current year.
-     * @return such value.
-     */
-    protected int retrieveCurrentYear()
-    {
-        return retrieveYear(Calendar.getInstance());
-    }
-    
-    /**
-     * Retrieves the year defined in given date.
-     * @param calendar the calendar.
-     * @return such value.
-     * @precondition calendar != null
-     */
-    protected int retrieveYear(@NotNull final Calendar calendar)
-    {
-        return calendar.get(Calendar.YEAR);
-    }
-
-    /**
-     * Creates a timestamp.
-     * @return such timestamp.
-     */
-    protected String createTimestamp()
-    {
-        return createTimestamp(new Date(), TIMESTAMP_FORMAT);
-    }
-    
-    /**
-     * Formats given date.
-     * @param date the date.
-     * @param format the formatter.
-     * @return the formatted date.
-     */
-    protected String createTimestamp(
-        @NotNull final Date date, @NotNull final String format)
-    {
-        return new SimpleDateFormat(format).format(date);
-    }
-
-    /**
      * Generates the source code.
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
@@ -719,9 +675,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String lowercase(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
@@ -731,24 +686,13 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Normalizes given value.
      * @param value the value.
-     * @return such output.
-     * @precondition value != null
-     */
-    protected String normalize(final String value)
-    {
-        return normalize(value, DecorationUtils.getInstance());
-    }
-
-    /**
-     * Normalizes given value.
-     * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
      * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalize(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalize(value);
     }
@@ -758,11 +702,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeLowercase(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeLowercase(value);
     }
@@ -772,11 +715,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String normalizeUppercase(
-        final String value, @NotNull final DecorationUtils decorationUtils)
+        @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.normalizeUppercase(value);
     }
@@ -785,8 +727,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Capitalizes given value.
      * @param value the value.
      * @return such output.
-     * @precondition value != null
      */
+    @NotNull
     protected String capitalize(@NotNull final String value)
     {
         return capitalize(value, DecorationUtils.getInstance());
@@ -797,9 +739,8 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
-     * @precondition value != null
-     * @precondition decorationUtils != null
      */
+    @NotNull
     protected String capitalize(
         @NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
@@ -828,7 +769,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @throws InvalidTemplateException if the generation process fails.
      */
     @NotNull
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("unchecked,unused")
     protected String generateOutput(
         @NotNull final String header,
         @NotNull final C context,
