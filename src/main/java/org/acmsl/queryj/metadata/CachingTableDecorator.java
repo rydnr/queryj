@@ -243,6 +243,11 @@ public class CachingTableDecorator
     private String m__strCachedVoNameUncapitalized;
 
     /**
+     * The cached custom selects.
+     */
+    private List<Sql> m__lCachedCustomSelects;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -2028,6 +2033,54 @@ public class CachingTableDecorator
         {
             result = super.getNonPrimaryKeyNonReadOnlyAttributes();
             setCachedNonPrimaryKeyNonReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached custom selects.
+     * @param selects such information.
+     */
+    protected final void immutableSetCachedCustomSelects(@NotNull final List<Sql> selects)
+    {
+        this.m__lCachedCustomSelects =  selects;
+    }
+
+    /**
+     * Specifies the cached custom selects.
+     * @param selects such information.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedCustomSelects(@NotNull final List<Sql> selects)
+    {
+        immutableSetCachedCustomSelects(selects);
+    }
+
+    /**
+     * Retrieves the cached custom selects.
+     * @return such information.
+     */
+    @Nullable
+    protected List<Sql> getCachedCustomSelects()
+    {
+        return m__lCachedCustomSelects;
+    }
+
+    /**
+     * Retrieves the custom selects.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public List<Sql> getCustomSelects()
+    {
+        List<Sql> result = getCachedCustomSelects();
+
+        if (result == null)
+        {
+            result = super.getCustomSelects();
+            setCachedCustomSelects(result);
         }
 
         return result;

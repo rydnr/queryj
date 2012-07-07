@@ -133,6 +133,18 @@ public class SqlXmlParserSqlDAO
      */
     @NotNull
     @Override
+    public List<Sql> findSelects(@NotNull final String table)
+    {
+        return filterSelects(findByDAO(table));
+    }
+
+    /**
+     * Retrieves all <i>selects-for-update</i> for a given DAO (table).
+     * @param table the table.
+     * @return all matching <i>selects-for-update</i> queries.
+     */
+    @NotNull
+    @Override
     public List<Sql> findSelectsForUpdate(@NotNull final String table)
     {
         return filterSelectsForUpdate(findByDAO(table));

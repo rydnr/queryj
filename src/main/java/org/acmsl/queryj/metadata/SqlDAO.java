@@ -147,4 +147,12 @@ public interface SqlDAO
      * @return <code>true</code> in such case.
      */
     boolean containsRepositoryScopedSql();
+
+    /**
+     * Retrieves all plain selects.
+     * @param table the name of the table.
+     * @return such list.
+     */
+    @NotNull
+    List<Sql> findSelects(@NotNull final String table);
 }

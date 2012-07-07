@@ -2198,4 +2198,39 @@ public abstract class AbstractTableDecorator
 
         return result;
     }
+
+    /**
+     * Retrieves the custom selects.
+     * @return such list of {@link Sql} elements.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Sql> getCustomSelects()
+    {
+        return getCustomSelects(getTable(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the custom selects.
+     * @param table the table.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return such list of {@link Sql} elements.
+     */
+    @NotNull
+    protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return getCustomSelects(table, customSqlProvider.getSqlDAO());
+    }
+
+    /**
+     * Retrieves the custom selects.
+     * @param table the table.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @return such list of {@link Sql} elements.
+     */
+    @NotNull
+    protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
+    {
+        return sqlDAO.findSelects(table.getName());
+    }
 }
