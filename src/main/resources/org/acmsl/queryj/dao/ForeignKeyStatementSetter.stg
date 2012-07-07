@@ -69,7 +69,7 @@ source() ::= <<
     project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    subpackage_name,
+    sub_package_name,
     table_name_normalized_lowercased
   ])>
 
