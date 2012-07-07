@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
@@ -106,10 +107,13 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
      * Retrieves the template value for that placeholder.
      *
      * @return the dynamic value.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @Nullable
     @Override
     public P getValue()
+      throws QueryJBuildException
     {
         return getValue(getTemplateContext());
     }
@@ -117,9 +121,12 @@ public abstract class AbstractTemplateContextFillHandler<C extends TemplateConte
     /**
      * Retrieves the template value for this placeholder.
      * @return such value.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @Nullable
-    protected abstract P getValue(@NotNull final C context);
+    protected abstract P getValue(@NotNull final C context)
+        throws QueryJBuildException;
 
     @Override
     public int hashCode()

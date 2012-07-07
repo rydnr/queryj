@@ -57,6 +57,7 @@ import org.acmsl.commons.patterns.Utils;
 /*
  * Importing some Apache Commons-Logging classes.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.apache.commons.logging.Log;
 
 /*
@@ -355,10 +356,8 @@ public class TemplateUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom results.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition decoratorFactory != null
-     * @precondition daoTemplateUtils != null
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @NotNull
     public List<Result> retrieveCustomResults(
@@ -366,6 +365,7 @@ public class TemplateUtils
         final MetadataManager metadataManager,
         final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
+      throws QueryJBuildException
     {
         return
             retrieveCustomResults(
@@ -387,6 +387,8 @@ public class TemplateUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom results.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @NotNull
     public List<Result> retrieveCustomResults(
@@ -395,6 +397,7 @@ public class TemplateUtils
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
+      throws QueryJBuildException
     {
         return
             retrieveCustomResults(
@@ -418,6 +421,8 @@ public class TemplateUtils
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @return the custom results.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @NotNull
     public List<Result> retrieveCustomResults(
@@ -428,6 +433,7 @@ public class TemplateUtils
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
+      throws QueryJBuildException
     {
         @NotNull List<Result> result = new ArrayList<Result>();
 
@@ -454,9 +460,16 @@ public class TemplateUtils
 
                 if  (t_bMatches)
                 {
+                    t_bMatches =
+                           Sql.SELECT.equals(t_Sql.getType())
+                        || Sql.SELECT_FOR_UPDATE.equals(t_Sql.getType());
+                }
+
+                if (t_bMatches)
+                {
                     t_ResultRef = t_Sql.getResultRef();
 
-                    if  (t_ResultRef != null)
+                    if (t_ResultRef != null)
                     {
                         t_ResultElement = resultDAO.findByPrimaryKey(t_ResultRef.getId());
 
@@ -467,22 +480,21 @@ public class TemplateUtils
                                 result.add(
                                     new CachingResultDecorator(
                                         t_ResultElement,
-                                            customSqlProvider,
-                                            metadataManager,
-                                            decoratorFactory));
+                                        customSqlProvider,
+                                        metadataManager,
+                                        decoratorFactory));
                             }
                         }
                         else
                         {
                             try
                             {
-                                // todo throw something.
                                 Log t_Log = UniqueLogFactory.getLog(TemplateUtils.class);
 
                                 if (t_Log != null)
                                 {
-                                    t_Log.warn(
-                                          "Referenced result not found:"
+                                    t_Log.error(
+                                        "Referenced result not found: "
                                         + t_ResultRef.getId());
                                 }
                             }
@@ -490,22 +502,25 @@ public class TemplateUtils
                             {
                                 // class-loading problem.
                                 System.err.println(
-                                       "Referenced result not found:"
-                                     + t_ResultRef.getId());
+                                    "Referenced result not found:"
+                                    + t_ResultRef.getId());
                             }
+                            throw
+                                new QueryJBuildException(
+                                    "Referenced result not found " + t_ResultRef.getId()
+                                    + " (" + t_Sql.getId() + ")");
                         }
                     }
                     else
                     {
                         try
                         {
-                            // todo throw something.
                             Log t_Log = UniqueLogFactory.getLog(TemplateUtils.class);
 
                             if (t_Log != null)
                             {
-                                t_Log.warn(
-                                      "Referenced result not found for sql:"
+                                t_Log.error(
+                                    "Referenced result not found:"
                                     + t_Sql.getId());
                             }
                         }
@@ -513,9 +528,13 @@ public class TemplateUtils
                         {
                             // class-loading problem.
                             System.err.println(
-                                  "Referenced result not found for sql:"
+                                "Referenced result not found:"
                                 + t_Sql.getId());
                         }
+                        throw
+                            new QueryJBuildException(
+                                "Referenced result not found: "
+                                + " (" + t_Sql.getId() + ")");
                     }
                 }
             }

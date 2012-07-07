@@ -214,7 +214,7 @@ public interface Sql
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
-    @NotNull
+    @Nullable
     ResultRef getResultRef();
 
     /**

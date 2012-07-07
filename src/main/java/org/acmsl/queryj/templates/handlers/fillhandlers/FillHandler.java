@@ -43,6 +43,7 @@ import org.acmsl.queryj.templates.handlers.TemplateHandler;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -73,5 +74,5 @@ public interface FillHandler<P>
      * @return the dynamic value.
      */
     @Nullable
-    P getValue();
+    P getValue() throws QueryJBuildException;
 }

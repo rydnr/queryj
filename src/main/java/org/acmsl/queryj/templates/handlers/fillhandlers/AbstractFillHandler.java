@@ -99,10 +99,13 @@ public abstract class AbstractFillHandler<P>
      * @param commandMap the command map.
      * @return <code>false</code> if the chain can continue.
      * @throws InvalidTemplateException if some fatal error occurs.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @SuppressWarnings("unchecked")
     protected boolean handle(@NotNull final Map commandMap)
-        throws InvalidTemplateException
+        throws InvalidTemplateException,
+               QueryJBuildException
     {
         boolean result;
 
@@ -122,10 +125,14 @@ public abstract class AbstractFillHandler<P>
      * Processes input extracted from given map to fill a placeholder.
      * @param map the command map.
      * @param placeHolder the placeholder.
+     * @throws InvalidTemplateException if the template contains errors.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @SuppressWarnings("unchecked")
     public boolean handle(@NotNull final Map map, @NotNull final String placeHolder)
-        throws InvalidTemplateException
+        throws InvalidTemplateException,
+               QueryJBuildException
     {
         boolean result = true;
 

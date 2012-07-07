@@ -111,10 +111,11 @@ public abstract class AbstractSqlXmlParserDAO
     {
         @Nullable T result = null;
 
-        for (@Nullable Object t_Item : parser.getCollection())
+        for (@Nullable IdentifiableElement t_Item : parser.getCollection())
         {
             if  (   (t_Item != null)
-                && (t_Item.getClass().isAssignableFrom(type)))
+                 && (type.isAssignableFrom(t_Item.getClass()))
+                 && (t_Item.getId().equals(id)))
             {
                 result = (T) t_Item;
                 break;
@@ -139,7 +140,7 @@ public abstract class AbstractSqlXmlParserDAO
         for (@Nullable Object t_Item : parser.getCollection())
         {
             if  (   (t_Item != null)
-                 && (t_Item.getClass().isAssignableFrom(type)))
+                 && (type.isAssignableFrom(t_Item.getClass())))
             {
                 result.add((T) t_Item);
             }
@@ -167,7 +168,7 @@ public abstract class AbstractSqlXmlParserDAO
         for (final IdentifiableElement t_CurrentItem : contents)
         {
             if (   (t_CurrentItem != null)
-                && (t_CurrentItem.getClass().isAssignableFrom(itemClass)))
+                && (itemClass.isAssignableFrom(t_CurrentItem.getClass())))
             {
                 if (   (idFilter == null)
                     || (filterById(t_CurrentItem, idFilter)))

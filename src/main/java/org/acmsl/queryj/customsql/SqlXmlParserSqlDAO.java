@@ -337,7 +337,8 @@ public class SqlXmlParserSqlDAO
             {
                 t_ResultRef = t_CurrentSql.getResultRef();
 
-                if (resultId.equals(t_ResultRef.getId()))
+                if (   (t_ResultRef != null)
+                    && (resultId.equals(t_ResultRef.getId())))
                 {
                     result.add(t_CurrentSql);
                 }

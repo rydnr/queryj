@@ -48,6 +48,7 @@ import org.acmsl.queryj.templates.dao.DAOTemplateUtils;
 /*
  * Importing some StringTemplate classes.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
@@ -105,6 +106,8 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * @param timestamp the timestamp.
      * @param copyrightYears the copyright years.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @SuppressWarnings("unchecked,unused")
     protected void fillParameters(
@@ -123,6 +126,7 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
         @NotNull final String timestamp,
         @NotNull final Integer[] copyrightYears,
         @NotNull final StringUtils stringUtils)
+      throws QueryJBuildException
     {
         fillParameters(
             input,
@@ -163,6 +167,8 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * @param stringUtils the <code>StringUtils</code> instance.
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @SuppressWarnings("unused,unchecked")
     protected void fillParameters(
@@ -183,6 +189,7 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
         @NotNull final StringUtils stringUtils,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
+      throws QueryJBuildException
     {
         @Nullable List<Sql> t_cCustomSelects =
             retrieveCustomSelects(
@@ -308,6 +315,8 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom results.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @NotNull
     protected List<Result> retrieveCustomResults(
@@ -316,6 +325,7 @@ public class RepositoryDAOTemplate<C extends BasePerRepositoryTemplateContext>
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
+      throws QueryJBuildException
     {
         return
             templateUtils.retrieveCustomResults(

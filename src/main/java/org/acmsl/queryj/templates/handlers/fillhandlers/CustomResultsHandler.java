@@ -50,6 +50,7 @@ import org.acmsl.queryj.templates.dao.DAOTemplateUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -80,10 +81,13 @@ public class CustomResultsHandler
      * Retrieves the {@link List} of {@link Result}s for given {@link BasePerTableTemplateContext context}.
      * @param context the context.
      * @return such value.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @NotNull
     @Override
     protected List<Result> getValue(@NotNull final BasePerTableTemplateContext context)
+        throws QueryJBuildException
     {
         return
             retrieveCustomResults(
@@ -115,6 +119,8 @@ public class CustomResultsHandler
      * @param daoTemplateUtils the <code>DAOTemplateUtils</code> instance.
      * @param templateUtils the <code>TemplateUtils</code> instance.
      * @return the custom results.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @NotNull
     protected List<Result> retrieveCustomResults(
@@ -124,6 +130,7 @@ public class CustomResultsHandler
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils,
         @NotNull final TemplateUtils templateUtils)
+      throws QueryJBuildException
     {
         return
             templateUtils.retrieveCustomResults(

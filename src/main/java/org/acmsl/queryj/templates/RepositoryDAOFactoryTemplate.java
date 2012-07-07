@@ -45,6 +45,7 @@ import org.acmsl.queryj.metadata.MetadataTypeManager;
 /*
  * Importing some StringTemplate classes.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
@@ -102,6 +103,8 @@ public class RepositoryDAOFactoryTemplate
      * @param timestamp the timestamp.
      * @param copyrightYears the copyright years.
      * @param stringUtils the <code>StringUtils</code> instance.
+     * @throws QueryJBuildException if there inconsistencies in the custom SQL
+     * model.
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -121,6 +124,7 @@ public class RepositoryDAOFactoryTemplate
         @NotNull final String timestamp,
         @NotNull final Integer[] copyrightYears,
         @NotNull final StringUtils stringUtils)
+      throws QueryJBuildException
     {
         super.fillParameters(
             input,
