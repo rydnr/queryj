@@ -908,13 +908,7 @@ public abstract class AbstractTableDecorator
         @NotNull final String word,
         @NotNull final EnglishGrammarUtils singularPluralFormConverter)
     {
-        if (word.endsWith("categories"))
-        {
-            int a = 0;
-        }
-        String result = singularPluralFormConverter.getSingular(word);
-
-        return result;
+        return singularPluralFormConverter.getSingular(word);
     }
 
     /**
@@ -968,6 +962,57 @@ public abstract class AbstractTableDecorator
     @SuppressWarnings("unused")
     @NotNull
     protected List<Attribute> getNonReadOnlyAttributes(
+        @NotNull final String name,
+        @NotNull final List<Attribute> attributes,
+        @Nullable final Table parentTable,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        @NotNull List<Attribute> result = attributes;
+
+        if  (parentTable != null)
+        {
+            result =
+                tableDecoratorHelper.removeReadOnly(
+                    decorateAttributes());
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the non-read-only attributes, including parent's.
+     * @return such attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Attribute> getAllNonReadOnlyAttributes()
+    {
+        return
+            getAllNonReadOnlyAttributes(
+                getName(),
+                getAttributes(),
+                getParentTable(),
+                getMetadataManager(),
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the non-read-only attributes.
+     * @param name the table name.
+     * @param attributes the attributes.
+     * @param parentTable the parent table (or <code>null</code> otherwise).
+     * @param metadataManager the <code>MetadataManager</code> instance.
+     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
+     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code>
+     * instance.
+     * @return such attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    protected List<Attribute> getAllNonReadOnlyAttributes(
         @NotNull final String name,
         @NotNull final List<Attribute> attributes,
         @Nullable final Table parentTable,
@@ -2141,7 +2186,7 @@ public abstract class AbstractTableDecorator
      * Filters certain attributes.
      * @param attributes the attributes.
      * @param toExclude the attributes to exclude.
-     * @return such list.
+     * @return such list.                                          C
      */
     @NotNull
     protected List<Attribute> filterAttributes(

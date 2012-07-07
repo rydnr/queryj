@@ -122,6 +122,11 @@ public class CachingTableDecorator
     private List<Attribute> m__lCachedNonReadOnlyAttributes;
 
     /**
+     * The cached non-readonly attributes, including parent's.
+     */
+    private List<Attribute> m__lCachedAllNonReadOnlyAttributes;
+
+    /**
      * The cached non-parent attributes.
      */
     private List<Attribute> m__lCachedNonParentAttributes;
@@ -493,6 +498,54 @@ public class CachingTableDecorator
         {
             result = super.getNonReadOnlyAttributes();
             setCachedNonReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached, non-parent attributes.
+     * @param attrs such attributes.
+     */
+    protected final void immutableSetCachedAllNonReadOnlyAttributes(@NotNull final List<Attribute> attrs)
+    {
+        m__lCachedAllNonReadOnlyAttributes = attrs;
+    }
+
+    /**
+     * Specifies the cached, non-read-only attributes, including parent's.
+     * @param attrs such attributes.
+     */
+    protected void setCachedAllNonReadOnlyAttributes(@NotNull final List<Attribute> attrs)
+    {
+        immutableSetCachedAllNonReadOnlyAttributes(attrs);
+    }
+
+    /**
+     * Retrieves the cached, non-read-only attributes, including parent's.
+     * @return such information.
+     */
+    @Nullable
+    protected List<Attribute> getCachedAllNonReadOnlyAttributes()
+    {
+        return m__lCachedAllNonReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the non-read-only attributes, including parent's.
+     * @return such attributes.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getAllNonReadOnlyAttributes()
+    {
+        List<Attribute> result = getCachedAllNonReadOnlyAttributes();
+
+        if  (   (result == null)
+                || (result.size() == 0))
+        {
+            result = super.getAllNonReadOnlyAttributes();
+            setCachedAllNonReadOnlyAttributes(result);
         }
 
         return result;
