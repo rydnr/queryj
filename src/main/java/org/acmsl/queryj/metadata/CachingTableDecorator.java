@@ -248,6 +248,11 @@ public class CachingTableDecorator
     private List<Sql> m__lCachedCustomSelects;
 
     /**
+     * The cached custom updates or inserts.
+     */
+    private List<Sql> m__lCachedCustomUpdatesOrInserts;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -2081,6 +2086,55 @@ public class CachingTableDecorator
         {
             result = super.getCustomSelects();
             setCachedCustomSelects(result);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Specifies the cached custom updates or inserts.
+     * @param queries such information.
+     */
+    protected final void immutableSetCachedCustomUpdatesOrInserts(@NotNull final List<Sql> queries)
+    {
+        this.m__lCachedCustomUpdatesOrInserts = queries;
+    }
+
+    /**
+     * Specifies the cached custom updates or inserts.
+     * @param queries such information.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedCustomUpdatesOrInserts(@NotNull final List<Sql> queries)
+    {
+        immutableSetCachedCustomUpdatesOrInserts(queries);
+    }
+
+    /**
+     * Retrieves the cached custom updates or inserts.
+     * @return such information.
+     */
+    @Nullable
+    protected List<Sql> getCachedCustomUpdatesOrInserts()
+    {
+        return m__lCachedCustomUpdatesOrInserts;
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public List<Sql> getCustomUpdatesOrInserts()
+    {
+        List<Sql> result = getCachedCustomUpdatesOrInserts();
+
+        if (result == null)
+        {
+            result = super.getCustomUpdatesOrInserts();
+            setCachedCustomUpdatesOrInserts(result);
         }
 
         return result;

@@ -2117,7 +2117,6 @@ public abstract class AbstractTableDecorator
         return result;
     }
 
-
     /**
      * {@inheritDoc}
      */
@@ -2232,5 +2231,43 @@ public abstract class AbstractTableDecorator
     protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
     {
         return sqlDAO.findSelects(table.getName());
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @return such information.
+     */
+    @NotNull
+    public List<Sql> getCustomUpdatesOrInserts()
+    {
+        return getCustomUpdatesOrInserts(getTable(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @return such information.
+     */
+    @NotNull
+    protected List<Sql> getCustomUpdatesOrInserts(
+        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return getCustomUpdatesOrInserts(table.getName(), customSqlProvider.getSqlDAO());
+    }
+
+    /**
+     * Retrieves the custom updates or inserts.
+     * @param tableName the table name.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected List<Sql> getCustomUpdatesOrInserts(
+        @NotNull final String tableName, @NotNull final SqlDAO sqlDAO)
+    {
+        @NotNull final List<Sql> result = new ArrayList<Sql>(sqlDAO.findInserts(tableName));
+
+        result.addAll(sqlDAO.findUpdates(tableName));
+
+        return result;
     }
 }
