@@ -140,7 +140,7 @@ property_javadoc(attribute) ::= <<
 >>
 
 property_method_declaration(attribute) ::= <<
-<0!
+<!
  Writes the method declaration for given attribute.
  @param attribute the attribute.
 !>
