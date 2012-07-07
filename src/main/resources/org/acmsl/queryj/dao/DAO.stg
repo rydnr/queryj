@@ -349,7 +349,7 @@ classImpl(foreign_keys, table, parent) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg")>
  */
-public <if(table.dynamic_queries)>abstract <endif>class <engine_name><table.voName>DAO
+public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voName>DAO
   extends     <repository.capitalized>JdbcTemplate
   implements  <table.voName>DAO
 <!//              <repository.capitalized>TableRepository!>

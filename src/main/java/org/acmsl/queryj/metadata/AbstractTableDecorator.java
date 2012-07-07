@@ -2124,8 +2124,33 @@ public abstract class AbstractTableDecorator
     @NotNull
     public List<Sql> getDynamicQueries()
     {
-        // TODO
-        return new ArrayList<Sql>(0);
+        return getDynamicQueries(getTable(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the dynamic queries.
+     * @param table the table.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return the list of dynamic queries.
+     */
+    @NotNull
+    protected List<Sql> getDynamicQueries(
+        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return getDynamicQueries(table.getName(), customSqlProvider.getSqlDAO());
+    }
+
+    /**
+     * Retrieves the dynamic queries.
+     * @param tableName the table name.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @return the list of dynamic queries.
+     */
+    @NotNull
+    protected List<Sql> getDynamicQueries(
+        @NotNull final String tableName, @NotNull final SqlDAO sqlDAO)
+    {
+        return sqlDAO.findDynamic(tableName);
     }
 
     /**

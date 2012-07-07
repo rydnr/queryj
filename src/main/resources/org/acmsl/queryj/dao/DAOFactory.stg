@@ -229,7 +229,7 @@ public class <engine_name><table.voName>DAOFactory
         if  (dataSource != null)
         {
             result =
-<if(table.dynamic_queries)>
+<if(table.dynamicQueries)>
                 new <engine_name><table.voName>DAOImpl(
 <else>
                 new <engine_name><table.voName>DAO(

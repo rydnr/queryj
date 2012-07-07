@@ -138,6 +138,34 @@ public class SqlXmlParserSqlDAO
         return filterSelects(findByDAO(table));
     }
 
+    @Override
+    public List<Sql> findDynamic(@NotNull final String tableName)
+    {
+        return filterDynamic(findByDAO(tableName));
+    }
+
+    /**
+     * Filters which queries are dynamic or not.
+     * @param queries the queries.
+     * @return the dynamic ones.
+     */
+    @NotNull
+    protected List<Sql> filterDynamic(@NotNull final List<Sql> queries)
+    {
+        @NotNull List<Sql> result = new ArrayList<Sql>();
+
+        for (@Nullable Sql t_Sql : queries)
+        {
+            if (   (t_Sql != null)
+                && (t_Sql.isDynamic()))
+            {
+                result.add(t_Sql);
+            }
+        }
+
+        return result;
+    }
+
     /**
      * Retrieves all <i>selects-for-update</i> for a given DAO (table).
      * @param table the table.

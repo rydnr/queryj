@@ -155,4 +155,11 @@ public interface SqlDAO
      */
     @NotNull
     List<Sql> findSelects(@NotNull final String table);
+
+    /**
+     * Retrieves all dynamic queries.
+     * @param tableName the name of the table.
+     * @return such list.
+     */
+    List<Sql> findDynamic(@NotNull final String tableName);
 }
