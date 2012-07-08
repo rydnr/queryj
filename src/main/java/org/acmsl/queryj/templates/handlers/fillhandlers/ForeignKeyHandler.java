@@ -38,6 +38,11 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.CachingForeignKeyDecorator;
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
+import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
 
@@ -53,7 +58,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @SuppressWarnings("unused")
 public class ForeignKeyHandler
-    extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, ForeignKey>
+    extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, ForeignKeyDecorator>
 {
     /**
      * Creates a new {@link ForeignKeyHandler} to resolve "foreign_key" placeholders using
@@ -83,8 +88,13 @@ public class ForeignKeyHandler
      */
     @NotNull
     @Override
-    protected ForeignKey getValue(@NotNull final BasePerForeignKeyTemplateContext context)
+    protected ForeignKeyDecorator getValue(@NotNull final BasePerForeignKeyTemplateContext context)
     {
-        return context.getForeignKey();
+        return
+            new CachingForeignKeyDecorator(
+                context.getForeignKey(),
+                context.getMetadataManager(),
+                context.getDecoratorFactory(),
+                context.getCustomSqlProvider());
     }
 }

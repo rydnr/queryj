@@ -59,7 +59,7 @@ import java.util.List;
  */
 @SuppressWarnings("unused")
 public class CachingForeignKeyDecorator
-    extends  AbstractForeignKeyDecorator
+    extends  ForeignKeyDecorator
 {
     /**
      * The cached source table.

@@ -1325,10 +1325,48 @@ public abstract class AbstractJdbcMetadataManager
     public boolean isGenerationAllowedForTable(@NotNull final String tableName)
     {
         return
-            isGenerationAllowedForTable(
+            isGenerationAllowed(
                 retrieveExplicitlyEnabledTables(),
                 retrieveExplicitlyDisabledTables(),
                 tableName);
+    }
+
+    /**
+     * Checks whether the generation phase is enabled for given item.
+     * @param enabled the explicitly-enabled ones.
+     * @param disabled the explicitly-disabled ones.
+     * @param item the item.
+     * @return <code>true</code> in such case.
+     */
+    protected final boolean isGenerationAllowed(
+        @Nullable final String[] enabled,
+        @Nullable final String[] disabled,
+        @NotNull final String item)
+    {
+        boolean result = true;
+
+        boolean t_bExplicitlyEnabled = false;
+
+        if (enabled != null)
+        {
+            t_bExplicitlyEnabled = Arrays.asList(enabled).contains(item);
+
+            result = t_bExplicitlyEnabled;
+        }
+
+        if (   (!t_bExplicitlyEnabled)
+            && (enabled != null)
+            && (disabled != null))
+        {
+            List<String> t_lDisabled = Arrays.asList(disabled);
+
+            result =
+                !(   (t_lDisabled.contains("*"))
+                  || (enabled.length > 0))
+                && !Arrays.asList(disabled).contains(item);
+        }
+
+        return result;
     }
 
     /**
@@ -1345,7 +1383,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (t_strProperty != null)
         {
-            result = parseExplicitTables(t_strProperty);
+            result = parseProperty(t_strProperty);
         }
 
         if (result == null)
@@ -1370,7 +1408,7 @@ public abstract class AbstractJdbcMetadataManager
 
         if (t_strProperty != null)
         {
-            result = parseExplicitTables(t_strProperty);
+            result = parseProperty(t_strProperty);
         }
 
         if (result == null)
@@ -1388,44 +1426,117 @@ public abstract class AbstractJdbcMetadataManager
      * @return the tables specified in given environment property.
      */
     @NotNull
-    protected String[] parseExplicitTables(@NotNull final String environmentProperty)
+    protected String[] parseProperty(@NotNull final String environmentProperty)
     {
         return environmentProperty.split(",");
     }
 
     /**
-     * Checks whether the generation phase is enabled for given table.
-     * @param tablesEnabled the explicitly-enabled tables.
-     * @param tablesDisabled the explicitly-disabled tables.
-     * @param tableName the table name.
+     * Checks whether the generation phase is enabled for given foreign key.
+     * @param foreignKey the foreign key.
      * @return <code>true</code> in such case.
      */
-    protected final boolean isGenerationAllowedForTable(
-        @Nullable final String[] tablesEnabled,
-        @Nullable final String[] tablesDisabled,
-        @NotNull final String tableName)
+    @Override
+    public boolean isGenerationAllowedForForeignKey(@NotNull final ForeignKey foreignKey)
     {
-        boolean result = true;
+        return
+            isGenerationAllowed(
+                retrieveExplicitlyEnabledForeignKeys(),
+                retrieveExplicitlyDisabledForeignKeys(),
+                toNormalizedString(foreignKey));
+    }
 
-        boolean t_bExplicitlyEnabled = false;
+    /**
+     * Retrieves a normalized representation of given foreign key.
+     * @param foreignKey the foreign key.
+     * @return such representation.
+     */
+    @NotNull
+    protected String toNormalizedString(@NotNull final ForeignKey foreignKey)
+    {
+        return
+            foreignKey.getSourceTableName()
+            + "(" + toNormalizedString(foreignKey.getAttributes()) + ")->"
+            + foreignKey.getTargetTableName();
+    }
 
-        if (tablesEnabled != null)
+    /**
+     * Retrieves a normalized representation of given attributes.
+     * @param attributes the attributes.
+     * @return such representation.
+     */
+    @NotNull
+    protected String toNormalizedString(@NotNull final List<Attribute> attributes)
+    {
+        StringBuilder t_sbResult = new StringBuilder();
+
+        boolean t_bFirstTime = true;
+
+        for (@Nullable Attribute t_Attribute : attributes)
         {
-            t_bExplicitlyEnabled = Arrays.asList(tablesEnabled).contains(tableName);
+            if (!t_bFirstTime)
+            {
+                t_sbResult.append(",");
+            }
+            else
+            {
+                t_bFirstTime = false;
+            }
+            if (t_Attribute != null)
+            {
+                t_sbResult.append(t_Attribute.getName());
+            }
 
-            result = t_bExplicitlyEnabled;
         }
 
-        if (   (!t_bExplicitlyEnabled)
-            && (tablesEnabled != null)
-            && (tablesDisabled != null))
-        {
-            List<String> t_lTablesDisabled = Arrays.asList(tablesDisabled);
+        return t_sbResult.toString();
+    }
 
-            result =
-                !(   (t_lTablesDisabled.contains("*"))
-                  || (tablesEnabled.length > 0))
-                && !Arrays.asList(tablesDisabled).contains(tableName);
+    /**
+     * Retrieves the explicitly enabled foreign keys, via environment property. This means
+     * no other tables should be processed.
+     * @return such list.
+     */
+    @NotNull
+    public String[] retrieveExplicitlyEnabledForeignKeys()
+    {
+        String[] result = null;
+
+        String t_strProperty = System.getProperty(FOREIGN_KEYS_ENABLED);
+
+        if (t_strProperty != null)
+        {
+            result = parseProperty(t_strProperty);
+        }
+
+        if (result == null)
+        {
+            result = new String[0];
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the explicitly disabled foreign keys, via environment property. This means
+     * no other tables should be processed.
+     * @return such list.
+     */
+    @NotNull
+    public String[] retrieveExplicitlyDisabledForeignKeys()
+    {
+        String[] result = null;
+
+        String t_strProperty = System.getProperty(FOREIGN_KEYS_DISABLED);
+
+        if (t_strProperty != null)
+        {
+            result = parseProperty(t_strProperty);
+        }
+
+        if (result == null)
+        {
+            result = new String[0];
         }
 
         return result;
@@ -1551,13 +1662,13 @@ public abstract class AbstractJdbcMetadataManager
             if (t_Table != null)
             {
                 if (   (caseSensitiveness)
-                    && (t_Table.getName().equals(name)))
+                       && (t_Table.getName().equals(name)))
                 {
                     result = t_Table;
                     break;
                 }
                 else if (   (!caseSensitiveness)
-                         && (t_Table.getName().equalsIgnoreCase(name)))
+                            && (t_Table.getName().equalsIgnoreCase(name)))
                 {
                     result = t_Table;
                     break;

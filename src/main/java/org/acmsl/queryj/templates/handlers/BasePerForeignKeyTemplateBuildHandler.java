@@ -102,6 +102,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         buildTemplates(
             parameters,
             t_MetadataManager,
+            retrieveCustomSqlProvider(parameters),
             retrieveTemplateFactory());
 
         return false;
@@ -111,19 +112,21 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * Builds the templates.
      * @param parameters the parameters.
      * @param metadataManager the database metadata manager.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @param templateFactory the template factory.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory)
       throws  QueryJBuildException
     {
         buildTemplates(
             parameters,
             metadataManager,
-            retrieveCustomSqlProvider(parameters),
+            customSqlProvider,
             templateFactory,
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
@@ -173,23 +176,27 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     {
         @NotNull List<T> t_lTemplates = new ArrayList<T>();
 
-        for  (ForeignKey t_ForeignKey : foreignKeys)
+        for  (@Nullable ForeignKey t_ForeignKey : foreignKeys)
         {
-            t_lTemplates.add(
-                templateFactory.createTemplate(
-                    metadataManager,
-                    customSqlProvider,
-                    retrievePackage(
-                        t_ForeignKey.getSourceTableName(),
-                        metadataManager.getEngineName(),
-                        parameters),
-                    projectPackage,
-                    repository,
-                    header,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    t_ForeignKey));
+            if (   (t_ForeignKey != null)
+                && (metadataManager.isGenerationAllowedForForeignKey(t_ForeignKey)))
+            {
+                t_lTemplates.add(
+                    templateFactory.createTemplate(
+                        metadataManager,
+                        customSqlProvider,
+                        retrievePackage(
+                            t_ForeignKey.getSourceTableName(),
+                            metadataManager.getEngineName(),
+                            parameters),
+                        projectPackage,
+                        repository,
+                        header,
+                        implementMarkerInterfaces,
+                        jmx,
+                        jndiLocation,
+                        t_ForeignKey));
+            }
         }
 
         storeTemplates(t_lTemplates, parameters);

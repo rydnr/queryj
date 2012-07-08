@@ -119,7 +119,7 @@ public class TableAttributeTypeImportsHandler
      * @return such list.
      */
     @NotNull
-    protected List<String> retrieveImports(
+    public static List<String> retrieveImports(
         @NotNull final String tableName,
         @NotNull final TableDAO tableDAO,
         @NotNull final MetadataTypeManager metadataTypeManager)
@@ -148,7 +148,7 @@ public class TableAttributeTypeImportsHandler
      * @return such list.
      */
     @NotNull
-    protected List<String> retrieveImports(
+    protected static List<String> retrieveImports(
         @NotNull final List<Attribute> attributes, @NotNull final MetadataTypeManager metadataTypeManager)
     {
         List<String> result = new ArrayList<String>();

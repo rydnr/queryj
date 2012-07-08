@@ -29,11 +29,11 @@
 //
 //***************************************************************************
 //
-// Filename: ForeignKeyStatementSetter.stg
+// Filename: FkStatementSetter.stg
 //
 // Author: Jose San Leandro Armendariz
 //
-// Description: Defines the rules to generate AttributeStatementSetter for
+// Description: Defines the rules to generate FkStatementSetter for
 //              a foreign key.
 //
 //
@@ -43,8 +43,8 @@ source() ::= <<
 <!
   Generates a AttributeStatementSetter source file for a concrete foreign key.
   @param copyright_years the copyright's years.
-  @param package the package.
-  @param foreignKey the foreign key.
+  @param project_package the package.
+  @param foreign_key the foreign key.
   @params project_imports
   @params class
 !>
@@ -55,13 +55,13 @@ source() ::= <<
   years=copyright_years,
   description=
   [
-    first_line_description(foreignKey=foreignKey),
-    second_line_description(foreignKey=foreignKey),
-    third_line_description(foreignKey=foreignKey)
+    first_line_description(foreignKey=foreign_key),
+    second_line_description(foreignKey=foreign_key),
+    third_line_description(foreignKey=foreign_key)
   ],
   timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/ForeignKeyStatementSetter.stg at <timestamp>
+// Generated using org/acmsl/queryj/dao/FkStatementSetter.stg at <timestamp>
 
 <package_declaration(
   packageNames=
@@ -70,13 +70,13 @@ source() ::= <<
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
     sub_package_name,
-    table_name_normalized_lowercased
+    foreign_key.source.nameNormalizedLowercased
   ])>
 
 <project_imports(
   basePackageName=project_package,
   voSubpackageName=typeInitMap.voSubpackageName,
-  voName=foreignKey.source.voName,
+  voName=foreign_key.source.voName,
   trSubpackageName=typeInitMap.tableRepositorySubpackageName,
   trName=repository.capitalized)>
 
@@ -91,21 +91,19 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
  */
 import javax.sql.DataSource;
 
+<if(foreign_key_type_imports)>
 /*
  * Importing some JDK classes.
  */
-import java.math.BigDecimal;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
+<foreign_key_type_imports:import(type=it)>
+<endif>
 
 /*
  * Importing Jakarta Commons Logging classes
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(foreignKey=foreignKey)>
+<class(foreignKey=foreign_key)>
 >>
 
 first_line_description(foreignKey) ::= <<
@@ -142,10 +140,12 @@ project_imports(
  @param trSubpackageName the table repository subpackage name.
  @param trName the table repository name.
 !>
+<!
 /*
  * Importing project classes.
  */
 //import <basePackageName>.<trSubpackageName>.<trName>TableRepository;
+!>
 >>
 
 class(foreignKey) ::= <<
@@ -159,7 +159,7 @@ class(foreignKey) ::= <<
       second_line_description(foreignKey=foreignKey),
       third_line_description(foreignKey=foreignKey)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(template="org/acmsl/queryj/dao/ForeignKeyStatementSetter.stg")>
+<class_common_javadoc(template="org/acmsl/queryj/dao/FkStatementSetter.stg")>
  */
 public class <foreignKey.source.voName>By<foreignKey.target.voName>StatementSetter
     implements  PreparedStatementSetter

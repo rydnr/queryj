@@ -43,7 +43,8 @@ package org.acmsl.queryj.metadata;
  * Importing some JetBrains annotations.
  */
 import org.acmsl.queryj.QueryJException;
-    import org.jetbrains.annotations.NotNull;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
+import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing some JDK classes.
@@ -69,6 +70,16 @@ public interface MetadataManager
      * The system property to enable generation for concrete (or all, with * or missing property) tables.
      */
     public static final String TABLES_ENABLED = "queryj.tables.enabled";
+
+    /**
+     * The system property prefix to disable generation for concrete (or all, with *) foreign keys.
+     */
+    public static final String FOREIGN_KEYS_DISABLED = "queryj.foreignkeys.disabled";
+
+    /**
+     * The system property to enable generation for concrete (or all, with * or missing property) foreign keys.
+     */
+    public static final String FOREIGN_KEYS_ENABLED = "queryj.foreignkeys.enabled";
 
     /**
      * Retrieves the name identifying the manager instance.
@@ -168,4 +179,11 @@ public interface MetadataManager
      */
     @NotNull
     ForeignKeyDAO getForeignKeyDAO();
+
+    /**
+     * Checks whether the generation is allowed for this foreign key.
+     * @param foreignKey the foreign key.
+     * @return <code>true</code> in such case.
+     */
+    boolean isGenerationAllowedForForeignKey(@NotNull ForeignKey foreignKey);
 }

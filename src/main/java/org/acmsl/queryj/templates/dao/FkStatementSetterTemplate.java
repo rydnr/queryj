@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -91,6 +90,6 @@ public class FkStatementSetterTemplate
     @NotNull
     public String getTemplateName()
     {
-        return "ForeignKeyStatementSetter";
+        return "FkStatementSetter";
     }
 }

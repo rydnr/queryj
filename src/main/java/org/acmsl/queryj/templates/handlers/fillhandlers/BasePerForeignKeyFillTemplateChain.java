@@ -39,8 +39,10 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  *Importing project classes.
 */
+import org.acmsl.queryj.metadata.ForeignKeyDecorator;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -51,6 +53,8 @@ import org.acmsl.commons.patterns.Chain;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -78,9 +82,11 @@ public class BasePerForeignKeyFillTemplateChain
     @Override
     protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerForeignKeyTemplateContext context)
     {
-        // TODO
-        int a = 0;
-
-        a++;
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext,ForeignKeyHandler,ForeignKeyDecorator>(
+                new ForeignKeyHandler(context)));
+        chain.add(
+            new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext,ForeignKeyAttributeTypeImportsHandler,List<String>>(
+                new ForeignKeyAttributeTypeImportsHandler(context)));
     }
 }
