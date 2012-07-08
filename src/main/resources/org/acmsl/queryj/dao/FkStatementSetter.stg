@@ -238,7 +238,7 @@ attribute_accessor(attr) ::= <<
 !>
 /**
  * Specifies the \<i><attr.name>\</i> value.
-<attribute_javadoc(name=attr.nameLowercased)>
+ <attribute_javadoc(name=attr.nameLowercased)>
  */
 protected final void immutableSet<attr.nameCapitalized>(
     <attribute_declaration(attr=attr)>)
@@ -248,7 +248,7 @@ protected final void immutableSet<attr.nameCapitalized>(
 
 /**
  * Specifies the \<i><attr.name>\</i> value.
-<attribute_javadoc(name=attr.nameLowercased)>
+ <attribute_javadoc(name=attr.nameLowercased)>
  */
 @SuppressWarnings("unused")
 protected void set<attr.nameCapitalized>(
@@ -259,7 +259,7 @@ protected void set<attr.nameCapitalized>(
 
 /**
  * Retrieves the \<i><attr.name>\</i> value.
-<attribute_javadoc(name=attr.nameLowercased)>
+ <attribute_javadoc(name=attr.nameLowercased)>
  * @return such value.
  */
 <type_checker(attribute=attr)>
