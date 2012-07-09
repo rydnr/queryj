@@ -65,14 +65,13 @@ public class BaseDAOTemplateWritingHandler
     public BaseDAOTemplateWritingHandler() {}
 
     /**
-     * Retrieves the template generator.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BaseDAOTemplateGenerator retrieveTemplateGenerator()
+    protected BaseDAOTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return BaseDAOTemplateGenerator.getInstance();
+        return new BaseDAOTemplateGenerator(caching, threadCount);
     }
 
     /**

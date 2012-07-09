@@ -63,7 +63,10 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectTemplateWritingHandler
-    extends  BasePerCustomResultTemplateWritingHandler<CustomValueObjectTemplate, BasePerCustomResultTemplateContext>
+    extends  BasePerCustomResultTemplateWritingHandler
+                 <CustomValueObjectTemplate,
+                     BasePerCustomResultTemplateContext,
+                     CustomValueObjectTemplateGenerator>
 {
     /**
      * Creates a CustomValueObjectTemplateWritingHandler.
@@ -75,9 +78,10 @@ public class CustomValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomValueObjectTemplateGenerator retrieveTemplateGenerator()
+    protected CustomValueObjectTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return CustomValueObjectTemplateGenerator.getInstance();
+        return new CustomValueObjectTemplateGenerator(caching, threadCount);
     }
 
     /**

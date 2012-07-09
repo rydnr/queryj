@@ -36,11 +36,11 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplate;
-import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
 /*
@@ -59,7 +59,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ResultSetExtractorTemplateBuildHandler
-    extends BasePerTableTemplateBuildHandler<ResultSetExtractorTemplate, ResultSetExtractorTemplateGenerator>
+    extends BasePerTableTemplateBuildHandler<ResultSetExtractorTemplate, ResultSetExtractorTemplateFactory>
 {
     /**
      * Creates a <code>PkStatementSetterTemplateBuildHandler</code>
@@ -72,9 +72,9 @@ public class ResultSetExtractorTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected ResultSetExtractorTemplateGenerator retrieveTemplateFactory()
+    protected ResultSetExtractorTemplateFactory retrieveTemplateFactory()
     {
-        return ResultSetExtractorTemplateGenerator.getInstance();
+        return ResultSetExtractorTemplateFactory.getInstance();
     }
 
     /**

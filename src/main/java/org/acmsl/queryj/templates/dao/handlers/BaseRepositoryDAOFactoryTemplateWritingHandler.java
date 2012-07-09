@@ -68,9 +68,10 @@ public class BaseRepositoryDAOFactoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BaseRepositoryDAOFactoryTemplateGenerator retrieveTemplateGenerator()
+    protected BaseRepositoryDAOFactoryTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return BaseRepositoryDAOFactoryTemplateGenerator.getInstance();
+        return new BaseRepositoryDAOFactoryTemplateGenerator(caching, threadCount);
     }
 
     /**

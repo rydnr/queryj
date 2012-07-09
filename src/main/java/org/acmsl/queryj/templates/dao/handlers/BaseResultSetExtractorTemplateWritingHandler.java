@@ -75,9 +75,10 @@ public class BaseResultSetExtractorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BaseResultSetExtractorTemplateGenerator retrieveTemplateGenerator()
+    protected BaseResultSetExtractorTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return BaseResultSetExtractorTemplateGenerator.getInstance();
+        return new BaseResultSetExtractorTemplateGenerator(caching, threadCount);
     }
 
     /**

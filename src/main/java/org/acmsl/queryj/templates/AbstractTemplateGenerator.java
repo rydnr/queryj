@@ -1,4 +1,5 @@
-/*                        QueryJ
+/*
+                        QueryJ
 
     Copyright (C) 2002-today  Jose San Leandro Armendariz
                               chous@acm-sl.org
@@ -72,7 +73,80 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     /**
      * Whether to enable template caching.
      */
-    public static final boolean CACHING = true;
+    private boolean m__bCaching = true;
+
+    /**
+     * The thread count.
+     */
+    private int m__iThreadCount = 1;
+
+    /**
+     * Creates an {@link AbstractTemplateGenerator} with given settings.
+     * @param caching whether to support caching or not.
+     * @param threadCount the number of threads to use.
+     */
+    protected AbstractTemplateGenerator(final boolean caching, final int threadCount)
+    {
+        immutableSetCaching(caching);
+        immutableSetThreadCount(threadCount);
+    }
+
+    /**
+     * Specifies whether to cache templates or not.
+     * @param flag such setting.
+     */
+    protected final void immutableSetCaching(final boolean flag)
+    {
+        m__bCaching = flag;
+    }
+
+    /**
+     * Specifies whether to cache templates or not.
+     * @param flag such setting.
+     */
+    @SuppressWarnings("unused")
+    protected void setCaching(final boolean flag)
+    {
+        immutableSetCaching(flag);
+    }
+
+    /**
+     * Retrieves whether to cache templates or not.
+     * @return such setting.
+     */
+    public boolean isCaching()
+    {
+        return m__bCaching;
+    }
+
+    /**
+     * Specifies the thread count.
+     * @param count such value.
+     */
+    protected final void immutableSetThreadCount(final int count)
+    {
+        m__iThreadCount = count;
+    }
+
+    /**
+     * Specifies the thread count.
+     * @param count such value.
+     */
+    @SuppressWarnings("unused")
+    protected void setThreadCount(final int count)
+    {
+        immutableSetThreadCount(count);
+    }
+
+    /**
+     * Retrieves the thread count.
+     * @return such value.
+     */
+    @SuppressWarnings("unused")
+    public int getThreadCount()
+    {
+        return m__iThreadCount;
+    }
 
     /**
      * Serializes given template.
@@ -130,6 +204,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         throws  IOException
     {
         write(
+            isCaching(),
             template,
             retrieveTemplateFileName(template.getTemplateContext()),
             outputDir,
@@ -139,6 +214,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
 
     /**
      * Writes a table template to disk.
+     * @param caching whether to use caching or not.
      * @param template the table template to write.
      * @param fileName the template's file name.
      * @param outputDir the output folder.
@@ -147,6 +223,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @throws IOException if the file cannot be created.
      */
     protected void write(
+        final boolean caching,
         @NotNull final N template,
         @NotNull final String fileName,
         @NotNull final File outputDir,
@@ -163,7 +240,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                 + File.separator
                 + fileName;
 
-        if (CACHING)
+        if (caching)
         {
             serializeTemplate(template, t_strOutputFile + ".ser");
         }
@@ -213,4 +290,5 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     {
         return CachingDecoratorFactory.getInstance();
     }
+
 }

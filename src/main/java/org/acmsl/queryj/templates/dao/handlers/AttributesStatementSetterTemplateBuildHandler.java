@@ -35,10 +35,10 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.AttributesStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.dao.AttributesStatementSetterTemplate;
-import org.acmsl.queryj.templates.dao.AttributesStatementSetterTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
@@ -58,7 +58,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class AttributesStatementSetterTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler<AttributesStatementSetterTemplate, AttributesStatementSetterTemplateGenerator>
+    extends  BasePerTableTemplateBuildHandler
+                 <AttributesStatementSetterTemplate, AttributesStatementSetterTemplateFactory>
 {
     /**
      * Creates a {@link AttributesStatementSetterTemplateBuildHandler}
@@ -71,9 +72,9 @@ public class AttributesStatementSetterTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected AttributesStatementSetterTemplateGenerator retrieveTemplateFactory()
+    protected AttributesStatementSetterTemplateFactory retrieveTemplateFactory()
     {
-        return AttributesStatementSetterTemplateGenerator.getInstance();
+        return AttributesStatementSetterTemplateFactory.getInstance();
     }
 
     /**

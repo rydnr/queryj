@@ -36,6 +36,8 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -135,7 +137,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
             retrieveForeignKeys(
-                parameters, metadataManager));
+                parameters, metadataManager),
+            CachingDecoratorFactory.getInstance());
     }
     
     /**
@@ -158,6 +161,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI location.
      * @param foreignKeys the foreign keys.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplates(
@@ -171,7 +175,8 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final List<ForeignKey> foreignKeys)
+        @NotNull final List<ForeignKey> foreignKeys,
+        @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         @NotNull List<T> t_lTemplates = new ArrayList<T>();
@@ -185,6 +190,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                     templateFactory.createTemplate(
                         metadataManager,
                         customSqlProvider,
+                        decoratorFactory,
                         retrievePackage(
                             t_ForeignKey.getSourceTableName(),
                             metadataManager.getEngineName(),

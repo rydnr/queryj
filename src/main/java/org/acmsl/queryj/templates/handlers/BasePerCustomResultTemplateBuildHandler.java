@@ -37,6 +37,8 @@ package org.acmsl.queryj.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJException;
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
@@ -129,6 +131,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             metadataManager,
             customSqlProvider,
             retrieveTemplateFactory(),
+            CachingDecoratorFactory.getInstance(),
             retrieveProjectPackage(parameters),
             retrieveTableRepositoryName(parameters),
             retrieveHeader(parameters),
@@ -147,24 +150,27 @@ public abstract class BasePerCustomResultTemplateBuildHandler
 
     /**
      * Builds the templates.
-     * @param parameters the parameters.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the custom result provider.
-     * @param templateFactory the template factory.
+     * @param parameters the parameter map.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param templateFactory the {@link org.acmsl.queryj.templates.TemplateFactory} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param projectPackage the project package.
      * @param repository the repository.
      * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces or not.
-     * @param jmx whether to include JMX support or not.
-     * @param resultElements the custom {@link Result elements}.
+     * @param implementMarkerInterfaces whether to implement marker interfaces.
+     * @param jmx whether to enable JMX support.
+     * @param jndiLocation the JNDI location.
+     * @param resultElements the {@link Result} list.
      * @param customResultUtils the {@link CustomResultUtils} instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
+     * @throws QueryJBuildException if the templates cannot be built.
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final TF templateFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
@@ -191,6 +197,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                         templateFactory.createTemplate(
                             customSqlProvider,
                             metadataManager,
+                            decoratorFactory,
                             retrievePackage(
                                 t_ResultElement,
                                 customSqlProvider,

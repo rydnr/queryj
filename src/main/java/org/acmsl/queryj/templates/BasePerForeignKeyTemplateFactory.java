@@ -62,6 +62,7 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
      * Creates a per-<i>foreign key</i> template.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the repository name.
@@ -75,6 +76,7 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
     T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
@@ -83,11 +85,4 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
         final boolean jmx,
         @NotNull final String jndiLocation,
         @NotNull final ForeignKey foreignKey);
-
-    /**
-     * Retrieves the decorator factory for each template.
-     * @return such instance.
-     */
-    @NotNull
-    DecoratorFactory getDecoratorFactory();
 }

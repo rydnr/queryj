@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates;
  */
 public interface BasePerForeignKeyTemplateGenerator
     <N extends BasePerForeignKeyTemplate<C>, C extends BasePerForeignKeyTemplateContext>
-    extends   TemplateGenerator<N, C>,
-              BasePerForeignKeyTemplateFactory<N>
+    extends   TemplateGenerator<N, C>
 {
 }

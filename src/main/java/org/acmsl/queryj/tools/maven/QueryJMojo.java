@@ -43,6 +43,7 @@ import org.acmsl.queryj.tools.ant.QueryJTask;
 /*
  * Importing some Maven classes.
  */
+import org.apache.maven.execution.MavenSession;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.Mojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -63,6 +64,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.lang.reflect.Method;
 import java.util.Locale;
 import java.util.Properties;
 import java.io.File;
@@ -239,6 +241,21 @@ public class QueryJMojo
      * @parameter property="encoding" default-value="${project.build.sourceEncoding}"
      */
     private String m__strEncoding;
+
+    /**
+ 	* The current build session instance. This is used for toolchain manager API calls.
+ 	*
+ 	* @parameter default-value="${session}"
+ 	* @required
+ 	* @readonly
+ 	*/
+ 	private MavenSession session;
+
+    /**
+     * Whether to use template caching.
+     * @parameter property="disableCaching"
+     */
+    private Boolean m__bDisableCaching;
 
     /**
      * Specifies the driver.
@@ -1164,6 +1181,42 @@ public class QueryJMojo
     }
 
     /**
+     * Specifies whether to use template caching.
+     * @param flag such condition.
+     */
+    protected final void immutableSetDisableCaching(final Boolean flag)
+    {
+        m__bDisableCaching = flag;
+    }
+
+    /**
+     * Specifies whether to use template caching.
+     * @param flag such condition.
+     */
+    public void setDisableCaching(final Boolean flag)
+    {
+        immutableSetDisableCaching(flag);
+    }
+
+    /**
+     * Retrieves whether to use template caching.
+     * @return such condition.
+     */
+    protected final Boolean immutableGetDisableCaching()
+    {
+        return m__bDisableCaching;
+    }
+
+    /**
+     * Retrieves whether to use template caching.
+     * @return such condition.
+     */
+    public Boolean isCaching()
+    {
+        return !immutableGetDisableCaching();
+    }
+
+    /**
      * Executes QueryJ via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
@@ -1285,7 +1338,6 @@ public class QueryJMojo
      * Builds the QueryJ task.
      * @param log the Maven log.
      * @return such info.
-     * @precondition log != null
      */
     @NotNull
     protected QueryJTask buildTask(@NotNull final Log log)
@@ -1384,6 +1436,15 @@ public class QueryJMojo
             log.info("Using encoding: '" + encoding + "' to generate QueryJ sources");
         }
         result.setEncoding(encoding);
+
+        boolean caching = isCaching();
+        log.debug("Caching: " + caching);
+        result.setCaching(caching);
+
+        int threadCount = getRequestThreadCount();
+
+        log.info("Using " + threadCount + " threads");
+        result.setThreadCount(threadCount);
 
         return result;
     }
@@ -1505,5 +1566,30 @@ public class QueryJMojo
                 }
             }
         }
+    }
+
+    /**
+     * try to get thread count if a Maven 3 build, using reflection as the plugin must not be maven3 api dependant
+     *
+     * @return number of thread for this build or 1 if not multi-thread build
+     */
+    protected int getRequestThreadCount()
+    {
+        int result = 1;
+
+        try
+        {
+            Method getRequestMethod = this.session.getClass().getMethod( "getRequest" );
+            Object mavenExecutionRequest = getRequestMethod.invoke( this.session );
+            Method getThreadCountMethod = mavenExecutionRequest.getClass().getMethod( "getThreadCount" );
+            String threadCount = (String) getThreadCountMethod.invoke( mavenExecutionRequest );
+            result  = Integer.valueOf( threadCount );
+        }
+        catch (final Throwable unexpectedError)
+        {
+            getLog().debug( "unable to get thread count for the current build: " + unexpectedError.getMessage());
+        }
+
+        return result;
     }
 }

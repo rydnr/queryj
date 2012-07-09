@@ -35,19 +35,14 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -55,12 +50,10 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -69,69 +62,16 @@ import java.util.Locale;
  */
 public class AttributesStatementSetterTemplateGenerator
     extends AbstractTemplateGenerator<AttributesStatementSetterTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<AttributesStatementSetterTemplate>,
-                BasePerTableTemplateGenerator<AttributesStatementSetterTemplate, BasePerTableTemplateContext>,
-                Singleton
-{
-    /**
-     * Singleton implemented to avoid the double-checked locking.
-     */
-    private static class AttributesStatementSetterTemplateGeneratorSingletonContainer
+    implements  BasePerTableTemplateGenerator<AttributesStatementSetterTemplate, BasePerTableTemplateContext>
     {
-        /**
-         * The actual singleton.
-         */
-        public static final AttributesStatementSetterTemplateGenerator SINGLETON =
-            new AttributesStatementSetterTemplateGenerator();
-    }
-
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Creates a new {@link AttributesStatementSetterTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads ot use.
      */
-    protected AttributesStatementSetterTemplateGenerator() {}
-
-    /**
-     * Retrieves a AttributesStatementSetterTemplateGenerator instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static AttributesStatementSetterTemplateGenerator getInstance()
+    public AttributesStatementSetterTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return AttributesStatementSetterTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public AttributesStatementSetterTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new AttributesStatementSetterTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**

@@ -39,10 +39,10 @@ import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplate;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
@@ -64,7 +64,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomResultSetExtractorTemplateBuildHandler
-    extends  BasePerCustomResultTemplateBuildHandler<CustomResultSetExtractorTemplate, CustomResultSetExtractorTemplateGenerator>
+    extends  BasePerCustomResultTemplateBuildHandler
+                 <CustomResultSetExtractorTemplate, CustomResultSetExtractorTemplateFactory>
 {
     /**
      * Creates a CustomResultSetExtractorTemplateBuildHandler.
@@ -76,9 +77,9 @@ public class CustomResultSetExtractorTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected CustomResultSetExtractorTemplateGenerator retrieveTemplateFactory()
+    protected CustomResultSetExtractorTemplateFactory retrieveTemplateFactory()
     {
-        return CustomResultSetExtractorTemplateGenerator.getInstance();
+        return CustomResultSetExtractorTemplateFactory.getInstance();
     }
 
     /**

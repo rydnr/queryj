@@ -39,7 +39,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.JndiUtilsTemplate;
-import org.acmsl.queryj.templates.dao.JndiUtilsTemplateGenerator;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -59,7 +59,7 @@ import java.util.Map;
  */
 public class JndiUtilsTemplateBuildHandler
       extends BasePerRepositoryTemplateBuildHandler
-                  <JndiUtilsTemplate, JndiUtilsTemplateGenerator, BasePerRepositoryTemplateContext>
+                  <JndiUtilsTemplate, JndiUtilsTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -76,9 +76,9 @@ public class JndiUtilsTemplateBuildHandler
      * {@inheritDoc}
      */
     @NotNull
-    protected JndiUtilsTemplateGenerator retrieveTemplateFactory()
+    protected JndiUtilsTemplateFactory retrieveTemplateFactory()
     {
-        return JndiUtilsTemplateGenerator.getInstance();
+        return JndiUtilsTemplateFactory.getInstance();
     }
     
     /**

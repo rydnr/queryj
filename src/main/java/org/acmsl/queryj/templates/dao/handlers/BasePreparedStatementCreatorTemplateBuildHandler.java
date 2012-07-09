@@ -45,7 +45,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplate;
-import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -68,7 +68,7 @@ import java.util.Map;
 public class BasePreparedStatementCreatorTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <BasePreparedStatementCreatorTemplate,
-                     BasePreparedStatementCreatorTemplateGenerator, BasePerRepositoryTemplateContext>
+                     BasePreparedStatementCreatorTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -85,9 +85,9 @@ public class BasePreparedStatementCreatorTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected BasePreparedStatementCreatorTemplateGenerator retrieveTemplateFactory()
+    protected BasePreparedStatementCreatorTemplateFactory retrieveTemplateFactory()
     {
-        return BasePreparedStatementCreatorTemplateGenerator.getInstance();
+        return BasePreparedStatementCreatorTemplateFactory.getInstance();
     }
 
     /**

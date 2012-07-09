@@ -78,9 +78,9 @@ public class JdbcTemplateTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected JdbcTemplateTemplateGenerator retrieveTemplateGenerator()
+    protected JdbcTemplateTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return JdbcTemplateTemplateGenerator.getInstance();
+        return new JdbcTemplateTemplateGenerator(caching, threadCount);
     }
 
     /**

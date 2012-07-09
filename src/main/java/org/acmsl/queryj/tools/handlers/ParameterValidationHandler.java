@@ -370,6 +370,21 @@ public class ParameterValidationHandler
     public static final String JMX = "jmx";
 
     /**
+     * Whether to enable caching.
+     */
+    public static final String CACHING = "caching";
+
+    /**
+     * The thread count.
+     */
+    public static final String THREAD_COUNT = "threads";
+
+    /**
+     * Invalid thread count.
+     */
+    public static final String ILLEGAL_THREAD_COUNT = "Invalid thread count";
+
+    /**
      * Creates a {@link ParameterValidationHandler} instance.
      */
     public ParameterValidationHandler() {}
@@ -453,6 +468,8 @@ public class ParameterValidationHandler
             (String) parameters.get(GRAMMAR_NAME),
             (String) parameters.get(GRAMMAR_SUFFIX),
             (String) parameters.get(ENCODING),
+            (Boolean) parameters.get(CACHING),
+            (Integer) parameters.get(THREAD_COUNT),
             parameters,
             usingAnt);
 
@@ -519,6 +536,8 @@ public class ParameterValidationHandler
         @Nullable final String grammarBundleName,
         @Nullable final String grammarSuffix,
         @Nullable final String encoding,
+        final boolean caching,
+        final int threadCount,
         @NotNull final Map parameters,
         final boolean usingAnt)
       throws  QueryJBuildException
@@ -726,6 +745,11 @@ public class ParameterValidationHandler
                 //     throw new QueryJBuildException(UNSUPPORTED_ENCODING);
                 // }
             }
+        }
+
+        if (threadCount < 0)
+        {
+            throw new QueryJBuildException(ILLEGAL_THREAD_COUNT);
         }
     }
 

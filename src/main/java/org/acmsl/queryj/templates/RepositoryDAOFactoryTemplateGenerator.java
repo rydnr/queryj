@@ -35,24 +35,13 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate the repository DAO factory implementation.
@@ -60,68 +49,16 @@ import java.util.List;
  */
 public class RepositoryDAOFactoryTemplateGenerator
     extends  AbstractTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateFactory<RepositoryDAOFactoryTemplate>,
-                BasePerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>,
-                Singleton
-{
-    /**
-     * Singleton implemented to avoid the double-checked locking.
-     */
-    private static class RepositoryDAOFactoryTemplateGeneratorSingletonContainer
+    implements  BasePerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
     {
-        /**
-         * The actual singleton.
-         */
-        public static final RepositoryDAOFactoryTemplateGenerator SINGLETON =
-            new RepositoryDAOFactoryTemplateGenerator();
-    }
-
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Creates a new {@link RepositoryDAOFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the threads to use.
      */
-    protected RepositoryDAOFactoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link RepositoryDAOFactoryTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static RepositoryDAOFactoryTemplateGenerator getInstance()
+    public RepositoryDAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return RepositoryDAOFactoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public RepositoryDAOFactoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new RepositoryDAOFactoryTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
+        super(caching, threadCount);
     }
 
     /**

@@ -35,23 +35,14 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate custom ValueObjectFactory templates.
@@ -59,53 +50,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CustomValueObjectFactoryTemplateGenerator
     extends AbstractTemplateGenerator<CustomValueObjectFactoryTemplate, BasePerCustomResultTemplateContext>
-    implements BasePerCustomResultTemplateFactory<CustomValueObjectFactoryTemplate>,
-                Singleton
+    implements BasePerCustomResultTemplateGenerator<CustomValueObjectFactoryTemplate, BasePerCustomResultTemplateContext>
 {
     /**
-     * Default constructor.
+     * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    public CustomValueObjectFactoryTemplateGenerator() {}
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    public CustomValueObjectFactoryTemplate createTemplate(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final Result customResult)
+    public CustomValueObjectFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        @Nullable CustomValueObjectFactoryTemplate result = null;
-
-        if  (!isStandard(
-                 extractClassName(customResult.getClassValue()),
-                 metadataManager))
-        {
-            result =
-                new CustomValueObjectFactoryTemplate(
-                    new BasePerCustomResultTemplateContext(
-                        metadataManager,
-                        customSqlProvider,
-                        header,
-                        getDecoratorFactory(),
-                        packageName,
-                        basePackageName,
-                        repositoryName,
-                        implementMarkerInterfaces,
-                        jmx,
-                        jndiLocation,
-                        customResult));
-        }
-
-        return result;
+        super(caching, threadCount);
     }
 
     /**
@@ -118,34 +72,6 @@ public class CustomValueObjectFactoryTemplateGenerator
         return
               extractClassName(context.getResult().getClassValue())
             + "ValueObjectFactory.java";
-    }
-
-    /**
-     * Checks whether given class name corresponds to a standard ValueObject or not.
-     * @param className the class name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @return <code>true</code> if the class name is associated to a standard value object.
-     */
-    protected boolean isStandard(@NotNull final String className, @NotNull final MetadataManager metadataManager)
-    {
-        return isStandard(className, metadataManager, ValueObjectUtils.getInstance());
-
-    }
-
-    /**
-     * Checks whether given class name corresponds to a standard ValueObject or not.
-     * @param className the class name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param valueObjectUtils the {@link ValueObjectUtils} instance.
-     * @return <code>true</code> if the class name is associated to a standard value object.
-     */
-    protected boolean isStandard(
-        @NotNull final String className,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final ValueObjectUtils valueObjectUtils)
-    {
-        return valueObjectUtils.isStandard(className, metadataManager);
-
     }
 
     /**

@@ -35,7 +35,9 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project classes.
  */
+import org.acmsl.commons.patterns.Decorator;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.vo.Row;
 
@@ -61,6 +63,7 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
      * Generates a <i>per-table</i> template.
      * @param metadataManager the metadata manager.
      * @param customSqlProvider the CustomSqlProvider instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param packageName the package name.
      * @param basePackageName the base package name.
      * @param repositoryName the name of the repository.
@@ -77,6 +80,7 @@ public interface BasePerTableTemplateFactory<T extends BasePerTableTemplate>
     public T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,

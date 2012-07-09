@@ -35,98 +35,38 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.MetadataManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
-
 /**
  * Is able to generate repository DAO implementations.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOTemplateGenerator
-    extends AbstractTemplateGenerator<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>>,
-                Singleton
+    extends AbstractTemplateGenerator<
+                RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>
+    implements  BasePerRepositoryTemplateGenerator<
+                    RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link RepositoryDAOFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class RepositoryDAOTemplateGeneratorSingletonContainer
+    public RepositoryDAOTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final RepositoryDAOTemplateGenerator SINGLETON =
-            new RepositoryDAOTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected RepositoryDAOTemplateGenerator() {}
-
-    /**
-     * Retrieves a RepositoryDAOTemplateGenerator instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static RepositoryDAOTemplateGenerator getInstance()
-    {
-        return RepositoryDAOTemplateGeneratorSingletonContainer.SINGLETON;
+        super(caching, threadCount);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NotNull
-    public RepositoryDAOTemplate<BasePerRepositoryTemplateContext> createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new RepositoryDAOTemplate<BasePerRepositoryTemplateContext>(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @NotNull
     public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {

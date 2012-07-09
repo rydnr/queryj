@@ -39,6 +39,10 @@ import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
+import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
+import org.acmsl.queryj.templates.dao.handlers.RepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
@@ -286,6 +290,22 @@ public class QueryJChain
     private String m__strEncoding;
 
     /**
+     * Whether to use template caching.
+     */
+    private boolean m__bCaching;
+
+    /**
+     * Whether to disable caching or not.
+     */
+    private String m__strDisableCaching;
+    private boolean m__bDisableCachingFlag;
+
+    /**
+     * The thread count.
+     */
+    private int m__iThreadCount;
+
+    /**
      * Creates a {@link QueryJChain} instance.
      */
     public QueryJChain() {}
@@ -335,37 +355,41 @@ public class QueryJChain
      * forms of the table names.
      * @param grammarSuffix the grammar suffix.
      * @param encoding the file encoding.
+     * @param caching whether to use template caching.
+     * @param threadCount the thread count.
      */
     @SuppressWarnings("unused")
     public QueryJChain(
-        final File settings,
-        final String driver,
-        final String url,
-        final String username,
-        final String password,
-        final String catalog,
-        final String schema,
-        final String repository,
-        final String packageName,
-        final File outputDir,
-        final File header,
+        @NotNull final File settings,
+        @NotNull final String driver,
+        @NotNull final String url,
+        @NotNull final String username,
+        @NotNull final String password,
+        @NotNull final String catalog,
+        @NotNull final String schema,
+        @NotNull final String repository,
+        @NotNull final String packageName,
+        @NotNull final File outputDir,
+        @NotNull final File header,
         final boolean outputDirSubFolders,
         final boolean extractTables,
         final boolean extractProcedures,
         final boolean extractFunctions,
-        final String jndiDataSource,
+        @NotNull final String jndiDataSource,
         final boolean generateMockDAOImplementation,
         final boolean generateXmlDAOImplementation,
         final boolean generateTests,
         final boolean allowEmptyRepositoryDAO,
         final boolean implementMarkerInterfaces,
-        final String customSqlModel,
+        @NotNull final String customSqlModel,
         final boolean disableCustomSqlValidation,
-        final File sqlXmlFile,
-        final File grammarFolder,
-        final String grammarName,
-        final String grammarSuffix,
-        final String encoding)
+        @NotNull final File sqlXmlFile,
+        @NotNull final File grammarFolder,
+        @NotNull final String grammarName,
+        @NotNull final String grammarSuffix,
+        @NotNull final String encoding,
+        final boolean caching,
+        final int threadCount)
     {
         immutableSetSettingsFile(settings);
         immutableSetDriver(driver);
@@ -397,8 +421,9 @@ public class QueryJChain
         immutableSetGrammarName(grammarName);
         immutableSetGrammarSuffix(grammarSuffix);
         immutableSetEncoding(encoding);
+        immutableSetCaching(caching);
+        immutableSetThreadCount(threadCount);
     }
-
     /**
      * Specifies the properties.
      * @param settings such settings.
@@ -2068,6 +2093,209 @@ public class QueryJChain
     }
 
     /**
+     * Specifies whether to disable caching.
+     * @param allow such setting.
+     */
+    protected final void immutableSetDisableCaching(
+        final String allow)
+    {
+        m__strDisableCaching = allow;
+    }
+
+    /**
+     * Specifies whether to disable custom sql validation.
+     * @param disable such setting.
+     */
+    @SuppressWarnings("unused")
+    public void setDisableCaching(final String disable)
+    {
+        immutableSetDisableCaching(disable);
+
+        setDisableCachingFlag(toBoolean(disable));
+    }
+
+    /**
+     * Retrieves whether to disable caching.
+     * @return such setting.
+     */
+    public String getDisableCaching()
+    {
+        return m__strDisableCaching;
+    }
+
+    /**
+     * Specifies the "disable-caching" flag.
+     * @param flag such flag.
+     */
+    protected final void immutableSetDisableCachingFlag(
+        final boolean flag)
+    {
+        m__bDisableCachingFlag = flag;
+    }
+
+    /**
+     * Specifies the "disable-caching" flag.
+     * @param flag such flag.
+     */
+    protected void setDisableCachingFlag(final boolean flag)
+    {
+        immutableSetDisableCachingFlag(flag);
+    }
+
+    /**
+     * Retrieves the "disable-caching" flag.
+     * @return such flag.
+     */
+    @SuppressWarnings("unused")
+    protected boolean getDisableCachingFlag()
+    {
+        return m__bDisableCachingFlag;
+    }
+
+    /**
+     * Retrieves the disable-caching flag, using given
+     * properties if necessary.
+     * @param properties the properties.
+     * @return such flag.
+     */
+    protected boolean getDisableCachingFlag(
+        @Nullable final Properties properties)
+    {
+        String t_strResult = getDisableCaching();
+
+        if  (   (t_strResult == null)
+                && (properties != null))
+        {
+            t_strResult =
+                properties.getProperty(DISABLE_CACHING);
+            setDisableCustomSqlValidation(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+
+    /**
+     * Specifies the thread count.
+     * @param threadCount such value.
+     */
+    protected final void immutableSetThreadCount(final int threadCount)
+    {
+        this.m__iThreadCount = threadCount;
+    }
+
+    /**
+     * Specifies the thread count.
+     * @param threadCount such value.
+     */
+    @SuppressWarnings("unused")
+    protected void setThreadCount(final int threadCount)
+    {
+        immutableSetThreadCount(threadCount);
+    }
+
+    /**
+     * Retrieves the thread count.
+     * @return such value.
+     */
+    public int getThreadCount()
+    {
+        return m__iThreadCount;
+    }
+
+    /**
+     * Retrieves the thread count, from given properties if necessary.
+     * @param properties the properties.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected int getThreadCount(@Nullable final Properties properties)
+    {
+        int result = getThreadCount();
+
+        if  (   (result == 0)
+             && (properties != null))
+        {
+            String t_strValue = properties.getProperty(THREAD_COUNT);
+            if (t_strValue != null)
+            {
+                try
+                {
+                    result = Integer.parseInt(t_strValue);
+                }
+                catch (@NotNull final NumberFormatException invalidValue)
+                {
+                    Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+
+                    if (t_Log != null)
+                    {
+                        t_Log.warn("Invalid thread count: " + t_strValue);
+                    }
+                }
+            }
+
+            setThreadCount(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies whether to use template caching.
+     * @param caching such condition.
+     */
+    protected final void immutableSetCaching(final boolean caching)
+    {
+        m__bCaching = caching;
+    }
+
+    /**
+     * Specifies whether to use template caching.
+     * @param caching such condition.
+     */
+    @SuppressWarnings("unused")
+    protected void setCaching(final boolean caching)
+    {
+        immutableSetCaching(caching);
+    }
+
+    /**
+     * Retrieves whether to use template caching.
+     * @return such condition.
+     */
+    @SuppressWarnings("unused")
+    public boolean isCaching()
+    {
+        return m__bCaching;
+    }
+
+    /**
+     * Retrieves whether to use template caching.
+     * @param properties the properties.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected boolean isCaching(@Nullable final Properties properties)
+    {
+        boolean result = isCaching();
+
+        if  (   (!result)
+             && (properties != null))
+        {
+            String t_strValue = properties.getProperty(DISABLE_CACHING);
+
+            if (t_strValue != null)
+            {
+                result = !Boolean.parseBoolean(t_strValue);
+            }
+
+            setCaching(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Builds the chain.
      * @param chain the chain to be configured.
      * @return the updated chain.
@@ -2117,19 +2345,15 @@ public class QueryJChain
 
         chain.add(new TableTemplateHandlerBundle());
 
-        // TODO: Enable all templates
-//            chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
-//            chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
+        chain.add(new BaseRepositoryDAOTemplateHandlerBundle());
+        chain.add(new BaseRepositoryDAOFactoryTemplateHandlerBundle());
 
-//            chain.add(new RepositoryDAOTemplateHandlerBundle());
-//            chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
+        chain.add(new RepositoryDAOTemplateHandlerBundle());
+        chain.add(new RepositoryDAOFactoryTemplateHandlerBundle());
 
-
-            //chain.add(new TableRepositoryTemplateHandlerBundle());
-
-            //chain.add(new FunctionsBundle());
-
-            //chain.add(new KeywordRepositoryTemplateHandlerBundle());
+        //chain.add(new TableRepositoryTemplateHandlerBundle());
+        //chain.add(new FunctionsBundle());
+        //chain.add(new KeywordRepositoryTemplateHandlerBundle());
 
         chain.add(new DAOBundle(generateMock, generateXML));
 
@@ -2237,7 +2461,9 @@ public class QueryJChain
             getGrammarFolder(settings),
             getGrammarName(settings),
             getGrammarSuffix(settings),
-            getEncoding(settings));
+            getEncoding(settings),
+            !getDisableCachingFlag(settings),
+            getThreadCount(settings));
 
         return command;
     }
@@ -2279,6 +2505,8 @@ public class QueryJChain
      * forms of the table names.
      * @param grammarSuffix the suffix grammar.
      * @param encoding the encoding.
+     * @param caching whether to enable template caching.
+     * @param threadCount the thread count.
      */
     @SuppressWarnings("unchecked")
     protected void mapAttributes(
@@ -2309,7 +2537,9 @@ public class QueryJChain
         @Nullable final File grammarFolder,
         @Nullable final String grammarName,
         @Nullable final String grammarSuffix,
-        @Nullable final String encoding)
+        @Nullable final String encoding,
+        final boolean caching,
+        final int threadCount)
     {
         if  (attributes != null)
         {
@@ -2504,6 +2734,14 @@ public class QueryJChain
                     ParameterValidationHandler.ENCODING,
                     encoding);
             }
+
+            attributes.put(
+                ParameterValidationHandler.CACHING,
+                caching);
+
+            attributes.put(
+                ParameterValidationHandler.THREAD_COUNT,
+                threadCount);
         }
     }
 

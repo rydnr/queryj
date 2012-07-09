@@ -35,13 +35,14 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.templates.dao.BaseAbstractDAOTemplateFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.dao.BaseAbstractDAOTemplate;
-import org.acmsl.queryj.templates.dao.BaseAbstractDAOTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
@@ -63,7 +64,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseAbstractDAOTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler<BaseAbstractDAOTemplate, BaseAbstractDAOTemplateGenerator>
+    extends  BasePerTableTemplateBuildHandler<BaseAbstractDAOTemplate, BaseAbstractDAOTemplateFactory>
 {
     /**
      * Creates a {@link BaseAbstractDAOTemplateBuildHandler}> instance.
@@ -75,9 +76,9 @@ public class BaseAbstractDAOTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected BaseAbstractDAOTemplateGenerator retrieveTemplateFactory()
+    protected BaseAbstractDAOTemplateFactory retrieveTemplateFactory()
     {
-        return BaseAbstractDAOTemplateGenerator.getInstance();
+        return BaseAbstractDAOTemplateFactory.getInstance();
     }
 
     /**
@@ -113,9 +114,10 @@ public class BaseAbstractDAOTemplateBuildHandler
     @Override
     @Nullable
     protected BaseAbstractDAOTemplate createTemplate(
-        @NotNull final BaseAbstractDAOTemplateGenerator templateFactory,
+        @NotNull final BaseAbstractDAOTemplateFactory templateFactory,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
@@ -151,15 +153,16 @@ public class BaseAbstractDAOTemplateBuildHandler
             templateFactory.createTemplate(
                 metadataManager,
                 customSqlProvider,
+                decoratorFactory,
                 packageName,
                 projectPackage,
                 repository,
-                    header,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    t_lStaticValues);
+                header,
+                implementMarkerInterfaces,
+                jmx,
+                jndiLocation,
+                tableName,
+                t_lStaticValues);
 
         return result;
     }

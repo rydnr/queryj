@@ -76,9 +76,10 @@ public class BasePreparedStatementCreatorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BasePreparedStatementCreatorTemplateGenerator retrieveTemplateGenerator()
+    protected BasePreparedStatementCreatorTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return BasePreparedStatementCreatorTemplateGenerator.getInstance();
+        return new BasePreparedStatementCreatorTemplateGenerator(caching, threadCount);
     }
 
     /**

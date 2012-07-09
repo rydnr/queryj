@@ -74,9 +74,10 @@ public class ConfigurationPropertiesTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected ConfigurationPropertiesTemplateGenerator retrieveTemplateGenerator()
+    protected ConfigurationPropertiesTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return ConfigurationPropertiesTemplateGenerator.getInstance();
+        return new ConfigurationPropertiesTemplateGenerator(caching, threadCount);
     }
 
     /**

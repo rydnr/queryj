@@ -35,102 +35,43 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
+import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Locale;
 
 /**
- * Is able to generate ResultSetExtractor templates.
+ * Is able to generate {@link ResultSetExtractorTemplate templates}.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ResultSetExtractorTemplateGenerator
     extends AbstractTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>
-    implements BasePerTableTemplateFactory<ResultSetExtractorTemplate>,
-               BasePerTableTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>,
-               Singleton
+    implements BasePerTableTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link ResultSetExtractorTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class ResultSetExtractorTemplateGeneratorSingletonContainer
+    public ResultSetExtractorTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final ResultSetExtractorTemplateGenerator SINGLETON =
-            new ResultSetExtractorTemplateGenerator();
-    }
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected ResultSetExtractorTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link ResultSetExtractorTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static ResultSetExtractorTemplateGenerator getInstance()
-    {
-        return ResultSetExtractorTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public ResultSetExtractorTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new ResultSetExtractorTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**

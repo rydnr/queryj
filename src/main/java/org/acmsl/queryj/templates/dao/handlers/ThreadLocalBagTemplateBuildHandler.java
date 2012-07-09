@@ -44,7 +44,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplate;
-import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -66,7 +66,7 @@ import java.util.Map;
 public class ThreadLocalBagTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <ThreadLocalBagTemplate,
-                     ThreadLocalBagTemplateGenerator, BasePerRepositoryTemplateContext>
+                     ThreadLocalBagTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -84,9 +84,9 @@ public class ThreadLocalBagTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected ThreadLocalBagTemplateGenerator retrieveTemplateFactory()
+    protected ThreadLocalBagTemplateFactory retrieveTemplateFactory()
     {
-        return ThreadLocalBagTemplateGenerator.getInstance();
+        return ThreadLocalBagTemplateFactory.getInstance();
     }
 
     /**

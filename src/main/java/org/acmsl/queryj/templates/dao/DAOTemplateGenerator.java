@@ -36,19 +36,15 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -56,12 +52,10 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -71,69 +65,16 @@ import java.util.Locale;
  */
 public class DAOTemplateGenerator
     extends AbstractTemplateGenerator<DAOTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<DAOTemplate>,
-                BasePerTableTemplateGenerator<DAOTemplate, BasePerTableTemplateContext>,
-                Singleton
+    implements  BasePerTableTemplateGenerator<DAOTemplate, BasePerTableTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link DAOTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class DAOTemplateGeneratorSingletonContainer
+    public DAOTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final DAOTemplateGenerator SINGLETON =
-            new DAOTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected DAOTemplateGenerator() {}
-
-    /**
-     * Retrieves a DAOTemplateGenerator instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static DAOTemplateGenerator getInstance()
-    {
-        return DAOTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public DAOTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new DAOTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**

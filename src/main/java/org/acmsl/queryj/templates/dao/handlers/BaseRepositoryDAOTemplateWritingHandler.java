@@ -60,16 +60,18 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOTemplateWritingHandler
-    extends BasePerRepositoryTemplateWritingHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+    extends BasePerRepositoryTemplateWritingHandler
+                <BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateGenerator()
+    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return BaseRepositoryDAOTemplateGenerator.getInstance();
+        return new BaseRepositoryDAOTemplateGenerator(caching, threadCount);
     }
 
     /**

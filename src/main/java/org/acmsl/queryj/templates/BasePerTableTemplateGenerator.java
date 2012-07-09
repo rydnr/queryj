@@ -37,7 +37,6 @@ package org.acmsl.queryj.templates;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface BasePerTableTemplateGenerator<N extends BasePerTableTemplate<C>, C extends BasePerTableTemplateContext>
-    extends TemplateGenerator<N, C>,
-            BasePerTableTemplateFactory<N>
+    extends TemplateGenerator<N, C>
 {
 }

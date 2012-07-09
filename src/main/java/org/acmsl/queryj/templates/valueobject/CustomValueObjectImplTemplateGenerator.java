@@ -38,18 +38,13 @@ package org.acmsl.queryj.templates.valueobject;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
+import org.acmsl.queryj.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.AbstractTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,13 +54,17 @@ import org.jetbrains.annotations.Nullable;
  */
 public class CustomValueObjectImplTemplateGenerator
     extends AbstractTemplateGenerator<CustomValueObjectImplTemplate, BasePerCustomResultTemplateContext>
-    implements BasePerCustomResultTemplateFactory<CustomValueObjectImplTemplate>,
-                Singleton
+    implements BasePerCustomResultTemplateGenerator<CustomValueObjectImplTemplate, BasePerCustomResultTemplateContext>
 {
     /**
-     * Creates a new generator.
+     * Creates a new {@link CustomBaseValueObjectTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    public CustomValueObjectImplTemplateGenerator() {}
+    public CustomValueObjectImplTemplateGenerator(final boolean caching, final int threadCount)
+    {
+        super(caching, threadCount);
+    }
 
     /**
      * {@inheritDoc}

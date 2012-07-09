@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.acmsl.queryj.templates.RepositoryDAOTemplate;
 import org.acmsl.queryj.templates.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
@@ -45,7 +46,6 @@ import org.acmsl.queryj.templates.TemplateMappingManager;
 /*
  * Importing some JetBrains annotations.
  n*/
-import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,16 +60,18 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOTemplateWritingHandler
-    extends BasePerRepositoryTemplateWritingHandler<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>, RepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+    extends BasePerRepositoryTemplateWritingHandler<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>,
+                        RepositoryDAOTemplateGenerator,
+                        BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected RepositoryDAOTemplateGenerator retrieveTemplateGenerator()
+    protected RepositoryDAOTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return RepositoryDAOTemplateGenerator.getInstance();
+        return new RepositoryDAOTemplateGenerator(caching, threadCount);
     }
 
     /**

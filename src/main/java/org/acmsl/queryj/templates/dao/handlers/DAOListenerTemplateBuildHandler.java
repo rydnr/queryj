@@ -43,7 +43,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.DAOListenerTemplate;
-import org.acmsl.queryj.templates.dao.DAOListenerTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOListenerTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -65,7 +65,7 @@ import java.util.Map;
  */
 public class DAOListenerTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
-                 <DAOListenerTemplate, DAOListenerTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <DAOListenerTemplate, DAOListenerTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -83,9 +83,9 @@ public class DAOListenerTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected DAOListenerTemplateGenerator retrieveTemplateFactory()
+    protected DAOListenerTemplateFactory retrieveTemplateFactory()
     {
-        return DAOListenerTemplateGenerator.getInstance();
+        return DAOListenerTemplateFactory.getInstance();
     }
 
     /**

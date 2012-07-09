@@ -41,28 +41,15 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate BasePreparedStatementCreator implementations.
@@ -72,73 +59,22 @@ import java.util.List;
  */
 public class BasePreparedStatementCreatorTemplateGenerator
     extends AbstractTemplateGenerator<BasePreparedStatementCreatorTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<BasePreparedStatementCreatorTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<BasePreparedStatementCreatorTemplate>,
-                Singleton
+    implements  BasePerRepositoryTemplateGenerator<BasePreparedStatementCreatorTemplate, BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link BasePreparedStatementCreatorTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class BasePreparedStatementCreatorTemplateGeneratorSingletonContainer
+    public BasePreparedStatementCreatorTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final BasePreparedStatementCreatorTemplateGenerator SINGLETON =
-            new BasePreparedStatementCreatorTemplateGenerator();
-    }
-
-    /**
-     * Default constructor.
-     */
-    public BasePreparedStatementCreatorTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static BasePreparedStatementCreatorTemplateGenerator getInstance()
-    {
-        return BasePreparedStatementCreatorTemplateGeneratorSingletonContainer.SINGLETON;
+        super(caching, threadCount);
     }
 
     /**
      * {@inheritDoc}
      */
-    @NotNull
     @Override
-    public BasePreparedStatementCreatorTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new BasePreparedStatementCreatorTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @NotNull
     public String retrieveTemplateFileName(@NotNull BasePerRepositoryTemplateContext context)
     {

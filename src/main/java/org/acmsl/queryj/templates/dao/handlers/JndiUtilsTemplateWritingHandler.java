@@ -67,9 +67,9 @@ public class JndiUtilsTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected JndiUtilsTemplateGenerator retrieveTemplateGenerator()
+    protected JndiUtilsTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return JndiUtilsTemplateGenerator.getInstance();
+        return new JndiUtilsTemplateGenerator(caching, threadCount);
     }
 
     /**

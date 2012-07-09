@@ -41,28 +41,15 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate BaseResultSetExtractor implementations.
@@ -71,73 +58,22 @@ import java.util.List;
  */
 public class BaseResultSetExtractorTemplateGenerator
     extends AbstractTemplateGenerator<BaseResultSetExtractorTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<BaseResultSetExtractorTemplate>,
-                Singleton
+    implements  BasePerRepositoryTemplateGenerator<BaseResultSetExtractorTemplate, BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link BaseRepositoryDAOFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class BaseResultSetExtractorTemplateGeneratorSingletonContainer
+    public BaseResultSetExtractorTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final BaseResultSetExtractorTemplateGenerator SINGLETON =
-            new BaseResultSetExtractorTemplateGenerator();
-    }
-
-    /**
-     * Default constructor.
-     */
-    public BaseResultSetExtractorTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link BaseResultSetExtractorTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static BaseResultSetExtractorTemplateGenerator getInstance()
-    {
-        return BaseResultSetExtractorTemplateGeneratorSingletonContainer.SINGLETON;
+        super(caching, threadCount);
     }
 
     /**
      * {@inheritDoc}
      */
-    @NotNull
     @Override
-    public BaseResultSetExtractorTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new BaseResultSetExtractorTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @NotNull
     public String retrieveTemplateFileName(@NotNull BasePerRepositoryTemplateContext context)
     {

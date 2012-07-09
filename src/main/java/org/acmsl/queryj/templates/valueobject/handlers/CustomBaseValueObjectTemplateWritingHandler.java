@@ -64,7 +64,9 @@ import java.util.Map;
  */
 public class CustomBaseValueObjectTemplateWritingHandler
     extends BasePerCustomResultTemplateWritingHandler
-                <CustomBaseValueObjectTemplate, BasePerCustomResultTemplateContext>
+                <CustomBaseValueObjectTemplate,
+                    BasePerCustomResultTemplateContext,
+                    CustomBaseValueObjectTemplateGenerator>
 {
     /**
      * Creates a CustomBaseValueObjectTemplateWritingHandler.
@@ -77,9 +79,10 @@ public class CustomBaseValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomBaseValueObjectTemplateGenerator retrieveTemplateGenerator()
+    protected CustomBaseValueObjectTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return new CustomBaseValueObjectTemplateGenerator();
+        return new CustomBaseValueObjectTemplateGenerator(caching, threadCount);
     }
 
     /**

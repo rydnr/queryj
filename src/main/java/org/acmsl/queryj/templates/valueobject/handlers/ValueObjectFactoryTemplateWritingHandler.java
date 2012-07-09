@@ -79,9 +79,10 @@ public class ValueObjectFactoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected ValueObjectFactoryTemplateGenerator retrieveTemplateGenerator()
+    protected ValueObjectFactoryTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return ValueObjectFactoryTemplateGenerator.getInstance();
+        return new ValueObjectFactoryTemplateGenerator(caching, threadCount);
     }
 
     /**

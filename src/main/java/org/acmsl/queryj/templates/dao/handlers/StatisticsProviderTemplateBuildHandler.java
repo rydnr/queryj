@@ -44,7 +44,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.StatisticsProviderTemplate;
-import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateGenerator;
+import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -62,12 +62,12 @@ import java.util.Map;
  * Builds a {@link org.acmsl.queryj.templates.dao.StatisticsProviderTemplate}
  * instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
- * @sicne 2012/07/03 (recovered)
+ * @since 2012/07/03 (recovered)
  */
 public class StatisticsProviderTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <StatisticsProviderTemplate,
-                     StatisticsProviderTemplateGenerator, BasePerRepositoryTemplateContext>
+                     StatisticsProviderTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -85,9 +85,9 @@ public class StatisticsProviderTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected StatisticsProviderTemplateGenerator retrieveTemplateFactory()
+    protected StatisticsProviderTemplateFactory retrieveTemplateFactory()
     {
-        return StatisticsProviderTemplateGenerator.getInstance();
+        return StatisticsProviderTemplateFactory.getInstance();
     }
 
     /**

@@ -67,9 +67,10 @@ public class KeywordRepositoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected KeywordRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected KeywordRepositoryTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return KeywordRepositoryTemplateGenerator.getInstance();
+        return new KeywordRepositoryTemplateGenerator(caching, threadCount);
     }
 
     /**

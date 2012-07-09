@@ -35,13 +35,13 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.handlers.BasePerCustomResultTemplateBuildHandler;
 import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplate;
-import org.acmsl.queryj.templates.valueobject.CustomBaseValueObjectTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
 /*
@@ -60,7 +60,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomBaseValueObjectTemplateBuildHandler
-    extends BasePerCustomResultTemplateBuildHandler<CustomBaseValueObjectTemplate, CustomBaseValueObjectTemplateGenerator>
+    extends BasePerCustomResultTemplateBuildHandler<CustomBaseValueObjectTemplate, CustomBaseValueObjectTemplateFactory>
 {
     /**
      * Creates a CustomBaseValueObjectTemplateBuildHandler.
@@ -72,9 +72,9 @@ public class CustomBaseValueObjectTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected CustomBaseValueObjectTemplateGenerator retrieveTemplateFactory()
+    protected CustomBaseValueObjectTemplateFactory retrieveTemplateFactory()
     {
-        return new CustomBaseValueObjectTemplateGenerator();
+        return CustomBaseValueObjectTemplateFactory.getInstance();
     }
 
     /**

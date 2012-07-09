@@ -76,9 +76,9 @@ public class ThreadLocalBagTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected ThreadLocalBagTemplateGenerator retrieveTemplateGenerator()
+    protected ThreadLocalBagTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return ThreadLocalBagTemplateGenerator.getInstance();
+        return new ThreadLocalBagTemplateGenerator(caching, threadCount);
     }
 
     /**

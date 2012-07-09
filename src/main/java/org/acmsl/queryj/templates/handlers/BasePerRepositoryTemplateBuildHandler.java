@@ -40,6 +40,8 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.CachingDecoratorFactory;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
@@ -73,7 +75,9 @@ import java.util.Map;
  *         >Jose San Leandro</a>
  */
 public abstract class BasePerRepositoryTemplateBuildHandler
-    <T extends BasePerRepositoryTemplate<C>, TF extends BasePerRepositoryTemplateFactory<T>, C extends BasePerRepositoryTemplateContext>
+    <T extends BasePerRepositoryTemplate<C>,
+     TF extends BasePerRepositoryTemplateFactory<T>,
+     C extends BasePerRepositoryTemplateContext>
     extends    AbstractQueryJCommandHandler
     implements TemplateBuildHandler
 {
@@ -143,7 +147,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
-            retrieveTableTemplates(parameters));
+            retrieveTableTemplates(parameters),
+            CachingDecoratorFactory.getInstance());
 
         return false;
     }
@@ -162,8 +167,10 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param jmx whether to support JMX or not.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tableTemplates the table templates.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @SuppressWarnings("unused")
     protected void buildTemplate(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -176,7 +183,8 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final List<TableTemplate> tableTemplates)
+        @NotNull final List<TableTemplate> tableTemplates,
+        @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
     {
         if (isGenerationEnabled(customSqlProvider, parameters))
@@ -187,6 +195,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 createTemplate(
                     metadataManager,
                     customSqlProvider,
+                    decoratorFactory,
                     templateFactory,
                     packageName,
                     projectPackage,
@@ -230,10 +239,12 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @return the template.
      * @throws QueryJBuildException on invalid input.
      */
+    @SuppressWarnings("unused")
     @Nullable
     protected T createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TF templateFactory,
         @NotNull final String packageName,
         @NotNull final String projectPackage,
@@ -250,6 +261,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
             templateFactory.createTemplate(
                 metadataManager,
                 customSqlProvider,
+                decoratorFactory,
                 packageName,
                 projectPackage,
                 repository,

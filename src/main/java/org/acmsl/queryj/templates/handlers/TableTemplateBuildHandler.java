@@ -35,13 +35,15 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.templates.TableTemplateFactory;
+import org.acmsl.queryj.templates.dao.DAOTemplateUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.templates.TableTemplate;
-import org.acmsl.queryj.templates.TableTemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -59,7 +61,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class TableTemplateBuildHandler
-    extends    BasePerTableTemplateBuildHandler<TableTemplate, TableTemplateGenerator>
+    extends    BasePerTableTemplateBuildHandler<TableTemplate, TableTemplateFactory>
     implements TemplateBuildHandler
 {
     /**
@@ -85,14 +87,16 @@ public class TableTemplateBuildHandler
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final TableTemplateGenerator templateFactory,
+        @NotNull final TableTemplateFactory templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final List<Table> tables)
+        @NotNull final List<Table> tables,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
         throws  QueryJBuildException
     {
         List<Table> t_lTables = tables;
@@ -115,18 +119,19 @@ public class TableTemplateBuildHandler
             implementMarkerInterfaces,
             jmx,
             jndiLocation,
-            t_lTables);
+            t_lTables,
+            decoratorFactory,
+            daoTemplateUtils);
     }
 
     /**
-     * Retrieves the template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
-    protected TableTemplateGenerator retrieveTemplateFactory()
+    protected TableTemplateFactory retrieveTemplateFactory()
     {
-        return TableTemplateGenerator.getInstance();
+        return TableTemplateFactory.getInstance();
     }
 
     /**

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -80,7 +79,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     @Override
     protected boolean handle(@NotNull final Map parameters)
@@ -96,8 +94,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @param parameters the parameters.
      * @param metadata the database metadata.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition metadata != null
      */
     protected void writeTemplate(
         @NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
@@ -127,8 +123,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
      */
     protected void writeTemplate(@NotNull final Map parameters, @NotNull final String engineName)
       throws  QueryJBuildException
@@ -137,9 +131,9 @@ public abstract class BasePerRepositoryTemplateWritingHandler
             retrieveTemplate(parameters),
             retrieveOutputDir(engineName, parameters),
             retrieveCharset(parameters),
-            retrieveTemplateGenerator());
+            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)));
     }
-            
+
     /**
      * Writes the template.
      * @param template the template.
@@ -147,9 +141,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition template != null
-     * @precondition outputDir != null
-     * @precondition templateGenerator != null
      */
     protected void writeTemplate(
         @Nullable final T template,
@@ -175,9 +166,11 @@ public abstract class BasePerRepositoryTemplateWritingHandler
 
     /**
      * Retrieves the template generator.
+     * @param caching whether to use caching.
+     * @param threadCount the number of threads to use.
      * @return such instance.
      */
-    protected abstract G retrieveTemplateGenerator();
+    protected abstract G retrieveTemplateGenerator(final boolean caching, final int threadCount);
 
     /**
      * Retrieves the template from the attribute map.

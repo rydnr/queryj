@@ -35,6 +35,8 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -42,7 +44,6 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TableTemplate;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplate;
-import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -62,16 +63,17 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class RepositoryDAOFactoryTemplateBuildHandler
-    extends BasePerRepositoryTemplateBuildHandler<RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
+    extends BasePerRepositoryTemplateBuildHandler<
+    RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
     @NotNull
-    protected RepositoryDAOFactoryTemplateGenerator retrieveTemplateFactory()
+    protected RepositoryDAOFactoryTemplateFactory retrieveTemplateFactory()
     {
-        return RepositoryDAOFactoryTemplateGenerator.getInstance();
+        return RepositoryDAOFactoryTemplateFactory.getInstance();
     }
     
     /**
@@ -114,7 +116,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final RepositoryDAOFactoryTemplateGenerator templateFactory,
+        @NotNull final RepositoryDAOFactoryTemplateFactory templateFactory,
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
@@ -122,7 +124,8 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final List<TableTemplate> tableTemplates)
+        @NotNull final List<TableTemplate> tableTemplates,
+        @NotNull final DecoratorFactory decoratorFactory)
         throws QueryJBuildException
     {
         if  (definesRepositoryScopedSql(
@@ -141,7 +144,8 @@ public class RepositoryDAOFactoryTemplateBuildHandler
                 implementMarkerInterfaces,
                 jmx,
                 jndiLocation,
-                tableTemplates);
+                tableTemplates,
+                decoratorFactory);
         }
     }
 }

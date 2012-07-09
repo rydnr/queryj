@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.TemplateGenerator;
 import org.acmsl.queryj.templates.dao.FkStatementSetterTemplate;
 import org.acmsl.queryj.templates.dao.FkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerForeignKeyTemplateWritingHandler;
@@ -61,7 +60,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class FkStatementSetterTemplateWritingHandler
-    extends BasePerForeignKeyTemplateWritingHandler<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
+    extends BasePerForeignKeyTemplateWritingHandler
+                <FkStatementSetterTemplate, BasePerForeignKeyTemplateContext, FkStatementSetterTemplateGenerator>
 {
     /**
      * Creates a <code>FkStatementSetterTemplateWritingHandler</code>
@@ -76,9 +76,10 @@ public class FkStatementSetterTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext> retrieveTemplateGenerator()
+    protected FkStatementSetterTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return FkStatementSetterTemplateGenerator.getInstance();
+        return new FkStatementSetterTemplateGenerator(caching, threadCount);
     }
 
     /**

@@ -38,7 +38,7 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplate;
-import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateFactory;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -58,16 +58,18 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOFactoryTemplateBuildHandler
-      extends BasePerRepositoryTemplateBuildHandler<BaseRepositoryDAOFactoryTemplate,
-                                   BaseRepositoryDAOFactoryTemplateGenerator, BasePerRepositoryTemplateContext>
+      extends BasePerRepositoryTemplateBuildHandler
+                  <BaseRepositoryDAOFactoryTemplate,
+                      BaseRepositoryDAOFactoryTemplateFactory,
+                      BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
      */
     @NotNull
-    protected BaseRepositoryDAOFactoryTemplateGenerator retrieveTemplateFactory()
+    protected BaseRepositoryDAOFactoryTemplateFactory retrieveTemplateFactory()
     {
-        return BaseRepositoryDAOFactoryTemplateGenerator.getInstance();
+        return BaseRepositoryDAOFactoryTemplateFactory.getInstance();
     }
     
     /**

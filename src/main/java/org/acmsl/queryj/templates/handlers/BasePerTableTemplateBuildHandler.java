@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
@@ -107,7 +108,7 @@ public abstract class BasePerTableTemplateBuildHandler
 
         if (t_MetadataManager != null)
         {
-            buildTemplate(parameters, t_MetadataManager);
+            buildTemplate(parameters, t_MetadataManager, t_MetadataManager.getTableDAO());
             result = false;
         }
 
@@ -118,11 +119,13 @@ public abstract class BasePerTableTemplateBuildHandler
      * Builds the template.
      * @param parameters the parameters.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @param tableDAO the {@link TableDAO} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplate(
         @NotNull final Map parameters,
-        @NotNull final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final TableDAO tableDAO)
       throws  QueryJBuildException
     {
         buildTemplate(
@@ -136,7 +139,9 @@ public abstract class BasePerTableTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
-            metadataManager.getTableDAO().findAllTables());
+            tableDAO.findAllTables(),
+            CachingDecoratorFactory.getInstance(),
+            DAOTemplateUtils.getInstance());
     }
 
     /**
@@ -160,6 +165,8 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
      * @param tables the tables.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     protected void buildTemplate(
@@ -173,7 +180,9 @@ public abstract class BasePerTableTemplateBuildHandler
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
-        @NotNull final List<Table> tables)
+        @NotNull final List<Table> tables,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  QueryJBuildException
     {
         List<T> t_lTemplates = new ArrayList<T>();
@@ -196,8 +205,8 @@ public abstract class BasePerTableTemplateBuildHandler
                                 retrieveStaticContent(
                                     t_Table.getName(),
                                     metadataManager,
-                                    CachingDecoratorFactory.getInstance(),
-                                    DAOTemplateUtils.getInstance());
+                                    decoratorFactory,
+                                    daoTemplateUtils);
                         }
                         catch (@Nullable final SQLException cannotRetrieveTableContents)
                         {
@@ -222,6 +231,7 @@ public abstract class BasePerTableTemplateBuildHandler
                             templateFactory,
                             metadataManager,
                             customSqlProvider,
+                            decoratorFactory,
                             retrievePackage(
                                 t_Table.getName(), metadataManager.getEngineName(), parameters),
                             projectPackage,
@@ -315,6 +325,7 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final TF templateFactory,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
@@ -331,6 +342,7 @@ public abstract class BasePerTableTemplateBuildHandler
             templateFactory.createTemplate(
                 metadataManager,
                 customSqlProvider,
+                decoratorFactory,
                 packageName,
                 projectPackage,
                 repository,

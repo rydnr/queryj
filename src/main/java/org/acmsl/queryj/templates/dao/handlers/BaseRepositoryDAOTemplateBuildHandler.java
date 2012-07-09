@@ -37,6 +37,7 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplate;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateFactory;
 import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -57,16 +58,17 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class BaseRepositoryDAOTemplateBuildHandler
-    extends BasePerRepositoryTemplateBuildHandler<BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateGenerator, BasePerRepositoryTemplateContext>
+    extends BasePerRepositoryTemplateBuildHandler
+                <BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected BaseRepositoryDAOTemplateGenerator retrieveTemplateFactory()
+    protected BaseRepositoryDAOTemplateFactory retrieveTemplateFactory()
     {
-        return BaseRepositoryDAOTemplateGenerator.getInstance();
+        return BaseRepositoryDAOTemplateFactory.getInstance();
     }
     
     /**

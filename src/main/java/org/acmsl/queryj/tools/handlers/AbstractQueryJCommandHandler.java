@@ -538,4 +538,25 @@ public abstract class AbstractQueryJCommandHandler
 
         return result;
     }
+
+
+    /**
+     * Retrieves whether to use template caching.
+     * @param parameters the parameter map.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean retrieveCaching(final Map parameters)
+    {
+        return (Boolean) parameters.get(ParameterValidationHandler.CACHING);
+    }
+
+    /**
+     * Retrieves the number of threads.
+     * @param parameters the parameter map.
+     * @return the number of threads to use.
+     */
+    protected int retrieveThreadCount(final Map parameters)
+    {
+        return (Integer) parameters.get(ParameterValidationHandler.THREAD_COUNT);
+    }
 }

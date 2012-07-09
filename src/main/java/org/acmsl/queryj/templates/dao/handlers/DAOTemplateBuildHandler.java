@@ -36,10 +36,10 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.dao.DAOTemplate;
-import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
@@ -59,7 +59,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler<DAOTemplate, DAOTemplateGenerator>
+    extends  BasePerTableTemplateBuildHandler<DAOTemplate, DAOTemplateFactory>
 {
     /**
      * Creates a <code>DAOTemplateBuildHandler</code> instance.
@@ -72,9 +72,9 @@ public class DAOTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected DAOTemplateGenerator retrieveTemplateFactory()
+    protected DAOTemplateFactory retrieveTemplateFactory()
     {
-        return DAOTemplateGenerator.getInstance();
+        return DAOTemplateFactory.getInstance();
     }
 
     /**

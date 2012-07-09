@@ -35,18 +35,13 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -54,12 +49,10 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -68,83 +61,16 @@ import java.util.Locale;
  */
 public class BaseDAOFactoryTemplateGenerator
     extends AbstractTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<BaseDAOFactoryTemplate>,
-                BasePerTableTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>,
-                Singleton
+    implements  BasePerTableTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link BaseDAOFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class BaseDAOFactoryTemplateGeneratorSingletonContainer
+    public BaseDAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final BaseDAOFactoryTemplateGenerator SINGLETON =
-            new BaseDAOFactoryTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected BaseDAOFactoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link BaseDAOFactoryTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static BaseDAOFactoryTemplateGenerator getInstance()
-    {
-        return BaseDAOFactoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * Creates a {@link BaseDAOFactoryTemplate} using given
-     * information.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param tableName the table name.
-     * @param staticContents the table static contents (optional).
-     * @return the fresh new template.
-     */
-    @NotNull
-    public BaseDAOFactoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new BaseDAOFactoryTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**

@@ -71,9 +71,9 @@ public class PkStatementSetterTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected PkStatementSetterTemplateGenerator retrieveTemplateGenerator()
+    protected PkStatementSetterTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return PkStatementSetterTemplateGenerator.getInstance();
+        return new PkStatementSetterTemplateGenerator(caching, threadCount);
     }
 
     /**

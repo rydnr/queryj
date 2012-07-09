@@ -36,31 +36,25 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -70,87 +64,23 @@ import java.util.Locale;
  */
 public class DAOFactoryTemplateGenerator
     extends AbstractTemplateGenerator<DAOFactoryTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<DAOFactoryTemplate>,
-                BasePerTableTemplateGenerator<DAOFactoryTemplate, BasePerTableTemplateContext>,
-                Singleton
+    implements BasePerTableTemplateGenerator<DAOFactoryTemplate, BasePerTableTemplateContext>
 {
-    /**
-     * Singleton implemented to avoid the double-checked locking.
-     */
-    private static class DAOFactoryTemplateGeneratorSingletonContainer
-    {
-        /**
-         * The actual singleton.
-         */
-        public static final DAOFactoryTemplateGenerator SINGLETON =
-            new DAOFactoryTemplateGenerator();
-    }
 
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Creates a new {@link DAOFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    protected DAOFactoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link DAOFactoryTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static DAOFactoryTemplateGenerator getInstance()
+    public DAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return DAOFactoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * Generates a DAOFactory template.
-     *
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param packageName the package name.
-     * @param projectPackage the project's base package name.
-     * @param repository the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker interfaces.
-     * @param jmx whether to include JMX support.
-     * @param jndiDataSource the JNDI location of the data source.
-     * @param tableName the table name.
-     * @param staticContents the static contents of the table (optional).
-     * @return a template.
-     */
-    @NotNull
-    public DAOFactoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiDataSource,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new DAOFactoryTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiDataSource,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**
      * {@inheritDoc}
      */
+    @Override
     @NotNull
     public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {

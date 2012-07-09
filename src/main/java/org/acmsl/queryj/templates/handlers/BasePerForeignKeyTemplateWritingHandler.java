@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.BasePerForeignKeyTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -65,7 +66,8 @@ import java.util.Map;
  */
 public abstract class BasePerForeignKeyTemplateWritingHandler
     <T extends BasePerForeignKeyTemplate<C>,
-     C extends BasePerForeignKeyTemplateContext>
+     C extends BasePerForeignKeyTemplateContext,
+     TG extends BasePerForeignKeyTemplateGenerator<T,C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -95,7 +97,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         {
             writeTemplates(
                 retrieveTemplates(parameters),
-                retrieveTemplateGenerator(),
+                retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
                 t_MetadataManager.getEngineName(),
                 retrieveCharset(parameters),
                 parameters);
@@ -163,10 +165,12 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
 
     /**
      * Retrieves the template generator.
+     * @param caching whether to enable template caching.
+     * @param threadCount the number of threads to use.
      * @return such instance.
      */
     @NotNull
-    protected abstract TemplateGenerator<T,C> retrieveTemplateGenerator();
+    protected abstract TG retrieveTemplateGenerator(final boolean caching, final int threadCount);
 
     /**
      * Retrieves the output dir from the attribute map.

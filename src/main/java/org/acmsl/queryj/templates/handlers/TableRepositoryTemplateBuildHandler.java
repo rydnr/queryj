@@ -38,7 +38,7 @@ package org.acmsl.queryj.templates.handlers;
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TableRepositoryTemplate;
-import org.acmsl.queryj.templates.TableRepositoryTemplateGenerator;
+import org.acmsl.queryj.templates.TableRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -58,16 +58,16 @@ import java.util.Map;
  */
 public class TableRepositoryTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
-                 <TableRepositoryTemplate, TableRepositoryTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <TableRepositoryTemplate, TableRepositoryTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Retrieves the per-repository template factory.
      * @return such instance.
      */
     @NotNull
-    protected TableRepositoryTemplateGenerator retrieveTemplateFactory()
+    protected TableRepositoryTemplateFactory retrieveTemplateFactory()
     {
-        return TableRepositoryTemplateGenerator.getInstance();
+        return TableRepositoryTemplateFactory.getInstance();
     }
 
     /**

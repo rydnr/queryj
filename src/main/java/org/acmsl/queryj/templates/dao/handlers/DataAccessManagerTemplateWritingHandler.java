@@ -73,9 +73,9 @@ public class DataAccessManagerTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected DataAccessManagerTemplateGenerator retrieveTemplateGenerator()
+    protected DataAccessManagerTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return DataAccessManagerTemplateGenerator.getInstance();
+        return new DataAccessManagerTemplateGenerator(caching, threadCount);
     }
 
     /**

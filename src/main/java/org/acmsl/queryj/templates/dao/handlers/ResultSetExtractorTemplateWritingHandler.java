@@ -74,9 +74,9 @@ public class ResultSetExtractorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected ResultSetExtractorTemplateGenerator retrieveTemplateGenerator()
+    protected ResultSetExtractorTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return ResultSetExtractorTemplateGenerator.getInstance();
+        return new ResultSetExtractorTemplateGenerator(caching, threadCount);
     }
 
     /**

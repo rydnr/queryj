@@ -36,27 +36,14 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate dataAccessContext-local.xml templates.
@@ -64,69 +51,16 @@ import java.util.List;
  */
 public class DataAccessContextLocalTemplateGenerator
     extends AbstractTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>
-    implements BasePerRepositoryTemplateFactory<DataAccessContextLocalTemplate>,
-                BasePerRepositoryTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>,
-                Singleton
-{
-    /**
-     * Singleton implemented to avoid the double-checked locking.
-     */
-    private static class DataAccessContextLocalTemplateGeneratorSingletonContainer
+    implements BasePerRepositoryTemplateGenerator<DataAccessContextLocalTemplate, BasePerRepositoryTemplateContext>
     {
-        /**
-         * The actual singleton.
-         */
-        public static final DataAccessContextLocalTemplateGenerator SINGLETON =
-            new DataAccessContextLocalTemplateGenerator();
-    }
-
     /**
-     * Protected constructor to avoid accidental instantiation.
+     * Creates a new {@link DataAccessContextLocalTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    protected DataAccessContextLocalTemplateGenerator() {}
-
-    /**
-     * Retrieves a DataAccessContextLocalTemplateGenerator instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static DataAccessContextLocalTemplateGenerator getInstance()
+    public DataAccessContextLocalTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return DataAccessContextLocalTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    @SuppressWarnings("unused")
-    public DataAccessContextLocalTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new DataAccessContextLocalTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
+        super(caching, threadCount);
     }
 
     /**

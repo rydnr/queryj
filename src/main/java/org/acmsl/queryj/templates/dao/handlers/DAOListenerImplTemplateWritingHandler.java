@@ -72,9 +72,9 @@ public class DAOListenerImplTemplateWritingHandler
      * {@inheritDoc}
      */
     @NotNull
-    protected DAOListenerImplTemplateGenerator retrieveTemplateGenerator()
+    protected DAOListenerImplTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return DAOListenerImplTemplateGenerator.getInstance();
+        return new DAOListenerImplTemplateGenerator(caching, threadCount);
     }
 
     /**

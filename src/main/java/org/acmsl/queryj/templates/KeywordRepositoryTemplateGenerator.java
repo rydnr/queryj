@@ -36,21 +36,12 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /**
  * Is able to generate keyword repositories template according to
@@ -59,68 +50,16 @@ import java.util.List;
  */
 public class KeywordRepositoryTemplateGenerator
     extends AbstractTemplateGenerator<KeywordRepositoryTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<KeywordRepositoryTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<KeywordRepositoryTemplate>,
-                Singleton
+    implements  BasePerRepositoryTemplateGenerator<KeywordRepositoryTemplate, BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a {@link KeywordRepositoryTemplateGenerator} with given settings.
+     * @param caching whether to use caching.
+     * @param threadCount the number of threads available.
      */
-    private static class KeywordRepositoryTemplateGeneratorSingletonContainer
+    public KeywordRepositoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final KeywordRepositoryTemplateGenerator SINGLETON =
-            new KeywordRepositoryTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected KeywordRepositoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link KeywordRepositoryTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static KeywordRepositoryTemplateGenerator getInstance()
-    {
-        return KeywordRepositoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public KeywordRepositoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new KeywordRepositoryTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
+        super(caching, threadCount);
     }
 
     /**

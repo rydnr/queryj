@@ -36,10 +36,10 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.FkStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.templates.dao.FkStatementSetterTemplate;
-import org.acmsl.queryj.templates.dao.FkStatementSetterTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerForeignKeyTemplateBuildHandler;
 import org.acmsl.queryj.templates.handlers.TemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
@@ -61,7 +61,7 @@ import java.util.Map;
  */
 public class FkStatementSetterTemplateBuildHandler
     extends BasePerForeignKeyTemplateBuildHandler
-                <FkStatementSetterTemplate, FkStatementSetterTemplateGenerator, BasePerForeignKeyTemplateContext>
+                <FkStatementSetterTemplate, FkStatementSetterTemplateFactory, BasePerForeignKeyTemplateContext>
     implements TemplateBuildHandler
 {
     /**
@@ -75,9 +75,9 @@ public class FkStatementSetterTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected FkStatementSetterTemplateGenerator retrieveTemplateFactory()
+    protected FkStatementSetterTemplateFactory retrieveTemplateFactory()
     {
-        return FkStatementSetterTemplateGenerator.getInstance();
+        return FkStatementSetterTemplateFactory.getInstance();
     }
 
     /**

@@ -72,9 +72,9 @@ public class DAOChooserTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected DAOChooserTemplateGenerator retrieveTemplateGenerator()
+    protected DAOChooserTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return DAOChooserTemplateGenerator.getInstance();
+        return new DAOChooserTemplateGenerator(caching, threadCount);
     }
 
     /**

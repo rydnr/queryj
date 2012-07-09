@@ -35,6 +35,8 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
+import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
@@ -64,7 +66,9 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public abstract class BasePerCustomResultTemplateWritingHandler
-    <T extends BasePerCustomResultTemplate<C>, C extends BasePerCustomResultTemplateContext>
+    <T extends BasePerCustomResultTemplate<C>,
+        C extends BasePerCustomResultTemplateContext,
+        TG extends BasePerCustomResultTemplateGenerator<T,C>>
     extends    AbstractQueryJCommandHandler
     implements TemplateWritingHandler
 {
@@ -106,7 +110,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     {
         writeTemplates(
             retrieveTemplates(parameters),
-            retrieveTemplateGenerator(),
+            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
             retrieveCustomSqlProvider(parameters),
             metadataManager,
             metadataManager.getEngineName(),
@@ -168,9 +172,12 @@ public abstract class BasePerCustomResultTemplateWritingHandler
 
     /**
      * Retrieves the template generator.
+     * @param caching whether to enable template caching.
+     * @param threadCount the number of threads to use.
      * @return such instance.
      */
-    protected abstract TemplateGenerator<T,C> retrieveTemplateGenerator();
+    protected abstract TG retrieveTemplateGenerator(
+        final boolean caching, final int threadCount);
 
     /**
      * Retrieves the templates from the attribute map.

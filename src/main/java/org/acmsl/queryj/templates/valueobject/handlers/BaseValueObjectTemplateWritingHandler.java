@@ -74,9 +74,9 @@ public class BaseValueObjectTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BaseValueObjectTemplateGenerator retrieveTemplateGenerator()
+    protected BaseValueObjectTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return BaseValueObjectTemplateGenerator.getInstance();
+        return new BaseValueObjectTemplateGenerator(caching, threadCount);
     }
 
     /**

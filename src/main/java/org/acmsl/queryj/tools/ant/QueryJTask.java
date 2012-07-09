@@ -92,6 +92,16 @@ public class QueryJTask
     private AntExternallyManagedFieldsElement m__ExternallyManagedFields;
 
     /**
+     * The number of threads.
+     */
+    private int m__iThreadCount;
+
+    /**
+     * Whether template caching is enabled.
+     */
+    private boolean m__bCaching;
+
+    /**
      * Creates a {@link QueryJTask} instance.
      */
     public QueryJTask()
@@ -1402,6 +1412,62 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to enable template caching or not.
+     * @param caching such condition.
+     */
+    protected final void immutableSetCaching(final boolean caching)
+    {
+        m__bCaching = caching;
+    }
+
+    /**
+     * Specifies whether to enable template caching or not.
+     * @param caching such condition.
+     */
+    public void setCaching(final boolean caching)
+    {
+        immutableSetCaching(caching);
+    }
+
+    /**
+     * Retrieves whether to template caching is enabled or not.
+     * @return such condition.
+     */
+    @SuppressWarnings("unused")
+    public boolean isCaching()
+    {
+        return m__bCaching;
+    }
+
+    /**
+     * Specifies the thread count.
+     * @param threadCount such value.
+     */
+    protected final void immutableSetThreadCount(final int threadCount)
+    {
+        m__iThreadCount = threadCount;
+    }
+
+    /**
+     * Specifies the thread count.
+     * @param threadCount such value.
+     */
+    public void setThreadCount(final int threadCount)
+    {
+        immutableSetThreadCount(threadCount);
+    }
+
+    /**
+     * Retrieves the thread count.
+     * @return such value.
+     */
+    @SuppressWarnings("unused")
+    public int getThreadCount()
+    {
+        return m__iThreadCount;
+    }
+
+    /**
      * Customizes <code>QueryJChain</code> to get parameters from Ant.
      * @author <a href="mailto:chous@acm-sl.org"
                >Jose San Leandro</a>
@@ -1460,36 +1526,41 @@ public class QueryJTask
          * forms of the table names.
          * @param grammarSuffix the grammar suffix.
          * @param encoding the file encoding.
+         * @param caching whether template caching is enabled or not.
+         * @param threadCount the thread count.
          */
+        @Override
         protected void mapAttributes(
-            final Map attributes,
-            final String driver,
-            final String url,
-            final String username,
-            final String password,
-            final String catalog,
-            final String schema,
-            final String repository,
-            final String packageName,
-            final File outputdir,
-            final File header,
+            @Nullable final Map attributes,
+            @Nullable final String driver,
+            @Nullable final String url,
+            @Nullable final String username,
+            @Nullable final String password,
+            @Nullable final String catalog,
+            @Nullable final String schema,
+            @Nullable final String repository,
+            @Nullable final String packageName,
+            @Nullable final File outputdir,
+            @Nullable final File header,
             final boolean outputdirsubfolders,
             final boolean extractTables,
             final boolean extractProcedures,
             final boolean extractFunctions,
-            final String jndiDataSource,
+            @Nullable final String jndiDataSource,
             final boolean generateMockDAOImplementation,
             final boolean generateXmlDAOImplementation,
             final boolean generateTests,
             final boolean allowEmptyRepositoryDAO,
             final boolean implementMarkerInterfaces,
-            final String customSqlModel,
+            @Nullable final String customSqlModel,
             final boolean disableCustomSqlValidation,
-            final File sqlXmlFile,
-            final File grammarFolder,
-            final String grammarName,
-            final String grammarSuffix,
-            final String encoding)
+            @Nullable final File sqlXmlFile,
+            @Nullable final File grammarFolder,
+            @Nullable final String grammarName,
+            @Nullable final String grammarSuffix,
+            @Nullable final String encoding,
+            final boolean caching,
+            final int threadCount)
         {
             super.mapAttributes(
                 attributes,
@@ -1519,7 +1590,9 @@ public class QueryJTask
                 grammarFolder,
                 grammarName,
                 grammarSuffix,
-                encoding);
+                encoding,
+                caching,
+                threadCount);
 
             mapAttributes(
                 attributes,

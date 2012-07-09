@@ -121,7 +121,7 @@ public abstract class BasePerTableTemplateWritingHandler
             engineName,
             parameters,
             retrieveCharset(parameters),
-            retrieveTemplateGenerator());
+            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)));
     }
             
     /**
@@ -170,10 +170,12 @@ public abstract class BasePerTableTemplateWritingHandler
 
     /**
      * Retrieves the template generator.
+     * @param caching whether to enable template caching.
+     * @param threadCount the number of threads to use.
      * @return such instance.
      */
     @NotNull
-    protected abstract TG retrieveTemplateGenerator();
+    protected abstract TG retrieveTemplateGenerator(final boolean caching, final int threadCount);
 
     /**
      * Retrieves the templates from the attribute map.

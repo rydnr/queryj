@@ -74,9 +74,10 @@ public class AttributesStatementSetterTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected AttributesStatementSetterTemplateGenerator retrieveTemplateGenerator()
+    protected AttributesStatementSetterTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return AttributesStatementSetterTemplateGenerator.getInstance();
+        return new AttributesStatementSetterTemplateGenerator(caching, threadCount);
     }
 
     /**

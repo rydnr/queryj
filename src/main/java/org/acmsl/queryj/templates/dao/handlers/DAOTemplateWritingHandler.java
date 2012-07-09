@@ -73,9 +73,9 @@ public class DAOTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected DAOTemplateGenerator retrieveTemplateGenerator()
+    protected DAOTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return DAOTemplateGenerator.getInstance();
+        return new DAOTemplateGenerator(caching, threadCount);
     }
 
     /**

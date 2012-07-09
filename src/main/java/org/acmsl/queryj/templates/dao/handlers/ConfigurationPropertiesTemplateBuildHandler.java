@@ -37,10 +37,10 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplate;
-import org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
@@ -61,22 +61,22 @@ import java.util.Map;
 public class ConfigurationPropertiesTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <ConfigurationPropertiesTemplate,
-                     ConfigurationPropertiesTemplateGenerator, BasePerRepositoryTemplateContext>
+                     ConfigurationPropertiesTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a <code>ConfigurationPropertiesTemplateBuildHandler</code>
      * instance.
      */
-    public ConfigurationPropertiesTemplateBuildHandler() {};
+    public ConfigurationPropertiesTemplateBuildHandler() {}
 
     /**
      * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected ConfigurationPropertiesTemplateGenerator retrieveTemplateFactory()
+    protected ConfigurationPropertiesTemplateFactory retrieveTemplateFactory()
     {
-        return ConfigurationPropertiesTemplateGenerator.getInstance();
+        return ConfigurationPropertiesTemplateFactory.getInstance();
     }
 
     /**

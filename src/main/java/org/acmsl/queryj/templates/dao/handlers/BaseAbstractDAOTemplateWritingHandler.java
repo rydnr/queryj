@@ -74,9 +74,9 @@ public class BaseAbstractDAOTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected BaseAbstractDAOTemplateGenerator retrieveTemplateGenerator()
+    protected BaseAbstractDAOTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return BaseAbstractDAOTemplateGenerator.getInstance();
+        return new BaseAbstractDAOTemplateGenerator(caching, threadCount);
     }
 
     /**

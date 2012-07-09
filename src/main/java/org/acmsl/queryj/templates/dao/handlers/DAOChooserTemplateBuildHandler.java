@@ -36,10 +36,10 @@ package org.acmsl.queryj.templates.dao.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.templates.dao.DAOChooserTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.DAOChooserTemplate;
-import org.acmsl.queryj.templates.dao.DAOChooserTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
@@ -59,7 +59,7 @@ import java.util.Map;
  */
 public class DAOChooserTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
-                 <DAOChooserTemplate, DAOChooserTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <DAOChooserTemplate, DAOChooserTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a DAOChooserTemplateBuildHandler.
@@ -82,9 +82,9 @@ public class DAOChooserTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected DAOChooserTemplateGenerator retrieveTemplateFactory()
+    protected DAOChooserTemplateFactory retrieveTemplateFactory()
     {
-        return DAOChooserTemplateGenerator.getInstance();
+        return DAOChooserTemplateFactory.getInstance();
     }
 
     /**

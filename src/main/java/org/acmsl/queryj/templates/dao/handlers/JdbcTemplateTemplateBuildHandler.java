@@ -45,7 +45,7 @@ import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.templates.dao.JdbcTemplateTemplate;
-import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateGenerator;
+import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -68,7 +68,7 @@ import java.util.Map;
 public class JdbcTemplateTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <JdbcTemplateTemplate,
-                     JdbcTemplateTemplateGenerator, BasePerRepositoryTemplateContext>
+                     JdbcTemplateTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -85,9 +85,9 @@ public class JdbcTemplateTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected JdbcTemplateTemplateGenerator retrieveTemplateFactory()
+    protected JdbcTemplateTemplateFactory retrieveTemplateFactory()
     {
-        return JdbcTemplateTemplateGenerator.getInstance();
+        return JdbcTemplateTemplateFactory.getInstance();
     }
 
     /**

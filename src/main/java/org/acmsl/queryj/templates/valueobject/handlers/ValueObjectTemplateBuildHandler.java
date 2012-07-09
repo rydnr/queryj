@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplate;
@@ -58,7 +59,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class ValueObjectTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler<ValueObjectTemplate, ValueObjectTemplateGenerator>
+    extends  BasePerTableTemplateBuildHandler<ValueObjectTemplate, ValueObjectTemplateFactory>
 {
     /**
      * Creates a <code>ValueObjectTemplateBuildHandler</code> instance.
@@ -70,9 +71,9 @@ public class ValueObjectTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected ValueObjectTemplateGenerator retrieveTemplateFactory()
+    protected ValueObjectTemplateFactory retrieveTemplateFactory()
     {
-        return ValueObjectTemplateGenerator.getInstance();
+        return ValueObjectTemplateFactory.getInstance();
     }
 
     /**

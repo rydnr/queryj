@@ -76,9 +76,10 @@ public class StatisticsProviderTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected StatisticsProviderTemplateGenerator retrieveTemplateGenerator()
+    protected StatisticsProviderTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return StatisticsProviderTemplateGenerator.getInstance();
+        return new StatisticsProviderTemplateGenerator(caching, threadCount);
     }
 
     /**

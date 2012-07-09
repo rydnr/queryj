@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplate;
 import org.acmsl.queryj.templates.valueobject.CustomValueObjectTemplateGenerator;
@@ -61,7 +62,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class CustomValueObjectTemplateBuildHandler
-    extends  BasePerCustomResultTemplateBuildHandler<CustomValueObjectTemplate, CustomValueObjectTemplateGenerator>
+    extends  BasePerCustomResultTemplateBuildHandler<CustomValueObjectTemplate, CustomValueObjectTemplateFactory>
 {
     /**
      * Creates a CustomValueObjectTemplateBuildHandler.
@@ -73,9 +74,9 @@ public class CustomValueObjectTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected CustomValueObjectTemplateGenerator retrieveTemplateFactory()
+    protected CustomValueObjectTemplateFactory retrieveTemplateFactory()
     {
-        return new CustomValueObjectTemplateGenerator();
+        return CustomValueObjectTemplateFactory.getInstance();
     }
 
     /**

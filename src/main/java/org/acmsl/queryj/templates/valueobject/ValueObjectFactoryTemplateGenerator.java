@@ -35,19 +35,14 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -55,9 +50,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Is able to generate base DAO factories.
@@ -65,83 +57,16 @@ import java.util.List;
  */
 public class ValueObjectFactoryTemplateGenerator
     extends AbstractTemplateGenerator<ValueObjectFactoryTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<ValueObjectFactoryTemplate>,
-                BasePerTableTemplateGenerator<ValueObjectFactoryTemplate, BasePerTableTemplateContext>,
-                Singleton
+    implements  BasePerTableTemplateGenerator<ValueObjectFactoryTemplate, BasePerTableTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link ValueObjectFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class ValueObjectFactoryTemplateGeneratorSingletonContainer
+    public ValueObjectFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final ValueObjectFactoryTemplateGenerator SINGLETON =
-            new ValueObjectFactoryTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected ValueObjectFactoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link ValueObjectFactoryTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static ValueObjectFactoryTemplateGenerator getInstance()
-    {
-        return ValueObjectFactoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * Creates a {@link ValueObjectFactoryTemplate} using given
-     * information.
-     * @param metadataManager the database metadata manager.
-     * @param customSqlProvider the CustomSqlProvider instance.
-     * @param packageName the package name.
-     * @param basePackageName the base package name.
-     * @param repositoryName the repository name.
-     * @param header the header.
-     * @param implementMarkerInterfaces whether to implement marker
-     * interfaces.
-     * @param jmx whether to includu JMX support.
-     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
-     * @param tableName the table name.
-     * @param staticContents the table's static contents (optional).
-     * @return the fresh new template.
-     */
-    @NotNull
-    public ValueObjectFactoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new ValueObjectFactoryTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**
@@ -159,6 +84,7 @@ public class ValueObjectFactoryTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
+    @Override
     public String retrieveTemplateFileName(@NotNull BasePerTableTemplateContext context)
     {
         return

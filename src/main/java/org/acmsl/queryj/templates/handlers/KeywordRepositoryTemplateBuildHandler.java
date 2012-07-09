@@ -36,6 +36,8 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.templates.KeywordRepositoryTemplateFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.ant.AntExternallyManagedFieldsElement;
 import org.acmsl.queryj.tools.ant.AntFieldElement;
@@ -44,7 +46,6 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.KeywordRepositoryTemplate;
-import org.acmsl.queryj.templates.KeywordRepositoryTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
 
@@ -73,17 +74,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class KeywordRepositoryTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
-                 <KeywordRepositoryTemplate, KeywordRepositoryTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <KeywordRepositoryTemplate, KeywordRepositoryTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
-     * Retrieves the per-repository template factory.
-     * @return such instance.
+     * {@inheritDoc}
      */
     @NotNull
     @Override
-    protected KeywordRepositoryTemplateGenerator retrieveTemplateFactory()
+    protected KeywordRepositoryTemplateFactory retrieveTemplateFactory()
     {
-        return KeywordRepositoryTemplateGenerator.getInstance();
+        return KeywordRepositoryTemplateFactory.getInstance();
     }
 
     /**
@@ -94,7 +94,8 @@ public class KeywordRepositoryTemplateBuildHandler
     protected KeywordRepositoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final KeywordRepositoryTemplateGenerator templateFactory,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final KeywordRepositoryTemplateFactory templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
@@ -110,6 +111,7 @@ public class KeywordRepositoryTemplateBuildHandler
             templateFactory.createTemplate(
                 metadataManager,
                 customSqlProvider,
+                decoratorFactory,
                 packageName,
                 projectPackage,
                 repository,

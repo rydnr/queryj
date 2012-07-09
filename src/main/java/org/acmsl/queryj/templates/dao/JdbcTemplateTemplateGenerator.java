@@ -28,11 +28,11 @@
 
  ******************************************************************************
  *
- * Filename: BaseResultSetExtractorTemplateGenerator.java
+ * Filename: JdbcTemplateTemplateGenerator.java
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to generate BaseResultSetExtractor
+ * Description: Is able to generate JdbcTemplateTemplate
  *              implementations.
  *
  */
@@ -41,105 +41,41 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-
-import org.acmsl.commons.patterns.Singleton;
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-/*
- * Importing some ACM-SL classes.
- */
 /*
  * Importing some JetBrains annotations.
  */
-/*
- * Importing some JDK classes.
- */
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Is able to generate JdbcTemplate implementations.
+ * Is able to generate {@link JdbcTemplateTemplate} implementations.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/01 (recovered)
  */
 public class JdbcTemplateTemplateGenerator
     extends AbstractTemplateGenerator<JdbcTemplateTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<JdbcTemplateTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<JdbcTemplateTemplate>,
-                Singleton
+    implements  BasePerRepositoryTemplateGenerator<JdbcTemplateTemplate, BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link JdbcTemplateTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class JdbcTemplateTemplateGeneratorSingletonContainer
+    public JdbcTemplateTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final JdbcTemplateTemplateGenerator SINGLETON =
-            new JdbcTemplateTemplateGenerator();
-    }
-
-    /**
-     * Default constructor.
-     */
-    public JdbcTemplateTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link org.acmsl.queryj.templates.dao.JdbcTemplateTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static JdbcTemplateTemplateGenerator getInstance()
-    {
-        return JdbcTemplateTemplateGeneratorSingletonContainer.SINGLETON;
+        super(caching, threadCount);
     }
 
     /**
      * {@inheritDoc}
      */
-    @NotNull
     @Override
-    public JdbcTemplateTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new JdbcTemplateTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @NotNull
-    public String retrieveTemplateFileName(@NotNull BasePerRepositoryTemplateContext context)
+    public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
         return retrieveTemplateFileName(context, DecorationUtils.getInstance());
     }

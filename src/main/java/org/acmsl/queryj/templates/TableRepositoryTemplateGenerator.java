@@ -34,25 +34,9 @@
 package org.acmsl.queryj.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.MetadataManager;
-
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.commons.patterns.Singleton;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate Table repositories according to database metadata.
@@ -60,68 +44,16 @@ import java.util.List;
  */
 public class TableRepositoryTemplateGenerator
     extends  AbstractTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<TableRepositoryTemplate>,
-                Singleton
+    implements  BasePerRepositoryTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link TableRepositoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class TableRepositoryTemplateGeneratorSingletonContainer
+    public TableRepositoryTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final TableRepositoryTemplateGenerator SINGLETON =
-            new TableRepositoryTemplateGenerator();
-    }
-
-    /**
-     * Default constructor.
-     */
-    public TableRepositoryTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link TableRepositoryTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static TableRepositoryTemplateGenerator getInstance()
-    {
-        return TableRepositoryTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public TableRepositoryTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new TableRepositoryTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
+        super(caching, threadCount);
     }
 
     /**

@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.PkStatementSetterTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.dao.PkStatementSetterTemplate;
@@ -58,7 +59,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class PkStatementSetterTemplateBuildHandler
-    extends  BasePerTableTemplateBuildHandler<PkStatementSetterTemplate, PkStatementSetterTemplateGenerator>
+    extends  BasePerTableTemplateBuildHandler<PkStatementSetterTemplate, PkStatementSetterTemplateFactory>
 {
     /**
      * Creates a <code>PkStatementSetterTemplateBuildHandler</code>
@@ -71,9 +72,9 @@ public class PkStatementSetterTemplateBuildHandler
      * @return such instance.
      */
     @NotNull
-    protected PkStatementSetterTemplateGenerator retrieveTemplateFactory()
+    protected PkStatementSetterTemplateFactory retrieveTemplateFactory()
     {
-        return PkStatementSetterTemplateGenerator.getInstance();
+        return PkStatementSetterTemplateFactory.getInstance();
     }
 
     /**

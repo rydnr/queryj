@@ -53,6 +53,7 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateFactory;
+import org.acmsl.queryj.templates.BasePerForeignKeyTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -66,66 +67,16 @@ import java.util.Locale;
  */
 public class FkStatementSetterTemplateGenerator
     extends AbstractTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
-    implements BasePerForeignKeyTemplateFactory<FkStatementSetterTemplate>,
-               Singleton
+    implements BasePerForeignKeyTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link FkStatementSetterTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class FkStatementSetterTemplateGeneratorSingletonContainer
+    public FkStatementSetterTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final FkStatementSetterTemplateGenerator SINGLETON =
-            new FkStatementSetterTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected FkStatementSetterTemplateGenerator() {}
-
-    /**
-     * Retrieves a FkStatementSetterTemplateGenerator instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static FkStatementSetterTemplateGenerator getInstance()
-    {
-        return FkStatementSetterTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public FkStatementSetterTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final ForeignKey foreignKey)
-    {
-        return
-            new FkStatementSetterTemplate(
-                new BasePerForeignKeyTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    foreignKey));
+        super(caching, threadCount);
     }
 
     /**

@@ -43,7 +43,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplate;
-import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
@@ -66,7 +66,7 @@ import java.util.Map;
 public class BaseResultSetExtractorTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <BaseResultSetExtractorTemplate,
-                     BaseResultSetExtractorTemplateGenerator, BasePerRepositoryTemplateContext>
+                     BaseResultSetExtractorTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Checks whether template generation is enabled for this kind of template.
@@ -84,9 +84,9 @@ public class BaseResultSetExtractorTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected BaseResultSetExtractorTemplateGenerator retrieveTemplateFactory()
+    protected BaseResultSetExtractorTemplateFactory retrieveTemplateFactory()
     {
-        return BaseResultSetExtractorTemplateGenerator.getInstance();
+        return BaseResultSetExtractorTemplateFactory.getInstance();
     }
 
     /**

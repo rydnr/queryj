@@ -181,4 +181,14 @@ public interface QueryJSettings
      * The encoding.
      */
     public static final String ENCODING = PREFIX + "encoding";
+
+    /**
+     * Whether to use template caching.
+     */
+    public static final String DISABLE_CACHING = PREFIX + "disableCaching";
+
+    /**
+     * The thread count.
+     */
+    public static final String THREAD_COUNT = PREFIX + "threadCount";
 }

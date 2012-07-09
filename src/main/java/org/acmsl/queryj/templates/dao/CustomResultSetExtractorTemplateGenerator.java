@@ -52,6 +52,7 @@ import org.acmsl.commons.utils.StringUtils;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -60,67 +61,16 @@ import org.jetbrains.annotations.NotNull;
  */
 public class CustomResultSetExtractorTemplateGenerator
     extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
-    implements  BasePerCustomResultTemplateFactory<CustomResultSetExtractorTemplate>,
-                Singleton
+    implements BasePerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link CustomResultSetExtractorTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads.
      */
-    private static class CustomResultSetExtractorTemplateGeneratorSingletonContainer
+    public CustomResultSetExtractorTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final CustomResultSetExtractorTemplateGenerator SINGLETON =
-            new CustomResultSetExtractorTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected CustomResultSetExtractorTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link CustomResultSetExtractorTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static CustomResultSetExtractorTemplateGenerator getInstance()
-    {
-        return
-            CustomResultSetExtractorTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    public CustomResultSetExtractorTemplate createTemplate(
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final Result customResult)
-    {
-        return
-            new CustomResultSetExtractorTemplate(
-                new BasePerCustomResultTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    customResult));
+        super(caching, threadCount);
     }
 
     /**
@@ -128,6 +78,7 @@ public class CustomResultSetExtractorTemplateGenerator
      * @return such instance.
      */
     @NotNull
+    @Override
     public DecoratorFactory getDecoratorFactory()
     {
         return CustomResultSetExtractorDecoratorFactory.getInstance();

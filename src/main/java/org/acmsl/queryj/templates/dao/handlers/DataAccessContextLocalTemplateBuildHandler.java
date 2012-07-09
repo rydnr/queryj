@@ -35,16 +35,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplate;
-import org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
 
 /*
  * Importing some JDK classes.
@@ -52,7 +48,7 @@ import org.acmsl.queryj.templates.TemplateMappingManager;
 import java.util.Map;
 
 /*
- * Importing some Commons-Collection classes.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -62,7 +58,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DataAccessContextLocalTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
-                 <DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator, BasePerRepositoryTemplateContext>
+                 <DataAccessContextLocalTemplate, DataAccessContextLocalTemplateFactory, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a <code>DataAccessContextLocalTemplateBuildHandler</code>
@@ -75,9 +71,9 @@ public class DataAccessContextLocalTemplateBuildHandler
      */
     @NotNull
     @Override
-    protected DataAccessContextLocalTemplateGenerator retrieveTemplateFactory()
+    protected DataAccessContextLocalTemplateFactory retrieveTemplateFactory()
     {
-        return DataAccessContextLocalTemplateGenerator.getInstance();
+        return DataAccessContextLocalTemplateFactory.getInstance();
     }
 
     /**

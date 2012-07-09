@@ -64,7 +64,9 @@ import java.util.Map;
  */
 public class CustomValueObjectFactoryTemplateWritingHandler
     extends BasePerCustomResultTemplateWritingHandler
-                <CustomValueObjectFactoryTemplate, BasePerCustomResultTemplateContext>
+                <CustomValueObjectFactoryTemplate,
+                    BasePerCustomResultTemplateContext,
+                    CustomValueObjectFactoryTemplateGenerator>
 {
     /**
      * Creates a CustomValueObjectFactoryTemplateWritingHandler.
@@ -76,9 +78,10 @@ public class CustomValueObjectFactoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomValueObjectFactoryTemplateGenerator retrieveTemplateGenerator()
+    protected CustomValueObjectFactoryTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return new CustomValueObjectFactoryTemplateGenerator();
+        return new CustomValueObjectFactoryTemplateGenerator(caching, threadCount);
     }
 
     /**

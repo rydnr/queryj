@@ -74,9 +74,9 @@ public class ValueObjectImplTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected ValueObjectImplTemplateGenerator retrieveTemplateGenerator()
+    protected ValueObjectImplTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return ValueObjectImplTemplateGenerator.getInstance();
+        return new ValueObjectImplTemplateGenerator(caching, threadCount);
     }
 
     /**

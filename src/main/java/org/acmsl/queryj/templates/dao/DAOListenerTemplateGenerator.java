@@ -40,28 +40,15 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecorationUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.patterns.Singleton;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate DAO listeners from templates.
@@ -70,73 +57,22 @@ import java.util.List;
  */
 public class DAOListenerTemplateGenerator
     extends AbstractTemplateGenerator<DAOListenerTemplate, BasePerRepositoryTemplateContext>
-    implements  BasePerRepositoryTemplateGenerator<DAOListenerTemplate, BasePerRepositoryTemplateContext>,
-                BasePerRepositoryTemplateFactory<DAOListenerTemplate>,
-                Singleton
+    implements  BasePerRepositoryTemplateGenerator<DAOListenerTemplate, BasePerRepositoryTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link DAOListenerImplTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class DAOListenerTemplateGeneratorSingletonContainer
+    public DAOListenerTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final DAOListenerTemplateGenerator SINGLETON =
-            new DAOListenerTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected DAOListenerTemplateGenerator() {}
-
-    /**
-     * Retrieves a DAOListenerTemplateGenerator instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static DAOListenerTemplateGenerator getInstance()
-    {
-        return DAOListenerTemplateGeneratorSingletonContainer.SINGLETON;
+        super(caching, threadCount);
     }
 
     /**
      * {@inheritDoc}
      */
-    @NotNull
     @Override
-    public DAOListenerTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String projectPackage,
-        @NotNull final String repository,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
-    {
-        return
-            new DAOListenerTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @NotNull
     public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {

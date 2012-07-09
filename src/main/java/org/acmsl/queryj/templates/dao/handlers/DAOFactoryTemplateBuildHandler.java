@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.dao.DAOFactoryTemplate;
@@ -58,7 +59,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DAOFactoryTemplateBuildHandler
-    extends BasePerTableTemplateBuildHandler<DAOFactoryTemplate, DAOFactoryTemplateGenerator>
+    extends BasePerTableTemplateBuildHandler<DAOFactoryTemplate, DAOFactoryTemplateFactory>
 {
     /**
      * Creates a <code>DAOFactoryTemplateBuildHandler</code> instance.
@@ -71,9 +72,9 @@ public class DAOFactoryTemplateBuildHandler
      */
     @Override
     @NotNull
-    protected DAOFactoryTemplateGenerator retrieveTemplateFactory()
+    protected DAOFactoryTemplateFactory retrieveTemplateFactory()
     {
-        return DAOFactoryTemplateGenerator.getInstance();
+        return DAOFactoryTemplateFactory.getInstance();
     }
 
     /**

@@ -67,9 +67,9 @@ public class TableRepositoryTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected TableRepositoryTemplateGenerator retrieveTemplateGenerator()
+    protected TableRepositoryTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
     {
-        return TableRepositoryTemplateGenerator.getInstance();
+        return new TableRepositoryTemplateGenerator(caching, threadCount);
     }
 
     /**

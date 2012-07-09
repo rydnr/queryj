@@ -36,20 +36,14 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
-import org.acmsl.queryj.templates.MetaLanguageUtils;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -57,12 +51,10 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -72,76 +64,16 @@ import java.util.Locale;
  */
 public class BaseAbstractDAOTemplateGenerator
     extends AbstractTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>
-    implements BasePerTableTemplateFactory<BaseAbstractDAOTemplate>,
-               BasePerTableTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>,
-               Singleton
+    implements BasePerTableTemplateGenerator<BaseAbstractDAOTemplate, BasePerTableTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link BaseAbstractDAOTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class BaseAbstractDAOTemplateGeneratorSingletonContainer
+    public BaseAbstractDAOTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final BaseAbstractDAOTemplateGenerator SINGLETON =
-            new BaseAbstractDAOTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected BaseAbstractDAOTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link BaseAbstractDAOTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static BaseAbstractDAOTemplateGenerator getInstance()
-    {
-        return BaseAbstractDAOTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Nullable
-    public BaseAbstractDAOTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable List<Row> staticContents)
-    {
-        @Nullable BaseAbstractDAOTemplate result = null;
-
-        if  (isStaticTable(tableName, metadataManager))
-        {
-            result =
-                new BaseAbstractDAOTemplate(
-                    new BasePerTableTemplateContext(
-                        metadataManager,
-                        customSqlProvider,
-                        header,
-                        getDecoratorFactory(),
-                        packageName,
-                        basePackageName,
-                        repositoryName,
-                        implementMarkerInterfaces,
-                        jmx,
-                        jndiLocation,
-                        tableName,
-                        staticContents));
-        }
-
-        return result;
+        super(caching, threadCount);
     }
 
     /**
@@ -153,38 +85,6 @@ public class BaseAbstractDAOTemplateGenerator
     {
         // Reusing to avoid copy/paste.
         return BaseDAODecoratorFactory.getInstance();
-    }
-
-
-    /**
-     * Checks whether the table contains static values or not.
-     * @param tableName the table name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @return such information.
-     */
-    protected boolean isStaticTable(
-        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
-    {
-        return
-            isStaticTable(
-                tableName, metadataManager, MetaLanguageUtils.getInstance());
-    }
-
-    /**
-     * Checks whether the table contains static values or not.
-     * @param tableName the table name.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param metaLanguageUtils the {@link MetaLanguageUtils} instance.
-     * @return such information.
-     */
-    protected boolean isStaticTable(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetaLanguageUtils metaLanguageUtils)
-    {
-         return
-            metaLanguageUtils.containsStaticValues(
-                tableName, metadataManager);
     }
 
     /**

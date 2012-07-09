@@ -60,7 +60,8 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public class DataAccessContextLocalTemplateWritingHandler
-    extends  BasePerRepositoryTemplateWritingHandler<DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator, BasePerRepositoryTemplateContext>
+    extends  BasePerRepositoryTemplateWritingHandler<
+    DataAccessContextLocalTemplate, DataAccessContextLocalTemplateGenerator, BasePerRepositoryTemplateContext>
 {
     /**
      * Creates a DataAccessContextLocalTemplateWritingHandler.
@@ -72,9 +73,10 @@ public class DataAccessContextLocalTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected DataAccessContextLocalTemplateGenerator retrieveTemplateGenerator()
+    protected DataAccessContextLocalTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
-        return DataAccessContextLocalTemplateGenerator.getInstance();
+        return new DataAccessContextLocalTemplateGenerator(caching, threadCount);
     }
 
     /**

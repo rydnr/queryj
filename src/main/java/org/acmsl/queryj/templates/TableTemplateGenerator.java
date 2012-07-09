@@ -34,13 +34,6 @@
 package org.acmsl.queryj.templates;
 
 /*
- * Importing some project-specific classes.
- */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
-
-/*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.patterns.Singleton;
@@ -49,12 +42,6 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Is able to generate Table repositories according to database metadata.
@@ -62,70 +49,17 @@ import java.util.List;
  */
 public class TableTemplateGenerator
     extends  AbstractTemplateGenerator<TableTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<TableTemplate>,
-                BasePerTableTemplateGenerator<TableTemplate, BasePerTableTemplateContext>,
+    implements  BasePerTableTemplateGenerator<TableTemplate, BasePerTableTemplateContext>,
                 Singleton
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link TableRepositoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class TableTemplateGeneratorSingletonContainer
+    public TableTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final TableTemplateGenerator SINGLETON =
-            new TableTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected TableTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link TableTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static TableTemplateGenerator getInstance()
-    {
-        return TableTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public TableTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        final boolean implementMarkerInterfaces,
-        final boolean jmx,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new TableTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**

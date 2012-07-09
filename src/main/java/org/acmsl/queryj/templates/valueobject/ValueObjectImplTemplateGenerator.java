@@ -35,19 +35,14 @@ package org.acmsl.queryj.templates.valueobject;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
-import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -55,9 +50,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 /**
  * Is able to generate base DAO factories.
@@ -65,70 +57,16 @@ import java.util.List;
  */
 public class ValueObjectImplTemplateGenerator
     extends AbstractTemplateGenerator<ValueObjectImplTemplate, BasePerTableTemplateContext>
-    implements  BasePerTableTemplateFactory<ValueObjectImplTemplate>,
-                BasePerTableTemplateGenerator<ValueObjectImplTemplate, BasePerTableTemplateContext>,
-                Singleton
+    implements  BasePerTableTemplateGenerator<ValueObjectImplTemplate, BasePerTableTemplateContext>
 {
     /**
-     * Singleton implemented to avoid the double-checked locking.
+     * Creates a new {@link ValueObjectFactoryTemplateGenerator} with given settings.
+     * @param caching whether to enable caching.
+     * @param threadCount the number of threads to use.
      */
-    private static class ValueObjectImplTemplateGeneratorSingletonContainer
+    public ValueObjectImplTemplateGenerator(final boolean caching, final int threadCount)
     {
-        /**
-         * The actual singleton.
-         */
-        public static final ValueObjectImplTemplateGenerator SINGLETON =
-            new ValueObjectImplTemplateGenerator();
-    }
-
-    /**
-     * Protected constructor to avoid accidental instantiation.
-     */
-    protected ValueObjectImplTemplateGenerator() {}
-
-    /**
-     * Retrieves a {@link ValueObjectImplTemplateGenerator} instance.
-     * @return such instance.
-     */
-    @NotNull
-    public static ValueObjectImplTemplateGenerator getInstance()
-    {
-        return ValueObjectImplTemplateGeneratorSingletonContainer.SINGLETON;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    @NotNull
-    public ValueObjectImplTemplate createTemplate(
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String packageName,
-        @NotNull final String basePackageName,
-        @NotNull final String repositoryName,
-        @NotNull final String header,
-        final boolean jmx,
-        final boolean implementMarkerInterfaces,
-        @NotNull final String jndiLocation,
-        @NotNull final String tableName,
-        @Nullable final List<Row> staticContents)
-    {
-        return
-            new ValueObjectImplTemplate(
-                new BasePerTableTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    getDecoratorFactory(),
-                    packageName,
-                    basePackageName,
-                    repositoryName,
-                    implementMarkerInterfaces,
-                    jmx,
-                    jndiLocation,
-                    tableName,
-                    staticContents));
+        super(caching, threadCount);
     }
 
     /**
@@ -145,6 +83,7 @@ public class ValueObjectImplTemplateGenerator
      * {@inheritDoc}
      */
     @NotNull
+    @Override
     public String retrieveTemplateFileName(@NotNull final BasePerTableTemplateContext context)
     {
         return
