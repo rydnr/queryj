@@ -45,11 +45,6 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
 
 /*
- * Importing some Apache Commons-Logging classes.
- */
-import org.apache.commons.logging.Log;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
@@ -58,10 +53,10 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Common logic for template generators.
@@ -149,48 +144,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     }
 
     /**
-     * Serializes given template.
-     * @param template the template.
-     * @param outputFilePath the output file path.
-     */
-    protected void serializeTemplate(@NotNull final N template, @NotNull final String outputFilePath)
-    {
-        try
-        {
-            @NotNull final File outputFile = new File(outputFilePath);
-            @NotNull final File baseFolder = outputFile.getParentFile();
-
-            if (!baseFolder.exists())
-            {
-                if (!baseFolder.mkdirs())
-                {
-                    throw new IOException(baseFolder + " does not exist and cannot be created");
-                }
-            }
-
-            if (!baseFolder.canWrite())
-            {
-                throw new IOException(baseFolder + " is not writable");
-            }
-
-            ObjectOutputStream t_osCache =
-                new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
-
-            t_osCache.writeObject(template);
-        }
-        catch (@NotNull IOException cannotSerialize)
-        {
-            @NotNull final Log t_Log =
-                UniqueLogFactory.getLog(
-                    AbstractTemplateGenerator.class);
-
-            t_Log.warn(
-                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
-                cannotSerialize);
-        }
-    }
-
-    /**
      * Writes a table template to disk.
      * @param template the table template to write.
      * @param outputDir the output folder.
@@ -205,6 +158,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     {
         write(
             isCaching(),
+            getThreadCount(),
             template,
             retrieveTemplateFileName(template.getTemplateContext()),
             outputDir,
@@ -215,6 +169,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     /**
      * Writes a table template to disk.
      * @param caching whether to use caching or not.
+     * @param threadCount the maximum number of threads to use.
      * @param template the table template to write.
      * @param fileName the template's file name.
      * @param outputDir the output folder.
@@ -224,6 +179,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      */
     protected void write(
         final boolean caching,
+        final int threadCount,
         @NotNull final N template,
         @NotNull final String fileName,
         @NotNull final File outputDir,
@@ -231,52 +187,30 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final FileUtils fileUtils)
         throws  IOException
     {
-        Log t_Log =
-            UniqueLogFactory.getLog(
-                AbstractTemplateGenerator.class);
+        final AtomicInteger threadsCreated = new AtomicInteger(0);
 
-        String t_strOutputFile =
-            outputDir.getAbsolutePath()
-                + File.separator
-                + fileName;
-
-        if (caching)
+        while (threadsCreated.get() < threadCount)
         {
-            serializeTemplate(template, t_strOutputFile + ".ser");
-        }
-        String t_strFileContents = template.generate();
+            final CountDownLatch latch = new CountDownLatch(1);
 
-        if  (!"".equals(t_strFileContents))
-        {
-            boolean folderCreated = outputDir.mkdirs();
+            new TemplateGeneratorThread<N,C>(
+                template,
+                caching,
+                fileName,
+                outputDir,
+                charset,
+                fileUtils,
+                latch,
+                threadsCreated).start();
 
-            if (   (!folderCreated)
-                && (!outputDir.exists()))
+            try
             {
-                throw
-                    new IOException("Cannot create output dir: " + outputDir);
+                latch.await();
             }
-            else
+            catch (@NotNull final InterruptedException interruptedException)
             {
-                if (t_Log != null)
-                {
-                    t_Log.debug(
-                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                        + t_strOutputFile);
-                }
-
-                fileUtils.writeFile(
-                    t_strOutputFile,
-                    t_strFileContents,
-                    charset);
-            }
-        }
-        else
-        {
-            if (t_Log != null)
-            {
-                t_Log.debug(
-                    "Not writing " + t_strOutputFile + " since the generated content is empty");
+                UniqueLogFactory.getLog(AbstractTemplateGenerator.class).warn(
+                    "Generation thread interrupted", interruptedException);
             }
         }
     }

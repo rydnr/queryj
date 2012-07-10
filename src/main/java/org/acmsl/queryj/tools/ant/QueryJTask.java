@@ -92,16 +92,6 @@ public class QueryJTask
     private AntExternallyManagedFieldsElement m__ExternallyManagedFields;
 
     /**
-     * The number of threads.
-     */
-    private int m__iThreadCount;
-
-    /**
-     * Whether template caching is enabled.
-     */
-    private boolean m__bCaching;
-
-    /**
      * Creates a {@link QueryJTask} instance.
      */
     public QueryJTask()
@@ -1185,6 +1175,7 @@ public class QueryJTask
      * Retrieves the grammar bundle.
      * @return such information.
      */
+    @Nullable
     @SuppressWarnings("unused")
     public String getGrammarName()
     {
@@ -1225,6 +1216,7 @@ public class QueryJTask
      * Retrieves the grammar suffix.
      * @return such information.
      */
+    @Nullable
     @SuppressWarnings("unused")
     public String getGrammarSuffix()
     {
@@ -1412,49 +1404,21 @@ public class QueryJTask
     }
 
     /**
-     * Specifies whether to enable template caching or not.
-     * @param caching such condition.
-     */
-    protected final void immutableSetCaching(final boolean caching)
-    {
-        m__bCaching = caching;
-    }
-
-    /**
-     * Specifies whether to enable template caching or not.
-     * @param caching such condition.
-     */
-    public void setCaching(final boolean caching)
-    {
-        immutableSetCaching(caching);
-    }
-
-    /**
-     * Retrieves whether to template caching is enabled or not.
-     * @return such condition.
-     */
-    @SuppressWarnings("unused")
-    public boolean isCaching()
-    {
-        return m__bCaching;
-    }
-
-    /**
-     * Specifies the thread count.
-     * @param threadCount such value.
-     */
-    protected final void immutableSetThreadCount(final int threadCount)
-    {
-        m__iThreadCount = threadCount;
-    }
-
-    /**
      * Specifies the thread count.
      * @param threadCount such value.
      */
     public void setThreadCount(final int threadCount)
     {
-        immutableSetThreadCount(threadCount);
+        setThreadCount(getQueryJChain(), threadCount);
+    }
+
+    /**
+     * Specifies the thread count.
+     * @param threadCount such value.
+     */
+    protected void setThreadCount(@NotNull final QueryJChain delegee, final int threadCount)
+    {
+        delegee.setThreadCount(threadCount);
     }
 
     /**
@@ -1464,7 +1428,74 @@ public class QueryJTask
     @SuppressWarnings("unused")
     public int getThreadCount()
     {
-        return m__iThreadCount;
+        return getThreadCount(getQueryJChain());
+    }
+
+    /**
+     * Retrieves the thread count.
+     * @return such value.
+     */
+    @SuppressWarnings("unused")
+    protected int getThreadCount(@NotNull final QueryJChain delegee)
+    {
+        return delegee.getThreadCount();
+    }
+
+    /**
+     * Specifies whether to disable custom sql validation.
+     * @param disable such setting.
+     */
+    @SuppressWarnings("unused")
+    public void setDisableCaching(@NotNull final String disable)
+    {
+        setDisableCaching(getQueryJChain(), disable);
+    }
+
+    /**
+     * Specifies whether to disable custom sql validation.
+     * @param disable such setting.
+     */
+    @SuppressWarnings("unused")
+    public void setDisableCaching(@NotNull final QueryJChain delegee, @NotNull final String disable)
+    {
+        delegee.setDisableCaching(disable);
+    }
+
+    /**
+     * Retrieves whether to disable caching.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean isCaching()
+    {
+        return isCaching(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to disable caching.
+     * @return such setting.
+     */
+    protected boolean isCaching(final QueryJChain delegee)
+    {
+        return delegee.isCaching();
+    }
+
+    /**
+     * Specifies whether to enable caching or not.
+     * @param caching such condition.
+     */
+    public void setCaching(final boolean caching)
+    {
+        setCaching(getQueryJChain(), caching);
+    }
+
+    /**
+     * Specifies whether to enable caching or not.
+     * @param caching such condition.
+     */
+    protected void setCaching(@NotNull final QueryJChain delegee, final boolean caching)
+    {
+        delegee.setDisableCaching(!caching);
     }
 
     /**

@@ -255,7 +255,7 @@ public class QueryJMojo
      * Whether to use template caching.
      * @parameter property="disableCaching"
      */
-    private Boolean m__bDisableCaching;
+    private Boolean m__bDisableCaching = false;
 
     /**
      * Specifies the driver.

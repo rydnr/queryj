@@ -747,7 +747,7 @@ public class ParameterValidationHandler
             }
         }
 
-        if (threadCount < 0)
+        if (threadCount <= 0)
         {
             throw new QueryJBuildException(ILLEGAL_THREAD_COUNT);
         }

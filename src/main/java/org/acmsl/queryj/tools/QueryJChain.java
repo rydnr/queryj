@@ -2103,7 +2103,7 @@ public class QueryJChain
     }
 
     /**
-     * Specifies whether to disable custom sql validation.
+     * Specifies whether to disable caching.
      * @param disable such setting.
      */
     @SuppressWarnings("unused")
@@ -2112,6 +2112,18 @@ public class QueryJChain
         immutableSetDisableCaching(disable);
 
         setDisableCachingFlag(toBoolean(disable));
+    }
+
+    /**
+     * Specifies whether to disable caching.
+     * @param disable such setting.
+     */
+    @SuppressWarnings("unused")
+    public void setDisableCaching(final boolean disable)
+    {
+        immutableSetDisableCaching(Boolean.valueOf(disable).toString());
+
+        setDisableCachingFlag(disable);
     }
 
     /**
@@ -2189,7 +2201,7 @@ public class QueryJChain
      * @param threadCount such value.
      */
     @SuppressWarnings("unused")
-    protected void setThreadCount(final int threadCount)
+    public void setThreadCount(final int threadCount)
     {
         immutableSetThreadCount(threadCount);
     }
