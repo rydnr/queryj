@@ -532,6 +532,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         if  (t_Runtime != null)
         {
+            t_Runtime.removeShutdownHook(t_FinalizingThread);
             t_Runtime.addShutdownHook(t_FinalizingThread);
         }
     }

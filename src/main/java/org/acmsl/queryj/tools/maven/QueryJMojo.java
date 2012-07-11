@@ -66,11 +66,13 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.lang.reflect.Method;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Executes QueryJ.
@@ -1590,6 +1592,25 @@ public class QueryJMojo
             getLog().debug( "unable to get thread count for the current build: " + unexpectedError.getMessage());
         }
 
+//        if (   (result == 1)
+//            && (isMultithreadEnabled()))
+//        {
+//            result = Runtime.getRuntime().availableProcessors();
+//        }
+
         return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    protected boolean isMultithreadEnabled()
+    {
+        Set<Map.Entry> entrySet = (Set<Map.Entry>) super.getPluginContext().entrySet();
+
+        for (Map.Entry item : entrySet)
+        {
+            getLog().info(item.getKey() + " -> " + item.getValue());
+        }
+
+        return true;
     }
 }

@@ -56,6 +56,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -187,31 +189,34 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final FileUtils fileUtils)
         throws  IOException
     {
+        ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
+
         final AtomicInteger threadsCreated = new AtomicInteger(0);
 
-        while (threadsCreated.get() < threadCount)
+        final CountDownLatch doneLatch = new CountDownLatch(threadCount);
+
+        for (int index = 0; index < threadCount; index++)
         {
-            final CountDownLatch latch = new CountDownLatch(1);
+            threadPool.execute(
+                new TemplateGeneratorThread<N,C>(
+                    template,
+                    caching,
+                    fileName,
+                    outputDir,
+                    charset,
+                    fileUtils,
+                    doneLatch,
+                    threadsCreated));
+        }
 
-            new TemplateGeneratorThread<N,C>(
-                template,
-                caching,
-                fileName,
-                outputDir,
-                charset,
-                fileUtils,
-                latch,
-                threadsCreated).start();
-
-            try
-            {
-                latch.await();
-            }
-            catch (@NotNull final InterruptedException interruptedException)
-            {
-                UniqueLogFactory.getLog(AbstractTemplateGenerator.class).warn(
-                    "Generation thread interrupted", interruptedException);
-            }
+        try
+        {
+            doneLatch.await();
+        }
+        catch (@NotNull final InterruptedException interruptedException)
+        {
+            UniqueLogFactory.getLog(AbstractTemplateGenerator.class).warn(
+                "Generation thread interrupted", interruptedException);
         }
     }
 

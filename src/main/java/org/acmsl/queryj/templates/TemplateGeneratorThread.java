@@ -508,34 +508,22 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
         @NotNull AtomicInteger threadsCreated,
         @NotNull final Log log)
     {
-        latch.countDown();
-        synchronized (this)
+        try
         {
-            log.debug("threads created: " + threadsCreated.incrementAndGet());
+            generate(
+                template,
+                caching,
+                fileName,
+                outputDir,
+                charset,
+                fileUtils,
+                log);
 
-            try
-            {
-                generate(
-                    template,
-                    caching,
-                    fileName,
-                    outputDir,
-                    charset,
-                    fileUtils,
-                    log);
-            }
-            catch (@NotNull final IOException ioException)
-            {
-                log.warn(ioException);
-            }
-            try
-            {
-                wait();
-            }
-            catch (final InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
-            }
+            latch.countDown();
+        }
+        catch (@NotNull final IOException ioException)
+        {
+            log.warn(ioException);
         }
     }
 }
