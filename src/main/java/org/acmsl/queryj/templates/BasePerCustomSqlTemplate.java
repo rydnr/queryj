@@ -92,13 +92,14 @@ public abstract class BasePerCustomSqlTemplate<C extends BasePerCustomSqlTemplat
      * Builds the correct chain.
      *
      * @param context the context.
+     * @param relevantOnly whether to include only relevant placeholders.
      * @return the specific {@link FillTemplateChain}.
      */
     @NotNull
     @Override
     protected FillTemplateChain buildFillTemplateChain(
-        @NotNull final C context)
+        @NotNull final C context, final boolean relevantOnly)
     {
-        return new BasePerCustomSqlFillTemplateChain(context);
+        return new BasePerCustomSqlFillTemplateChain(context, relevantOnly);
     }
 }

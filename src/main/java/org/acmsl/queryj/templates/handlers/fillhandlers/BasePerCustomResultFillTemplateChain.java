@@ -68,25 +68,36 @@ public class BasePerCustomResultFillTemplateChain
     /**
      * Creates a {@link org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain} using given context.
      * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerCustomResultFillTemplateChain(@NotNull final BasePerCustomResultTemplateContext context)
+    public BasePerCustomResultFillTemplateChain(
+        @NotNull final BasePerCustomResultTemplateContext context,
+        final boolean relevantOnly)
     {
-        super(context);
+        super(context, relevantOnly);
     }
 
     /**
      * Adds additional per-custom-result handlers.
      * @param chain the chain to be configured.
      * @param context the {@link BasePerCustomResultTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
-    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerCustomResultTemplateContext context)
+    protected void addHandlers(
+        @NotNull final Chain chain,
+        @NotNull final BasePerCustomResultTemplateContext context,
+        final boolean relevantOnly)
     {
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultHandler,ResultDecorator>(
-                new CustomResultHandler(context)));
-        chain.add(
+                new CustomResultHandler(context)),
+            relevantOnly);
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultTypeImportsHandler,List<String>>(
-                new CustomResultTypeImportsHandler(context)));
+                new CustomResultTypeImportsHandler(context)),
+            relevantOnly);
     }
 }

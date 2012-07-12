@@ -68,22 +68,31 @@ public class BasePerRepositoryFillTemplateChain
     /**
      * Creates a {@link BasePerRepositoryFillTemplateChain} using given context.
      * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerRepositoryFillTemplateChain(@NotNull final BasePerRepositoryTemplateContext context)
+    public BasePerRepositoryFillTemplateChain(
+        @NotNull final BasePerRepositoryTemplateContext context,
+        final boolean relevantOnly)
     {
-        super(context);
+        super(context, relevantOnly);
     }
 
     /**
      * Adds additional per-repository handlers.
      * @param chain the chain to be configured.
      * @param context the {@link BasePerRepositoryTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
-    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerRepositoryTemplateContext context)
+    protected void addHandlers(
+        @NotNull final Chain chain,
+        @NotNull final BasePerRepositoryTemplateContext context,
+        final boolean relevantOnly)
     {
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<BasePerRepositoryTemplateContext,TableListHandler,List<TableDecorator>>(
-                new TableListHandler(context)));
+                new TableListHandler(context)),
+            relevantOnly);
     }
 }

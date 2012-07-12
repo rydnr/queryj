@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.templates.NonRelevantFillHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -54,6 +55,7 @@ import java.util.Locale;
  */
 public class TimestampHandler
     extends AbstractFillHandler<String>
+    implements NonRelevantFillHandler
 {
     /**
      * Retrieves the placeholder.

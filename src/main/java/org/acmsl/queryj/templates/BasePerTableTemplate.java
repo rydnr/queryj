@@ -104,8 +104,8 @@ public abstract class BasePerTableTemplate<C extends BasePerTableTemplateContext
     @NotNull
     @Override
     protected FillTemplateChain buildFillTemplateChain(
-        @NotNull final C context)
+        @NotNull final C context, final boolean relevantOnly)
     {
-        return new BasePerTableFillTemplateChain(context);
+        return new BasePerTableFillTemplateChain(context, relevantOnly);
     }
 }

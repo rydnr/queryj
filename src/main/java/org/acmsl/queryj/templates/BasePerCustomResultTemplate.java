@@ -75,13 +75,15 @@ public abstract class BasePerCustomResultTemplate<C extends BasePerCustomResultT
      * Builds the correct chain.
      *
      * @param context the context.
+     * @param relevantOnly whether to include only relevant placeholders.
      * @return the specific {@link FillTemplateChain}.
      */
     @NotNull
     @Override
-    protected FillTemplateChain buildFillTemplateChain(@NotNull final C context)
+    protected FillTemplateChain buildFillTemplateChain(
+        @NotNull final C context, final boolean relevantOnly)
     {
-        return new BasePerCustomResultFillTemplateChain(context);
+        return new BasePerCustomResultFillTemplateChain(context, relevantOnly);
     }
 
     /**

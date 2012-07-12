@@ -64,19 +64,27 @@ public class BasePerCustomSqlFillTemplateChain
     /**
      * Creates a {@link BasePerCustomSqlFillTemplateChain} using given context.
      * @param context the {@link BasePerCustomSqlTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerCustomSqlFillTemplateChain(@NotNull final BasePerCustomSqlTemplateContext context)
+    public BasePerCustomSqlFillTemplateChain(
+        @NotNull final BasePerCustomSqlTemplateContext context,
+        final boolean relevantOnly)
     {
-        super(context);
+        super(context, relevantOnly);
     }
 
     /**
      * Adds additional per-custom-sql handlers.
      * @param chain the chain to be configured.
      * @param context the {@link BasePerCustomSqlTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
+    @SuppressWarnings("unused")
     @Override
-    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerCustomSqlTemplateContext context)
+    protected void addHandlers(
+        @NotNull final Chain chain,
+        @NotNull final BasePerCustomSqlTemplateContext context,
+        final boolean relevantOnly)
     {
     }
 }

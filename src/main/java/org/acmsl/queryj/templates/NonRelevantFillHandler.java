@@ -23,40 +23,23 @@
 
  ******************************************************************************
  *
- * Filename: Template.java
+ * Filename: NonRelevantFillHandler.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents any kind of templates.
+ * Description: Marker interface for all non-mandatory fill handlers.
+ *
+ * Date: 7/12/12
+ * Time: 6:18 PM
  *
  */
 package org.acmsl.queryj.templates;
 
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
 /**
- * Represents any kind of templates.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Marker interface for all non-mandatory fill handlers.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/07/12
  */
-public interface Template<T extends TemplateContext>
+public interface NonRelevantFillHandler
 {
-    /**
-     * Retrieves the template context.
-     * @return such {@link TemplateContext} instance.
-     */
-    @NotNull
-    T getTemplateContext();
-
-    /**
-     * Generates the output source code.
-     * @param relevantOnly whether to include only relevant placeholders.
-     * @return such output.
-     * @throws InvalidTemplateException if the template cannot be generated.
-     */
-    @NotNull
-    String generate(final boolean relevantOnly)
-      throws  InvalidTemplateException;
 }

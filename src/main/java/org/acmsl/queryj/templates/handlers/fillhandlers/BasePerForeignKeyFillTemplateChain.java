@@ -68,25 +68,36 @@ public class BasePerForeignKeyFillTemplateChain
     /**
      * Creates a {@link BasePerForeignKeyFillTemplateChain} using given context.
      * @param context the {@link BasePerForeignKeyTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
-    public BasePerForeignKeyFillTemplateChain(@NotNull final BasePerForeignKeyTemplateContext context)
+    public BasePerForeignKeyFillTemplateChain(
+        @NotNull final BasePerForeignKeyTemplateContext context,
+        final boolean relevantOnly)
     {
-        super(context);
+        super(context, relevantOnly);
     }
 
     /**
      * Adds additional per-foreign-key handlers.
      * @param chain the chain to be configured.
      * @param context the {@link BasePerForeignKeyTemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
     @Override
-    protected void addHandlers(@NotNull final Chain chain, @NotNull final BasePerForeignKeyTemplateContext context)
+    protected void addHandlers(
+        @NotNull final Chain chain,
+        @NotNull final BasePerForeignKeyTemplateContext context,
+        final boolean relevantOnly)
     {
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext,ForeignKeyHandler,ForeignKeyDecorator>(
-                new ForeignKeyHandler(context)));
-        chain.add(
+                new ForeignKeyHandler(context)),
+            relevantOnly);
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<BasePerForeignKeyTemplateContext,ForeignKeyAttributeTypeImportsHandler,List<String>>(
-                new ForeignKeyAttributeTypeImportsHandler(context)));
+                new ForeignKeyAttributeTypeImportsHandler(context)),
+            relevantOnly);
     }
 }

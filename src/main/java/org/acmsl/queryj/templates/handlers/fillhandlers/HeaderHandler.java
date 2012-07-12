@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.NonRelevantFillHandler;
 import org.acmsl.queryj.templates.TemplateContext;
 
 /*
@@ -53,6 +54,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class HeaderHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
+    implements NonRelevantFillHandler
 {
     /**
      * Creates a handler able to resolve "header" placeholders.

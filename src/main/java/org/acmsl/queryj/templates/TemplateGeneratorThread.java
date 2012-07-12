@@ -36,6 +36,11 @@
 package org.acmsl.queryj.templates;
 
 /*
+ * Importing some project classes.
+ */
+import org.acmsl.queryj.tools.QueryJBuildException;
+
+/*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
@@ -59,6 +64,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -428,47 +435,154 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils,
         @NotNull final Log log)
-      throws IOException
+      throws IOException,
+             QueryJBuildException
     {
-        String t_strOutputFile =
-            outputDir.getAbsolutePath()
-            + File.separator
-            + fileName;
+        String relevantContent = template.generate(true);
 
-        if (caching)
+        String newHash = computeHash(relevantContent, charset);
+
+        String oldHash = retrieveHash(fileName, outputDir, fileUtils);
+
+        if (   (oldHash == null)
+            || (!newHash.equals(oldHash)))
         {
-            serializeTemplate(template, t_strOutputFile + ".ser");
-        }
+            String t_strOutputFile =
+                outputDir.getAbsolutePath()
+                + File.separator
+                + fileName;
 
-        String t_strFileContents = template.generate();
-
-        if  (!"".equals(t_strFileContents))
-        {
-            boolean folderCreated = outputDir.mkdirs();
-
-            if (   (!folderCreated)
-                && (!outputDir.exists()))
+            if (caching)
             {
-                throw
-                    new IOException("Cannot create output dir: " + outputDir);
+                serializeTemplate(
+                    template,
+                    outputDir.getAbsolutePath() + File.separator + "." + fileName + ".ser");
+            }
+
+            String t_strFileContents = template.generate(false);
+
+            if  (!"".equals(t_strFileContents))
+            {
+                boolean folderCreated = outputDir.mkdirs();
+
+                if (   (!folderCreated)
+                    && (!outputDir.exists()))
+                {
+                    throw
+                        new IOException("Cannot create output dir: " + outputDir);
+                }
+                else
+                {
+                    log.debug(
+                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
+                        + t_strOutputFile);
+                }
+
+                fileUtils.writeFile(
+                    t_strOutputFile,
+                    t_strFileContents,
+                    charset);
+
+                writeHash(newHash, fileName, outputDir, charset, fileUtils);
             }
             else
             {
                 log.debug(
-                    "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                    + t_strOutputFile);
+                    "Not writing " + t_strOutputFile + " since the generated content is empty");
             }
+        }
+    }
 
-            fileUtils.writeFile(
-                t_strOutputFile,
-                t_strFileContents,
-                charset);
-        }
-        else
+    /**
+     * Tries to read the hash from disk.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @return the hash, if found.
+     */
+    protected String retrieveHash(
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final FileUtils fileUtils)
+    {
+        return
+            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir));
+    }
+
+    /**
+     * Builds the hash file.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @return the hash file.
+     */
+    protected File buildHashFile(@NotNull final String fileName, @NotNull final File outputDir)
+    {
+        return new File(outputDir.getAbsolutePath() + File.separator + "." + fileName + ".sha256");
+    }
+    /**
+     * Writes the hash value to disk, to avoid unnecessary generation.
+     * @param hashValue the content to write
+     * @param fileName the file name.
+     * @param outputDir the output dir.
+     * @param charset the charset.
+     * @param fileUtils the {@link FileUtils} instance.
+     */
+    protected void writeHash(
+        @NotNull final String hashValue,
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final Charset charset,
+        @NotNull final FileUtils fileUtils)
+    {
+        fileUtils.writeFileIfPossible(
+            buildHashFile(fileName, outputDir), hashValue, charset);
+    }
+
+    /**
+     * Computes the hash of given content.
+     * @param relevantContent the content.
+     * @return the hash.
+     */
+    protected String computeHash(
+        @NotNull final String relevantContent, @NotNull final Charset charset)
+        throws QueryJBuildException
+    {
+        byte[] content = relevantContent.getBytes(charset);
+
+        byte[] buffer = new byte[content.length];
+
+        try
         {
-            log.debug(
-                "Not writing " + t_strOutputFile + " since the generated content is empty");
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            md.update(content, 0, buffer.length);
+
+            buffer = md.digest();
         }
+        catch (NoSuchAlgorithmException e)
+        {
+            throw new QueryJBuildException("SHA-256 not supported", e);
+        }
+
+        return toHex(buffer);
+    }
+
+    /**
+     * Converts given bytes to hexadecimal.                            v
+     * @param buffer the buffer to convert.
+     * @return the hexadecimal representation.
+     */
+    @NotNull
+    protected String toHex(@NotNull final byte[] buffer)
+    {
+        @NotNull StringBuilder result = new StringBuilder(buffer.length);
+
+        for (byte currentByte : buffer)
+        {
+            result.append(Integer.toHexString(0xFF & currentByte));
+        }
+
+        return result.toString();
     }
 
     public void run()
@@ -497,6 +611,7 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
      * @param threadsCreated the number of the threads created
      * @param log the {@link Log} instance.
      */
+    @SuppressWarnings("unused")
     protected void runGenerator(
         @NotNull final T template,
         final boolean caching,
@@ -520,6 +635,10 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
                 log);
 
             latch.countDown();
+        }
+        catch (@NotNull final QueryJBuildException unknownException)
+        {
+            log.warn(unknownException);
         }
         catch (@NotNull final IOException ioException)
         {

@@ -70,12 +70,14 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
      * Generates the actual source code, using a chain-of-responsibility approach.
      * @param header  the header.
      * @param context the {@link TemplateContext} instance.
+     * @param relevantOnly whether to include only relevant placeholders.
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
     @NotNull
     @Override
-    protected String generateOutput(@NotNull final String header, @NotNull final C context)
+    protected String generateOutput(
+        @NotNull final String header, @NotNull final C context, final boolean relevantOnly)
         throws InvalidTemplateException
     {
         String result = "";
@@ -85,11 +87,6 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
             QueryJCommand command = null;
 
             createChain().process();
-
-            // TODO
-            // command.getAttributeMap -> set
-            // toString()
-
         }
         catch (@NotNull final QueryJBuildException processFailed)
         {

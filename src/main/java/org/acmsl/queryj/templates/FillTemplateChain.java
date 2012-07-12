@@ -88,13 +88,20 @@ public abstract class FillTemplateChain<C extends TemplateContext>
     private C templateContext;
 
     /**
+     * Whether to include only relevant placeholders.
+     */
+    private boolean relevantOnly;
+
+    /**
      * Creates a new {@link FillTemplateChain} associated to given
      * {@link TemplateContext}.
      * @param context the template.
+     * @param relevantOnly whether to include only relevant placeholders.
      */
-    protected FillTemplateChain(@NotNull final C context)
+    protected FillTemplateChain(@NotNull final C context, final boolean relevantOnly)
     {
         immutableSetTemplateContext(context);
+        immutableSetRelevantOnly(relevantOnly);
     }
 
     /**
@@ -125,6 +132,43 @@ public abstract class FillTemplateChain<C extends TemplateContext>
     {
         return templateContext;
     }
+
+    /**
+     * Specifies whether to include only relevant placeholders.
+     * @param relevantOnly such condition.
+     */
+    protected final void immutableSetRelevantOnly(final boolean relevantOnly)
+    {
+        this.relevantOnly = relevantOnly;
+    }
+
+    /**
+     * Specifies whether to include only relevant placeholders.
+     * @param relevantOnly such condition.
+     */
+    @SuppressWarnings("unused")
+    protected void setRelevantOnly(final boolean relevantOnly)
+    {
+        this.relevantOnly = relevantOnly;
+    }
+
+    /**
+     * Retrieves whether to include only relevant placeholders.
+     * @return such condition.
+     */
+    protected boolean getRelevantOnly()
+    {
+        return this.relevantOnly;
+    }
+
+    /**
+     * Adds additional handlers.
+     * @param chain the chain.
+     * @param context the {@link TemplateContext context}.
+     * @param relevantOnly whether to include only relevant placeholders or not.
+     */
+    protected abstract void addHandlers(
+        @NotNull final Chain chain, @NotNull final C context, final boolean relevantOnly);
 
     /**
      * Builds the command.
@@ -179,7 +223,29 @@ public abstract class FillTemplateChain<C extends TemplateContext>
     @NotNull
     protected final Chain buildChain(@NotNull final Chain chain)
     {
-        return buildChain(chain, getTemplateContext());
+        return buildChain(chain, getTemplateContext(), getRelevantOnly());
+    }
+
+    /**
+     * Adds given handler depending on whether it's relevant or not.
+     * @param chain the chain.
+     * @param handler the handler.
+     * @param relevantOnly whether to include only relevant placeholders.
+     */
+    protected void add(
+        @NotNull final Chain chain,
+        @NotNull final FillAdapterHandler handler,
+        final boolean relevantOnly)
+    {
+        FillAdapterHandler actualHander = handler;
+
+        if (   (relevantOnly)
+            && (handler instanceof NonRelevantFillHandler))
+        {
+            actualHander = new EmptyFillAdapterHandler(handler.getFillHandler());
+        }
+
+        chain.add(actualHander);
     }
 
     /**
@@ -187,73 +253,96 @@ public abstract class FillTemplateChain<C extends TemplateContext>
      *
      * @param chain the chain to be configured.
      * @param context the context.
+     * @param relevantOnly whether to include only relevant placeholders.
      * @return the updated chain.
      */
     @NotNull
-    protected final Chain buildChain(@NotNull final Chain chain, @NotNull final C context)
+    protected final Chain buildChain(
+        @NotNull final Chain chain, @NotNull final C context, final boolean relevantOnly)
     {
-        chain.add(
-            new FillAdapterHandler<CopyrightYearsHandler,Integer[]>(new CopyrightYearsHandler()));
+        add(
+            chain,
+            new FillAdapterHandler<CopyrightYearsHandler,Integer[]>(new CopyrightYearsHandler()),
+            relevantOnly);
 
-        chain.add(
-            new FillAdapterHandler<CurrentYearHandler,String>(new CurrentYearHandler()));
+        add(
+            chain,
+            new FillAdapterHandler<CurrentYearHandler,String>(new CurrentYearHandler()),
+            relevantOnly);
 
-        chain.add(
-            new FillAdapterHandler<TimestampHandler,String>(new TimestampHandler()));
+        add(
+            chain,
+            new FillAdapterHandler<TimestampHandler,String>(new TimestampHandler()),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,DAOSubpackageNameHandler,String>(
-                new DAOSubpackageNameHandler(context)));
+                new DAOSubpackageNameHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,DatabaseEngineNameHandler,DecoratedString>(
-                new DatabaseEngineNameHandler(context)));
+                new DatabaseEngineNameHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,DatabaseEngineVersionHandler,DecoratedString>(
-                new DatabaseEngineVersionHandler(context)));
+                new DatabaseEngineVersionHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,HeaderHandler,DecoratedString>(
-                new HeaderHandler(context)));
+                new HeaderHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,IsRepositoryDAOHandler,Boolean>(
-                new IsRepositoryDAOHandler(context)));
+                new IsRepositoryDAOHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,ProjectPackageHandler,DecoratedString>(
-                new ProjectPackageHandler(context)));
+                new ProjectPackageHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,RepositoryNameHandler,DecoratedString>(
-                new RepositoryNameHandler(context)));
+                new RepositoryNameHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,SubPackageNameHandler,DecoratedString>(
-                new SubPackageNameHandler(context)));
+                new SubPackageNameHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,SerialVersionUIDHandler,Long>(
-                new SerialVersionUIDHandler(context)));
+                new SerialVersionUIDHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,JndiLocationFillHandler,DecoratedString>(
-                new JndiLocationFillHandler(context)));
+                new JndiLocationFillHandler(context)),
+            relevantOnly);
 
-        chain.add(
+        add(
+            chain,
             new TemplateContextFillAdapterHandler<TemplateContext,DAOChooserPropertiesFileNameHandler,DecoratedString>(
-                new DAOChooserPropertiesFileNameHandler(context)));
+                new DAOChooserPropertiesFileNameHandler(context)),
+            relevantOnly);
 
-        addHandlers(chain, context);
+        addHandlers(chain, context, relevantOnly);
 
         return chain;
     }
-
-    /**
-     * Adds additional handlers.
-     * @param chain the chain.
-     * @param context the {@link TemplateContext context}.
-     */
-    protected abstract void addHandlers(@NotNull final Chain chain, @NotNull final C context);
 }

@@ -39,6 +39,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.templates.NonRelevantFillHandler;
 import org.acmsl.queryj.templates.TemplateContext;
 
 /*
@@ -54,6 +55,7 @@ import org.jetbrains.annotations.NotNull;
 @SuppressWarnings("unused")
 public class DatabaseEngineVersionHandler
     extends AbstractTemplateContextFillHandler<TemplateContext,DecoratedString>
+    implements NonRelevantFillHandler
 {
     /**
      * Creates a {@link DatabaseEngineNameHandler} for given {@link TemplateContext}.

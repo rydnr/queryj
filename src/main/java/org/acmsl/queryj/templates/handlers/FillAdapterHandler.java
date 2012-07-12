@@ -97,7 +97,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      * @return such instance.
      */
     @NotNull
-    public F getFillHandler()
+    public FillHandler getFillHandler()
     {
         return this.fillHandler;
     }
@@ -155,7 +155,7 @@ public class FillAdapterHandler<F extends FillHandler<P>, P>
      * @throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
-    public boolean handle(@NotNull final Map attributes, @NotNull final F fillHandler)
+    public boolean handle(@NotNull final Map attributes, @NotNull final FillHandler<P> fillHandler)
         throws QueryJBuildException
     {
         boolean result = false;

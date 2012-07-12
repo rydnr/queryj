@@ -38,6 +38,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.templates.NonRelevantFillHandler;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -53,6 +54,7 @@ import java.util.Calendar;
 @SuppressWarnings("unused")
 public class CopyrightYearsHandler
     extends AbstractFillHandler<Integer[]>
+    implements NonRelevantFillHandler
 {
     private static final long serialVersionUID = 1992543204063604784L;
 
