@@ -35,8 +35,6 @@ package org.acmsl.queryj.templates.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
@@ -46,16 +44,11 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.util.Map;
 
 /**
@@ -64,7 +57,7 @@ import java.util.Map;
  */
 public abstract class BasePerRepositoryTemplateWritingHandler
     <T extends BasePerRepositoryTemplate<C>, G extends BasePerRepositoryTemplateGenerator<T,C>, C extends BasePerRepositoryTemplateContext>
-    extends    AbstractQueryJCommandHandler
+    extends    AbstractTemplateWritingHandler<T, G, C>
     implements TemplateWritingHandler
 {
     /**
@@ -73,124 +66,16 @@ public abstract class BasePerRepositoryTemplateWritingHandler
     public BasePerRepositoryTemplateWritingHandler() {}
 
     /**
-     * Handles given information.
-     *
-     *
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    @Override
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
-    {
-        writeTemplate(parameters, retrieveDatabaseMetaData(parameters));
-
-        return false;
-    }
-
-    /**
-     * Writes the template.
-     * @param parameters the parameters.
-     * @param metadata the database metadata.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplate(
-        @NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
-      throws  QueryJBuildException
-    {
-        String t_strProductName = "";
-
-        if (metadata != null)
-        {
-            try
-            {
-                t_strProductName = metadata.getDatabaseProductName();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                throw
-                    new QueryJBuildException(
-                        "Cannot retrieve database product name", sqlException);
-            }
-        }
-
-        writeTemplate(parameters, t_strProductName);
-    }
-
-    /**
-     * Writes the template.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplate(@NotNull final Map parameters, @NotNull final String engineName)
-      throws  QueryJBuildException
-    {
-        writeTemplate(
-            retrieveTemplate(parameters),
-            retrieveOutputDir(engineName, parameters),
-            retrieveCharset(parameters),
-            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)));
-    }
-
-    /**
-     * Writes the template.
-     * @param template the template.
-     * @param outputDir the output dir.
-     * @param charset the file encoding.
-     * @param templateGenerator the template generator.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplate(
-        @Nullable final T template,
-        @NotNull final File outputDir,
-        @NotNull final Charset charset,
-        @NotNull final G templateGenerator)
-      throws  QueryJBuildException
-    {
-        if (template != null)
-        {
-            try
-            {
-                templateGenerator.write(template, outputDir, charset);
-            }
-            catch  (@NotNull final IOException ioException)
-            {
-                throw
-                    new QueryJBuildException(
-                        "Cannot write the template", ioException);
-            }
-        }
-    }
-
-    /**
-     * Retrieves the template generator.
-     * @param caching whether to use caching.
-     * @param threadCount the number of threads to use.
-     * @return such instance.
-     */
-    protected abstract G retrieveTemplateGenerator(final boolean caching, final int threadCount);
-
-    /**
-     * Retrieves the template from the attribute map.
-     * @param parameters the parameter map.
-     * @return the template.
-     */
-    @Nullable
-    protected abstract T retrieveTemplate(
-        @NotNull final Map parameters);
-
-    /**
      * Retrieves the output dir from the attribute map.
+     * @param context the context.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
-     * @precondition parameters != null
      */
+    @Override
     @NotNull
     protected File retrieveOutputDir(
-        @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
@@ -212,9 +97,6 @@ public abstract class BasePerRepositoryTemplateWritingHandler
      * @param parameters the parameter map.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return such folder.
-     * @precondition engineName != null
-     * @precondition parameters != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected abstract File retrieveOutputDir(

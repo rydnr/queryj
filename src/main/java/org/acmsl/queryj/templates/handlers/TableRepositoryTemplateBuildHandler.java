@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -50,6 +49,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -99,8 +100,11 @@ public class TableRepositoryTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final TableRepositoryTemplate template, @NotNull final Map parameters)
     {
+        List<TableRepositoryTemplate> list = new ArrayList<TableRepositoryTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.TABLE_REPOSITORY_TEMPLATE,
-            template);
+            list);
     }
 }

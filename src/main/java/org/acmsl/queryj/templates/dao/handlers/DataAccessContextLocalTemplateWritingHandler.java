@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,10 +85,11 @@ public class DataAccessContextLocalTemplateWritingHandler
      */
     @Nullable
     @Override
-    protected DataAccessContextLocalTemplate retrieveTemplate(@NotNull final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected List<DataAccessContextLocalTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (DataAccessContextLocalTemplate)
+            (List<DataAccessContextLocalTemplate>)
                 parameters.get(TemplateMappingManager.DATAACCESSCONTEXTLOCAL_TEMPLATE);
     }
 

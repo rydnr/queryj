@@ -57,6 +57,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,9 +115,12 @@ public class BasePreparedStatementCreatorTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final BasePreparedStatementCreatorTemplate template, @NotNull final Map parameters)
     {
+        List<BasePreparedStatementCreatorTemplate> list = new ArrayList<BasePreparedStatementCreatorTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.BASE_PREPARED_STATEMENT_CREATOR_TEMPLATE,
-            template);
+            list);
     }
 
 }

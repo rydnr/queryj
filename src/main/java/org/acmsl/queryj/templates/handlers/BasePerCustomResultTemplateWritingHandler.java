@@ -36,16 +36,13 @@ package org.acmsl.queryj.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
-import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.TemplateGenerator;
 
 /*
  * Importing Jetbrains annotations.
@@ -56,9 +53,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -69,7 +63,7 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     <T extends BasePerCustomResultTemplate<C>,
         C extends BasePerCustomResultTemplateContext,
         TG extends BasePerCustomResultTemplateGenerator<T,C>>
-    extends    AbstractQueryJCommandHandler
+    extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
     /**
@@ -79,115 +73,41 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     public BasePerCustomResultTemplateWritingHandler() {}
 
     /**
-     * {@inheritDoc}
+     * Retrieves the output folder.
+     * @param context the context.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @return the output folder.
+     * @throws QueryJBuildException if the operation fails.
      */
-    @Override
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
+    @NotNull
+    protected File retrieveOutputDir(
+        @NotNull final C context,
+        @NotNull final String engineName,
+        @NotNull final Map parameters)
+      throws QueryJBuildException
     {
-        boolean result = true;
+        File result;
 
         MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
 
         if (t_MetadataManager != null)
         {
-            writeTemplates(parameters, t_MetadataManager);
-            result = false;
+            result =
+                retrieveOutputDir(
+                    context.getResult(),
+                    retrieveCustomSqlProvider(parameters),
+                    t_MetadataManager,
+                    engineName,
+                    parameters);
+        }
+        else
+        {
+            throw new QueryJBuildException("Cannot retrieve MetadataManager");
         }
 
         return result;
     }
-
-    /**
-     * Writes the templates.
-     * @param parameters the parameters.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final MetadataManager metadataManager)
-      throws  QueryJBuildException
-    {
-        writeTemplates(
-            retrieveTemplates(parameters),
-            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
-            retrieveCustomSqlProvider(parameters),
-            metadataManager,
-            metadataManager.getEngineName(),
-            retrieveCharset(parameters),
-            parameters);
-    }
-
-    /**
-     * Writes the templates.
-     * @param templates the templates.
-     * @param templateGenerator the template generator.
-     * @param customSqlProvider the custom sql provider.
-     * @param metadataManager the metadata manager.
-     * @param engineName the engine name.
-     * @param charset the file encoding.
-     * @param parameters the parameter map.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplates(
-        @NotNull final List<T> templates,
-        @NotNull final TemplateGenerator<T, C> templateGenerator,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final String engineName,
-        @NotNull final Charset charset,
-        @NotNull final Map parameters)
-      throws  QueryJBuildException
-    {
-        try
-        {
-            for  (T t_Template : templates)
-            {
-                if  (t_Template != null)
-                {
-                    C t_Context = t_Template.getTemplateContext();
-
-                    Result t_Result = t_Context.getResult();
-
-                    File t_OutputDir =
-                        retrieveOutputDir(
-                            t_Result,
-                            customSqlProvider,
-                            metadataManager,
-                            engineName,
-                            parameters);
-
-                    templateGenerator.write(
-                        t_Template, t_OutputDir, charset);
-                }
-            }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the templates", ioException);
-        }
-    }
-
-    /**
-     * Retrieves the template generator.
-     * @param caching whether to enable template caching.
-     * @param threadCount the number of threads to use.
-     * @return such instance.
-     */
-    protected abstract TG retrieveTemplateGenerator(
-        final boolean caching, final int threadCount);
-
-    /**
-     * Retrieves the templates from the attribute map.
-     * @param parameters the parameter map.
-     * @return the templates.
-     * @throws QueryJBuildException if the template retrieval process if faulty.
-     */
-    @NotNull
-    protected abstract List<T> retrieveTemplates(@NotNull final Map parameters)
-      throws  QueryJBuildException;
 
     /**
      * Retrieves the output dir from the attribute map.

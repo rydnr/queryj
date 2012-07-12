@@ -52,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,10 +79,10 @@ public class JndiUtilsTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected JndiUtilsTemplate retrieveTemplate(@NotNull final Map parameters)
+    protected List<JndiUtilsTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (JndiUtilsTemplate)
+            (List<JndiUtilsTemplate>)
                 parameters.get(
                     TemplateMappingManager.JNDI_UTILS_TEMPLATE);
     }

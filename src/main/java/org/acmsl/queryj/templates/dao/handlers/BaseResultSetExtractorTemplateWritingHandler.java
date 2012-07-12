@@ -57,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,11 +88,11 @@ public class BaseResultSetExtractorTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected BaseResultSetExtractorTemplate retrieveTemplate(
+    protected List<BaseResultSetExtractorTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (BaseResultSetExtractorTemplate)
+            (List<BaseResultSetExtractorTemplate>)
                 parameters.get(
                     TemplateMappingManager.BASE_RESULTSET_EXTRACTOR_TEMPLATE);
     }

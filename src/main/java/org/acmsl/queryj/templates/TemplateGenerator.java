@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.tools.QueryJBuildException;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -64,10 +65,12 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
+     * @throws QueryJBuildException if the generation process fails.
      */
     void write(
         @NotNull final T template,
         @NotNull final File outputDir,
         @NotNull final Charset charset)
-        throws  IOException;
+        throws  IOException,
+                QueryJBuildException;
 }

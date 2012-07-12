@@ -56,6 +56,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -112,9 +114,12 @@ public class ThreadLocalBagTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final ThreadLocalBagTemplate template, @NotNull final Map parameters)
     {
+        List<ThreadLocalBagTemplate> list = new ArrayList<ThreadLocalBagTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.THREAD_LOCAL_BAG_TEMPLATE,
-            template);
+            list);
     }
 
 }

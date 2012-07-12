@@ -57,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,11 +89,11 @@ public class BasePreparedStatementCreatorTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected BasePreparedStatementCreatorTemplate retrieveTemplate(
+    protected List<BasePreparedStatementCreatorTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (BasePreparedStatementCreatorTemplate)
+            (List<BasePreparedStatementCreatorTemplate>)
                 parameters.get(
                     TemplateMappingManager.BASE_PREPARED_STATEMENT_CREATOR_TEMPLATE);
     }

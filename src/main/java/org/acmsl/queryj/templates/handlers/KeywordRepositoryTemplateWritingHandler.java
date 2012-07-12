@@ -52,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -79,10 +80,10 @@ public class KeywordRepositoryTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected KeywordRepositoryTemplate retrieveTemplate(@NotNull final Map parameters)
+    protected List<KeywordRepositoryTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (KeywordRepositoryTemplate)
+            (List<KeywordRepositoryTemplate>)
                 parameters.get(
                     TemplateMappingManager.KEYWORD_REPOSITORY_TEMPLATE);
     }

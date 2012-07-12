@@ -57,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,10 +85,10 @@ public class DAOListenerTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected DAOListenerTemplate retrieveTemplate(@NotNull final Map parameters)
+    protected List<DAOListenerTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (DAOListenerTemplate)
+            (List<DAOListenerTemplate>)
                 parameters.get(
                     TemplateMappingManager.DAO_LISTENER_TEMPLATE);
     }

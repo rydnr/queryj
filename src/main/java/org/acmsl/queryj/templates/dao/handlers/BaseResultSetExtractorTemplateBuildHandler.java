@@ -56,6 +56,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -112,9 +114,12 @@ public class BaseResultSetExtractorTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final BaseResultSetExtractorTemplate template, @NotNull final Map parameters)
     {
+        List<BaseResultSetExtractorTemplate> list = new ArrayList<BaseResultSetExtractorTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.BASE_RESULTSET_EXTRACTOR_TEMPLATE,
-            template);
+            list);
     }
 
 }

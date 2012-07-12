@@ -59,6 +59,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -89,11 +90,11 @@ public class JdbcTemplateTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected JdbcTemplateTemplate retrieveTemplate(
+    protected List<JdbcTemplateTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (JdbcTemplateTemplate)
+            (List<JdbcTemplateTemplate>)
                 parameters.get(
                     TemplateMappingManager.JDBC_TEMPLATE_TEMPLATE);
     }

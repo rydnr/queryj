@@ -52,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -84,10 +85,10 @@ public class DataAccessManagerTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected DataAccessManagerTemplate retrieveTemplate(@NotNull final Map parameters)
+    protected List<DataAccessManagerTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (DataAccessManagerTemplate)
+            (List<DataAccessManagerTemplate>)
                 parameters.get(
                     TemplateMappingManager.DATA_ACCESS_MANAGER_TEMPLATE);
     }

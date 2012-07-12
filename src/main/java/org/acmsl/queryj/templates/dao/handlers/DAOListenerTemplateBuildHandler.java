@@ -56,6 +56,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -111,8 +113,11 @@ public class DAOListenerTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final DAOListenerTemplate template, @NotNull final Map parameters)
     {
+        List<DAOListenerTemplate> list = new ArrayList<DAOListenerTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.DAO_LISTENER_TEMPLATE,
-            template);
+            list);
     }
 }

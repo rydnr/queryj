@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,11 +81,11 @@ public class RepositoryDAOTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected RepositoryDAOTemplate<BasePerRepositoryTemplateContext> retrieveTemplate(
+    protected List<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (RepositoryDAOTemplate)
+            (List<RepositoryDAOTemplate<BasePerRepositoryTemplateContext>>)
                 parameters.get(
                     TemplateMappingManager.REPOSITORY_DAO_TEMPLATE);
     }

@@ -57,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -87,11 +88,11 @@ public class ThreadLocalBagTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected ThreadLocalBagTemplate retrieveTemplate(
+    protected List<ThreadLocalBagTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (ThreadLocalBagTemplate)
+            (List<ThreadLocalBagTemplate>)
                 parameters.get(
                     TemplateMappingManager.THREAD_LOCAL_BAG_TEMPLATE);
     }

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -57,6 +56,7 @@ import org.acmsl.commons.utils.StringValidator;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -210,8 +210,11 @@ public class KeywordRepositoryTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final KeywordRepositoryTemplate template, @NotNull final Map parameters)
     {
+        List<KeywordRepositoryTemplate> list = new ArrayList<KeywordRepositoryTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.KEYWORD_REPOSITORY_TEMPLATE,
-            template);
+            list);
     }
 }

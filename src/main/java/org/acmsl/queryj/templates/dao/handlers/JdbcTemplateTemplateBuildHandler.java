@@ -57,6 +57,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -111,9 +113,12 @@ public class JdbcTemplateTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final JdbcTemplateTemplate template, @NotNull final Map parameters)
     {
+        List<JdbcTemplateTemplate> list = new ArrayList<JdbcTemplateTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.JDBC_TEMPLATE_TEMPLATE,
-            template);
+            list);
     }
 
 }

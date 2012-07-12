@@ -52,6 +52,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,8 +115,11 @@ public class DataAccessManagerTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final DataAccessManagerTemplate template, @NotNull final Map parameters)
     {
+        List<DataAccessManagerTemplate> list = new ArrayList<DataAccessManagerTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.DATA_ACCESS_MANAGER_TEMPLATE,
-            template);
+            list);
     }
 }

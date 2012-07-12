@@ -37,12 +37,18 @@ package org.acmsl.queryj.templates;
  */
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing some ACM-SL classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.io.FileUtils;
+
+/*
+ * Importing some Apache Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains annotations.
@@ -53,12 +59,12 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Common logic for template generators.
@@ -146,21 +152,32 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     }
 
     /**
+     * Retrieves the decorator factory.
+     * @return such instance.
+     */
+    @NotNull
+    public DecoratorFactory getDecoratorFactory()
+    {
+        return CachingDecoratorFactory.getInstance();
+    }
+
+    /**
      * Writes a table template to disk.
      * @param template the table template to write.
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
+     * @throws QueryJBuildException if the generation process fails.
      */
     public void write(
         @NotNull final N template,
         @NotNull final File outputDir,
         @NotNull final Charset charset)
-        throws  IOException
+        throws  IOException,
+                QueryJBuildException
     {
         write(
             isCaching(),
-            getThreadCount(),
             template,
             retrieveTemplateFileName(template.getTemplateContext()),
             outputDir,
@@ -171,63 +188,242 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     /**
      * Writes a table template to disk.
      * @param caching whether to use caching or not.
-     * @param threadCount the maximum number of threads to use.
      * @param template the table template to write.
      * @param fileName the template's file name.
      * @param outputDir the output folder.
      * @param charset the file encoding.
      * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
+     * @throws QueryJBuildException if the generation process fails.
      */
     protected void write(
         final boolean caching,
-        final int threadCount,
         @NotNull final N template,
         @NotNull final String fileName,
         @NotNull final File outputDir,
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils)
-        throws  IOException
+        throws  IOException,
+                QueryJBuildException
     {
-        ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
+        generate(
+            template,
+            caching,
+            fileName,
+            outputDir,
+            charset,
+            fileUtils,
+            UniqueLogFactory.getLog(AbstractTemplateGenerator.class));
+    }
 
-        final AtomicInteger threadsCreated = new AtomicInteger(0);
-
-        final CountDownLatch doneLatch = new CountDownLatch(threadCount);
-
-        for (int index = 0; index < threadCount; index++)
-        {
-            threadPool.execute(
-                new TemplateGeneratorThread<N,C>(
-                    template,
-                    caching,
-                    fileName,
-                    outputDir,
-                    charset,
-                    fileUtils,
-                    doneLatch,
-                    threadsCreated));
-        }
-
+    /**
+     * Serializes given template.
+     * @param template the template.
+     * @param outputFilePath the output file path.
+     */
+    protected void serializeTemplate(@NotNull final N template, @NotNull final String outputFilePath)
+    {
         try
         {
-            doneLatch.await();
+            @NotNull final File outputFile = new File(outputFilePath);
+            @NotNull final File baseFolder = outputFile.getParentFile();
+
+            if (!baseFolder.exists())
+            {
+                if (!baseFolder.mkdirs())
+                {
+                    throw new IOException(baseFolder + " does not exist and cannot be created");
+                }
+            }
+
+            if (!baseFolder.canWrite())
+            {
+                throw new IOException(baseFolder + " is not writable");
+            }
+
+            ObjectOutputStream t_osCache =
+                new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
+
+            t_osCache.writeObject(template);
         }
-        catch (@NotNull final InterruptedException interruptedException)
+        catch (@NotNull IOException cannotSerialize)
         {
-            UniqueLogFactory.getLog(AbstractTemplateGenerator.class).warn(
-                "Generation thread interrupted", interruptedException);
+            @NotNull final Log t_Log =
+                UniqueLogFactory.getLog(
+                    AbstractTemplateGenerator.class);
+
+            t_Log.warn(
+                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
+                cannotSerialize);
         }
     }
 
     /**
-     * Retrieves the decorator factory.
-     * @return such instance.
+     * Performs the generation process.
+     * @param template the template.
+     * @param caching whether template caching is enabled.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @param charset the {@link Charset} to use.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @param log the {@link Log} instance.
+     * @throws IOException if the output dir cannot be created.
      */
-    @NotNull
-    public DecoratorFactory getDecoratorFactory()
+    protected void generate(
+        @NotNull final N template,
+        final boolean caching,
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final Charset charset,
+        @NotNull final FileUtils fileUtils,
+        @NotNull final Log log)
+        throws IOException,
+        QueryJBuildException
     {
-        return CachingDecoratorFactory.getInstance();
+        String relevantContent = template.generate(true);
+
+        String newHash = computeHash(relevantContent, charset);
+
+        String oldHash = retrieveHash(fileName, outputDir, fileUtils);
+
+        if (   (oldHash == null)
+               || (!newHash.equals(oldHash)))
+        {
+            String t_strOutputFile =
+                outputDir.getAbsolutePath()
+                + File.separator
+                + fileName;
+
+            if (caching)
+            {
+                serializeTemplate(
+                    template,
+                    outputDir.getAbsolutePath() + File.separator + "." + fileName + ".ser");
+            }
+
+            String t_strFileContents = template.generate(false);
+
+            if  (!"".equals(t_strFileContents))
+            {
+                boolean folderCreated = outputDir.mkdirs();
+
+                if (   (!folderCreated)
+                       && (!outputDir.exists()))
+                {
+                    throw
+                        new IOException("Cannot create output dir: " + outputDir);
+                }
+                else
+                {
+                    log.debug(
+                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
+                        + t_strOutputFile);
+                }
+
+                fileUtils.writeFile(
+                    t_strOutputFile,
+                    t_strFileContents,
+                    charset);
+
+                writeHash(newHash, fileName, outputDir, charset, fileUtils);
+            }
+            else
+            {
+                log.debug(
+                    "Not writing " + t_strOutputFile + " since the generated content is empty");
+            }
+        }
     }
 
+    /**
+     * Tries to read the hash from disk.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @return the hash, if found.
+     */
+    protected String retrieveHash(
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final FileUtils fileUtils)
+    {
+        return
+            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir));
+    }
+
+    /**
+     * Builds the hash file.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @return the hash file.
+     */
+    protected File buildHashFile(@NotNull final String fileName, @NotNull final File outputDir)
+    {
+        return new File(outputDir.getAbsolutePath() + File.separator + "." + fileName + ".sha256");
+    }
+    /**
+     * Writes the hash value to disk, to avoid unnecessary generation.
+     * @param hashValue the content to write
+     * @param fileName the file name.
+     * @param outputDir the output dir.
+     * @param charset the charset.
+     * @param fileUtils the {@link FileUtils} instance.
+     */
+    protected void writeHash(
+        @NotNull final String hashValue,
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final Charset charset,
+        @NotNull final FileUtils fileUtils)
+    {
+        fileUtils.writeFileIfPossible(
+            buildHashFile(fileName, outputDir), hashValue, charset);
+    }
+
+    /**
+     * Computes the hash of given content.
+     * @param relevantContent the content.
+     * @return the hash.
+     */
+    protected String computeHash(
+        @NotNull final String relevantContent, @NotNull final Charset charset)
+        throws QueryJBuildException
+    {
+        byte[] content = relevantContent.getBytes(charset);
+
+        byte[] buffer = new byte[content.length];
+
+        try
+        {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+
+            md.update(content, 0, buffer.length);
+
+            buffer = md.digest();
+        }
+        catch (@NotNull final NoSuchAlgorithmException e)
+        {
+            throw new QueryJBuildException("SHA-256 not supported", e);
+        }
+
+        return toHex(buffer);
+    }
+
+    /**
+     * Converts given bytes to hexadecimal.                            v
+     * @param buffer the buffer to convert.
+     * @return the hexadecimal representation.
+     */
+    @NotNull
+    protected String toHex(@NotNull final byte[] buffer)
+    {
+        @NotNull StringBuilder result = new StringBuilder(buffer.length);
+
+        for (byte currentByte : buffer)
+        {
+            result.append(Integer.toHexString(0xFF & currentByte));
+        }
+
+        return result.toString();
+    }
 }

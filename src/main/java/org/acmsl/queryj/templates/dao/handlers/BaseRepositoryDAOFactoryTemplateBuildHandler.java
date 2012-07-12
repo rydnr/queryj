@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -51,6 +50,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -93,8 +94,11 @@ public class BaseRepositoryDAOFactoryTemplateBuildHandler
     protected void storeTemplate(
         final @NotNull BaseRepositoryDAOFactoryTemplate template, @NotNull final Map parameters)
     {
+        List<BaseRepositoryDAOFactoryTemplate> list = new ArrayList<BaseRepositoryDAOFactoryTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.BASE_REPOSITORY_DAO_FACTORY_TEMPLATE,
-            template);
+            list);
     }
 }

@@ -51,6 +51,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -92,8 +94,11 @@ public class BaseRepositoryDAOTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final BaseRepositoryDAOTemplate template, @NotNull final Map parameters)
     {
+        List<BaseRepositoryDAOTemplate> list = new ArrayList<BaseRepositoryDAOTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.BASE_REPOSITORY_DAO_TEMPLATE,
-            template);
+            list);
     }
 }

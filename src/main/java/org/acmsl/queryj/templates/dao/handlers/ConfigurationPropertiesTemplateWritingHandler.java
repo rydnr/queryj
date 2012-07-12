@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,10 +87,10 @@ public class ConfigurationPropertiesTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected ConfigurationPropertiesTemplate retrieveTemplate(@NotNull final Map parameters)
+    protected List<ConfigurationPropertiesTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (ConfigurationPropertiesTemplate)
+            (List<ConfigurationPropertiesTemplate>)
                 parameters.get(
                     TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE);
     }

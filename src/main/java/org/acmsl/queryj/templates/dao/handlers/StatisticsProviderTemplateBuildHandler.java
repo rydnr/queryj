@@ -56,6 +56,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -113,9 +115,12 @@ public class StatisticsProviderTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final StatisticsProviderTemplate template, @NotNull final Map parameters)
     {
+        List<StatisticsProviderTemplate> list = new ArrayList<StatisticsProviderTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.STATISTICS_PROVIDER_TEMPLATE,
-            template);
+            list);
     }
 
 }

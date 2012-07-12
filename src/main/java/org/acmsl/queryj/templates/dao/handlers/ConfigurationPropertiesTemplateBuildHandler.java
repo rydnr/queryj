@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -52,6 +51,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -100,8 +101,11 @@ public class ConfigurationPropertiesTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final ConfigurationPropertiesTemplate template, @NotNull final Map parameters)
     {
+        List<ConfigurationPropertiesTemplate> list = new ArrayList<ConfigurationPropertiesTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.CONFIGURATION_PROPERTIES_TEMPLATE,
-            template);
+            list);
     }
 }

@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,10 +81,10 @@ public class RepositoryDAOFactoryTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected RepositoryDAOFactoryTemplate retrieveTemplate(@NotNull final Map parameters)
+    protected List<RepositoryDAOFactoryTemplate> retrieveTemplates(@NotNull final Map parameters)
     {
         return
-            (RepositoryDAOFactoryTemplate)
+            (List<RepositoryDAOFactoryTemplate>)
                 parameters.get(
                     TemplateMappingManager.REPOSITORY_DAO_FACTORY_TEMPLATE);
     }

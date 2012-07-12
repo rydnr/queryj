@@ -50,6 +50,7 @@ import org.acmsl.queryj.tools.PackageUtils;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -103,9 +104,12 @@ public class RepositoryDAOFactoryTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final RepositoryDAOFactoryTemplate template, @NotNull final Map parameters)
     {
+        List<RepositoryDAOFactoryTemplate> list = new ArrayList<RepositoryDAOFactoryTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.REPOSITORY_DAO_FACTORY_TEMPLATE,
-            template);
+            list);
     }
 
     /**

@@ -57,6 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -88,11 +89,11 @@ public class StatisticsProviderTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected StatisticsProviderTemplate retrieveTemplate(
+    protected List<StatisticsProviderTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (StatisticsProviderTemplate)
+            (List<StatisticsProviderTemplate>)
                 parameters.get(
                     TemplateMappingManager.STATISTICS_PROVIDER_TEMPLATE);
     }

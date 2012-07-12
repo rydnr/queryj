@@ -44,7 +44,6 @@ import org.acmsl.queryj.tools.QueryJBuildException;
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing some Apache Commons-Logging classes.
@@ -60,13 +59,10 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -74,23 +70,19 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/10
  */
-public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateContext>
+public class TemplateGeneratorThread
+    <T extends Template<C>, TG extends TemplateGenerator<T,C>, C extends TemplateContext>
     extends Thread
 {
+    /**
+     * The template generator.
+     */
+    private TG templateGenerator;
+
     /**
      * The template.
      */
     private T template;
-
-    /**
-     * Whether caching is enabled.
-     */
-    private boolean caching;
-
-    /**
-     * The filename.
-     */
-    private String fileName;
 
     /**
      * The output folder.
@@ -103,49 +95,38 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
     private Charset charset;
 
     /**
-     * The {@link FileUtils} instance.
+     * The thread index.
      */
-    private FileUtils fileUtils;
+    private AtomicInteger threadIndex;
 
     /**
-     * The countdown latch.
+     * The cyclic barrier.
      */
-    private CountDownLatch latch;
-
-    /**
-     * The count of threads alive.
-     */
-    private AtomicInteger threadsCreated;
+    private CyclicBarrier cyclicBarrier;
 
     /**
      * Creates a {@link TemplateGeneratorThread} with given information.
+     * @param templateGenerator the template generator.
      * @param template the template.
-     * @param caching whether to enable caching or not.
-     * @param fileName the file name.
      * @param outputFolder the output folder.
      * @param charset the {@link Charset} instance.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @param latch the {@link CountDownLatch latch}.
-     * @param threadsCreated the number of threads created so far.
+     * @param threadIndex the thread index.
+     * @param barrier the {@link CyclicBarrier}.
      */
     public TemplateGeneratorThread(
+        @NotNull final TG templateGenerator,
         @NotNull final T template,
-        final boolean caching,
-        @NotNull final String fileName,
         @NotNull final File outputFolder,
         @NotNull final Charset charset,
-        @NotNull final FileUtils fileUtils,
-        @NotNull final CountDownLatch latch,
-        @NotNull final AtomicInteger threadsCreated)
+        @NotNull final AtomicInteger threadIndex,
+        @NotNull final CyclicBarrier barrier)
     {
+        immutableSetTemplateGenerator(templateGenerator);
         immutableSetTemplate(template);
-        immutableSetCaching(caching);
-        immutableSetFileName(fileName);
         immutableSetOutputFolder(outputFolder);
         immutableSetCharset(charset);
-        immutableSetFileUtils(fileUtils);
-        immutableSetLatch(latch);
-        immutableSetThreadsCreated(threadsCreated);
+        immutableSetThreadIndex(threadIndex);
+        immutableSetCyclicBarrier(barrier);
     }
 
     /**
@@ -169,7 +150,7 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
 
     /**
      * Retrieves the template.
-     * @return such template.
+     * @return such {@link Template}.
      */
     protected T getTemplate()
     {
@@ -177,60 +158,32 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
     }
 
     /**
-     * Retrieves whether to use caching or not.
-     * @param flag such condition.
+     * Specifies the template generator.
+     * @param templateGenerator the {@link TemplateGenerator} instance to use.
      */
-    protected final void immutableSetCaching(final boolean flag)
+    protected final void immutableSetTemplateGenerator(@NotNull final TG templateGenerator)
     {
-        this.caching = flag;
+        this.templateGenerator = templateGenerator;
     }
 
     /**
-     * Retrieves whether to use caching or not.
-     * @param flag such condition.
-     */
-    @SuppressWarnings("unused")
-    protected void setCaching(final boolean flag)
-    {
-        immutableSetCaching(flag);
-    }
-
-    /**
-     * Retrieves if template caching is enabled.
-     * @return such condition.
-     */
-    protected boolean isCaching()
-    {
-        return this.caching;
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName the file name.
-     */
-    protected final void immutableSetFileName(@NotNull final String fileName)
-    {
-        this.fileName = fileName;
-    }
-
-    /**
-     * Specifies the file name.
-     * @param fileName the file name.
+     * Specifies the template generator.
+     * @param templateGenerator the {@link TemplateGenerator} instance to use.
      */
     @SuppressWarnings("unused")
-    protected void setFileName(@NotNull final String fileName)
+    protected void setTemplateGenerator(@NotNull final TG templateGenerator)
     {
-        immutableSetFileName(fileName);
+        immutableSetTemplateGenerator(templateGenerator);
     }
 
     /**
-     * Retrieves the file name.
-     * @return such information.
+     * Retrieves the template generator.
+     * @return such {@link TemplateGenerator}.
      */
     @NotNull
-    protected String getFileName()
+    protected TG getTemplateGenerator()
     {
-        return this.fileName;
+        return templateGenerator;
     }
 
     /**
@@ -285,356 +238,106 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
      * Retrieves the charset.
      * @return the {@link Charset} in use.
      */
+    @NotNull
     protected Charset getCharset()
     {
         return this.charset;
     }
 
     /**
-     * Specifies the {@link FileUtils} instance.
-     * @param fileUtils such instance.
+     * Specifies the thread index.
+     * @param index such index.
      */
-    protected final void immutableSetFileUtils(@NotNull final FileUtils fileUtils)
+    protected final void immutableSetThreadIndex(@NotNull final AtomicInteger index)
     {
-        this.fileUtils = fileUtils;
+        this.threadIndex = index;
     }
 
     /**
-     * Specifies the {@link FileUtils} instance.
-     * @param fileUtils such instance.
+     * Specifies the thread index.
+     * @param index such index.
      */
     @SuppressWarnings("unused")
-    protected void setFileUtils(@NotNull final FileUtils fileUtils)
+    protected void setThreadIndex(@NotNull final AtomicInteger index)
     {
-        immutableSetFileUtils(fileUtils);
+        immutableSetThreadIndex(index);
     }
 
     /**
-     * Retrieves the {@link FileUtils} instance.
-     * @return such instance.
+     * Retrieves the thread index.
+     * @return such index.
      */
     @NotNull
-    protected FileUtils getFileUtils()
+    public AtomicInteger getThreadIndex()
     {
-        return this.fileUtils;
-    }
-    /**
-     * Specifies the count-down latch.
-     * @param latch such {@link CountDownLatch latch}.
-     */
-    protected final void immutableSetLatch(final CountDownLatch latch)
-    {
-        this.latch = latch;
+        return this.threadIndex;
     }
 
     /**
-     * Specifies the count-down latch.
-     * @param latch such {@link CountDownLatch latch}.
+     * Specifies the cyclic barrier.
+     * @param barrier the barrier.
      */
-    @SuppressWarnings("unused")
-    protected void setLatch(final CountDownLatch latch)
+    protected final void immutableSetCyclicBarrier(@NotNull final CyclicBarrier barrier)
     {
-        immutableSetLatch(latch);
+        this.cyclicBarrier = barrier;
     }
 
     /**
-     * Retrieves the count-down latch.
-     * @return such {@link CountDownLatch latch}.
-     */
-    protected CountDownLatch getLatch()
-    {
-        return this.latch;
-    }
-
-    /**
-     * Specifies the number of threads created (reference).
-     * @param threadsCreated such reference.
-     */
-    protected final void immutableSetThreadsCreated(@NotNull final AtomicInteger threadsCreated)
-    {
-        this.threadsCreated = threadsCreated;
-    }
-
-    /**
-     * Specifies the number of threads created (reference).
-     * @param threadsCreated such reference.
+     * Specifies the cyclic barrier.
+     * @param barrier the barrier.
      */
     @SuppressWarnings("unused")
-    protected void setThreadsCreated(@NotNull final AtomicInteger threadsCreated)
+    protected void setCyclicBarrier(@NotNull final CyclicBarrier barrier)
     {
-        immutableSetThreadsCreated(threadsCreated);
+        immutableSetCyclicBarrier(barrier);
     }
 
     /**
-     * Retrieves the number of threads created (reference).
-     * @return such reference.
-     */
-    protected AtomicInteger getThreadsCreated()
-    {
-        return this.threadsCreated;
-    }
-
-    /**
-     * Serializes given template.
-     * @param template the template.
-     * @param outputFilePath the output file path.
-     */
-    protected void serializeTemplate(@NotNull final T template, @NotNull final String outputFilePath)
-    {
-        try
-        {
-            @NotNull final File outputFile = new File(outputFilePath);
-            @NotNull final File baseFolder = outputFile.getParentFile();
-
-            if (!baseFolder.exists())
-            {
-                if (!baseFolder.mkdirs())
-                {
-                    throw new IOException(baseFolder + " does not exist and cannot be created");
-                }
-            }
-
-            if (!baseFolder.canWrite())
-            {
-                throw new IOException(baseFolder + " is not writable");
-            }
-
-            ObjectOutputStream t_osCache =
-                new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
-
-            t_osCache.writeObject(template);
-        }
-        catch (@NotNull IOException cannotSerialize)
-        {
-            @NotNull final Log t_Log =
-                UniqueLogFactory.getLog(
-                    AbstractTemplateGenerator.class);
-
-            t_Log.warn(
-                "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
-                cannotSerialize);
-        }
-    }
-
-    /**
-     * Performs the generation process.
-     * @param template the template.
-     * @param caching whether template caching is enabled.
-     * @param fileName the file name.
-     * @param outputDir the output folder.
-     * @param charset the {@link Charset} to use.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @param log the {@link Log} instance.
-     * @throws IOException if the output dir cannot be created.
-     */
-    protected void generate(
-        @NotNull final T template,
-        final boolean caching,
-        @NotNull final String fileName,
-        @NotNull final File outputDir,
-        @NotNull final Charset charset,
-        @NotNull final FileUtils fileUtils,
-        @NotNull final Log log)
-      throws IOException,
-             QueryJBuildException
-    {
-        String relevantContent = template.generate(true);
-
-        String newHash = computeHash(relevantContent, charset);
-
-        String oldHash = retrieveHash(fileName, outputDir, fileUtils);
-
-        if (   (oldHash == null)
-            || (!newHash.equals(oldHash)))
-        {
-            String t_strOutputFile =
-                outputDir.getAbsolutePath()
-                + File.separator
-                + fileName;
-
-            if (caching)
-            {
-                serializeTemplate(
-                    template,
-                    outputDir.getAbsolutePath() + File.separator + "." + fileName + ".ser");
-            }
-
-            String t_strFileContents = template.generate(false);
-
-            if  (!"".equals(t_strFileContents))
-            {
-                boolean folderCreated = outputDir.mkdirs();
-
-                if (   (!folderCreated)
-                    && (!outputDir.exists()))
-                {
-                    throw
-                        new IOException("Cannot create output dir: " + outputDir);
-                }
-                else
-                {
-                    log.debug(
-                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                        + t_strOutputFile);
-                }
-
-                fileUtils.writeFile(
-                    t_strOutputFile,
-                    t_strFileContents,
-                    charset);
-
-                writeHash(newHash, fileName, outputDir, charset, fileUtils);
-            }
-            else
-            {
-                log.debug(
-                    "Not writing " + t_strOutputFile + " since the generated content is empty");
-            }
-        }
-    }
-
-    /**
-     * Tries to read the hash from disk.
-     * @param fileName the file name.
-     * @param outputDir the output folder.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @return the hash, if found.
-     */
-    protected String retrieveHash(
-        @NotNull final String fileName,
-        @NotNull final File outputDir,
-        @NotNull final FileUtils fileUtils)
-    {
-        return
-            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir));
-    }
-
-    /**
-     * Builds the hash file.
-     * @param fileName the file name.
-     * @param outputDir the output folder.
-     * @return the hash file.
-     */
-    protected File buildHashFile(@NotNull final String fileName, @NotNull final File outputDir)
-    {
-        return new File(outputDir.getAbsolutePath() + File.separator + "." + fileName + ".sha256");
-    }
-    /**
-     * Writes the hash value to disk, to avoid unnecessary generation.
-     * @param hashValue the content to write
-     * @param fileName the file name.
-     * @param outputDir the output dir.
-     * @param charset the charset.
-     * @param fileUtils the {@link FileUtils} instance.
-     */
-    protected void writeHash(
-        @NotNull final String hashValue,
-        @NotNull final String fileName,
-        @NotNull final File outputDir,
-        @NotNull final Charset charset,
-        @NotNull final FileUtils fileUtils)
-    {
-        fileUtils.writeFileIfPossible(
-            buildHashFile(fileName, outputDir), hashValue, charset);
-    }
-
-    /**
-     * Computes the hash of given content.
-     * @param relevantContent the content.
-     * @return the hash.
-     */
-    protected String computeHash(
-        @NotNull final String relevantContent, @NotNull final Charset charset)
-        throws QueryJBuildException
-    {
-        byte[] content = relevantContent.getBytes(charset);
-
-        byte[] buffer = new byte[content.length];
-
-        try
-        {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
-
-            md.update(content, 0, buffer.length);
-
-            buffer = md.digest();
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            throw new QueryJBuildException("SHA-256 not supported", e);
-        }
-
-        return toHex(buffer);
-    }
-
-    /**
-     * Converts given bytes to hexadecimal.                            v
-     * @param buffer the buffer to convert.
-     * @return the hexadecimal representation.
+     * Retrieves the cyclic barrier.
+     * @return such barrier
      */
     @NotNull
-    protected String toHex(@NotNull final byte[] buffer)
+    protected CyclicBarrier getCyclicBarrier()
     {
-        @NotNull StringBuilder result = new StringBuilder(buffer.length);
-
-        for (byte currentByte : buffer)
-        {
-            result.append(Integer.toHexString(0xFF & currentByte));
-        }
-
-        return result.toString();
+        return this.cyclicBarrier;
     }
 
     public void run()
     {
         runGenerator(
+            getTemplateGenerator(),
             getTemplate(),
-            isCaching(),
-            getFileName(),
             getOutputFolder(),
             getCharset(),
-            getFileUtils(),
-            getLatch(),
-            getThreadsCreated(),
+            getThreadIndex(),
+            getCyclicBarrier(),
             UniqueLogFactory.getLog(TemplateGeneratorThread.class));
     }
 
     /**
      * Runs the template generation process.
-     * @param template the template..
-     * @param caching whether template caching is enabled.
-     * @param fileName the file name.
+     * @param templateGenerator the template generator.
      * @param outputDir the output folder.
      * @param charset the {@link Charset} to use.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @param latch the {@link CountDownLatch latch}.
-     * @param threadsCreated the number of the threads created
+     * @param threadIndex the thread index.
+     * @param barrier the cyclic barrier.
      * @param log the {@link Log} instance.
      */
-    @SuppressWarnings("unused")
     protected void runGenerator(
+        @NotNull final TG templateGenerator,
         @NotNull final T template,
-        final boolean caching,
-        @NotNull final String fileName,
         @NotNull final File outputDir,
         @NotNull final Charset charset,
-        @NotNull final FileUtils fileUtils,
-        @NotNull CountDownLatch latch,
-        @NotNull AtomicInteger threadsCreated,
+        @NotNull final AtomicInteger threadIndex,
+        @NotNull final CyclicBarrier barrier,
         @NotNull final Log log)
     {
         try
         {
-            generate(
+            templateGenerator.write(
                 template,
-                caching,
-                fileName,
                 outputDir,
-                charset,
-                fileUtils,
-                log);
-
-            latch.countDown();
+                charset);
         }
         catch (@NotNull final QueryJBuildException unknownException)
         {
@@ -643,6 +346,23 @@ public class TemplateGeneratorThread<T extends Template<C>, C extends TemplateCo
         catch (@NotNull final IOException ioException)
         {
             log.warn(ioException);
+        }
+
+        threadIndex.incrementAndGet();
+
+        try
+        {
+            barrier.await();
+        }
+        catch (@NotNull final InterruptedException interrupted)
+        {
+            log.debug("Interrupted thread", interrupted);
+
+            Thread.currentThread().interrupt();
+        }
+        catch (@NotNull final BrokenBarrierException brokenBarrier)
+        {
+            log.warn("Broken barrier", brokenBarrier);
         }
     }
 }

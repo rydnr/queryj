@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,14 +36,9 @@ package org.acmsl.queryj.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateGenerator;
-import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplate;
 import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
-import org.acmsl.queryj.templates.TemplateGenerator;
 
 /*
  * Importing some JetBrains annotations.
@@ -55,9 +49,6 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -68,7 +59,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
     <T extends BasePerForeignKeyTemplate<C>,
      C extends BasePerForeignKeyTemplateContext,
      TG extends BasePerForeignKeyTemplateGenerator<T,C>>
-    extends    AbstractQueryJCommandHandler
+    extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
     /**
@@ -77,100 +68,19 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
     public BasePerForeignKeyTemplateWritingHandler() {}
 
     /**
-     * Handles given information.
-     *
-     *
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * Retrieves the output dir from the attribute map.
+     * @param context the context.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @return such folder.
      */
     @Override
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
-    {
-        boolean result = true;
-
-        MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
-
-        if (t_MetadataManager != null)
-        {
-            writeTemplates(
-                retrieveTemplates(parameters),
-                retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
-                t_MetadataManager.getEngineName(),
-                retrieveCharset(parameters),
-                parameters);
-
-            result = false;
-        }
-
-        return result;
-    }
-
-    /**
-     * Writes the templates.
-     * @param templates the templates.
-     * @param templateGenerator the template generator.
-     * @param engineName the engine name.
-     * @param charset the file encoding.
-     * @param parameters the parameter map.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplates(
-        @NotNull final List<T> templates,
-        @NotNull final TemplateGenerator<T, C> templateGenerator,
-        @NotNull final String engineName,
-        @NotNull final Charset charset,
-        @NotNull final Map parameters)
-        throws  QueryJBuildException
-    {
-        try
-        {
-            for  (T t_Template : templates)
-            {
-                if  (t_Template != null)
-                {
-                    @NotNull C t_Context = t_Template.getTemplateContext();
-                    @NotNull ForeignKey t_ForeignKey  = t_Context.getForeignKey();
-
-                    File t_OutputDir =
-                        retrieveOutputDir(
-                            engineName,
-                            t_ForeignKey.getSourceTableName(),
-                            parameters);
-
-                    templateGenerator.write(
-                        t_Template, t_OutputDir, charset);
-                }
-            }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the templates", ioException);
-        }
-    }
-
-    /**
-     * Retrieves the templates from the attribute map.
-     * @param parameters the parameter map.
-     * @return the templates.
-     * @throws QueryJBuildException if the template retrieval process if faulty.
-     */
     @NotNull
-    protected abstract List<T> retrieveTemplates(@NotNull final Map parameters)
-        throws  QueryJBuildException;
-
-    /**
-     * Retrieves the template generator.
-     * @param caching whether to enable template caching.
-     * @param threadCount the number of threads to use.
-     * @return such instance.
-     */
-    @NotNull
-    protected abstract TG retrieveTemplateGenerator(final boolean caching, final int threadCount);
+    protected File retrieveOutputDir(
+        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
+    {
+        return retrieveOutputDir(engineName, context.getForeignKey().getSourceTableName(), parameters);
+    }
 
     /**
      * Retrieves the output dir from the attribute map.

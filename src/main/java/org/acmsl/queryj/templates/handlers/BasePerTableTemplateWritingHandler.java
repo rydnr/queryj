@@ -36,37 +36,20 @@ package org.acmsl.queryj.templates.handlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.handlers.AbstractQueryJCommandHandler;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerTableTemplate;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 
 /*
- * Importing some ACM-SL Commons classes.
- */
-import org.acmsl.commons.logging.UniqueLogFactory;
-
-/*
- * Importing some Apache Commons Logging classes.
- */
-import org.apache.commons.logging.Log;
-
-/*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
  */
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -75,159 +58,29 @@ import java.util.Map;
  */
 public abstract class BasePerTableTemplateWritingHandler
     <T extends BasePerTableTemplate<C>, TG extends BasePerTableTemplateGenerator<T,C>, C extends BasePerTableTemplateContext>
-    extends    AbstractQueryJCommandHandler
+    extends    AbstractTemplateWritingHandler<T, TG, C>
     implements TemplateWritingHandler
 {
-    /**
-     * The database product name entry.
-     */
-    public static final String PRODUCT_NAME = "L.:ProductName::.@";
-
     /**
      * Creates a <code>BasePerTableTemplateWritingHandler</code> instance.
      */
     public BasePerTableTemplateWritingHandler() {}
 
     /**
-     * Handles given information.
-     *
-     *
-     * @param parameters the parameters.
-     * @return <code>true</code> if the chain should be stopped.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * Retrieves the output dir from the attribute map.
+     * @param context the context.
+     * @param engineName the engine name.
+     * @param parameters the parameter map.
+     * @return such folder.
+     * @throws org.acmsl.queryj.tools.QueryJBuildException if the output-dir retrieval process if faulty.
      */
     @Override
-    protected boolean handle(@NotNull final Map parameters)
-      throws  QueryJBuildException
-    {
-        writeTemplates(parameters, retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)));
-
-        return false;
-    }
-
-    /**
-     * Writes the templates.
-     * @param parameters the parameters.
-     * @param engineName the engine name.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final String engineName)
-      throws  QueryJBuildException
-    {
-        writeTemplates(
-            retrieveTemplates(parameters),
-            engineName,
-            parameters,
-            retrieveCharset(parameters),
-            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)));
-    }
-            
-    /**
-     * Writes the templates.
-     * @param templates the templates.
-     * @param engineName the engine name.
-     * @param parameters the parameters.
-     * @param charset the file encoding.
-     * @param templateGenerator the template generator.
-     * @throws QueryJBuildException if the build process cannot be performed.
-     */
-    protected void writeTemplates(
-        @Nullable final List<T> templates,
-        @NotNull final String engineName,
-        @NotNull final Map parameters,
-        @NotNull final Charset charset,
-        @NotNull final TG templateGenerator)
-      throws  QueryJBuildException
-    {
-        try 
-        {
-            if (templates != null)
-            {
-                for  (T t_Template : templates)
-                {
-                    if  (t_Template != null)
-                    {
-                        templateGenerator.write(
-                            t_Template,
-                            retrieveOutputDir(
-                                t_Template.getTemplateContext().getTableName(),
-                                engineName,
-                                parameters),
-                            charset);
-                    }
-                }
-            }
-        }
-        catch  (@NotNull final IOException ioException)
-        {
-            throw
-                new QueryJBuildException(
-                    "Cannot write the templates", ioException);
-        }
-    }
-
-    /**
-     * Retrieves the template generator.
-     * @param caching whether to enable template caching.
-     * @param threadCount the number of threads to use.
-     * @return such instance.
-     */
     @NotNull
-    protected abstract TG retrieveTemplateGenerator(final boolean caching, final int threadCount);
-
-    /**
-     * Retrieves the templates from the attribute map.
-     *
-     * @param parameters the parameter map.
-     * @return the template.
-     * @throws QueryJBuildException if the template retrieval process if faulty.
-     */
-    @Nullable
-    protected abstract List<T> retrieveTemplates(@NotNull final Map parameters)
-        throws QueryJBuildException;
-
-    /**
-     * Retrieves the database product name.
-     * @param parameters the parameter map.
-     * @param metadata the database metadata.
-     * @return the product name.
-     */
-    @SuppressWarnings("unchecked")
-    public String retrieveProductName(@NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
+    protected File retrieveOutputDir(
+        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
+        throws  QueryJBuildException
     {
-        @Nullable String result = (String) parameters.get(PRODUCT_NAME);
-
-        if (   (result == null)
-            && (metadata != null))
-        {
-            try
-            {
-                result = metadata.getDatabaseProductName();
-            }
-            catch  (@NotNull final SQLException sqlException)
-            {
-                Log t_Log = UniqueLogFactory.getLog(BasePerTableTemplateWritingHandler.class);
-
-                if (t_Log != null)
-                {
-                    t_Log.warn(
-                        "Cannot retrieve database product name, "
-                        + "version or quote string",
-                        sqlException);
-                }
-            }
-        }
-
-        if (result == null)
-        {
-            result = "";
-        }
-
-        parameters.put(PRODUCT_NAME, result);
-
-        return result;
+        return retrieveOutputDir(context.getTableName(), engineName, parameters);
     }
 
     /**

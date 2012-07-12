@@ -52,6 +52,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -78,11 +79,11 @@ public class TableRepositoryTemplateWritingHandler
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
-    protected TableRepositoryTemplate retrieveTemplate(
+    protected List<TableRepositoryTemplate> retrieveTemplates(
         @NotNull final Map parameters)
     {
         return
-            (TableRepositoryTemplate)
+            (List<TableRepositoryTemplate>)
                 parameters.get(
                     TemplateMappingManager.TABLE_REPOSITORY_TEMPLATE);
     }

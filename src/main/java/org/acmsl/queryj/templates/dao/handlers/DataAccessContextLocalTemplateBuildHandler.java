@@ -45,6 +45,8 @@ import org.acmsl.queryj.templates.TemplateMappingManager;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -106,8 +108,11 @@ public class DataAccessContextLocalTemplateBuildHandler
     protected void storeTemplate(
         @NotNull final DataAccessContextLocalTemplate template, @NotNull final Map parameters)
     {
+        List<DataAccessContextLocalTemplate> list = new ArrayList<DataAccessContextLocalTemplate>(1);
+        list.add(template);
+
         parameters.put(
             TemplateMappingManager.DATAACCESSCONTEXTLOCAL_TEMPLATE,
-            template);
+            list);
     }
 }
