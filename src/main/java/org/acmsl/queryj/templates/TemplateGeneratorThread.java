@@ -63,7 +63,6 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Thread to make generators concurrent.
@@ -97,7 +96,7 @@ public class TemplateGeneratorThread
     /**
      * The thread index.
      */
-    private AtomicInteger threadIndex;
+    private int threadIndex;
 
     /**
      * The cyclic barrier.
@@ -118,7 +117,7 @@ public class TemplateGeneratorThread
         @NotNull final T template,
         @NotNull final File outputFolder,
         @NotNull final Charset charset,
-        @NotNull final AtomicInteger threadIndex,
+        final int threadIndex,
         @NotNull final CyclicBarrier barrier)
     {
         immutableSetTemplateGenerator(templateGenerator);
@@ -248,7 +247,7 @@ public class TemplateGeneratorThread
      * Specifies the thread index.
      * @param index such index.
      */
-    protected final void immutableSetThreadIndex(@NotNull final AtomicInteger index)
+    protected final void immutableSetThreadIndex(final int index)
     {
         this.threadIndex = index;
     }
@@ -258,7 +257,7 @@ public class TemplateGeneratorThread
      * @param index such index.
      */
     @SuppressWarnings("unused")
-    protected void setThreadIndex(@NotNull final AtomicInteger index)
+    protected void setThreadIndex(final int index)
     {
         immutableSetThreadIndex(index);
     }
@@ -267,8 +266,7 @@ public class TemplateGeneratorThread
      * Retrieves the thread index.
      * @return such index.
      */
-    @NotNull
-    public AtomicInteger getThreadIndex()
+    public int getThreadIndex()
     {
         return this.threadIndex;
     }
@@ -328,7 +326,7 @@ public class TemplateGeneratorThread
         @NotNull final T template,
         @NotNull final File outputDir,
         @NotNull final Charset charset,
-        @NotNull final AtomicInteger threadIndex,
+        final int threadIndex,
         @NotNull final CyclicBarrier barrier,
         @NotNull final Log log)
     {
@@ -348,7 +346,8 @@ public class TemplateGeneratorThread
             log.warn(ioException);
         }
 
-        threadIndex.incrementAndGet();
+        UniqueLogFactory.getLog(TemplateGeneratorThread.class).info(
+            "Thread " + threadIndex + " finished");
 
         try
         {

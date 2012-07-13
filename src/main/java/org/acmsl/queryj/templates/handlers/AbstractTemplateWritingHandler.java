@@ -62,6 +62,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
@@ -120,7 +121,7 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final Map parameters, @NotNull final String engineName)
       throws  QueryJBuildException
     {
-        writeTemplates(
+        writeTemplatesSequentially(
             retrieveTemplates(parameters),
             engineName,
             parameters,
@@ -139,7 +140,51 @@ public abstract class AbstractTemplateWritingHandler
      * @param threadCount the number of threads to use.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
-    protected void writeTemplates(
+    @SuppressWarnings("unused")
+    protected void writeTemplatesSequentially(
+        @Nullable final List<T> templates,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final Charset charset,
+        @NotNull final TG templateGenerator,
+        final int threadCount)
+        throws  QueryJBuildException
+    {
+        if (templates != null)
+        {
+            for  (T t_Template : templates)
+            {
+                if  (t_Template != null)
+                {
+                    try
+                    {
+                        templateGenerator.write(
+                            t_Template,
+                            retrieveOutputDir(t_Template.getTemplateContext(), engineName, parameters),
+                            charset);
+                    }
+                    catch (@NotNull final IOException ioException)
+                    {
+                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).warn(
+                            "Error writing template", ioException);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Writes the templates.
+     * @param templates the templates.
+     * @param engineName the engine name.
+     * @param parameters the parameters.
+     * @param charset the file encoding.
+     * @param templateGenerator the template generator.
+     * @param threadCount the number of threads to use.
+     * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
+     */
+    @SuppressWarnings("unused")
+    protected void writeTemplatesMultithread(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
         @NotNull final Map parameters,
@@ -156,13 +201,18 @@ public abstract class AbstractTemplateWritingHandler
 
             AtomicInteger index = new AtomicInteger(0);
 
+            int intIndex;
+
             for  (T t_Template : templates)
             {
                 if  (t_Template != null)
                 {
-                    if (index.get() < threadCount)
+                    intIndex = index.incrementAndGet();
+
+                    if (intIndex <= threadCount)
                     {
-                        index.incrementAndGet();
+                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
+                            "Starting a new thread " + intIndex + "/" + threadCount);
 
                         threadPool.execute(
                             new TemplateGeneratorThread<T, TG, C>(
@@ -170,11 +220,16 @@ public abstract class AbstractTemplateWritingHandler
                                 t_Template,
                                 retrieveOutputDir(t_Template.getTemplateContext(), engineName, parameters),
                                 charset,
-                                index,
+                                intIndex,
                                 round));
                     }
                     else
                     {
+                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
+                            "No threads available " + intIndex + "/" + threadCount);
+
+                        index = new AtomicInteger(0);
+
                         try
                         {
                             round.await();
@@ -190,6 +245,9 @@ public abstract class AbstractTemplateWritingHandler
                             UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
                                 "Broken barrier", brokenBarrier);
                         }
+
+                        UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
+                            "Resetting thread pool (shutdown? " + threadPool.isShutdown() + ")");
 
                         round.reset();
                     }
