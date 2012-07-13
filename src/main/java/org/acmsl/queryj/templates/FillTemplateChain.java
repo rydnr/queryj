@@ -240,7 +240,7 @@ public abstract class FillTemplateChain<C extends TemplateContext>
         FillAdapterHandler actualHander = handler;
 
         if (   (relevantOnly)
-            && (handler instanceof NonRelevantFillHandler))
+            && (handler.getFillHandler() instanceof NonRelevantFillHandler))
         {
             actualHander = new EmptyFillAdapterHandler(handler.getFillHandler());
         }
