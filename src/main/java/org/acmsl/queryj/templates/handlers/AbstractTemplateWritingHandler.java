@@ -72,6 +72,7 @@ import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -197,15 +198,68 @@ public abstract class AbstractTemplateWritingHandler
         {
             ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
+            for  (int t_iIndex = 0 ; t_iIndex < templates.size(); t_iIndex++)
+            {
+                T t_Template = templates.get(t_iIndex);
+
+                if  (t_Template != null)
+                {
+                    threadPool.execute(
+                        new TemplateGeneratorThread<T, TG, C>(
+                            templateGenerator,
+                            t_Template,
+                            retrieveOutputDir(t_Template.getTemplateContext(), engineName, parameters),
+                            charset,
+                            t_iIndex + 1,
+                            null));
+                }
+            }
+
+            try
+            {
+                threadPool.awaitTermination(1000, TimeUnit.MILLISECONDS);
+            }
+            catch (@NotNull final InterruptedException interrupted)
+            {
+                UniqueLogFactory.getLog(AbstractTemplateWritingHandler.class).info(
+                    "Interrupted while waiting for the threads to finish", interrupted);
+            }
+        }
+    }
+
+    /**
+     * Writes the templates.
+     * @param templates the templates.
+     * @param engineName the engine name.
+     * @param parameters the parameters.
+     * @param charset the file encoding.
+     * @param templateGenerator the template generator.
+     * @param threadCount the number of threads to use.
+     * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
+     */
+    @SuppressWarnings("unused")
+    protected void writeTemplatesMultithread2ndVersion(
+        @Nullable final List<T> templates,
+        @NotNull final String engineName,
+        @NotNull final Map parameters,
+        @NotNull final Charset charset,
+        @NotNull final TG templateGenerator,
+        final int threadCount)
+        throws  QueryJBuildException
+    {
+        if (templates != null)
+        {
+            ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
+
             final CyclicBarrier round = new CyclicBarrier(threadCount);
 
             AtomicInteger index = new AtomicInteger(0);
 
             int intIndex;
 
-            for  (T t_Template : templates)
+            for (T t_Template : templates)
             {
-                if  (t_Template != null)
+                if (t_Template != null)
                 {
                     intIndex = index.incrementAndGet();
 

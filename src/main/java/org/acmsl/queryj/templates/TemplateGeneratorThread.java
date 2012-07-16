@@ -54,6 +54,7 @@ import org.apache.commons.logging.Log;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -118,7 +119,7 @@ public class TemplateGeneratorThread
         @NotNull final File outputFolder,
         @NotNull final Charset charset,
         final int threadIndex,
-        @NotNull final CyclicBarrier barrier)
+        @Nullable final CyclicBarrier barrier)
     {
         immutableSetTemplateGenerator(templateGenerator);
         immutableSetTemplate(template);
@@ -275,7 +276,7 @@ public class TemplateGeneratorThread
      * Specifies the cyclic barrier.
      * @param barrier the barrier.
      */
-    protected final void immutableSetCyclicBarrier(@NotNull final CyclicBarrier barrier)
+    protected final void immutableSetCyclicBarrier(@Nullable final CyclicBarrier barrier)
     {
         this.cyclicBarrier = barrier;
     }
@@ -294,7 +295,7 @@ public class TemplateGeneratorThread
      * Retrieves the cyclic barrier.
      * @return such barrier
      */
-    @NotNull
+    @Nullable
     protected CyclicBarrier getCyclicBarrier()
     {
         return this.cyclicBarrier;
@@ -327,7 +328,7 @@ public class TemplateGeneratorThread
         @NotNull final File outputDir,
         @NotNull final Charset charset,
         final int threadIndex,
-        @NotNull final CyclicBarrier barrier,
+        @Nullable final CyclicBarrier barrier,
         @NotNull final Log log)
     {
         try
@@ -346,22 +347,25 @@ public class TemplateGeneratorThread
             log.warn(ioException);
         }
 
-        UniqueLogFactory.getLog(TemplateGeneratorThread.class).info(
-            "Thread " + threadIndex + " finished");
+        UniqueLogFactory.getLog(TemplateGeneratorThread.class).debug(
+            "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished");
 
-        try
+        if (barrier != null)
         {
-            barrier.await();
-        }
-        catch (@NotNull final InterruptedException interrupted)
-        {
-            log.debug("Interrupted thread", interrupted);
+            try
+            {
+                barrier.await();
+            }
+            catch (@NotNull final InterruptedException interrupted)
+            {
+                log.debug("Interrupted thread", interrupted);
 
-            Thread.currentThread().interrupt();
-        }
-        catch (@NotNull final BrokenBarrierException brokenBarrier)
-        {
-            log.warn("Broken barrier", brokenBarrier);
+                Thread.currentThread().interrupt();
+            }
+            catch (@NotNull final BrokenBarrierException brokenBarrier)
+            {
+                log.warn("Broken barrier", brokenBarrier);
+            }
         }
     }
 }

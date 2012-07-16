@@ -54,6 +54,7 @@ import org.apache.commons.logging.Log;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -280,14 +281,14 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         throws IOException,
         QueryJBuildException
     {
-        String relevantContent = template.generate(true);
+        @NotNull final String relevantContent = template.generate(true);
 
-        String newHash = computeHash(relevantContent, charset);
+        @NotNull final String newHash = computeHash(relevantContent, charset);
 
-        String oldHash = retrieveHash(fileName, outputDir, fileUtils);
+        @Nullable final String oldHash = retrieveHash(fileName, outputDir, fileUtils);
 
         if (   (oldHash == null)
-               || (!newHash.equals(oldHash)))
+            || (!newHash.equals(oldHash)))
         {
             String t_strOutputFile =
                 outputDir.getAbsolutePath()
@@ -342,13 +343,22 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param fileUtils the {@link FileUtils} instance.
      * @return the hash, if found.
      */
+    @Nullable
     protected String retrieveHash(
         @NotNull final String fileName,
         @NotNull final File outputDir,
         @NotNull final FileUtils fileUtils)
     {
-        return
+        @Nullable String result =
             fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir));
+
+        if (   (result != null)
+            && (result.endsWith("\n")))
+        {
+            result = result.substring(0, result.length() - 1);
+        }
+
+        return result;
     }
 
     /**
