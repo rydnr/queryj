@@ -38,7 +38,9 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 
@@ -56,6 +58,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -125,8 +128,10 @@ public class SqlXmlParserResultDAO
     {
         @Nullable Result result = null;
 
-        Sql t_Sql;
-        String t_strDAO = null;
+        @Nullable List<Sql> t_lSql;
+        @Nullable String t_strDAO = null;
+
+        boolean t_bBreak = false;
 
         for (@Nullable Result t_Result : findAll())
         {
@@ -134,17 +139,30 @@ public class SqlXmlParserResultDAO
             {
                 if (t_Result.getMatches().equals(type))
                 {
-                    t_Sql = findSqlByResultId(t_Result.getId());
+                    t_lSql = findSqlByResultId(t_Result.getId());
 
-                    if (t_Sql != null)
+                    for (@Nullable Sql t_Sql : t_lSql)
                     {
-                        t_strDAO = t_Sql.getDao();
+                        if (t_Sql != null)
+                        {
+                            t_strDAO = t_Sql.getDao();
+                        }
+
+                        if ("g_cycle_metadata".equals(t_strDAO))
+                        {
+                            UniqueLogFactory.getLog(SqlXmlParserResultDAO.class).debug("caught");
+                        }
+                        if (   (t_strDAO != null)
+                            && (matches(table, t_strDAO, englishGrammarUtils)))
+                        {
+                            result = t_Result;
+                            t_bBreak = true;
+                            break;
+                        }
                     }
 
-                    if (   (t_strDAO != null)
-                        && (matches(table, t_strDAO, englishGrammarUtils)))
+                    if (t_bBreak)
                     {
-                        result = t_Result;
                         break;
                     }
                 }
@@ -159,11 +177,47 @@ public class SqlXmlParserResultDAO
      * @param id the result id.
      * @return the associated {@link Sql}.
      */
-    @Nullable
-    protected Sql findSqlByResultId(@NotNull final String id)
+    @NotNull
+    protected List<Sql> findSqlByResultId(@NotNull final String id)
     {
-        // TODO
-        return null;
+        return findSqlByResultId(id, getSqlXmlParser());
+    }
+
+    /**
+     * Finds the sql associated to given result id.
+     * @param id the result id.
+     * @param sqlXmlParser the {@link SqlXmlParser} instance.
+     * @return the associated {@link Sql}.
+     */
+    @NotNull
+    protected List<Sql> findSqlByResultId(@NotNull final String id, @NotNull final SqlXmlParser sqlXmlParser)
+    {
+        @Nullable List<Sql> result = new ArrayList<Sql>(2);
+
+        @Nullable Result t_CustomResult = findByPrimaryKey(id);
+        @Nullable ResultRef t_ResultRef;
+        @Nullable Sql t_Sql;
+
+        if (t_CustomResult != null)
+        {
+            for (Object t_Item : sqlXmlParser.getCollection())
+            {
+                if (t_Item instanceof Sql)
+                {
+                    t_Sql = (Sql) t_Item;
+
+                    t_ResultRef = t_Sql.getResultRef();
+
+                    if (   (t_ResultRef != null)
+                        && (id.equalsIgnoreCase(t_ResultRef.getId())))
+                    {
+                        result.add(t_Sql);
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -175,8 +229,44 @@ public class SqlXmlParserResultDAO
     @Nullable
     public Result findBySqlId(@NotNull final String sqlId)
     {
-        // TODO: need a way to retrieve a SqlDAO.
-        return null;
+        return findBySqlId(sqlId, getSqlXmlParser());
+    }
+
+    /**
+     * Retrieves the {@link Result} for given {@link org.acmsl.queryj.customsql.Sql sql} id.
+     * @param sqlId the identifier.
+     * @param sqlXmlParser the {@link SqlXmlParser} instance.
+     * @return the associated {@link Result}, or <code>null</code> if not found.
+     */
+    @Nullable
+    protected Result findBySqlId(@NotNull final String sqlId, @NotNull final SqlXmlParser sqlXmlParser)
+    {
+        @Nullable Result result = null;
+
+        @Nullable Sql t_Sql;
+
+        @Nullable ResultRef t_ResultRef;
+
+        for (Object t_Item : sqlXmlParser.getCollection())
+        {
+            if (t_Item instanceof Sql)
+            {
+                t_Sql = (Sql) t_Item;
+
+                if (sqlId.equalsIgnoreCase(t_Sql.getId()))
+                {
+                    t_ResultRef = t_Sql.getResultRef();
+
+                    if (t_ResultRef != null)
+                    {
+                        result = findByPrimaryKey(t_ResultRef.getId());
+                        break;
+                    }
+                }
+            }
+        }
+
+        return result;
     }
 
     /**

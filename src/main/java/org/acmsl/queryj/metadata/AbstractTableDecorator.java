@@ -42,6 +42,8 @@ package org.acmsl.queryj.metadata;
  * Importing project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.AbstractTable;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -2351,4 +2353,153 @@ public abstract class AbstractTableDecorator
 
         return result;
     }
+
+    /**
+     * Retrieves the custom results.
+     * @return such list of {@link ResultDecorator} elements.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<ResultDecorator> getCustomResults()
+    {
+        return getCustomResults(getTable(), getCustomSqlProvider(), getMetadataManager(), getDecoratorFactory());
+    }
+
+
+    /**
+     * Retrieves the custom results.
+     * @param table the {@link Table} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return such list of {@link Result} elements.
+     */
+    @NotNull
+    protected List<ResultDecorator> getCustomResults(
+        @NotNull final Table table,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        return
+            getCustomResults(
+                table.getName(),
+                customSqlProvider.getSqlDAO(),
+                customSqlProvider.getSqlResultDAO(),
+                customSqlProvider,
+                metadataManager,
+                decoratorFactory);
+    }
+
+    /**
+     * Retrieves the custom results.
+     * @param tableName the table name.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return such list of {@link Result} elements.
+     */
+    @NotNull
+    protected List<ResultDecorator> getCustomResults(
+        @NotNull final String tableName,
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final SqlResultDAO resultDAO,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        List<ResultDecorator> result;
+
+        List<Result> aux = new ArrayList<Result>(2);
+
+        @Nullable Result singleResult = resultDAO.findSingleMatch(tableName);
+
+        if (singleResult != null)
+        {
+            aux.add(singleResult);
+        }
+
+        @Nullable Result multipleResult = resultDAO.findMultipleMatch(tableName);
+
+        if (   (multipleResult == null)
+            && (singleResult != null))
+        {
+            multipleResult =
+                new ResultElement(
+                    singleResult.getId().replaceFirst("single\\.", "multiple\\."),
+                    singleResult.getClassValue(),
+                    Result.MULTIPLE);
+
+            aux.add(multipleResult);
+        }
+        else if (   (multipleResult != null)
+                 && (singleResult == null))
+        {
+            singleResult =
+                new ResultElement(
+                    multipleResult.getId().replaceFirst("multiple\\.", "single\\."),
+                    multipleResult.getClassValue(),
+                    Result.MULTIPLE);
+
+            aux.add(singleResult);
+        }
+
+        @Nullable Result customResult;
+
+        List<Sql> sqlList = sqlDAO.findSelects(tableName);
+
+        for (Sql t_Sql : sqlList)
+        {
+            customResult = resultDAO.findBySqlId(t_Sql.getId());
+
+            if (   (customResult != null)
+                && (!aux.contains(customResult)))
+            {
+                aux.add(customResult);
+            }
+        }
+
+        sqlList = sqlDAO.findSelectsForUpdate(tableName);
+
+        for (Sql t_Sql : sqlList)
+        {
+            customResult = resultDAO.findBySqlId(t_Sql.getId());
+
+            if (   (customResult != null)
+                && (!aux.contains(customResult)))
+            {
+                aux.add(customResult);
+            }
+        }
+
+        result = new ArrayList<ResultDecorator>(aux.size());
+
+        for (@NotNull Result t_Result : aux)
+        {
+            result.add(decorate(t_Result, customSqlProvider, metadataManager, decoratorFactory));
+        }
+
+        return result;
+    }
+
+    /**
+     * Decorates given result.
+     * @param customResult the {@link Result} element.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the decorated version.
+     */
+    @NotNull
+    protected ResultDecorator decorate(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        return new CachingResultDecorator(customResult, customSqlProvider, metadataManager, decoratorFactory);
+    }
+
 }

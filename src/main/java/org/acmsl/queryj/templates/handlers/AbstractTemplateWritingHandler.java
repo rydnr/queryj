@@ -122,7 +122,7 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final Map parameters, @NotNull final String engineName)
       throws  QueryJBuildException
     {
-        writeTemplatesMultithread(
+        writeTemplatesSequentially(
             retrieveTemplates(parameters),
             engineName,
             parameters,

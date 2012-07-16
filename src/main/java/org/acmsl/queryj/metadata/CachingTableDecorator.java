@@ -253,6 +253,11 @@ public class CachingTableDecorator
     private List<Sql> m__lCachedCustomUpdatesOrInserts;
 
     /**
+     * The cached custom results.
+     */
+    private List<ResultDecorator> m__lCachedCustomResults;
+
+    /**
      * Creates a <code>CachingTableDecorator</code> with the
      * <code>Table</code> to decorate.
      * @param table the table.
@@ -2135,6 +2140,54 @@ public class CachingTableDecorator
         {
             result = super.getCustomUpdatesOrInserts();
             setCachedCustomUpdatesOrInserts(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached custom results.
+     * @param results the results to cache.
+     */
+    protected final void immutableSetCachedCustomResults(@NotNull final List<ResultDecorator> results)
+    {
+        m__lCachedCustomResults = results;
+    }
+
+    /**
+     * Specifies the cached custom results.
+     * @param results the results to cache.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedCustomResults(@NotNull final List<ResultDecorator> results)
+    {
+        immutableSetCachedCustomResults(results);
+    }
+
+    /**
+     * Retrieves the cached custom results.
+     * @return such information.
+     */
+    @Nullable
+    protected List<ResultDecorator> getCachedCustomResults()
+    {
+        return m__lCachedCustomResults;
+    }
+
+    /**
+     * Retrieves the custom results.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public List<ResultDecorator> getCustomResults()
+    {
+        List<ResultDecorator> result = getCachedCustomResults();
+
+        if (result == null)
+        {
+            result = super.getCustomResults();
+            setCachedCustomResults(result);
         }
 
         return result;
