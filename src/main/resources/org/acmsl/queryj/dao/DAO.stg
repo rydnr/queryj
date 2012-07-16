@@ -1382,7 +1382,7 @@ jdbcInsert(table, parent) ::= <<
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <table.allButExternallyManagedAttributes:attribute_javadoc(
+ <table.allNonExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
@@ -1420,7 +1420,7 @@ jdbcInsert2(table, parent) ::= <<
 <if(parent)>
  <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
- <table.allButExternallyManagedAttributes:attribute_javadoc(
+ <table.allNonExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
 <endif>
 
