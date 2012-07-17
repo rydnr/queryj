@@ -37,11 +37,13 @@ package org.acmsl.queryj.metadata;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing jetbrains annotations.
  */
+import org.acmsl.queryj.SingularPluralFormConverter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -353,6 +355,32 @@ public class DecorationUtils
         @NotNull final StringUtils stringUtils)
     {
         return stringUtils.escape(value, charToEscape);
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @return the singular.
+     */
+    @NotNull
+    protected String getSingular(@NotNull final String word)
+    {
+        return getSingular(word, SingularPluralFormConverter.getInstance());
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @param singularPluralFormConverter the
+     * <code>SingularPluralFormConverter</code> instance.
+     * @return the singular.
+     */
+    @NotNull
+    protected String getSingular(
+        @NotNull final String word,
+        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
+    {
+        return singularPluralFormConverter.getSingular(word);
     }
 
     /**

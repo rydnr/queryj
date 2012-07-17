@@ -931,7 +931,20 @@ public abstract class AbstractTableDecorator
     @NotNull
     public String getSingularNameCapitalized()
     {
-        return capitalize(getSingular(lowercase(getName())));
+        return getSingularNameCapitalized(getName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the table's name once normalized.
+     * @param name the table name.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getSingularNameCapitalized(
+        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(decorationUtils.getSingular(name));
     }
 
     /**

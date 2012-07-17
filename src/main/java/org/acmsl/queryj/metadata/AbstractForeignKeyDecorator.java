@@ -36,6 +36,8 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.vo.AbstractForeignKey;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -346,6 +348,108 @@ public abstract class AbstractForeignKeyDecorator
     }
 
     /**
+     * Retrieves the Value-Object-formatted name of the source table.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getSourceVoName()
+    {
+        return toVoName(getSourceTableName());
+    }
+
+    /**
+     * Retrieves the Value-Object-formatted name of the target table.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getTargetVoName()
+    {
+        return toVoName(getTargetTableName());
+    }
+
+    /**
+     * Converts given name into a ValueObject-formatted one.
+     * @param tableName the table name.
+     * @return the formatted name.
+     */
+    @NotNull
+    protected String toVoName(@NotNull final String tableName)
+    {
+        return toVoName(tableName, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the table's name once normalized.
+     * @param name the table name.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String toVoName(
+        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(decorationUtils.getSingular(name));
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @return the singular.
+     */
+    @NotNull
+    protected String getSingular(@NotNull final String word)
+    {
+        return getSingular(word, SingularPluralFormConverter.getInstance());
+    }
+
+    /**
+     * Retrieves the singular of given word.
+     * @param word the word.
+     * @param singularPluralFormConverter the
+     * <code>SingularPluralFormConverter</code> instance.
+     * @return the singular.
+     */
+    @NotNull
+    protected String getSingular(
+        @NotNull final String word,
+        @NotNull final EnglishGrammarUtils singularPluralFormConverter)
+    {
+        return singularPluralFormConverter.getSingular(word);
+    }
+
+    /**
+     * Checks whether this foreign key allows null or not.
+     * @return such condition.
+     */
+    public boolean isNullable()
+    {
+        return isNullable(getAttributes());
+    }
+
+    /**
+     * Checks whether this foreign key allows null or not.
+     * @return such condition.
+     */
+    protected boolean isNullable(@NotNull final List<Attribute> attributes)
+    {
+        boolean result = true;
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (   (t_Attribute != null)
+                && (!t_Attribute.isNullable()))
+            {
+                result = false;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
      * Decorates given table.
      * @param table the table.
      * @return the decorated table.
@@ -354,6 +458,107 @@ public abstract class AbstractForeignKeyDecorator
     protected Table decorate(@NotNull final Table table)
     {
         return new CachingTableDecorator(table, getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the name of the foreign key, in upper case.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getNameUppercased()
+    {
+        return getNameUppercased(getFkName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the name of the foreign key, in upper case.
+     * @param name the {@link ForeignKey}'s name.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getNameUppercased(
+        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.upperCase(name);
+    }
+
+    /**
+     * Retrieves the name of the foreign key, capitalized.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getNameCapitalized()
+    {
+        return getNameCapitalized(getFkName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the name of the foreign key, capitalized.
+     * @param name the {@link ForeignKey}'s name.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getNameCapitalized(
+        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(name);
+    }
+
+    /**
+     * Retrieves the name of the foreign key, in lower case.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getNameLowercased()
+    {
+        return getNameLowercased(getFkName(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the name of the foreign key, in lower case.
+     * @param name the {@link ForeignKey}'s name.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getNameLowercased(
+        @NotNull final String name, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.lowerCase(name);
+    }
+
+    /**
+     * Retrieves the name of the foreign key.
+     * @return such information.
+     */
+    @Override
+    @NotNull
+    public String getFkName()
+    {
+        return getFkName(getForeignKey());
+    }
+
+    /**
+     * Retrieves the name of the foreign key.
+     * @param foreignKey the {@link ForeignKey} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected String getFkName(@NotNull final ForeignKey foreignKey)
+    {
+        String result = foreignKey.getFkName();
+
+        if (result == null)
+        {
+            result = getSourceVoName() + "_" + getTargetVoName() + foreignKey.hashCode();
+        }
+
+        return result;
     }
 
     /**

@@ -1301,7 +1301,7 @@ fk_dao_delete_call(foreignKey, pkAttributes) ::= <<
   @param foreignKey the foreign key.
   @param pkAttributes the pk attributes.
 !>
-<if(foreignKey.allowsNull)>
+<if(foreignKey.nullable)>
 //<foreignKey.targetVoName>DAO.discardRelationTo<foreignKey.sourceVoName>(
 <else>
 //<foreignKey.targetVoName>DAO.deleteBy<foreignKey.sourceVoName>(
@@ -1356,8 +1356,8 @@ fk_delete_method(foreignKey) ::= <<
  * \<br/>\<b>This method is not implemented yet\</b>.
  <foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
-public void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
-    <foreignKey:attribute_declaration(attr=it); separator=",\n">)
+public void deleteBy<foreignKey.attributes:{attr |<attr.nameCapitalized>}>(
+    <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">)
 {
     // TODO: not refactored yet. Removed till then.
     throw new IllegalArgumentException("Not implemented yet");
@@ -2186,7 +2186,7 @@ delete_by_fk_sql(foreignKey) ::= <<
 //public static final String DELETE_BY_<foreignKey>_SQL =
 //    "DELETE FROM <table.nameUppercased> "
 //    + "WHERE "
-//<foreignKey:{attr|
+//<foreignKey.attributes:{attr|
 //    + "<attr.nameUppercased> = ? "}; separator="\n    + \" AND \"">;
 >>
 
