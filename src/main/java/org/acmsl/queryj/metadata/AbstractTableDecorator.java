@@ -406,16 +406,60 @@ public abstract class AbstractTableDecorator
     @Override
     public List<ForeignKey> getForeignKeys()
     {
+        return getForeignKeys(getName(), getMetadataManager(), getDecoratorFactory(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     * @param name the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instnace.
+     * @return such list.
+     */
+    @NotNull
+    protected List<ForeignKey> getForeignKeys(
+        @NotNull final String name,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
         List<ForeignKey> result = immutableGetForeignKeys();
 
-        if  (result == null)
+        if  (   (result == null)
+             || (!areDecorated(result)))
         {
             result =
-                retrieveForeignKeys(
-                    getName(),
-                    getMetadataManager());
+                decorate(
+                    retrieveForeignKeys(
+                        name,
+                        metadataManager),
+                    metadataManager,
+                    decoratorFactory,
+                    customSqlProvider);
 
             setForeignKeys(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given foreign keys are decorated already or not.
+     * @param foreignKeys the {@link ForeignKey} list.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean areDecorated(@NotNull final List<ForeignKey> foreignKeys)
+    {
+        boolean result = false;
+
+        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        {
+            if (t_ForeignKey instanceof ForeignKeyDecorator)
+            {
+                result = true;
+                break;
+            }
         }
 
         return result;
@@ -2502,4 +2546,49 @@ public abstract class AbstractTableDecorator
         return new CachingResultDecorator(customResult, customSqlProvider, metadataManager, decoratorFactory);
     }
 
+    /**
+     * Decorates given foreign keys.
+     * @param foreignKeys the {@link ForeignKey} list.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return the decorated version.
+     */
+    @NotNull
+    protected List<ForeignKey> decorate(
+        @NotNull final List<ForeignKey> foreignKeys,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        @NotNull final List<ForeignKey> result = new ArrayList<ForeignKey>(foreignKeys.size());
+
+        for (@Nullable ForeignKey t_ForeignKey : foreignKeys)
+        {
+            if (t_ForeignKey != null)
+            {
+                result.add(decorate(t_ForeignKey, metadataManager, decoratorFactory, customSqlProvider));
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Decorates given foreign key.
+     * @param foreignKey the {@link ForeignKey}.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return the decorated version.
+     */
+    @NotNull
+    protected ForeignKeyDecorator decorate(
+        @NotNull final ForeignKey foreignKey,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return new CachingForeignKeyDecorator(foreignKey, metadataManager, decoratorFactory, customSqlProvider);
+    }
 }
