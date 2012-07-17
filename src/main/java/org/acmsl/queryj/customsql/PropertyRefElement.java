@@ -48,6 +48,7 @@ package org.acmsl.queryj.customsql;
  */
 public class PropertyRefElement
     extends  AbstractIdElement
+    implements PropertyRef
 {
     private static final long serialVersionUID = -944778567031371562L;
 

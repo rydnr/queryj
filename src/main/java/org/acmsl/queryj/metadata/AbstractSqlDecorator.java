@@ -77,7 +77,6 @@ public abstract class AbstractSqlDecorator
 
     /**
      * The custom sql provider.
-     * @todo remove this.
      */
     private CustomSqlProvider m__CustomSqlProvider;
 
@@ -361,7 +360,6 @@ public abstract class AbstractSqlDecorator
 
     /**
      * Retrieves the parameters.
-     * @todo fix reference to customSqlProvider.
      * @param parameterRefs the parameter references.
      * @param customSqlProvider the <code>CustomSqlProvider</code>.
      * @param metadataTypeManager the metadata type manager.
@@ -408,7 +406,6 @@ public abstract class AbstractSqlDecorator
                 {
                     try
                     {
-                        // todo throw something.
                         Log t_Log = UniqueLogFactory.getLog(SqlDecorator.class);
 
                         if (t_Log != null)
@@ -486,7 +483,6 @@ public abstract class AbstractSqlDecorator
             {
                 try
                 {
-                    // todo throw something.
                     Log t_Log = UniqueLogFactory.getLog("custom-sql");
 
                     if (t_Log != null)
@@ -506,6 +502,114 @@ public abstract class AbstractSqlDecorator
         return result;
     }
 
+    /**
+     * Retrieves the result id.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public String getResultId()
+    {
+        return getResultIdAsConstant();
+    }
+
+    /**
+     * Retrieves the result.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @Nullable
+    public Result getResult()
+    {
+        return getResult(getResultRef(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the result.
+     * @param resultRef the {@link ResultRef} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return such information.
+     */
+    @Nullable
+    protected Result getResult(
+        @Nullable final ResultRef resultRef,
+        @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return getResult(resultRef, customSqlProvider.getSqlResultDAO());
+    }
+
+    /**
+     * Retrieves the result.
+     * @param resultRef the {@link ResultRef} instance.
+     * @param sqlResultDAO the {@link SqlResultDAO} instance.
+     * @return such information.
+     */
+    @Nullable
+    protected Result getResult(
+        @Nullable final ResultRef resultRef,
+        @NotNull final SqlResultDAO sqlResultDAO)
+    {
+        @Nullable Result result = null;
+
+        if  (resultRef != null)
+        {
+            @Nullable Result t_Result = sqlResultDAO.findByPrimaryKey(resultRef.getId());
+
+            if  (t_Result != null)
+            {
+                result = decorate(t_Result);
+            }
+            else
+            {
+                try
+                {
+                    Log t_Log = UniqueLogFactory.getLog("custom-sql");
+
+                    if (t_Log != null)
+                    {
+                        t_Log.warn(
+                            "Referenced result not found:"
+                            + resultRef.getId());
+                    }
+                }
+                catch  (@NotNull final Throwable throwable)
+                {
+                    // class-loading problem.
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Decorates given {@link Result} instance.
+     * @param result the instance to decorate.
+     * @return the decorated instance.
+     */
+    @NotNull
+    protected ResultDecorator decorate(@NotNull final Result result)
+    {
+        return decorate(result, getCustomSqlProvider(), getMetadataManager(), CachingDecoratorFactory.getInstance());
+    }
+
+    /**
+     * Decorates given {@link Result} instance.
+     * @param result the instance to decorate.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the decorated instance.
+     */
+    @NotNull
+    protected ResultDecorator decorate(
+        @NotNull final Result result,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        return new CachingResultDecorator(result, customSqlProvider, metadataManager, decoratorFactory);
+    }
     /**
      * Retrieves the result id as constant.
      * @return such information.
@@ -551,34 +655,41 @@ public abstract class AbstractSqlDecorator
     {
         @Nullable String result = null;
 
-        if  (resultRef != null)
+        @Nullable final Result t_Result = getResult(resultRef, resultDAO);
+
+        if (t_Result != null)
         {
-            @Nullable Result t_Result = resultDAO.findByPrimaryKey(resultRef.getId());
+            result = uppercase(normalize(t_Result.getId(), decorationUtils));
+        }
 
-            if  (t_Result != null)
-            {
-                result =
-                    uppercase(normalize(t_Result.getId(), decorationUtils));
-            }
-            else
-            {
-                try
-                {
-                    // todo throw something.
-                    Log t_Log = UniqueLogFactory.getLog("custom-sql");
+        return result;
+    }
 
-                    if (t_Log != null)
-                    {
-                        t_Log.warn(
-                              "Referenced result not found:"
-                            + resultRef.getId());
-                    }
-                }
-                catch  (@NotNull final Throwable throwable)
-                {
-                    // class-loading problem.
-                }
-            }
+    /**
+     * Retrieves the capitalized version of the result identifier.
+     * @return such id.
+     */
+    @Nullable
+    public String getResultIdCapitalized()
+    {
+        return getResultIdCapitalized(DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the capitalized version of the result identifier.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such id.
+     */
+    @Nullable
+    public String getResultIdCapitalized(@NotNull final DecorationUtils decorationUtils)
+    {
+        @Nullable String result = null;
+
+        @Nullable final Result t_Result = getResult();
+
+        if (t_Result != null)
+        {
+            result = capitalize(t_Result.getId(), decorationUtils);
         }
 
         return result;

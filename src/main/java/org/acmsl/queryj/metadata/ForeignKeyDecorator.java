@@ -41,23 +41,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-
-/*
- * Importing some ACM-SL Commons classes.
- */
-
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
-/*
- * Importing some JDK classes.
- */
-import java.util.List;
 
 /**
  * Decorates <code>ForeignKey</code> instances to provide required alternate
@@ -65,61 +49,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
-public class ForeignKeyDecorator
-    extends AbstractForeignKeyDecorator
+public interface ForeignKeyDecorator
+    extends ForeignKey
 {
-    /**
-     * Creates a <code>ForeignKeyDecorator</code> with the
-     * <code>ForeignKey</code> information to decorate.
-     * @param foreignKey the foreign key.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     */
-    @SuppressWarnings("unused")
-    public ForeignKeyDecorator(
-        @NotNull final ForeignKey foreignKey,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final CustomSqlProvider customSqlProvider)
-    {
-        this(
-            foreignKey.getSourceTableName(),
-            foreignKey.getAttributes(),
-            foreignKey.getTargetTableName(),
-            foreignKey.isNullable(),
-            metadataManager,
-            decoratorFactory,
-            customSqlProvider);
-    }
-
-    /**
-     * Creates a <code>ForeignKeyDecorator</code> with the following
-     * information.
-     * @param sourceTableName the source table name.
-     * @param attributes the attributes.
-     * @param targetTableName the target table name.
-     * @param allowsNull whether the foreign key allows null values.
-     * @param metadataManager the {@link MetadataManager} instance.
-     * @param decoratorFactory the {@link DecoratorFactory} instance.
-     * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     */
-    public ForeignKeyDecorator(
-        @NotNull final String sourceTableName,
-        @NotNull final List<Attribute> attributes,
-        @NotNull final String targetTableName,
-        final boolean allowsNull,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final DecoratorFactory decoratorFactory,
-        @NotNull final CustomSqlProvider customSqlProvider)
-    {
-        super(
-            sourceTableName,
-            attributes,
-            targetTableName,
-            allowsNull,
-            metadataManager,
-            decoratorFactory,
-            customSqlProvider);
-    }
 }

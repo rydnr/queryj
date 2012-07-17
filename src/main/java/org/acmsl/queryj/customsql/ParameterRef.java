@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -24,41 +23,24 @@
 
  ******************************************************************************
  *
- * Filename: ParameterRefElement.java
+ * Filename: ParameterRef.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Models <parameter-ref> elements in custom-sql models.
+ * Description: Represents parameter references.
+ *
+ * Date: 7/17/12
+ * Time: 4:56 PM
  *
  */
 package org.acmsl.queryj.customsql;
 
-/*
- * Importing project-specific classes.
- */
-
 /**
- * Models &lt;parameter-ref&gt; elements in <i>custom-sql</i> models, which
- * satisfy the following DTD extract (to describe the model even in
- * non-xml implementations):
- *  <!ELEMENT parameter-ref EMPTY>
- *  <!ATTLIST parameter-ref
- *    id IDREF #REQUIRED>
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Represents parameter references.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/07/17
  */
-public class ParameterRefElement
-    extends  AbstractIdElement
-    implements ParameterRef
+public interface ParameterRef
+    extends IdentifiableElement
 {
-    private static final long serialVersionUID = 6158747761881841323L;
-
-    /**
-     * Creates a ParameterRefElement with given information.
-     * @param id the <i>id</i> attribute.
-     * @precondition id != null
-     */
-    public ParameterRefElement(final String id)
-    {
-        super(id);
-    }
 }

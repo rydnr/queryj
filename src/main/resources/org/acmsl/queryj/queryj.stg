@@ -183,7 +183,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
 public <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
@@ -307,7 +307,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
 protected <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
@@ -461,7 +461,7 @@ custom_select_for_update(cs, table) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 <if(cs.resultClass)>
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
 public <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
@@ -481,7 +481,7 @@ public void <cs.nameUncapitalized>(
   throws DataAccessException
 {
 <if(cs.resultClass)>
-<cs.result:{rs|<if(table.voDecorated)><if(!rs.implicitProperty)><if(rs.multiple)>
+<cs.result:{rs|<if(table.voDecorated)><if(!rs.implicitProperties)><if(rs.multiple)>
     <cs.resultClass> result = null;
 <else>
     <cs.resultClass>Decorator result = null;
@@ -1109,8 +1109,8 @@ custom_select_result_declaration(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<if(result.implicitProperty)>
-<implicit_attribute_declaration(result=result, attr=result.implicitProperty)>
+<if(result.implicitProperties)>
+<result.implicitProperties:implicit_attribute_declaration(attr=it, result=result)>
 <else>
 <if(table.voDecorated)>
 <if(result.multiple)>
@@ -1125,7 +1125,7 @@ custom_select_result_declaration(sql, result, table) ::= <<
 
 >>
 
-implicit_attribute_declaration(result, attr) ::= <<
+implicit_attribute_declaration(attr, result) ::= <<
 <!
  Generates the declaration of the property.
  @param result the custom result.
@@ -1172,8 +1172,8 @@ custom_select_template_call(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<if(result.implicitProperty)>
-<result.implicitProperty:{attr |
+<if(result.implicitProperties)>
+<result.implicitProperties:{attr |
     <if(!attr.nullable)>((<attr.javaType>)
     (<actual_custom_select_template_call(sql=sql, result=result)>)).<attr.javaType>Value();
 <else>(<sql.resultClass>)

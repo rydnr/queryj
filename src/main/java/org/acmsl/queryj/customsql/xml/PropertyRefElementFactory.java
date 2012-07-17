@@ -64,7 +64,7 @@ public class PropertyRefElementFactory
     /**
      * Creates a PropertyRefElementFactory instance.
      */
-    public PropertyRefElementFactory() {};
+    public PropertyRefElementFactory() {}
 
     /**
      * Creates a PropertyRefElement instance from given SAX attributes.

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,7 +33,7 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -55,43 +54,44 @@ public interface Result
      * The <b>none</b> value for <i>matches</i> attribute.
      */
     @SuppressWarnings("unused")
-    public static final String NONE = "none";
+    static final String NONE = "none";
 
     /**
      * The <b>single</b> value for <i>matches</i> attribute.
      */
     @SuppressWarnings("unused")
-    public static final String SINGLE = "single";
+    static final String SINGLE = "single";
 
     /**
      * The <b>multiple</b> value for <i>multiple</i> attribute.
      */
-    public static final String MULTIPLE = "multiple";
+    static final String MULTIPLE = "multiple";
 
     /**
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
     @NotNull
-    public String getClassValue();
+    String getClassValue();
 
     /**
      * Retrieves the <i>matches</i> attribute.
      * @return such value.
      */
     @NotNull
-    public String getMatches();
+    String getMatches();
 
     /**
      * Retrieves the &lt;property-ref&gt; elements.
      * @return such elements.
      */
     @NotNull
-    public List<PropertyRefElement> getPropertyRefs();
+    List<PropertyRef> getPropertyRefs();
 
     /**
      * Adds a new &lt;property-ref&gt; element.
      * @param propertyRef such element.
      */
-    public void add(@NotNull final PropertyRefElement propertyRef);
+    public void add(@NotNull final PropertyRef propertyRef);
+
 }

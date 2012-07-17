@@ -63,7 +63,7 @@ public abstract class AbstractResult
     /**
      * The <i>property-ref> elements.
      */
-    private List<PropertyRefElement> m__lPropertyRefs;
+    private List<PropertyRef> m__lPropertyRefs;
 
     /**
      * Creates a <code>AbstractResult</code> with given information.
@@ -111,7 +111,7 @@ public abstract class AbstractResult
      * Specifies the &lt;property-ref&gt; elements.
      * @param propertyRefs such elements.
      */
-    protected final void immutableSetPropertyRefs(@NotNull final List<PropertyRefElement> propertyRefs)
+    protected final void immutableSetPropertyRefs(@NotNull final List<PropertyRef> propertyRefs)
     {
         m__lPropertyRefs = propertyRefs;
     }
@@ -121,7 +121,7 @@ public abstract class AbstractResult
      * @param propertyRefs such elements.
      */
     @SuppressWarnings("unused")
-    protected void setPropertyRefs(@NotNull final List<PropertyRefElement> propertyRefs)
+    protected void setPropertyRefs(@NotNull final List<PropertyRef> propertyRefs)
     {
         immutableSetPropertyRefs(propertyRefs);
     }
@@ -131,7 +131,7 @@ public abstract class AbstractResult
      * @return such elements.
      */
     @Nullable
-    protected final List<PropertyRefElement> immutableGetPropertyRefs()
+    protected final List<PropertyRef> immutableGetPropertyRefs()
     {
         return m__lPropertyRefs;
     }
@@ -140,14 +140,15 @@ public abstract class AbstractResult
      * Retrieves the &lt;property-ref&gt; elements.
      * @return such elements.
      */
+    @Override
     @NotNull
-    public List<PropertyRefElement> getPropertyRefs()
+    public List<org.acmsl.queryj.customsql.PropertyRef> getPropertyRefs()
     {
-        List<PropertyRefElement> result = immutableGetPropertyRefs();
+        List<PropertyRef> result = immutableGetPropertyRefs();
 
         if (result == null)
         {
-            result = new ArrayList<PropertyRefElement>(0);
+            result = new ArrayList<PropertyRef>(0);
             setPropertyRefs(result);
         }
 
@@ -158,7 +159,7 @@ public abstract class AbstractResult
      * Adds a new &lt;property-ref&gt; element.
      * @param propertyRef such element.
      */
-    public void add(@NotNull final PropertyRefElement propertyRef)
+    public void add(@NotNull final PropertyRef propertyRef)
     {
         add(propertyRef, getPropertyRefs());
     }
@@ -169,7 +170,7 @@ public abstract class AbstractResult
      * @param propertyRefs thhe &ltproperty-ref&gt; elements.
      */
     protected synchronized void add(
-        @NotNull final PropertyRefElement propertyRef, @NotNull final List<PropertyRefElement> propertyRefs)
+        @NotNull final PropertyRef propertyRef, @NotNull final List<PropertyRef> propertyRefs)
     {
         propertyRefs.add(propertyRef);
     }

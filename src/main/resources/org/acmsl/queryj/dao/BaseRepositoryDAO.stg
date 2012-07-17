@@ -187,7 +187,7 @@ custom_select_for_update(cs, table, input) ::= <<
  * @throws DataAccessException if the operation fails.
  */
 <if(cs.resultClass)>
-<cs.result:{rs|<if(rs.implicitProperty)><if(table.voDecorated)>
+<cs.result:{rs|<if(rs.implicitProperties)><if(table.voDecorated)>
 public <cs.resultClass>Decorator <cs.nameUncapitalized>(
 <else>
 public <cs.resultClass> <cs.nameUncapitalized>(

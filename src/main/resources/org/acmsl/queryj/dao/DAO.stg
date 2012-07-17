@@ -494,9 +494,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
     }
 
 <if(table.static)>
-    <static_table(
-      primaryKey=table.primaryKey,
-      voName=table.voName)>
+    <find_constant_by(primaryKey=table.primaryKey,voName=table.voName); separator="\n\n">
 <endif>
 
     /**
@@ -1142,19 +1140,7 @@ result.put(
 <endif>
 >>
 
-static_table(primaryKey, voName) ::= <<
-<!
-  Generates the method to operate directly on defined constants.
-  @param primaryKey the primary key.
-  @param voName the value object name.
-!>
-
-<primaryKey.attributes:find_constant_by(attribute=it,voName=voName)>
-
-<find_constant_by_pk(primaryKey=primaryKey, voName=voName)>
->>
-
-find_constant_by(attribute, voName) ::= <<
+find_constant_by(primaryKey, voName) ::= <<
 /**
  * Loads \<i\><voName>\</i\> information from the constant pool,
  * filtering by <attribute.nameLowercased>.
@@ -1162,16 +1148,16 @@ find_constant_by(attribute, voName) ::= <<
  * @return the {@link <voName>} instance.
  */
 <nullable()>
-public <voName> findConstantBy<attribute.nameCapitalized>(
-    <notnull()>final <attribute.javaType> <attribute.nameLowercased>)
+public <voName> findConstantBy<primaryKey:{attribute|<attribute.nameCapitalized>}>(
+    <primaryKey:{attribute|final <attribute.javaType> <attribute.nameLowercased>}; separator=",\n">)
 {
     <nullable()><voName> result = null;
 
     for  (<nullable()><voName> item : FIXED_CONSTANTS)
     {
         if  (   (item != null)
-             && (item.get<attribute.nameCapitalized>().equals(
-                    <attribute.nameLowercased>)))
+             <primaryKey:{attribute|&& (item.get<attribute.nameCapitalized>().equals(
+                    <attribute.nameLowercased>))}; separator="\n">)
         {
             result = item;
             break;
@@ -1186,7 +1172,7 @@ find_constant_by_pk(primaryKey, voName) ::= <<
 /**
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
- <primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <attribute:attribute_javadoc(name=it.nameLowercased); separator="\n">
  * @return the {@link <voName>} instance.
  */
 <nullable()>

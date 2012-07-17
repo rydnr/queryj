@@ -41,7 +41,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
-import org.acmsl.queryj.customsql.PropertyRefElement;
+import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataTypeManager;
@@ -128,7 +128,7 @@ public class CustomResultTypeImportsHandler
      */
     @NotNull
     protected List<String> retrieveImports(
-        @NotNull final List<PropertyRefElement> propertyRefs,
+        @NotNull final List<PropertyRef> propertyRefs,
         @NotNull final SqlPropertyDAO sqlPropertyDAO,
         @NotNull final MetadataTypeManager metadataTypeManager)
     {
@@ -138,7 +138,7 @@ public class CustomResultTypeImportsHandler
 
         Property t_Property;
 
-        for (@Nullable PropertyRefElement t_PropertyRef : propertyRefs)
+        for (@Nullable PropertyRef t_PropertyRef : propertyRefs)
         {
             if (t_PropertyRef != null)
             {

@@ -93,6 +93,7 @@ public class ResultElement
      * Specifies the <i>class</i> attribute.
      * @param classValue such value.
      */
+    @SuppressWarnings("unused")
     protected void setClassValue(final String classValue)
     {
         immutableSetClassValue(classValue);
@@ -145,13 +146,20 @@ public class ResultElement
      */
     public boolean equals(final Object instance)
     {
-        return
-            equals(
-                instance,
-                getId(),
-                getClassValue(),
-                getMatches(),
-                getPropertyRefs());
+        boolean result = false;
+
+        if (instance instanceof Result)
+        {
+            result =
+                equals(
+                    instance,
+                    getId(),
+                    getClassValue(),
+                    getMatches(),
+                    getPropertyRefs());
+        }
+
+        return result;
     }
 
     /**

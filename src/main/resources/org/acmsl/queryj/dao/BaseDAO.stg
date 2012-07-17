@@ -386,7 +386,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
 <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>
@@ -456,7 +456,7 @@ custom_select_for_update(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperty)>
+<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
 <cs.resultClass> <cs.nameUncapitalized>(
 <else>
 <if(rs.multiple)>

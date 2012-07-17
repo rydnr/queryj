@@ -41,7 +41,7 @@ import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
-import org.acmsl.queryj.customsql.PropertyRefElement;
+import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -378,7 +378,7 @@ public abstract class AbstractResultDecorator
      */
     @NotNull
     public List<Property> getProperties(
-        @NotNull final List<PropertyRefElement> propertyRefs,
+        @NotNull final List<PropertyRef> propertyRefs,
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
@@ -409,7 +409,7 @@ public abstract class AbstractResultDecorator
      */
     @NotNull
     public List<Property> getProperties(
-        @NotNull final List<PropertyRefElement> propertyRefs,
+        @NotNull final List<PropertyRef> propertyRefs,
         @NotNull final Result resultElement,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final SqlPropertyDAO sqlPropertyDAO,
@@ -422,7 +422,7 @@ public abstract class AbstractResultDecorator
 
         @Nullable Property t_Property ;
 
-        for (@Nullable PropertyRefElement t_PropertyRef : propertyRefs)
+        for (@Nullable PropertyRef t_PropertyRef : propertyRefs)
         {
             if  (t_PropertyRef != null)
             {
@@ -696,7 +696,6 @@ public abstract class AbstractResultDecorator
     {
         return singularPluralFormConverter.getSingular(word);
     }
-
 
     /**
      * Provides a text representation of the information

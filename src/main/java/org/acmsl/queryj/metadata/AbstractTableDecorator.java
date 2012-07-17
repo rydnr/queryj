@@ -541,7 +541,7 @@ public abstract class AbstractTableDecorator
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         return
-            new ForeignKeyDecorator(
+            new CachingForeignKeyDecorator(
                 sourceTable,
                 attributes,
                 targetTable,

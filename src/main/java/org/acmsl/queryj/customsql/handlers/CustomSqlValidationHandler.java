@@ -903,7 +903,7 @@ public class CustomSqlValidationHandler
 
         Property t_Property;
 
-        for (@Nullable PropertyRefElement t_PropertyRef : sqlResult.getPropertyRefs())
+        for (@Nullable PropertyRef t_PropertyRef : sqlResult.getPropertyRefs())
         {
             if (t_PropertyRef != null)
             {

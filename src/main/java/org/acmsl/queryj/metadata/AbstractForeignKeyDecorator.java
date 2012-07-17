@@ -63,6 +63,7 @@ import java.util.List;
  */
 public abstract class AbstractForeignKeyDecorator
     extends AbstractForeignKey
+    implements ForeignKeyDecorator
 {
     /**
      * The decorated instance.

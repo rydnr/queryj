@@ -217,6 +217,17 @@ public abstract class AbstractPropertyDecorator
     }
 
     /**
+     * Retrieves the Java type.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJavaType()
+    {
+        return getType();
+    }
+
+    /**
      * Retrieves the Object type of the property.
      * @return such information.
      */

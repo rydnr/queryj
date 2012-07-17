@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -64,7 +63,7 @@ public class ParameterRefElementFactory
     /**
      * Creates a ParameterRefElementFactory instance.
      */
-    public ParameterRefElementFactory() {};
+    public ParameterRefElementFactory() {}
 
     /**
      * Creates a ParameterRefElement instance from given SAX attributes.

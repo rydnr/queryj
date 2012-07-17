@@ -349,7 +349,7 @@ public class CachingDecoratorFactory
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         return
-            new ForeignKeyDecorator(
+            new CachingForeignKeyDecorator(
                 sourceTableName,
                 attributes,
                 targetTableName,
