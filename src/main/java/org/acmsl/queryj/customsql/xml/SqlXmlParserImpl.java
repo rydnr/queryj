@@ -36,7 +36,10 @@ package org.acmsl.queryj.customsql.xml;
  * Importing project-specific classes.
  */
 import org.acmsl.queryj.customsql.*;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.metadata.SqlParameterDAO;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -49,18 +52,11 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /*
  * Importing Digester classes.
  */
-import org.acmsl.queryj.metadata.SqlDAO;
-import org.acmsl.queryj.metadata.SqlParameterDAO;
-import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.apache.commons.digester.Digester;
 
 /*
@@ -83,15 +79,6 @@ public class SqlXmlParserImpl
                 SqlXmlParser
 {
     public static final long serialVersionUID = 4622172516611441363L;
-    /**
-     * The complete sql.xml contents.
-     */
-    private List<? extends IdentifiableElement> m__cSqlXmlContents;
-
-    /**
-     * The key-value pairs.
-     */
-    private Map m__mSqlXmlContents;
 
     /**
      * The input stream.
@@ -102,6 +89,51 @@ public class SqlXmlParserImpl
      * The class loader.
      */
     private transient ClassLoader m__ClassLoader;
+
+    /**
+     * The queries.
+     */
+    private List<Sql> m__lQueries = new ArrayList<Sql>();
+
+    /**
+     * The results.
+     */
+    private List<Result> m__lResults = new ArrayList<Result>();
+
+    /**
+     * The parameters.
+     */
+    private List<Parameter> m__lParameters = new ArrayList<Parameter>();
+
+    /**
+     * The parameter refs.
+     */
+    private List<ParameterRef> m__lParameterRefs = new ArrayList<ParameterRef>();
+
+    /**
+     * The properties.
+     */
+    private List<Property> m__lProperties = new ArrayList<Property>();
+
+    /**
+     * The property refs.
+     */
+    private List<PropertyRef> m__lPropertyRefs = new ArrayList<PropertyRef>();
+
+    /**
+     * The connection flags.
+     */
+    private List<ConnectionFlags> m__lConnectionFlags = new ArrayList<ConnectionFlags>();
+
+    /**
+     * The statement flags.
+     */
+    private List<StatementFlags> m__lStatementFlags = new ArrayList<StatementFlags>();
+
+    /**
+     * The result set flags.
+     */
+    private List<ResultSetFlags> m__lResultSetFlags = new ArrayList<ResultSetFlags>();
 
     /**
      * Creates a SqlXmlParserImpl with given input stream.
@@ -157,41 +189,248 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Specifies the map with sql.xml contents.
-     * @param map the new map.
+     * Processes given collection.
+     * @param collection the collection to process.
      */
-    protected void setMap(final Map map)
+    protected void processCollection(@NotNull final List<? extends IdentifiableElement> collection)
     {
-        m__mSqlXmlContents = map;
+        for (@Nullable IdentifiableElement t_Item : collection)
+        {
+            if (t_Item instanceof Sql)
+            {
+                addQuery((Sql) t_Item);
+            }
+            else if (t_Item instanceof Result)
+            {
+                addResult((Result) t_Item);
+            }
+            else if (t_Item instanceof Property)
+            {
+                addProperty((Property) t_Item);
+            }
+            else if (t_Item instanceof PropertyRef)
+            {
+                addPropertyRef((PropertyRef) t_Item);
+            }
+            else if (t_Item instanceof Parameter)
+            {
+                addParameter((Parameter) t_Item);
+            }
+            else if (t_Item instanceof ParameterRef)
+            {
+                addParameterRef((ParameterRef) t_Item);
+            }
+            else if (t_Item instanceof ConnectionFlags)
+            {
+                addConnectionFlags((ConnectionFlags) t_Item);
+            }
+            else if (t_Item instanceof StatementFlags)
+            {
+                addStatementFlags((StatementFlags) t_Item);
+            }
+            else if (t_Item instanceof ResultSetFlags)
+            {
+                addResultSetFlags((ResultSetFlags) t_Item);
+            }
+            else
+            {
+                UniqueLogFactory.getLog(SqlXmlParserImpl.class).fatal(
+                    "Unexpected element : " + t_Item);
+            }
+        }
     }
 
     /**
-     * Retrieves the map with sql.xml contents.
-     * return such map.
+     * Adds given query, if not already annotated.
+     * @param sql the query.
      */
-    public Map getMap()
+    protected void addQuery(@NotNull final Sql sql)
     {
-        return m__mSqlXmlContents;
+        this.add(sql, getQueries());
     }
 
     /**
-     * Specifies the sql.xml element collection.
-     * @param collection the new collection.
+     * Adds given result, if not already annotated.
+     * @param result the result.
      */
-    protected void setCollection(final List<? extends IdentifiableElement> collection)
+    protected void addResult(@NotNull final Result result)
     {
-        m__cSqlXmlContents = collection;
+        add(result, getResults());
     }
 
     /**
-     * Retrieves the sql.xml element collection.
+     * Adds given parameter, if not already annotated.
+     * @param parameter the parameter.
+     */
+    protected void addParameter(@NotNull final Parameter parameter)
+    {
+        add(parameter, getParameters());
+    }
+
+    /**
+     * Adds given parameter reference, if not already annotated.
+     * @param parameterRef the parameter reference.
+     */
+    protected void addParameterRef(@NotNull final ParameterRef parameterRef)
+    {
+        add(parameterRef, getParameterRefs());
+    }
+
+    /**
+     * Adds given property, if not already annotated.
+     * @param property the property.
+     */
+    protected void addProperty(@NotNull final Property property)
+    {
+        add(property, getProperties());
+    }
+
+    /**
+     * Adds given property reference, if not already annotated.
+     * @param propertyRef the property reference.
+     */
+    protected void addPropertyRef(@NotNull final PropertyRef propertyRef)
+    {
+        add(propertyRef, getPropertyRefs());
+    }
+
+    /**
+     * Adds given connection flags, if not already annotated.
+     * @param connectionFlags the connection flags reference.
+     */
+    protected void addConnectionFlags(@NotNull final ConnectionFlags connectionFlags)
+    {
+        add(connectionFlags, getConnectionFlagList());
+    }
+
+    /**
+     * Adds given statement flags, if not already annotated.
+     * @param statementFlags the statement flags reference.
+     */
+    protected void addStatementFlags(@NotNull final StatementFlags statementFlags)
+    {
+        add(statementFlags, getStatementFlagList());
+    }
+
+    /**
+     * Adds given result-set flags, if not already annotated.
+     * @param resultSetFlags the result-set flags reference.
+     */
+    protected void addResultSetFlags(@NotNull final ResultSetFlags resultSetFlags)
+    {
+        add(resultSetFlags, getResultSetFlagList());
+    }
+
+    /**
+     * Adds given table, if not already annotated.
+     * @param table the table.
+     * @param tables the table list.
+     */
+    protected <C> void add(@NotNull final C table, @NotNull final List<C> tables)
+    {
+        if (!tables.contains(table))
+        {
+            tables.add(table);
+        }
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.metadata.vo.Table} collection.
      * return such collection.
      */
-    @SuppressWarnings("unchecked")
     @NotNull
-    public List<? extends IdentifiableElement> getCollection()
+    @Override
+    public List<Sql> getQueries()
     {
-        return m__cSqlXmlContents;
+        return m__lQueries;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Result} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<Result> getResults()
+    {
+        return m__lResults;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Parameter} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<Parameter> getParameters()
+    {
+        return m__lParameters;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Parameter} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<ParameterRef> getParameterRefs()
+    {
+        return m__lParameterRefs;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Property} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<Property> getProperties()
+    {
+        return m__lProperties;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.PropertyRef} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<PropertyRef> getPropertyRefs()
+    {
+        return m__lPropertyRefs;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.ConnectionFlags} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<ConnectionFlags> getConnectionFlagList()
+    {
+        return m__lConnectionFlags;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.StatementFlags} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<StatementFlags> getStatementFlagList()
+    {
+        return m__lStatementFlags;
+    }
+
+    /**
+     * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.ResultSetFlags} collection.
+     * return such collection.
+     */
+    @NotNull
+    @Override
+    public List<ResultSetFlags> getResultSetFlagList()
+    {
+        return m__lResultSetFlags;
     }
 
     /**
@@ -243,30 +482,24 @@ public class SqlXmlParserImpl
 
     /**
      * Loads the information from the XML resource.
-     * @return the custom SQL information.
      * @throws QueryJBuildException if the information cannot be read.
      */
-    @Nullable
-    protected Map load()
+    protected void load()
       throws  QueryJBuildException
     {
-        return load(configureDigester(getClassLoader()), getInput());
+        load(configureDigester(getClassLoader()), getInput());
     }
 
     /**
      * Loads the information from the XML resource.
      * @param digester the Digester instance.
      * @param input the input stream.
-     * @return the information.
      * @throws QueryJBuildException if the information cannot be read.
      */
-    @Nullable
-    protected synchronized Map load(
+    protected synchronized void load(
         @Nullable final Digester digester, @Nullable final InputStream input)
       throws  QueryJBuildException
     {
-        @Nullable Map result = null;
-
         if  (digester != null)
         {
             @NotNull List<? extends IdentifiableElement> collection = new ArrayList<IdentifiableElement>();
@@ -279,10 +512,7 @@ public class SqlXmlParserImpl
                 {
                     digester.parse(input);
 
-                    result = new Hashtable();
-                    processSqlXml(collection, result);
-                    setCollection(collection);
-                    setMap(result);
+                    processCollection(collection);
                 }
             }
             catch  (@NotNull final RuntimeException exception)
@@ -313,8 +543,6 @@ public class SqlXmlParserImpl
                         exception);
             }
         }
-
-        return result;
     }
 
     /**
@@ -468,237 +696,18 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Processes given sql.xml information.
-     * @param collection the sql.xml element collection.
-     * @param map the sql.xml map.
-     */
-    @SuppressWarnings("unchecked")
-    protected synchronized void processSqlXml(
-        @NotNull final Collection collection, @NotNull final Map map)
-    {
-        Iterator t_Iterator = collection.iterator();
-
-        if  (t_Iterator != null)
-        {
-            while  (t_Iterator.hasNext())
-            {
-                Object t_Object = t_Iterator.next();
-
-                if  (t_Object != null)
-                {
-                    if  (t_Object instanceof Sql)
-                    {
-                        map.put(
-                            buildSqlKey(t_Object), t_Object);
-                    }
-                    else if  (t_Object instanceof Parameter)
-                    {
-                        map.put(
-                            buildParameterKey(
-                                (AbstractIdElement) t_Object),
-                            t_Object);
-                    }
-                    else if  (t_Object instanceof Result)
-                    {
-                        map.put(
-                            buildResultKey(
-                                (AbstractIdElement) t_Object),
-                            t_Object);
-                    }
-                    else if  (t_Object instanceof Property)
-                    {
-                        map.put(
-                            buildPropertyKey(
-                                (AbstractIdElement) t_Object),
-                            t_Object);
-                    }
-                    else if  (t_Object instanceof ConnectionFlagsElement)
-                    {
-                        map.put(
-                            buildConnectionFlagsKey(
-                                (AbstractIdElement) t_Object),
-                            t_Object);
-                    }
-                    else if  (t_Object instanceof StatementFlagsElement)
-                    {
-                        map.put(
-                            buildStatementFlagsKey(
-                                (AbstractIdElement) t_Object),
-                            t_Object);
-                    }
-                    else if  (t_Object instanceof ResultSetFlagsElement)
-                    {
-                        map.put(
-                            buildResultSetFlagsKey(
-                                (AbstractIdElement) t_Object),
-                            t_Object);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Parses the sql.xml associated to this instance.
      * @throws QueryJBuildException if the information cannot be read.
      */
     public void parse()
         throws  QueryJBuildException
     {
-        @Nullable Map t_mSqlXmlMap = getMap();
+        @Nullable List<Sql> queries = getQueries();
 
-        if  (t_mSqlXmlMap == null)
+        if  (queries.size() == 0)
         {
-            t_mSqlXmlMap = load();
-            setMap(t_mSqlXmlMap);
+            load();
         }
-    }
-
-    /**
-     * Builds a key for &lt;sql&gt; elements.
-     * @param sqlElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildSqlKey(final Object sqlElement)
-    {
-        return "\\/sql\\::" + sqlElement;
-    }
-
-    /**
-     * Builds a key for &lt;parameter&gt; elements.
-     * @param parameterElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildParameterKey(
-        @NotNull final AbstractIdElement parameterElement)
-    {
-        return buildParameterKey(parameterElement.getId());
-    }
-
-    /**
-     * Builds a key for &lt;parameter&gt; elements, via their id.
-     * @param parameterElementId such element id.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildParameterKey(final String parameterElementId)
-    {
-        return "\\/parameter\\::" + parameterElementId;
-    }
-
-    /**
-     * Builds a key for &lt;result&gt; elements.
-     * @param resultElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildResultKey(@NotNull final AbstractIdElement resultElement)
-    {
-        return buildResultKey(resultElement.getId());
-    }
-
-    /**
-     * Builds a key for &lt;result&gt; elements, via their id.
-     * @param resultElementId such element id.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildResultKey(final String resultElementId)
-    {
-        return "\\/result\\::" + resultElementId;
-    }
-
-    /**
-     * Builds a key for &lt;property&gt; elements.
-     * @param propertyElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildPropertyKey(@NotNull final AbstractIdElement propertyElement)
-    {
-        return buildPropertyKey(propertyElement.getId());
-    }
-
-    /**
-     * Builds a key for &lt;property&gt; elements, via their id.
-     * @param propertyElementId such element id.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildPropertyKey(final String propertyElementId)
-    {
-        return "\\/property\\::" + propertyElementId;
-    }
-
-    /**
-     * Builds a key for &lt;connection-flags&gt; elements.
-     * @param connectionFlagsElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildConnectionFlagsKey(
-        @NotNull final AbstractIdElement connectionFlagsElement)
-    {
-        return buildConnectionFlagsKey(connectionFlagsElement.getId());
-    }
-
-    /**
-     * Builds a key for &lt;connection-flags&gt; elements, via their id.
-     * @param connectionFlagsElementId such element id.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildConnectionFlagsKey(final String connectionFlagsElementId)
-    {
-        return "\\/connection|flags\\::" + connectionFlagsElementId;
-    }
-
-    /**
-     * Builds a key for &lt;statement-flags&gt; elements.
-     * @param statementFlagsElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildStatementFlagsKey(
-        @NotNull final AbstractIdElement statementFlagsElement)
-    {
-        return buildStatementFlagsKey(statementFlagsElement.getId());
-    }
-
-    /**
-     * Builds a key for &lt;statement-flags&gt; elements, via their id.
-     * @param statementFlagsElementId such element id.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildStatementFlagsKey(final String statementFlagsElementId)
-    {
-        return "\\/statement|flags\\::" + statementFlagsElementId;
-    }
-
-    /**
-     * Builds a key for &lt;resultset-flags&gt; elements.
-     * @param resultSetFlagsElement such element.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildResultSetFlagsKey(
-        @NotNull final AbstractIdElement resultSetFlagsElement)
-    {
-        return buildResultSetFlagsKey(resultSetFlagsElement.getId());
-    }
-
-    /**
-     * Builds a key for &lt;resultset-flags&gt; elements, via their id.
-     * @param resultSetFlagsElementId such element id.
-     * @return the key.
-     */
-    @NotNull
-    protected Object buildResultSetFlagsKey(final String resultSetFlagsElementId)
-    {
-        return "\\/resultset|flags\\::" + resultSetFlagsElementId;
     }
 
     /**
@@ -709,20 +718,28 @@ public class SqlXmlParserImpl
     @Override
     public void addResult(@NotNull final String id, @NotNull final Result result)
     {
-        // TODO
+        getResults().add(result);
     }
 
     /**
      * Adds a new property.
      * @param id the property id.
+     * @param columnName the column name.
+     * @param index the property index.
      * @param name the property name.
      * @param type the property type.
+     * @param nullable whether it allows null or not.
      */
     @Override
     public void addProperty(
-        @NotNull final String id, @NotNull final String name, @NotNull final String type)
+        @NotNull final String id,
+        @NotNull final String columnName,
+        final int index,
+        @NotNull final String name,
+        @NotNull final String type,
+        final boolean nullable)
     {
-        // TODO
+        getProperties().add(new PropertyElement(id, columnName, index, name, type, nullable));
     }
 
     /**

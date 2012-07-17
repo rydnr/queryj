@@ -63,12 +63,6 @@ public class SqlXmlParserResultSetFlagsDAO
     implements SqlResultSetFlagsDAO
 {
     /**
-     * The default resultset-flags filter.
-     */
-    public static final String DEFAULT_RESULTSET_FLAGS_FILTER =
-        "resultset-flags.default";
-
-    /**
      * The resultset-flags filter for <i>find-by-primary-key</i> operation.
      */
     public static final String FIND_BY_PRIMARY_KEY_RESULTSET_FLAGS_FILTER =
@@ -105,15 +99,12 @@ public class SqlXmlParserResultSetFlagsDAO
     {
         @Nullable List<ResultSetFlags> result =
             filterResultSetFlags(
-                parser.getCollection(),
+                parser.getResultSetFlagList(),
                 FIND_BY_PRIMARY_KEY_RESULTSET_FLAGS_FILTER);
 
         if  (result.size() == 0)
         {
-            result =
-                filterResultSetFlags(
-                    parser.getCollection(),
-                    DEFAULT_RESULTSET_FLAGS_FILTER);
+            result = parser.getResultSetFlagList();
         }
 
         return result;

@@ -88,7 +88,19 @@ public class SqlXmlParserResultDAO
     @Nullable
     public Result findByPrimaryKey(@NotNull final String id)
     {
-        return this.findById(id, Result.class);
+        return findByPrimaryKey(id, getSqlXmlParser());
+    }
+
+    /**
+     * Retrieves the {@link org.acmsl.queryj.customsql.Result} associated to given id.
+     * @param id the result id.
+     * @param parser the {@link SqlXmlParser} instance.
+     * @return the associated {@link org.acmsl.queryj.customsql.Result result}.
+     */
+    @Nullable
+    protected Result findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
+    {
+        return findById(id, Result.class, parser.getResults());
     }
 
     /**
@@ -196,16 +208,13 @@ public class SqlXmlParserResultDAO
 
         @Nullable Result t_CustomResult = findByPrimaryKey(id);
         @Nullable ResultRef t_ResultRef;
-        @Nullable Sql t_Sql;
 
         if (t_CustomResult != null)
         {
-            for (Object t_Item : sqlXmlParser.getCollection())
+            for (@Nullable Sql t_Sql : sqlXmlParser.getQueries())
             {
-                if (t_Item instanceof Sql)
+                if (t_Sql != null)
                 {
-                    t_Sql = (Sql) t_Item;
-
                     t_ResultRef = t_Sql.getResultRef();
 
                     if (   (t_ResultRef != null)
@@ -243,16 +252,12 @@ public class SqlXmlParserResultDAO
     {
         @Nullable Result result = null;
 
-        @Nullable Sql t_Sql;
-
         @Nullable ResultRef t_ResultRef;
 
-        for (Object t_Item : sqlXmlParser.getCollection())
+        for (@Nullable Sql t_Sql : sqlXmlParser.getQueries())
         {
-            if (t_Item instanceof Sql)
+            if (t_Sql != null)
             {
-                t_Sql = (Sql) t_Item;
-
                 if (sqlId.equalsIgnoreCase(t_Sql.getId()))
                 {
                     t_ResultRef = t_Sql.getResultRef();
@@ -315,7 +320,19 @@ public class SqlXmlParserResultDAO
     @NotNull
     public List<Result> findAll()
     {
-        return this.findAll(getSqlXmlParser(), Result.class);
+        return findAll(getSqlXmlParser());
+
+    }
+
+    /**
+     * Retrieves all {@link Result Results}
+     * @param parser the {@link SqlXmlParser} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Result> findAll(@NotNull final SqlXmlParser parser)
+    {
+        return parser.getResults();
 
     }
 
@@ -331,6 +348,4 @@ public class SqlXmlParserResultDAO
     {
         return filterItems(findAll(), Result.class, type);
     }
-
-
 }

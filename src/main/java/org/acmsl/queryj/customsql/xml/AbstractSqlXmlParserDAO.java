@@ -40,7 +40,6 @@ import org.acmsl.queryj.customsql.IdentifiableElement;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.customsql.Sql;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,23 +100,46 @@ public abstract class AbstractSqlXmlParserDAO
     }
 
     /**
+     * Retrieves the complete collection of items.
+     * @param parser the {@link SqlXmlParser} implementation.
+     * @return such collection.
+     */
+    @NotNull
+    protected List<IdentifiableElement> getCollection(@NotNull final SqlXmlParser parser)
+    {
+        List<IdentifiableElement> result =
+            new ArrayList<IdentifiableElement>(parser.getQueries());
+
+        result.addAll(parser.getResults());
+        result.addAll(parser.getProperties());
+        result.addAll(parser.getPropertyRefs());
+        result.addAll(parser.getParameters());
+        result.addAll(parser.getParameterRefs());
+
+        return result;
+    }
+
+    /**
      * Retrieves the element matching given id.
      * @param id the id.
      * @return the element, if any.
      */
     @SuppressWarnings("unchecked")
     @Nullable
-    protected <T> T findById(@NotNull final String id, @NotNull final Class<T> type)
+    protected <T extends IdentifiableElement> T findById(
+        @NotNull final String id,
+        @NotNull final Class<T> type,
+        @NotNull final List<T> collection)
     {
         @Nullable T result = null;
 
-        for (@Nullable IdentifiableElement t_Item : parser.getCollection())
+        for (@Nullable T t_Item : collection)
         {
             if  (   (t_Item != null)
                  && (type.isAssignableFrom(t_Item.getClass()))
                  && (t_Item.getId().equals(id)))
             {
-                result = (T) t_Item;
+                result = t_Item;
                 break;
             }
         }
@@ -129,15 +151,32 @@ public abstract class AbstractSqlXmlParserDAO
     /**
      * Retrieves all elements of a given type.
      * @param parser the parser.
+     * @param type the type.
      * @return such list.
      */
     @SuppressWarnings("unchecked")
     @NotNull
     protected <T> List<T> findAll(@NotNull final SqlXmlParser parser, @NotNull final Class<T> type)
     {
+        return findAll(type, getCollection(parser));
+    }
+
+    /**
+     * Retrieves all elements of a given type.
+     * @param type the type.
+     * @param collection the collection.
+     * @return such list.
+     */
+    @SuppressWarnings("unchecked")
+    @NotNull
+    protected <T> List<T> findAll(
+        @NotNull final Class<T> type,
+        @NotNull final List<IdentifiableElement> collection)
+    {
+
         @NotNull List<T> result = new ArrayList<T>();
 
-        for (@Nullable Object t_Item : parser.getCollection())
+        for (@Nullable Object t_Item : collection)
         {
             if  (   (t_Item != null)
                  && (type.isAssignableFrom(t_Item.getClass())))

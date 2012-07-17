@@ -92,25 +92,7 @@ public class SqlXmlParserSqlDAO
     @Nullable
     protected Sql findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
     {
-        @Nullable Sql result = null;
-
-        Sql t_Sql;
-
-        for (@Nullable Object t_Item : parser.getCollection())
-        {
-            if  (t_Item instanceof Sql)
-            {
-                t_Sql = (Sql) t_Item;
-
-                if (id.equals(t_Sql.getId()))
-                {
-                    result = t_Sql;
-                    break;
-                }
-            }
-        }
-
-        return result;
+        return findById(id, Sql.class, parser.getQueries());
     }
 
     /**
@@ -344,17 +326,7 @@ public class SqlXmlParserSqlDAO
     @NotNull
     protected List<Sql> findAll(@NotNull final SqlXmlParser parser)
     {
-        @NotNull List<Sql> result = new ArrayList<Sql>();
-
-        for (@Nullable Object t_Item : parser.getCollection())
-        {
-            if  (t_Item instanceof Sql)
-            {
-                result.add((Sql) t_Item);
-            }
-        }
-
-        return result;
+        return parser.getQueries();
     }
 
     /**

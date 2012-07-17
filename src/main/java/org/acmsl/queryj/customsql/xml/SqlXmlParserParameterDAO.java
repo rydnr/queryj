@@ -81,7 +81,19 @@ public class SqlXmlParserParameterDAO
     @Nullable
     public Parameter findByPrimaryKey(@NotNull final String id)
     {
-        return findById(id, Parameter.class);
+        return findByPrimaryKey(id, getSqlXmlParser());
+    }
+
+    /**
+     * Retrieves the {@link org.acmsl.queryj.customsql.Parameter} associated to given id.
+     *
+     * @param id the parameter id.
+     * @return the {@link org.acmsl.queryj.customsql.Parameter}, or <code>null</code> if not found.
+     */
+    @Nullable
+    protected Parameter findByPrimaryKey(@NotNull final String id, @NotNull final SqlXmlParser parser)
+    {
+        return findById(id, Parameter.class, parser.getParameters());
     }
 
     /**

@@ -63,12 +63,6 @@ public class SqlXmlParserStatementFlagsDAO
     implements SqlStatementFlagsDAO
 {
     /**
-     * The default statement-flags filter.
-     */
-    public static final String DEFAULT_STATEMENT_FLAGS_FILTER =
-        "statement-flags.default";
-
-    /**
      * The statement-flags filter for <i>find-by-primary-key</i> operation.
      */
     public static final String FIND_BY_PRIMARY_KEY_STATEMENT_FLAGS_FILTER =
@@ -106,15 +100,12 @@ public class SqlXmlParserStatementFlagsDAO
     {
         @Nullable List<StatementFlags> result =
             filterStatementFlags(
-                parser.getCollection(),
+                parser.getStatementFlagList(),
                 FIND_BY_PRIMARY_KEY_STATEMENT_FLAGS_FILTER);
 
         if  (result.size() == 0)
         {
-            result =
-                filterStatementFlags(
-                    parser.getCollection(),
-                    DEFAULT_STATEMENT_FLAGS_FILTER);
+            result = parser.getStatementFlagList();
         }
 
         return result;

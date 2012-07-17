@@ -290,10 +290,27 @@ extends TestCase
           new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
       assertNotNull(t_Parser);
       t_Parser.parse();
-      Collection t_cContents = t_Parser.getCollection();
+      Collection t_cContents = t_Parser.getQueries();
       assertNotNull(t_cContents);
-      assertEquals(21, t_cContents.size());
       System.out.println(t_cContents);
+      assertEquals(4, t_cContents.size());
+      t_cContents.addAll(t_Parser.getResults());
+      assertEquals(7, t_cContents.size());
+      t_cContents.addAll(t_Parser.getParameters());
+      assertEquals(8, t_cContents.size());
+      t_cContents.addAll(t_Parser.getParameterRefs());
+      assertEquals(12, t_cContents.size());
+      t_cContents.addAll(t_Parser.getProperties());
+      assertEquals(18, t_cContents.size());
+      t_cContents.addAll(t_Parser.getPropertyRefs());
+      assertEquals(24, t_cContents.size());
+      t_cContents.addAll(t_Parser.getConnectionFlagList());
+      assertEquals(29, t_cContents.size());
+      t_cContents.addAll(t_Parser.getStatementFlagList());
+      assertEquals(30, t_cContents.size());
+      t_cContents.addAll(t_Parser.getResultSetFlagList());
+
+      assertEquals(31, t_cContents.size());
     // JUnitDoclet end method parse
   }
   

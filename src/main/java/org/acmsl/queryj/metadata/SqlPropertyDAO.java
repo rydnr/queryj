@@ -86,6 +86,15 @@ public interface SqlPropertyDAO
      * @param name the property name.
      * @param tableName the table name.
      * @param type the type.
+     * @param index the property index.
+     * @param columnName the column name.
+     * @param nullable whether it allows null or not.
      */
-    void insert(@NotNull final String name, @NotNull final String tableName, @NotNull final String type);
+    public void insert(
+        @NotNull final String name,
+        @NotNull final String columnName,
+        final int index,
+        @NotNull final String tableName,
+        @NotNull final String type,
+        final boolean nullable);
 }

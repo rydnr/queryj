@@ -36,21 +36,22 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.queryj.customsql.ConnectionFlagsElement;
+import org.acmsl.queryj.customsql.ConnectionFlags;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.IdentifiableElement;
 import org.acmsl.queryj.customsql.Parameter;
-import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.ParameterRef;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.Result;
-import org.acmsl.queryj.customsql.ResultSetFlagsElement;
-import org.acmsl.queryj.customsql.StatementFlagsElement;
+import org.acmsl.queryj.customsql.ResultSetFlags;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.StatementFlags;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -66,11 +67,67 @@ public interface SqlXmlParser
     extends CustomSqlProvider
 {
     /**
-     * Retrieves the sql.xml element collection.
-     * return such collection.
+     * Retrieves the sql.xml {@link Sql} collection.
+     * @return such collection.
      */
     @NotNull
-    List<? extends IdentifiableElement> getCollection();
+    List<Sql> getQueries();
+
+    /**
+     * Retrieves the sql.xml {@link Result} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<Result> getResults();
+
+    /**
+     * Retrieves the sql.xml {@link Parameter} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<Parameter> getParameters();
+
+    /**
+     * Retrieves the sql.xml {@link Parameter} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<ParameterRef> getParameterRefs();
+
+    /**
+     * Retrieves the sql.xml {@link Property} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<Property> getProperties();
+
+    /**
+     * Retrieves the sql.xml {@link PropertyRef} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<PropertyRef> getPropertyRefs();
+
+    /**
+     * Retrieves the sql.xml {@link ResultSetFlags} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<ResultSetFlags> getResultSetFlagList();
+
+    /**
+     * Retrieves the sql.xml {@link StatementFlags} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<StatementFlags> getStatementFlagList();
+
+    /**
+     * Retrieves the sql.xml {@link ConnectionFlags} collection.
+     * @return such collection.
+     */
+    @NotNull
+    List<ConnectionFlags> getConnectionFlagList();
 
     /**
      * Parses the sql.xml associated to this instance.
@@ -84,15 +141,24 @@ public interface SqlXmlParser
      * @param id the result id.
      * @param result the <code>Result</code> instance.
      */
+    @SuppressWarnings("unused")
     void addResult(@NotNull final String id, @NotNull final Result result);
 
     /**
      * Adds a new property.
      * @param id the property id.
+     * @param columnName the column name.
+     * @param index the property index.
      * @param name the property name.
      * @param type the property type.
+     * @param nullable whether it allows null or not.
      */
     void addProperty(
-        @NotNull final String id, @NotNull final String name, @NotNull final String type);
+        @NotNull final String id,
+        @NotNull final String columnName,
+        final int index,
+        @NotNull final String name,
+        @NotNull final String type,
+        final boolean nullable);
 }
 

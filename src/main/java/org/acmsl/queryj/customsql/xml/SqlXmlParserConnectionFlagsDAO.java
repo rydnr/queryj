@@ -60,12 +60,6 @@ public class SqlXmlParserConnectionFlagsDAO
     implements SqlConnectionFlagsDAO
 {
     /**
-     * The default connection-flags filter.
-     */
-    public static final String DEFAULT_CONNECTION_FLAGS_FILTER =
-        "connection-flags.default";
-
-    /**
      * The connection-flags filter for <i>find-by-primary-key</i> operation.
      */
     public static final String FIND_BY_PRIMARY_KEY_CONNECTION_FLAGS_FILTER =
@@ -102,15 +96,12 @@ public class SqlXmlParserConnectionFlagsDAO
     {
         @Nullable List<ConnectionFlags> result =
             filterConnectionFlags(
-                parser.getCollection(),
+                parser.getConnectionFlagList(),
                 FIND_BY_PRIMARY_KEY_CONNECTION_FLAGS_FILTER);
 
         if  (result.size() == 0)
         {
-            result =
-                filterConnectionFlags(
-                    parser.getCollection(),
-                    DEFAULT_CONNECTION_FLAGS_FILTER);
+            result = parser.getConnectionFlagList();
         }
 
         return result;
