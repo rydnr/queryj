@@ -149,7 +149,7 @@ public class CachingTableDecorator
     /**
      * The cached non-parent non-managed-externally attributes.
      */
-    private List<Attribute> m__lCachedNonParentNonManagedExternallyAttributes;
+    private List<Attribute> m__lCachedNonParentNonExternallyManagedAttributes;
 
     /**
      * The cached parent's all attributes and the non-parent own attributes.
@@ -159,17 +159,17 @@ public class CachingTableDecorator
     /**
      * The cached parent's all attributes and the non-parent non-managed-externally attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonManagedExternallyAttributes;
+    private List<Attribute> m__lCachedAllParentAndNonParentNonExternallyManagedAttributes;
 
     /**
      * The cached all non-managed externally attributes.
      */
-    private List<Attribute> m__lCachedAllNonManagedExternallyAttributes;
+    private List<Attribute> m__lCachedAllNonExternallyManagedAttributes;
 
     /**
      * The cached all parent and non-parent non-managed-externally read-only attributes.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes;
+    private List<Attribute> m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes;
 
     /**
      * The cached all parent and non-parent non-read-only attributes.
@@ -184,23 +184,23 @@ public class CachingTableDecorator
     /**
      * The cached non-parent non-managed-externally attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedNonParentNonManagedExternallyPlusPkAttributes;
+    private List<Attribute> m__lCachedNonParentNonExternallyManagedPlusPkAttributes;
 
     /**
      * The cached all non-managed-externally attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedAllNonManagedExternallyPlusPkAttributes;
+    private List<Attribute> m__lCachedAllNonExternallyManagedPlusPkAttributes;
 
     /**
      * The cached all non-managed-externally, non-readonly attributes, plus the primary key.
      */
-    private List<Attribute> m__lCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes;
+    private List<Attribute> m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes;
 
     /**
      * The cached all parent and non-parent non-managed-externally, non-readonly attributes,
      * plus the primary key.
      */
-    private List<Attribute> m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes;
+    private List<Attribute> m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes;
 
     /**
      * The cached non-parent attributes, plus the primary key.
@@ -1159,9 +1159,9 @@ public class CachingTableDecorator
      * attributes.
      * @param list such list.
      */
-    protected final void immutableSetCachedNonParentNonManagedExternallyAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
     {
-        m__lCachedNonParentNonManagedExternallyAttributes = list;
+        m__lCachedNonParentNonExternallyManagedAttributes = list;
     }
 
     /**
@@ -1169,9 +1169,9 @@ public class CachingTableDecorator
      * attributes.
      * @param list such list.
      */
-    protected void setCachedNonParentNonManagedExternallyAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
     {
-        immutableSetCachedNonParentNonManagedExternallyAttributes(list);
+        immutableSetCachedNonParentNonExternallyManagedAttributes(list);
     }
 
     /**
@@ -1180,9 +1180,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedNonParentNonManagedExternallyAttributes()
+    protected List<Attribute> getCachedNonParentNonExternallyManagedAttributes()
     {
-        return m__lCachedNonParentNonManagedExternallyAttributes;
+        return m__lCachedNonParentNonExternallyManagedAttributes;
     }
 
     /**
@@ -1191,15 +1191,15 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonManagedExternallyAttributes()
+    public List<Attribute> getNonParentNonExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonParentNonManagedExternallyAttributes();
+        @Nullable List<Attribute> result = getCachedNonParentNonExternallyManagedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
         {
-            result = super.getNonParentNonManagedExternallyAttributes();
-            setCachedNonParentNonManagedExternallyAttributes(result);
+            result = super.getNonParentNonExternallyManagedAttributes();
+            setCachedNonParentNonExternallyManagedAttributes(result);
         }
 
         return result;
@@ -1304,10 +1304,10 @@ public class CachingTableDecorator
      * non-managed-externally own attributes.
      * @param list such list.
      */
-    protected final void immutableSetCachedAllParentAndNonParentNonManagedExternallyAttributes(
+    protected final void immutableSetCachedAllParentAndNonParentNonExternallyManagedAttributes(
         @NotNull final List<Attribute> list)
     {
-        m__lCachedAllParentAndNonParentNonManagedExternallyAttributes = list;
+        m__lCachedAllParentAndNonParentNonExternallyManagedAttributes = list;
     }
 
     /**
@@ -1315,9 +1315,9 @@ public class CachingTableDecorator
      * non-managed-externally own attributes.
      * @param list such list.
      */
-    protected void setCachedAllParentAndNonParentNonManagedExternallyAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllParentAndNonParentNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
     {
-        immutableSetCachedAllParentAndNonParentNonManagedExternallyAttributes(list);
+        immutableSetCachedAllParentAndNonParentNonExternallyManagedAttributes(list);
     }
 
     /**
@@ -1326,9 +1326,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonManagedExternallyAttributes()
+    protected List<Attribute> getCachedAllParentAndNonParentNonExternallyManagedAttributes()
     {
-        return m__lCachedAllParentAndNonParentNonManagedExternallyAttributes;
+        return m__lCachedAllParentAndNonParentNonExternallyManagedAttributes;
     }
 
     /**
@@ -1337,15 +1337,15 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyAttributes()
+    public List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllParentAndNonParentNonManagedExternallyAttributes();
+        @Nullable List<Attribute> result = getCachedAllParentAndNonParentNonExternallyManagedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
         {
-            result = super.getAllParentAndNonParentNonManagedExternallyAttributes();
-            setCachedAllParentAndNonParentNonManagedExternallyAttributes(result);
+            result = super.getAllParentAndNonParentNonExternallyManagedAttributes();
+            setCachedAllParentAndNonParentNonExternallyManagedAttributes(result);
         }
 
         return result;
@@ -1355,18 +1355,18 @@ public class CachingTableDecorator
      * Specifies cached all attributes, including the parent's, but not the externally-managed.
      * @param list such attributes.
      */
-    protected final void immutableSetCachedAllNonManagedExternallyAttributes(@NotNull final List<Attribute> list)
+    protected final void immutableSetCachedAllNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
     {
-        m__lCachedAllNonManagedExternallyAttributes = list;
+        m__lCachedAllNonExternallyManagedAttributes = list;
     }
 
     /**
      * Specifies cached all attributes, including the parent's, but not the externally-managed.
      * @param list such attributes.
      */
-    protected void setCachedAllNonManagedExternallyAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllNonExternallyManagedAttributes(@NotNull final List<Attribute> list)
     {
-        immutableSetCachedAllNonManagedExternallyAttributes(list);
+        immutableSetCachedAllNonExternallyManagedAttributes(list);
     }
 
     /**
@@ -1374,9 +1374,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonManagedExternallyAttributes()
+    protected List<Attribute> getCachedAllNonExternallyManagedAttributes()
     {
-        return m__lCachedAllNonManagedExternallyAttributes;
+        return m__lCachedAllNonExternallyManagedAttributes;
     }
 
     /**
@@ -1384,15 +1384,15 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyAttributes()
+    public List<Attribute> getAllNonExternallyManagedAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonManagedExternallyAttributes();
+        @Nullable List<Attribute> result = getCachedAllNonExternallyManagedAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
         {
-            result = super.getAllNonManagedExternallyAttributes();
-            setCachedAllNonManagedExternallyAttributes(result);
+            result = super.getAllNonExternallyManagedAttributes();
+            setCachedAllNonExternallyManagedAttributes(result);
         }
 
         return result;
@@ -1455,10 +1455,10 @@ public class CachingTableDecorator
      * non-managed-externally, non-read-only own attributes.
      * @param list such list.
      */
-    protected final void immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(
+    protected final void immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(
         @NotNull final List<Attribute> list)
     {
-        m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes = list;
+        m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes = list;
     }
 
     /**
@@ -1466,10 +1466,10 @@ public class CachingTableDecorator
      * non-managed-externally, non-read-only own attributes.
      * @param list such list.
      */
-    protected void setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(
+    protected void setCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(
         @NotNull final List<Attribute> list)
     {
-        immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(
+        immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(
             list);
     }
 
@@ -1479,9 +1479,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes()
+    protected List<Attribute> getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
     {
-        return m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes;
+        return m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes;
     }
 
     /**
@@ -1490,16 +1490,16 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes()
+    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
     {
         @Nullable List<Attribute> result =
-            getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+            getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
 
         if  (   (result == null)
              || (result.size() == 0))
         {
-            result = super.getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
-            setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes(result);
+            result = super.getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
+            setCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes(result);
         }
 
         return result;
@@ -1610,10 +1610,10 @@ public class CachingTableDecorator
      * plus the primary key.
      * @param list such list.
      */
-    protected final void immutableSetCachedNonParentNonManagedExternallyPlusPkAttributes(
+    protected final void immutableSetCachedNonParentNonExternallyManagedPlusPkAttributes(
         @NotNull final List<Attribute> list)
     {
-        m__lCachedNonParentNonManagedExternallyPlusPkAttributes = list;
+        m__lCachedNonParentNonExternallyManagedPlusPkAttributes = list;
     }
 
     /**
@@ -1621,9 +1621,9 @@ public class CachingTableDecorator
      * plus the primary key.
      * @param list such list.
      */
-    protected void setCachedNonParentNonManagedExternallyPlusPkAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedNonParentNonExternallyManagedPlusPkAttributes(@NotNull final List<Attribute> list)
     {
-        immutableSetCachedNonParentNonManagedExternallyPlusPkAttributes(list);
+        immutableSetCachedNonParentNonExternallyManagedPlusPkAttributes(list);
     }
 
     /**
@@ -1632,9 +1632,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedNonParentNonManagedExternallyPlusPkAttributes()
+    protected List<Attribute> getCachedNonParentNonExternallyManagedPlusPkAttributes()
     {
-        return m__lCachedNonParentNonManagedExternallyPlusPkAttributes;
+        return m__lCachedNonParentNonExternallyManagedPlusPkAttributes;
     }
 
     /**
@@ -1643,14 +1643,14 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonManagedExternallyPlusPkAttributes()
+    public List<Attribute> getNonParentNonExternallyManagedPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedNonParentNonManagedExternallyPlusPkAttributes();
+        @Nullable List<Attribute> result = getCachedNonParentNonExternallyManagedPlusPkAttributes();
 
         if  (result == null)
         {
-            result = super.getNonParentNonManagedExternallyPlusPkAttributes();
-            setCachedNonParentNonManagedExternallyPlusPkAttributes(result);
+            result = super.getNonParentNonExternallyManagedPlusPkAttributes();
+            setCachedNonParentNonExternallyManagedPlusPkAttributes(result);
         }
 
         return result;
@@ -1661,10 +1661,10 @@ public class CachingTableDecorator
      * plus the primary key.
      * @param list the list.
      */
-    protected final void immutableSetCachedAllNonManagedExternallyPlusPkAttributes(
+    protected final void immutableSetCachedAllNonExternallyManagedPlusPkAttributes(
         @NotNull final List<Attribute> list)
     {
-        m__lCachedAllNonManagedExternallyPlusPkAttributes = list;
+        m__lCachedAllNonExternallyManagedPlusPkAttributes = list;
     }
 
     /**
@@ -1672,9 +1672,9 @@ public class CachingTableDecorator
      * plus the primary key.
      * @param list the list.
      */
-    protected void setCachedAllNonManagedExternallyPlusPkAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllNonExternallyManagedPlusPkAttributes(@NotNull final List<Attribute> list)
     {
-        immutableSetCachedAllNonManagedExternallyPlusPkAttributes(list);
+        immutableSetCachedAllNonExternallyManagedPlusPkAttributes(list);
     }
 
     /**
@@ -1683,9 +1683,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonManagedExternallyPlusPkAttributes()
+    protected List<Attribute> getCachedAllNonExternallyManagedPlusPkAttributes()
     {
-        return m__lCachedAllNonManagedExternallyPlusPkAttributes;
+        return m__lCachedAllNonExternallyManagedPlusPkAttributes;
     }
 
     /**
@@ -1694,14 +1694,14 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyPlusPkAttributes()
+    public List<Attribute> getAllNonExternallyManagedPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonManagedExternallyPlusPkAttributes();
+        @Nullable List<Attribute> result = getCachedAllNonExternallyManagedPlusPkAttributes();
 
         if  (result == null)
         {
-            result = super.getAllNonManagedExternallyPlusPkAttributes();
-            setCachedAllNonManagedExternallyPlusPkAttributes(result);
+            result = super.getAllNonExternallyManagedPlusPkAttributes();
+            setCachedAllNonExternallyManagedPlusPkAttributes(result);
         }
 
         return result;
@@ -1712,10 +1712,10 @@ public class CachingTableDecorator
      * or read-only, plus the primary key.
      * @param list the list.
      */
-    protected final void immutableSetCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(
+    protected final void immutableSetCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(
         @NotNull final List<Attribute> list)
     {
-        m__lCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes = list;
+        m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes = list;
     }
 
     /**
@@ -1723,9 +1723,9 @@ public class CachingTableDecorator
      * or read-only, plus the primary key.
      * @param list the list.
      */
-    protected void setCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(@NotNull final List<Attribute> list)
+    protected void setCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(@NotNull final List<Attribute> list)
     {
-        immutableSetCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(list);
+        immutableSetCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(list);
     }
 
     /**
@@ -1734,9 +1734,9 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @Nullable
-    protected List<Attribute> getCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    protected List<Attribute> getCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
-        return m__lCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes;
+        return m__lCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes;
     }
 
     /**
@@ -1745,14 +1745,14 @@ public class CachingTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    public List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
-        @Nullable List<Attribute> result = getCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+        @Nullable List<Attribute> result = getCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
         if  (result == null)
         {
-            result = super.getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
-            setCachedAllNonManagedExternallyNonReadOnlyPlusPkAttributes(result);
+            result = super.getAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
+            setCachedAllNonExternallyManagedNonReadOnlyPlusPkAttributes(result);
         }
 
         return result;
@@ -1763,10 +1763,10 @@ public class CachingTableDecorator
      * non-managed-externally, non-read-only own attributes, including the primary key.
      * @param list such list.
      */
-    protected final void immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+    protected final void immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
         @NotNull final List<Attribute> list)
     {
-        m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes = list;
+        m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes = list;
     }
 
     /**
@@ -1774,10 +1774,10 @@ public class CachingTableDecorator
      * non-managed-externally, non-read-only own attributes, including the primary key.
      * @param list such list.
      */
-    protected void setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+    protected void setCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
         @NotNull final List<Attribute> list)
     {
-        immutableSetCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+        immutableSetCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
             list);
     }
 
@@ -1787,9 +1787,9 @@ public class CachingTableDecorator
      * @return such list.
      */
     @Nullable
-    protected List<Attribute> getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    protected List<Attribute> getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
-        return m__lCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes;
+        return m__lCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes;
     }
 
     /**
@@ -1798,16 +1798,16 @@ public class CachingTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
         @Nullable List<Attribute> result =
-            getCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
+            getCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
         if  (result == null)
         {
             result =
-                super.getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
-            setCachedAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(result);
+                super.getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
+            setCachedAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(result);
         }
 
         return result;

@@ -297,7 +297,7 @@ public class TableDecoratorHelper
         for (@Nullable Attribute t_Attribute : attributes)
         {
             if  (   (t_Attribute != null)
-                 && (!t_Attribute.isManagedExternally()))
+                 && (!t_Attribute.isExternallyManaged()))
             {
                 result.add(t_Attribute);
             }

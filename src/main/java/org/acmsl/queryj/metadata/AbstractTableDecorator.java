@@ -1591,10 +1591,10 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonManagedExternallyAttributes()
+    public List<Attribute> getNonParentNonExternallyManagedAttributes()
     {
         return
-            getNonParentNonManagedExternallyAttributes(
+            getNonParentNonExternallyManagedAttributes(
                 getNonParentAttributes());
     }
 
@@ -1605,7 +1605,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getNonParentNonManagedExternallyAttributes(
+    protected List<Attribute> getNonParentNonExternallyManagedAttributes(
         @NotNull final List<Attribute> nonParentAttributes)
     {
         List<Attribute> result = new ArrayList<Attribute>();
@@ -1613,7 +1613,7 @@ public abstract class AbstractTableDecorator
         for (@Nullable Attribute t_Attribute : nonParentAttributes)
         {
             if  (   (t_Attribute != null)
-                 && (!t_Attribute.isManagedExternally()))
+                 && (!t_Attribute.isExternallyManaged()))
             {
                 result.add(t_Attribute);
             }
@@ -1628,10 +1628,10 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getNonParentNonManagedExternallyPlusPkAttributes()
+    public List<Attribute> getNonParentNonExternallyManagedPlusPkAttributes()
     {
         return
-            getNonParentNonManagedExternallyPlusPkAttributes(
+            getNonParentNonExternallyManagedPlusPkAttributes(
                 getNonParentPlusPkAttributes(),
                 getPrimaryKey());
     }
@@ -1644,7 +1644,7 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getNonParentNonManagedExternallyPlusPkAttributes(
+    protected List<Attribute> getNonParentNonExternallyManagedPlusPkAttributes(
         @NotNull final List<Attribute> nonParentAttributes,
         @NotNull final List<Attribute> primaryKey)
     {
@@ -1653,7 +1653,7 @@ public abstract class AbstractTableDecorator
         for (@Nullable Attribute t_Attribute : nonParentAttributes)
         {
             if  (   (t_Attribute != null)
-                 && (   (!t_Attribute.isManagedExternally())
+                 && (   (!t_Attribute.isExternallyManaged())
                      || (isPartOf(primaryKey, t_Attribute))))
             {
                 result.add(t_Attribute);
@@ -1730,12 +1730,12 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyAttributes()
+    public List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes()
     {
         return
-            getAllParentAndNonParentNonManagedExternallyAttributes(
+            getAllParentAndNonParentNonExternallyManagedAttributes(
                 getParentTable(),
-                getNonParentNonManagedExternallyAttributes(),
+                getNonParentNonExternallyManagedAttributes(),
                 getMetadataManager(),
                 getDecoratorFactory(),
                 getCustomSqlProvider());
@@ -1745,7 +1745,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the list of parent's all attributes and the non-parent
      * non-managed-externally own attributes.
      * @param parent the parent.
-     * @param nonParentNonManagedExternallyAttributes the non-parent, non-managed-externally
+     * @param nonParentNonExternallyManagedAttributes the non-parent, non-managed-externally
      * own attributes.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -1753,9 +1753,9 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getAllParentAndNonParentNonManagedExternallyAttributes(
+    protected List<Attribute> getAllParentAndNonParentNonExternallyManagedAttributes(
         @Nullable final Table parent,
-        @NotNull final List<Attribute> nonParentNonManagedExternallyAttributes,
+        @NotNull final List<Attribute> nonParentNonExternallyManagedAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -1779,11 +1779,11 @@ public abstract class AbstractTableDecorator
 
             if (t_ParentDecorator != null)
             {
-                result.addAll(t_ParentDecorator.getAllNonManagedExternallyAttributes());
+                result.addAll(t_ParentDecorator.getAllNonExternallyManagedAttributes());
             }
         }
 
-        result.addAll(nonParentNonManagedExternallyAttributes);
+        result.addAll(nonParentNonExternallyManagedAttributes);
 
         return result;
     }
@@ -1793,9 +1793,9 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyAttributes()
+    public List<Attribute> getAllNonExternallyManagedAttributes()
     {
-        return getAllNonManagedExternallyAttributes(getAllAttributes());
+        return getAllNonExternallyManagedAttributes(getAllAttributes());
     }
 
     /**
@@ -1804,14 +1804,14 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonManagedExternallyAttributes(@NotNull final List<Attribute> allAttributes)
+    protected List<Attribute> getAllNonExternallyManagedAttributes(@NotNull final List<Attribute> allAttributes)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
 
         for (@Nullable Attribute t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
-                 && (!t_Attribute.isManagedExternally()))
+                 && (!t_Attribute.isExternallyManaged()))
             {
                 result.add(t_Attribute);
             }
@@ -1826,9 +1826,9 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyPlusPkAttributes()
+    public List<Attribute> getAllNonExternallyManagedPlusPkAttributes()
     {
-        return getAllNonManagedExternallyPlusPkAttributes(getAllAttributes(), getPrimaryKey());
+        return getAllNonExternallyManagedPlusPkAttributes(getAllAttributes(), getPrimaryKey());
     }
 
     /**
@@ -1839,7 +1839,7 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonManagedExternallyPlusPkAttributes(
+    protected List<Attribute> getAllNonExternallyManagedPlusPkAttributes(
         @NotNull final List<Attribute> allAttributes, @NotNull final List<Attribute> primaryKey)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
@@ -1847,7 +1847,7 @@ public abstract class AbstractTableDecorator
         for (@Nullable Attribute t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
-                 && (   (!t_Attribute.isManagedExternally())
+                 && (   (!t_Attribute.isExternallyManaged())
                      || (isPartOf(primaryKey, t_Attribute))))
             {
                 result.add(t_Attribute);
@@ -1863,9 +1863,9 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    public List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    public List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
-        return getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(getAllAttributes(), getPrimaryKey());
+        return getAllNonExternallyManagedNonReadOnlyPlusPkAttributes(getAllAttributes(), getPrimaryKey());
     }
 
     /**
@@ -1876,7 +1876,7 @@ public abstract class AbstractTableDecorator
      * @return such attributes.
      */
     @NotNull
-    protected List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes(
+    protected List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes(
         @NotNull final List<Attribute> allAttributes, @NotNull final List<Attribute> primaryKey)
     {
         @NotNull final List<Attribute> result = new ArrayList<Attribute>();
@@ -1884,7 +1884,7 @@ public abstract class AbstractTableDecorator
         for (@Nullable Attribute t_Attribute : allAttributes)
         {
             if  (   (t_Attribute != null)
-                 && (   (   (!t_Attribute.isManagedExternally())
+                 && (   (   (!t_Attribute.isExternallyManaged())
                          && (!t_Attribute.isReadOnly()))
                      || (isPartOf(primaryKey, t_Attribute))))
             {
@@ -1923,10 +1923,10 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes()
+    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes()
     {
         @NotNull List<Attribute> result =
-            getAllParentAndNonParentNonManagedExternallyAttributes();
+            getAllParentAndNonParentNonExternallyManagedAttributes();
 
         return removeReadOnly(result, TableDecoratorHelper.getInstance());
     }
@@ -1990,12 +1990,12 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    public List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes()
+    public List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes()
     {
         return
-            getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+            getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
                 getParentTable(),
-                getNonParentNonManagedExternallyPlusPkAttributes(),
+                getNonParentNonExternallyManagedPlusPkAttributes(),
                 getMetadataManager(),
                 getDecoratorFactory(),
                 getCustomSqlProvider(),
@@ -2006,7 +2006,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the list of parent's all attributes and the non-parent
      * non-managed-externally , non-read-only, own attributes, plus the primary key.
      * @param parent the parent.
-     * @param nonParentNonManagedExternallyPlusPkAttributes the non-parent, non-managed-externally
+     * @param nonParentNonExternallyManagedPlusPkAttributes the non-parent, non-managed-externally
      * own attributes, plus the primary key.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @param decoratorFactory the <code>DecoratorFactory</code> instance.
@@ -2015,9 +2015,9 @@ public abstract class AbstractTableDecorator
      * @return such list.
      */
     @NotNull
-    protected List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes(
+    protected List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes(
         @Nullable final Table parent,
-        @NotNull final List<Attribute> nonParentNonManagedExternallyPlusPkAttributes,
+        @NotNull final List<Attribute> nonParentNonExternallyManagedPlusPkAttributes,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -2043,13 +2043,13 @@ public abstract class AbstractTableDecorator
             if (t_ParentDecorator != null)
             {
                 result.addAll(
-                    t_ParentDecorator.getAllNonManagedExternallyNonReadOnlyPlusPkAttributes());
+                    t_ParentDecorator.getAllNonExternallyManagedNonReadOnlyPlusPkAttributes());
             }
         }
 
         result.addAll(
             tableDecoratorHelper.removeReadOnly(
-                nonParentNonManagedExternallyPlusPkAttributes));
+                nonParentNonExternallyManagedPlusPkAttributes));
 
         return result;
     }
@@ -2305,6 +2305,42 @@ public abstract class AbstractTableDecorator
     protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
     {
         return sqlDAO.findSelects(table.getName());
+    }
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     * @return such list of {@link Sql} elements.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Sql> getCustomSelectsForUpdate()
+    {
+        return decorate(getCustomSelectsForUpdate(getTable(), getCustomSqlProvider()));
+    }
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     * @param table the table.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @return such list of {@link Sql} elements.
+     */
+    @NotNull
+    protected List<Sql> getCustomSelectsForUpdate(
+        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return getCustomSelectsForUpdate(table, customSqlProvider.getSqlDAO());
+    }
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     * @param table the table.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @return such list of {@link Sql} elements.
+     */
+    @NotNull
+    protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
+    {
+        return sqlDAO.findSelectsForUpdate(table.getName());
     }
 
     /**
@@ -2590,5 +2626,53 @@ public abstract class AbstractTableDecorator
         @NotNull final CustomSqlProvider customSqlProvider)
     {
         return new CachingForeignKeyDecorator(foreignKey, metadataManager, decoratorFactory, customSqlProvider);
+    }
+
+    /**
+     * Retrieves the externally-managed attributes.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<AttributeDecorator> getAllExternallyManagedAttributes()
+    {
+        return getAllExternallyManagedAttributes(getAllParentAndNonParentAttributes(), getMetadataManager());
+    }
+
+
+    /**
+     * Retrieves the externally-managed attributes.
+     * @param attributes the attributes (including parent's).
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return such information.
+     */
+    @NotNull
+    protected List<AttributeDecorator> getAllExternallyManagedAttributes(
+        @NotNull final List<Attribute> attributes, @NotNull final MetadataManager metadataManager)
+    {
+        List<AttributeDecorator> result = new ArrayList<AttributeDecorator>();
+
+        for (@Nullable Attribute t_Attribute : attributes)
+        {
+            if (   (t_Attribute != null)
+                && (t_Attribute.isExternallyManaged()))
+            {
+                result.add(decorate(t_Attribute, metadataManager));
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Decorates given attribute.
+     * @param attribute the attribute to decorate.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the decorated attribute.
+     */
+    @NotNull
+    protected AttributeDecorator decorate(
+        @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)
+    {
+        return new CachingAttributeDecorator(attribute, metadataManager);
     }
 }

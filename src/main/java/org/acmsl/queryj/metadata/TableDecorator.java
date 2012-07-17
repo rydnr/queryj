@@ -164,7 +164,7 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllNonManagedExternallyAttributes();
+    List<Attribute> getAllNonExternallyManagedAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
@@ -172,7 +172,7 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllNonManagedExternallyPlusPkAttributes();
+    List<Attribute> getAllNonExternallyManagedPlusPkAttributes();
 
     /**
      * Retrieves all attributes, including the parent's, but not the externally-managed,
@@ -180,7 +180,7 @@ public interface TableDecorator
      * @return such attributes.
      */
     @NotNull
-    List<Attribute> getAllNonManagedExternallyNonReadOnlyPlusPkAttributes();
+    List<Attribute> getAllNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the non-parent attributes.
@@ -202,7 +202,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getNonParentNonManagedExternallyAttributes();
+    List<Attribute> getNonParentNonExternallyManagedAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent own attributes.
@@ -217,7 +217,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyAttributes();
+    List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent
@@ -225,7 +225,7 @@ public interface TableDecorator
      * @return such list.
      */
     @NotNull
-    List<Attribute> getAllParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes();
+    List<Attribute> getAllParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes();
 
     /**
      * Retrieves the list of parent's all attributes and the non-parent,

@@ -645,7 +645,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
     <defaultInsert(table=table, parent=parent)>
 <endif>
 
-    <table.externallyManagedAttributes:attribute_resultset_extractor_class(
+    <table.allExternallyManagedAttributes:attribute_resultset_extractor_class(
       table=table,
       trNameCapitalized=repository.capitalized,
       nameCapitalized=it.nameCapitalized,
@@ -823,7 +823,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
 
 <if(parent)>
         parentDAO.update(
-            <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyPlusPkAttributes:{<it.nameLowercased>}; separator=",\n">);
+            <parent.allParentAndNonParentNonExternallyManagedNonReadOnlyPlusPkAttributes:{<it.nameLowercased>}; separator=",\n">);
 <endif>
 
 
@@ -1380,7 +1380,7 @@ jdbcInsert(table, parent) ::= <<
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1390,7 +1390,7 @@ jdbcInsert(table, parent) ::= <<
  */
 public void insert(
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1399,7 +1399,7 @@ public void insert(
 {
     insert(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+        <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
         <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1418,7 +1418,7 @@ jdbcInsert2(table, parent) ::= <<
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1430,7 +1430,7 @@ jdbcInsert2(table, parent) ::= <<
  */
 protected void insert(
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1441,7 +1441,7 @@ protected void insert(
 {
     insert(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+        <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
         <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1463,7 +1463,7 @@ jdbcInsert3(table, parent) ::= <<
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1480,7 +1480,7 @@ jdbcInsert3(table, parent) ::= <<
  */
 protected void insert(
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1495,7 +1495,7 @@ protected void insert(
 {
     insert(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+        <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
         <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1520,7 +1520,7 @@ jdbcInsert4(table, parent) ::= <<
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1539,7 +1539,7 @@ jdbcInsert4(table, parent) ::= <<
 @SuppressWarnings("unchecked")
 protected void insert(
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1556,16 +1556,16 @@ protected void insert(
 <if(parent)>
     <parent.voName> <parent.nameLowercased> =
         <parent.nameLowercased>DAO.create(
-            <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+            <parent.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 
 <table.primaryKey:{attr |
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
 
 <else>
-<if(table.externallyManagedAttributes)>
+<if(table.allExternallyManagedAttributes)>
     Map map = null;
 
-    <table.externallyManagedAttributes:em_attribute_value_retrieval(
+    <table.allExternallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
@@ -1601,7 +1601,7 @@ create(table, parent) ::= <<
  * Inserts and retrieves the newly-inserted
  * {@link <table.voName>} instance.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1616,7 +1616,7 @@ public <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1626,7 +1626,7 @@ public <table.voName> create(
     return
         create(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
             <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1647,7 +1647,7 @@ create2(table, parent) ::= <<
  * Inserts and retrieves the newly-inserted
  * {@link <table.voName>} instance.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1666,7 +1666,7 @@ protected <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1679,7 +1679,7 @@ protected <table.voName> create(
     return
         create(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
             <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1704,7 +1704,7 @@ create3(table, parent) ::= <<
  * Inserts and retrieves the newly-inserted
  * {@link <table.voName>} instance.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1728,7 +1728,7 @@ protected <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1747,7 +1747,7 @@ protected <table.voName> create(
     return
         create(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
             <table.allNonReadOnlyButExternallyManagedAttributes:{<it.nameLowercased>}; separator=",\n">,
 <endif>
@@ -1773,7 +1773,7 @@ create4(table, parent) ::= <<
  * Inserts and retrieves the newly-inserted
  * {@link <table.voName>} instance.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1799,7 +1799,7 @@ protected <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">,
 <endif>
@@ -1823,16 +1823,16 @@ protected <table.voName> create(
 <if(parent)>
     <parent.voName> <parent.nameLowercased> =
         <parent.nameLowercased>DAO.create(
-            <parent.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
+            <parent.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{<it.nameLowercased>}; separator=",\n">);
 
 <table.primaryKey:{attr |
     <attr.fieldType> <attr.nameLowercased> = <parent.nameLowercased>.get<attr.nameCapitalized>();}; separator="\n">
 
 <else>
-<if(table.externallyManagedAttributes)>
+<if(table.allExternallyManagedAttributes)>
     Map map = null;
 
-    <table.externallyManagedAttributes:em_attribute_value_retrieval(
+    <table.allExternallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
@@ -1886,7 +1886,7 @@ oracle8Insert() ::= <<
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1895,7 +1895,7 @@ oracle8Insert() ::= <<
  */
 public void insert(
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1904,7 +1904,7 @@ public void insert(
 {
     create(
 <if(parent)>
-        <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">);
+        <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">);
 <else>
         <table.attributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">);
 <endif>
@@ -1914,7 +1914,7 @@ public void insert(
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1930,7 +1930,7 @@ public <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">)
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">)
@@ -1940,7 +1940,7 @@ public <table.voName> create(
     return
         create(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
             <table.nonReadOnlyAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
@@ -1951,7 +1951,7 @@ public <table.voName> create(
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -1968,7 +1968,7 @@ protected <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -1979,7 +1979,7 @@ protected <table.voName> create(
     return
         create(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
             <table.nonReadOnlyAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
@@ -1990,7 +1990,7 @@ protected <table.voName> create(
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -2008,7 +2008,7 @@ protected <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -2024,7 +2024,7 @@ protected <table.voName> create(
 
         create(
 <if(parent)>
-            <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
+            <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attr.nameLowercased>}; separator=",\n">,
 <else>
             <table.nonReadOnlyAttributes:{ attr | <if(!attr.managedExternally)><attr.nameLowercased><endif>}; separator=",\n">,
 <endif>
@@ -2038,7 +2038,7 @@ protected <table.voName> create(
 /**
  * Persists {@link <table.voName>} information.
 <if(parent)>
- <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
+ <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_javadoc(name=attr.nameLowercased)>}; separator="\n">
 <else>
  <table.allNonReadOnlyButExternallyManagedAttributes:attribute_javadoc(
    name=it.nameLowercased); separator="\n">
@@ -2056,7 +2056,7 @@ protected <table.voName> create(
 <endif>
 
 <if(parent)>
-    <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
+    <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{ attr | <attribute_declaration_impl(attr=attr)>}; separator=",\n">,
 <else>
     <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(
       attr=it); separator=",\n">,
@@ -2071,10 +2071,10 @@ protected <table.voName> create(
     <table.voName> result = null;
 <endif>
 
-<if(table.externallyManagedAttributes)>
+<if(table.allExternallyManagedAttributes)>
     Map map = null;
 
-    <table.externallyManagedAttributes:em_attribute_value_retrieval(
+    <table.allExternallyManagedAttributes:em_attribute_value_retrieval(
       query=it.query,
       nativeType=it.nativeType,
       nameLowercased=it.nameLowercased,
@@ -2089,7 +2089,7 @@ protected <table.voName> create(
                 "insert into <table.nameUppercased>" +
                 " (" +
 <if(parent)>
-                <table.allParentAndNonParentNonManagedExternallyNonReadOnlyAttributes:{"<it.nameUppercased>};
+                <table.allParentAndNonParentNonExternallyManagedNonReadOnlyAttributes:{"<it.nameUppercased>};
                   separator=", \" +\n"> " +
 <else>
                 <table.nonReadOnlyAttributes:{"<it.nameUppercased>};

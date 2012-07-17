@@ -89,7 +89,7 @@ public interface Attribute
      * Retrieves whether the value is managed externally (via keyword or retrieval query).
      * @return such information.
      */
-    boolean isManagedExternally();
+    boolean isExternallyManaged();
 
     /**
      * Retrieves the keyword used to retrieve the value, if any.

@@ -470,7 +470,7 @@ public abstract class AbstractAttribute
      * Retrieves whether it's managed externally.
      * @return such information.
      */
-    public boolean isManagedExternally()
+    public boolean isExternallyManaged()
     {
         return
             (    (getKeyword() != null)

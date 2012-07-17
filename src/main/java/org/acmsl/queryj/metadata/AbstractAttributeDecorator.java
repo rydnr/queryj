@@ -634,7 +634,7 @@ public abstract class AbstractAttributeDecorator
     @Nullable
     public String getQuery()
     {
-        return getQuery(isManagedExternally());
+        return getQuery(isExternallyManaged());
     }
 
     /**

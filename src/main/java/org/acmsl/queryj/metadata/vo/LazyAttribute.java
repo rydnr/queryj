@@ -482,7 +482,7 @@ public class LazyAttribute
 
         if (t_Attribute != null)
         {
-            result = t_Attribute.isManagedExternally();
+            result = t_Attribute.isExternallyManaged();
         }
 
         return result;

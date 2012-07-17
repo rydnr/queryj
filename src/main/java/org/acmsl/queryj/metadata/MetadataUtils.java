@@ -232,7 +232,7 @@ public class MetadataUtils
 
             for (Attribute t_Attribute : t_lAttributes)
             {
-                if (t_Attribute.isManagedExternally())
+                if (t_Attribute.isExternallyManaged())
                 {
                     if (result == null)
                     {
@@ -273,7 +273,7 @@ public class MetadataUtils
             for (Attribute t_Attribute : t_lAttributes)
             {
                 if (   (t_Attribute != null)
-                    && (!t_Attribute.isManagedExternally()))
+                    && (!t_Attribute.isExternallyManaged()))
                 {
                     if (result == null)
                     {
