@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -319,6 +318,47 @@ public abstract class AbstractParameterDecorator
             metadataTypeManager.isClob(metadataTypeManager.getJavaType(type));
     }
 
+    /**
+     * Retrieves the Java type of the parameter.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public String getJavaType()
+    {
+        return getType();
+    }
+
+    /**
+     * Checks whether this parameter is nullable or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isNullable()
+    {
+        return false;
+    }
+
+    /**
+     * Checks whether this parameter is primitive or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean isPrimitive()
+    {
+        return isPrimitive(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Checks whether this parameter is primitive or not.
+     * @param type the type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return such information.
+     */
+    protected boolean isPrimitive(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isPrimitive(type);
+    }
     /**
      * Provides a text representation of the information
      * contained in this instance.
