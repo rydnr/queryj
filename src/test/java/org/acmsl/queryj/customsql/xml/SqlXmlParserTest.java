@@ -287,7 +287,7 @@ extends TestCase
   {
     // JUnitDoclet begin method parse
       @NotNull SqlXmlParser t_Parser =
-          new SqlXmlParser(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
+          new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
       assertNotNull(t_Parser);
       t_Parser.parse();
       Collection t_cContents = t_Parser.getCollection();

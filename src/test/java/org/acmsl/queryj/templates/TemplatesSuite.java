@@ -101,10 +101,7 @@ public class TemplatesSuite
     new TestSuite("org.acmsl.queryj.tools.templates");
     
     //suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.KeywordRepositoryTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateUtilsTest.class);
     //suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateTest.class);
     

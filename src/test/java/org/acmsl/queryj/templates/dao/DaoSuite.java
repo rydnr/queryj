@@ -93,20 +93,12 @@ public class DaoSuite
     new TestSuite("org.acmsl.queryj.templates.dao");
     
     suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOBundleTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOChooserTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.DataAccessManagerTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateGeneratorTest.class);
     //suite.addTestSuite(org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateTest.class);
     //suite.addTestSuite(org.acmsl.queryj.templates.dao.BaseDAOFactoryTemplateTest.class);
-    //suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOTestTemplateGeneratorTest.class);
     suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOTemplateUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOFactoryTemplateGeneratorTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOTemplateGeneratorTest.class);
     //suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOChooserTemplateTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.BaseDAOTemplateGeneratorTest.class);
     //suite.addTestSuite(org.acmsl.queryj.templates.dao.BaseDAOTemplateTest.class);
     suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOChooserTemplateUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.dao.BaseDAOFactoryTemplateGeneratorTest.class);
     //suite.addTestSuite(org.acmsl.queryj.templates.dao.DAOTemplateTest.class);
     
     
