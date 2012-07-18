@@ -59,7 +59,10 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * {@link SqlXmlParser}-backed {@link SqlResultDAO} implementation.
@@ -70,6 +73,12 @@ public class SqlXmlParserResultDAO
     extends AbstractSqlXmlParserDAO
     implements SqlResultDAO
 {
+    /**
+     * The map of results by table/DAO.
+     */
+    private static final Map<String,List<Result>> CACHED_RESULTS_BY_TABLE = new HashMap<String, List<Result>>();
+    private static final Map<String, Boolean> UNMATCHED_TABLES = new HashMap<String, Boolean>(1);
+
     /**
      * Creates a new {@link SqlXmlParserResultDAO} with given {@link SqlXmlParser}.
      * @param parser the {@link SqlXmlParser} instance.
@@ -140,48 +149,148 @@ public class SqlXmlParserResultDAO
     {
         @Nullable Result result = null;
 
-        @Nullable List<Sql> t_lSql;
-        @Nullable String t_strDAO = null;
+        List<Result> t_lCachedResults = getCachedResults(table);
 
-        boolean t_bBreak = false;
-
-        for (@Nullable Result t_Result : findAll())
+        if (t_lCachedResults != null)
         {
-            if (t_Result != null)
+            result = filterByType(t_lCachedResults, type);
+        }
+
+        if (   (result == null)
+            && (!knownToBeNotFound(table)))
+        {
+            @Nullable List<Sql> t_lSql;
+            @Nullable String t_strDAO = null;
+
+            boolean t_bBreak = false;
+
+            for (@Nullable Result t_Result : findAll())
             {
-                if (t_Result.getMatches().equals(type))
+                if (t_Result != null)
                 {
-                    t_lSql = findSqlByResultId(t_Result.getId());
-
-                    for (@Nullable Sql t_Sql : t_lSql)
+                    if (t_Result.getMatches().equals(type))
                     {
-                        if (t_Sql != null)
+                        t_lSql = findSqlByResultId(t_Result.getId());
+
+                        for (@Nullable Sql t_Sql : t_lSql)
                         {
-                            t_strDAO = t_Sql.getDao();
+                            if (t_Sql != null)
+                            {
+                                t_strDAO = t_Sql.getDao();
+                            }
+
+                            if ("g_cycle_metadata".equals(t_strDAO))
+                            {
+                                UniqueLogFactory.getLog(SqlXmlParserResultDAO.class).debug("caught");
+                            }
+                            if (   (t_strDAO != null)
+                                && (matches(table, t_strDAO, englishGrammarUtils)))
+                            {
+                                result = t_Result;
+                                t_bBreak = true;
+                                break;
+                            }
                         }
 
-                        if ("g_cycle_metadata".equals(t_strDAO))
+                        if (t_bBreak)
                         {
-                            UniqueLogFactory.getLog(SqlXmlParserResultDAO.class).debug("caught");
-                        }
-                        if (   (t_strDAO != null)
-                            && (matches(table, t_strDAO, englishGrammarUtils)))
-                        {
-                            result = t_Result;
-                            t_bBreak = true;
                             break;
                         }
-                    }
-
-                    if (t_bBreak)
-                    {
-                        break;
                     }
                 }
             }
         }
 
+        if (result != null)
+        {
+            cacheResult(table, result);
+        }
+        else
+        {
+            cacheNonMatch(table);
+        }
         return result;
+    }
+
+    /**
+     * Checks whether given table is known not to be associated to any {@link Result}.
+     * @param table the table.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean knownToBeNotFound(@NotNull final String table)
+    {
+        boolean result = false;
+
+        if (UNMATCHED_TABLES.get(table.toLowerCase(Locale.US)) != null)
+        {
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Annotates given table doesn't have an associated {@link Result}.
+     * @param table the table.
+     */
+    protected void cacheNonMatch(@NotNull final String table)
+    {
+        UNMATCHED_TABLES.put(table.toLowerCase(Locale.US), Boolean.TRUE);
+    }
+
+    /**
+     * Filters given list to get the first {@link Result} matching given type.
+     * @param results the list of results to filter.
+     * @param type the type.
+     * @return the first match, or <code>null</code> otherwise.
+     */
+    @Nullable
+    protected Result filterByType(@NotNull final List<Result> results, @NotNull final String type)
+    {
+        @Nullable Result result = null;
+
+        for (@Nullable Result t_Result : results)
+        {
+            if (   (t_Result != null)
+                && (type.equalsIgnoreCase(t_Result.getMatches())))
+            {
+                result = t_Result;
+                break;
+            }
+        }
+
+        return result;
+
+    }
+
+    /**
+     * Retrieves the cached results for given table.
+     * @param table the table.
+     * @return the cached results.
+     */
+    @Nullable
+    protected synchronized List<Result> getCachedResults(@NotNull final String table)
+    {
+        return CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
+    }
+
+    /**
+     * Caches given results, associated to given table.
+     * @param table the table.
+     * @param result the result.
+     */
+    protected synchronized void cacheResult(@NotNull final String table, @NotNull final Result result)
+    {
+        List<Result> t_lCurrentMatches = CACHED_RESULTS_BY_TABLE.get(table.toLowerCase(Locale.US));
+        if (t_lCurrentMatches == null)
+        {
+            t_lCurrentMatches = new ArrayList<Result>(2);
+            CACHED_RESULTS_BY_TABLE.put(table.toLowerCase(Locale.US), t_lCurrentMatches);
+        }
+        if (!t_lCurrentMatches.contains(result))
+        {
+            t_lCurrentMatches.add(result);
+        }
     }
 
     /**
