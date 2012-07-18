@@ -56,33 +56,65 @@ public class PropertyElement
     implements  Property
 {
     private static final long serialVersionUID = -6387934586093006533L;
+
+    /**
+     * The column name.
+     */
+    private String m__strColumnName;
+
     /**
      * Whether the property allows nulls or not.
      */
     private boolean m__bNullable;
-    
+
     /**
      * Creates a PropertyElement with given information.
      * @param id the <i>id</i> attribute.
-     * @param columnName the <i>column_name</i> attribute.
      * @param index the <i>index</i> attribute.
-     * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param nullable the <i>nullable</i> attribute.
-     * @precondition id != null
-     * @precondition type != null
      */
     public PropertyElement(
-        final String id,
-        final String columnName,
+        @NotNull final String id,
+        @NotNull final String columnName,
         final int index,
-        final String name,
-        final String type,
+        @NotNull final String type,
         final boolean nullable)
     {
-        super(id, columnName, index, name, type);
+        super(id, index, type);
 
+        immutableSetColumnName(columnName);
         immutableSetNullable(nullable);
+    }
+
+    /**
+     * Specifies the column name.
+     * @param name such name.
+     */
+    protected final void immutableSetColumnName(@NotNull final String name)
+    {
+        m__strColumnName = name;
+    }
+
+    /**
+     * Specifies the column name.
+     * @param name such name.
+     */
+    @SuppressWarnings("unused")
+    protected void setColumnName(@NotNull final String name)
+    {
+        immutableSetColumnName(name);
+    }
+
+    /**
+     * Retrieves the column name.
+     * @return such name.
+     */
+    @Override
+    @NotNull
+    public String getColumnName()
+    {
+        return m__strColumnName;
     }
 
     /**

@@ -42,13 +42,16 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandler;
 // JUnitDoclet end import
 
 /*
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -145,7 +148,6 @@ extends TestCase
   /**
   * Tests ValueObjectFactoryTemplateWritingHandlerTesthandle()
   * @throws Exception if an unexpected situation occurs.
-  * @see org.acmsl.queryj.templates.valueobject.handlers.ValueObjectFactoryTemplateWritingHandler#handle(org.acmsl.queryj.tools.AntCommand)
   */
   public void testHandle()
   throws Exception

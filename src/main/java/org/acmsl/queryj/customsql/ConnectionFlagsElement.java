@@ -67,11 +67,9 @@ public class ConnectionFlagsElement
      * Creates a ConnectionFlagsElement with given information.
      * @param id the <i>id</i> attribute.
      * @param transactionIsolation the <i>transactionosilation</i> attribute.
-     * @precondition id != null
-     * @precondition transactionIsolation != null
      */
     public ConnectionFlagsElement(
-        final String id, final String transactionIsolation)
+        @NotNull final String id, @NotNull final String transactionIsolation)
     {
         super(id);
         immutableSetTransactionIsolation(transactionIsolation);
@@ -81,7 +79,7 @@ public class ConnectionFlagsElement
      * Specifies the <i>transactionisolation</i> attribute.
      * @param value such value.
      */
-    protected final void immutableSetTransactionIsolation(final String value)
+    protected final void immutableSetTransactionIsolation(@NotNull final String value)
     {
         m__strTransactionIsolation = value;
     }
@@ -90,7 +88,8 @@ public class ConnectionFlagsElement
      * Specifies the <i>transactionisolation</i> attribute.
      * @param value such value.
      */
-    protected void setTransactionIsolation(final String value)
+    @SuppressWarnings("unused")
+    protected void setTransactionIsolation(@NotNull final String value)
     {
         immutableSetTransactionIsolation(value);
     }
@@ -99,6 +98,7 @@ public class ConnectionFlagsElement
      * Retrieves the <i>transactionisolation</i> attribute.
      * @return such value.
      */
+    @NotNull
     public String getTransactionIsolation()
     {
         return m__strTransactionIsolation;

@@ -42,13 +42,16 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.templates.valueobject.handlers.ValueObjectTemplateWritingHandler;
 // JUnitDoclet end import
 
 /*
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

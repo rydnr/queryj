@@ -42,13 +42,16 @@ package org.acmsl.queryj.customsql;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.ParameterElement;
 // JUnitDoclet end import
 
 /*
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -112,7 +115,7 @@ extends TestCase
   throws Exception
   {
     // JUnitDoclet begin method testcase.createInstance
-    return new org.acmsl.queryj.customsql.ParameterElement("p1", "customer_id", 1, "id", "long", "default");
+    return new org.acmsl.queryj.customsql.ParameterElement("p1", 1, "id", "long", "default");
     // JUnitDoclet end method testcase.createInstance
   }
   

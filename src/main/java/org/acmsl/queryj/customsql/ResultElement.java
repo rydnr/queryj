@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -68,13 +67,11 @@ public class ResultElement
      * @param id the <i>id</i> attribute.
      * @param classValue the <i>class</i> attribute.
      * @param matches the <i>matches</i> attribute.
-     * @precondition id != null
-     * @precondition matches != null
      */
     public ResultElement(
-        final String id,
-        final String classValue,
-        final String matches)
+        @NotNull final String id,
+        @NotNull final String classValue,
+        @NotNull final String matches)
     {
         super(id, matches);
         immutableSetClassValue(classValue);
@@ -84,7 +81,7 @@ public class ResultElement
      * Specifies the <i>class</i> attribute.
      * @param classValue such value.
      */
-    protected final void immutableSetClassValue(final String classValue)
+    protected final void immutableSetClassValue(@NotNull final String classValue)
     {
         m__strClass = classValue;
     }
@@ -94,7 +91,7 @@ public class ResultElement
      * @param classValue such value.
      */
     @SuppressWarnings("unused")
-    protected void setClassValue(final String classValue)
+    protected void setClassValue(@NotNull final String classValue)
     {
         immutableSetClassValue(classValue);
     }
@@ -103,6 +100,7 @@ public class ResultElement
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getClassValue()
     {

@@ -75,7 +75,6 @@ public abstract class AbstractParameterDecorator
     {
         super(
             parameter.getId(),
-            parameter.getColumnName(),
             parameter.getIndex(),
             parameter.getName(),
             parameter.getType(),

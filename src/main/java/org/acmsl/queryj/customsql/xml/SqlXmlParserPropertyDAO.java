@@ -152,43 +152,39 @@ public class SqlXmlParserPropertyDAO
 
     /**
      * Inserts a new property.
-     * @param name the property name.
-     * @param tableName the table name.
+     * @param id the property id.
+     * @param columnName the column name.
      * @param type the type.
      * @param index the property index.
-     * @param columnName the column name.
      * @param nullable whether it allows null or not.
      */
     @Override
     public void insert(
-        @NotNull final String name,
+        @NotNull final String id,
         @NotNull final String columnName,
         final int index,
-        @NotNull final String tableName,
         @NotNull final String type,
         final boolean nullable)
     {
-        insert(name, columnName, index, tableName, type, nullable, getSqlXmlParser());
+        insert(id, columnName, index, type, nullable, getSqlXmlParser());
     }
 
     /**
      * Inserts a new property.
-     * @param name the property name.
+     * @param id the property id.
      * @param columnName the column name.
      * @param index the property index.
-     * @param tableName the table name.
      * @param type the type.
      * @param parser the {@link SqlXmlParser} instance.
      */
     protected void insert(
-        @NotNull final String name,
+        @NotNull final String id,
         @NotNull final String columnName,
         final int index,
-        @NotNull final String tableName,
         @NotNull final String type,
         final boolean nullable,
         @NotNull final SqlXmlParser parser)
     {
-        parser.addProperty(name, columnName, index, tableName, type, nullable);
+        parser.addProperty(id, columnName, index, type, nullable);
     }
 }

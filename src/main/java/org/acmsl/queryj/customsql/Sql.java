@@ -168,7 +168,7 @@ public interface Sql
      * Retrieves the <i>implementation</i> attribute.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     String getImplementation();
 
     /**
@@ -202,13 +202,13 @@ public interface Sql
      * @return such elements.
      */
     @NotNull
-    List<ParameterRefElement> getParameterRefs();
+    List<ParameterRef> getParameterRefs();
 
     /**
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    void add(@NotNull final ParameterRefElement parameterRef);
+    void add(@NotNull final ParameterRef parameterRef);
 
     /**
      * Retrieves the &lt;result-ref&gt; element.
@@ -222,19 +222,19 @@ public interface Sql
      * @return such element.
      */
     @Nullable
-    ConnectionFlagsRefElement getConnectionFlagsRef();
+    ConnectionFlagsRef getConnectionFlagsRef();
 
     /**
      * Retrieves the &lt;statement-flags-ref&gt; element.
      * @return such element.
      */
     @Nullable
-    StatementFlagsRefElement getStatementFlagsRef();
+    StatementFlagsRef getStatementFlagsRef();
 
     /**
      * Retrieves the &lt;resultset-flags-ref&gt; element.
      * @return such element.
      */
     @Nullable
-    ResultSetFlagsRefElement getResultSetFlagsRef();
+    ResultSetFlagsRef getResultSetFlagsRef();
 }

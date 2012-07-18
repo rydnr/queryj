@@ -42,13 +42,16 @@ package org.acmsl.queryj.customsql;
 * Importing project classes.
 */
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.PropertyElement;
 // JUnitDoclet end import
 
 /*
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -114,7 +117,7 @@ extends TestCase
     // JUnitDoclet begin method testcase.createInstance
     return
         new org.acmsl.queryj.customsql.PropertyElement(
-            "pp1", "column_name", 1, "name", "int", true);
+            "pp1", "column_name", 1, "int", true);
     // JUnitDoclet end method testcase.createInstance
   }
   

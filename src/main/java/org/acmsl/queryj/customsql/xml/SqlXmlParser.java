@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -149,7 +148,6 @@ public interface SqlXmlParser
      * @param id the property id.
      * @param columnName the column name.
      * @param index the property index.
-     * @param name the property name.
      * @param type the property type.
      * @param nullable whether it allows null or not.
      */
@@ -157,7 +155,6 @@ public interface SqlXmlParser
         @NotNull final String id,
         @NotNull final String columnName,
         final int index,
-        @NotNull final String name,
         @NotNull final String type,
         final boolean nullable);
 }

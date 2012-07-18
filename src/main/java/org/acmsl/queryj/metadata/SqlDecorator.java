@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.Sql;
 
 /*
@@ -44,8 +45,14 @@ import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.commons.patterns.Decorator;
 
 /*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing JDK classes.
  */
+import java.util.List;
 
 /**
  * Decorates &lt;sql&gt; elements in <i>custom-sql</i> models.
@@ -58,11 +65,18 @@ public interface SqlDecorator
     /**
      * The class used to multiple results.
      */
-    public static final String MULTIPLE_RESULT_CLASS = "List";
+    static final String MULTIPLE_RESULT_CLASS = "List";
 
     /**
      * Retrieves the <i>sql</i> element.
      * @return such instance.
      */
-    public Sql getSql();
+    Sql getSql();
+
+    /**
+     * Retrieves the parameters.
+     * @return such information.
+     */
+    @NotNull
+    List<Parameter> getParameters();
 }

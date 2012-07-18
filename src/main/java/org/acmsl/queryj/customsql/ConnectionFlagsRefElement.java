@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -49,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class ConnectionFlagsRefElement
     extends  AbstractIdElement
+    implements ConnectionFlagsRef
 {
     private static final long serialVersionUID = 3311191419084681233L;
 

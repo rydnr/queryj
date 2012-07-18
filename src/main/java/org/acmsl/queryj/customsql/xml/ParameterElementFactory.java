@@ -88,8 +88,6 @@ public class ParameterElementFactory
 
         String t_strId = attributes.getValue("id");
 
-        String t_strColumnName = attributes.getValue("column_name");
-
         int t_iIndex =
             conversionUtils.toInt(attributes.getValue("index"));
 
@@ -103,7 +101,6 @@ public class ParameterElementFactory
         result =
             new ParameterElement(
                 t_strId,
-                t_strColumnName,
                 t_iIndex,
                 t_strName,
                 t_strType,

@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -54,22 +53,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class AbstractParameterElement
     extends  AbstractIdElement
-    implements  Parameter
 {
-    /**
-     * The <i>column_name</i> attribute.
-     */
-    private String m__strColumnName;
-
     /**
      * The <i>index</i> attribute.
      */
     private int m__iIndex;
-
-    /**
-     * The <i>name</i> attribute.
-     */
-    private String m__strName;
 
     /**
      * The <i>type</i> attribute.
@@ -79,52 +67,17 @@ public abstract class AbstractParameterElement
     /**
      * Creates an AbstractParameterElement with given information.
      * @param id the <i>id</i> attribute.
-     * @param columnName the <i>column_name</i> attribute.
      * @param index the <i>index</i> attribute.
-     * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      */
     protected AbstractParameterElement(
         @NotNull final String id,
-        @NotNull final String columnName,
         final int index,
-        @NotNull final String name,
         @NotNull final String type)
     {
         super(id);
-        immutableSetColumnName(columnName);
         immutableSetIndex(index);
-        immutableSetName(name);
         immutableSetType(type);
-    }
-
-    /**
-     * Specifies the <i>column_name</i> attribute.
-     * @param columnName such value.
-     */
-    protected final void immutableSetColumnName(@NotNull final String columnName)
-    {
-        m__strColumnName = columnName;
-    }
-
-    /**
-     * Specifies the <i>column_name</i> attribute.
-     * @param columnName such value.
-     */
-    @SuppressWarnings("unused")
-    protected void setColumnName(@NotNull final String columnName)
-    {
-        immutableSetColumnName(columnName);
-    }
-
-    /**
-     * Retrieves the <i>column_name</i> attribute.
-     * @return such value.
-     */
-    @NotNull
-    public String getColumnName()
-    {
-        return m__strColumnName;
     }
 
     /**
@@ -153,34 +106,6 @@ public abstract class AbstractParameterElement
     public int getIndex()
     {
         return m__iIndex;
-    }
-
-    /**
-     * Specifies the <i>name</i> attribute.
-     * @param name such value.
-     */
-    protected final void immutableSetName(@NotNull final String name)
-    {
-        m__strName = name;
-    }
-
-    /**
-     * Specifies the <i>name</i> attribute.
-     * @param name such value.
-     */
-    protected void setName(@NotNull final String name)
-    {
-        immutableSetName(name);
-    }
-
-    /**
-     * Retrieves the <i>name</i> attribute.
-     * @return such value.
-     */
-    @NotNull
-    public String getName()
-    {
-        return m__strName;
     }
 
     /**
@@ -221,35 +146,27 @@ public abstract class AbstractParameterElement
         return
             toString(
                 getId(),
-                getColumnName(),
                 getIndex(),
-                getName(),
                 getType());
     }
 
     /**
      * Provides a text information about this instance.
      * @param id the <i>id</i> attribute.
-     * @param columnName the <i>column_name</i> attribute.
      * @param index the <i>index</i> attribute.
-     * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @return such information.
      */
     @NotNull
     protected String toString(
         final String id,
-        final String columnName,
         final int index,
-        final String name,
         final String type)
     {
         return
               getClass().getName()
             + "[" + "id=" + id + "]"
-            + "[" + "column_name=" + columnName + "]"
             + "[" + "index=" + index + "]"
-            + "[" + "name=" + name + "]"
             + "[" + "type=" + type + "]";
     }
 
@@ -263,9 +180,7 @@ public abstract class AbstractParameterElement
         return
             new org.apache.commons.lang.builder.HashCodeBuilder(-1682907425, 860212091)
                 .appendSuper(super.hashCode())
-                .append(getColumnName())
                 .append(getIndex())
-                .append(getName())
                 .append(getType())
                 .toHashCode();
     }
@@ -287,14 +202,8 @@ public abstract class AbstractParameterElement
                 new org.apache.commons.lang.builder.EqualsBuilder()
                     .appendSuper(super.equals(t_OtherInstance))
                     .append(
-                        getColumnName(),
-                        t_OtherInstance.getColumnName())
-                    .append(
                         getIndex(),
                         t_OtherInstance.getIndex())
-                    .append(
-                        getName(),
-                        t_OtherInstance.getName())
                     .append(
                         getType(),
                         t_OtherInstance.getType())
@@ -312,12 +221,17 @@ public abstract class AbstractParameterElement
      */
     public int compareTo(@Nullable final Parameter object)
     {
-        return
-            new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(getColumnName(), object.getColumnName())
-                .append(getIndex(), object.getIndex())
-                .append(getName(), object.getName())
-                .append(getType(), object.getType())
-                .toComparison();
+        int result = 0;
+
+        if (object != null)
+        {
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                    .append(getIndex(), object.getIndex())
+                    .append(getType(), object.getType())
+                    .toComparison();
+        }
+
+        return result;
     }
 }

@@ -36,10 +36,12 @@ package org.acmsl.queryj.metadata;
  * Importing project-specific classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.customsql.ConnectionFlagsRef;
+import org.acmsl.queryj.customsql.ParameterRef;
+import org.acmsl.queryj.customsql.ResultSetFlagsRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.customsql.Parameter;
 import org.acmsl.queryj.customsql.IdentifiableElement;
-import org.acmsl.queryj.customsql.ParameterRefElement;
 import org.acmsl.queryj.customsql.SqlElement;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
@@ -54,6 +56,7 @@ import java.util.List;
 /*
  * Importing Apache Commons-Logging classes.
  */
+import org.acmsl.queryj.customsql.StatementFlagsRef;
 import org.apache.commons.logging.Log;
 
 /*
@@ -108,15 +111,30 @@ public abstract class AbstractSqlDecorator
         immutableSetValue(sql.getValue());
         immutableSetParameterRefs(sql.getParameterRefs());
 
-        @Nullable ResultRef t_ResultRef = sql.getResultRef();
+        @Nullable final ResultRef t_ResultRef = sql.getResultRef();
         if (t_ResultRef != null)
         {
             immutableSetResultRef(t_ResultRef);
         }
 
-        immutableSetConnectionFlagsRef(sql.getConnectionFlagsRef());
-        immutableSetStatementFlagsRef(sql.getStatementFlagsRef());
-        immutableSetResultSetFlagsRef(sql.getResultSetFlagsRef());
+        @Nullable final ConnectionFlagsRef t_ConnectionFlagsRef = sql.getConnectionFlagsRef();
+        if (t_ConnectionFlagsRef != null)
+        {
+            immutableSetConnectionFlagsRef(t_ConnectionFlagsRef);
+        }
+
+        @Nullable final StatementFlagsRef t_StatementFlagsRef = sql.getStatementFlagsRef();
+        if (t_StatementFlagsRef != null)
+        {
+            immutableSetStatementFlagsRef(t_StatementFlagsRef);
+        }
+
+        @Nullable final ResultSetFlagsRef t_ResultSetFlagsRef = sql.getResultSetFlagsRef();
+        if (t_ResultSetFlagsRef != null)
+        {
+            immutableSetResultSetFlagsRef(t_ResultSetFlagsRef);
+        }
+
         immutableSetSql(sql);
         immutableSetCustomSqlProvider(customSqlProvider);
         immutableSetMetadataManager(metadataManager);
@@ -348,6 +366,7 @@ public abstract class AbstractSqlDecorator
      * Retrieves the parameters.
      * @return such information.
      */
+    @Override
     @NotNull
     public List<Parameter> getParameters()
     {
@@ -367,7 +386,7 @@ public abstract class AbstractSqlDecorator
      */
     @NotNull
     protected List<Parameter> getParameters(
-        @NotNull final List<ParameterRefElement> parameterRefs,
+        @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final CustomSqlProvider customSqlProvider,
         final MetadataTypeManager metadataTypeManager)
     {
@@ -383,13 +402,13 @@ public abstract class AbstractSqlDecorator
      */
     @NotNull
     protected List<Parameter> getParameters(
-        @NotNull final List<ParameterRefElement> parameterRefs,
+        @NotNull final List<ParameterRef> parameterRefs,
         @NotNull final SqlParameterDAO sqlParameterDAO,
         final MetadataTypeManager metadataTypeManager)
     {
         @NotNull List<Parameter> result = new ArrayList<Parameter>();
 
-        for (@NotNull ParameterRefElement t_ParameterRef : parameterRefs)
+        for (@NotNull ParameterRef t_ParameterRef : parameterRefs)
         {
             @Nullable Parameter t_Parameter;
 

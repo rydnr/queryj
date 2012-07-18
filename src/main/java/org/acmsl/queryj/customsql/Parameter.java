@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -56,13 +55,6 @@ import org.jetbrains.annotations.Nullable;
 public interface Parameter
     extends  IdentifiableElement
 {
-    /**
-     * Retrieves the <i>column_name</i> attribute.
-     * @return such value.
-     */
-    @NotNull
-    String getColumnName();
-
     /**
      * Retrieves the <i>index</i> attribute.
      * @return such value.

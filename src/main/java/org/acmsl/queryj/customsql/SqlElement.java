@@ -109,7 +109,7 @@ public class SqlElement
     /**
      * The <i>parameter-ref</i> elements.
      */
-    private List<ParameterRefElement> m__lParameterRefs;
+    private List<ParameterRef> m__lParameterRefs = new ArrayList<ParameterRef>();
 
     /**
      * The <i>result-ref</i> element.
@@ -119,17 +119,17 @@ public class SqlElement
     /**
      * The <i>connection-flags-ref</i> element.
      */
-    private ConnectionFlagsRefElement m__ConnectionFlagsRef;
+    private ConnectionFlagsRef m__ConnectionFlagsRef;
 
     /**
      * The <i>statement-flags-ref</i> element.
      */
-    private StatementFlagsRefElement m__StatementFlagsRef;
+    private StatementFlagsRef m__StatementFlagsRef;
 
     /**
      * The <i>resultset-flags-ref</i> element.
      */
-    private ResultSetFlagsRefElement m__ResultSetFlagsRef;
+    private ResultSetFlagsRef m__ResultSetFlagsRef;
 
     /**
      * Creates a <code>SqlElement</code> with given information.
@@ -210,16 +210,6 @@ public class SqlElement
     }
 
     /**
-     * Retrieves the <i>description</i> attribute.
-     * @return such value.
-     */
-    @NotNull
-    public String getDescription()
-    {
-        return m__strDescription;
-    }
-
-    /**
      * Specifies the <i>dao</i> attribute.
      * @param dao such value.
      */
@@ -242,6 +232,7 @@ public class SqlElement
      * Retrieves the <i>dao</i> attribute.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getDao()
     {
@@ -272,7 +263,8 @@ public class SqlElement
      * Retrieves the <i>repositoryScope</i> attribute.
      * @return such information.
      */
-    @NotNull
+    @Override
+    @Nullable
     public String getRepositoryScope()
     {
         return m__strRepositoryScope;
@@ -282,7 +274,7 @@ public class SqlElement
      * Specifies the <i>name</i> attribute.
      * @param name such value.
      */
-    protected final void immutableSetName(final String name)
+    protected final void immutableSetName(@NotNull final String name)
     {
         m__strName = name;
     }
@@ -292,7 +284,7 @@ public class SqlElement
      * @param name such value.
      */
     @SuppressWarnings("unused")
-    protected void setName(final String name)
+    protected void setName(@NotNull final String name)
     {
         immutableSetName(name);
     }
@@ -301,6 +293,7 @@ public class SqlElement
      * Retrieves the <i>name</i> attribute.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getName()
     {
@@ -311,7 +304,7 @@ public class SqlElement
      * Specifies the <i>type</i> attribute.
      * @param type such value.
      */
-    protected final void immutableSetType(final String type)
+    protected final void immutableSetType(@NotNull final String type)
     {
         m__strType = type;
     }
@@ -321,7 +314,7 @@ public class SqlElement
      * @param type such value.
      */
     @SuppressWarnings("unused")
-    protected void setType(final String type)
+    protected void setType(@NotNull final String type)
     {
         immutableSetType(type);
     }
@@ -330,6 +323,7 @@ public class SqlElement
      * Retrieves the <i>type</i> attribute.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getType()
     {
@@ -340,7 +334,7 @@ public class SqlElement
      * Specifies the <i>implementation</i> attribute.
      * @param implementation such value.
      */
-    protected final void immutableSetImplementation(final String implementation)
+    protected final void immutableSetImplementation(@NotNull final String implementation)
     {
         m__strImplementation = implementation;
     }
@@ -350,7 +344,7 @@ public class SqlElement
      * @param implementation such value.
      */
     @SuppressWarnings("unused")
-    protected void setImplementation(final String implementation)
+    protected void setImplementation(@NotNull final String implementation)
     {
         immutableSetImplementation(implementation);
     }
@@ -359,7 +353,8 @@ public class SqlElement
      * Retrieves the <i>implementation</i> attribute.
      * @return such value.
      */
-    @NotNull
+    @Override
+    @Nullable
     public String getImplementation()
     {
         return m__strImplementation;
@@ -407,6 +402,7 @@ public class SqlElement
      * Retrieves the <i>validate</i> attribute.
      * @return such information.
      */
+    @Override
     public boolean isValidate()
     {
         return getValidate();
@@ -435,6 +431,7 @@ public class SqlElement
      * Retrieves whether the query is dynamic or not.
      * @return such information.
      */
+    @Override
     public boolean isDynamic()
     {
         return m__bDynamic;
@@ -444,7 +441,7 @@ public class SqlElement
      * Specifies the <i>description</i> attribute.
      * @param description such value.
      */
-    protected final void immutableSetDescription(final String description)
+    protected final void immutableSetDescription(@NotNull final String description)
     {
         m__strDescription = description;
     }
@@ -454,16 +451,27 @@ public class SqlElement
      * @param description such value.
      */
     @SuppressWarnings("unused")
-    public void setDescription(final String description)
+    public void setDescription(@NotNull final String description)
     {
         immutableSetDescription(description);
+    }
+
+    /**
+     * Retrieves the <i>description</i> attribute.
+     * @return such value.
+     */
+    @Override
+    @NotNull
+    public String getDescription()
+    {
+        return m__strDescription;
     }
 
     /**
      * Specifies the &lt;value&gt; element.
      * @param value such value.
      */
-    protected final void immutableSetValue(final String value)
+    protected final void immutableSetValue(@NotNull final String value)
     {
         m__strValue = value;
     }
@@ -473,7 +481,7 @@ public class SqlElement
      * @param value such value.
      */
     @SuppressWarnings("unused")
-    public void setValue(final String value)
+    public void setValue(@NotNull final String value)
     {
         immutableSetValue(value);
     }
@@ -482,6 +490,7 @@ public class SqlElement
      * Retrieves the &lt;value&gt; element.
      * @return such value.
      */
+    @Override
     @NotNull
     public String getValue()
     {
@@ -493,7 +502,7 @@ public class SqlElement
      * @param list such elements.
      */
     protected final void immutableSetParameterRefs(
-        final List<ParameterRefElement> list)
+        @NotNull final List<ParameterRef> list)
     {
         m__lParameterRefs = list;
     }
@@ -502,7 +511,8 @@ public class SqlElement
      * Specifies the &lt;parameter-ref&gt; elements.
      * @param list such elements.
      */
-    protected void setParameterRefs(@NotNull final List<ParameterRefElement> list)
+    @SuppressWarnings("unused")
+    protected void setParameterRefs(@NotNull final List<ParameterRef> list)
     {
         immutableSetParameterRefs(list);
     }
@@ -511,8 +521,9 @@ public class SqlElement
      * Retrieves the &lt;parameter-ref&gt; elements.
      * @return such elements.
      */
+    @Override
     @NotNull
-    public List<ParameterRefElement> getParameterRefs()
+    public List<ParameterRef> getParameterRefs()
     {
         return m__lParameterRefs;
     }
@@ -521,7 +532,7 @@ public class SqlElement
      * Adds a new &lt;parameter-ref&gt; element.
      * @param parameterRef such element.
      */
-    public void add(@NotNull final ParameterRefElement parameterRef)
+    public void add(@NotNull final ParameterRef parameterRef)
     {
         add(parameterRef, getParameterRefs());
     }
@@ -532,17 +543,9 @@ public class SqlElement
      * @param parameterRefs thhe &ltparameter-ref&gt; elements.
      */
     protected synchronized void add(
-        @NotNull final ParameterRefElement parameterRef, @Nullable final List<ParameterRefElement> parameterRefs)
+        @NotNull final ParameterRef parameterRef, @NotNull final List<ParameterRef> parameterRefs)
     {
-        List<ParameterRefElement> t_lParameterRefs = parameterRefs;
-
-        if  (t_lParameterRefs == null)
-        {
-            t_lParameterRefs = new ArrayList<ParameterRefElement>();
-            setParameterRefs(t_lParameterRefs);
-        }
-
-        t_lParameterRefs.add(parameterRef);
+        parameterRefs.add(parameterRef);
     }
 
     /**
@@ -569,7 +572,7 @@ public class SqlElement
      * Retrieves the &lt;result-ref&gt; element.
      * @return such element.
      */
-    @NotNull
+    @Nullable
     public ResultRef getResultRef()
     {
         return m__ResultRef;
@@ -580,7 +583,7 @@ public class SqlElement
      * @param connectionflagsRef such element.
      */
     protected final void immutableSetConnectionFlagsRef(
-        final ConnectionFlagsRefElement connectionflagsRef)
+        @NotNull final ConnectionFlagsRef connectionflagsRef)
     {
         m__ConnectionFlagsRef = connectionflagsRef;
     }
@@ -590,7 +593,7 @@ public class SqlElement
      * @param connectionflagsRef such element.
      */
     @SuppressWarnings("unused")
-    public void setConnectionFlagsRef(final ConnectionFlagsRefElement connectionflagsRef)
+    public void setConnectionFlagsRef(@NotNull final ConnectionFlagsRef connectionflagsRef)
     {
         immutableSetConnectionFlagsRef(connectionflagsRef);
     }
@@ -599,8 +602,8 @@ public class SqlElement
      * Retrieves the &lt;connection-flags-ref&gt; element.
      * @return such element.
      */
-    @NotNull
-    public ConnectionFlagsRefElement getConnectionFlagsRef()
+    @Nullable
+    public ConnectionFlagsRef getConnectionFlagsRef()
     {
         return m__ConnectionFlagsRef;
     }
@@ -610,7 +613,7 @@ public class SqlElement
      * @param statementflagsRef such element.
      */
     protected final void immutableSetStatementFlagsRef(
-        final StatementFlagsRefElement statementflagsRef)
+        @NotNull final StatementFlagsRef statementflagsRef)
     {
         m__StatementFlagsRef = statementflagsRef;
     }
@@ -620,7 +623,7 @@ public class SqlElement
      * @param statementflagsRef such element.
      */
     @SuppressWarnings("unused")
-    public void setStatementFlagsRef(final StatementFlagsRefElement statementflagsRef)
+    public void setStatementFlagsRef(@NotNull final StatementFlagsRef statementflagsRef)
     {
         immutableSetStatementFlagsRef(statementflagsRef);
     }
@@ -629,8 +632,8 @@ public class SqlElement
      * Retrieves the &lt;statement-flags-ref&gt; element.
      * @return such element.
      */
-    @NotNull
-    public StatementFlagsRefElement getStatementFlagsRef()
+    @Nullable
+    public StatementFlagsRef getStatementFlagsRef()
     {
         return m__StatementFlagsRef;
     }
@@ -640,7 +643,7 @@ public class SqlElement
      * @param resultsetflagsRef such element.
      */
     protected final void immutableSetResultSetFlagsRef(
-        final ResultSetFlagsRefElement resultsetflagsRef)
+        @NotNull final ResultSetFlagsRef resultsetflagsRef)
     {
         m__ResultSetFlagsRef = resultsetflagsRef;
     }
@@ -650,7 +653,7 @@ public class SqlElement
      * @param resultsetflagsRef such element.
      */
     @SuppressWarnings("unused")
-    public void setResultSetFlagsRef(final ResultSetFlagsRefElement resultsetflagsRef)
+    public void setResultSetFlagsRef(@NotNull final ResultSetFlagsRef resultsetflagsRef)
     {
         immutableSetResultSetFlagsRef(resultsetflagsRef);
     }
@@ -659,7 +662,8 @@ public class SqlElement
      * Retrieves the &lt;resultset-flags-ref&gt; element.
      * @return such element.
      */
-    public ResultSetFlagsRefElement getResultSetFlagsRef()
+    @Nullable
+    public ResultSetFlagsRef getResultSetFlagsRef()
     {
         return m__ResultSetFlagsRef;
     }
@@ -716,9 +720,9 @@ public class SqlElement
         final String value,
         final Collection parameterRefs,
         final ResultRef resultRef,
-        final ConnectionFlagsRefElement connectionFlagsRef,
-        final StatementFlagsRefElement statementFlagsRef,
-        final ResultSetFlagsRefElement resultSetFlagsRef)
+        final ConnectionFlagsRef connectionFlagsRef,
+        final StatementFlagsRef statementFlagsRef,
+        final ResultSetFlagsRef resultSetFlagsRef)
     {
         return
               getClass().getName()

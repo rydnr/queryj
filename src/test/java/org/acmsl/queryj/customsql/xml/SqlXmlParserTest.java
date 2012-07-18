@@ -41,16 +41,29 @@ package org.acmsl.queryj.customsql.xml;
 /*
 * Importing project classes.
 */
+import org.acmsl.queryj.customsql.ConnectionFlags;
+import org.acmsl.queryj.customsql.Parameter;
+import org.acmsl.queryj.customsql.ParameterRef;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.PropertyRef;
+import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultSetFlags;
+import org.acmsl.queryj.customsql.Sql;
+import org.acmsl.queryj.customsql.StatementFlags;
+
 // JUnitDoclet begin import
-import org.acmsl.queryj.customsql.xml.SqlXmlParser;
 import java.io.ByteArrayInputStream;
-import java.util.Collection;
+import java.util.List;
 // JUnitDoclet end import
 
 /*
 * Importing JUnit classes.
 */
 import junit.framework.TestCase;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -105,6 +118,7 @@ extends TestCase
         + "    <result-ref id=\"find-customer-by-customer-id.result\"/>\n"
         + "  </sql>\n"
         + "  <sql\n"
+        + "    id=\"find-customer-by-person-last-name\"\n"
         + "    name=\"find-customer-by-person-last-name\"\n"
         + "    dao=\"customer\"\n"
         + "    type=\"select\"\n"
@@ -115,6 +129,7 @@ extends TestCase
         + "    <result-ref id=\"find-customer-by-person-last-name.result\"/>\n"
         + "  </sql>\n"
         + "  <sql\n"
+        + "    id=\"insert-test\"\n"
         + "    name=\"insert-test\"\n"
         + "    dao=\"customer\"\n"
         + "    type=\"insert\"\n"
@@ -151,6 +166,7 @@ extends TestCase
         + "  <result-list>\n"
         + "    <result\n"
         + "      id=\"find-customer-by-customer-id.result\"\n"
+        + "      class=\"com.foo.bar.dao.CustomerBean\"\n"
         + "      matches=\"single\">\n"
         + "      <property-ref\n"
         + "        id=\"find-customer-by-customer-id.customer_id.property\"/>\n"
@@ -168,6 +184,7 @@ extends TestCase
         + "    </result>\n"
         + "    <result\n"
         + "      id=\"find-customer-for-update.result\"\n"
+        + "      class=\"com.foo.bar.dao.CustomerBean\"\n"
         + "      matches=\"single\">\n"
         + "      <property-ref\n"
         + "        id=\"find-customer-for-update.customer_id.property\"/>\n"
@@ -231,7 +248,8 @@ extends TestCase
         + "      querytimeout=\"30\"\n"
         + "      fetchdirection=\"FETCH_FORWARD\"\n"
         + "      escapeprocessing=\"false\"\n"
-        + "      moreresults=\"CLOSE_ALL_RESULTS\"/>\n"
+        + "      moreresults=\"CLOSE_ALL_RESULTS\"\n"
+        + "      cursorname=\"mycursor\"/>\n"
         + "    <resultset-flags\n"
         + "      id=\"find-customer-for-update-resultset-flags\"\n"
         + "      type=\"TYPE_FORWARD_ONLY\"\n"
@@ -290,27 +308,35 @@ extends TestCase
           new SqlXmlParserImpl(new ByteArrayInputStream(TEST_INPUT.getBytes())) {};
       assertNotNull(t_Parser);
       t_Parser.parse();
-      Collection t_cContents = t_Parser.getQueries();
-      assertNotNull(t_cContents);
-      System.out.println(t_cContents);
-      assertEquals(4, t_cContents.size());
-      t_cContents.addAll(t_Parser.getResults());
-      assertEquals(7, t_cContents.size());
-      t_cContents.addAll(t_Parser.getParameters());
-      assertEquals(8, t_cContents.size());
-      t_cContents.addAll(t_Parser.getParameterRefs());
-      assertEquals(12, t_cContents.size());
-      t_cContents.addAll(t_Parser.getProperties());
-      assertEquals(18, t_cContents.size());
-      t_cContents.addAll(t_Parser.getPropertyRefs());
-      assertEquals(24, t_cContents.size());
-      t_cContents.addAll(t_Parser.getConnectionFlagList());
-      assertEquals(29, t_cContents.size());
-      t_cContents.addAll(t_Parser.getStatementFlagList());
-      assertEquals(30, t_cContents.size());
-      t_cContents.addAll(t_Parser.getResultSetFlagList());
+      List<Sql> t_lQueries = t_Parser.getQueries();
+      assertNotNull(t_lQueries);
+      System.out.println(t_lQueries);
+      assertEquals(4, t_lQueries.size());
 
-      assertEquals(31, t_cContents.size());
+      List<Result> t_lResults = t_Parser.getResults();
+      assertEquals(3, t_lResults.size());
+
+      List<Parameter> t_lParameters = t_Parser.getParameters();
+      assertEquals(1, t_lParameters.size());
+
+      List<ParameterRef> t_lParameterRefs = t_Parser.getParameterRefs();
+      assertEquals(0, t_lParameterRefs.size());
+
+      List<Property> t_lProperties = t_Parser.getProperties();
+      assertEquals(6, t_lProperties.size());
+
+      List<PropertyRef> t_lPropertyRefs = t_Parser.getPropertyRefs();
+      assertEquals(0, t_lPropertyRefs.size());
+
+      List<ConnectionFlags> t_lConnectionFlags = t_Parser.getConnectionFlagList();
+      assertEquals(5, t_lConnectionFlags.size());
+
+      List<StatementFlags> t_lStatementFlags = t_Parser.getStatementFlagList();
+      assertEquals(1, t_lStatementFlags.size());
+
+      List<ResultSetFlags> t_lResultSetFlags = t_Parser.getResultSetFlagList();
+      assertEquals(1, t_lResultSetFlags.size());
+
     // JUnitDoclet end method parse
   }
   

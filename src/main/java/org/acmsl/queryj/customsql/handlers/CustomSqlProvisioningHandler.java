@@ -160,7 +160,6 @@ public class CustomSqlProvisioningHandler
                             t_strPropertyName,
                             t_Attribute.getName(),
                             t_Attribute.getOrdinalPosition(),
-                            t_Table.getName(),
                             metadataTypeManager.getFieldType(
                                 t_Attribute.getTypeId()),
                             t_Attribute.isNullable());

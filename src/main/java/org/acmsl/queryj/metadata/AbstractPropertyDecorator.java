@@ -81,7 +81,6 @@ public abstract class AbstractPropertyDecorator
             property.getId(),
             property.getColumnName(),
             property.getIndex(),
-            property.getName(),
             property.getType(),
             property.isNullable());
 
@@ -89,11 +88,6 @@ public abstract class AbstractPropertyDecorator
         immutableSetMetadataManager(metadataManager);
         immutableSetMetadataTypeManager(
             metadataManager.getMetadataTypeManager());
-
-        if  (property.getName() == null)
-        {
-            immutableSetName(property.getColumnName());
-        }
     }
 
     /**
@@ -284,7 +278,7 @@ public abstract class AbstractPropertyDecorator
     @NotNull
     public String getNameLowercased()
     {
-        return lowercase(getName());
+        return lowercase(getColumnName());
     }
 
     /**
@@ -294,7 +288,7 @@ public abstract class AbstractPropertyDecorator
     @NotNull
     public String getNameUppercased()
     {
-        return uppercase(getName());
+        return uppercase(getColumnName());
     }
 
     /**
@@ -304,7 +298,7 @@ public abstract class AbstractPropertyDecorator
     @NotNull
     public String getNameCapitalized()
     {
-        return capitalize(getName());
+        return capitalize(getColumnName());
     }
 
     /**

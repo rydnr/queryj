@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -34,8 +33,9 @@
 package org.acmsl.queryj.customsql;
 
 /*
- * Importing project-specific classes.
+ * Importing some JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Models &lt;resultset-flags-ref&gt; elements in <i>custom-sql</i> models, which
@@ -48,6 +48,7 @@ package org.acmsl.queryj.customsql;
  */
 public class ResultSetFlagsRefElement
     extends  AbstractIdElement
+    implements ResultSetFlagsRef
 {
     private static final long serialVersionUID = 5242210262110643037L;
 
@@ -56,7 +57,7 @@ public class ResultSetFlagsRefElement
      * @param id the <i>id</i> attribute.
      * @precondition id != null
      */
-    public ResultSetFlagsRefElement(final String id)
+    public ResultSetFlagsRefElement(@NotNull final String id)
     {
         super(id);
     }

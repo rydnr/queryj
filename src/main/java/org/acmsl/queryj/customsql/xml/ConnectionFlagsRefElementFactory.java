@@ -65,7 +65,7 @@ public class ConnectionFlagsRefElementFactory
     /**
      * Creates a ConnectionFlagsRefElementFactory instance.
      */
-    public ConnectionFlagsRefElementFactory() {};
+    public ConnectionFlagsRefElementFactory() {}
 
     /**
      * Creates a ConnectionRefElement instance from given SAX attributes.
@@ -85,7 +85,7 @@ public class ConnectionFlagsRefElementFactory
         final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ConnectionFlagsRefElement result = null;
+        @Nullable ConnectionFlagsRefElement result;
 
         String t_strId = attributes.getValue("id");
 

@@ -78,23 +78,22 @@ public interface SqlPropertyDAO
      * @param resultId the {@link org.acmsl.queryj.customsql.Result} identifier.
      * @return the list of properties associated to given {@link org.acmsl.queryj.customsql.Result}.
      */
+    @SuppressWarnings("unused")
     @NotNull
     List<Property> findByResult(@NotNull final String resultId);
 
     /**
      * Inserts a new property.
-     * @param name the property name.
-     * @param tableName the table name.
-     * @param type the type.
-     * @param index the property index.
+     * @param id the property id.
      * @param columnName the column name.
+     * @param index the property index.
+     * @param type the type.
      * @param nullable whether it allows null or not.
      */
     public void insert(
-        @NotNull final String name,
+        @NotNull final String id,
         @NotNull final String columnName,
         final int index,
-        @NotNull final String tableName,
         @NotNull final String type,
         final boolean nullable);
 }

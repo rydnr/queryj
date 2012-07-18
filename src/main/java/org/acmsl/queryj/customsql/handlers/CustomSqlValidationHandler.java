@@ -662,7 +662,7 @@ public class CustomSqlValidationHandler
 
         Parameter t_Parameter;
 
-        for (@Nullable ParameterRefElement t_ParameterRef : sql.getParameterRefs())
+        for (@Nullable ParameterRef t_ParameterRef : sql.getParameterRefs())
         {
             if (t_ParameterRef != null)
             {
@@ -1000,7 +1000,6 @@ public class CustomSqlValidationHandler
                             t_strId,
                             t_Column.getName(),
                             t_iIndex + 1,
-                            t_Column.getName(),
                             t_strType,
                             t_Column.isNullable()));
                 }
@@ -1291,7 +1290,6 @@ public class CustomSqlValidationHandler
         boolean result = true;
 
         if  (   (name != null)
-             && (!name.equalsIgnoreCase(property.getName()))
              && (!name.equalsIgnoreCase(property.getColumnName())))
         {
             result = false;

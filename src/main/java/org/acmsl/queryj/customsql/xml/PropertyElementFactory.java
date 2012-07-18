@@ -86,9 +86,6 @@ public class PropertyElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;property&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
     @Nullable
     public Object createObject(
@@ -97,7 +94,7 @@ public class PropertyElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable PropertyElement result = null;
+        @Nullable PropertyElement result;
 
         String t_strId = attributes.getValue("id");
 
@@ -107,13 +104,11 @@ public class PropertyElementFactory
         int t_iIndex =
             conversionUtils.toInt(attributes.getValue("index"));
 
-        String t_strName = attributes.getValue("name");
-
         String t_strType = attributes.getValue("type");
 
         String t_strNullable = attributes.getValue("nullable");
 
-        boolean t_bNullable = false;
+        boolean t_bNullable;
 
         if (t_strNullable != null)
         {
@@ -126,12 +121,16 @@ public class PropertyElementFactory
                  && (startsWithUpperCase(t_strType)));
         }
 
+        if (t_strType == null)
+        {
+            t_strType = "String";
+        }
+
         result =
             new PropertyElement(
                 t_strId,
                 t_strColumnName,
                 t_iIndex,
-                t_strName,
                 t_strType,
                 t_bNullable);
 

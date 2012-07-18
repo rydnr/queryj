@@ -322,15 +322,15 @@ public class SqlXmlParserImpl
     }
 
     /**
-     * Adds given table, if not already annotated.
-     * @param table the table.
-     * @param tables the table list.
+     * Adds given item, if not already annotated.
+     * @param item the item.
+     * @param items the item list.
      */
-    protected <C> void add(@NotNull final C table, @NotNull final List<C> tables)
+    protected <C> void add(@NotNull final C item, @NotNull final List<C> items)
     {
-        if (!tables.contains(table))
+        if (!items.contains(item))
         {
-            tables.add(table);
+            items.add(item);
         }
     }
 
@@ -437,16 +437,26 @@ public class SqlXmlParserImpl
      * Specifies the class loader (to give it to Digester).
      * @param classLoader the class loader.
      */
-    @SuppressWarnings("unused")
-    public void setClassLoader(final ClassLoader classLoader)
+    protected final void immutableSetClassLoader(@NotNull final ClassLoader classLoader)
     {
         m__ClassLoader = classLoader;
+    }
+
+    /**
+     * Specifies the class loader (to give it to Digester).
+     * @param classLoader the class loader.
+     */
+    @SuppressWarnings("unused")
+    public void setClassLoader(@NotNull final ClassLoader classLoader)
+    {
+        immutableSetClassLoader(classLoader);
     }
 
     /**
      * Retrieves the class loader.
      * @return such instance.
      */
+    @Nullable
     public ClassLoader getClassLoader()
     {
         return m__ClassLoader;
@@ -456,7 +466,7 @@ public class SqlXmlParserImpl
      * Specifies the input stream.
      * @param input the input stream.
      */
-    private void immutableSetInput(final InputStream input)
+    protected final void immutableSetInput(@NotNull final InputStream input)
     {
         m__isInput = input;
     }
@@ -466,7 +476,7 @@ public class SqlXmlParserImpl
      * @param input the input stream.
      */
     @SuppressWarnings("unused")
-    protected void setInput(final InputStream input)
+    protected void setInput(@NotNull final InputStream input)
     {
         immutableSetInput(input);
     }
@@ -475,6 +485,7 @@ public class SqlXmlParserImpl
      * Retrieves the input stream.
      * @return such stream.
      */
+    @Nullable
     protected InputStream getInput()
     {
         return m__isInput;
@@ -726,7 +737,6 @@ public class SqlXmlParserImpl
      * @param id the property id.
      * @param columnName the column name.
      * @param index the property index.
-     * @param name the property name.
      * @param type the property type.
      * @param nullable whether it allows null or not.
      */
@@ -735,11 +745,10 @@ public class SqlXmlParserImpl
         @NotNull final String id,
         @NotNull final String columnName,
         final int index,
-        @NotNull final String name,
         @NotNull final String type,
         final boolean nullable)
     {
-        getProperties().add(new PropertyElement(id, columnName, index, name, type, nullable));
+        getProperties().add(new PropertyElement(id, columnName, index, type, nullable));
     }
 
     /**

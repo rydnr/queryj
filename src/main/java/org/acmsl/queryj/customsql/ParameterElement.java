@@ -37,6 +37,9 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Models &lt;parameter&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
@@ -50,8 +53,15 @@ package org.acmsl.queryj.customsql;
  */
 public class ParameterElement
     extends  AbstractParameterElement
+    implements Parameter
 {
     private static final long serialVersionUID = 106725100966627608L;
+
+    /**
+     * The parameter name.
+     */
+    private String m__strName;
+
     /**
      * The validation value.
      */
@@ -60,26 +70,54 @@ public class ParameterElement
     /**
      * Creates a ParameterElement with given information.
      * @param id the <i>id</i> attribute.
-     * @param columnName the <i>columnName</i> attribute.
      * @param index the <i>index</i> attribute.
      * @param name the <i>name</i> attribute.
      * @param type the <i>type</i> attribute.
      * @param validationValue the <i>validation-value</i> attribute.
-     * @precondition id != null
-     * @precondition type != null
-     * @precondition validationValue != null
      */
     public ParameterElement(
-        final String id,
-        final String columnName,
+        @NotNull final String id,
         final int index,
-        final String name,
-        final String type,
-        final String validationValue)
+        @NotNull final String name,
+        @NotNull final String type,
+        @Nullable final String validationValue)
     {
-        super(id, columnName, index, name, type);
+        super(id, index, type);
 
-        immutableSetValidationValue(validationValue);
+        immutableSetName(name);
+
+        if (validationValue != null)
+        {
+            immutableSetValidationValue(validationValue);
+        }
+    }
+
+    /**
+     * Specifies the <i>name</i> attribute.
+     * @param name such value.
+     */
+    protected final void immutableSetName(@NotNull final String name)
+    {
+        m__strName = name;
+    }
+
+    /**
+     * Specifies the <i>name</i> attribute.
+     * @param name such value.
+     */
+    protected void setName(@NotNull final String name)
+    {
+        immutableSetName(name);
+    }
+
+    /**
+     * Retrieves the <i>name</i> attribute.
+     * @return such value.
+     */
+    @NotNull
+    public String getName()
+    {
+        return m__strName;
     }
 
     /**
@@ -87,7 +125,7 @@ public class ParameterElement
      * @param validationValue the validation value.
      */
     protected final void immutableSetValidationValue(
-        final String validationValue)
+        @NotNull final String validationValue)
     {
         m__strValidationValue = validationValue;
     }
@@ -96,8 +134,9 @@ public class ParameterElement
      * Specifies the validation value.
      * @param validationValue the validation value.
      */
+    @SuppressWarnings("unused")
     protected void setValidationValue(
-        final String validationValue)
+        @NotNull final String validationValue)
     {
         immutableSetValidationValue(validationValue);
     }
@@ -106,6 +145,7 @@ public class ParameterElement
      * Retrieves the validation value.
      * @return such value.
      */
+    @Nullable
     public String getValidationValue()
     {
         return m__strValidationValue;

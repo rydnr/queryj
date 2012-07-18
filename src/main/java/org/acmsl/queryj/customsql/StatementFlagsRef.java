@@ -23,50 +23,24 @@
 
  ******************************************************************************
  *
- * Filename: Property.java
+ * Filename: StatementFlagsRef.java
  *
- * Author: Jose San Leandro Armendariz
+ * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Models <property> elements in custom-sql models.
+ * Description: Represents references to StatementFlags instances.
+ *
+ * Date: 7/18/12
+ * Time: 6:57 AM
  *
  */
 package org.acmsl.queryj.customsql;
 
-/*
- * Importing some JetBrains annotations.
- */
-import org.jetbrains.annotations.NotNull;
-
 /**
- * Models &lt;property&gt; elements in <i>custom-sql</i> models.
- * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
+ * Represents references to {@link StatementFlags} instances.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
+ * @since 2012/07/18
  */
-public interface Property
-    extends  IdentifiableElement
+public interface StatementFlagsRef
+    extends IdentifiableElement
 {
-    /**
-     * Retrieves the <i>column_name</i> attribute.
-     * @return such information.
-     */
-    @NotNull
-    String getColumnName();
-
-    /**
-     * Retrieves the <i>index</i> attribute.
-     * @return such information.
-     */
-    int getIndex();
-
-    /**
-     * Retrieves the <i>type</i> attribute.
-     * @return such information.
-     */
-    @NotNull
-    String getType();
-
-    /**
-     * Retrieves whether the property is nullable or not.
-     * @return such condition.
-     */
-    boolean isNullable();
 }
