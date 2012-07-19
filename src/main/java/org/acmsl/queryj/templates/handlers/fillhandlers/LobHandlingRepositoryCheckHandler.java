@@ -29,8 +29,8 @@
  *
  * Description: Resolves "lob_handling_required" placeholders.
  *
- * Date: 6/3/12
- * Time: 10:39 AM
+ * Date: 7/19/12
+ * Time: 10:50 AM
  *
  */
 package org.acmsl.queryj.templates.handlers.fillhandlers;
@@ -39,31 +39,27 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  * Importing some project classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.MetadataTypeManager;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Resolves "lob_handling_required" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
- * @since 2012/06/03
+ * @since 2012/07/19
  */
 @SuppressWarnings("unused")
-public class LobHandlingCheckHandler
-    extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, Boolean>
+public class LobHandlingRepositoryCheckHandler
+    extends AbstractTemplateContextFillHandler<BasePerRepositoryTemplateContext, Boolean>
 {
     /**
-     * Creates a {@link LobHandlingCheckHandler} instance.
+     * Creates a {@link LobHandlingTableCheckHandler} instance.
      * @param context the context.
      */
-    @SuppressWarnings("unused")
-    public LobHandlingCheckHandler(@NotNull final BasePerTableTemplateContext context)
+    public LobHandlingRepositoryCheckHandler(@NotNull final BasePerRepositoryTemplateContext context)
     {
         super(context);
     }
@@ -85,51 +81,17 @@ public class LobHandlingCheckHandler
      */
     @NotNull
     @Override
-    protected Boolean getValue(@NotNull final BasePerTableTemplateContext context)
+    protected Boolean getValue(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return isLobHandlingRequired(context.getTableName(), context.getMetadataManager());
+        return isLobHandlingRequired(context.getMetadataManager());
     }
 
     /**
      * Checks whether processing current table requires taking care of clobs/blobs.
-     * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      */
-    protected boolean isLobHandlingRequired(
-        @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
+    protected boolean isLobHandlingRequired(@NotNull final MetadataManager metadataManager)
     {
-        return
-            (   (metadataManager.requiresCustomClobHandling())
-             && (containsLobs(
-                     tableName, metadataManager, metadataManager.getMetadataTypeManager())));
-    }
-
-    /**
-     * Checks whether given table contains Lob attributes or not.
-     * @param tableName the table name.
-     * @param metadataManager the metadata manager.
-     * @param metadataTypeManager the metadata type manager.
-     * @return <code>true</code> in such case.
-     */
-    protected boolean containsLobs(
-        @NotNull final String tableName,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final MetadataTypeManager metadataTypeManager)
-    {
-        boolean result = false;
-
-        for (@Nullable Attribute t_Column : metadataManager.getColumnDAO().findColumns(tableName))
-        {
-            if (t_Column != null)
-            {
-                if  (metadataTypeManager.isClob(t_Column.getTypeId()))
-                {
-                    result = true;
-                    break;
-                }
-            }
-        }
-
-        return result;
+        return metadataManager.requiresCustomClobHandling();
     }
 }

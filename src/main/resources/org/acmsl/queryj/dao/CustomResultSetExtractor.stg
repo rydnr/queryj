@@ -68,7 +68,7 @@ source() ::= <<
     project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    subpackage_name
+    sub_package_name
   ])>
 
 <project_imports(

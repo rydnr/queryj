@@ -124,8 +124,8 @@ public class BasePerTableFillTemplateChain
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,LobHandlingCheckHandler,Boolean>(
-                new LobHandlingCheckHandler(context)),
+            new TemplateContextFillAdapterHandler<BasePerTableTemplateContext,LobHandlingTableCheckHandler,Boolean>(
+                new LobHandlingTableCheckHandler(context)),
             relevantOnly);
 
         add(

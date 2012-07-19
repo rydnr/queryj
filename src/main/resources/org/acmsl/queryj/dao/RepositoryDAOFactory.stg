@@ -37,7 +37,7 @@
 //
 group DAOFactory;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a RepositoryDAOFactory source file.
   @param copyright_years the copyright's years.

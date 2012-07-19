@@ -1110,17 +1110,26 @@ custom_select_result_declaration(sql, result, table) ::= <<
  @param table the table.
  !>
 <if(result.implicitProperties)>
+// implicit properties
 <result.implicitProperties:implicit_attribute_declaration(attr=it, result=result)>
 <else>
-<if(table.voDecorated)>
-<if(result.multiple)>
+// explicit properties
+<  if(table.voDecorated)>
+// table decorated
+<    if(result.multiple)>
+// result -> multiple
+List\<<sql.resultClass>Decorator\> result = null;
+<    else>
+// result -> simple
 <sql.resultClass> result = null;
-<else>
-<sql.resultClass>Decorator result = null;
-<endif>
-<else>
+<    endif>
+<  else>
+<    if(result.multiple)>
+List\<<sql.resultClass>\> result = null;
+<    else>
 <sql.resultClass> result = null;
-<endif>
+<    endif>
+<  endif>
 <endif>
 
 >>

@@ -201,7 +201,7 @@ public class SqlXmlParserSqlDAO
 
     /**
      * Retrieves all <i>selects-for-update</i> for a given DAO (table).
-     * @param table the table.
+     * @param table the table.                                                     I
      * @return all matching <i>selects-for-update</i> queries.
      */
     @NotNull

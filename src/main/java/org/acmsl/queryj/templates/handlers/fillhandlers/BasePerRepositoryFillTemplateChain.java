@@ -42,6 +42,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 import org.acmsl.queryj.metadata.TableDecorator;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.FillTemplateChain;
+import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
 
 /*
  * Importing some ACM-SL Commons classes.
@@ -51,9 +52,11 @@ import org.acmsl.commons.patterns.Chain;
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing some JDK classes.
+ */
 import java.util.List;
 
 /**
@@ -91,8 +94,17 @@ public class BasePerRepositoryFillTemplateChain
     {
         add(
             chain,
-            new TemplateContextFillAdapterHandler<BasePerRepositoryTemplateContext,TableListHandler,List<TableDecorator>>(
+            new TemplateContextFillAdapterHandler
+                <BasePerRepositoryTemplateContext,TableListHandler,List<TableDecorator>>(
                 new TableListHandler(context)),
             relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler
+                <BasePerRepositoryTemplateContext,LobHandlingRepositoryCheckHandler,Boolean>(
+                new LobHandlingRepositoryCheckHandler(context)),
+            relevantOnly);
+
     }
 }
