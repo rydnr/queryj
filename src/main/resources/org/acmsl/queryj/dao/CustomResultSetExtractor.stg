@@ -194,7 +194,6 @@ public class <result.idCapitalized>Extractor
       throws  SQLException,
               DataAccessException
     {
-<if(!result.implicit)>
         return
             extractData(
                 resultSet,
@@ -208,12 +207,10 @@ public class <result.idCapitalized>Extractor
      * @param resultSet the result set.
      * @param sql the original sql.
      * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
-<if(!result.implicit)>
      * @param factory the value object factory.
-<endif>
 
 <if(result.multiple)>
-     * @return the {@link <result.classValue> instances} or \<code>null\</code>
+     * @return a list of {@link <result.classValue> instances} or \<code>null\</code>
      * if the operation returned no data.
 <else>
      * @return the {@link <result.classValue>} instance or \<code>null\</code>
@@ -232,19 +229,12 @@ public class <result.idCapitalized>Extractor
       throws  SQLException,
               DataAccessException
     {
-<endif>
-
-
 <if(result.multiple)>
         List\<<result.classValue>\> result = new ArrayList\<<result.classValue>\>();
 <else>
-<if(result.implicit)>
-// implicit_attribute_declaration
-        <result.implicitProperties:implicit_attribute_declaration(result=result, attr=it)>
-<else>
         <result.classValue> result = null;
 <endif>
-<endif>
+
 
         int t_iRowCount = 0;
 
@@ -268,10 +258,10 @@ public class <result.idCapitalized>Extractor
             result =
 <endif>
 
-<if(result.implicit)>
-                <result.implicitProperties:implicit_nullable_attribute_extraction(result=result, attr=it)>
-<else>
                 factory.createValueObject(
+<if(result.implicit)>
+                    <result.implicitProperties:implicit_nullable_attribute_extraction(result=result, attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
+<else>
                     <result.properties:attribute_extraction(attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
 <endif>
 
@@ -279,15 +269,7 @@ public class <result.idCapitalized>Extractor
 
         daoListener.resultSetClosed(sql, t_iRowCount);
 
-
-<if(result.implicit)>
-// implicit
-        <result.implicitProperties:implicit_attribute_result(attr=it)>
-<else>
-// explicit
         return result;
-<endif>
-
     }
 }
 >>
@@ -311,10 +293,7 @@ implicit_nullable_attribute_extraction(result, attr) ::= <<
  @param result the sql result.
  @param attr the implicit attribute.
  !>
-<if(attr.nullable)>
-new <result.classValue>(
-<endif>
-resultSet.get<attr.objectType>(<attr.index>)<if(attr.nullable)>)<endif><if(result.multiple)>)<endif>;
+resultSet.get<attr.objectType>(<attr.index>)
 >>
 
 nullable_attribute_extraction(attr) ::= <<
