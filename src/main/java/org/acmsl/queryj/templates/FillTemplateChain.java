@@ -42,6 +42,8 @@ import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.templates.handlers.fillhandlers.DAOChooserPropertiesFileNameHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.JndiLocationFillHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.LobHandlingFlavorHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.LobHandlingRepositoryCheckHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.handlers.FillAdapterHandler;
 import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
@@ -339,6 +341,20 @@ public abstract class FillTemplateChain<C extends TemplateContext>
             chain,
             new TemplateContextFillAdapterHandler<TemplateContext,DAOChooserPropertiesFileNameHandler,DecoratedString>(
                 new DAOChooserPropertiesFileNameHandler(context)),
+            relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler
+                <TemplateContext,LobHandlingRepositoryCheckHandler,Boolean>(
+                new LobHandlingRepositoryCheckHandler(context)),
+            relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler
+                <TemplateContext,LobHandlingFlavorHandler,DecoratedString>(
+                new LobHandlingFlavorHandler(context)),
             relevantOnly);
 
         addHandlers(chain, context, relevantOnly);

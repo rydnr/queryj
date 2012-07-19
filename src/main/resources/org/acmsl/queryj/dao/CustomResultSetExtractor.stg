@@ -314,7 +314,7 @@ implicit_nullable_attribute_extraction(result, attr) ::= <<
 <if(attr.nullable)>
 new <result.classValue>(
 <endif>
-resultSet.get<attr.actualObjectType>(<attr.index>)<if(attr.nullable)>)<endif><if(result.multiple)>)<endif>;
+resultSet.get<attr.objectType>(<attr.index>)<if(attr.nullable)>)<endif><if(result.multiple)>)<endif>;
 >>
 
 nullable_attribute_extraction(attr) ::= <<
@@ -324,7 +324,7 @@ nullable_attribute_extraction(attr) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=clobHandling+"_nullable_attribute_extraction", extra1=attr)>
+  name=lob_handling_flavor+"_nullable_attribute_extraction", extra1=attr)>
 <else>
 <default_nullable_attribute_extraction(attr=attr )>
 <endif>
@@ -386,9 +386,9 @@ boolean t_<attr.columnNameNormalizedCapitalized>AsBoolean = false;
 <endif>
 
 <if(attr.allowsNull)>
-<attr.actualObjectType> t_<attr.nameLowercased> =
-    new <attr.actualObjectType>(
-        resultSet.get<attr.actualObjectType>(
+<attr.objectType> t_<attr.nameLowercased> =
+    new <attr.objectType>(
+        resultSet.get<attr.objectType>(
             "<attr.columnName>"));
 
 if  (resultSet.wasNull())
@@ -397,7 +397,7 @@ if  (resultSet.wasNull())
 }
 <else>
 <attr.actualJavaType> t_<attr.nameLowercased> =
-    resultSet.get<attr.actualObjectType>(
+    resultSet.get<attr.objectType>(
         "<attr.columnName>");
 <endif>
 
@@ -551,7 +551,7 @@ attribute_extraction(attr) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=clobHandling+"_attribute_extraction", attr=attr)>
+  name=lob_handling_flavor+"_attribute_extraction", attr=attr)>
 <else>
 <default_attribute_extraction(attr)>
 <endif>
@@ -625,7 +625,7 @@ special_attribute_extraction(attr) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=clobHandling+"_special_attribute_extraction", attr=attr)>
+  name=lob_handling_flavor+"_special_attribute_extraction", attr=attr)>
 <endif>
 >>
 

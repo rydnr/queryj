@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: LobHandlingCheckHandler.java
+ * Filename: LobHandlingFlavorHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Resolves "lob_handling_required" placeholders.
+ * Description: Resolves 'lob_handling_flavor' placeholders.
  *
  * Date: 7/19/12
- * Time: 10:50 AM
+ * Time: 2:17 PM
  *
  */
 package org.acmsl.queryj.templates.handlers.fillhandlers;
@@ -40,6 +40,7 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
  */
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.TemplateContext;
+import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing some JetBrains annotations.
@@ -47,50 +48,54 @@ import org.acmsl.queryj.templates.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Resolves "lob_handling_required" placeholders.
- * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * Resolves 'lob_handling_flavor' placeholders.
+ * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/19
  */
-public class LobHandlingRepositoryCheckHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
+public class LobHandlingFlavorHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
     /**
-     * Creates a {@link LobHandlingTableCheckHandler} instance.
-     * @param context the context.
+     * Creates a new {@link LobHandlingFlavorHandler} with given context.
+     * @param context the {@link TemplateContext} instance.
      */
-    public LobHandlingRepositoryCheckHandler(@NotNull final TemplateContext context)
+    public LobHandlingFlavorHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "lob_handling_required".
+     * Retrieves 'lob_handling_flavor'.
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "lob_handling_required";
+        return "lob_handling_flavor";
     }
 
     /**
      * Retrieves the template value for this placeholder.
      * @return such value.
+     * @throws org.acmsl.queryj.tools.QueryJBuildException
+     *          if there inconsistencies in the custom SQL
+     *          model.
      */
-    @NotNull
     @Override
-    protected Boolean getValue(@NotNull final TemplateContext context)
+    protected DecoratedString getValue(@NotNull final TemplateContext context) throws QueryJBuildException
     {
-        return isLobHandlingRequired(context.getMetadataManager());
+        return new DecoratedString(getLobFlavor(context.getMetadataManager()));
     }
 
     /**
-     * Checks whether processing current table requires taking care of clobs/blobs.
+     * Retrieves the Lob-handling flavor.
      * @param metadataManager the {@link MetadataManager} instance.
+     * @return such flavor.
      */
-    protected boolean isLobHandlingRequired(@NotNull final MetadataManager metadataManager)
+    @NotNull
+    protected String getLobFlavor(@NotNull final MetadataManager metadataManager)
     {
-        return metadataManager.requiresCustomClobHandling();
+        return metadataManager.getEngineName();
     }
 }

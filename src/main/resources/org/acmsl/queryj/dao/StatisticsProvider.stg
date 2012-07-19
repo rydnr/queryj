@@ -102,7 +102,7 @@ class(input) ::= <<
  * <[
       first_line_description()
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(template="org/acmsl/queryj/dao/StatisticsProvider.stg")
+<class_common_javadoc(template="org/acmsl/queryj/dao/StatisticsProvider.stg")>
  */
 public class <repository.capitalized>StatisticsProvider
 {

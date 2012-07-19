@@ -98,13 +98,5 @@ public class BasePerRepositoryFillTemplateChain
                 <BasePerRepositoryTemplateContext,TableListHandler,List<TableDecorator>>(
                 new TableListHandler(context)),
             relevantOnly);
-
-        add(
-            chain,
-            new TemplateContextFillAdapterHandler
-                <BasePerRepositoryTemplateContext,LobHandlingRepositoryCheckHandler,Boolean>(
-                new LobHandlingRepositoryCheckHandler(context)),
-            relevantOnly);
-
     }
 }

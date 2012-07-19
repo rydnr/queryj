@@ -940,6 +940,26 @@ public abstract class AbstractAttributeDecorator
     }
 
     /**
+     * Checks whether the value is null or not.
+     * @return such check.
+     */
+    @SuppressWarnings("unused")
+    public boolean isValueNull()
+    {
+        return isNull(getValue());
+    }
+
+    /**
+     * Checks whether the value is null or not.
+     * @param value the value.
+     * @return such check.
+     */
+    protected boolean isNull(@Nullable final String value)
+    {
+        return value == null;
+    }
+
+    /**
      * Retrieves the attribute name.
      * @return such information.
      */

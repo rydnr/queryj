@@ -2116,7 +2116,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the static content.
      * @return such information.
      */
-    @SuppressWarnings("unused")
+    @Override
     @NotNull
     public List<Row> getStaticContent()
     {

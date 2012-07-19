@@ -150,7 +150,7 @@ public class <table.voName>ResultSetExtractor
 <!                <repository.capitalized>TableRepository !>
 {
 <if(lob_handling_required)>
-    <indirect_template(name=clobHandling+"Extractor", extra1=table, extra2=parent)>
+    <indirect_template(name=lob_handling_flavor+"Extractor", extra1=table, extra2=parent)>
 <else>
     <defaultExtractorImpl(table=table, parent=parent)>
 <endif>
@@ -569,7 +569,7 @@ nullable_attribute_extraction(value) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=clobHandling+"_nullable_attribute_extraction", extra1=value)>
+  name=clob_handling_flavor+"_nullable_attribute_extraction", extra1=value)>
 <else>
 <default_nullable_attribute_extraction(value=value)>
 <endif>
@@ -741,7 +741,7 @@ attribute_extraction(value) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=clobHandling+"_attribute_extraction", extra1=value)>
+  name=lob_handling_flavor+"_attribute_extraction", extra1=value)>
 <else>
 <default_attribute_extraction(value)>
 <endif>
@@ -800,7 +800,7 @@ special_attribute_extraction(value) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=clobHandling+"_special_attribute_extraction", extra1=value)>
+  name=lob_handling_flavor+"_special_attribute_extraction", extra1=value)>
 <endif>
 >>
 

@@ -43,6 +43,7 @@ package org.acmsl.queryj.metadata;
  */
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 
@@ -249,4 +250,11 @@ public interface TableDecorator
     @SuppressWarnings("unused")
     @NotNull
     List<Sql> getDynamicQueries();
+
+    /**
+     * Retrieves the static contents, if any.
+     * @return the list of static contents.
+     */
+    @NotNull
+    List<Row> getStaticContent();
 }

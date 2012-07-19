@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -142,7 +141,7 @@ public class MetaLanguageUtils
     * @return such attribute.
     */
     @Nullable
-    public String retrieveStaticAttribute(final String tableComment)
+    public String retrieveStaticAttribute(@NotNull final String tableComment)
     {
         @Nullable String result = null;
 
@@ -177,9 +176,9 @@ public class MetaLanguageUtils
      * declated by the table comment.
      * @param tableComment the table's comment.
      * @return the parent table, or <code>null</code> otherwise.
-     * @precondition tableComment != null
      */
-    public String retrieveDeclaredParent(final String tableComment)
+    @Nullable
+    public String retrieveDeclaredParent(@NotNull final String tableComment)
     {
         String result = null;
 
@@ -454,18 +453,18 @@ public class MetaLanguageUtils
     {
         PerCommentParser result;
 
-        Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
-
-        if  (   (t_Log != null)
-             && (t_Log.isDebugEnabled()))
-        {
-            t_Log.debug("Parsing '" + comment + "'");
-        }
-
         result = (PerCommentParser) PARSER_CACHE.get(comment);
 
         if  (result == null)
         {
+            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+
+            if  (   (t_Log != null)
+                 && (t_Log.isDebugEnabled()))
+            {
+                t_Log.debug("Parsing '" + comment + "'");
+            }
+
             PerCommentLexer t_Lexer =
                 new PerCommentLexer(
                     new ANTLRStringStream(comment));

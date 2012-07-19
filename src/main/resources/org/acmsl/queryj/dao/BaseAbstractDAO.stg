@@ -124,7 +124,7 @@ class() ::= <<
       first_line_description(tableName=table.name),
       second_line_description(tableName=table.name)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/BaseAbstractDAO.stg")>
 */
 public abstract class Abstract<table.voName>DAO
     extends  <repository.capitalized>JdbcTemplate
@@ -176,10 +176,13 @@ public abstract class Abstract<table.voName>DAO
         System.arraycopy(source, 0, target, 0, source.length);
     }
 
-    <table.staticContents:static_table(
+  <if(table.static)>
+    <table.attributes:static_table(
       attribute=it,
       primaryKeyAttributes=table.primaryKey,
       voName=table.voName)>
+  <endif>
+
 }
 >>
 
@@ -187,7 +190,7 @@ static_table(
   attribute, primaryKeyAttributes, voName) ::= <<
 <!
   Generates the method to operate directly on defined constants.
-  @param attribute the static attribute.
+  @param attribute the attribute.
   @param primaryKeyAttributes the primary key.
   @param voName the value object name.
 !>
@@ -200,19 +203,12 @@ static_table(
  */
 <nullable()>
 public <voName> findConstantBy<attribute.nameCapitalized>(
-    <type_checker(attribute=attribute)>final <attribute.javaType> <attribute.name>)
+    <type_checker(attribute=attribute)>final <attribute.type> <attribute.name>)
 {
     <nullable()><voName> result = null;
 
-    int t_iLength =
-        (_ALL_QUERYJ_CONSTANTS_ != null)
-        ?  _ALL_QUERYJ_CONSTANTS_.length
-        :  0;
-
-    for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+    for  (<nullable()> <voName> t_CurrentItem : _ALL_QUERYJ_CONSTANTS)
     {
-        <nullable()><voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
-
         if  (   (t_CurrentItem != null)
              && (<attribute.nameLowercased>.equals(
                     t_CurrentItem.get<attribute.nameCapitalized>())))
@@ -237,23 +233,15 @@ public <voName> findConstantByPk(
 {
     <nullable()><voName> result = null;
 
-    int t_iLength =
-        (_ALL_QUERYJ_CONSTANTS_ != null)
-        ?  _ALL_QUERYJ_CONSTANTS_.length
-        :  0;
-
     boolean t_bFound = false;
 
-    for  (int t_iIndex = 0; t_iIndex \< t_iLength; t_iIndex++)
+    for  (<nullable()> <voName> t_CurrentItem : _ALL_QUERYJ_CONSTANTS)
     {
-        <nullable()><voName> t_CurrentItem = _ALL_QUERYJ_CONSTANTS_[t_iIndex];
-
         if  (t_CurrentItem != null)
         {
             t_bFound = true;
 
-            <primaryKeyAttributes:static_attribute_check(attr=it);
-              separator="\n">
+            <primaryKeyAttributes:static_attribute_check(attr=it); separator="\n">
 
             if  (t_bFound)
             {

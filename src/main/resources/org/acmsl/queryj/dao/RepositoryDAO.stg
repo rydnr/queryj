@@ -227,6 +227,6 @@ public class <engine_name><repository.capitalized>DAO
 
     <inner_transaction_callbacks(
       daoName=engine_name+repository.capitalized,
-      clobHandling=lob_handling_required)>
+      clobHandling=lob_handling_flavor)>
 }
 >>
