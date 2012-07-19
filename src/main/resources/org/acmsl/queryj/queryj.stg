@@ -1109,26 +1109,20 @@ custom_select_result_declaration(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<if(result.implicitProperties)>
-// implicit properties
-<result.implicitProperties:implicit_attribute_declaration(attr=it, result=result)>
-<else>
-// explicit properties
-<  if(table.voDecorated)>
+<if(table.voDecorated)>
 // table decorated
-<    if(result.multiple)>
+<  if(result.multiple)>
 // result -> multiple
 List\<<sql.resultClass>Decorator\> result = null;
-<    else>
+<  else>
 // result -> simple
 <sql.resultClass> result = null;
-<    endif>
-<  else>
-<    if(result.multiple)>
+<  endif>
+<else>
+<  if(result.multiple)>
 List\<<sql.resultClass>\> result = null;
-<    else>
+<  else>
 <sql.resultClass> result = null;
-<    endif>
 <  endif>
 <endif>
 
@@ -1181,16 +1175,12 @@ custom_select_template_call(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<if(result.implicitProperties)>
-<result.implicitProperties:{attr |
-    <if(!attr.nullable)>((<attr.javaType>)
-    (<actual_custom_select_template_call(sql=sql, result=result)>)).<attr.javaType>Value();
-<else>(<sql.resultClass>)
-     <actual_custom_select_template_call(sql=sql, result=result)>;
-<endif>}>
-<else><if(table.voDecorated)><if(result.multiple)>(<sql.resultClass>)<else>(<sql.resultClass>Decorator)<endif><else>(<sql.resultClass>)<endif>
-     <actual_custom_select_template_call(sql=sql, result=result)>;
+<if(result.multiple)>
+List\<(<sql.resultClass>)\>
+<else>
+(<sql.resultClass>)
 <endif>
+     <actual_custom_select_template_call(sql=sql, result=result)>;
 >>
 
 actual_custom_select_template_call(sql, result) ::= <<
