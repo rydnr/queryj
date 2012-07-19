@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql;
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -46,7 +47,6 @@ import org.acmsl.queryj.metadata.vo.Table;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing some Apache Commons-Logging classes.
@@ -65,7 +65,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -283,8 +282,6 @@ public class CustomResultUtils
     {
         @Nullable String result = retrieveCachedEntry(resultId);
 
-        boolean t_bBreakLoop = false;
-
         if (result == null)
         {
             if (   (resultId.equals("draws.multiple.draw.result"))
@@ -303,23 +300,15 @@ public class CustomResultUtils
 
                     if (t_strDao != null)
                     {
-                        for (@Nullable Table t_Table : metadataManager.getTableDAO().findAllTables())
+                        Table t_Table = metadataManager.getTableDAO().findByDAO(t_strDao);
+
+                        if  (t_Table != null)
                         {
-                            if  (   (t_Table != null)
-                                 && (matches(t_Table.getName(), t_strDao)))
-                            {
-                                result = t_Table.getName();
-                                cacheEntry(resultId, result);
-                                t_bBreakLoop = true;
-                                break;
-                            }
+                            result = t_Table.getName();
+                            cacheEntry(resultId, result);
+                            break;
                         }
                     }
-                }
-
-                if (t_bBreakLoop)
-                {
-                    break;
                 }
             }
         }
@@ -346,7 +335,7 @@ public class CustomResultUtils
             @NotNull final String tableName,
             @NotNull final CustomSqlProvider customSqlProvider)
     {
-        return matches(resultElement, tableName, customSqlProvider, EnglishGrammarUtils.getInstance());
+        return matches(resultElement, tableName, customSqlProvider, MetadataUtils.getInstance());
     }
 
     /**
@@ -355,14 +344,14 @@ public class CustomResultUtils
      * @param resultElement the result.
      * @param tableName the table name.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
-     * @param englishGrammarUtils the {@link EnglishGrammarUtils} instance.
+     * @param metadataUtils the {@link MetadataUtils} instance.
      * @return <code>true</code> if it should be included.
      */
     protected boolean matches(
         @NotNull final Result resultElement,
         @NotNull final String tableName,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+        @NotNull final MetadataUtils metadataUtils)
     {
         boolean result = false;
 
@@ -376,73 +365,11 @@ public class CustomResultUtils
             }
 
             if (   (t_strDao != null)
-                && (matches(tableName, t_strDao, englishGrammarUtils)))
+                && (metadataUtils.matches(tableName, t_strDao)))
             {
                 result = true;
                 break;
             }
-        }
-
-        return result;
-    }
-
-    /**
-     * Checks whether given table name matches the DAO id.
-     * @param tableName the table name.
-     * @param daoId the DAO id.
-     * @return <code>true</code> if they match.
-     */
-    public boolean matches(
-        @NotNull final String tableName, @NotNull final String daoId)
-    {
-        return matches(tableName, daoId, EnglishGrammarUtils.getInstance());
-    }
-
-    /**
-     * Checks whether given table name matches the DAO id.
-     * @param tableName the table name.
-     * @param daoId the DAO id.
-     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
-     * instance.
-     * @return <code>true</code> if they match.
-     */
-    protected boolean matches(
-        @NotNull final String tableName,
-        @NotNull final String daoId,
-        @NotNull final EnglishGrammarUtils englishGrammarUtils)
-    {
-        boolean result;
-
-        String t_strTableInLowerCase = tableName.trim().toLowerCase(Locale.US);
-
-        result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
-
-        if  (!result)
-        {
-            String t_strSingularName =
-                retrieveCachedSingularTableName(t_strTableInLowerCase);
-
-            t_strSingularName =
-                englishGrammarUtils.getSingular(t_strTableInLowerCase);
-
-            cacheSingularTableName(
-                t_strTableInLowerCase, t_strSingularName);
-
-            result = daoId.equalsIgnoreCase(t_strSingularName);
-        }
-
-        if  (!result)
-        {
-            String t_strPluralName =
-                retrieveCachedPluralTableName(t_strTableInLowerCase);
-
-            t_strPluralName =
-                englishGrammarUtils.getPlural(t_strTableInLowerCase);
-
-            cachePluralTableName(
-                t_strTableInLowerCase, t_strPluralName);
-
-            result = daoId.equalsIgnoreCase(t_strPluralName);
         }
 
         return result;
@@ -565,30 +492,6 @@ public class CustomResultUtils
     }
 
     /**
-     * Caches the singular table name.
-     * @param tableName the table name.
-     * @param singularForm the singular form.
-     * @precondition tableName != null
-     */
-    protected void cacheSingularTableName(
-        final String tableName, final String singularForm)
-    {
-        cacheEntry(buildSingularKey(tableName), singularForm);
-    }
-
-    /**
-     * Caches the plural table name.
-     * @param tableName the table name.
-     * @param pluralForm the plural form.
-     * @precondition tableName != null
-     */
-    protected void cachePluralTableName(
-        final String tableName, final String pluralForm)
-    {
-        cacheEntry(buildPluralKey(tableName), pluralForm);
-    }
-
-    /**
      * Caches given singular or plural form of a table name.
      * @param key the key.
      * @param value the value.
@@ -605,30 +508,6 @@ public class CustomResultUtils
         {
             cache(CACHE, key, value);
         }
-    }
-
-    /**
-     * Retrieves the cached singular form for given table.
-     * @param tableName the table name.
-     * @return such value.
-     * @precondition tableName != null
-     */
-    @Nullable
-    protected String retrieveCachedSingularTableName(final String tableName)
-    {
-        return retrieveCachedEntry(buildSingularKey(tableName));
-    }
-
-    /**
-     * Retrieves the cached plural form for given table.
-     * @param tableName the table name.
-     * @return such value.
-     * @precondition tableName != null
-     */
-    @Nullable
-    protected String retrieveCachedPluralTableName(final String tableName)
-    {
-        return retrieveCachedEntry(buildPluralKey(tableName));
     }
 
     /**
@@ -673,28 +552,6 @@ public class CustomResultUtils
     protected void removeEntryFromCache(@NotNull final Map<String,String> cache, @NotNull final String key)
     {
         cache.remove(key);
-    }
-
-    /**
-     * Builds the singular key for given table.
-     * @param tableName the table name.
-     * @return such key.
-     */
-    @NotNull
-    protected String buildSingularKey(@NotNull final String tableName)
-    {
-        return "~singular--" + tableName;
-    }
-
-    /**
-     * Builds the plural key for given table.
-     * @param tableName the table name.
-     * @return such key.
-     */
-    @NotNull
-    protected String buildPluralKey(@NotNull final String tableName)
-    {
-        return "~plural--" + tableName;
     }
 
     /**

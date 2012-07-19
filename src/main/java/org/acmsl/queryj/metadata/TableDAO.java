@@ -95,4 +95,11 @@ public interface TableDAO
     @NotNull
     List<Table> findReferringTables(@NotNull final String target);
 
+    /**
+     * Retrieves the table associated to given DAO.
+     * @param dao the DAO name.
+     * @return the table.
+     */
+    @Nullable
+    Table findByDAO(@NotNull final String dao);
 }

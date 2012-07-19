@@ -40,6 +40,7 @@ package org.acmsl.queryj.customsql;
  */
 import org.acmsl.queryj.customsql.xml.AbstractSqlXmlParserDAO;
 import org.acmsl.queryj.customsql.xml.SqlXmlParser;
+import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.SqlDAO;
 
 /*
@@ -52,7 +53,9 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * {@link SqlXmlParser}-backed {@link SqlDAO} implementation.
@@ -64,6 +67,31 @@ public class SqlXmlParserSqlDAO
     implements SqlDAO
 {
     /**
+     * A cache of id -> Sql
+     */
+    private static final Map<String, Sql> FIND_BY_PRIMARY_KEY_CACHE = new HashMap<String, Sql>();
+
+    /**
+     * The cache misses.
+     */
+    private static final Map<String, Boolean> PRIMARY_KEY_MISS_CACHE = new HashMap<String, Boolean>();
+
+    /**
+     * The cache of resultId -> List<Sql>
+     */
+    private static final Map<String, List<Sql>> FIND_BY_RESULTID_CACHE = new HashMap<String, List<Sql>>();
+
+    /**
+     * The cache of type -> List<Sql>
+     */
+    private static final Map<String, List<Sql>> FIND_BY_TYPE_CACHE = new HashMap<String, List<Sql>>();
+
+    /**
+     * The cached repository-scoped Sql.
+     */
+    private static List<Sql> m__lCachedRepositoryScopedSql;
+
+    /**
      * Creates a new {@link SqlXmlParser} with given {@link SqlXmlParser}.
      * @param parser the {@link SqlXmlParser} instance.
      */
@@ -73,6 +101,52 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
+     * Retrieves the {@link Sql} from the cache, if possible.
+     * @param id the id.
+     * @return the {@link Sql}, or <code>null</code> if not found in the cache.
+     */
+    protected synchronized Sql getFromPrimaryKeyCache(@NotNull final String id)
+    {
+        return FIND_BY_PRIMARY_KEY_CACHE.get(id);
+    }
+
+    /**
+     * Caches given {@link Sql} in the cache.
+     * @param id the id.
+     * @param sql the {@link Sql} to cache.
+     */
+    protected synchronized void cachePrimaryKey(@NotNull final String id, @NotNull final Sql sql)
+    {
+        FIND_BY_PRIMARY_KEY_CACHE.put(id, sql);
+    }
+
+    /**
+     * Specifies that given primary key was already retrieved, with no success.
+     * @param id the id to annotate.
+     */
+    protected synchronized void setPrimaryKeyAlreadyRetrieved(@NotNull final String id)
+    {
+        PRIMARY_KEY_MISS_CACHE.put(id, Boolean.TRUE);
+    }
+
+    /**
+     * Checks whether given primary key was already retrieved or not.
+     * @param id the id to check.
+     */
+    protected synchronized boolean isPrimaryKeyAlreadyRetrieved(@NotNull final String id)
+    {
+        boolean result = false;
+
+        Boolean miss = PRIMARY_KEY_MISS_CACHE.get(id);
+
+        if (miss != null)
+        {
+            result = miss;
+        }
+
+        return result;
+    }
+    /**
      * Finds a given {@link Sql} by its id.
      * @param id the id.
      * @return the associated {@link Sql}, or <code>null</code> if not found.
@@ -81,7 +155,24 @@ public class SqlXmlParserSqlDAO
     @Nullable
     public Sql findByPrimaryKey(@NotNull final String id)
     {
-        return findByPrimaryKey(id, getSqlXmlParser());
+        Sql result = getFromPrimaryKeyCache(id);
+
+        if (   (result == null)
+            && (!isPrimaryKeyAlreadyRetrieved(id)))
+        {
+            result = findByPrimaryKey(id, getSqlXmlParser());
+
+            if (result != null)
+            {
+                cachePrimaryKey(id, result);
+            }
+            else
+            {
+                setPrimaryKeyAlreadyRetrieved(id);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -105,7 +196,7 @@ public class SqlXmlParserSqlDAO
     @Override
     public List<Sql> findByDAO(@NotNull final String table)
     {
-        return filterTable(table, findAll(), CustomResultUtils.getInstance());
+        return filterTable(table, findAll(), MetadataUtils.getInstance());
     }
 
     /**
@@ -200,14 +291,14 @@ public class SqlXmlParserSqlDAO
      * Retrieves all <i>delete</i> {@link Sql sentences} for a given DAO (table).
      * @param table the table.
      * @param queries the complete list of queries.
-     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @param metadataUtils the {@link MetadataUtils} instance.
      * @return all matching <i>delete</i> sentences.
      */
     @NotNull
     protected List<Sql> filterTable(
         @NotNull final String table,
         @NotNull final List<Sql> queries,
-        @NotNull final CustomResultUtils customResultUtils)
+        @NotNull final MetadataUtils metadataUtils)
     {
         @NotNull List<Sql> result = new ArrayList<Sql>();
 
@@ -220,7 +311,7 @@ public class SqlXmlParserSqlDAO
                 t_strDAO = t_Sql.getDao();
 
                 if (   (t_strDAO != null)
-                    && (customResultUtils.matches(table, t_strDAO)))
+                    && (metadataUtils.matches(table, t_strDAO)))
                 {
                     result.add(t_Sql);
                 }
@@ -330,6 +421,27 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
+     * Retrieves the list of matching {@link Sql} for given result id, from a local cache.
+     * @param resultId the {@link Result} identifier.
+     * @return the list of matching {@link Sql}, or <code>null</code> if not found in the cache.
+     */
+    @Nullable
+    protected synchronized List<Sql> getFromResultIdCache(@NotNull final String resultId)
+    {
+        return FIND_BY_RESULTID_CACHE.get(resultId);
+    }
+
+    /**
+     * Annotates the matching {@link Sql}s for given result id in a local cache.
+     * @param resultId the result id.
+     * @param list the {@link Sql} list.
+     */
+    protected synchronized void cacheResultId(@NotNull final String resultId, @NotNull final List<Sql> list)
+    {
+        FIND_BY_RESULTID_CACHE.put(resultId, list);
+    }
+
+    /**
      * Retrieves all SQL matching given result id.
      *
      * @param resultId the result id.
@@ -339,9 +451,30 @@ public class SqlXmlParserSqlDAO
     @Override
     public List<Sql> findByResultId(@NotNull final String resultId)
     {
+        List<Sql> result = getFromResultIdCache(resultId);
+
+        if (result == null)
+        {
+            result = findByResultId(resultId, findAll());
+            cacheResultId(resultId, result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves all SQL matching given result id.
+     * @param resultId the result id.
+     * @param list the list of {@link Sql} to process.
+     * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
+     */
+    @NotNull
+    public List<Sql> findByResultId(@NotNull final String resultId, @NotNull final List<Sql> list)
+    {
+
         @NotNull List<Sql> result = new ArrayList<Sql>();
 
-        for (@Nullable Sql t_CurrentSql : findAll())
+        for (@Nullable Sql t_CurrentSql : list)
         {
             @Nullable ResultRef t_ResultRef;
 
@@ -361,6 +494,26 @@ public class SqlXmlParserSqlDAO
     }
 
     /**
+     * Retrieves the list of matching {@link Sql} for given type.
+     * @param type the type.
+     * @return the cached list of matching {@link Sql} items.
+     */
+    protected synchronized List<Sql> getFromTypeCache(@NotNull final String type)
+    {
+        return FIND_BY_TYPE_CACHE.get(type);
+    }
+
+    /**
+     * Annotates given list of {@link Sql} matching given type, in a local cache.
+     * @param type the type.
+     * @param list the matching {@link Sql} list.
+     */
+    protected synchronized void cacheType(@NotNull final String type, @NotNull final List<Sql> list)
+    {
+        FIND_BY_TYPE_CACHE.put(type, list);
+    }
+
+    /**
      * Retrieves all SQL matching given type.
      *
      * @param type the type.
@@ -370,7 +523,46 @@ public class SqlXmlParserSqlDAO
     @Override
     public List<Sql> findByType(@NotNull final String type)
     {
-        return filterByType(findAll(), type);
+        List<Sql> result = getFromTypeCache(type);
+
+        if (result == null)
+        {
+            result = findByType(type, findAll());
+            cacheType(type, result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves all SQL matching given type.
+     * @param type the type.
+     * @param list the list of {@link Sql} elements.
+     * @return the list of matching {@link org.acmsl.queryj.customsql.Sql}.
+     */
+    @NotNull
+    public List<Sql> findByType(@NotNull final String type, @NotNull final List<Sql> list)
+    {
+        return filterByType(list, type);
+    }
+
+    /**
+     * Specifies the cached repository-scoped {@link Sql} items.
+     * @param list such list.
+     */
+    protected synchronized static void setCachedRepositoryScopedSql(@NotNull final List<Sql> list)
+    {
+        m__lCachedRepositoryScopedSql = list;
+    }
+
+    /**
+     * Retrieves the cached repository-scoped {@link Sql} items.
+     * @return such list.
+     */
+    @Nullable
+    protected synchronized static List<Sql> getCachedRepositoryScopedSql()
+    {
+        return m__lCachedRepositoryScopedSql;
     }
 
     /**
@@ -381,7 +573,15 @@ public class SqlXmlParserSqlDAO
     @Override
     public List<Sql> findAllRepositoryScopedSql()
     {
-        return findAllRepositoryScopedSql(false);
+        List<Sql> result = getCachedRepositoryScopedSql();
+
+        if (result == null)
+        {
+            result = findAllRepositoryScopedSql(false);
+            setCachedRepositoryScopedSql(result);
+        }
+
+        return result;
     }
 
     /**
@@ -418,7 +618,7 @@ public class SqlXmlParserSqlDAO
     @Override
     public boolean containsRepositoryScopedSql()
     {
-        @NotNull List<Sql> result = findAllRepositoryScopedSql(true);
+        @NotNull List<Sql> result = findAllRepositoryScopedSql();
 
         return result.size() > 0;
     }

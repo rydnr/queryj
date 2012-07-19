@@ -39,44 +39,44 @@
 //
 group CustomResultSetExtractor;
 
-source(input) ::= <<
+source() ::= <<
 <!
   Generates a CustomResultSetExtractor source file.
-  @param input.copyright_years the copyright's years.
-  @param input.table_name the table name.
-  @param input.package the package.
+  @param copyright_years the copyright's years.
+  @param table_name the table name.
+  @param package the package.
   @params project_imports
   @params class
 !>
-<if(input.header)>
-<input.header>
+<if(header)>
+<header>
 <else>
 <java_header(
-  years=input.copyright_years,
+  years=copyright_years,
   description=
   [
-    first_line_description(result=input.result),
-    second_line_description(result=input.result)
+    first_line_description(result=result),
+    second_line_description(result=result)
   ],
-  timestamp=input.timestamp)>
+  timestamp=timestamp)>
 <endif>
 // Generated using org/acmsl/queryj/dao/CustomResultSetExtractor.stg
 
 <package_declaration(
   packageNames=
   [
-    input.base_package_name,
+    project_package,
     typeInitMap.baseDAOSubpackageName,
     typeInitMap.rdbSubpackageName,
-    input.subpackage_name
+    subpackage_name
   ])>
 
 <project_imports(
-  result=input.result,
-  basePackageName=input.base_package_name,
+  result=result,
+  basePackageName=project_package,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
-  trName=input.tr_name_capitalized)>
+  trName=repository.capitalized)>
 
 <checkers_import()>
 /*
@@ -101,7 +101,7 @@ import java.util.Date;
  */
 import org.apache.commons.logging.LogFactory;
 
-<class(result=input.result, input=input)>
+<class(result=result)>
 >>
 
 first_line_description(result) ::= <<
@@ -141,21 +141,20 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>Res
 
 >>
 
-class(result, input) ::= <<
+class(result) ::= <<
 <!
  Generates the class body.
  @param result the result.
- @param input the input.
 !>
 /**
  * <[
       first_line_description(result=result),
       second_line_description(result=result)
     ]:{line |<line>}; separator="\n * ")>
-<class_common_javadoc(template="org/acmsl/queryj/dao/DAOListener.stg")>
+<class_common_javadoc(template="org/acmsl/queryj/dao/CustomResultSetExtractor.stg")>
  */
 public class <result.idCapitalized>Extractor
-    extends  <input.tr_name_capitalized>ResultSetExtractor
+    extends  <repository.capitalized>ResultSetExtractor
 {
     /**
      * Constructs a new {@link <result.idCapitalized>Extractor}.
@@ -163,7 +162,7 @@ public class <result.idCapitalized>Extractor
      */
     public <result.idCapitalized>Extractor(
         <notnull()>final String sql,
-        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
         super(daoListener);
     }
@@ -173,12 +172,12 @@ public class <result.idCapitalized>Extractor
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
      * @param sql the original sql.
-     * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
 <if(result.multiple)>
-     * @return the \<i><input.className>\</i> instances or {@link null}
+     * @return the \<i><result.classValue>\</i> instances or {@link null}
      * if the operation returned no data.
 <else>
-     * @return the \<i><input.className>\</i> instance or {@link null}
+     * @return the \<i><result.classValue>\</i> instance or {@link null}
      * if the operation returned no data.
 <endif>
 
@@ -191,7 +190,7 @@ public class <result.idCapitalized>Extractor
     public Object extractData(
         <notnull()>final ResultSet resultSet,
         <notnull()>final String sql,
-        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener)
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
       throws  SQLException,
               DataAccessException
     {
@@ -208,7 +207,7 @@ public class <result.idCapitalized>Extractor
      * Extracts \<i><result.id>\</i> information from given result set.
      * @param resultSet the result set.
      * @param sql the original sql.
-     * @param daoListener the {@link <input.tr_name_capitalized>DAOListener} instance.
+     * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
 <if(!result.implicit)>
      * @param factory the value object factory.
 <endif>
@@ -228,7 +227,7 @@ public class <result.idCapitalized>Extractor
     protected Object extractData(
         <notnull()>final ResultSet resultSet,
         <notnull()>final String sql,
-        <notnull()>final <input.tr_name_capitalized>DAOListener daoListener,
+        <notnull()>final <repository.capitalized>DAOListener daoListener,
         <notnull()>final <result.classValue>ValueObjectFactory factory)
       throws  SQLException,
               DataAccessException
@@ -260,10 +259,8 @@ public class <result.idCapitalized>Extractor
 
             daoListener.resultSetMovedForward(sql, t_iRowCount);
 
-            <result.properties:nullable_attribute_extraction(
-              attr=it, input=input)>
-            <result.lobProperties:special_attribute_extraction(
-              attr=it, input=input)>
+            <result.properties:nullable_attribute_extraction(attr=it)>
+            <result.lobProperties:special_attribute_extraction(attr=it)>
 
 <if(result.multiple)>
             result.add(
@@ -275,8 +272,7 @@ public class <result.idCapitalized>Extractor
                 <result.implicitProperties:implicit_nullable_attribute_extraction(result=result, attr=it)>
 <else>
                 factory.createValueObject(
-                    <result.properties:attribute_extraction(
-                      attr=it, input=input); separator=",\n">)<if(result.multiple)>)<endif>;
+                    <result.properties:attribute_extraction(attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
 <endif>
 
         }
@@ -321,26 +317,24 @@ new <result.classValue>(
 resultSet.get<attr.actualObjectType>(<attr.index>)<if(attr.nullable)>)<endif><if(result.multiple)>)<endif>;
 >>
 
-nullable_attribute_extraction(attr, input) ::= <<
+nullable_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract nullable attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(input.clobHandling)>
+<if(lob_handling_required)>
 <indirect_template(
-  name=input.clobHandling+"_nullable_attribute_extraction", input=attr)>
+  name=clobHandling+"_nullable_attribute_extraction", extra1=attr)>
 <else>
-<default_nullable_attribute_extraction(attr=attr, input=input)>
+<default_nullable_attribute_extraction(attr=attr )>
 <endif>
 
 >>
 
-default_nullable_attribute_extraction(attr, input) ::= <<
+default_nullable_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract nullable attributes.
  @param attr the attribute.
- @param input the input.
 !>
 <if(attr.boolean)>
 <Boolean_nullable_attribute_extraction(attr=attr)>
@@ -353,16 +347,16 @@ Timestamp t_<attr.columnNameNormalizedCapitalized>AsTimestamp =
 <endif>
 
 <if(attr.primitive)>
-<if(input.clobhandling)>
+<if(lob_handling_required)>
     <object_nullable_clobhandling_attribute_extractor(attr=attr)>
 <else>
     <primitive_nullable_attribute_extractor(attr=attr)>
 <endif>
 <else>
-<if(input.clobhandling)>
-    <indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", input=attr)>
+<if(lob_handling_required)>
+    <indirect_template(name=attr.objectType+"_nullable_clobhandling_attribute_extractor", extra1=attr)>
 <else>
-    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", input=attr)>
+    <indirect_template(name=attr.objectType+"_nullable_attribute_extractor", extra1=attr)>
 <endif>
 <endif>
 
@@ -432,60 +426,60 @@ else
 
 >>
 
-String_nullable_attribute_extractor(input) ::= <<
+String_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a String nullable attribute.
 !>
-<object_nullable_attribute_extractor(attr=input)>
+<object_nullable_attribute_extractor(attr=attr)>
 >>
 
-String_nullable_clobhandling_attribute_extractor(input) ::= <<
+String_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a String nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(attr=attr)>
 >>
 
-Date_nullable_attribute_extractor(input) ::= <<
+Date_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(attr=attr)>
 >>
 
-Date_nullable_clobhandling_attribute_extractor(input) ::= <<
+Date_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a Date nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(attr=attr)>
 >>
 
-Timestamp_nullable_attribute_extractor(input) ::= <<
+Timestamp_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(attr=attr)>
 >>
 
-Timestamp_nullable_clobhandling_attribute_extractor(input) ::= <<
+Timestamp_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a Timestamp nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(attr=attr)>
 >>
 
-BigDecimal_nullable_attribute_extractor(input) ::= <<
+BigDecimal_nullable_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a BigDecimal nullable attribute.
 !>
-<object_nullable_attribute_extractor(attr=input)>
+<object_nullable_attribute_extractor(attr=attr)>
 >>
 
-BigDecimal_nullable_clobhandling_attribute_extractor(input) ::= <<
+BigDecimal_nullable_clobhandling_attribute_extractor(attr) ::= <<
 <!
   Generates the code to extract a BigDecimal nullable attribute.
 !>
-<object_nullable_clobhandling_attribute_extractor(attr=input)>
+<object_nullable_clobhandling_attribute_extractor(attr=attr)>
 >>
 
 primitive_nullable_attribute_extractor(attr) ::= <<
@@ -550,15 +544,14 @@ resultSet.get<attr.objectType>("<attr.columnName>");
 
 >>
 
-attribute_extraction(attr, input) ::= <<
+attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(input.clobHandling)>
+<if(lob_handling_required)>
 <indirect_template(
-  name=input.clobHandling+"_attribute_extraction", input=attr)>
+  name=clobHandling+"_attribute_extraction", attr=attr)>
 <else>
 <default_attribute_extraction(attr)>
 <endif>
@@ -625,83 +618,82 @@ resultSet.get<attr.objectType>("<attr.nameUppercased>")
 
 >>
 
-special_attribute_extraction(attr, input) ::= <<
+special_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract special attributes.
  @param attr the attribute.
- @param input the input.
 !>
-<if(input.clobHandling)>
+<if(lob_handling_required)>
 <indirect_template(
-  name=input.clobHandling+"_special_attribute_extraction", input=attr)>
+  name=clobHandling+"_special_attribute_extraction", attr=attr)>
 <endif>
 >>
 
-oracle_nullable_attribute_extraction(input) ::= <<
+oracle_nullable_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle.
- @param input the attribute.
+ @param attr the attribute.
 !>
-<oracle8_nullable_attribute_extraction(input=input)>
+<oracle8_nullable_attribute_extraction(attr=attr)>
 >>
 
-oracle8_nullable_attribute_extraction(input) ::= <<
+oracle8_nullable_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle8.
- @param input the attribute.
+ @param attr the attribute.
 !>
-<if(!input.clob)>
-<default_nullable_attribute_extraction(attr=input)>
+<if(!attr.clob)>
+<default_nullable_attribute_extraction(attr=attr)>
 <endif>
 >>
 
-oracle_special_attribute_extraction(input) ::= <<
+oracle_special_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract special attributes for Oracle.
- @param input the attribute.
+ @param attr the attribute.
 !>
-<oracle8_special_attribute_extraction(input=input)>
+<oracle8_special_attribute_extraction(attr=attr)>
 >>
 
-oracle8_special_attribute_extraction(input) ::= <<
+oracle8_special_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract special attributes for Oracle8.
- @param input the attribute.
+ @param attr the attribute.
 !>
-<if(input.clob)>
-oracle.sql.CLOB t_<input.columnNameNormalizedCapitalized> =
+<if(attr.clob)>
+oracle.sql.CLOB t_<attr.columnNameNormalizedCapitalized> =
     (oracle.sql.CLOB) resultSet.getClob("<attr.columnName>");
 
 if  (selectForUpdateMode)
 {
-    t_<input.columnNameNormalizedCapitalized>.putString(1, <input.nameLowercased>);
+    t_<attr.columnNameNormalizedCapitalized>.putString(1, <attr.nameLowercased>);
 }
 <else>
 if  (resultSet.wasNull())
 {
-    t_<input.columnNameNormalizedCapitalized>As<input.objectType> = null;
+    t_<attr.columnNameNormalizedCapitalized>As<attr.objectType> = null;
 }
 <endif>
 >>
 
-oracle_attribute_extraction(input) ::= <<
+oracle_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract the attributes for Oracle.
- @param input the attribute.
+ @param attr the attribute.
 !>
-<oracle8_attribute_extraction(input=input)>
+<oracle8_attribute_extraction(attr=attr)>
 >>
 
-oracle8_attribute_extraction(input) ::= <<
+oracle8_attribute_extraction(attr) ::= <<
 <!
  Generates the code to extract the attributes for Oracle8.
- @param input the attribute.
+ @param attr the attribute.
 !>
-<if(input.clob)>
+<if(attr.clob)>
 (selectForUpdateMode)
-?  <input.nameLowercased>
-:  t_<input.columnNameNormalizedCapitalized>.getSubString(1, (int) t_<input.columnNameNormalizedCapitalized>.length())
+?  <attr.nameLowercased>
+:  t_<attr.columnNameNormalizedCapitalized>.getSubString(1, (int) t_<attr.columnNameNormalizedCapitalized>.length())
 <else>
-<default_clobhandling_attribute_extraction(attr=input)>
+<default_clobhandling_attribute_extraction(attr=attr)>
 <endif>
 >>

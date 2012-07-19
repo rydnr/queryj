@@ -43,6 +43,7 @@ package org.acmsl.queryj.metadata;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 
@@ -256,6 +257,46 @@ public class CachingTableDecorator
      * The cached custom results.
      */
     private List<ResultDecorator> m__lCachedCustomResults;
+
+    /**
+     * The cached child attributes.
+     */
+    private List<Attribute> m__lCachedChildAttributes;
+
+    /**
+     * The cached foreign keys.
+     */
+    private List<ForeignKey> m__lCachedForeignKeys;
+
+    /**
+     * The cached parent foreign key.
+     */
+    private ForeignKey m__CachedParentForeignKey;
+
+    /**
+     * Whether the parent foreign key was already retrieved.
+     */
+    private boolean m__bParentForeignKeyAlreadyRetrieved;
+
+    /**
+     * The cached version of the singular name, in upper case.
+     */
+    private String m__strCachedSingularNameUppercased;
+
+    /**
+     * The cached version of the singular name, in lower case.
+     */
+    private String m__strCachedSingularNameLowercased;
+
+    /**
+     * The cached read-only attributes.
+     */
+    private List<Attribute> m__lCachedReadOnlyAttributes;
+
+    /**
+     * The cached externally-managed attributes.
+     */
+    private List<AttributeDecorator> m__lCachedAllExternallyManagedAttributes;
 
     /**
      * Creates a <code>CachingTableDecorator</code> with the
@@ -2188,6 +2229,394 @@ public class CachingTableDecorator
         {
             result = super.getCustomResults();
             setCachedCustomResults(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached child attributes.
+     * @param attributes such {@link Attribute attributes}.
+     */
+    protected final void immutableSetCachedChildAttributes(@NotNull final List<Attribute> attributes)
+    {
+        this.m__lCachedChildAttributes = attributes;
+    }
+
+    /**
+     * Specifies the cached child attributes.
+     * @param attributes such {@link Attribute attributes}.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedChildAttributes(@NotNull final List<Attribute> attributes)
+    {
+        immutableSetCachedChildAttributes(attributes);
+    }
+
+    /**
+     * Retrieves the cached child attributes.
+     * @return such attributes.
+     */
+    @Nullable
+    public List<Attribute> getCachedChildAttributes()
+    {
+        return m__lCachedChildAttributes;
+    }
+
+    /**
+     * Retrieves the child's attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getChildAttributes()
+    {
+        List<Attribute> result = getCachedChildAttributes();
+
+        if (result == null)
+        {
+            result = super.getChildAttributes();
+            setCachedChildAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached foreign keys.
+     * @param foreignKeys the {@link ForeignKey foreignKeys}.
+     */
+    protected final void immutableSetCachedForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    {
+        this.m__lCachedForeignKeys = foreignKeys;
+    }
+
+    /**
+     * Specifies the cached foreign keys.
+     * @param foreignKeys the {@link ForeignKey foreignKeys}.
+     */
+    protected void setCachedForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    {
+        immutableSetCachedForeignKeys(foreignKeys);
+    }
+
+    /**
+     * Retrieves the cached foreign keys.
+     * @return such list.
+     */
+    @Nullable
+    public List<ForeignKey> getCachedForeignKeys()
+    {
+        return this.m__lCachedForeignKeys;
+    }
+
+    /**
+     * Retrieves the foreign keys.
+     *
+     * @return such list.
+     */
+    @NotNull
+    @Override
+    public List<ForeignKey> getForeignKeys()
+    {
+        List<ForeignKey> result = getCachedForeignKeys();
+
+        if (result == null)
+        {
+            result = super.getForeignKeys();
+            setCachedForeignKeys(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached parent foreign key.
+     * @param foreignKey such {@link ForeignKey}.
+     */
+    protected final void immutableSetCachedParentForeignKey(@NotNull final ForeignKey foreignKey)
+    {
+        this.m__CachedParentForeignKey = foreignKey;
+    }
+
+    /**
+     * Specifies the cached parent foreign key.
+     * @param foreignKey such {@link ForeignKey}.
+     */
+    protected void setCachedParentForeignKey(@NotNull final ForeignKey foreignKey)
+    {
+        immutableSetCachedParentForeignKey(foreignKey);
+    }
+
+    /**
+     * Retrieves the cached parent foreign key.
+     * @return such {@link ForeignKey}.
+     */
+    @Nullable
+    public ForeignKey getCachedParentForeignKey()
+    {
+        return this.m__CachedParentForeignKey;
+    }
+
+    /**
+     * Specifies whether the parent foreign key was already retrieved or not.
+     * @param flag such conditiion.
+     */
+    protected final void immutableSetParentForeignKeyAlreadyRetrieved(final boolean flag)
+    {
+        m__bParentForeignKeyAlreadyRetrieved = flag;
+    }
+
+    /**
+     * Specifies whether the parent foreign key was already retrieved or not.
+     * @param flag such conditiion.
+     */
+    protected void setParentForeignKeyAlreadyRetrieved(final boolean flag)
+    {
+        immutableSetParentForeignKeyAlreadyRetrieved(flag);
+    }
+
+    /**
+     * Checks whether the parent foreign key was already retrieved or not.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isParentForeignKeyAlreadyRetrieved()
+    {
+        return m__bParentForeignKeyAlreadyRetrieved;
+    }
+
+    /**
+     * Retrieves the parent foreign-key.
+     * @return such foreign key.
+     */
+    @Override
+    @Nullable
+    public ForeignKey getParentForeignKey()
+    {
+        ForeignKey result = getCachedParentForeignKey();
+
+        if (   (result == null)
+            && (!isParentForeignKeyAlreadyRetrieved()))
+        {
+            result = super.getParentForeignKey();
+
+            if (result != null)
+            {
+                setCachedParentForeignKey(result);
+            }
+
+            setParentForeignKeyAlreadyRetrieved(true);
+
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached singular name, in upper case.
+     * @param value such value.
+     */
+    protected final void immutableSetCachedSingularNameUppercased(@NotNull final String value)
+    {
+        this.m__strCachedSingularNameUppercased = value;
+    }
+
+    /**
+     * Specifies the cached singular name, in upper case.
+     * @param value such value.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedSingularNameUppercased(@NotNull final String value)
+    {
+        immutableSetCachedSingularNameUppercased(value);
+    }
+
+    /**
+     * Retrieves the cached singular name, in upper case.
+     * @return such value.
+     */
+    @Nullable
+    public String getCachedSingularNameUppercased()
+    {
+        return m__strCachedSingularNameUppercased;
+    }
+
+    /**
+     * Retrieves the singular table's name, upper-cased.
+     *
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String getSingularNameUppercased()
+    {
+        String result = getCachedSingularNameUppercased();
+
+        if (result == null)
+        {
+            result = super.getSingularNameUppercased();
+            setCachedSingularNameUppercased(result);
+        }
+
+        return result;
+    }
+
+
+    /**
+     * Specifies the cached singular name, in lower case.
+     * @param value such value.
+     */
+    protected final void immutableSetCachedSingularNameLowercased(@NotNull final String value)
+    {
+        this.m__strCachedSingularNameLowercased = value;
+    }
+
+    /**
+     * Specifies the cached singular name, in lower case.
+     * @param value such value.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedSingularNameLowercased(@NotNull final String value)
+    {
+        immutableSetCachedSingularNameLowercased(value);
+    }
+
+    /**
+     * Retrieves the cached singular name, in lower case.
+     * @return such value.
+     */
+    @Nullable
+    public String getCachedSingularNameLowercased()
+    {
+        return m__strCachedSingularNameLowercased;
+    }
+
+    /**
+     * Retrieves the singular table's name, lower-cased.
+     *
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String getSingularNameLowercased()
+    {
+        String result = getCachedSingularNameLowercased();
+
+        if (result == null)
+        {
+            result = super.getSingularNameLowercased();
+            setCachedSingularNameLowercased(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached read-only attributes.
+     * @param list such {@link Attribute} list.
+     */
+    protected final void immutableSetCachedReadOnlyAttributes(@NotNull final List<Attribute> list)
+    {
+        this.m__lCachedReadOnlyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached read-only attributes.
+     * @param list such {@link Attribute} list.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedReadOnlyAttributes(@NotNull final List<Attribute> list)
+    {
+        immutableSetCachedReadOnlyAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached read-only attributes.
+     * @return such list.
+     */
+    @Nullable
+    public List<Attribute> getCachedReadOnlyAttributes()
+    {
+        return m__lCachedReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the read-only attributes.
+     *
+     * @return such list.
+     */
+    @NotNull
+    @Override
+    public List<Attribute> getReadOnlyAttributes()
+    {
+        List<Attribute> result = getCachedReadOnlyAttributes();
+
+        if (result == null)
+        {
+            result = super.getReadOnlyAttributes();
+            setCachedReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the custom select-for-update queries.
+     *
+     * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
+     */
+    @NotNull
+    @Override
+    public List<Sql> getCustomSelectsForUpdate()
+    {
+        return super
+            .getCustomSelectsForUpdate();    //To change body of overridden methods use File | Settings | File
+            // Templates.
+    }
+
+    /**
+     * Specifies the cached, externally-managed attributes.
+     * @param list such {@link AttributeDecorator attributes}.
+     */
+    protected final void immutableSetCachedAllExternallyManagedAttributes(@NotNull final List<AttributeDecorator> list)
+    {
+        this.m__lCachedAllExternallyManagedAttributes = list;
+    }
+
+    /**
+     * Specifies the cached, externally-managed attributes.
+     * @param list such {@link AttributeDecorator attributes}.
+     */
+    @SuppressWarnings("unused")
+    protected void setCachedAllExternallyManagedAttributes(@NotNull final List<AttributeDecorator> list)
+    {
+        immutableSetCachedAllExternallyManagedAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached, externally-managed attributes.
+     * @return such {@link AttributeDecorator list}.
+     */
+    @Nullable
+    protected List<AttributeDecorator> getCachedAllExternallyManagedAttributes()
+    {
+        return m__lCachedAllExternallyManagedAttributes;
+    }
+    /**
+     * Retrieves the externally-managed attributes.
+     *
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public List<AttributeDecorator> getAllExternallyManagedAttributes()
+    {
+        List<AttributeDecorator> result = getCachedAllExternallyManagedAttributes();
+
+        if (result == null)
+        {
+            result = super.getAllExternallyManagedAttributes();
+            setCachedAllExternallyManagedAttributes(result);
         }
 
         return result;

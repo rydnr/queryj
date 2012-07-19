@@ -39,6 +39,7 @@ package org.acmsl.queryj.metadata.engines;
  * Importing project classes.
  */
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.MetadataUtils;
 import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -53,7 +54,10 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * {@link MetadataManager}-backed {@link TableDAO} instance.
@@ -67,6 +71,16 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * The {@link MetadataManager} instance.
      */
     private M m__MetadataManager;
+
+    /**
+     * The cache of DAO -> Table.
+     */
+    private static final Map<String, Table> FIND_BY_DAO_CACHE = new HashMap<String, Table>();
+
+    /**
+     * The cache miss.
+     */
+    private static final Map<String, Boolean> FIND_BY_DAO_CACHE_MISS = new HashMap<String, Boolean>();
 
     /**
      * Creates a new {@link MetadataManagerTableDAO} instance using given {@link MetadataManager}.
@@ -183,6 +197,103 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
 
                     }
                 }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table associated to given DAO.
+     * @param dao the DAO name.
+     * @return the table.
+     */
+    @Override
+    @Nullable
+    public Table findByDAO(@NotNull final String dao)
+    {
+        return findByDAO(dao, MetadataUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the {@link Table} associated to given DAO, from local cache.
+     * @param dao the DAO.
+     * @return such {@link Table}, or <code>null</code> if not found.
+     */
+    protected synchronized static Table getCachedByDAO(@NotNull final String dao)
+    {
+        return FIND_BY_DAO_CACHE.get(dao.toLowerCase(Locale.US));
+    }
+
+    /**
+     * Caches given association between DAO and {@link Table}.
+     * @param dao the DAO.
+     * @param table the associated table.
+     */
+    protected synchronized static void cacheByDAO(@NotNull final String dao, @NotNull final Table table)
+    {
+        FIND_BY_DAO_CACHE.put(dao, table);
+    }
+
+    /**
+     * Annotates a miss for given DAO.
+     * @param dao the dao.
+     */
+    protected synchronized static void cacheByDAOMiss(@NotNull final String dao)
+    {
+        FIND_BY_DAO_CACHE_MISS.put(dao, Boolean.TRUE);
+    }
+
+    /**
+     * Checks whether given DAO is known to have no associated {@link Table}.
+     * @param dao the DAO to check.
+     * @return <code>true</code> in such case.
+     */
+    protected synchronized boolean isDaoAlreadyProcessed(@NotNull final String dao)
+    {
+        boolean result = false;
+
+        Boolean miss = FIND_BY_DAO_CACHE_MISS.get(dao);
+
+        if (miss != null)
+        {
+            result = miss;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves the table associated to given DAO.
+     * @param dao the DAO name.
+     * @param metadataUtils the {@link MetadataUtils} instance.
+     * @return the table.
+     */
+    @Nullable
+    protected Table findByDAO(@NotNull final String dao, @NotNull final MetadataUtils metadataUtils)
+    {
+        Table result = getCachedByDAO(dao);
+
+        if (   (result == null)
+            && (!isDaoAlreadyProcessed(dao)))
+        {
+            for (@Nullable Table t_Table : findAllTables())
+            {
+                if  (   (t_Table != null)
+                     && (metadataUtils.matches(t_Table.getName(), dao)))
+                {
+                    result = t_Table;
+                    break;
+                }
+            }
+
+            if (result != null)
+            {
+                cacheByDAO(dao, result);
+            }
+            else
+            {
+                cacheByDAOMiss(dao);
             }
         }
 

@@ -459,13 +459,16 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     {
         String result;
 
-        logHeader(buildHeader());
+        if (!relevantOnly)
+        {
+            logHeader(buildHeader());
+        }
 
-        traceClassLoaders();
+        //traceClassLoaders();
 
         result = generateOutput(getHeader(context), context, relevantOnly);
 
-        cleanUpClassLoaderTracing();
+        //cleanUpClassLoaderTracing();
 
         return result;
     }
@@ -474,7 +477,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Logs a custom header.
      * @param header the header.
      */
-    protected void logHeader(final String header)
+    protected void logHeader(@NotNull final String header)
     {
         Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
         
@@ -488,6 +491,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Builds the header for logging purposes.
      * @return such header.
      */
+    @NotNull
     protected String buildHeader()
     {
         return "Generating " + getClass().getName() + ".";

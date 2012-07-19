@@ -35,6 +35,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing some project-specific classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -60,6 +61,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -80,6 +82,13 @@ public class MetadataUtils
          */
         public static final MetadataUtils SINGLETON = new MetadataUtils();
     }
+
+    /**
+     * A map-based cache to improve performance when retrieving
+     * singular and plural forms for tables, and to cache other
+     * other data if needed.
+     */
+    private static final Map<String,String> CACHE = new HashMap<String,String>();
 
     /**
      * Protected constructor to avoid accidental instantiation.
@@ -218,6 +227,7 @@ public class MetadataUtils
      * @param metadataManager the {@link MetadataManager} instance.
      * @return the externally-managed attributes.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Attribute> retrieveExternallyManagedAttributes(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
@@ -257,6 +267,7 @@ public class MetadataUtils
      * @param metadataManager the {@link MetadataManager} instance.
      * @return all but the externally-managed attributes.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Attribute> retrieveAllButExternallyManagedAttributes(
         final String tableName,
@@ -300,6 +311,7 @@ public class MetadataUtils
      * to this one:
      * a map of referringTableName -> ForeignKey[].
      */
+    @SuppressWarnings("unused")
     @NotNull
     public Map<String,List<ForeignKey>> retrieveReferringKeys(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
@@ -484,6 +496,7 @@ public class MetadataUtils
      * @param metadataTypeManager the metadata type manager.
      * @return such attributes.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Attribute> retrieveLobAttributes(
         @NotNull final String tableName,
@@ -505,6 +518,7 @@ public class MetadataUtils
      * @param metadataTypeManager the metadata type manager.
      * @return such attributes.
      */
+    @SuppressWarnings("unused")
     @NotNull
     public List<Attribute> retrieveAllButLobAttributes(
         @NotNull final String tableName,
@@ -621,10 +635,8 @@ public class MetadataUtils
      * @param attributeName the attribute name.
      * @param tableName the table name.
      * @return <code>true</code> in such case.
-     * @precondition attributes != null
-     * @precondition attributeName != null
-     * @precondition tableName != null
      */
+    @SuppressWarnings("unused")
     public boolean contain(
         @Nullable final Collection<Attribute> attributes,
         @NotNull final String attributeName,
@@ -678,6 +690,207 @@ public class MetadataUtils
              && (tableName.equalsIgnoreCase(attribute.getTableName())))
         {
             result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Caches the singular table name.
+     * @param tableName the table name.
+     * @param singularForm the singular form.
+     * @precondition tableName != null
+     */
+    protected void cacheSingularTableName(
+        final String tableName, final String singularForm)
+    {
+        cacheEntry(buildSingularKey(tableName), singularForm);
+    }
+
+    /**
+     * Caches the plural table name.
+     * @param tableName the table name.
+     * @param pluralForm the plural form.
+     * @precondition tableName != null
+     */
+    protected void cachePluralTableName(
+        final String tableName, final String pluralForm)
+    {
+        cacheEntry(buildPluralKey(tableName), pluralForm);
+    }
+
+    /**
+     * Caches given singular or plural form of a table name.
+     * @param key the key.
+     * @param value the value.
+     * @precondition key != null
+     */
+    protected void cacheEntry(
+        final String key, @Nullable final String value)
+    {
+        if  (value == null)
+        {
+            removeEntryFromCache(CACHE, key);
+        }
+        else
+        {
+            cache(CACHE, key, value);
+        }
+    }
+
+    /**
+     * Retrieves the cached singular form for given table.
+     * @param tableName the table name.
+     * @return such value.
+     * @precondition tableName != null
+     */
+    @Nullable
+    protected String retrieveCachedSingularTableName(final String tableName)
+    {
+        return retrieveCachedEntry(buildSingularKey(tableName));
+    }
+
+    /**
+     * Retrieves the cached plural form for given table.
+     * @param tableName the table name.
+     * @return such value.
+     * @precondition tableName != null
+     */
+    @Nullable
+    protected String retrieveCachedPluralTableName(final String tableName)
+    {
+        return retrieveCachedEntry(buildPluralKey(tableName));
+    }
+
+    /**
+     * Retrieves the cached entry.
+     * @param key the key.
+     * @return the cached entry, or <code>null</code> if it's not cached.
+     */
+    @Nullable
+    protected String retrieveCachedEntry(@NotNull final String key)
+    {
+        return retrieveCachedEntry(CACHE, key);
+    }
+
+    /**
+     * Caches given entry.
+     * @param map the cache.
+     * @param key the key.
+     * @param value the value.
+     */
+    protected void cache(@NotNull final Map<String,String> map, @NotNull final String key, @NotNull final String value)
+    {
+        map.put(key, value);
+    }
+
+    /**
+     * Retrieves the cached entry.
+     * @param cache the cache.
+     * @param key the key.
+     * @return the cached entry, or <code>null</code> if it's not cached.
+     */
+    @NotNull
+    protected String retrieveCachedEntry(@NotNull final Map<String,String> cache, @NotNull final String key)
+    {
+        return cache.get(key);
+    }
+
+    /**
+     * Removes an entry from the cache.
+     * @param cache the cache.
+     * @param key the key.
+     */
+    protected void removeEntryFromCache(@NotNull final Map<String,String> cache, @NotNull final String key)
+    {
+        cache.remove(key);
+    }
+
+    /**
+     * Builds the singular key for given table.
+     * @param tableName the table name.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildSingularKey(@NotNull final String tableName)
+    {
+        return "~singular--" + tableName;
+    }
+
+    /**
+     * Builds the plural key for given table.
+     * @param tableName the table name.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildPluralKey(@NotNull final String tableName)
+    {
+        return "~plural--" + tableName;
+    }
+
+    /**
+     * Checks whether given table name matches the DAO id.
+     * @param tableName the table name.
+     * @param daoId the DAO id.
+     * @return <code>true</code> if they match.
+     */
+    public boolean matches(
+        @NotNull final String tableName, @NotNull final String daoId)
+    {
+        return matches(tableName, daoId, EnglishGrammarUtils.getInstance());
+    }
+
+    /**
+     * Checks whether given table name matches the DAO id.
+     * @param tableName the table name.
+     * @param daoId the DAO id.
+     * @param englishGrammarUtils the <code>EnglishGrammarUtils</code>
+     * instance.
+     * @return <code>true</code> if they match.
+     */
+    protected boolean matches(
+        @NotNull final String tableName,
+        @NotNull final String daoId,
+        @NotNull final EnglishGrammarUtils englishGrammarUtils)
+    {
+        boolean result;
+
+        String t_strTableInLowerCase = tableName.trim().toLowerCase(Locale.US);
+
+        result = daoId.equalsIgnoreCase(t_strTableInLowerCase);
+
+        if  (!result)
+        {
+            String t_strSingularName =
+                retrieveCachedSingularTableName(t_strTableInLowerCase);
+
+            if (t_strSingularName == null)
+            {
+                t_strSingularName =
+                    englishGrammarUtils.getSingular(t_strTableInLowerCase);
+
+                cacheSingularTableName(
+                    t_strTableInLowerCase, t_strSingularName);
+            }
+
+            result = daoId.equalsIgnoreCase(t_strSingularName);
+        }
+
+        if  (!result)
+        {
+            String t_strPluralName =
+                retrieveCachedPluralTableName(t_strTableInLowerCase);
+
+            if (t_strPluralName == null)
+            {
+                t_strPluralName =
+                    englishGrammarUtils.getPlural(t_strTableInLowerCase);
+
+                cachePluralTableName(
+                    t_strTableInLowerCase, t_strPluralName);
+            }
+
+            result = daoId.equalsIgnoreCase(t_strPluralName);
         }
 
         return result;

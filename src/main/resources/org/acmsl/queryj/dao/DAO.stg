@@ -1143,8 +1143,8 @@ result.put(
 find_constant_by(primaryKey, voName) ::= <<
 /**
  * Loads \<i\><voName>\</i\> information from the constant pool,
- * filtering by <attribute.nameLowercased>.
- * @param <attribute.nameLowercased> the <attribute.name> value to filter.
+ * filtering by <primaryKey:{attribute|<attribute.nameLowercased>}; separaror=", ">.
+ <primaryKey:{attribute|<attribute_javadoc(name=attribute.nameLowercased)>}; separator="\n">
  * @return the {@link <voName>} instance.
  */
 <nullable()>
@@ -1172,7 +1172,7 @@ find_constant_by_pk(primaryKey, voName) ::= <<
 /**
  * Loads \<i><voName>\</i> information from the constant pool,
  * filtering by the primary key.
- <attribute:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ <primaryKey:{attribute|<attribute_javadoc(name=attribute.nameLowercased)>}; separator="\n">
  * @return the {@link <voName>} instance.
  */
 <nullable()>

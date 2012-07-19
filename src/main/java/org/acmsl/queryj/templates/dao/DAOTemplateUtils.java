@@ -251,23 +251,22 @@ public class DAOTemplateUtils
     public boolean matches(
         @NotNull final String tableName, @NotNull final String daoId)
     {
-        return matches(tableName, daoId, CustomResultUtils.getInstance());
+        return matches(tableName, daoId, MetadataUtils.getInstance());
     }
 
     /**
      * Checks whether given table name matches the DAO id.
      * @param tableName the table name.
      * @param daoId the DAO id.
-     * @param customResultUtils the <code>CustomResultUtils</code>
-     * instance.
+     * @param metadataUtils the {@link MetadataUtils} instance.
      * @return <code>true</code> if they match.
      */
     protected boolean matches(
         @NotNull final String tableName,
         @NotNull final String daoId,
-        @NotNull final CustomResultUtils customResultUtils)
+        @NotNull final MetadataUtils metadataUtils)
     {
-        return customResultUtils.matches(tableName, daoId);
+        return metadataUtils.matches(tableName, daoId);
     }
 
     /**
@@ -279,7 +278,7 @@ public class DAOTemplateUtils
     @SuppressWarnings("unused")
     @NotNull
     public List<Sql> retrieveSqlElementsByType(
-        final CustomSqlProvider customSqlProvider,
+        @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final String type)
     {
         return

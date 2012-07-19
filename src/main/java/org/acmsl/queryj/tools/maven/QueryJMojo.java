@@ -1598,6 +1598,11 @@ public class QueryJMojo
 //            result = Runtime.getRuntime().availableProcessors();
 //        }
 
+        if (result == 1)
+        {
+            result = Runtime.getRuntime().availableProcessors();
+        }
+
         return result;
     }
 
