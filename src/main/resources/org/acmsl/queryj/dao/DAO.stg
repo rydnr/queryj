@@ -400,6 +400,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <endif>
 
+
      /**
       * The SQL to delete.
       */
@@ -414,6 +415,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
 <table.attributes:{attr |
         +   "<attr.nameUppercased> = ?}; separator=" AND \"\n">";
 <endif>
+
 
       /**
        * The SQL to insert.
@@ -439,6 +441,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
 <table.attributes:{attr|
         +   "?}; separator=", \"\n"> "
 <endif>
+
         + ")";
 
     <table.foreignKeys:delete_by_fk_sql(foreignKey=it); separator="\n\n">
@@ -496,6 +499,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
 <if(table.static)>
     <find_constant_by(primaryKey=table.primaryKey,voName=table.voName); separator="\n\n">
 <endif>
+
 
     /**
      * Retrieves {@link <table.voName>} information
@@ -642,6 +646,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
 <else>
     <defaultInsert(table=table, parent=parent)>
 <endif>
+
 
     <table.allExternallyManagedAttributes:attribute_resultset_extractor_class(
       table=table,
@@ -1319,7 +1324,7 @@ fk_delete_query(foreignKey) ::= <<
  @param foreignKey the foreign key.
 !>
 /**
- * The SQL to delete <foreignKey>-associated entities.
+ * The SQL to delete <foreignKey.name>-associated entities.
  */
 public static final String _DELETE_BY_<foreignKey.nameUppercased>_SQL =
       "DELETE "
@@ -2167,9 +2172,9 @@ delete_by_fk_sql(foreignKey) ::= <<
  @param foreignKey the foreign key.
 !>
  /**
-  * The SQL to delete by <foreignKey>.
+  * The SQL to delete by <foreignKey.name>.
   */
-public static final String DELETE_BY_<foreignKey>_SQL =
+public static final String DELETE_BY_<foreignKey.name>_SQL =
     "DELETE FROM <table.nameUppercased> "
     + "WHERE "
 <foreignKey.attributes:{attr|
