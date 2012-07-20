@@ -76,7 +76,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * The key for storing the foreign keys in the parameter map.
      */
     public static final String FOREIGN_KEYS = "..FOreignKeY:::";
-    
+
     /**
      * Creates a <code>BasePerForeignKeyTemplateBuildHandler</code> instance.
      */
@@ -304,5 +304,16 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         }
 
         return result;
+    }
+
+    /**
+     * Displays useful information about this handler.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "Builder:" + getClass().getSimpleName();
     }
 }

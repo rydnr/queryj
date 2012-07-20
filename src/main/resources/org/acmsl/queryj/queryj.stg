@@ -1111,19 +1111,19 @@ custom_select_result_declaration(sql, result, table) ::= <<
  !>
 <if(table.voDecorated)>
 // table decorated
-<  if(result.multiple)>
+<if(result.multiple)>
 // result -> multiple
 List\<<sql.resultClass>Decorator\> result = null;
-<  else>
+<else>
 // result -> simple
 <sql.resultClass> result = null;
-<  endif>
+<endif>
 <else>
-<  if(result.multiple)>
+<if(result.multiple)>
 List\<<sql.resultClass>\> result = null;
-<  else>
+<else>
 <sql.resultClass> result = null;
-<  endif>
+<endif>
 <endif>
 
 >>

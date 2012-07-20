@@ -394,4 +394,15 @@ public abstract class BasePerRepositoryTemplateBuildHandler
 
         return result;
     }
+
+    /**
+     * Displays useful information about this handler.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "Builder:" + getClass().getSimpleName();
+    }
 }

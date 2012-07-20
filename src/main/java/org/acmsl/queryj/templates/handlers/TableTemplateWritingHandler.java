@@ -71,11 +71,12 @@ public class TableTemplateWritingHandler
      * Writes the templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param threadCount the number of threads.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
     @Override
     protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final String engineName)
+        @NotNull final Map parameters, @NotNull final String engineName, final int threadCount)
         throws QueryJBuildException
     {
         // Disabled

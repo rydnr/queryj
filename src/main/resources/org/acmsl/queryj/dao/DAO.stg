@@ -2169,11 +2169,11 @@ delete_by_fk_sql(foreignKey) ::= <<
  /**
   * The SQL to delete by <foreignKey>.
   */
-//public static final String DELETE_BY_<foreignKey>_SQL =
-//    "DELETE FROM <table.nameUppercased> "
-//    + "WHERE "
-//<foreignKey.attributes:{attr|
-//    + "<attr.nameUppercased> = ? "}; separator="\n    + \" AND \"">;
+public static final String DELETE_BY_<foreignKey>_SQL =
+    "DELETE FROM <table.nameUppercased> "
+    + "WHERE "
+<foreignKey.attributes:{attr|
+    + "<attr.nameUppercased> = ? "}; separator="\n    + \" AND \"">;
 >>
 
 find_by_pk_sql_join(table, parent) ::= <<

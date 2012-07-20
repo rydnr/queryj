@@ -88,8 +88,7 @@ public abstract class BasePerTableTemplateBuildHandler
     /**
      * Creates a {@link BasePerTableTemplateBuildHandler} instance.
      */
-    public BasePerTableTemplateBuildHandler() {}
-
+    protected BasePerTableTemplateBuildHandler() {}
     /**
      * Handles given information.
      *
@@ -97,7 +96,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
@@ -501,5 +499,16 @@ public abstract class BasePerTableTemplateBuildHandler
     protected Object buildStaticContentKey(@NotNull final String tableName)
     {
         return "..static-contents-for-table-" + tableName + "..";
+    }
+
+    /**
+     * Displays useful information about this handler.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "Builder:" + getClass().getSimpleName();
     }
 }

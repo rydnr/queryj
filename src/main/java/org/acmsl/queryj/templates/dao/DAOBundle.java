@@ -61,6 +61,7 @@ import org.acmsl.queryj.templates.dao.handlers.ResultSetExtractorTemplateHandler
 import org.acmsl.queryj.templates.dao.handlers.StatisticsProviderTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.ThreadLocalBagTemplateHandlerBundle;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Bundles the complete set of handlers related to DAO templates.
@@ -110,5 +111,16 @@ public class DAOBundle
 //                new DataSourceTransactionTokenTemplateHandlerBundle(),
                 new StatisticsProviderTemplateHandlerBundle()
             });
+    }
+
+    /**
+     * Displays information about this bundle.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "(DAO bundle)";
     }
 }

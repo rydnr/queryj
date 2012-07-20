@@ -545,7 +545,8 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return <code>true</code> in such case.
      */
-    protected boolean retrieveCaching(final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected boolean retrieveCaching(@NotNull final Map parameters)
     {
         return (Boolean) parameters.get(ParameterValidationHandler.CACHING);
     }
@@ -555,8 +556,21 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the number of threads to use.
      */
-    protected int retrieveThreadCount(final Map parameters)
+    @SuppressWarnings("unchecked")
+    protected int retrieveThreadCount(@NotNull final Map parameters)
     {
         return (Integer) parameters.get(ParameterValidationHandler.THREAD_COUNT);
     }
+
+    /**
+     * Displays the role of this handler.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return getClass().getSimpleName();
+    }
+
 }

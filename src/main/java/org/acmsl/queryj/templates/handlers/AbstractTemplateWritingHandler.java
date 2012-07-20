@@ -107,7 +107,10 @@ public abstract class AbstractTemplateWritingHandler
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        writeTemplates(parameters, retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)));
+        writeTemplates(
+            parameters,
+            retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)),
+            retrieveThreadCount(parameters));
 
         return false;
     }
@@ -116,19 +119,33 @@ public abstract class AbstractTemplateWritingHandler
      * Writes the templates.
      * @param parameters the parameters.
      * @param engineName the engine name.
+     * @param threadCount the thread count.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
     protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final String engineName)
+        @NotNull final Map parameters, @NotNull final String engineName, final int threadCount)
       throws  QueryJBuildException
     {
-        writeTemplatesMultithread(
-            retrieveTemplates(parameters),
-            engineName,
-            parameters,
-            retrieveCharset(parameters),
-            retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
-            retrieveThreadCount(parameters));
+        if (threadCount > 1)
+        {
+            writeTemplatesMultithread(
+                retrieveTemplates(parameters),
+                engineName,
+                parameters,
+                retrieveCharset(parameters),
+                retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
+                retrieveThreadCount(parameters));
+        }
+        else
+        {
+            writeTemplatesSequentially(
+                retrieveTemplates(parameters),
+                engineName,
+                parameters,
+                retrieveCharset(parameters),
+                retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
+                retrieveThreadCount(parameters));
+        }
     }
 
     /**

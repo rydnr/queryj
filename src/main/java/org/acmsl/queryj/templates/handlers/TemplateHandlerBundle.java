@@ -70,8 +70,6 @@ public class TemplateHandlerBundle
      * Builds a bundle with given handlers.
      * @param buildHandler the template build handler.
      * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
      */
     public TemplateHandlerBundle(
         @NotNull final TemplateBuildHandler buildHandler,
@@ -87,7 +85,6 @@ public class TemplateHandlerBundle
     /**
      * Builds a bundle with given ones.
      * @param bundles the first bundle.
-     * @precondition bundles != null
      */
     public TemplateHandlerBundle(@Nullable final TemplateHandlerBundle[] bundles)
     {

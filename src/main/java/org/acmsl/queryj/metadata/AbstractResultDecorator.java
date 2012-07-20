@@ -668,6 +668,15 @@ public abstract class AbstractResultDecorator
                 result = capitalize(getSingular(t_strTable.toLowerCase(Locale.US)), DecorationUtils.getInstance());
             }
         }
+        else
+        {
+            String[] tokens = result.split("\\.");
+
+            if (tokens.length > 0)
+            {
+                result = tokens[tokens.length - 1];
+            }
+        }
 
         return result;
     }

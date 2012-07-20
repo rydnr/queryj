@@ -121,4 +121,15 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
         @NotNull final String tableName,
         final boolean subFolders,
         @NotNull final PackageUtils packageUtils);
+
+    /**
+     * Displays useful information about this handler.
+     * @return such information.
+     */
+    @NotNull
+    @Override
+    public String toString()
+    {
+        return "Writer:" + getClass().getSimpleName();
+    }
 }
