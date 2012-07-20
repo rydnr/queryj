@@ -57,6 +57,8 @@ import java.util.Iterator;
 /*
  * Importing some Apache Commons Logging classes.
  */
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -113,6 +115,7 @@ public class CompositeQueryJCommandHandler
      * Specifies the handler collection.
      * @param collection such collection.
      */
+    @SuppressWarnings("unused")
     protected void setHandlerCollection(
         @NotNull final Collection<QueryJCommandHandler> collection)
     {
@@ -289,5 +292,34 @@ public class CompositeQueryJCommandHandler
         }
 
         return result;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder().append(this.m__cHandlers).toHashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj)
+    {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (getClass() != obj.getClass())
+        {
+            return false;
+        }
+        final CompositeQueryJCommandHandler other = (CompositeQueryJCommandHandler) obj;
+        return new EqualsBuilder().append(this.m__cHandlers, other.m__cHandlers).isEquals();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "CompositeQueryJCommandHandler{" +
+               "handlers=" + m__cHandlers +
+               '}';
     }
 }

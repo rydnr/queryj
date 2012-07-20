@@ -570,16 +570,3 @@ preparedStatement.set<attr.objectType>(<if(attr.nullable)>
 <endif>
 <endif>
 >>
-
-Date_to_primitive(value) ::= <<
-<!
- Don't try to convert the Date to anything.
- @param value the attribute.
-!>
-<if(value.date)>
-new Date(<value.nameLowercased>.getTime())
-<else>
-<Object_to_primitive(value=value)>
-<endif>
->>
-

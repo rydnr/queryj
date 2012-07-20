@@ -1350,10 +1350,6 @@ primitive_to_Timestamp_value(value) ::= <<
 >>
 
 Date_to_primitive(value) ::= <<
-<!
- Don't try to convert the Date to anything.
- @param value the attribute.
-!>
 <if(value.date)>
 new Date(<value.nameLowercased>.getTime())
 <else>

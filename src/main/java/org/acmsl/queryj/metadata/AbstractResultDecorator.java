@@ -655,15 +655,18 @@ public abstract class AbstractResultDecorator
         @NotNull final Result customResult,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull CustomResultUtils customResultUtils)
+        @NotNull final CustomResultUtils customResultUtils)
     {
         String result = customResult.getClassValue();
 
-        String t_strTable = customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager);
-
-        if (t_strTable != null)
+        if (customResult.getPropertyRefs().size() == 0)
         {
-            result = capitalize(getSingular(t_strTable.toLowerCase(Locale.US)), DecorationUtils.getInstance());
+            String t_strTable = customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager);
+
+            if (t_strTable != null)
+            {
+                result = capitalize(getSingular(t_strTable.toLowerCase(Locale.US)), DecorationUtils.getInstance());
+            }
         }
 
         return result;

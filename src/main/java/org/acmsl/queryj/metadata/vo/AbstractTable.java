@@ -1,8 +1,7 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+    Copyright (C) 2002-today Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -452,5 +451,20 @@ public abstract class AbstractTable
         }
         final AbstractTable other = (AbstractTable) obj;
         return new EqualsBuilder().append(this.m__strName, other.m__strName).isEquals();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractTable{" +
+               "m__strName='" + m__strName + '\'' +
+               ", m__strComment='" + m__strComment + '\'' +
+               ", m__lPrimaryKey=" + m__lPrimaryKey +
+               ", m__lAttributes=" + m__lAttributes +
+               ", m__ParentTable=" + m__ParentTable +
+               ", m__lForeignKeys=" + m__lForeignKeys +
+               ", m__bStatic=" + m__bStatic +
+               ", m__bVoDecorated=" + m__bVoDecorated +
+               '}';
     }
 }

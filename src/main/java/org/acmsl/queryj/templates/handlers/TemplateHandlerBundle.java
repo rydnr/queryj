@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -124,7 +123,7 @@ public class TemplateHandlerBundle
      * Adds a new handler to the collection.
      * @param handler the new handler to add.
      */
-    private void immutableAddHandler(final TemplateHandler handler)
+    protected final void immutableAddHandler(@NotNull final TemplateHandler handler)
     {
         super.addHandler(handler);
     }
@@ -220,4 +219,6 @@ public class TemplateHandlerBundle
 
         return result;
     }
+
+
 }
