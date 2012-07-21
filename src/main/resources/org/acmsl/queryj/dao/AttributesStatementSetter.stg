@@ -131,6 +131,7 @@ classImpl(table, parent) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/AttributesStatementSetter.stg")>
 */
+<class_annotations()>
 public class <table.voName>AttributesStatementSetter
     implements  PreparedStatementSetter
 {

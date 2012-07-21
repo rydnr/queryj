@@ -130,6 +130,7 @@ class() ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/BasePreparedStatement.stg")>
  */
+<class_annotations()>
 public class <repository.capitalized>PreparedStatementCreator
     implements  PreparedStatementCreator
 {

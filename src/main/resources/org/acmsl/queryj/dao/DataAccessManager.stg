@@ -107,6 +107,7 @@ class(input) ::= <<
     ]:{line |<line>}; separator="\n * ")>
 <class_common_javadoc(template="org/acmsl/queryj/dao/DataAccessManager.stg")>
  */
+<class_annotations()>
 public class <repository.capitalized>DataAccessManager
 {
     <tables:dao_attribute_declaration(table=it); separator="\n\n">

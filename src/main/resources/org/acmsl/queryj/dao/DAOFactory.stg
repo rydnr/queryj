@@ -166,6 +166,7 @@ class(table) ::= <<
     ]:{ line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
+<class_annotations()>
 public class <engine_name><table.voName>DAOFactory
     extends  <table.voName>DAOFactory
 {

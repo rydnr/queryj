@@ -133,10 +133,9 @@ class_impl(input, table, parent) ::= <<
       first_line_description(tableName=input.table_name),
       second_line_description(tableName=input.table_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
- * @since <input.timestamp>
+<class_common_javadoc(template="org/acmsl/queryj/sql/Table.stg")>
  */
+<class_annotations()>
 public class <input.table_name_capitalized>Table
 <if(parent)>
     extends  <parent.nameCapitalized>Table

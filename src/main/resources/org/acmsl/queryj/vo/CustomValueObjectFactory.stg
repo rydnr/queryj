@@ -99,6 +99,7 @@ class(result) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/CustomValueObjectFactory.stg")>
  */
+<class_annotations()>
 public class <result.voName>ValueObjectFactory
 {
     /**

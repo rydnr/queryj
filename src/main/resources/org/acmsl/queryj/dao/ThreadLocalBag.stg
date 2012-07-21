@@ -97,6 +97,7 @@ class() ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/ThreadLocalBag.stg")>
  */
+<class_annotations()>
 public class <repository.capitalized>ThreadLocalBag
 {
     /**

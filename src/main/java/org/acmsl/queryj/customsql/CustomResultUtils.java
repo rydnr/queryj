@@ -99,6 +99,19 @@ public class CustomResultUtils
     private static final Map<String,String> CACHE = new HashMap<String,String>();
 
     /**
+     * Checks whether given {@link Result} is implicit or not.
+     * @param customResult the {@link Result} to process.
+     * @return <code>true</code> in such case.
+     */
+    public boolean isImplicit(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
+    {
+        return retrieveTable(customResult, customSqlProvider, metadataManager) != null;
+    }
+
+    /**
      * Singleton implemented to avoid the double-checked locking.
      */
     private static class CustomResultUtilsSingletonContainer

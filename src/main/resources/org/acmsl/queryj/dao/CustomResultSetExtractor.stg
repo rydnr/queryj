@@ -153,6 +153,7 @@ class(result) ::= <<
     ]:{line |<line>}; separator="\n * ")>
 <class_common_javadoc(template="org/acmsl/queryj/dao/CustomResultSetExtractor.stg")>
  */
+<class_annotations()>
 public class <result.idCapitalized>Extractor
     extends  <repository.capitalized>ResultSetExtractor
 {

@@ -121,10 +121,9 @@ class(input) ::= <<
       first_line_description(repository=input.tr_name),
       second_line_description(repository=input.tr_name)
     ]:{line |<line>}; separator="\n * ">
- * @author \<a href="http://www.acm-sl.org/queryj"\>QueryJ\</a\>
- * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
- * @since <input.timestamp>
+<class_common_javadoc(template="org/acmsl/queryj/dao/KeywordRepository.stg")>
  */
+<class_annotations()>
 public class <input.tr_name_capitalized>KeywordRepository
 {
     /**

@@ -156,6 +156,7 @@ class(input, table) ::= <<
  * @version <"$">Revision: $ (<"$">Author: $ at <"$">Date: $)
  * @since <input.timestamp>
  */
+<class_annotations()>
 public class Xml<table.voName>DAOFactory
     extends  <table.voName>DAOFactory
 {

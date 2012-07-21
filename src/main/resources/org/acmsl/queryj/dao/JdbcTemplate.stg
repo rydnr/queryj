@@ -200,6 +200,7 @@ class() ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/JdbcTemplate.stg")>
  */
+<class_annotations()>
 public class <repository.capitalized>JdbcTemplate
     extends  JdbcTemplate
 {

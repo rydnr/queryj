@@ -161,6 +161,7 @@ class(foreignKey) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/FkStatementSetter.stg")>
  */
+<class_annotations()>
 public class <foreignKey.source.voName>By<foreignKey.target.voName>StatementSetter
     implements  PreparedStatementSetter
 {

@@ -1413,3 +1413,7 @@ import(type) ::= <<
 !>
 import <type>;
 >>
+
+class_annotations() ::= <<
+@org.checkthread.annotations.ThreadSafe
+>>

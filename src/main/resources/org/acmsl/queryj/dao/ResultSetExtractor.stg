@@ -144,6 +144,7 @@ classImpl(table, parent) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/ResultSetExtractor.stg")>
  */
+<class_annotations()>
 public class <table.voName>ResultSetExtractor
     extends     <repository.capitalized>ResultSetExtractor
     implements  ResultSetExtractor

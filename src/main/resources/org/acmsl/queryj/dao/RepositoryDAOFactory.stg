@@ -145,6 +145,7 @@ class() ::= <<
     ]:{ line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/RepositoryDAOFactory.stg")>
  */
+<class_annotations()>
 public class <engine_name><repository.capitalized>DAOFactory
     extends  <repository.capitalized>DAOFactory
 {

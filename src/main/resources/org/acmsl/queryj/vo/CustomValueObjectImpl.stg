@@ -96,6 +96,7 @@ class(result) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc(template="org/acmsl/queryj/dao/CustomValueObjectImpl.stg")>
  */
+<class_annotations()>
 public class <result.voName>ValueObject
     extends  Abstract<result.voName>ValueObject
 {

@@ -132,6 +132,7 @@ class() ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
+<class_annotations()>
 public class <repository.capitalized>DAOChooser
 {
     /**

@@ -107,6 +107,7 @@ class_impl(table, parent) ::= <<
     ]:{line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  */
+<class_annotations()>
 public class <table.voName>ValueObject
     extends  Abstract<table.voName>ValueObject
 {

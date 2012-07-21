@@ -115,8 +115,9 @@ class() ::= <<
       second_line_description(tableName=table_name),
       third_line_description(tableName=table_name)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/PkStatementSetter.stg")>
  */
+<class_annotations()>
 public class <table.voName>PkStatementSetter
     implements  PreparedStatementSetter
 {
