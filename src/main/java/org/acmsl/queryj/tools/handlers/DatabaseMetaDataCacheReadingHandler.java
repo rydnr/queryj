@@ -64,10 +64,16 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Checks whether we can use the cached metadata or not.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DatabaseMetaDataCacheReadingHandler
     extends  AbstractDatabaseMetaDataCacheHandler
 {

@@ -51,11 +51,17 @@ import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * <code>LogFactory</code> implementation that uses a
  * cached Ant-based <code>Log</code> instance if pre-cached.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class QueryJLogFactory
     extends  LogFactory
 {

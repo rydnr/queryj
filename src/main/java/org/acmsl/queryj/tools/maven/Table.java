@@ -39,11 +39,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models a table.
  * @author <a href="mailto:jose.juan@ventura24.es">Jose Juan</a>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class Table
 {
     /**

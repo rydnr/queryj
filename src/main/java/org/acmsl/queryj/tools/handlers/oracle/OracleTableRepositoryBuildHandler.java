@@ -38,10 +38,16 @@ package org.acmsl.queryj.tools.handlers.oracle;
  */
 import org.acmsl.queryj.templates.handlers.TableRepositoryTemplateBuildHandler;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds an Oracle-specific table repository.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class OracleTableRepositoryBuildHandler
     extends  TableRepositoryTemplateBuildHandler
 {

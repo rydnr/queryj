@@ -44,11 +44,17 @@ import org.acmsl.commons.patterns.Singleton;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Manages the association between database engines and template
  * factory classes.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class TemplateMappingManager
     implements  Manager,
                 Singleton

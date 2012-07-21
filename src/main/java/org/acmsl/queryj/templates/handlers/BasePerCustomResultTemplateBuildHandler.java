@@ -51,10 +51,15 @@ import org.acmsl.queryj.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
 
 /*
- * Importing some ACM-SL classes.
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /*
  * Importing some JDK classes.
@@ -68,6 +73,7 @@ import java.util.Map;
  * Builds all templates to generate sources for each custom result.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public abstract class BasePerCustomResultTemplateBuildHandler
     <T extends BasePerCustomResultTemplate,
      TF extends BasePerCustomResultTemplateFactory<T>>
@@ -93,6 +99,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @throws QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @ThreadSafe
     @Override
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
@@ -120,6 +127,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
+    @ThreadSafe
     protected void buildTemplates(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -165,6 +173,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @throws QueryJBuildException if the templates cannot be built.
      */
+    @ThreadSafe
     protected void buildTemplates(
         @NotNull final Map parameters,
         @NotNull final MetadataManager metadataManager,
@@ -238,6 +247,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @return <code>true</code> in such case.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected boolean isGenerationAllowedForResult(
         @NotNull final Result customResult,
@@ -269,6 +279,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition customResult != null
      * @precondition parameters != null
      */
+    @ThreadSafe
     protected String retrievePackage(
         @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -297,6 +308,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param packageUtils the {@link PackageUtils} instance.
      * @return the package name.
      */
+    @ThreadSafe
     protected abstract String retrievePackage(
         @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -325,6 +337,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @precondition parameters != null
      * @precondition customSqlProvider != null
      */
+    @ThreadSafe
     @NotNull
     @SuppressWarnings("unchecked")
     protected List<Result> retrieveCustomResults(
@@ -349,6 +362,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param results the original results.
      * @return the list without duplicates (i.e. {@link Result} differing only if they're single or multiple).
      */
+    @ThreadSafe
     @NotNull
     protected List<Result> fixDuplicated(@NotNull final List<Result> results)
     {
@@ -374,6 +388,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param customSqlProvider the custom RESULT provider.
      * @return such result elements.
      */
+    @ThreadSafe
     @NotNull
     protected List<Result> retrieveCustomResultElements(
         @NotNull final CustomSqlProvider customSqlProvider)
@@ -386,6 +401,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param resultDAO the {@link SqlResultDAO} instance.
      * @return such result elements.
      */
+    @ThreadSafe
     @NotNull
     protected List<Result> retrieveCustomResultElements(
         @NotNull final SqlResultDAO resultDAO)
@@ -398,6 +414,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * Displays useful information about this handler.
      * @return such information.
      */
+    @ThreadSafe
     @NotNull
     @Override
     public String toString()

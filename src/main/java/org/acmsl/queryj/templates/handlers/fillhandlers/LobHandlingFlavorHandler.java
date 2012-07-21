@@ -47,11 +47,17 @@ import org.acmsl.queryj.tools.QueryJBuildException;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves 'lob_handling_flavor' placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/19
  */
+@ThreadSafe
 public class LobHandlingFlavorHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {

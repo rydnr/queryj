@@ -64,11 +64,17 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * {@link SqlXmlParser}-backed {@link SqlResultDAO} implementation.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
+@ThreadSafe
 public class SqlXmlParserResultDAO
     extends AbstractSqlXmlParserDAO
     implements SqlResultDAO

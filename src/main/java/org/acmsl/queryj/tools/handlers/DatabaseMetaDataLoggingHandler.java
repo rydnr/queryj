@@ -62,10 +62,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Prints trace messages with some database metadata information.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DatabaseMetaDataLoggingHandler
     extends  AbstractQueryJCommandHandler
 {

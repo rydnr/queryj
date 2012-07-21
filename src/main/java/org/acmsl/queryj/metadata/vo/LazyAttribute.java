@@ -50,12 +50,18 @@ import org.acmsl.queryj.metadata.MetadataTypeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * <code>Attribute</code> implementation which retrieves its information
  * lazily.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  */
+@ThreadSafe
 public class LazyAttribute
     extends  AbstractAttribute
 {

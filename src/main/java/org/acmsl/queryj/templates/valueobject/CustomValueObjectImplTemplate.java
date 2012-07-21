@@ -51,11 +51,17 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create CustomValueObjectImpl implementations for each
  * custom query requiring so.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomValueObjectImplTemplate
     extends  CustomValueObjectTemplate
 {

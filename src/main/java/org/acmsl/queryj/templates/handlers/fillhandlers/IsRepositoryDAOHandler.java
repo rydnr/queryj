@@ -49,12 +49,18 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to resolve "is_repository_DAO" placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class IsRepositoryDAOHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
 {

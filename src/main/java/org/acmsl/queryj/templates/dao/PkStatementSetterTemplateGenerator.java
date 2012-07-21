@@ -55,10 +55,16 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate PkStatementSetter templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class PkStatementSetterTemplateGenerator
     extends AbstractTemplateGenerator<PkStatementSetterTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateGenerator<PkStatementSetterTemplate, BasePerTableTemplateContext>

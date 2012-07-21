@@ -48,11 +48,17 @@ import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * FillHandler to resolve "result" placeholders, for per-custom-result templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/05
  */
+@ThreadSafe
 public class CustomResultHandler
     extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, ResultDecorator>
 {

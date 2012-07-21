@@ -50,11 +50,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.io.File;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides some grammar rules for converting plural and singular
  * forms (using english rules by default).
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class SingularPluralFormConverter
     extends  EnglishGrammarUtils
 {

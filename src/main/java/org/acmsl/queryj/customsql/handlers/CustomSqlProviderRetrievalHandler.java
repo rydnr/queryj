@@ -59,10 +59,16 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Retrieves the CustomSqlProvider instance.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomSqlProviderRetrievalHandler
     extends  AbstractQueryJCommandHandler
 {

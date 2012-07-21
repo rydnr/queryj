@@ -57,11 +57,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides some useful methods for ValueObject-related templates.
  * @author <a href="mailto:jose.sanleandro@ventura24.es">chous</a>
  * @since 05/05/2012 16:26
  */
+@ThreadSafe
 public class ValueObjectUtils
     implements Singleton
 {

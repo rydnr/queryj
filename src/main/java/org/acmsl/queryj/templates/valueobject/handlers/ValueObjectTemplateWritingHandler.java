@@ -56,10 +56,16 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Writes <code>ValueObjectTemplate</code> instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ValueObjectTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
                  <ValueObjectTemplate, ValueObjectTemplateGenerator, BasePerTableTemplateContext>

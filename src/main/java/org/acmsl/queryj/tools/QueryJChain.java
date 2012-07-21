@@ -85,10 +85,16 @@ import org.apache.commons.logging.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Defines the steps performed by QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class QueryJChain
     extends org.acmsl.queryj.AbstractQueryJChain
     implements org.acmsl.queryj.QueryJSettings

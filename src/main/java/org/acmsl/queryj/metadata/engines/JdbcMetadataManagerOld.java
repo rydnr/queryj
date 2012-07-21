@@ -53,10 +53,16 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Manages the information provided by database metadata, using plain JDBC.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class JdbcMetadataManagerOld
     extends AbstractJdbcMetadataManagerOld
     implements MetadataManagerOld

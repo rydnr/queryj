@@ -48,12 +48,18 @@ import org.acmsl.queryj.templates.handlers.fillhandlers.TemplateContextFillHandl
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Adapts fill handlers to be used as regular handlers in a chain-of-responsibility
  * process flow.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
+@ThreadSafe
 public class TemplateContextFillAdapterHandler<C extends TemplateContext, F extends TemplateContextFillHandler<C,P>, P>
     extends FillAdapterHandler
 {

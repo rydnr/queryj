@@ -54,11 +54,17 @@ import org.acmsl.commons.patterns.Command;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Wraps a {@link FillHandler} to make its placeholders give empty strings.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/12
  */
+@ThreadSafe
 public class EmptyFillAdapterHandler
     extends FillAdapterHandler
 {

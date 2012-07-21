@@ -62,11 +62,17 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create CustomValueObject implementations for each
  * custom query requiring so.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomValueObjectTemplate
     extends   BasePerCustomResultTemplate<BasePerCustomResultTemplateContext>
 {

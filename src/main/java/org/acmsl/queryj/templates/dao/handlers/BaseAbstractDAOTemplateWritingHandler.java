@@ -55,10 +55,16 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Writes base abstract DAO templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseAbstractDAOTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
                  <BaseAbstractDAOTemplate, BaseAbstractDAOTemplateGenerator, BasePerTableTemplateContext>

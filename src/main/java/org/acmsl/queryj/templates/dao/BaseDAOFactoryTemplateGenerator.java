@@ -55,10 +55,16 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseDAOFactoryTemplateGenerator
     extends AbstractTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateGenerator<BaseDAOFactoryTemplate, BasePerTableTemplateContext>

@@ -56,12 +56,18 @@ import org.jetbrains.annotations.NotNull;
  * Importing some JetBrains annotations.
  */
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "dao_factory_class_name" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/26
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class DAOFactoryClassNameHandler
     extends AbstractDecoratedStringHandler<BasePerTableTemplateContext>
 {

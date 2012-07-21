@@ -48,12 +48,18 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to resolve "DAO_subpackage_name" placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class DAOSubpackageNameHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, String>
 {

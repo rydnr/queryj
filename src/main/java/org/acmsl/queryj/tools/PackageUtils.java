@@ -49,11 +49,17 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides some useful methods for retrieving package information about
  * the generated code.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class PackageUtils
     implements  Singleton,
                 Utils

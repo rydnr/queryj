@@ -43,12 +43,18 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Bundles a pair of BasePreparedStatementCreator template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/01 (recovered)
  */
+@ThreadSafe
 public class BasePreparedStatementCreatorTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {

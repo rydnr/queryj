@@ -42,10 +42,16 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models foreign keys.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ForeignKeyValueObject
     extends AbstractForeignKey
 {

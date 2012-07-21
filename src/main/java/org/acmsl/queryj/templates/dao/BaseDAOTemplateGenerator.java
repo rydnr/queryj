@@ -52,11 +52,17 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate base DAO implementations according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseDAOTemplateGenerator
     extends AbstractTemplateGenerator<BaseDAOTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateGenerator<BaseDAOTemplate, BasePerTableTemplateContext>

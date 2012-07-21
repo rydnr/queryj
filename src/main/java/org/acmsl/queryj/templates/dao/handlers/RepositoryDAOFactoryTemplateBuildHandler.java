@@ -59,10 +59,16 @@ import java.util.Map;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds the repository DAO factory implementation if requested.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class RepositoryDAOFactoryTemplateBuildHandler
     extends BasePerRepositoryTemplateBuildHandler<
     RepositoryDAOFactoryTemplate, RepositoryDAOFactoryTemplateFactory, BasePerRepositoryTemplateContext>

@@ -55,10 +55,16 @@ import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate custom ResultSetExtractor templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomResultSetExtractorTemplateGenerator
     extends  AbstractTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>
     implements BasePerCustomResultTemplateGenerator<CustomResultSetExtractorTemplate, BasePerCustomResultTemplateContext>

@@ -51,12 +51,18 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate BasePreparedStatementCreator implementations.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  * @since 2012/07/01 (recovered)
  */
+@ThreadSafe
 public class BasePreparedStatementCreatorTemplateGenerator
     extends AbstractTemplateGenerator<BasePreparedStatementCreatorTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<BasePreparedStatementCreatorTemplate, BasePerRepositoryTemplateContext>

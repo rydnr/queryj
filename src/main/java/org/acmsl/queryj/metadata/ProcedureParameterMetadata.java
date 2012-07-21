@@ -43,10 +43,16 @@ package org.acmsl.queryj.metadata;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Represents procedure parameter metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ProcedureParameterMetadata
     extends  ProcedureMetadata
 {

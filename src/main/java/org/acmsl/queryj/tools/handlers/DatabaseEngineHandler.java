@@ -44,11 +44,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Defines which classes take part on the process depending on
  * the database engine.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DatabaseEngineHandler
     extends  AbstractQueryJCommandHandler
 {

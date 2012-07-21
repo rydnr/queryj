@@ -42,6 +42,11 @@ import org.jetbrains.annotations.Nullable;
  * Importing JDK classes.
  */
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models &lt;statement-flags&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
@@ -59,6 +64,7 @@ import org.jetbrains.annotations.Nullable;
  *   moreresults (CLOSE_CURRENT_RESULT | KEEP_CURRENT_RESULT | CLOSE_ALL_RESULTS) #IMPLIED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class StatementFlagsElement
     extends  AbstractIdElement
     implements StatementFlags

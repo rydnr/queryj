@@ -52,12 +52,18 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.templates.BasePerCustomSqlTemplate per-custom-sql templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/07/07
  */
+@ThreadSafe
 public class BasePerCustomSqlFillTemplateChain
     extends FillTemplateChain<BasePerCustomSqlTemplateContext>
 {

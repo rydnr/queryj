@@ -57,12 +57,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Adds additional custom-sql information to avoid
  * the need to manually specify elements derived from the model.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class CustomSqlProvisioningHandler
     extends  AbstractQueryJCommandHandler
 {

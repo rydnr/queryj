@@ -47,10 +47,16 @@ import org.acmsl.queryj.Table;
     import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Represents the USER_TABLES table in the persistence domain.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class OracleUserTablesTable
     extends Table
     implements  Singleton

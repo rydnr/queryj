@@ -52,11 +52,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Contains all information inside a "field" XML element in Ant scripts,
  * under QueryJ task.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class AntFieldElement
     extends  AbstractField
     implements  DynamicConfigurator

@@ -46,12 +46,18 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Calendar;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves the copyright years placeholder.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class CopyrightYearsHandler
     extends AbstractFillHandler<Integer[]>
     implements NonRelevantFillHandler

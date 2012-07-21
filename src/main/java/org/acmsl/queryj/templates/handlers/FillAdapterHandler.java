@@ -48,12 +48,18 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Adapts non-{@link org.acmsl.queryj.templates.TemplateContext}-specific
  * fill handlers to be used within QueryJ Chain-of-Responsibility processes.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
+@ThreadSafe
 public class FillAdapterHandler<F extends FillHandler<P>, P>
     implements QueryJCommandHandler
 {

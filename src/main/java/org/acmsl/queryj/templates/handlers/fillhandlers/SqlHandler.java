@@ -46,12 +46,18 @@ import org.acmsl.queryj.templates.BasePerCustomSqlTemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to resolve "sql" placeholders using {@link BasePerCustomSqlTemplateContext contexts}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class SqlHandler
     extends AbstractTemplateContextFillHandler<BasePerCustomSqlTemplateContext,Sql>
 {

@@ -55,10 +55,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds the repository DAO interface if requested.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseRepositoryDAOTemplateBuildHandler
     extends BasePerRepositoryTemplateBuildHandler
                 <BaseRepositoryDAOTemplate, BaseRepositoryDAOTemplateFactory, BasePerRepositoryTemplateContext>

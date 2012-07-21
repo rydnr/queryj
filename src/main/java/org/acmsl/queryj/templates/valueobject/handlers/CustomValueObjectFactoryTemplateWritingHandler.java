@@ -58,10 +58,16 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Writes ValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomValueObjectFactoryTemplateWritingHandler
     extends BasePerCustomResultTemplateWritingHandler
                 <CustomValueObjectFactoryTemplate,

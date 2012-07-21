@@ -60,12 +60,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "property_type_imports" placeholders, to avoid declaring
  * unused imports.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/06/20
  */
+@ThreadSafe
 public class CustomResultTypeImportsHandler
     extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, List<String>>
 {

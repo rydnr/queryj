@@ -60,11 +60,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds a DAO listener implementations if requested.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
+@ThreadSafe
 public class DAOListenerImplTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <DAOListenerImplTemplate, DAOListenerImplTemplateFactory, BasePerRepositoryTemplateContext>

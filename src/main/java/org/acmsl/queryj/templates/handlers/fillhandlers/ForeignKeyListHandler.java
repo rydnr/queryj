@@ -53,12 +53,18 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
 * Resolves "foreign_keys placeholders.
 * @author <a href="mailto:chous@acm-sl.org">chous@acm-sl.org</a>
 * @since 2012/06/03
 */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class ForeignKeyListHandler
     extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<ForeignKey>>
 {

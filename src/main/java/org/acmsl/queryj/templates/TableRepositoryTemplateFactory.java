@@ -55,10 +55,16 @@ import java.util.List;
  * Importing some JDK classes.
  */
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class TableRepositoryTemplateFactory
     implements  BasePerRepositoryTemplateFactory<TableRepositoryTemplate>,
                 Singleton

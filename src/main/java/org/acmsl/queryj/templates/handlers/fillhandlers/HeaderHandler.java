@@ -46,12 +46,18 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Fills "header" placeholder in templates.
  * @author <a href="mailto:jose.sanleandro@ventura24.es">Jose San Leandro</a>
  * @since 2012/05/23
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class HeaderHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
     implements NonRelevantFillHandler

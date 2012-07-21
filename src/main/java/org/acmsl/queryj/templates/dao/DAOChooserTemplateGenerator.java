@@ -46,11 +46,17 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate DAOChooser instances according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DAOChooserTemplateGenerator
     extends AbstractTemplateGenerator<DAOChooserTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<DAOChooserTemplate, BasePerRepositoryTemplateContext>

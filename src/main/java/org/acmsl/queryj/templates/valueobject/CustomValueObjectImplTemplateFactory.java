@@ -53,11 +53,17 @@ import org.acmsl.commons.patterns.Singleton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create {@link CustomValueObjectImplTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2012/07/09
  */
+@ThreadSafe
 public class CustomValueObjectImplTemplateFactory
     implements BasePerCustomResultTemplateFactory<CustomValueObjectImplTemplate>,
                 Singleton

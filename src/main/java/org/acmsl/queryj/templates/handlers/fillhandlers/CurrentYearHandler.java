@@ -47,11 +47,17 @@ import org.jetbrains.annotations.NotNull;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Used to fill the 'current_year' placeholder in templates.
  * @author <a href="mailto:jose@acm-sl.org">Jose San Leandro</a>
  * @since 2012/05/13
  */
+@ThreadSafe
 public class CurrentYearHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler

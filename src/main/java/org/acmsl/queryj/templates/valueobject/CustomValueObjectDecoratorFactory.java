@@ -48,10 +48,16 @@ import org.acmsl.queryj.metadata.PropertyDecorator;
 import org.acmsl.commons.patterns.Singleton;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides custom decorators for the CustomValueObject template.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomValueObjectDecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton

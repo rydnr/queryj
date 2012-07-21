@@ -61,11 +61,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create {@link JdbcTemplateTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/09
  */
+@ThreadSafe
 public class JdbcTemplateTemplateFactory
     implements  BasePerRepositoryTemplateFactory<JdbcTemplateTemplate>,
                 Singleton

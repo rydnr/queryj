@@ -66,12 +66,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * {@link org.acmsl.queryj.metadata.MetadataManager} implementation using
  * plain JDBC.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/08
  */
+@ThreadSafe
 public class JdbcMetadataManager
     extends AbstractJdbcMetadataManager
 {

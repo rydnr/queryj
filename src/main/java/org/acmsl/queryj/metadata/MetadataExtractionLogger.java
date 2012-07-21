@@ -62,12 +62,18 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Basic implementation of {@link MetadataExtractionListener} that
  * logs all events it gets.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/08
  */
+@ThreadSafe
 public class MetadataExtractionLogger
     implements MetadataExtractionListener
 {

@@ -47,12 +47,18 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves the "engine_version" placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class DatabaseEngineVersionHandler
     extends AbstractTemplateContextFillHandler<TemplateContext,DecoratedString>
     implements NonRelevantFillHandler

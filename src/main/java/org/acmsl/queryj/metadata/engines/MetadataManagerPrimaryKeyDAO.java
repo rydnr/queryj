@@ -53,11 +53,17 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * {@link MetadataManager}-backed {@link PrimaryKeyDAO} implementation.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
+@ThreadSafe
 public class MetadataManagerPrimaryKeyDAO
     implements PrimaryKeyDAO
 {

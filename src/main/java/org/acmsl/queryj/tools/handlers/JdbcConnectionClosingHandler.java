@@ -55,10 +55,16 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Closes a JDBC connection.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class JdbcConnectionClosingHandler
     extends  AbstractQueryJCommandHandler
 {

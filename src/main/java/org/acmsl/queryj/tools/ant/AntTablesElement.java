@@ -52,11 +52,17 @@ import org.apache.tools.ant.DynamicConfigurator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Contains all information regarding the tables to be managed by
  * QueryJ task.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class AntTablesElement
     implements  DynamicConfigurator
 {

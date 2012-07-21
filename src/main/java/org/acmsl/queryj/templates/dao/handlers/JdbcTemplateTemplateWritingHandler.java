@@ -62,12 +62,18 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Writes {@link org.acmsl.queryj.templates.dao.JdbcTemplateTemplate} templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  * @since 2012/07/01 (recovered)
  */
+@ThreadSafe
 public class JdbcTemplateTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
                  <JdbcTemplateTemplate,

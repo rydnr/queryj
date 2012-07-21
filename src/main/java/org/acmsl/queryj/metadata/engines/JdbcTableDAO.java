@@ -49,11 +49,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * A {@link org.acmsl.queryj.metadata.TableDAO} implementation using {@link JdbcMetadataManager}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @version 2012/06/12
  */
+@ThreadSafe
 public class JdbcTableDAO
     extends MetadataManagerTableDAO<JdbcMetadataManager>
 {

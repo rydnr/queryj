@@ -41,11 +41,17 @@ package org.acmsl.queryj.metadata.vo;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * An incomplete {@link Attribute}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
+@ThreadSafe
 public class AttributeIncompleteValueObject
     extends AbstractAttribute
 {

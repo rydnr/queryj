@@ -47,12 +47,18 @@ import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to resolve "result" placeholders using {@link BasePerCustomResultTemplateContext contexts}.
  * <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/23
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class ResultHandler
     extends AbstractTemplateContextFillHandler<BasePerCustomResultTemplateContext, Result>
 {

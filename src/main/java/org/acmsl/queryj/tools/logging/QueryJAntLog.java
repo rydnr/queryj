@@ -53,6 +53,11 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 import org.apache.tools.ant.Project;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Minimal logging helper to avoid using Ant-specific
  * API. It implements <code>Log</code> only to make the
@@ -61,6 +66,7 @@ import org.jetbrains.annotations.NotNull;
  * using the <code>UniqueLogFactory.getLog(..)</code>.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class QueryJAntLog
     implements  QueryJLog
 {

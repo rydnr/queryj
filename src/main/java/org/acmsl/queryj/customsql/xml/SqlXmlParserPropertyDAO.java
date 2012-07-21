@@ -55,11 +55,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * {@link SqlXmlParser}-backed {@link SqlPropertyDAO} implementation.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/07/06
  */
+@ThreadSafe
 public class SqlXmlParserPropertyDAO
     extends AbstractSqlXmlParserDAO
     implements SqlPropertyDAO

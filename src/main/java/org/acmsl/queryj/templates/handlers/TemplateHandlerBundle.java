@@ -48,10 +48,16 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.Arrays;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Bundles a pair of template build and writing handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class TemplateHandlerBundle
     extends    CompositeQueryJCommandHandler
     implements TemplateHandler

@@ -49,10 +49,16 @@ import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.commons.patterns.Singleton;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides custom decorators for the AttributeStatementSetter template.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class AttributeStatementSetterDecoratorFactory
     extends  CachingDecoratorFactory
     implements  Singleton

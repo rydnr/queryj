@@ -66,11 +66,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate the configuration file for configuring
  * DAOChooser.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ConfigurationPropertiesTemplate
     extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {

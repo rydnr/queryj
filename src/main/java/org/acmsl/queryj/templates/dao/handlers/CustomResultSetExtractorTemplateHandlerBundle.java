@@ -41,11 +41,17 @@ import org.acmsl.queryj.templates.dao.handlers.CustomResultSetExtractorTemplateB
 import org.acmsl.queryj.templates.dao.handlers.CustomResultSetExtractorTemplateWritingHandler;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Bundles a pair of CustomResultSetExtractor template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomResultSetExtractorTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {

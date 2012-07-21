@@ -39,10 +39,16 @@ package org.acmsl.queryj.templates;
 import org.acmsl.commons.NonCheckedException;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Triggered whenever an invalid template is generated.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class InvalidTemplateException
     extends  NonCheckedException
 {

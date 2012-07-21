@@ -56,12 +56,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Sets up the chain required to provide placeholder replacements for
  * {@link org.acmsl.queryj.templates.BasePerCustomResultTemplate per-custom-result templates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/17
  */
+@ThreadSafe
 public class BasePerCustomResultFillTemplateChain
     extends FillTemplateChain<BasePerCustomResultTemplateContext>
 {

@@ -40,11 +40,17 @@ import org.acmsl.queryj.customsql.Parameter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Adds a simple caching mechanism while decorating <code>Parameter</code>
  * instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CachingParameterDecorator
     extends  AbstractParameterDecorator
 {

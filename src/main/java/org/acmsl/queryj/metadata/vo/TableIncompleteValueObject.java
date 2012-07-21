@@ -42,11 +42,17 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Represents an incomplete {@link Table}: only with partial information.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
+@ThreadSafe
 public class TableIncompleteValueObject
     extends AbstractTable
 {

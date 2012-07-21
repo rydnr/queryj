@@ -81,6 +81,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Overrides {@link org.acmsl.queryj.metadata.engines.JdbcMetadataManager}
  * in order to retrieve Oracle dictionary information when using the
@@ -88,6 +93,7 @@ import java.util.Map;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/08
  */
+@ThreadSafe
 public class OracleMetadataManager
     extends JdbcMetadataManager
     implements  OracleTableRepository,

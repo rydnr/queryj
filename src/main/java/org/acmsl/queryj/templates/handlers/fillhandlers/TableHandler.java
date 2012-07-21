@@ -50,12 +50,18 @@ import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "table" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class TableHandler
     extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, TableDecorator>
 {

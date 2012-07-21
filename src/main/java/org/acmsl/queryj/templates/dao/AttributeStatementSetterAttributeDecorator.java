@@ -46,10 +46,16 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Decorates attributes for AttributeStatementSetter templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class AttributeStatementSetterAttributeDecorator
     extends  CachingAttributeDecorator
 {

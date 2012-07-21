@@ -45,12 +45,18 @@ import org.acmsl.queryj.templates.BasePerTableTemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Fills the "table_name" placeholder.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/19
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class TableNameHandler
     extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, DecoratedString>
 {

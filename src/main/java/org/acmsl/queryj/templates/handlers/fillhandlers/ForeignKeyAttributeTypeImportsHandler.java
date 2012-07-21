@@ -54,12 +54,18 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "foreign_key_type_imports" placeholders, to avoid declaring
  * unused imports.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/08
  */
+@ThreadSafe
 public class ForeignKeyAttributeTypeImportsHandler
     extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, List<String>>
 {

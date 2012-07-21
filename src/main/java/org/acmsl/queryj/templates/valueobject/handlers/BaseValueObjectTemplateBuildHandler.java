@@ -53,10 +53,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds {@link org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplate} instances using database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseValueObjectTemplateBuildHandler
     extends BasePerTableTemplateBuildHandler<BaseValueObjectTemplate, BaseValueObjectTemplateFactory>
 {

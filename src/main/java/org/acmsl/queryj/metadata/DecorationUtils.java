@@ -52,10 +52,16 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides some useful decoration methods.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DecorationUtils
     implements  Singleton,
                 Utils

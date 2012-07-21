@@ -45,11 +45,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * A mutable implementation of {@link ForeignKey}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/09
  */
+@ThreadSafe
 public class ForeignKeyIncompleteValueObject
     extends AbstractForeignKey
 {

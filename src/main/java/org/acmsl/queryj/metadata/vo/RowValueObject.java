@@ -42,11 +42,17 @@ package org.acmsl.queryj.metadata.vo;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Value-object implementation of <code>Row</code> interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class RowValueObject
     extends  AbstractRow
 {

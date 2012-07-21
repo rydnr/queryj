@@ -74,6 +74,11 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Set;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Executes QueryJ.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
@@ -82,6 +87,7 @@ import java.util.Set;
  * @threadSafe
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class QueryJMojo
     extends AbstractMojo
     implements Mojo

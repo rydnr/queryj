@@ -46,11 +46,17 @@ import org.acmsl.queryj.templates.dao.handlers.DAOListenerTemplateBuildHandler;
 import org.acmsl.queryj.templates.dao.handlers.DAOListenerTemplateWritingHandler;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Bundles a pair of DAOListener template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  */
+@ThreadSafe
 public class DAOListenerTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {

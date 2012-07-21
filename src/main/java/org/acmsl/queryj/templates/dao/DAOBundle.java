@@ -63,11 +63,17 @@ import org.acmsl.queryj.templates.dao.handlers.ThreadLocalBagTemplateHandlerBund
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Bundles the complete set of handlers related to DAO templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class DAOBundle
     extends  TemplateHandlerBundle
 {

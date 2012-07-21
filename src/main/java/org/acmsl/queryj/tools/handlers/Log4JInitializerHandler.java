@@ -74,11 +74,17 @@ import java.util.Map;
  */
 import org.apache.log4j.Logger;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Ensures Log4J is correctly configured.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/06/19
  */
+@ThreadSafe
 public class Log4JInitializerHandler
     extends  AbstractQueryJCommandHandler
 {

@@ -40,6 +40,11 @@ package org.acmsl.queryj.customsql;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models &lt;parameter&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
@@ -51,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
  *    type CDATA #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ParameterElement
     extends  AbstractParameterElement
     implements Parameter

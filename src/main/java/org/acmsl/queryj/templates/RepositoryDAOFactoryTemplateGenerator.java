@@ -43,19 +43,26 @@ import org.acmsl.queryj.metadata.MetadataManager;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate the repository DAO factory implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class RepositoryDAOFactoryTemplateGenerator
     extends  AbstractTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<RepositoryDAOFactoryTemplate, BasePerRepositoryTemplateContext>
-    {
+{
     /**
      * Creates a new {@link RepositoryDAOFactoryTemplateGenerator} with given settings.
      * @param caching whether to enable caching.
      * @param threadCount the threads to use.
      */
+    @ThreadSafe
     public RepositoryDAOFactoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
@@ -64,6 +71,7 @@ public class RepositoryDAOFactoryTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @ThreadSafe
     @NotNull
     public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
@@ -77,6 +85,7 @@ public class RepositoryDAOFactoryTemplateGenerator
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such name.
      */
+    @ThreadSafe
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final BasePerRepositoryTemplateContext context,

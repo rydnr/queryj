@@ -57,10 +57,16 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class TableTemplateFactory
     implements  BasePerTableTemplateFactory<TableTemplate>,
                 Singleton

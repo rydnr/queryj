@@ -59,6 +59,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.File;
@@ -79,6 +84,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Writes <i>per-table</i> templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public abstract class AbstractTemplateWritingHandler
     <T extends Template<C>, TG extends TemplateGenerator<T,C>, C extends TemplateContext>
     extends    AbstractQueryJCommandHandler
@@ -92,6 +98,7 @@ public abstract class AbstractTemplateWritingHandler
     /**
      * Creates a <code>AbstractTemplateWritingHandler</code> instance.
      */
+    @ThreadSafe
     public AbstractTemplateWritingHandler() {}
 
     /**
@@ -103,6 +110,7 @@ public abstract class AbstractTemplateWritingHandler
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      * @precondition parameters != null
      */
+    @ThreadSafe
     @Override
     protected boolean handle(@NotNull final Map parameters)
       throws  QueryJBuildException
@@ -124,6 +132,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
+    @ThreadSafe
     protected void writeTemplates(
         @NotNull final Map parameters,
         @NotNull final String engineName,
@@ -164,6 +173,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void writeTemplatesSequentially(
         @Nullable final List<T> templates,
@@ -209,6 +219,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
+    @ThreadSafe
     protected void writeTemplatesMultithread(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
@@ -264,6 +275,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void writeTemplatesMultithread2ndVersion(
         @Nullable final List<T> templates,
@@ -365,6 +377,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param metadata the database metadata.
      * @return the product name.
      */
+    @ThreadSafe
     @SuppressWarnings("unchecked")
     public String retrieveProductName(@NotNull final Map parameters, @Nullable final DatabaseMetaData metadata)
     {

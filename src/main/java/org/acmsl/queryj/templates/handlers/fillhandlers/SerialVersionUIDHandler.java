@@ -38,11 +38,17 @@ package org.acmsl.queryj.templates.handlers.fillhandlers;
 import org.acmsl.queryj.templates.TemplateContext;
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "serialVersionUID" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/06/20
  */
+@ThreadSafe
 public class SerialVersionUIDHandler
     extends AbstractTemplateContextFillHandler<TemplateContext,Long>
 {

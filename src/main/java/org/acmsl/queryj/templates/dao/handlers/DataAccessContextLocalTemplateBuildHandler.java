@@ -54,10 +54,16 @@ import java.util.Map;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds the Spring DAO declaration file.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DataAccessContextLocalTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <DataAccessContextLocalTemplate, DataAccessContextLocalTemplateFactory, BasePerRepositoryTemplateContext>

@@ -66,10 +66,16 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.Vector;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Adapts Ant {@link Project} to use Maven's Log mechanism.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  */
+@ThreadSafe
 public class AntProjectAdapter
     extends  Project
 {

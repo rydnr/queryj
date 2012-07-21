@@ -60,12 +60,18 @@ import java.sql.Types;
 import java.util.Locale;
 import java.util.HashMap;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides the basic translation and management services
  * related to database attribute types, according to strict
  * JDBC specification.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class JdbcMetadataTypeManager
     implements  MetadataTypeManager,
                 Singleton,

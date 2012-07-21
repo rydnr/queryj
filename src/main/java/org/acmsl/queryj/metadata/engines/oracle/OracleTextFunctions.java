@@ -53,11 +53,17 @@ import org.acmsl.queryj.StringField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Contains the text functions supported by Oracle Oracle8i Enterprise Edition
  * Release 8.1.7.0.1 - Production JServer Release 8.1.7.0.1 - Production.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class OracleTextFunctions
     implements  Singleton
 {

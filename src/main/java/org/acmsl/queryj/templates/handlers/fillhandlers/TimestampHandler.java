@@ -48,11 +48,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Handler to provide 'timestamp' placeholder in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/18
  */
+@ThreadSafe
 public class TimestampHandler
     extends AbstractFillHandler<String>
     implements NonRelevantFillHandler

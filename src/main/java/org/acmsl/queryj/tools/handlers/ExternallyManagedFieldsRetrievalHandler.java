@@ -60,11 +60,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Retrieves the externally-managed fields declaration and
  * configures MetadataManager accordingly.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ExternallyManagedFieldsRetrievalHandler
     extends  AbstractQueryJCommandHandler
 {

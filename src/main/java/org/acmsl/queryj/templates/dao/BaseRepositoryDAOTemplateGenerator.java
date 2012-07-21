@@ -45,10 +45,16 @@ import org.acmsl.queryj.metadata.DecorationUtils;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate the repository DAO interface.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseRepositoryDAOTemplateGenerator
     extends AbstractTemplateGenerator<BaseRepositoryDAOTemplate, BasePerRepositoryTemplateContext>
     implements BasePerRepositoryTemplateGenerator<BaseRepositoryDAOTemplate, BasePerRepositoryTemplateContext>

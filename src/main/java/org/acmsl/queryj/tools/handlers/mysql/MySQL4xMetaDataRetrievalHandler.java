@@ -58,10 +58,16 @@ import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Retrieves the MySQL 4.x metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class MySQL4xMetaDataRetrievalHandler
     extends  DatabaseMetaDataRetrievalHandler
 {

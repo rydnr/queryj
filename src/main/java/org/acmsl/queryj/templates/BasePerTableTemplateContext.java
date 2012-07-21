@@ -56,11 +56,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Context used by per-table templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/20
  */
+@ThreadSafe
 public class BasePerTableTemplateContext
     extends AbstractTemplateContext
 {

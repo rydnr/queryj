@@ -46,11 +46,17 @@ import org.acmsl.queryj.templates.dao.DAOChooserTemplateUtils;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "dao_chooser_properties_file_name" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/30
  */
+@ThreadSafe
 public class DAOChooserPropertiesFileNameHandler
     extends AbstractDecoratedStringHandler<TemplateContext>
 {

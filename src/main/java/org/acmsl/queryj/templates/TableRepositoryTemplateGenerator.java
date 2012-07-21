@@ -38,10 +38,16 @@ package org.acmsl.queryj.templates;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate Table repositories according to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class TableRepositoryTemplateGenerator
     extends  AbstractTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<TableRepositoryTemplate, BasePerRepositoryTemplateContext>

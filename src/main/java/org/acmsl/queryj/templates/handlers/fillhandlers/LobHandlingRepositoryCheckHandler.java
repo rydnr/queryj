@@ -46,11 +46,17 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "lob_handling_required" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/07/19
  */
+@ThreadSafe
 public class LobHandlingRepositoryCheckHandler
     extends AbstractTemplateContextFillHandler<TemplateContext, Boolean>
 {

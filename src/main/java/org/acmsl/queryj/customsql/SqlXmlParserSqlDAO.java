@@ -57,11 +57,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * {@link SqlXmlParser}-backed {@link SqlDAO} implementation.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/06
  */
+@ThreadSafe
 public class SqlXmlParserSqlDAO
     extends AbstractSqlXmlParserDAO
     implements SqlDAO

@@ -60,11 +60,17 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Writes the DAO listener implementation.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
+@ThreadSafe
 public class DAOListenerImplTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
                  <DAOListenerImplTemplate, DAOListenerImplTemplateGenerator, BasePerRepositoryTemplateContext>

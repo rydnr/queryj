@@ -50,6 +50,11 @@ import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.jetbrains.annotations.NotNull;
 
 /*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
+/*
  * Importing some JDK classes.
  */
 import java.util.List;
@@ -59,17 +64,20 @@ import java.util.Map;
  * Builds custom BaseValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomBaseValueObjectTemplateBuildHandler
     extends BasePerCustomResultTemplateBuildHandler<CustomBaseValueObjectTemplate, CustomBaseValueObjectTemplateFactory>
 {
     /**
      * Creates a CustomBaseValueObjectTemplateBuildHandler.
      */
+    @ThreadSafe
     public CustomBaseValueObjectTemplateBuildHandler() {}
 
     /**
      * {@inheritDoc}
      */
+    @ThreadSafe
     @Override
     @NotNull
     protected CustomBaseValueObjectTemplateFactory retrieveTemplateFactory()
@@ -80,6 +88,7 @@ public class CustomBaseValueObjectTemplateBuildHandler
     /**
      * {@inheritDoc}
      */
+    @ThreadSafe
     @Override
     @SuppressWarnings("unchecked")
     protected void storeTemplates(
@@ -93,6 +102,7 @@ public class CustomBaseValueObjectTemplateBuildHandler
     /**
      * {@inheritDoc}
      */
+    @ThreadSafe
     @Override
     @NotNull
     protected String retrievePackage(

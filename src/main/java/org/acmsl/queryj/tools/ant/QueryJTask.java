@@ -62,10 +62,16 @@ import org.apache.tools.ant.types.Reference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Generates QueryJ classes using Ant.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class QueryJTask
     extends     Task
     implements  QueryJSettings,

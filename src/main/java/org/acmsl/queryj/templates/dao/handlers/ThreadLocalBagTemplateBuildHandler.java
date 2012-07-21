@@ -60,11 +60,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds {@link ThreadLocalBagTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/02 (recovered)
  */
+@ThreadSafe
 public class ThreadLocalBagTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <ThreadLocalBagTemplate,

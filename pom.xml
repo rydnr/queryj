@@ -29,6 +29,12 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.checkthread</groupId>
+      <artifactId>checkthread-annotations</artifactId>
+      <version>1.0.9</version>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
       <groupId>org.acmsl</groupId>
       <artifactId>queryj-sql</artifactId>
       <version>2.1-SNAPSHOT</version>

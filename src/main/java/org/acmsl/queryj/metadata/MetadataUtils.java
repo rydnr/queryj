@@ -64,10 +64,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides some methods commonly-used when working with metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class MetadataUtils
     implements Singleton,
                Utils

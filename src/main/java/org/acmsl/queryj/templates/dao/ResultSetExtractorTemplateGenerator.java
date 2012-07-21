@@ -56,10 +56,16 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate {@link ResultSetExtractorTemplate templates}.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ResultSetExtractorTemplateGenerator
     extends AbstractTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>
     implements BasePerTableTemplateGenerator<ResultSetExtractorTemplate, BasePerTableTemplateContext>

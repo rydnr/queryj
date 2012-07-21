@@ -58,12 +58,18 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "custom_results" placeholders in
  * {@link org.acmsl.queryj.templates.BasePerTableTemplate BasePerTableTemplates}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/31
  */
+@ThreadSafe
 public class CustomResultsHandler
     extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<Result>>
 {

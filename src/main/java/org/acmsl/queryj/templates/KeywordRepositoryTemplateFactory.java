@@ -56,11 +56,17 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate keyword repositories template according to
  * keyword definition.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class KeywordRepositoryTemplateFactory
     implements  BasePerRepositoryTemplateFactory<KeywordRepositoryTemplate>,
                 Singleton

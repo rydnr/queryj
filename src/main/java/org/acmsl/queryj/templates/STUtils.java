@@ -56,10 +56,16 @@ import java.io.InputStreamReader;
 import java.util.WeakHashMap;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides some methods commonly-used when working with ST templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class STUtils
     implements  Singleton,
                 Utils

@@ -55,11 +55,17 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Context information required by templates customized for each {@link ForeignKey}.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/20
  */
+@ThreadSafe
 public class BasePerForeignKeyTemplateContext
     extends AbstractTemplateContext
 {

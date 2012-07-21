@@ -60,12 +60,18 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Writes {@link org.acmsl.queryj.templates.dao.StatisticsProviderTemplate} templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  * @since 2012/07/03 (recovered)
  */
+@ThreadSafe
 public class StatisticsProviderTemplateWritingHandler
     extends  BasePerRepositoryTemplateWritingHandler
                  <StatisticsProviderTemplate,

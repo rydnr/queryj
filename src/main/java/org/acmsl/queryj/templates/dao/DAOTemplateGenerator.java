@@ -58,11 +58,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate DAO implementations according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class DAOTemplateGenerator
     extends AbstractTemplateGenerator<DAOTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateGenerator<DAOTemplate, BasePerTableTemplateContext>

@@ -33,10 +33,16 @@
 package org.acmsl.queryj.tools.handlers;
 
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Extracts metadata information from JDBC-compliant databases.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class JdbcMetaDataRetrievalHandler
     extends  DatabaseMetaDataRetrievalHandler
 {

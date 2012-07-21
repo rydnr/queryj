@@ -46,10 +46,16 @@ import org.acmsl.queryj.metadata.vo.Attribute;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides custom decorators for the BaseDAO template.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class BaseDAODecoratorFactory
     extends  CachingDecoratorFactory
 {

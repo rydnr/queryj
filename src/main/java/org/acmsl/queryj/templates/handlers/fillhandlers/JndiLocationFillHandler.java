@@ -45,11 +45,17 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "jndi_location" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/06/25
  */
+@ThreadSafe
 public class JndiLocationFillHandler
     extends AbstractDecoratedStringHandler<TemplateContext>
 {

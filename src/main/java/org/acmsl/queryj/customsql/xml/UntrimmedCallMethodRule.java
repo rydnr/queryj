@@ -39,11 +39,17 @@ package org.acmsl.queryj.customsql.xml;
  */
 import org.apache.commons.digester.CallMethodRule;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Custom implementation of Digester's CallMethodRule, so that
  * inner text body is not trimmed.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class UntrimmedCallMethodRule
     extends  CallMethodRule
 {

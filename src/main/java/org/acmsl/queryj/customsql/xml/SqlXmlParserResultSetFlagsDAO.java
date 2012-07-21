@@ -53,11 +53,17 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * {@link SqlXmlParser}-based {@link SqlResultSetFlagsDAO} implementation.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/06
  */
+@ThreadSafe
 public class SqlXmlParserResultSetFlagsDAO
     extends AbstractSqlXmlParserDAO
     implements SqlResultSetFlagsDAO

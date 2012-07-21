@@ -43,12 +43,18 @@ package org.acmsl.queryj.templates.dao.handlers;
  */
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Bundles a pair of ThreadLocalbag template build and writing
  * handlers.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/02 (recovered)
  */
+@ThreadSafe
 public class ThreadLocalBagTemplateHandlerBundle
     extends  TemplateHandlerBundle
 {

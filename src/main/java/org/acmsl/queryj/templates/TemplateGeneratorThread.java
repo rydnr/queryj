@@ -65,11 +65,17 @@ import java.nio.charset.Charset;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Thread to make generators concurrent.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro</a>
  * @since 2012/07/10
  */
+@ThreadSafe
 public class TemplateGeneratorThread
     <T extends Template<C>, TG extends TemplateGenerator<T,C>, C extends TemplateContext>
     extends Thread
@@ -119,6 +125,7 @@ public class TemplateGeneratorThread
      * @param threadIndex the thread index.
      * @param barrier the {@link CyclicBarrier}.
      */
+    @ThreadSafe
     public TemplateGeneratorThread(
         @NotNull final TG templateGenerator,
         @NotNull final T template,
@@ -141,6 +148,7 @@ public class TemplateGeneratorThread
      * Specifies the template.
      * @param template the {@link Template} instance to use.
      */
+    @ThreadSafe
     protected final void immutableSetTemplate(@NotNull final T template)
     {
         this.template = template;
@@ -150,6 +158,7 @@ public class TemplateGeneratorThread
      * Specifies the template.
      * @param template the {@link Template} instance to use.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setTemplate(@NotNull final T template)
     {
@@ -160,6 +169,7 @@ public class TemplateGeneratorThread
      * Retrieves the template.
      * @return such {@link Template}.
      */
+    @ThreadSafe
     protected T getTemplate()
     {
         return template;
@@ -169,6 +179,7 @@ public class TemplateGeneratorThread
      * Specifies the template generator.
      * @param templateGenerator the {@link TemplateGenerator} instance to use.
      */
+    @ThreadSafe
     protected final void immutableSetTemplateGenerator(@NotNull final TG templateGenerator)
     {
         this.templateGenerator = templateGenerator;
@@ -178,6 +189,7 @@ public class TemplateGeneratorThread
      * Specifies the template generator.
      * @param templateGenerator the {@link TemplateGenerator} instance to use.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setTemplateGenerator(@NotNull final TG templateGenerator)
     {
@@ -188,6 +200,7 @@ public class TemplateGeneratorThread
      * Retrieves the template generator.
      * @return such {@link TemplateGenerator}.
      */
+    @ThreadSafe
     @NotNull
     protected TG getTemplateGenerator()
     {
@@ -198,6 +211,7 @@ public class TemplateGeneratorThread
      * Specifies the output folder.
      * @param outputFolder the output folder.
      */
+    @ThreadSafe
     protected final void immutableSetOutputFolder(@NotNull final File outputFolder)
     {
         this.outputDir = outputFolder;
@@ -207,6 +221,7 @@ public class TemplateGeneratorThread
      * Specifies the output folder.
      * @param outputFolder the output folder.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setOutputFolder(@NotNull final File outputFolder)
     {
@@ -217,6 +232,7 @@ public class TemplateGeneratorThread
      * Retrieves the output folder.
      * @return such information.
      */
+    @ThreadSafe
     @NotNull
     public File getOutputFolder()
     {
@@ -227,6 +243,7 @@ public class TemplateGeneratorThread
      * Specifies the root folder.
      * @param rootFolder the root folder.
      */
+    @ThreadSafe
     protected final void immutableSetRootFolder(@NotNull final File rootFolder)
     {
         this.rootDir = rootFolder;
@@ -236,6 +253,7 @@ public class TemplateGeneratorThread
      * Specifies the root folder.
      * @param rootFolder the root folder.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setRootFolder(@NotNull final File rootFolder)
     {
@@ -246,6 +264,7 @@ public class TemplateGeneratorThread
      * Retrieves the root folder.
      * @return such information.
      */
+    @ThreadSafe
     @NotNull
     public File getRootFolder()
     {
@@ -256,6 +275,7 @@ public class TemplateGeneratorThread
      * Specifies the charset.
      * @param charset the {@link Charset} to use.
      */
+    @ThreadSafe
     protected final void immutableSetCharset(@NotNull final Charset charset)
     {
         this.charset = charset;
@@ -265,6 +285,7 @@ public class TemplateGeneratorThread
      * Specifies the charset.
      * @param charset the {@link Charset} to use.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setCharset(@NotNull final Charset charset)
     {
@@ -275,6 +296,7 @@ public class TemplateGeneratorThread
      * Retrieves the charset.
      * @return the {@link Charset} in use.
      */
+    @ThreadSafe
     @NotNull
     protected Charset getCharset()
     {
@@ -285,6 +307,7 @@ public class TemplateGeneratorThread
      * Specifies the thread index.
      * @param index such index.
      */
+    @ThreadSafe
     protected final void immutableSetThreadIndex(final int index)
     {
         this.threadIndex = index;
@@ -295,6 +318,7 @@ public class TemplateGeneratorThread
      * @param index such index.
      */
     @SuppressWarnings("unused")
+    @ThreadSafe
     protected void setThreadIndex(final int index)
     {
         immutableSetThreadIndex(index);
@@ -304,6 +328,7 @@ public class TemplateGeneratorThread
      * Retrieves the thread index.
      * @return such index.
      */
+    @ThreadSafe
     public int getThreadIndex()
     {
         return this.threadIndex;
@@ -313,6 +338,7 @@ public class TemplateGeneratorThread
      * Specifies the cyclic barrier.
      * @param barrier the barrier.
      */
+    @ThreadSafe
     protected final void immutableSetCyclicBarrier(@Nullable final CyclicBarrier barrier)
     {
         this.cyclicBarrier = barrier;
@@ -322,6 +348,7 @@ public class TemplateGeneratorThread
      * Specifies the cyclic barrier.
      * @param barrier the barrier.
      */
+    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setCyclicBarrier(@NotNull final CyclicBarrier barrier)
     {
@@ -332,12 +359,14 @@ public class TemplateGeneratorThread
      * Retrieves the cyclic barrier.
      * @return such barrier
      */
+    @ThreadSafe
     @Nullable
     protected CyclicBarrier getCyclicBarrier()
     {
         return this.cyclicBarrier;
     }
 
+    @ThreadSafe
     public void run()
     {
         runGenerator(
@@ -361,6 +390,7 @@ public class TemplateGeneratorThread
      * @param barrier the cyclic barrier.
      * @param log the {@link Log} instance.
      */
+    @ThreadSafe
     protected void runGenerator(
         @NotNull final TG templateGenerator,
         @NotNull final T template,

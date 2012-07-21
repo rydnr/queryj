@@ -68,10 +68,16 @@ import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Builds a keyword repository from declared keyword definition.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class KeywordRepositoryTemplateBuildHandler
     extends  BasePerRepositoryTemplateBuildHandler
                  <KeywordRepositoryTemplate, KeywordRepositoryTemplateFactory, BasePerRepositoryTemplateContext>

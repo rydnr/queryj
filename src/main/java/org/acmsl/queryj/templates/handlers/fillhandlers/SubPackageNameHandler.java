@@ -45,12 +45,18 @@ import org.acmsl.queryj.templates.TemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
 * Is able to resolve "sub_package_name" placeholders
 * @author <a href="mailto:chous@acm-sl.org">chous</a>
 * @since 2012/05/23
 */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class SubPackageNameHandler
     extends AbstractTemplateContextFillHandler<TemplateContext,DecoratedString>
 {

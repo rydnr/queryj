@@ -50,10 +50,16 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate base DAO factories.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ValueObjectTemplateGenerator
     extends AbstractTemplateGenerator<ValueObjectTemplate, BasePerTableTemplateContext>
     implements  BasePerTableTemplateGenerator<ValueObjectTemplate, BasePerTableTemplateContext>

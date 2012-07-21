@@ -44,10 +44,16 @@ import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate custom BaseValueObject templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomBaseValueObjectTemplateGenerator
     extends AbstractTemplateGenerator<CustomBaseValueObjectTemplate, BasePerCustomResultTemplateContext>
     implements BasePerCustomResultTemplateGenerator<CustomBaseValueObjectTemplate, BasePerCustomResultTemplateContext>

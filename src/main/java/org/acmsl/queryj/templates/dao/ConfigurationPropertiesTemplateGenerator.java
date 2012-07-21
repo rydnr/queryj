@@ -50,11 +50,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate ConfigurationProperties implementations according
  * to database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ConfigurationPropertiesTemplateGenerator
     extends AbstractTemplateGenerator<ConfigurationPropertiesTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<ConfigurationPropertiesTemplate, BasePerRepositoryTemplateContext>

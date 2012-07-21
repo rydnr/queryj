@@ -55,10 +55,16 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.Types;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Provides the core methods when working with database metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class MySQL4xMetadataTypeManager
     extends  JdbcMetadataTypeManager
 {

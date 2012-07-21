@@ -33,11 +33,17 @@ package org.acmsl.queryj.tools.maven;
 
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models a field
  * @author <a href="mailto:jose.juan@ventura24.es">Jose Juan</a>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class Field
 {
     /**

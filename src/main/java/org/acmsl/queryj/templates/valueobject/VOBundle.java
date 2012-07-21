@@ -48,11 +48,17 @@ import org.acmsl.queryj.templates.valueobject.handlers.ValueObjectFactoryTemplat
 import org.acmsl.queryj.templates.valueobject.handlers.ValueObjectImplTemplateHandlerBundle;
 import org.acmsl.queryj.templates.valueobject.handlers.ValueObjectTemplateHandlerBundle;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Wraps all ValueObject-related templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/20
  */
+@ThreadSafe
 public class VOBundle
     extends TemplateHandlerBundle
 {

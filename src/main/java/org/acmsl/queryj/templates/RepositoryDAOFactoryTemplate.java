@@ -66,11 +66,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate repository DAO factories according to database
  * metadata.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class RepositoryDAOFactoryTemplate
     extends  RepositoryDAOTemplate<BasePerRepositoryTemplateContext>
 {

@@ -45,6 +45,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models &lt;sql&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
@@ -56,6 +61,7 @@ import java.util.List;
  *    matches (single | multiple) #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class SqlElement
     extends  AbstractIdElement
     implements Sql

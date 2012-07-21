@@ -54,6 +54,11 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.io.PrintStream;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Minimal logging helper to integrate with UniqueLogFactory  API.
  * It implements <code>Log</code> only to make the
@@ -62,6 +67,7 @@ import java.io.PrintStream;
  * using the <code>UniqueLogFactory.getLog(..)</code>.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class QueryJCLILog
     implements  QueryJLog
 {

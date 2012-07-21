@@ -52,12 +52,18 @@ import org.acmsl.commons.utils.StringUtils;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "dao_class_name" placeholders.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class DAOClassNameHandler
     extends AbstractDecoratedStringHandler<BasePerTableTemplateContext>
 {

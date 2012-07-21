@@ -37,6 +37,11 @@ package org.acmsl.queryj.customsql;
  * Importing project-specific classes.
  */
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models &lt;property-ref&gt; elements in <i>custom-sql</i> models, which
  * satisfy the following DTD extract (to describe the model even in
@@ -46,6 +51,7 @@ package org.acmsl.queryj.customsql;
  *    id IDREF #REQUIRED>
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class PropertyRefElement
     extends  AbstractIdElement
     implements PropertyRef

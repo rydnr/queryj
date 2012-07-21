@@ -51,11 +51,17 @@ import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate DAO listeners from templates.
  * @author <a href="mailto:chous@acm-sl.org"
            >Jose San Leandro</a>
  */
+@ThreadSafe
 public class DAOListenerImplTemplateGenerator
     extends AbstractTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<DAOListenerImplTemplate, BasePerRepositoryTemplateContext>

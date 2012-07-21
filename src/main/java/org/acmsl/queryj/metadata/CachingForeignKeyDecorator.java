@@ -52,12 +52,18 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Adds a simple caching mechanism while decorating <code>ForeignKey</code>
  * instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class CachingForeignKeyDecorator
     extends  AbstractForeignKeyDecorator
 {

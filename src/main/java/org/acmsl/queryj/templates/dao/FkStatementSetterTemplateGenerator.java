@@ -61,10 +61,16 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate FkStatementSetter templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class FkStatementSetterTemplateGenerator
     extends AbstractTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>
     implements BasePerForeignKeyTemplateGenerator<FkStatementSetterTemplate, BasePerForeignKeyTemplateContext>

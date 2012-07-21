@@ -43,11 +43,17 @@ import org.acmsl.queryj.metadata.DecorationUtils;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate keyword repositories template according to
  * keyword definition.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class KeywordRepositoryTemplateGenerator
     extends AbstractTemplateGenerator<KeywordRepositoryTemplate, BasePerRepositoryTemplateContext>
     implements  BasePerRepositoryTemplateGenerator<KeywordRepositoryTemplate, BasePerRepositoryTemplateContext>
@@ -57,6 +63,7 @@ public class KeywordRepositoryTemplateGenerator
      * @param caching whether to use caching.
      * @param threadCount the number of threads available.
      */
+    @ThreadSafe
     public KeywordRepositoryTemplateGenerator(final boolean caching, final int threadCount)
     {
         super(caching, threadCount);
@@ -65,6 +72,7 @@ public class KeywordRepositoryTemplateGenerator
     /**
      * {@inheritDoc}
      */
+    @ThreadSafe
     @NotNull
     @Override
     public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
@@ -78,6 +86,7 @@ public class KeywordRepositoryTemplateGenerator
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such name.
      */
+    @ThreadSafe
     @NotNull
     protected String retrieveTemplateFileName(
         @NotNull final BasePerRepositoryTemplateContext context, @NotNull final DecorationUtils decorationUtils)

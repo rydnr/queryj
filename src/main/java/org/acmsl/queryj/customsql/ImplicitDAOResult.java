@@ -44,10 +44,16 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.Collection;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Models pre-defined per-DAO &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ImplicitDAOResult
     extends  AbstractResult
 {

@@ -56,11 +56,17 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to resolve "tables" placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/24
  */
+@ThreadSafe
 public class TableListHandler
     extends AbstractTemplateContextFillHandler<BasePerRepositoryTemplateContext, List<TableDecorator>>
 {

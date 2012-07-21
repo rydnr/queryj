@@ -72,10 +72,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Manages the information metadata stored in an Oracle database.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class OracleMetadataManagerOld
     extends  JdbcMetadataManagerOld
     implements  OracleTableRepository

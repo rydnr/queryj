@@ -56,11 +56,17 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create {@link DAOChooserTemplate} instances.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  * @since 2012/07/09
  */
+@ThreadSafe
 public class DAOChooserTemplateFactory
     implements  BasePerRepositoryTemplateFactory<DAOChooserTemplate>,
                 Singleton

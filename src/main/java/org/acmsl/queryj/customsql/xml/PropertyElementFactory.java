@@ -66,11 +66,17 @@ import org.xml.sax.SAXException;
  */
 import java.util.Locale;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create sql.xml &lt;property&gt; element instances from their
  * attributes, while being parsed by Digester.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class PropertyElementFactory
     extends  ElementFactory
 {

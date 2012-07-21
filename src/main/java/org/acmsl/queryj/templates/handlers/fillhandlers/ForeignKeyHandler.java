@@ -51,12 +51,18 @@ import org.acmsl.queryj.templates.BasePerForeignKeyTemplateContext;
  */
 import org.jetbrains.annotations.NotNull;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to resolve {@link ForeignKey} placeholders in templates.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/24
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class ForeignKeyHandler
     extends AbstractTemplateContextFillHandler<BasePerForeignKeyTemplateContext, ForeignKeyDecorator>
 {

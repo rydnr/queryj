@@ -53,12 +53,18 @@ import org.jetbrains.annotations.NotNull;
  */
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Resolves "pk_attributes" placeholders with the primary key information from given {@link org.acmsl.queryj.templates.BasePerTableTemplateContext}
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/05/31
  */
 @SuppressWarnings("unused")
+@ThreadSafe
 public class PrimaryKeyHandler
     extends AbstractTemplateContextFillHandler<BasePerTableTemplateContext, List<Attribute>>
 {

@@ -54,12 +54,18 @@ import org.antlr.stringtemplate.StringTemplateGroup;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create ThreadLocalBag sources.
  * @author <a href="mailto:chous@acm-sl.org"
  *         >Jose San Leandro</a>
  * @since 2012/07/02 (recovered)
  */
+@ThreadSafe
 public class ThreadLocalBagTemplate
     extends  BasePerRepositoryTemplate<BasePerRepositoryTemplateContext>
 {

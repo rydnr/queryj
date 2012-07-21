@@ -48,10 +48,16 @@ import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to generate custom ValueObjectImpl templates.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CustomValueObjectImplTemplateGenerator
     extends AbstractTemplateGenerator<CustomValueObjectImplTemplate, BasePerCustomResultTemplateContext>
     implements BasePerCustomResultTemplateGenerator<CustomValueObjectImplTemplate, BasePerCustomResultTemplateContext>

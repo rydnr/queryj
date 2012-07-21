@@ -53,11 +53,17 @@ import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Is able to create sql.xml &lt;connection-flags&gt; element instances
  * from their attributes, while being parsed by Digester.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class ConnectionFlagsElementFactory
     extends  ElementFactory
 {

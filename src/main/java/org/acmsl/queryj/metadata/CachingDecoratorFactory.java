@@ -61,10 +61,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * Importing checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
+
 /**
  * Abstract factory for template-specific decorators.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public class CachingDecoratorFactory
     implements  DecoratorFactory,
                 Serializable,
