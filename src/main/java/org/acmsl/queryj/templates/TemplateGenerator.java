@@ -63,6 +63,7 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
      * Writes a table template to disk.
      * @param template the table template to write.
      * @param outputDir the output folder.
+     * @param rootFolder the root folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
      * @throws QueryJBuildException if the generation process fails.
@@ -70,6 +71,7 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
     void write(
         @NotNull final T template,
         @NotNull final File outputDir,
+        @NotNull final File rootFolder,
         @NotNull final Charset charset)
         throws  IOException,
                 QueryJBuildException;

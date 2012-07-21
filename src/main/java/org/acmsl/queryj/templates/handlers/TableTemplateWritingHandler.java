@@ -76,8 +76,11 @@ public class TableTemplateWritingHandler
      */
     @Override
     protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final String engineName, final int threadCount)
-        throws QueryJBuildException
+        @NotNull final Map parameters,
+        @NotNull final String engineName,
+        final int threadCount,
+        @NotNull final File rootDir)
+    throws QueryJBuildException
     {
         // Disabled
     }

@@ -78,7 +78,8 @@ public class CustomResultSetExtractorTemplateWritingHandler
      */
     @NotNull
     @Override
-    protected CustomResultSetExtractorTemplateGenerator retrieveTemplateGenerator(final boolean caching, final int threadCount)
+    protected CustomResultSetExtractorTemplateGenerator retrieveTemplateGenerator(
+        final boolean caching, final int threadCount)
     {
         return new CustomResultSetExtractorTemplateGenerator(caching, threadCount);
     }

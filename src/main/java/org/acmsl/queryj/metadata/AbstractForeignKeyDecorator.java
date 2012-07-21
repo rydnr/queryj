@@ -469,7 +469,7 @@ public abstract class AbstractForeignKeyDecorator
     @NotNull
     public String getNameUppercased()
     {
-        return getNameUppercased(getFkName(), DecorationUtils.getInstance());
+        return getNameUppercased(buildName(getForeignKey()), DecorationUtils.getInstance());
     }
 
     /**
@@ -486,6 +486,44 @@ public abstract class AbstractForeignKeyDecorator
     }
 
     /**
+     * Builds a name using information from the foreign key.
+     * @param foreignKey the {@link ForeignKey} instance.
+     * @return the artificial name.
+     */
+    @NotNull
+    protected String buildName(@NotNull final ForeignKey foreignKey)
+    {
+        @Nullable String result = foreignKey.getFkName();
+
+        if (result == null)
+        {
+            StringBuilder t_sbName = new StringBuilder(foreignKey.getSourceTableName());
+
+            t_sbName.append("_");
+
+            for (@Nullable Attribute t_Attribute : foreignKey.getAttributes())
+            {
+                if (t_Attribute == null)
+                {
+                    t_sbName.append("null");
+                }
+                else
+                {
+                    t_sbName.append(t_Attribute.getName());
+                }
+
+                t_sbName.append("_");
+            }
+
+            t_sbName.append(foreignKey.getTargetTableName());
+
+            result = t_sbName.toString();
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the name of the foreign key, capitalized.
      * @return such information.
      */
@@ -493,7 +531,7 @@ public abstract class AbstractForeignKeyDecorator
     @NotNull
     public String getNameCapitalized()
     {
-        return getNameCapitalized(getFkName(), DecorationUtils.getInstance());
+        return getNameCapitalized(buildName(getForeignKey()), DecorationUtils.getInstance());
     }
 
     /**
@@ -517,7 +555,7 @@ public abstract class AbstractForeignKeyDecorator
     @NotNull
     public String getNameLowercased()
     {
-        return getNameLowercased(getFkName(), DecorationUtils.getInstance());
+        return getNameLowercased(buildName(getForeignKey()), DecorationUtils.getInstance());
     }
 
     /**

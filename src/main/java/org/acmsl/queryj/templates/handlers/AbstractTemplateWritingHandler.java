@@ -110,7 +110,8 @@ public abstract class AbstractTemplateWritingHandler
         writeTemplates(
             parameters,
             retrieveProductName(parameters, retrieveDatabaseMetaData(parameters)),
-            retrieveThreadCount(parameters));
+            retrieveThreadCount(parameters),
+            retrieveProjectOutputDir(parameters));
 
         return false;
     }
@@ -120,10 +121,14 @@ public abstract class AbstractTemplateWritingHandler
      * @param parameters the parameters.
      * @param engineName the engine name.
      * @param threadCount the thread count.
+     * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
     protected void writeTemplates(
-        @NotNull final Map parameters, @NotNull final String engineName, final int threadCount)
+        @NotNull final Map parameters,
+        @NotNull final String engineName,
+        final int threadCount,
+        @NotNull final File rootDir)
       throws  QueryJBuildException
     {
         if (threadCount > 1)
@@ -134,7 +139,8 @@ public abstract class AbstractTemplateWritingHandler
                 parameters,
                 retrieveCharset(parameters),
                 retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
-                retrieveThreadCount(parameters));
+                threadCount,
+                rootDir);
         }
         else
         {
@@ -144,7 +150,7 @@ public abstract class AbstractTemplateWritingHandler
                 parameters,
                 retrieveCharset(parameters),
                 retrieveTemplateGenerator(retrieveCaching(parameters), retrieveThreadCount(parameters)),
-                retrieveThreadCount(parameters));
+                rootDir);
         }
     }
 
@@ -155,7 +161,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param parameters the parameters.
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
-     * @param threadCount the number of threads to use.
+     * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
     @SuppressWarnings("unused")
@@ -165,7 +171,7 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final Map parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
-        final int threadCount)
+        @NotNull final File rootDir)
         throws  QueryJBuildException
     {
         if (templates != null)
@@ -178,7 +184,8 @@ public abstract class AbstractTemplateWritingHandler
                     {
                         templateGenerator.write(
                             t_Template,
-                            retrieveOutputDir(t_Template.getTemplateContext(), engineName, parameters),
+                            retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                            rootDir,
                             charset);
                     }
                     catch (@NotNull final IOException ioException)
@@ -199,16 +206,17 @@ public abstract class AbstractTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @param threadCount the number of threads to use.
+     * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
-    @SuppressWarnings("unused")
     protected void writeTemplatesMultithread(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
         @NotNull final Map parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
-        final int threadCount)
+        final int threadCount,
+        @NotNull final File rootDir)
       throws  QueryJBuildException
     {
         if (templates != null)
@@ -225,7 +233,8 @@ public abstract class AbstractTemplateWritingHandler
                         new TemplateGeneratorThread<T, TG, C>(
                             templateGenerator,
                             t_Template,
-                            retrieveOutputDir(t_Template.getTemplateContext(), engineName, parameters),
+                            retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                            rootDir,
                             charset,
                             t_iIndex + 1,
                             null));
@@ -252,6 +261,7 @@ public abstract class AbstractTemplateWritingHandler
      * @param charset the file encoding.
      * @param templateGenerator the template generator.
      * @param threadCount the number of threads to use.
+     * @param rootDir the root dir.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
      */
     @SuppressWarnings("unused")
@@ -261,7 +271,8 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final Map parameters,
         @NotNull final Charset charset,
         @NotNull final TG templateGenerator,
-        final int threadCount)
+        final int threadCount,
+        @NotNull final File rootDir)
         throws  QueryJBuildException
     {
         if (templates != null)
@@ -289,7 +300,8 @@ public abstract class AbstractTemplateWritingHandler
                             new TemplateGeneratorThread<T, TG, C>(
                                 templateGenerator,
                                 t_Template,
-                                retrieveOutputDir(t_Template.getTemplateContext(), engineName, parameters),
+                                retrieveOutputDir(t_Template.getTemplateContext(), rootDir, engineName, parameters),
+                                rootDir,
                                 charset,
                                 intIndex,
                                 round));
@@ -392,6 +404,7 @@ public abstract class AbstractTemplateWritingHandler
     /**
      * Retrieves the output dir from the attribute map.
      * @param context the context.
+     * @param rootDir the root dir.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
@@ -399,6 +412,9 @@ public abstract class AbstractTemplateWritingHandler
      */
     @NotNull
     protected abstract File retrieveOutputDir(
-        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final C context,
+        @NotNull final File rootDir,
+        @NotNull final String engineName,
+        @NotNull final Map parameters)
       throws  QueryJBuildException;
 }

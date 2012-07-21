@@ -70,6 +70,7 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
     /**
      * Retrieves the output dir from the attribute map.
      * @param context the context.
+     * @param rootDir the root dir.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
@@ -77,7 +78,10 @@ public abstract class BasePerForeignKeyTemplateWritingHandler
     @Override
     @NotNull
     protected File retrieveOutputDir(
-        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final C context,
+        @NotNull final File rootDir,
+        @NotNull final String engineName,
+        @NotNull final Map parameters)
     {
         return retrieveOutputDir(engineName, context.getForeignKey().getSourceTableName(), parameters);
     }

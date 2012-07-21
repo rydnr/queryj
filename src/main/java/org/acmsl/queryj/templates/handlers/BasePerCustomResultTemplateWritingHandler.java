@@ -73,16 +73,13 @@ public abstract class BasePerCustomResultTemplateWritingHandler
     public BasePerCustomResultTemplateWritingHandler() {}
 
     /**
-     * Retrieves the output folder.
-     * @param context the context.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @return the output folder.
-     * @throws QueryJBuildException if the operation fails.
+     * {@inheritDoc}
      */
+    @Override
     @NotNull
     protected File retrieveOutputDir(
         @NotNull final C context,
+        @NotNull final File rootDir,
         @NotNull final String engineName,
         @NotNull final Map parameters)
       throws QueryJBuildException

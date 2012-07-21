@@ -69,6 +69,7 @@ public abstract class BasePerTableTemplateWritingHandler
     /**
      * Retrieves the output dir from the attribute map.
      * @param context the context.
+     * @param rootDir the root dir.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
@@ -77,29 +78,35 @@ public abstract class BasePerTableTemplateWritingHandler
     @Override
     @NotNull
     protected File retrieveOutputDir(
-        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final C context,
+        @NotNull final File rootDir,
+        @NotNull final String engineName,
+        @NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        return retrieveOutputDir(context.getTableName(), engineName, parameters);
+        return retrieveOutputDir(context.getTableName(), rootDir, engineName, parameters);
     }
 
     /**
      * Retrieves the output dir from the attribute map.
      * @param tableName the table name.
+     * @param rootDir the root dir.
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return such folder.
      * @throws QueryJBuildException if the output-dir retrieval process if faulty.
-     * @precondition parameters != null
      */
     @NotNull
     protected File retrieveOutputDir(
-        @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final String tableName,
+        @NotNull final File rootDir,
+        @NotNull final String engineName,
+        @NotNull final Map parameters)
       throws  QueryJBuildException
     {
         return
             retrieveOutputDir(
-                retrieveProjectOutputDir(parameters),
+                rootDir,
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
                 tableName,

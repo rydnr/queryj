@@ -61,7 +61,9 @@ import java.util.Map;
  */
 public class AttributesStatementSetterTemplateWritingHandler
     extends  BasePerTableTemplateWritingHandler
-                 <AttributesStatementSetterTemplate, AttributesStatementSetterTemplateGenerator, BasePerTableTemplateContext>
+                 <AttributesStatementSetterTemplate,
+                  AttributesStatementSetterTemplateGenerator,
+                  BasePerTableTemplateContext>
 {
     /**
      * Creates a AttributesStatementSetterTemplateWritingHandler.

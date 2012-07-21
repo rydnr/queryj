@@ -171,6 +171,18 @@ public class ParameterValidationHandler
     public static final String OUTPUT_DIR = "outputdir";
 
     /**
+     * The missing output dir error message.
+     */
+    public static final String OUTPUTDIR_MISSING =
+        "Output directory not specified.";
+
+    /**
+     * The missing output dir not folder error message.
+     */
+    public static final String OUTPUTDIR_NOT_FOLDER =
+        "Specified Outputdir is not a folder.";
+
+    /**
      * The header-file attribute name.
      */
     public static final String HEADER_FILE = "header-file";
@@ -185,18 +197,6 @@ public class ParameterValidationHandler
      */
     public static final String HEADER_NOT_READABLE =
         "Specified header is not readable";
-
-    /**
-     * The missing output dir error message.
-     */
-    public static final String OUTPUTDIR_MISSING =
-         "Output directory not specified.";
-
-    /**
-     * The missing output dir not folder error message.
-     */
-    public static final String OUTPUTDIR_NOT_FOLDER =
-         "Specified Outputdir is not a folder.";
 
     /**
      * The output-dir-subfolders attribute name.
@@ -594,7 +594,7 @@ public class ParameterValidationHandler
             throw new QueryJBuildException(OUTPUTDIR_MISSING);
         }
 
-        if  (header == null) 
+        if  (header == null)
         {
             if  (t_Log != null)
             {
@@ -801,9 +801,9 @@ public class ParameterValidationHandler
      * reading the file.
      * @throws IOException if the file cannot be read for any
      * other reason.
-     * @precondition file != null
      */
-    protected String readFile(final File file)
+    @NotNull
+    protected String readFile(@NotNull final File file)
         throws  SecurityException,
                 IOException
     {
@@ -820,10 +820,9 @@ public class ParameterValidationHandler
      * reading the file.
      * @throws IOException if the file cannot be read for any
      * other reason.
-     * @precondition file != null
-     * @precondition fileUtils != null
      */
-    protected String readFile(final File file, @NotNull final FileUtils fileUtils)
+    @NotNull
+    protected String readFile(@NotNull final File file, @NotNull final FileUtils fileUtils)
         throws  SecurityException,
                 IOException
     {

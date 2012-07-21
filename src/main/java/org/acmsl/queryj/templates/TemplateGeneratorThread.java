@@ -90,6 +90,11 @@ public class TemplateGeneratorThread
     private File outputDir;
 
     /**
+     * The root folder.
+     */
+    private File rootDir;
+
+    /**
      * The charset.
      */
     private Charset charset;
@@ -109,6 +114,7 @@ public class TemplateGeneratorThread
      * @param templateGenerator the template generator.
      * @param template the template.
      * @param outputFolder the output folder.
+     * @param rootFolder the root folder.
      * @param charset the {@link Charset} instance.
      * @param threadIndex the thread index.
      * @param barrier the {@link CyclicBarrier}.
@@ -117,6 +123,7 @@ public class TemplateGeneratorThread
         @NotNull final TG templateGenerator,
         @NotNull final T template,
         @NotNull final File outputFolder,
+        @NotNull final File rootFolder,
         @NotNull final Charset charset,
         final int threadIndex,
         @Nullable final CyclicBarrier barrier)
@@ -124,6 +131,7 @@ public class TemplateGeneratorThread
         immutableSetTemplateGenerator(templateGenerator);
         immutableSetTemplate(template);
         immutableSetOutputFolder(outputFolder);
+        immutableSetRootFolder(rootFolder);
         immutableSetCharset(charset);
         immutableSetThreadIndex(threadIndex);
         immutableSetCyclicBarrier(barrier);
@@ -213,6 +221,35 @@ public class TemplateGeneratorThread
     public File getOutputFolder()
     {
         return this.outputDir;
+    }
+
+    /**
+     * Specifies the root folder.
+     * @param rootFolder the root folder.
+     */
+    protected final void immutableSetRootFolder(@NotNull final File rootFolder)
+    {
+        this.rootDir = rootFolder;
+    }
+
+    /**
+     * Specifies the root folder.
+     * @param rootFolder the root folder.
+     */
+    @SuppressWarnings("unused")
+    protected void setRootFolder(@NotNull final File rootFolder)
+    {
+        immutableSetRootFolder(rootFolder);
+    }
+
+    /**
+     * Retrieves the root folder.
+     * @return such information.
+     */
+    @NotNull
+    public File getRootFolder()
+    {
+        return this.rootDir;
     }
 
     /**
@@ -307,6 +344,7 @@ public class TemplateGeneratorThread
             getTemplateGenerator(),
             getTemplate(),
             getOutputFolder(),
+            getRootFolder(),
             getCharset(),
             getThreadIndex(),
             getCyclicBarrier(),
@@ -317,6 +355,7 @@ public class TemplateGeneratorThread
      * Runs the template generation process.
      * @param templateGenerator the template generator.
      * @param outputDir the output folder.
+     * @param rootFolder the root folder.
      * @param charset the {@link Charset} to use.
      * @param threadIndex the thread index.
      * @param barrier the cyclic barrier.
@@ -326,6 +365,7 @@ public class TemplateGeneratorThread
         @NotNull final TG templateGenerator,
         @NotNull final T template,
         @NotNull final File outputDir,
+        @NotNull final File rootFolder,
         @NotNull final Charset charset,
         final int threadIndex,
         @Nullable final CyclicBarrier barrier,
@@ -336,6 +376,7 @@ public class TemplateGeneratorThread
             templateGenerator.write(
                 template,
                 outputDir,
+                rootFolder,
                 charset);
         }
         catch (@NotNull final QueryJBuildException unknownException)

@@ -66,20 +66,19 @@ public abstract class BasePerRepositoryTemplateWritingHandler
     public BasePerRepositoryTemplateWritingHandler() {}
 
     /**
-     * Retrieves the output dir from the attribute map.
-     * @param context the context.
-     * @param engineName the engine name.
-     * @param parameters the parameter map.
-     * @return such folder.
+     * {@inheritDoc}
      */
     @Override
     @NotNull
     protected File retrieveOutputDir(
-        @NotNull final C context, @NotNull final String engineName, @NotNull final Map parameters)
+        @NotNull final C context,
+        @NotNull final File rootDir,
+        @NotNull final String engineName,
+        @NotNull final Map parameters)
     {
         return
             retrieveOutputDir(
-                retrieveProjectOutputDir(parameters),
+                rootDir,
                 retrieveProjectPackage(parameters),
                 retrieveUseSubfoldersFlag(parameters),
                 engineName,

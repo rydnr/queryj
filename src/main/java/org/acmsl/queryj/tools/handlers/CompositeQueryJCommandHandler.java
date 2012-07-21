@@ -161,7 +161,6 @@ public class CompositeQueryJCommandHandler
      * Handles given command.
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
-     * @precondition command != null
      */
     public boolean handle(@NotNull final Command command)
     {
@@ -256,7 +255,6 @@ public class CompositeQueryJCommandHandler
      * @return <code>true</code> to avoid further processing of such command
      * by different handlers.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition handler != null
      */
     protected boolean handle(
         @NotNull final QueryJCommand command, @NotNull final QueryJCommandHandler handler)
@@ -294,12 +292,18 @@ public class CompositeQueryJCommandHandler
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder().append(this.m__cHandlers).toHashCode();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(final Object obj)
     {
@@ -315,11 +319,13 @@ public class CompositeQueryJCommandHandler
         return new EqualsBuilder().append(this.m__cHandlers, other.m__cHandlers).isEquals();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
+    @NotNull
     public String toString()
     {
-        return "CompositeQueryJCommandHandler{" +
-               "handlers=" + m__cHandlers +
-               '}';
+        return getHandlerCollection().toString();
     }
 }

@@ -166,13 +166,16 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Writes a table template to disk.
      * @param template the table template to write.
      * @param outputDir the output folder.
+     * @param rootFolder the root folder.
      * @param charset the file encoding.
      * @throws IOException if the file cannot be created.
      * @throws QueryJBuildException if the generation process fails.
      */
+    @Override
     public void write(
         @NotNull final N template,
         @NotNull final File outputDir,
+        @NotNull final File rootFolder,
         @NotNull final Charset charset)
         throws  IOException,
                 QueryJBuildException
@@ -182,6 +185,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
             template,
             retrieveTemplateFileName(template.getTemplateContext()),
             outputDir,
+            rootFolder,
             charset,
             FileUtils.getInstance());
     }
@@ -192,6 +196,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param template the table template to write.
      * @param fileName the template's file name.
      * @param outputDir the output folder.
+     * @param rootFolder the root folder.
      * @param charset the file encoding.
      * @param fileUtils the {@link FileUtils} instance.
      * @throws IOException if the file cannot be created.
@@ -202,6 +207,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final N template,
         @NotNull final String fileName,
         @NotNull final File outputDir,
+        @NotNull final File rootFolder,
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils)
         throws  IOException,
@@ -212,9 +218,132 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
             caching,
             fileName,
             outputDir,
+            rootFolder,
             charset,
             fileUtils,
             UniqueLogFactory.getLog(AbstractTemplateGenerator.class));
+    }
+
+    /**
+     * Performs the generation process.
+     * @param template the template.
+     * @param caching whether template caching is enabled.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @param charset the {@link Charset} to use.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @param log the {@link Log} instance.
+     * @throws IOException if the output dir cannot be created.
+     */
+    protected void generate(
+        @NotNull final N template,
+        final boolean caching,
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final File rootFolder,
+        @NotNull final Charset charset,
+        @NotNull final FileUtils fileUtils,
+        @NotNull final Log log)
+        throws IOException,
+        QueryJBuildException
+    {
+        @NotNull final String relevantContent = template.generate(true);
+
+        @NotNull final String newHash = computeHash(relevantContent, charset);
+
+        @Nullable final String oldHash = retrieveHash(fileName, outputDir, rootFolder, fileUtils);
+
+        if (   (oldHash == null)
+            || (!newHash.equals(oldHash)))
+        {
+            String t_strOutputFile =
+                outputDir.getAbsolutePath()
+                + File.separator
+                + fileName;
+
+            if (caching)
+            {
+                serializeTemplate(
+                    template,
+                    getOutputDir(outputDir, rootFolder).getAbsolutePath() + File.separator + "." + fileName + ".ser");
+            }
+
+            String t_strFileContents = template.generate(false);
+
+            if  (!"".equals(t_strFileContents))
+            {
+                boolean folderCreated = outputDir.mkdirs();
+
+                if (   (!folderCreated)
+                    && (!outputDir.exists()))
+                {
+                    throw
+                        new IOException("Cannot create output dir: " + outputDir);
+                }
+                else
+                {
+                    log.debug(
+                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
+                        + t_strOutputFile);
+                }
+
+                fileUtils.writeFile(
+                    t_strOutputFile,
+                    t_strFileContents,
+                    charset);
+
+                writeHash(newHash, fileName, outputDir, rootFolder, charset, fileUtils);
+            }
+            else
+            {
+                log.debug(
+                    "Not writing " + t_strOutputFile + " since the generated content is empty");
+            }
+        }
+    }
+
+    /**
+     * Tries to read the hash from disk.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @param fileUtils the {@link FileUtils} instance.
+     * @return the hash, if found.
+     */
+    @Nullable
+    protected String retrieveHash(
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final File rootFolder,
+        @NotNull final FileUtils fileUtils)
+    {
+        @Nullable String result =
+            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir, rootFolder));
+
+        if (   (result != null)
+            && (result.endsWith("\n")))
+        {
+            result = result.substring(0, result.length() - 1);
+        }
+
+        return result;
+    }
+
+    /**
+     * Builds the hash file.
+     * @param fileName the file name.
+     * @param outputDir the output folder.
+     * @param rootFolder the root folder.
+     * @return the hash file.
+     */
+    @NotNull
+    protected File buildHashFile(
+        @NotNull final String fileName,
+        @NotNull final File outputDir,
+        @NotNull final File rootFolder)
+    {
+        return
+            new File(
+                getOutputDir(outputDir, rootFolder).getAbsolutePath() + File.separator + "." + fileName + ".sha256");
     }
 
     /**
@@ -260,117 +389,36 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     }
 
     /**
-     * Performs the generation process.
-     * @param template the template.
-     * @param caching whether template caching is enabled.
-     * @param fileName the file name.
-     * @param outputDir the output folder.
-     * @param charset the {@link Charset} to use.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @param log the {@link Log} instance.
-     * @throws IOException if the output dir cannot be created.
+     * Retrieves the actual base folder.
+     * @param outputDir the output dir.
+     * @param rootFolder the root folder.
+     * @return the actual folder.
      */
-    protected void generate(
-        @NotNull final N template,
-        final boolean caching,
-        @NotNull final String fileName,
-        @NotNull final File outputDir,
-        @NotNull final Charset charset,
-        @NotNull final FileUtils fileUtils,
-        @NotNull final Log log)
-        throws IOException,
-        QueryJBuildException
+
+    @NotNull
+    protected File getOutputDir(@NotNull final File outputDir, @NotNull final File rootFolder)
     {
-        @NotNull final String relevantContent = template.generate(true);
+        File result = outputDir;
 
-        @NotNull final String newHash = computeHash(relevantContent, charset);
+        String rootPath = rootFolder.getAbsolutePath();
+        String outputPath = outputDir.getAbsolutePath();
 
-        @Nullable final String oldHash = retrieveHash(fileName, outputDir, fileUtils);
-
-        if (   (oldHash == null)
-            || (!newHash.equals(oldHash)))
+        if (outputPath.startsWith(rootPath))
         {
-            String t_strOutputFile =
-                outputDir.getAbsolutePath()
-                + File.separator
-                + fileName;
+            outputPath = rootPath + File.separator + ".queryj" + outputPath.substring(rootPath.length());
 
-            if (caching)
+            result = new File(outputPath);
+
+            if (   (!result.exists())
+                && (!result.mkdirs()))
             {
-                serializeTemplate(
-                    template,
-                    outputDir.getAbsolutePath() + File.separator + "." + fileName + ".ser");
+                result = outputDir;
             }
-
-            String t_strFileContents = template.generate(false);
-
-            if  (!"".equals(t_strFileContents))
-            {
-                boolean folderCreated = outputDir.mkdirs();
-
-                if (   (!folderCreated)
-                       && (!outputDir.exists()))
-                {
-                    throw
-                        new IOException("Cannot create output dir: " + outputDir);
-                }
-                else
-                {
-                    log.debug(
-                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                        + t_strOutputFile);
-                }
-
-                fileUtils.writeFile(
-                    t_strOutputFile,
-                    t_strFileContents,
-                    charset);
-
-                writeHash(newHash, fileName, outputDir, charset, fileUtils);
-            }
-            else
-            {
-                log.debug(
-                    "Not writing " + t_strOutputFile + " since the generated content is empty");
-            }
-        }
-    }
-
-    /**
-     * Tries to read the hash from disk.
-     * @param fileName the file name.
-     * @param outputDir the output folder.
-     * @param fileUtils the {@link FileUtils} instance.
-     * @return the hash, if found.
-     */
-    @Nullable
-    protected String retrieveHash(
-        @NotNull final String fileName,
-        @NotNull final File outputDir,
-        @NotNull final FileUtils fileUtils)
-    {
-        @Nullable String result =
-            fileUtils.readFileIfPossible(buildHashFile(fileName, outputDir));
-
-        if (   (result != null)
-            && (result.endsWith("\n")))
-        {
-            result = result.substring(0, result.length() - 1);
         }
 
         return result;
     }
 
-    /**
-     * Builds the hash file.
-     * @param fileName the file name.
-     * @param outputDir the output folder.
-     * @return the hash file.
-     */
-    protected File buildHashFile(@NotNull final String fileName, @NotNull final File outputDir)
-    {
-        return new File(outputDir.getAbsolutePath() + File.separator + "." + fileName + ".sha256");
-    }
     /**
      * Writes the hash value to disk, to avoid unnecessary generation.
      * @param hashValue the content to write
@@ -383,11 +431,12 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         @NotNull final String hashValue,
         @NotNull final String fileName,
         @NotNull final File outputDir,
+        @NotNull final File rootFolder,
         @NotNull final Charset charset,
         @NotNull final FileUtils fileUtils)
     {
         fileUtils.writeFileIfPossible(
-            buildHashFile(fileName, outputDir), hashValue, charset);
+            buildHashFile(fileName, outputDir, rootFolder), hashValue, charset);
     }
 
     /**
