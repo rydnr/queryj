@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -37,8 +36,6 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.templates.dao.handlers.BaseDAOTemplateBuildHandler;
-import org.acmsl.queryj.templates.dao.handlers.BaseDAOTemplateWritingHandler;
 import org.acmsl.queryj.templates.handlers.TemplateHandlerBundle;
 
 /*
@@ -57,10 +54,6 @@ public class BaseDAOTemplateHandlerBundle
 {
     /**
      * Builds a bundle with given handlers.
-     * @param buildHandler the template build handler.
-     * @param writingHandler the writing handler.
-     * @precondition buildHandler != null
-     * @precondition writingHandler != null
      */
     public BaseDAOTemplateHandlerBundle()
     {

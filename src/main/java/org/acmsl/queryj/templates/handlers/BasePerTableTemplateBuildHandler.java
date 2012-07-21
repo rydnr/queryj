@@ -224,6 +224,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         }
                         storeCachedStaticContent(t_lStaticContent, parameters, t_Table.getName());
                     }
+
                     t_Template =
                         createTemplate(
                             templateFactory,

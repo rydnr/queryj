@@ -55,7 +55,9 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -173,6 +175,11 @@ public class TableAttributeTypeImportsHandler
                     && (!result.contains(t_strImport)))
                 {
                     result.add(t_strImport);
+
+                    if (Timestamp.class.getName().equals(t_strImport))
+                    {
+                        result.add(Date.class.getName());
+                    }
                 }
             }
         }

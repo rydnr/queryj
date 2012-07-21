@@ -55,6 +55,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -136,35 +137,39 @@ public class BaseDAOTemplateBuildHandler
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {        
-        @Nullable BaseDAOTemplate result = null;
+        @Nullable BaseDAOTemplate result;
+
+        @Nullable List<Row> t_cStaticValues = null;
 
         if  (isStaticTable(tableName, metadataManager))
         {
-            @Nullable List<Row> t_cStaticValues =
+            t_cStaticValues =
                 retrieveStaticContent(
                     parameters,
                     tableName,
                     metadataManager,
                     decoratorFactory);
-
-            if (t_cStaticValues != null)
-            {
-                result =
-                    templateFactory.createTemplate(
-                        metadataManager,
-                        customSqlProvider,
-                        decoratorFactory,
-                        packageName,
-                        projectPackage,
-                        repository,
-                        header,
-                        implementMarkerInterfaces,
-                        jmx,
-                        jndiLocation,
-                        tableName,
-                        t_cStaticValues);
-            }
         }
+
+        if (t_cStaticValues == null)
+        {
+            t_cStaticValues = new ArrayList<Row>(0);
+        }
+
+        result =
+            templateFactory.createTemplate(
+                metadataManager,
+                customSqlProvider,
+                decoratorFactory,
+                packageName,
+                projectPackage,
+                repository,
+                header,
+                implementMarkerInterfaces,
+                jmx,
+                jndiLocation,
+                tableName,
+                t_cStaticValues);
 
         return result;
     }
