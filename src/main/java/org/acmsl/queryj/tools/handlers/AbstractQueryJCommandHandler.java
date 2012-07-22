@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.Template;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.QueryJCommand;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -570,8 +571,8 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      */
     @SuppressWarnings("unchecked")
-    protected void annotateGenerationTasks(
-        @NotNull final List<Future> tasks, @NotNull final Map parameters)
+    protected <T extends Template> void annotateGenerationTasks(
+        @NotNull final List<Future<T>> tasks, @NotNull final Map parameters)
     {
         parameters.put(buildGenerationTasksKey(), tasks);
     }
@@ -583,9 +584,9 @@ public abstract class AbstractQueryJCommandHandler
      */
     @SuppressWarnings("unchecked")
     @Nullable
-    protected List<Future> retrieveGenerationTasks(final Map parameters)
+    protected <T extends Template> List<Future<T>> retrieveGenerationTasks(@NotNull final Map parameters)
     {
-        return (List<Future>) parameters.get(buildGenerationTasksKey());
+        return (List<Future<T>>) parameters.get(buildGenerationTasksKey());
     }
 
     /**

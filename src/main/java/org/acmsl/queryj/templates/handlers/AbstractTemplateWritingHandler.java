@@ -143,7 +143,7 @@ public abstract class AbstractTemplateWritingHandler
     {
         if (threadCount > 1)
         {
-            List<Future> t_lTasks =
+            List<Future<T>> t_lTasks =
                 writeTemplatesMultithread(
                     retrieveTemplates(parameters),
                     engineName,
@@ -155,7 +155,8 @@ public abstract class AbstractTemplateWritingHandler
 
             synchronized (AbstractTemplateWritingHandler.class)
             {
-                List<Future> t_lTrackedTasks = retrieveGenerationTasks(parameters);
+                List<Future<T>> t_lTrackedTasks =
+                    retrieveGenerationTasks(parameters);
 
                 if (t_lTrackedTasks == null)
                 {
@@ -239,7 +240,7 @@ public abstract class AbstractTemplateWritingHandler
      */
     @ThreadSafe
     @NotNull
-    protected List<Future> writeTemplatesMultithread(
+    protected List<Future<T>> writeTemplatesMultithread(
         @Nullable final List<T> templates,
         @NotNull final String engineName,
         @NotNull final Map parameters,
@@ -249,11 +250,11 @@ public abstract class AbstractTemplateWritingHandler
         @NotNull final File rootDir)
       throws  QueryJBuildException
     {
-        List<Future> result;
+        List<Future<T>> result;
 
         if (templates != null)
         {
-            result = new ArrayList<Future>(templates.size());
+            result = new ArrayList<Future<T>>(templates.size());
 
             ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 
@@ -272,7 +273,8 @@ public abstract class AbstractTemplateWritingHandler
                                 rootDir,
                                 charset,
                                 t_iIndex + 1,
-                                null)));
+                                null),
+                            t_Template));
                 }
             }
 
@@ -288,7 +290,7 @@ public abstract class AbstractTemplateWritingHandler
         }
         else
         {
-            result = new ArrayList<Future>(0);
+            result = new ArrayList<Future<T>>(0);
         }
 
         return result;

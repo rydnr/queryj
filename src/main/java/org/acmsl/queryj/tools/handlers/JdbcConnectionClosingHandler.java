@@ -35,6 +35,7 @@ package org.acmsl.queryj.tools.handlers;
 /*
  * Importing some project classes.
  */
+import org.acmsl.queryj.templates.Template;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -58,6 +59,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.List;
 import java.util.Map;
@@ -121,17 +123,31 @@ public class JdbcConnectionClosingHandler
      * @param log the {@link Log} instance.
      */
     protected void waitUntilGenerationThreadsFinish(
-        @Nullable final List<Future> tasks, @NotNull final Log log)
+        @Nullable final List<Future<Template>> tasks, @NotNull final Log log)
     {
         if (tasks != null)
         {
-            for (@Nullable Future t_Task : tasks)
+            for (@Nullable Future<Template> t_Task : tasks)
             {
                 if (t_Task != null)
                 {
                     while (!t_Task.isDone())
                     {
-                        log.debug("Waiting for generation threads to finish");
+                        try
+                        {
+                            log.debug(
+                                "Waiting for " + t_Task.get().getTemplateContext().getTemplateName() + " to finish");
+                        }
+                        catch (@NotNull final InterruptedException interrupted)
+                        {
+                            log.info(
+                                "Interrupted while waiting for the threads to finish", interrupted);
+                        }
+                        catch (@NotNull final ExecutionException interrupted)
+                        {
+                            log.info(
+                                "Could not retrieve information about the thread's template", interrupted);
+                        }
 
                         synchronized(LOCK)
                         {
