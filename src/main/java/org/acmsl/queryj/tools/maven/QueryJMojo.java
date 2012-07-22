@@ -210,7 +210,7 @@ public class QueryJMojo
      * The list of external managed fields
      * @parameter
      */
-    private ExternallyManagedField[] externallyManagedFields;
+    private ExternallyManagedField[] externallyManagedFields = new ExternallyManagedField[0];
 
     /**
      * The grammar folder.
@@ -241,7 +241,7 @@ public class QueryJMojo
      * The list of tables.
      * @parameter
      */
-    private Table[] m__aTables;
+    private Table[] m__aTables = new Table[0];
     // @*** parameter property="tables"
 
     /**
@@ -269,7 +269,7 @@ public class QueryJMojo
      * Specifies the driver.
      * @param driver such value.
      */
-    protected final void immutableSetDriver(final String driver)
+    protected final void immutableSetDriver(@NotNull final String driver)
     {
         m__strDriver = driver;
     }
@@ -278,7 +278,7 @@ public class QueryJMojo
      * Specifies the driver.
      * @param driver such value.
      */
-    public void setDriver(final String driver)
+    public void setDriver(@NotNull final String driver)
     {
         immutableSetDriver(driver);
     }
@@ -287,6 +287,7 @@ public class QueryJMojo
      * Returns the driver.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetDriver()
     {
         return m__strDriver;
@@ -296,16 +297,24 @@ public class QueryJMojo
      * Returns the driver.
      * @return such value.
      */
+    @Nullable
     protected String getDriver()
     {
-        return immutableGetDriver();
+        String result = System.getProperty("queryj.driver");
+
+        if (result == null)
+        {
+            result = immutableGetDriver();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the url.
      * @param url the url.
      */
-    protected final void immutableSetUrl(final String url)
+    protected final void immutableSetUrl(@NotNull final String url)
     {
         m__strUrl = url;
     }
@@ -314,7 +323,7 @@ public class QueryJMojo
      * Specifies the url.
      * @param url the url.
      */
-    public void setUrl(final String url)
+    public void setUrl(@NotNull final String url)
     {
         immutableSetUrl(url);
     }
@@ -323,6 +332,7 @@ public class QueryJMojo
      * Returns the url.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetUrl()
     {
         return m__strUrl;
@@ -332,16 +342,24 @@ public class QueryJMojo
      * Returns the url.
      * @return such value.
      */
+    @Nullable
     protected String getUrl()
     {
-        return immutableGetUrl();
+        String result = System.getProperty("queryj.url");
+
+        if (result == null)
+        {
+            result = immutableGetUrl();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the username.
      * @param username the new value.
      */
-    protected final void immutableSetUsername(final String username)
+    protected final void immutableSetUsername(@NotNull final String username)
     {
         m__strUsername = username;
     }
@@ -350,7 +368,7 @@ public class QueryJMojo
      * Specifies the username.
      * @param username the new value.
      */
-    public void setUsername(final String username)
+    public void setUsername(@NotNull final String username)
     {
         immutableSetUsername(username);
     }
@@ -359,6 +377,7 @@ public class QueryJMojo
      * Returns the user name.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetUsername()
     {
         return m__strUsername;
@@ -368,16 +387,24 @@ public class QueryJMojo
      * Returns the user name.
      * @return such value.
      */
+    @Nullable
     protected String getUsername()
     {
-        return immutableGetUsername();
+        String result = System.getProperty("queryj.username");
+
+        if (result == null)
+        {
+            result = immutableGetUsername();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the password.
      * @param password the password.
      */
-    protected final void immutableSetPassword(final String password)
+    protected final void immutableSetPassword(@NotNull final String password)
     {
         m__strPassword = password;
     }
@@ -386,7 +413,7 @@ public class QueryJMojo
      * Specifies the password.
      * @param password the password.
      */
-    public void setPassword(final String password)
+    public void setPassword(@NotNull final String password)
     {
         immutableSetPassword(password);
     }
@@ -395,6 +422,7 @@ public class QueryJMojo
      * Returns the password.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetPassword()
     {
         return m__strPassword;
@@ -404,16 +432,24 @@ public class QueryJMojo
      * Returns the password.
      * @return such value.
      */
+    @Nullable
     protected String getPassword()
     {
-        return immutableGetPassword();
+        String result = System.getProperty("queryj.password");
+
+        if (result == null)
+        {
+            result = immutableGetPassword();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the catalog.
      * @param catalog the catalog.
      */
-    protected final void immutableSetCatalog(final String catalog)
+    protected final void immutableSetCatalog(@NotNull final String catalog)
     {
         this.catalog = catalog;
     }
@@ -422,7 +458,7 @@ public class QueryJMojo
      * Specifies the catalog.
      * @param catalog the catalog.
      */
-    public void setCatalog(final String catalog)
+    public void setCatalog(@NotNull final String catalog)
     {
         immutableSetCatalog(catalog);
     }
@@ -431,6 +467,7 @@ public class QueryJMojo
      * Returns the catalog.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetCatalog()
     {
         return catalog;
@@ -440,16 +477,24 @@ public class QueryJMojo
      * Returns the catalog.
      * @return such value.
      */
+    @Nullable
     protected String getCatalog()
     {
-        return immutableGetCatalog();
+        String result = System.getProperty("queryj.catalog");
+
+        if (result == null)
+        {
+            result = immutableGetCatalog();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the schema.
      * @param schema the schema.
      */
-    protected final void immutableSetSchema(final String schema)
+    protected final void immutableSetSchema(@NotNull final String schema)
     {
         this.schema = schema;
     }
@@ -458,7 +503,7 @@ public class QueryJMojo
      * Specifies the schema.
      * @param schema the schema.
      */
-    public void setSchema(final String schema)
+    public void setSchema(@NotNull final String schema)
     {
         immutableSetSchema(schema);
     }
@@ -467,6 +512,7 @@ public class QueryJMojo
      * Returns the schema.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetSchema()
     {
         return schema;
@@ -476,9 +522,15 @@ public class QueryJMojo
      * Returns the schema.
      * @return such value, or an empty string if not initialized.
      */
+    @NotNull
     protected String getSchema()
     {
-        String result = immutableGetSchema();
+        String result = System.getProperty("queryj.schema");
+
+        if (result == null)
+        {
+            result = immutableGetSchema();
+        }
 
         if  (result == null)
         {
@@ -492,7 +544,7 @@ public class QueryJMojo
      * Specifies the repository.
      * @param repository the repository.
      */
-    protected final void immutableSetRepository(final String repository)
+    protected final void immutableSetRepository(@NotNull final String repository)
     {
         m__strRepository = repository;
     }
@@ -501,7 +553,7 @@ public class QueryJMojo
      * Specifies the repository.
      * @param repository the repository.
      */
-    public void setRepository(final String repository)
+    public void setRepository(@NotNull final String repository)
     {
         immutableSetRepository(repository);
     }
@@ -510,6 +562,7 @@ public class QueryJMojo
      * Returns the repository.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetRepository()
     {
         return m__strRepository;
@@ -519,9 +572,15 @@ public class QueryJMojo
      * Returns the repository.
      * @return such value, or an empty string if not initialized.
      */
+    @NotNull
     protected String getRepository()
     {
-        String result = immutableGetRepository();
+        String result = System.getProperty("queryj.repository");
+
+        if (result == null)
+        {
+            result = immutableGetRepository();
+        }
 
         if  (result == null)
         {
@@ -535,7 +594,7 @@ public class QueryJMojo
      * Specifies the package name.
      * @param packageName the package name.
      */
-    protected final void immutableSetPackageName(final String packageName)
+    protected final void immutableSetPackageName(@NotNull final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -544,7 +603,7 @@ public class QueryJMojo
      * Specifies the package name.
      * @param packageName the package name.
      */
-    public void setPackageName(final String packageName)
+    public void setPackageName(@NotNull final String packageName)
     {
         immutableSetPackageName(packageName);
     }
@@ -553,6 +612,7 @@ public class QueryJMojo
      * Returns the package name.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetPackageName()
     {
         return m__strPackageName;
@@ -562,16 +622,24 @@ public class QueryJMojo
      * Returns the package name.
      * @return such value.
      */
+    @Nullable
     protected String getPackageName()
     {
-        return immutableGetPackageName();
+        String result = System.getProperty("queryj.package");
+
+        if (result == null)
+        {
+            result = immutableGetPackageName();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the output directory.
      * @param outputDir such directory.
      */
-    protected final void immutableSetOutputDir(final File outputDir)
+    protected final void immutableSetOutputDir(@NotNull final File outputDir)
     {
         m__OutputDir = outputDir;
     }
@@ -580,7 +648,7 @@ public class QueryJMojo
      * Specifies the output directory.
      * @param outputDir such directory.
      */
-    public void setOutputDir(final File outputDir)
+    public void setOutputDir(@NotNull final File outputDir)
     {
         immutableSetOutputDir(outputDir);
     }
@@ -589,6 +657,7 @@ public class QueryJMojo
      * Returns the output directory.
      * @return such directory.
      */
+    @Nullable
     protected final File immutableGetOutputDir()
     {
         return m__OutputDir;
@@ -598,16 +667,30 @@ public class QueryJMojo
      * Returns the output directory.
      * @return such directory.
      */
+    @Nullable
     protected File getOutputDir()
     {
-        return immutableGetOutputDir();
+        File result;
+
+        String aux = System.getProperty("queryj.package");
+
+        if (aux == null)
+        {
+            result = immutableGetOutputDir();
+        }
+        else
+        {
+            result = new File(aux);
+        }
+
+        return result;
     }
 
     /**
      * Specifies the JNDI path to the data source.
      * @param jndiPath such path.
      */
-    protected final void immutableSetJndiDataSource(final String jndiPath)
+    protected final void immutableSetJndiDataSource(@NotNull final String jndiPath)
     {
         m__strJndiDataSource = jndiPath;
     }
@@ -616,7 +699,7 @@ public class QueryJMojo
      * Specifies the JNDI path to the data source.
      * @param jndiPath such path.
      */
-    public void setJndiDataSource(final String jndiPath)
+    public void setJndiDataSource(@NotNull final String jndiPath)
     {
         immutableSetJndiDataSource(jndiPath);
     }
@@ -625,6 +708,7 @@ public class QueryJMojo
      * Returns the JNDI location of the data source.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetJndiDataSource()
     {
         return m__strJndiDataSource;
@@ -634,16 +718,24 @@ public class QueryJMojo
      * Returns the JNDI location of the data source.
      * @return such value.
      */
+    @Nullable
     protected String getJndiDataSource()
     {
-        return immutableGetJndiDataSource();
+        String result = System.getProperty("queryj.jndi");
+
+        if (result == null)
+        {
+            result = immutableGetJndiDataSource();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the XML file where the SQL queries are defined.
      * @param sqlFile such file.
      */
-    protected final void immutableSetSqlXmlFile(final File sqlFile)
+    protected final void immutableSetSqlXmlFile(@NotNull final File sqlFile)
     {
         m__SqlXmlFile = sqlFile;
     }
@@ -652,7 +744,7 @@ public class QueryJMojo
      * Specifies the XML file where the SQL queries are defined.
      * @param sqlFile such file.
      */
-    public void setSqlXmlFile(final File sqlFile)
+    public void setSqlXmlFile(@NotNull final File sqlFile)
     {
         immutableSetSqlXmlFile(sqlFile);
     }
@@ -661,6 +753,7 @@ public class QueryJMojo
      * Return the sql xml file.
      * @return such file.
      */
+    @Nullable
     protected final File immutableGetSqlXmlFile()
     {
         return m__SqlXmlFile;
@@ -670,16 +763,30 @@ public class QueryJMojo
      * Return the sql xml file.
      * @return such file.
      */
+    @Nullable
     protected File getSqlXmlFile()
     {
-        return immutableGetSqlXmlFile();
+        File result;
+
+        String aux = System.getProperty("queryj.sqlXmlFile");
+
+        if (aux == null)
+        {
+            result = immutableGetSqlXmlFile();
+        }
+        else
+        {
+            result = new File(aux);
+        }
+
+        return result;
     }
 
     /**
      * Specifies the custom SQL model.
      * @param model the model.
      */
-    protected final void immutableSetCustomSqlModel(final String model)
+    protected final void immutableSetCustomSqlModel(@NotNull final String model)
     {
         m__strCustomSqlModel = model;
     }
@@ -688,7 +795,7 @@ public class QueryJMojo
      * Specifies the custom SQL model.
      * @param model the model.
      */
-    public final void setCustomSqlModel(final String model)
+    public final void setCustomSqlModel(@NotNull final String model)
     {
         immutableSetCustomSqlModel(model);
     }
@@ -697,6 +804,7 @@ public class QueryJMojo
      * Returns the custom sql model.
      * @return such value.
      */
+    @Nullable
     protected final String immutableGetCustomSqlModel()
     {
         return m__strCustomSqlModel;
@@ -706,16 +814,24 @@ public class QueryJMojo
      * Returns the custom sql model.
      * @return such value.
      */
+    @Nullable
     protected String getCustomSqlModel()
     {
-        return immutableGetCustomSqlModel();
+        String result = System.getProperty("queryj.customSqlModel");
+
+        if (result == null)
+        {
+            result = immutableGetCustomSqlModel();
+        }
+
+        return result;
     }
 
     /**
      * Specifies whether to generate a XML-based DAO implementation.
      * @param flag such condition.
      */
-    protected final void immutableSetGenerateXmlDAOImplementation(final Boolean flag)
+    protected final void immutableSetGenerateXmlDAOImplementation(@NotNull final Boolean flag)
     {
         m__bGenerateXmlDAOImplementation = flag;
     }
@@ -724,7 +840,7 @@ public class QueryJMojo
      * Specifies whether to generate a XML-based DAO implementation.
      * @param flag such condition.
      */
-    public void setGenerateXmlDAOImplementation(final Boolean flag)
+    public void setGenerateXmlDAOImplementation(@NotNull final Boolean flag)
     {
         immutableSetGenerateXmlDAOImplementation(flag);
     }
@@ -733,6 +849,7 @@ public class QueryJMojo
      * Indicates if xml dao must be generated.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetGenerateXmlDAOImplementation()
     {
         return m__bGenerateXmlDAOImplementation;
@@ -742,16 +859,31 @@ public class QueryJMojo
      * Indicates if xml dao must be generated.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getGenerateXmlDAOImplementation()
     {
-        return immutableGetGenerateXmlDAOImplementation();
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.generateXmlDAO");
+
+        if (aux == null)
+        {
+            result = immutableGetGenerateXmlDAOImplementation();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
     }
 
     /**
      * Specifies whether to generate a Mock-based DAO implementation.
      * @param flag such condition.
      */
-    protected final void immutableSetGenerateMockDAOImplementation(final Boolean flag)
+    protected final void immutableSetGenerateMockDAOImplementation(@NotNull final Boolean flag)
     {
         m__bGenerateMockDAOImplementation = flag;
     }
@@ -760,7 +892,7 @@ public class QueryJMojo
      * Specifies whether to generate a Mock-based DAO implementation.
      * @param flag such condition.
      */
-    public void setGenerateMockDAOImplementation(final Boolean flag)
+    public void setGenerateMockDAOImplementation(@NotNull final Boolean flag)
     {
         immutableSetGenerateMockDAOImplementation(flag);
     }
@@ -769,6 +901,7 @@ public class QueryJMojo
      * Indicates if mock dao must be generated.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetGenerateMockDAOImplementation()
     {
         return m__bGenerateMockDAOImplementation;
@@ -778,16 +911,31 @@ public class QueryJMojo
      * Indicates if mock dao must be generated.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getGenerateMockDAOImplementation()
     {
-        return immutableGetGenerateMockDAOImplementation();
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.generateMockDAO");
+
+        if (aux == null)
+        {
+            result = immutableGetGenerateMockDAOImplementation();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
     }
 
     /**
      * Specifies whether the tests should be generated.
      * @param flag such condition.
      */
-    protected final void immutableSetGenerateTests(final Boolean flag)
+    protected final void immutableSetGenerateTests(@NotNull final Boolean flag)
     {
         m__bGenerateTests = flag;
     }
@@ -796,7 +944,7 @@ public class QueryJMojo
      * Specifies whether the tests should be generated.
      * @param flag such condition.
      */
-    public void setGenerateTests(final Boolean flag)
+    public void setGenerateTests(@NotNull final Boolean flag)
     {
         immutableSetGenerateTests(flag);
     }
@@ -805,6 +953,7 @@ public class QueryJMojo
      * Indicates if tests must be generated.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetGenerateTests()
     {
         return m__bGenerateTests;
@@ -814,16 +963,31 @@ public class QueryJMojo
      * Indicates if tests must be generated.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getGenerateTests()
     {
-        return immutableGetGenerateTests();
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.generateTests");
+
+        if (aux == null)
+        {
+            result = immutableGetGenerateTests();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
     }
 
     /**
      * Specifies the header file.
      * @param file such file.
      */
-    protected final void immutableSetHeaderFile(final File file)
+    protected final void immutableSetHeaderFile(@NotNull final File file)
     {
         m__HeaderFile = file;
     }
@@ -832,7 +996,7 @@ public class QueryJMojo
      * Specifies the header file.
      * @param file such file.
      */
-    public void setHeaderFile(final File file)
+    public void setHeaderFile(@NotNull final File file)
     {
         immutableSetHeaderFile(file);
     }
@@ -841,6 +1005,7 @@ public class QueryJMojo
      * Returns the header file.
      * @return such file.
      */
+    @Nullable
     protected final File immutableGetHeaderFile()
     {
         return m__HeaderFile;
@@ -850,16 +1015,30 @@ public class QueryJMojo
      * Returns the header file.
      * @return such file.
      */
+    @Nullable
     protected File getHeaderFile()
     {
-        return immutableGetHeaderFile();
+        File result;
+
+        String aux = System.getProperty("queryj.headerFile");
+
+        if (aux == null)
+        {
+            result = immutableGetHeaderFile();
+        }
+        else
+        {
+            result = new File(aux);
+        }
+
+        return result;
     }
 
     /**
      * Specifies whether database functions must be generated.
      * @param flag such condition.
      */
-    protected final void immutableSetExtractFunctions(final Boolean flag)
+    protected final void immutableSetExtractFunctions(@NotNull final Boolean flag)
     {
         m__bExtractFunctions = flag;
     }
@@ -868,7 +1047,7 @@ public class QueryJMojo
      * Specifies whether database functions must be generated.
      * @param flag such condition.
      */
-    public void setExtractFunctions(final Boolean flag)
+    public void setExtractFunctions(@NotNull final Boolean flag)
     {
         immutableSetExtractFunctions(flag);
     }
@@ -877,6 +1056,7 @@ public class QueryJMojo
      * Indicates if functions must be extracted.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetExtractFunctions()
     {
         return m__bExtractFunctions;
@@ -886,16 +1066,31 @@ public class QueryJMojo
      * Indicates if functions must be extracted.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getExtractFunctions()
     {
-        return immutableGetExtractFunctions();
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.extractFunctions");
+
+        if (aux == null)
+        {
+            result = immutableGetExtractFunctions();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
     }
 
     /**
      * Specifies whether database procedures must be generated.
      * @param flag such condition.
      */
-    protected final void immutableSetExtractProcedures(final Boolean flag)
+    protected final void immutableSetExtractProcedures(@NotNull final Boolean flag)
     {
         m__bExtractProcedures = flag;
     }
@@ -904,7 +1099,7 @@ public class QueryJMojo
      * Specifies whether database procedures must be generated.
      * @param flag such condition.
      */
-    public void setExtractProcedures(final Boolean flag)
+    public void setExtractProcedures(@NotNull final Boolean flag)
     {
         immutableSetExtractProcedures(flag);
     }
@@ -913,6 +1108,7 @@ public class QueryJMojo
      * Indicates if procedures must be extracted.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetExtractProcedures()
     {
         return m__bExtractProcedures;
@@ -922,9 +1118,24 @@ public class QueryJMojo
      * Indicates if procedures must be extracted.
      * @return such condition.
      */
+    @Nullable
     protected Boolean getExtractProcedures()
     {
-        return immutableGetExtractProcedures();
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.extractProcedures");
+
+        if (aux == null)
+        {
+            result = immutableGetExtractProcedures();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
     }
 
     /**
@@ -932,7 +1143,7 @@ public class QueryJMojo
      * @param fields such fields.
      */
     protected final void immutableSetExternallyManagedFields(
-        final ExternallyManagedField[] fields)
+        @NotNull final ExternallyManagedField[] fields)
     {
         externallyManagedFields = fields;
     }
@@ -941,7 +1152,7 @@ public class QueryJMojo
      * Specifies the externally managed fields.
      * @param fields such fields.
      */
-    public void setExternallyManagedFields(final ExternallyManagedField[] fields)
+    public void setExternallyManagedFields(@NotNull final ExternallyManagedField[] fields)
     {
         immutableSetExternallyManagedFields(fields);
     }
@@ -950,6 +1161,7 @@ public class QueryJMojo
      * Returns the externally managed fields.
      * @return such fields.
      */
+    @NotNull
     protected final ExternallyManagedField[] immutableGetExternallyManagedFields()
     {
 //        return m__aExternallyManagedFields;
@@ -960,6 +1172,7 @@ public class QueryJMojo
      * Returns the externally managed fields.
      * @return such fields.
      */
+    @NotNull
     protected ExternallyManagedField[] getExternallyManagedFields()
     {
         return immutableGetExternallyManagedFields();
@@ -969,7 +1182,7 @@ public class QueryJMojo
      * Specifies the grammar folder.
      * @param folder such folder.
      */
-    protected final void immutableSetGrammarFolder(final File folder)
+    protected final void immutableSetGrammarFolder(@NotNull final File folder)
     {
         m__GrammarFolder = folder;
     }
@@ -979,7 +1192,7 @@ public class QueryJMojo
      * @param folder such folder.
      */
     @SuppressWarnings("unused")
-    public void setGrammarFolder(final File folder)
+    public void setGrammarFolder(@NotNull final File folder)
     {
         immutableSetGrammarFolder(folder);
     }
@@ -988,6 +1201,7 @@ public class QueryJMojo
      * Returns the grammar folder.
      * @return such folder.
      */
+    @Nullable
     protected final File immutableGetGrammarFolder()
     {
         return m__GrammarFolder;
@@ -997,16 +1211,30 @@ public class QueryJMojo
      * Returns the grammar bundle.
      * @return such resource.
      */
+    @Nullable
     protected File getGrammarFolder()
     {
-        return immutableGetGrammarFolder();
+        File result;
+
+        String aux = System.getProperty("queryj.grammarFolder");
+
+        if (aux == null)
+        {
+            result = immutableGetGrammarFolder();
+        }
+        else
+        {
+            result = new File(aux);
+        }
+
+        return result;
     }
 
     /**
      * Specifies the grammar bundle.
      * @param bundle such bundle.
      */
-    protected final void immutableSetGrammarName(final String bundle)
+    protected final void immutableSetGrammarName(@NotNull final String bundle)
     {
         m__strGrammarName = bundle;
     }
@@ -1016,7 +1244,7 @@ public class QueryJMojo
      * @param bundle such bundle.
      */
     @SuppressWarnings("unused")
-    public void setGrammarName(final String bundle)
+    public void setGrammarName(@NotNull final String bundle)
     {
         immutableSetGrammarName(bundle);
     }
@@ -1025,6 +1253,7 @@ public class QueryJMojo
      * Returns the grammar bundle.
      * @return such resource.
      */
+    @Nullable
     protected final String immutableGetGrammarName()
     {
         return m__strGrammarName;
@@ -1034,16 +1263,24 @@ public class QueryJMojo
      * Returns the grammar bundle.
      * @return such resource.
      */
+    @Nullable
     protected String getGrammarName()
     {
-        return immutableGetGrammarName();
+        String result = System.getProperty("queryj.grammarName");
+
+        if (result == null)
+        {
+            result = immutableGetGrammarName();
+        }
+
+        return result;
     }
 
     /**
      * Specifies the grammar suffix.
      * @param suffix such suffix.
      */
-    protected final void immutableSetGrammarSuffix(final String suffix)
+    protected final void immutableSetGrammarSuffix(@NotNull final String suffix)
     {
         m__strGrammarSuffix = suffix;
     }
@@ -1053,7 +1290,7 @@ public class QueryJMojo
      * @param suffix such suffix.
      */
     @SuppressWarnings("unused")
-    public void setGrammarSuffix(final String suffix)
+    public void setGrammarSuffix(@NotNull final String suffix)
     {
         immutableSetGrammarSuffix(suffix);
     }
@@ -1062,6 +1299,7 @@ public class QueryJMojo
      * Returns the grammar suffix.
      * @return such resource.
      */
+    @Nullable
     protected final String immutableGetGrammarSuffix()
     {
         return m__strGrammarSuffix;
@@ -1071,9 +1309,17 @@ public class QueryJMojo
      * Returns the grammar suffix.
      * @return such resource.
      */
+    @Nullable
     protected String getGrammarSuffix()
     {
-        return immutableGetGrammarSuffix();
+        String result = System.getProperty("queryj.grammarSuffix");
+
+        if (result == null)
+        {
+            result = immutableGetGrammarSuffix();
+        }
+
+        return result;
     }
 
     /**
@@ -1081,7 +1327,7 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @param flag such condition.
      */
-    protected final void immutableSetUseOutputSubfolders(final Boolean flag)
+    protected final void immutableSetUseOutputSubfolders(@NotNull final Boolean flag)
     {
         m__bOutputSubfolders = flag;
     }
@@ -1091,7 +1337,7 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @param flag such condition.
      */
-    public void setUseOutputSubfolders(final Boolean flag)
+    public void setUseOutputSubfolders(@NotNull final Boolean flag)
     {
         immutableSetUseOutputSubfolders(flag);
     }
@@ -1101,6 +1347,7 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetUseOutputSubfolders()
     {
         return m__bOutputSubfolders;
@@ -1111,16 +1358,30 @@ public class QueryJMojo
      * subfolders withing <code>outputDir</code>. Defaults to false.
      * @return such condition.
      */
+    @Nullable
     public Boolean getUseOutputSubfolders()
     {
-        return immutableGetUseOutputSubfolders();
+        Boolean result;
+
+        String aux = System.getProperty("queryj.useOutputSubfolders");
+
+        if (aux == null)
+        {
+            result = immutableGetUseOutputSubfolders();
+        }
+        else
+        {
+            result = Boolean.valueOf(aux);
+        }
+
+        return result;
     }
 
     /**
      * Specifies the tables.
      * @param tables such information.
      */
-    protected final void immutableSetTables(final Table[] tables)
+    protected final void immutableSetTables(@NotNull final Table[] tables)
     {
         m__aTables = tables;
     }
@@ -1129,7 +1390,7 @@ public class QueryJMojo
      * Specifies the tables.
      * @param tables such information.
      */
-    public void setTables(final Table[] tables)
+    public void setTables(@NotNull final Table[] tables)
     {
         immutableSetTables(tables);
     }
@@ -1138,6 +1399,7 @@ public class QueryJMojo
      * Returns the tables.
      * @return such information.
      */
+    @NotNull
     protected final Table[] immutableGetTables()
     {
         return m__aTables;
@@ -1147,6 +1409,7 @@ public class QueryJMojo
      * Returns the tables.
      * @return such information.
      */
+    @NotNull
     protected Table[] getTables()
     {
         return immutableGetTables();
@@ -1156,7 +1419,7 @@ public class QueryJMojo
      * Specifies the encoding.
      * @param encoding the encoding.
      */
-    protected final void immutableSetEncoding(final String encoding)
+    protected final void immutableSetEncoding(@NotNull final String encoding)
     {
         m__strEncoding = encoding;
     }
@@ -1165,7 +1428,7 @@ public class QueryJMojo
      * Specifies the encoding.
      * @param encoding the encoding.
      */
-    public void setEncoding(final String encoding)
+    public void setEncoding(@NotNull final String encoding)
     {
         immutableSetEncoding(encoding);
     }
@@ -1174,6 +1437,7 @@ public class QueryJMojo
      * Retrieves the encoding.
      * @return such information.
      */
+    @Nullable
     protected final String immutableGetEncoding()
     {
         return m__strEncoding;
@@ -1183,16 +1447,24 @@ public class QueryJMojo
      * Retrieves the encoding.
      * @return such information.
      */
+    @Nullable
     public String getEncoding()
     {
-        return immutableGetEncoding();
+        String result = System.getProperty("queryj.enconding");
+
+        if (result == null)
+        {
+            result = immutableGetEncoding();
+        }
+
+        return result;
     }
 
     /**
      * Specifies whether to use template caching.
      * @param flag such condition.
      */
-    protected final void immutableSetDisableCaching(final Boolean flag)
+    protected final void immutableSetDisableCaching(@NotNull final Boolean flag)
     {
         m__bDisableCaching = flag;
     }
@@ -1201,7 +1473,7 @@ public class QueryJMojo
      * Specifies whether to use template caching.
      * @param flag such condition.
      */
-    public void setDisableCaching(final Boolean flag)
+    public void setDisableCaching(@NotNull final Boolean flag)
     {
         immutableSetDisableCaching(flag);
     }
@@ -1210,6 +1482,7 @@ public class QueryJMojo
      * Retrieves whether to use template caching.
      * @return such condition.
      */
+    @Nullable
     protected final Boolean immutableGetDisableCaching()
     {
         return m__bDisableCaching;
@@ -1219,9 +1492,28 @@ public class QueryJMojo
      * Retrieves whether to use template caching.
      * @return such condition.
      */
+    @Nullable
     public Boolean isCaching()
     {
-        return !immutableGetDisableCaching();
+        Boolean result;
+
+        String aux = System.getProperty("queryj.caching");
+
+        if (aux == null)
+        {
+            result = immutableGetDisableCaching();
+        }
+        else
+        {
+            result = Boolean.valueOf(aux);
+        }
+
+        if (result != null)
+        {
+            result = !result;
+        }
+
+        return result;
     }
 
     /**
@@ -1445,7 +1737,14 @@ public class QueryJMojo
         }
         result.setEncoding(encoding);
 
-        boolean caching = isCaching();
+        boolean caching = true;
+
+        Boolean auxCaching = isCaching();
+        if (auxCaching != null)
+        {
+            caching = auxCaching;
+        }
+
         log.debug("Caching: " + caching);
         result.setCaching(caching);
 
@@ -1467,12 +1766,12 @@ public class QueryJMojo
     {
         ExternallyManagedField[] array = getExternallyManagedFields();
 
-        int count = (array == null) ? 0 : array.length;
+        int count = array.length;
         @Nullable AntExternallyManagedFieldsElement element;
         ExternallyManagedField field;
         @Nullable AntFieldElement fieldElement;
 
-        if  (array != null)
+        if  (count > 0)
         {
             element =
                 (AntExternallyManagedFieldsElement) task.createDynamicElement(
@@ -1480,11 +1779,11 @@ public class QueryJMojo
 
             if (element != null)
             {
-                for (int index = 0; index < count; index++)
+                for (ExternallyManagedField anArray : array)
                 {
-                    field = array[index];
+                    field = anArray;
 
-                    if  (field != null)
+                    if (field != null)
                     {
                         fieldElement =
                             (AntFieldElement) element.createDynamicElement("field");
@@ -1523,18 +1822,18 @@ public class QueryJMojo
         Field field;
         @Nullable AntFieldElement fieldElement;
 
-        int count = (array == null) ? 0 : array.length;
+        int count =  array.length;
 
-        if  (array != null)
+        if  (count > 0)
         {
             element =
                 (AntTablesElement) task.createDynamicElement("tables");
 
             if (element != null)
             {
-                for (int index = 0; index < count; index++)
+                for (Table anArray : array)
                 {
-                    table = array[index];
+                    table = anArray;
 
                     tableElement =
                         (AntTableElement) element.createDynamicElement("table");
@@ -1553,7 +1852,7 @@ public class QueryJMojo
                             {
                                 field = fields.get(fieldIndex);
 
-                                if  (field != null)
+                                if (field != null)
                                 {
                                     fieldElement =
                                         (AntFieldElement) tableElement.createDynamicElement("field");
@@ -1577,13 +1876,40 @@ public class QueryJMojo
     }
 
     /**
-     * try to get thread count if a Maven 3 build, using reflection as the plugin must not be maven3 api dependant
+     * Tries to get thread count if a Maven 3 build, using reflection as the plugin must not be maven3 api dependant
      *
      * @return number of thread for this build or 1 if not multi-thread build
      */
     protected int getRequestThreadCount()
     {
-        int result = 1;
+        int result = getRequestThreadCountFromSystemProperties();
+
+        if (result < 1)
+        {
+            result = getRequestThreadCountFromMaven();
+        }
+
+        if (result < 1)
+        {
+            result = getRequestThreadCountFromRuntime();
+        }
+
+        if (result < 1)
+        {
+            result = 1;
+        }
+
+        return result;
+    }
+
+    /**
+     * Tries to get thread count if a Maven 3 build, using reflection as the plugin must not be maven3 api dependant
+     *
+     * @return number of thread for this build or 1 if not multi-thread build
+     */
+    protected int getRequestThreadCountFromMaven()
+    {
+        int result = 0;
 
         try
         {
@@ -1604,12 +1930,16 @@ public class QueryJMojo
 //            result = Runtime.getRuntime().availableProcessors();
 //        }
 
-        if (result == 1)
-        {
-            result = Runtime.getRuntime().availableProcessors();
-        }
-
         return result;
+    }
+
+    /**
+     * Retrieves the thread count, from Runtime.
+     * @return such information.
+     */
+    protected int getRequestThreadCountFromRuntime()
+    {
+        return Runtime.getRuntime().availableProcessors();
     }
 
     @SuppressWarnings("unchecked")
@@ -1623,5 +1953,19 @@ public class QueryJMojo
         }
 
         return true;
+    }
+
+    public int getRequestThreadCountFromSystemProperties()
+    {
+        int result = 0;
+
+        String aux = System.getProperty("queryj.threadCount");
+
+        if (aux != null)
+        {
+            result = Integer.parseInt(aux);
+        }
+
+        return result;
     }
 }
