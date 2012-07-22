@@ -131,16 +131,6 @@ public abstract class Abstract<table.voName>DAO
     implements  <table.voName>DAO
 {
     /**
-     * The whole constants.
-     */
-    private static final <table.voName>[] _ALL_QUERYJ_CONSTANTS_ =
-        new <table.voName>[]
-        {
-            <table.staticContent:{<it.nameNormalizedUppercased>};
-              separator=",\n">
-        };
-
-    /**
      * Builds a {@link Abstract<table.voName>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
@@ -157,9 +147,9 @@ public abstract class Abstract<table.voName>DAO
     public <table.voName>[] getStaticValues()
     {
         <table.voName>[] result =
-            new <table.voName>[_ALL_QUERYJ_CONSTANTS_.length];
+            new <table.voName>[FIXED_CONSTANTS.length];
 
-        copyArray(_ALL_QUERYJ_CONSTANTS_, result);
+        copyArray(FIXED_CONSTANTS, result);
 
         return result;
     }
@@ -170,9 +160,9 @@ public abstract class Abstract<table.voName>DAO
      * @param target the target.
      */
     protected void copyArray(
-        <notnull()>final <table.voName>[] source, <notnull()>final <table.voName>[] target)
+        <notnull()>final <table.voName>[] source,
+        <notnull()>final <table.voName>[] target)
     {
-
         System.arraycopy(source, 0, target, 0, source.length);
     }
 
@@ -181,6 +171,8 @@ public abstract class Abstract<table.voName>DAO
       attribute=it,
       primaryKeyAttributes=table.primaryKey,
       voName=table.voName)>
+
+    <find_by_primary_key(voName=table.voName, primaryKeyAttributes=table.primaryKey)>
   <endif>
 
 }
@@ -203,11 +195,11 @@ static_table(
  */
 <nullable()>
 public <voName> findConstantBy<attribute.nameCapitalized>(
-    <type_checker(attribute=attribute)>final <attribute.type> <attribute.name>)
+    <type_checker(attribute=attribute)>final <attribute.javaType> <attribute.nameLowercased>)
 {
     <nullable()><voName> result = null;
 
-    for  (<nullable()> <voName> t_CurrentItem : _ALL_QUERYJ_CONSTANTS)
+    for  (<nullable()> <voName> t_CurrentItem : FIXED_CONSTANTS)
     {
         if  (   (t_CurrentItem != null)
              && (<attribute.nameLowercased>.equals(
@@ -215,39 +207,6 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
         {
             result = t_CurrentItem;
             break;
-        }
-    }
-
-    return result;
-}
-
-/**
- * Loads \<i><voName>\</i> information from the constant pool,
- * filtering by the primary key.
- <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
- * @return the {@link <voName>} instance.
- */
-<nullable()>
-public <voName> findConstantByPk(
-  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
-{
-    <nullable()><voName> result = null;
-
-    boolean t_bFound = false;
-
-    for  (<nullable()> <voName> t_CurrentItem : _ALL_QUERYJ_CONSTANTS)
-    {
-        if  (t_CurrentItem != null)
-        {
-            t_bFound = true;
-
-            <primaryKeyAttributes:static_attribute_check(attr=it); separator="\n">
-
-            if  (t_bFound)
-            {
-                result = t_CurrentItem;
-                break;
-            }
         }
     }
 
@@ -297,5 +256,40 @@ if  (t_bFound)
     {
         t_bFound = t_<attr.nameCapitalized>.equals(<attr.name>);
     }
+}
+>>
+
+find_constant_by_pk(voName, primaryKeyAttributes) ::= <<
+/**
+ * Loads \<i><voName>\</i> information from the constant pool,
+ * filtering by the primary key.
+ <primaryKeyAttributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the {@link <voName>} instance.
+ */
+<nullable()>
+public <voName> findConstantByPk(
+  <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
+{
+    <nullable()><voName> result = null;
+
+    boolean t_bFound = false;
+
+    for  (<nullable()> <voName> t_CurrentItem : FIXED_CONSTANTS)
+    {
+        if  (t_CurrentItem != null)
+        {
+            t_bFound = true;
+
+            <primaryKeyAttributes:static_attribute_check(attr=it); separator="\n">
+
+            if  (t_bFound)
+            {
+                result = t_CurrentItem;
+                break;
+            }
+        }
+    }
+
+    return result;
 }
 >>

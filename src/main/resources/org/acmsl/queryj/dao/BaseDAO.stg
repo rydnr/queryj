@@ -410,63 +410,6 @@ custom_select_declaration(select, result) ::= <<
 <endif>);
 >>
 
-custom_select_return(table, select, result) ::= <<
-<if(table.voDecorated)>
-<custom_select_return_decorated(select=select, result=result)>
-<else>
-<custom_select_return_nondecorated(select=select, result=result)>
-<endif>
->>
-
-custom_select_return_decorated(select, result) ::= <<
-<if(result.multiple)>
-<custom_select_declaration_decorated_multiple(select=select, result=result)>
-<else>
-<custom_select_declaration_decorated_single(select=select, result=result)>
-<endif>
->>
-
-custom_select_return_decorated_multiple(select, result) ::= <<
-List\<<result.voName>Decorator\> 
->>
-
-custom_select_return_decorated_single(select, result) ::= <<
-<result.voName>Decorator
->>
-
-custom_select_return_nondecorated(select, result) ::= <<
-<if(result.multiple)>
-<custom_select_return_nondecorated_multiple(select=select, result=result)>
-<else>
-<custom_select_return_nondecorated_single(select=select, result=result)>
-<endif>
->>
-
-custom_select_return_nondecorated_multiple(select, result) ::= <<
-<if(result.wrappingASingleProperty)>
-<custom_select_return_property_multiple(select=select, result=result)>
-<else>
-List\<<result.voName>\>
-<endif>
->>
-
-custom_select_return_nondecorated_single(select, result) ::= <<
-<if(result.wrappingASingleProperty)>
-<custom_select_return_property_single(select=select, result=result)>
-<else>
-<result.voName>
-<endif>
->>
-
-custom_select_return_property_multiple(select, result) ::= <<
-<notnull()>
-List\<<result.properties:{property|<property.objectType>}>\>
->>
-
-custom_select_return_property_single(select, result) ::= <<
-<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull()><endif><endif><property.type>}>
->>
-
 custom_update_or_insert(cs, table) ::= <<
 <!
  Writes the subtemplate for custom updates or inserts.

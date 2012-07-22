@@ -183,18 +183,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
-public <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<if(rs.multiple)>
-public <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-public <cs.resultClass>Decorator <cs.nameUncapitalized>(
-<endif>
-<endif>
-<else>
-public <cs.resultClass> <cs.nameUncapitalized>(
-<endif>}>
+<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException
 {
@@ -225,18 +214,7 @@ public <cs.resultClass> <cs.nameUncapitalized>(
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicit)>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<if(rs.multiple)>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-protected <cs.resultClass>Decorator <cs.nameUncapitalized>(
-<endif>
-<endif>
-<else>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<endif>}>
+<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
@@ -264,18 +242,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicit)>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<if(rs.multiple)>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-protected <cs.resultClass>Decorator <cs.nameUncapitalized>(
-<endif>
-<endif>
-<else>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<endif>}>
+<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
@@ -307,18 +274,7 @@ protected <cs.resultClass> <cs.nameUncapitalized>(
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<if(rs.multiple)>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<else>
-protected <cs.resultClass>Decorator <cs.nameUncapitalized>(
-<endif>
-<endif>
-<else>
-protected <cs.resultClass> <cs.nameUncapitalized>(
-<endif>}>
+<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
@@ -1109,23 +1065,7 @@ custom_select_result_declaration(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<if(table.voDecorated)>
-// table decorated
-<if(result.multiple)>
-// result -> multiple
-List\<<sql.resultClass>Decorator\> result = null;
-<else>
-// result -> simple
-<sql.resultClass> result = null;
-<endif>
-<else>
-<if(result.multiple)>
-List\<<sql.resultClass>\> result = null;
-<else>
-<sql.resultClass> result = null;
-<endif>
-<endif>
-
+<custom_select_return(table=table, select=sql, result=result)> result;
 >>
 
 implicit_attribute_declaration(attr, result) ::= <<
@@ -1416,4 +1356,61 @@ import <type>;
 
 class_annotations() ::= <<
 @org.checkthread.annotations.ThreadSafe
+>>
+
+custom_select_return(table, select, result) ::= <<
+<if(table.voDecorated)>
+<custom_select_return_decorated(select=select, result=result)>
+<else>
+<custom_select_return_nondecorated(select=select, result=result)>
+<endif>
+>>
+
+custom_select_return_decorated(select, result) ::= <<
+<if(result.multiple)>
+<custom_select_declaration_decorated_multiple(select=select, result=result)>
+<else>
+<custom_select_declaration_decorated_single(select=select, result=result)>
+<endif>
+>>
+
+custom_select_return_decorated_multiple(select, result) ::= <<
+List\<<result.voName>Decorator\> 
+>>
+
+custom_select_return_decorated_single(select, result) ::= <<
+<result.voName>Decorator
+>>
+
+custom_select_return_nondecorated(select, result) ::= <<
+<if(result.multiple)>
+<custom_select_return_nondecorated_multiple(select=select, result=result)>
+<else>
+<custom_select_return_nondecorated_single(select=select, result=result)>
+<endif>
+>>
+
+custom_select_return_nondecorated_multiple(select, result) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_property_multiple(select=select, result=result)>
+<else>
+List\<<result.voName>\>
+<endif>
+>>
+
+custom_select_return_nondecorated_single(select, result) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_property_single(select=select, result=result)>
+<else>
+<result.voName>
+<endif>
+>>
+
+custom_select_return_property_multiple(select, result) ::= <<
+<notnull()>
+List\<<result.properties:{property|<property.objectType>}>\>
+>>
+
+custom_select_return_property_single(select, result) ::= <<
+<result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull()><endif><endif><property.type>}>
 >>
