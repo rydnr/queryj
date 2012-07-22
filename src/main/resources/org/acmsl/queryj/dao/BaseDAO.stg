@@ -63,7 +63,6 @@ source() ::= <<
   timestamp=timestamp)>
 <endif>
 // Generated using org/acmsl/queryj/dao/BaseDAO.stg at <timestamp>
-
 <package_declaration(
   packageNames=
   [
@@ -79,8 +78,12 @@ source() ::= <<
 
 <checkers_import()>
 <if(column_type_imports)>
-<column_type_imports:import(type=it)>
+/*
+ * Importing some JDK classes.
+ */
+<column_type_imports:import(type=it); separator="\n">
 <endif>
+
 
 <class(table=table)>
 >>
@@ -260,7 +263,7 @@ public interface <table.voName>DAO
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
     <table.foreignKeys:fk_delete_method(
-      foreignKey=it, table=table); separator="\n">
+      foreignKey=it, table=table); separator="\n\n">
 
     <table.customSelects:custom_select(
       cs=it, table=table); separator="\n\n">
@@ -385,26 +388,19 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:custom_select_declaration(select=cs, result=it)>
+<custom_select_declaration(select=cs, result=cs.result)>
 >>
 
 custom_select_declaration(select, result) ::= <<
-<if(table.voDecorated)><! decorated !>
-<if(rs.multiple)><! decorated multiple !>
-List\<<cs.resultClass>Decorator\> <cs.nameUncapitalized>(
-<else><! decorated single !>
-<cs.resultClass>Decorator <cs.nameUncapitalized>(
-<endif>
-<else><! non-decorated multiple !>
-List\<<cs.resultClass>\> <cs.nameUncapitalized>(
-<else><! non-decorated single !>
-<cs.resultClass> <cs.nameUncapitalized>(
-<endif>
-<endif>
-<if(cs.parameters)>
-    <cs.parameters:attribute_declaration_impl(attr=it); separator=",\n">
+<if(table.voDecorated)><if(result.multiple)><notnull()>
+List\<<result.voName>Decorator\> <cs.nameUncapitalized>(<else><nullable()>
+<result.voName>Decorator <select.nameUncapitalized>(<endif><else><if(result.multiple)><notnull()>
+List\<<result.voName>\> <select.nameUncapitalized>(<else><nullable()>
+<result.voName> <select.nameUncapitalized>(<endif><endif>
+<if(select.parameters)>
+    <select.parameters:attribute_declaration_impl(attr=it); separator=",\n">
 <else>
-<if(cs.dynamic)>
+<if(select.dynamic)>
     final Object[] parameters
 <endif>
 <endif>);
