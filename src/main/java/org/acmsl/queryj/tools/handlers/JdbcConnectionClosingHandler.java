@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -41,9 +40,15 @@ import org.acmsl.queryj.tools.QueryJBuildException;
 /*
  * Importing some ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 
 /*
  * Importing some Commons-Logging classes.
+ */
+import org.apache.commons.logging.Log;
+
+/*
+ * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -53,6 +58,8 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.concurrent.Future;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -69,9 +76,14 @@ public class JdbcConnectionClosingHandler
     extends  AbstractQueryJCommandHandler
 {
     /**
+     * A token used to wait for the threads to complete.
+     */
+    private static final Object LOCK = new Object();
+
+    /**
      * Creates a <code>JdbcConnectionClosingHandler</code> instance.
      */
-    public JdbcConnectionClosingHandler() {};
+    public JdbcConnectionClosingHandler() {}
 
     /**
      * Handles given information.
@@ -79,17 +91,64 @@ public class JdbcConnectionClosingHandler
      *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
-     * @throws BuildException if the build process cannot be performed.
-     * @precondition parameters != null
+     * @throws QueryJBuildException the build process cannot be performed.
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
+        waitUntilGenerationThreadsFinish(parameters);
+
         closeConnection(parameters);
 
         removeConnection(parameters);
 
         return false;
+    }
+
+    /**
+     * Waits until all generation threads have finish.
+     */
+    protected void waitUntilGenerationThreadsFinish(@NotNull final Map parameters)
+    {
+        waitUntilGenerationThreadsFinish(
+            retrieveGenerationTasks(parameters),
+            UniqueLogFactory.getLog(JdbcConnectionClosingHandler.class));
+    }
+
+    /**
+     * Waits until all generation threads have finish.
+     * @param tasks the tasks.
+     * @param log the {@link Log} instance.
+     */
+    protected void waitUntilGenerationThreadsFinish(
+        @Nullable final List<Future> tasks, @NotNull final Log log)
+    {
+        if (tasks != null)
+        {
+            for (@Nullable Future t_Task : tasks)
+            {
+                if (t_Task != null)
+                {
+                    while (!t_Task.isDone())
+                    {
+                        log.debug("Waiting for generation threads to finish");
+
+                        synchronized(LOCK)
+                        {
+                            try
+                            {
+                                LOCK.wait(1000);
+                            }
+                            catch (@NotNull final InterruptedException interrupted)
+                            {
+                                log.info(
+                                    "Interrupted while waiting for the threads to finish", interrupted);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     /**

@@ -57,7 +57,9 @@ import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 /*
  * Importing some Apache Commons Logging classes.
@@ -560,6 +562,40 @@ public abstract class AbstractQueryJCommandHandler
     protected int retrieveThreadCount(@NotNull final Map parameters)
     {
         return (Integer) parameters.get(ParameterValidationHandler.THREAD_COUNT);
+    }
+
+    /**
+     * Annotates given list of generation tasks into the parameter map.
+     * @param tasks the tasks to track.
+     * @param parameters the parameter map.
+     */
+    @SuppressWarnings("unchecked")
+    protected void annotateGenerationTasks(
+        @NotNull final List<Future> tasks, @NotNull final Map parameters)
+    {
+        parameters.put(buildGenerationTasksKey(), tasks);
+    }
+
+    /**
+     * Retrieves the generation tasks.
+     * @param parameters the parameter map.
+     * @return such list.
+     */
+    @SuppressWarnings("unchecked")
+    @Nullable
+    protected List<Future> retrieveGenerationTasks(final Map parameters)
+    {
+        return (List<Future>) parameters.get(buildGenerationTasksKey());
+    }
+
+    /**
+     * Retrieves the key used to store the generation task list.
+     * @return such key.
+     */
+    @NotNull
+    protected String buildGenerationTasksKey()
+    {
+        return ">:generation_tasks:<";
     }
 
     /**

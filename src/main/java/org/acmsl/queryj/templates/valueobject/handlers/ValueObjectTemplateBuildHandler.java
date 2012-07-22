@@ -39,7 +39,6 @@ import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateFactory;
 import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplate;
-import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerTableTemplateBuildHandler;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 
