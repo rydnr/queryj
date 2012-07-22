@@ -229,7 +229,6 @@ public interface <table.voName>DAO
     void insert(
         <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
 
-
     /**
      * Inserts and retrieves the newly-inserted
      * {@link <table.voName>} instance.
@@ -244,7 +243,6 @@ public interface <table.voName>DAO
 <endif>
 
         <table.allNonReadOnlyButExternallyManagedAttributes:attribute_declaration(attr=it); separator=",\n">);
-
 
     /**
      * Updates {@link <table.voName>} information.
@@ -264,15 +262,24 @@ public interface <table.voName>DAO
 
     <table.foreignKeys:fk_delete_method(
       foreignKey=it, table=table); separator="\n\n">
+<if(table.customSelects)>
 
     <table.customSelects:custom_select(
       cs=it, table=table); separator="\n\n">
 
+<endif>
+<if(table.customUpdatesOrInserts)>
+
     <table.customUpdatesOrInserts:custom_update_or_insert(
       cs=it, table=table); separator="\n\n">
 
+<endif>
+<if(table.customSelectsForUpdate)>
+
     <table.customSelectsForUpdate:custom_select_for_update(
       cs=it, table=table); separator="\n\n">
+
+<endif>
 }
 >>
 
@@ -432,7 +439,6 @@ int <cs.nameUncapitalized>(
     final Object[] parameters
 <endif>
 <endif>);
-
 >>
 
 custom_select_for_update(cs, table) ::= <<
