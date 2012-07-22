@@ -91,10 +91,13 @@ import org.springframework.jdbc.core.PreparedStatementSetter;
  */
 import javax.sql.DataSource;
 
-<if(foreign_key_type_imports)>
 /*
  * Importing some JDK classes.
  */
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+<if(foreign_key_type_imports)>
 <foreign_key_type_imports:import(type=it)>
 <endif>
 

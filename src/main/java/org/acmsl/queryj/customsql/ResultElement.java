@@ -46,6 +46,7 @@ import java.util.Collection;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models &lt;result&gt; elements in <i>custom-sql</i> models, which
@@ -107,7 +108,7 @@ public class ResultElement
      * @return such value.
      */
     @Override
-    @NotNull
+    @Nullable
     public String getClassValue()
     {
         return m__strClass;
@@ -148,7 +149,7 @@ public class ResultElement
      * @param instance the instance.
      * @return <code>true</code> in such case.
      */
-    public boolean equals(final Object instance)
+    public boolean equals(@Nullable final Object instance)
     {
         boolean result = false;
 
@@ -156,7 +157,7 @@ public class ResultElement
         {
             result =
                 equals(
-                    instance,
+                    (Result) instance,
                     getId(),
                     getClassValue(),
                     getMatches(),
@@ -175,27 +176,18 @@ public class ResultElement
      * @return <code>true</code> in such case.
      */
     public boolean equals(
-        final Object instance,
+        @NotNull final Result candidate,
         @NotNull final String id,
-        @NotNull final String classValue,
+        @Nullable final String classValue,
         @NotNull final String matches,
-        final Collection propertyRefs)
+        final Collection<PropertyRef> propertyRefs)
     {
-        boolean result = false;
-
-        if  (instance instanceof ResultElement)
-        {
-            @NotNull ResultElement candidate = (ResultElement) instance;
-
-            result =
-                (   (id.equalsIgnoreCase(candidate.getId())
-                 && (classValue.equals(candidate.getClassValue()))
-                 && (matches.equalsIgnoreCase(candidate.getMatches()))
-                 && ("" + propertyRefs).equals(
-                         "" + candidate.getPropertyRefs())));
-        }
-
-        return result;
+        return
+            (   (id.equalsIgnoreCase(candidate.getId())
+             && (   ("" + classValue).equals(candidate.getClassValue()))
+             && (matches.equalsIgnoreCase(candidate.getMatches()))
+             && ("" + propertyRefs).equals(
+                     "" + candidate.getPropertyRefs())));
     }
 
     /**

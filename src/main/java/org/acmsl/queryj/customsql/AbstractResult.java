@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -69,10 +68,8 @@ public abstract class AbstractResult
      * Creates a <code>AbstractResult</code> with given information.
      * @param id the <i>id</i> attribute.
      * @param matches the <i>matches</i> attribute.
-     * @precondition id != null
-     * @precondition matches != null
      */
-    public AbstractResult(final String id, final String matches)
+    public AbstractResult(@NotNull final String id, @NotNull final String matches)
     {
         super(id);
         immutableSetMatches(matches);
@@ -82,7 +79,7 @@ public abstract class AbstractResult
      * Specifies the <i>matches</i> attribute.
      * @param matches such value.
      */
-    protected final void immutableSetMatches(final String matches)
+    protected final void immutableSetMatches(@NotNull final String matches)
     {
         m__strMatches = matches;
     }
@@ -92,7 +89,7 @@ public abstract class AbstractResult
      * @param matches such value.
      */
     @SuppressWarnings("unused")
-    protected void setMatches(final String matches)
+    protected void setMatches(@NotNull final String matches)
     {
         immutableSetMatches(matches);
     }
@@ -142,7 +139,7 @@ public abstract class AbstractResult
      */
     @Override
     @NotNull
-    public List<org.acmsl.queryj.customsql.PropertyRef> getPropertyRefs()
+    public List<PropertyRef> getPropertyRefs()
     {
         List<PropertyRef> result = immutableGetPropertyRefs();
 
@@ -208,7 +205,7 @@ public abstract class AbstractResult
      * @param instance the instance.
      * @return <code>true</code> in such case.
      */
-    public boolean equals(final Object instance)
+    public boolean equals(@Nullable final Object instance)
     {
         boolean result = false;
 
@@ -216,7 +213,7 @@ public abstract class AbstractResult
         {
             result =
                 equals(
-                    instance,
+                    (Result) instance,
                     getId(),
                     getMatches(),
                     getPropertyRefs());
@@ -233,25 +230,16 @@ public abstract class AbstractResult
      * @return <code>true</code> in such case.
      */
     public boolean equals(
-        final Object instance,
+        @NotNull final Result candidate,
         @NotNull final String id,
         @NotNull final String matches,
         final Collection propertyRefs)
     {
-        boolean result = false;
-
-        if  (instance instanceof Result)
-        {
-            @NotNull Result candidate = (Result) instance;
-
-            result =
-                (   (id.equalsIgnoreCase(candidate.getId())
-                 && (matches.equalsIgnoreCase(candidate.getMatches()))
-                 && ("" + propertyRefs).equals(
-                         "" + candidate.getPropertyRefs())));
-        }
-
-        return result;
+        return
+            (   (id.equalsIgnoreCase(candidate.getId())
+             && (matches.equalsIgnoreCase(candidate.getMatches()))
+             && ("" + propertyRefs).equals(
+                     "" + candidate.getPropertyRefs())));
     }
 
     /**
@@ -294,7 +282,7 @@ public abstract class AbstractResult
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(@Nullable final Object object)
         throws  ClassCastException
     {
         int result = 1;

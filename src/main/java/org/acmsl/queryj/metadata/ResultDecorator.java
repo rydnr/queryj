@@ -66,26 +66,33 @@ public interface ResultDecorator
      * @return such element.
      */
     @NotNull
-    public Result getResult();
+    Result getResult();
 
     /**
      * Retrieves whether the result matches a single entity or expects
      * a set of them.
      * @return such information.
      */
-    public boolean isMultiple();
+    boolean isMultiple();
 
     /**
      * Retrieves the properties.
      * @return such information.
      */
     @NotNull
-    public List<Property> getProperties();
+    List<Property> getProperties();
 
     /**
      * Retrieves the large-object-block properties.
      * @return such collection.
      */
     @NotNull
-    public List<Property> getLobProperties();
+    List<Property> getLobProperties();
+
+    /**
+     * Retrieves whether this {@link Result} is wrapping a single {@link Property}.
+     * @return <code>true</code> in such case.
+     */
+    @SuppressWarnings("unused")
+    boolean isWrappingASingleProperty();
 }

@@ -36,6 +36,7 @@ package org.acmsl.queryj.customsql;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -71,7 +72,7 @@ public interface Result
      * Retrieves the <i>class</i> attribute.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     String getClassValue();
 
     /**

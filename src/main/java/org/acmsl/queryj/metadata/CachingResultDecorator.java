@@ -107,6 +107,16 @@ public class CachingResultDecorator
     private List<Property> m__lCachedImplicitProperties;
 
     /**
+     * The cached ValueObject-formatted name.
+     */
+    private String m__strCachedVoName;
+
+    /**
+     * The cached information about whether the result is wrapping a single property.
+     */
+    private Boolean m__bCachedWrappingASingleProperty;
+
+    /**
      * Creates a <code>CachingResultElementDecorator</code> with given instance.
      * @param result the result element.
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
@@ -500,4 +510,95 @@ public class CachingResultDecorator
         return result;
     }
 
+    /**
+     * Specifies the cached ValueObject-formatted name.
+     * @param name the name.
+     */
+    protected final void immutableSetCachedVoName(@NotNull final String name)
+    {
+        this.m__strCachedVoName = name;
+    }
+
+    /**
+     * Specifies the cached ValueObject-formatted name.
+     * @param name the name.
+     */
+    protected void setCachedVoName(@NotNull final String name)
+    {
+        immutableSetCachedVoName(name);
+    }
+
+    /**
+     * Retrieves the cached ValueObject-formatted name.
+     * @return such information.
+     */
+    @Nullable
+    protected String getCachedVoName()
+    {
+        return this.m__strCachedVoName;
+    }
+
+    /**
+     * Retrieves the value-object name.
+     * @return such value.
+     */
+    @NotNull
+    @Override
+    public String getVoName()
+    {
+        String result = getCachedVoName();
+
+        if (result == null)
+        {
+            result = super.getVoName();
+            setCachedVoName(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Annotates in the cache whether this result is wrapping a single property.
+     * @param flag such flag.
+     */
+    protected final void immutableSetCachedWrappingASingleProperty(@NotNull final Boolean flag)
+    {
+        this.m__bCachedWrappingASingleProperty = flag;
+    }
+
+    /**
+     * Annotates in the cache whether this result is wrapping a single property.
+     * @param flag such flag.
+     */
+    protected void setCachedWrappingASingleProperty(@NotNull final Boolean flag)
+    {
+        immutableSetCachedWrappingASingleProperty(flag);
+    }
+
+    /**
+     * Retrieves whether the information about if this result is wrapping single property, is already cached or not.
+     * @return such information.
+     */
+    protected Boolean getCachedWrappingASingleProperty()
+    {
+        return this.m__bCachedWrappingASingleProperty;
+    }
+
+    /**
+     * Retrieves whether this {@link org.acmsl.queryj.customsql.Result} is wrapping a single {@link Property}.
+         * @return <code>true</code> in such case.
+     */
+    @Override
+    public boolean isWrappingASingleProperty()
+    {
+        Boolean result = getCachedWrappingASingleProperty();
+
+        if (result == null)
+        {
+            result = super.isWrappingASingleProperty();
+            setCachedWrappingASingleProperty(result);
+        }
+
+        return result;
+    }
 }

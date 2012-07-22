@@ -153,7 +153,7 @@ public class SqlElement
         @Nullable final String dao,
         @NotNull final String name,
         @NotNull final String type,
-        @NotNull final String implementation,
+        @Nullable final String implementation,
         final boolean validate,
         final boolean dynamic)
     {
@@ -175,7 +175,7 @@ public class SqlElement
         @NotNull final String id,
         @NotNull final String name,
         @NotNull final String type,
-        @NotNull final String implementation,
+        @Nullable final String implementation,
         final boolean validate,
         final boolean dynamic,
         @NotNull final String repositoryScope)
@@ -201,7 +201,7 @@ public class SqlElement
         @Nullable final String repositoryScope,
         @NotNull final String name,
         @NotNull final String type,
-        @NotNull final String implementation,
+        @Nullable final String implementation,
         final boolean validate,
         final boolean dynamic)
     {
@@ -210,7 +210,10 @@ public class SqlElement
         immutableSetRepositoryScope(repositoryScope);
         immutableSetName(name);
         immutableSetType(type);
-        immutableSetImplementation(implementation);
+        if (implementation != null)
+        {
+            immutableSetImplementation(implementation);
+        }
         immutableSetValidate(validate);
         immutableSetDynamic(dynamic);
     }

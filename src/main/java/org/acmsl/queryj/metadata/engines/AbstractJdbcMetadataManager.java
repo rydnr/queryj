@@ -1324,6 +1324,11 @@ public abstract class AbstractJdbcMetadataManager
     @Override
     public boolean isGenerationAllowedForTable(@NotNull final String tableName)
     {
+        if (tableName.equals("G_SHARES"))
+        {
+            System.out.println("debug ");
+        }
+
         return
             isGenerationAllowed(
                 retrieveExplicitlyEnabledTables(),

@@ -708,6 +708,26 @@ public abstract class AbstractResultDecorator
     }
 
     /**
+     * Retrieves whether this {@link Result} is wrapping a single {@link Property}.
+     * @return <code>true</code> in such case.
+     */
+    @Override
+    public boolean isWrappingASingleProperty()
+    {
+        return isWrappingASingleProperty(getProperties());
+    }
+
+    /**
+     * Retrieves whether this {@link Result} is wrapping a single {@link Property}.
+     * @param properties the list of {@link Property properties}.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isWrappingASingleProperty(@NotNull final List<Property> properties)
+    {
+        return properties.size() == 1;
+    }
+
+    /**
      * Provides a text representation of the information
      * contained in this instance.
      * @return such information.
