@@ -140,7 +140,7 @@ classImpl(table, parent) ::= <<
       first_line_description(tableName=table.name),
       second_line_description(tableName=table.name)
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/BaseDAO.stg")>
  */
 public interface <table.voName>DAO
 {
@@ -251,7 +251,6 @@ public interface <table.voName>DAO
      */
     int update(
         <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
-
 
     /**
      * Deletes {@link <table.voName>} information.
@@ -386,19 +385,22 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
-<cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<if(rs.multiple)>
-<cs.resultClass> <cs.nameUncapitalized>(
-<else>
+<cs.result:custom_select_declaration(select=cs, result=it)>
+>>
+
+custom_select_declaration(select, result) ::= <<
+<if(table.voDecorated)><! decorated !>
+<if(rs.multiple)><! decorated multiple !>
+List\<<cs.resultClass>Decorator\> <cs.nameUncapitalized>(
+<else><! decorated single !>
 <cs.resultClass>Decorator <cs.nameUncapitalized>(
 <endif>
-<endif>
-<else>
+<else><! non-decorated multiple !>
+List\<<cs.resultClass>\> <cs.nameUncapitalized>(
+<else><! non-decorated single !>
 <cs.resultClass> <cs.nameUncapitalized>(
-<endif>}>
-
+<endif>
+<endif>
 <if(cs.parameters)>
     <cs.parameters:attribute_declaration_impl(attr=it); separator=",\n">
 <else>
@@ -456,24 +458,5 @@ custom_select_for_update(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<cs.result:{rs|<if(table.voDecorated)><if(rs.implicitProperties)>
-<cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<if(rs.multiple)>
-<cs.resultClass> <cs.nameUncapitalized>(
-<else>
-<cs.resultClass>Decorator <cs.nameUncapitalized>(
-<endif>
-<endif>
-<else>
-<cs.resultClass> <cs.nameUncapitalized>(
-<endif>}>
-<if(cs.parameters)>
-    <cs.parameters:attribute_declaration(attr=it); separator=",\n">
-<else>
-<if(cs.dynamic)>
-    final Object[] parameters
-<endif>
-<endif>);
-
+<cs.result:custom_select_declaration(select=cs, result=it)>
 >>

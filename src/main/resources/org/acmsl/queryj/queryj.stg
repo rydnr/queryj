@@ -498,12 +498,12 @@ public void <cs.nameUncapitalized>(
             getDataSource(), <cs.idAsConstant>_SQL);
 
 <if(cs.resultClass)>
-    List t_lResult = t_Query.execute();
+    List\<<cs.resultClass>\> t_lResult = (List\<<cs.resultClass>\>) t_Query.execute();
 
     if  (   (t_lResult != null)
          && (t_lResult.size() > 0))
     {
-        result = (<cs.resultClass>) t_lResult.get(0);
+        result = t_lResult.get(0);
     }
 
     return result;
@@ -1136,7 +1136,7 @@ implicit_attribute_declaration(attr, result) ::= <<
 !>
 <if(attr.nullable)>
 <if(result.multiple)>
-List result = null;
+List\<<result.classValue>\> result = null;
 <else>
 <result.classValue> result = null;
 <endif>
