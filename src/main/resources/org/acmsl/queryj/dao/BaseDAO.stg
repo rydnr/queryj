@@ -77,10 +77,11 @@ source() ::= <<
   table=table)>
 
 <checkers_import()>
-<if(column_type_imports)>
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
+<if(column_type_imports)>
 <column_type_imports:import(type=it); separator="\n">
 <endif>
 
