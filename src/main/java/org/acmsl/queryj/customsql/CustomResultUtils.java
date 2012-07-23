@@ -557,7 +557,7 @@ public class CustomResultUtils
      * @param key the key.
      * @return the cached entry, or <code>null</code> if it's not cached.
      */
-    @NotNull
+    @Nullable
     protected String retrieveCachedEntry(@NotNull final Map<String,String> cache, @NotNull final String key)
     {
         return cache.get(key);

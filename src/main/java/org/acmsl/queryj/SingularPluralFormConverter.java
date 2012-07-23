@@ -54,6 +54,7 @@ import java.io.File;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Provides some grammar rules for converting plural and singular
@@ -118,7 +119,7 @@ public class SingularPluralFormConverter
      * Retrieves the bundle name.
      * @return such information.
      */
-    @NotNull
+    @Nullable
     public static File getGrammarBundle()
     {
         return m__GrammarBundle;
@@ -138,6 +139,7 @@ public class SingularPluralFormConverter
      * Retrieves the words bundle.
      * @return such bundle name.
      */
+    @Nullable
     protected String retrieveGrammarBundleName()
     {
         String result = null;
@@ -173,6 +175,7 @@ public class SingularPluralFormConverter
      * @param bundleName the bundle name.
      * @return the <code>BundleI14able</code> instance.
      */
+    @NotNull
     protected BundleI14able createBundleI14able(
         @NotNull final String messageKey,
         @NotNull final String bundleProperty,
@@ -189,6 +192,7 @@ public class SingularPluralFormConverter
      * @param cacheTtl the cache TTL.
      * @return the <code>BundleI14able</code> instance.
      */
+    @NotNull
     protected BundleI14able createBundleI14able(
         @NotNull final String messageKey,
         @NotNull final String bundleProperty,
@@ -202,5 +206,4 @@ public class SingularPluralFormConverter
                 bundleName,
                 cacheTtl);
     }
-    
 }

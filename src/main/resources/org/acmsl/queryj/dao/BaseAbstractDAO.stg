@@ -173,7 +173,6 @@ public abstract class Abstract<table.voName>DAO
       primaryKeyAttributes=table.primaryKey,
       voName=table.voName)>
 
-    <find_by_primary_key(voName=table.voName, primaryKeyAttributes=table.primaryKey)>
   <endif>
 
 }
@@ -258,6 +257,25 @@ if  (t_bFound)
         t_bFound = t_<attr.nameCapitalized>.equals(<attr.name>);
     }
 }
+>>
+
+find_by_primary_key(table) ::= <<
+/**
+ * Retrieves {@link <table.voName>} information
+ * filtering by its primary key.
+ <table.primaryKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @return the {@link <table.voName>} matching given
+ * primary key.
+ * @throws DataAccessException if the operation fails.
+ */
+<if(table.voDecorated)>
+<table.voName>Decorator findByPrimaryKey(
+<else>
+<table.voName> findByPrimaryKey(
+<endif>
+
+    <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
+
 >>
 
 find_constant_by_pk(voName, primaryKeyAttributes) ::= <<

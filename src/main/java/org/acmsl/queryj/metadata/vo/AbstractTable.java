@@ -285,7 +285,7 @@ public abstract class AbstractTable
     @NotNull
     public List<Attribute> getAttributes()
     {
-        List<Attribute> result = immutableGetAttributes();
+        @Nullable List<Attribute> result = immutableGetAttributes();
 
         if (result == null)
         {

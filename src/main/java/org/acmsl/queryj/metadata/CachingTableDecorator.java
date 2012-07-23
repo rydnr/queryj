@@ -56,6 +56,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -881,6 +882,7 @@ public class CachingTableDecorator
      * Retrieves the value-object name associated to the table name.
      * @return such name.
      */
+    @Override
     @NotNull
     public String getVoName()
     {
@@ -2282,6 +2284,10 @@ public class CachingTableDecorator
         if (result == null)
         {
             result = super.getChildAttributes();
+            if (result == null)
+            {
+                result = new ArrayList<Attribute>(0);
+            }
             setCachedChildAttributes(result);
         }
 

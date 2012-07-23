@@ -392,6 +392,7 @@ public abstract class AbstractTableDecorator
      * Retrieves the child's attributes.
      * @return such list.
      */
+    @Nullable
     public List<Attribute> getChildAttributes()
     {
         return m__lChildAttributes;
@@ -1362,6 +1363,23 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Retrieves the child attributes.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Attribute> retrieveChildAttributes()
+    {
+        @Nullable List<Attribute> result = getChildAttributes();
+
+        if (result == null)
+        {
+            result = new ArrayList<Attribute>(0);
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the attributes.
      * @return such information.
      */
@@ -1371,7 +1389,7 @@ public abstract class AbstractTableDecorator
         return
             getAttributes(
                 getName(),
-                getChildAttributes(),
+                retrieveChildAttributes(),
                 getMetadataManager(),
                 getDecoratorFactory(),
                 getAttributesShouldBeCleanedUp());
@@ -1511,7 +1529,7 @@ public abstract class AbstractTableDecorator
         return
             sumUpParentAndChildAttributes(
                 getAttributes(),
-                getChildAttributes(),
+                retrieveChildAttributes(),
                 TableDecoratorHelper.getInstance());
     }
 
