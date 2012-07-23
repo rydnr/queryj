@@ -454,13 +454,18 @@ public class OracleMetadataManager
         {
             if (t_Table != null)
             {
-                if (metaLanguageUtils.isStatic(t_Table.getComment()))
+                @Nullable String t_strComment = t_Table.getComment();
+
+                if (t_strComment != null)
                 {
-                    t_Table.setStatic(true);
-                }
-                if (metaLanguageUtils.retrieveTableDecorator(t_Table.getComment()))
-                {
-                    t_Table.setVoDecorated(true);
+                    if (metaLanguageUtils.isStatic(t_strComment))
+                    {
+                        t_Table.setStatic(true);
+                    }
+                    if (metaLanguageUtils.retrieveTableDecorator(t_strComment))
+                    {
+                        t_Table.setVoDecorated(true);
+                    }
                 }
             }
         }

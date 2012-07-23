@@ -60,15 +60,16 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
     String retrieveTemplateFileName(@NotNull final C context);
 
     /**
-     * Writes a table template to disk.
+     * Writes a template to disk.
      * @param template the table template to write.
      * @param outputDir the output folder.
      * @param rootFolder the root folder.
      * @param charset the file encoding.
+     * @return <code>true</code> if it actually generated the file.
      * @throws IOException if the file cannot be created.
      * @throws QueryJBuildException if the generation process fails.
      */
-    void write(
+    boolean write(
         @NotNull final T template,
         @NotNull final File outputDir,
         @NotNull final File rootFolder,

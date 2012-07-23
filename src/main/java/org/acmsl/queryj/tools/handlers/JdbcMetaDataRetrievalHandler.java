@@ -37,6 +37,7 @@ package org.acmsl.queryj.tools.handlers;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Extracts metadata information from JDBC-compliant databases.
@@ -53,11 +54,10 @@ public class JdbcMetaDataRetrievalHandler
      * @param majorVersion the major version number.
      * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
-     * @precondition product != null
      */
     protected boolean checkVendor(
-        final String productName,
-        final String productVersion,
+        @NotNull final String productName,
+        @NotNull final String productVersion,
         final int majorVersion,
         final int minorVersion)
     {

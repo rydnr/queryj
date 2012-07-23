@@ -1992,7 +1992,11 @@ public class QueryJChain
              && (properties != null))
         {
             result = properties.getProperty(GRAMMAR_NAME);
-            setGrammarName(result);
+
+            if (result != null)
+            {
+                setGrammarName(result);
+            }
         }
 
         return result;
@@ -2043,7 +2047,11 @@ public class QueryJChain
              && (properties != null))
         {
             result = properties.getProperty(GRAMMAR_SUFFIX);
-            setGrammarSuffix(result);
+
+            if (result != null)
+            {
+                setGrammarSuffix(result);
+            }
         }
 
         return result;
@@ -2092,7 +2100,11 @@ public class QueryJChain
              && (properties != null))
         {
             result = properties.getProperty(ENCODING);
-            setEncoding(result);
+
+            if (result != null)
+            {
+                setEncoding(result);
+            }
         }
 
         return result;

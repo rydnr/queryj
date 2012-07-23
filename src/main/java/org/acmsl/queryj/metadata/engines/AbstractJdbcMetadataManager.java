@@ -769,8 +769,6 @@ public abstract class AbstractJdbcMetadataManager
      * @param values the values.
      * @param start the index to start from.
      * @return <code>true</code> if there are still items to concatenate.
-     * @precondition start >= 0;
-     * @precondition start < values.length
      */
     protected boolean anythingElseToConcatenate(
         @NotNull final String[] values, final int start)

@@ -77,11 +77,15 @@ public class ResultElement
      */
     public ResultElement(
         @NotNull final String id,
-        @NotNull final String classValue,
+        @Nullable final String classValue,
         @NotNull final String matches)
     {
         super(id, matches);
-        immutableSetClassValue(classValue);
+
+        if (classValue != null)
+        {
+            immutableSetClassValue(classValue);
+        }
     }
 
     /**

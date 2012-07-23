@@ -80,10 +80,10 @@ public abstract class AbstractField
      * @param pk whether it participates in the table's pk.
      */
     public AbstractField(
-        @NotNull final String name,
+        @Nullable final String name,
         final int typeId,
-        @NotNull final String type,
-        @NotNull final String tableName,
+        @Nullable final String type,
+        @Nullable final String tableName,
         @Nullable final String comment,
         final int ordinalPosition,
         final int length,
@@ -153,7 +153,7 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    private void immutableSetFieldFks(final Collection<AntFieldFkElement> fieldFks)
+    private void immutableSetFieldFks(@NotNull final Collection<AntFieldFkElement> fieldFks)
     {
         m__cFieldFks = fieldFks;
     }
@@ -162,7 +162,7 @@ public abstract class AbstractField
      * Specifies the field fk collection.
      * @param fieldFks the collection
      */
-    protected void setFieldFks(final Collection<AntFieldFkElement> fieldFks)
+    protected void setFieldFks(@NotNull final Collection<AntFieldFkElement> fieldFks)
     {
         immutableSetFieldFks(fieldFks);
     }
@@ -171,6 +171,7 @@ public abstract class AbstractField
      * Retrieves the field fk collection.
      * @return such collection.
      */
+    @Nullable
     public Collection<AntFieldFkElement> getFieldFks()
     {
         return m__cFieldFks;
@@ -181,6 +182,8 @@ public abstract class AbstractField
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
+    @Override
     public String toString()
     {
         return
@@ -198,6 +201,7 @@ public abstract class AbstractField
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -216,6 +220,7 @@ public abstract class AbstractField
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(final Object object)
     {
         final boolean result;

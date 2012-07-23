@@ -46,6 +46,7 @@ import java.util.List;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an incomplete {@link Table}: only with partial information.
@@ -65,7 +66,7 @@ public class TableIncompleteValueObject
      * @param comment the table comment.
      */
     public TableIncompleteValueObject(
-        @NotNull final String name, @NotNull final String comment)
+        @NotNull final String name, @Nullable final String comment)
     {
         super(name, comment);
     }

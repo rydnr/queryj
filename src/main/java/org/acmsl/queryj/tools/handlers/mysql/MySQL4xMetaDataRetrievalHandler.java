@@ -78,12 +78,11 @@ public class MySQL4xMetaDataRetrievalHandler
      * @param majorVersion the major version number.
      * @param minorVersion the minor version number.
      * @return <code>true</code> in case it matches.
-     * @precondition product != null
      */
     @Override
     protected boolean checkVendor(
         @NotNull final String productName,
-        final String productVersion,
+        @NotNull final String productVersion,
         final int majorVersion,
         final int minorVersion)
     {
@@ -102,11 +101,9 @@ public class MySQL4xMetaDataRetrievalHandler
      * @param version the version.
      * @param versionUtils the <code>VersionUtils</code> instance.
      * @return <code>true</code> if the version matches or is compatible with.
-     * @precondition version != null
-     * @precondition versionUtils != null
      */
     protected boolean checkVersion(
-        final String version, @NotNull final VersionUtils versionUtils)
+        @NotNull final String version, @NotNull final VersionUtils versionUtils)
     {
         return versionUtils.matches(version, "4.x");
     }
@@ -129,7 +126,6 @@ public class MySQL4xMetaDataRetrievalHandler
      * @return the metadata manager instance.
      * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
-     * @precondition metaData != null
      */
     @Override
     @Nullable
@@ -141,9 +137,9 @@ public class MySQL4xMetaDataRetrievalHandler
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @NotNull final DatabaseMetaData metaData,
+        @Nullable final DatabaseMetaData metaData,
         @Nullable final String catalog,
-        @NotNull final String schema,
+        @Nullable final String schema,
         final boolean caseSensitive,
         @NotNull final String engineName,
         @NotNull final String engineVersion,

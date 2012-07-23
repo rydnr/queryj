@@ -133,9 +133,8 @@ public class MetaLanguageUtils
      * Checks whether given table is static.
      * @param tableComment the table's comment.
      * @return <code>true</code> in such case.
-     * @precondition tableComment != null
      */
-    public boolean isStatic(final String tableComment)
+    public boolean isStatic(@NotNull final String tableComment)
     {
         return (retrieveStaticAttribute(tableComment) != null);
     }
@@ -219,9 +218,9 @@ public class MetaLanguageUtils
      * children in an ISA relationship.
      * @param tableComment the table's comment.
      * @return the ISA parent table.
-     * @precondition tableComment != null
      */
     @SuppressWarnings("unused")
+    @Nullable
     public String retrieveDiscriminatingParent(@NotNull final String tableComment)
     {
         String result = null;
@@ -259,9 +258,9 @@ public class MetaLanguageUtils
      * @return the values to use in the database to denote <code>true</code>,
      * <code>false</code> and <code>null</code> values, or <code>null</code>
      * if the column is not boolean.
-     * @precondition columnComment != null
      */
-    public String[] retrieveColumnBool(final String columnComment)
+    @NotNull
+    public String[] retrieveColumnBool(@NotNull final String columnComment)
     {
         String[] result = null;
 
@@ -296,6 +295,11 @@ public class MetaLanguageUtils
              }
         }
 
+        if (result == null)
+        {
+            result = new String[0];
+        }
+
         return result;
     }
 
@@ -304,9 +308,8 @@ public class MetaLanguageUtils
      * Java side (i.e. a last-modified or creation-date timestamp).
      * @param columnComment the column comment.
      * @return such condition.
-     * @precondition columnComment != null
      */
-    public boolean retrieveColumnReadOnly(final String columnComment)
+    public boolean retrieveColumnReadOnly(@NotNull final String columnComment)
     {
         boolean result = false;
 
@@ -341,11 +344,11 @@ public class MetaLanguageUtils
      * table (whose parent is declared in table comments as <code>@isatype</code>).
      * @param columnComment the column comment.
      * @return such associations.
-     * @precondition columnComment != null
      */
     @SuppressWarnings("unused")
+    @NotNull
     public String[][] retrieveColumnDiscriminatedTables(
-        final String columnComment)
+        @NotNull final String columnComment)
     {
         String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
 
@@ -378,9 +381,8 @@ public class MetaLanguageUtils
      * Retrieves whether the table is meant to be decorated.
      * @param tableComment the table comment.
      * @return such condition.
-     * @precondition tableComment != null
      */
-    public boolean retrieveTableDecorator(final String tableComment)
+    public boolean retrieveTableDecorator(@NotNull final String tableComment)
     {
         boolean result = false;
 
@@ -491,7 +493,7 @@ public class MetaLanguageUtils
      * @param text the text.
      * @return <code>true</code> in such case.
      */
-    protected boolean isEmpty(final String text)
+    protected boolean isEmpty(@NotNull final String text)
     {
         return isEmpty(text, StringValidator.getInstance());
     }
@@ -501,10 +503,9 @@ public class MetaLanguageUtils
      * @param text the text.
      * @param stringValidator the <code>StringValidator</code> instance.
      * @return <code>true</code> in such case.
-     * @precondition stringValidator != null
      */
     protected boolean isEmpty(
-        final String text, final StringValidator stringValidator)
+        @NotNull final String text, @NotNull final StringValidator stringValidator)
     {
         return stringValidator.isEmpty(text);
     }

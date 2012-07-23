@@ -77,7 +77,7 @@ public class AttributeIncompleteValueObject
         final int typeId,
         @NotNull final String type,
         @NotNull final String tableName,
-        @NotNull final String comment,
+        @Nullable final String comment,
         final int ordinalPosition,
         final int length,
         final int precision,

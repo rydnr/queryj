@@ -177,10 +177,10 @@ public abstract class AbstractAttribute
      * @param value the optional value.
      */
     protected AbstractAttribute(
-        @NotNull final String name,
+        @Nullable final String name,
         final int typeId,
-        @NotNull final String type,
-        @NotNull final String tableName,
+        @Nullable final String type,
+        @Nullable final String tableName,
         @Nullable final String comment,
         final int ordinalPosition,
         final int length,
@@ -190,7 +190,10 @@ public abstract class AbstractAttribute
     {
         this(tableName, name);
         immutableSetTypeId(typeId);
-        immutableSetType(type);
+        if (type != null)
+        {
+            immutableSetType(type);
+        }
         immutableSetComment(comment);
         immutableSetOrdinalPosition(ordinalPosition);
         immutableSetLength(length);
@@ -221,10 +224,10 @@ public abstract class AbstractAttribute
      * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      */
     protected AbstractAttribute(
-        @NotNull final String name,
+        @Nullable final String name,
         final int typeId,
-        @NotNull final String type,
-        @NotNull final String tableName,
+        @Nullable final String type,
+        @Nullable final String tableName,
         @Nullable final String comment,
         final int ordinalPosition,
         final int length,

@@ -167,6 +167,7 @@ public abstract class Abstract<table.voName>DAO
     }
 
   <if(table.static)>
+// <table.primaryKey>
     <table.attributes:static_table(
       attribute=it,
       primaryKeyAttributes=table.primaryKey,

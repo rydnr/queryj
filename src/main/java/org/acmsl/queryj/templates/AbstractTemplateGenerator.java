@@ -187,7 +187,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      */
     @ThreadSafe
     @Override
-    public void write(
+    public boolean write(
         @NotNull final N template,
         @NotNull final File outputDir,
         @NotNull final File rootFolder,
@@ -195,14 +195,15 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         throws  IOException,
                 QueryJBuildException
     {
-        write(
-            isCaching(),
-            template,
-            retrieveTemplateFileName(template.getTemplateContext()),
-            outputDir,
-            rootFolder,
-            charset,
-            FileUtils.getInstance());
+        return
+            write(
+                isCaching(),
+                template,
+                retrieveTemplateFileName(template.getTemplateContext()),
+                outputDir,
+                rootFolder,
+                charset,
+                FileUtils.getInstance());
     }
 
     /**
@@ -218,7 +219,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @throws QueryJBuildException if the generation process fails.
      */
     @ThreadSafe
-    protected void write(
+    protected boolean write(
         final boolean caching,
         @NotNull final N template,
         @NotNull final String fileName,
@@ -229,15 +230,16 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         throws  IOException,
                 QueryJBuildException
     {
-        generate(
-            template,
-            caching,
-            fileName,
-            outputDir,
-            rootFolder,
-            charset,
-            fileUtils,
-            UniqueLogFactory.getLog(AbstractTemplateGenerator.class));
+        return
+            generate(
+                template,
+                caching,
+                fileName,
+                outputDir,
+                rootFolder,
+                charset,
+                fileUtils,
+                UniqueLogFactory.getLog(AbstractTemplateGenerator.class));
     }
 
     /**
@@ -252,7 +254,7 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @throws IOException if the output dir cannot be created.
      */
     @ThreadSafe
-    protected void generate(
+    protected boolean generate(
         @NotNull final N template,
         final boolean caching,
         @NotNull final String fileName,
@@ -264,6 +266,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
         throws IOException,
         QueryJBuildException
     {
+        boolean result = false;
+
         @NotNull final String relevantContent = template.generate(true);
 
         @NotNull final String newHash = computeHash(relevantContent, charset);
@@ -272,6 +276,11 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
 
         if (   (oldHash == null)
             || (!newHash.equals(oldHash)))
+        {
+            result = true;
+        }
+
+        if (result)
         {
             String t_strOutputFile =
                 outputDir.getAbsolutePath()
@@ -317,6 +326,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                     "Not writing " + t_strOutputFile + " since the generated content is empty");
             }
         }
+
+        return result;
     }
 
     /**

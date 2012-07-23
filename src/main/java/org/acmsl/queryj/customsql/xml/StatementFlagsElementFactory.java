@@ -70,7 +70,7 @@ public class StatementFlagsElementFactory
     /**
      * Creates a StatementFlagsElementFactory instance.
      */
-    public StatementFlagsElementFactory() {};
+    public StatementFlagsElementFactory() {}
 
     /**
      * Creates a StatementFlagsElement instance from given SAX
@@ -80,9 +80,6 @@ public class StatementFlagsElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;sql&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
     @Nullable
     public Object createObject(
@@ -91,7 +88,7 @@ public class StatementFlagsElementFactory
         @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable StatementFlagsElement result = null;
+        @Nullable StatementFlagsElement result;
 
         String t_strId = attributes.getValue("id");
 
@@ -106,7 +103,7 @@ public class StatementFlagsElementFactory
         if  (t_strFetchSize != null)
         {
             t_iFetchSize =
-                Integer.valueOf(conversionUtils.toInt(t_strFetchSize));
+                conversionUtils.toInt(t_strFetchSize);
         }
 
         @Nullable Integer t_iMaxFieldSize = null;
@@ -117,7 +114,7 @@ public class StatementFlagsElementFactory
         if  (t_strMaxFieldSize != null)
         {
             t_iMaxFieldSize =
-                Integer.valueOf(conversionUtils.toInt(t_strMaxFieldSize));
+                conversionUtils.toInt(t_strMaxFieldSize);
         }
 
         @Nullable Integer t_iMaxRows = null;
@@ -128,7 +125,7 @@ public class StatementFlagsElementFactory
         if  (t_strMaxRows != null)
         {
             t_iMaxRows =
-                Integer.valueOf(conversionUtils.toInt(t_strMaxRows));
+                conversionUtils.toInt(t_strMaxRows);
         }
 
         @Nullable Integer t_iQueryTimeout = null;
@@ -139,7 +136,7 @@ public class StatementFlagsElementFactory
         if  (t_strQueryTimeout != null)
         {
             t_iQueryTimeout =
-                Integer.valueOf(conversionUtils.toInt(t_strQueryTimeout));
+                conversionUtils.toInt(t_strQueryTimeout);
         }
 
         String t_strFetchDirection = 

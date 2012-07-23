@@ -401,13 +401,16 @@ public class TemplateGeneratorThread
         @Nullable final CyclicBarrier barrier,
         @NotNull final Log log)
     {
+        boolean generated = false;
+
         try
         {
-            templateGenerator.write(
-                template,
-                outputDir,
-                rootFolder,
-                charset);
+            generated =
+                templateGenerator.write(
+                    template,
+                    outputDir,
+                    rootFolder,
+                    charset);
         }
         catch (@NotNull final QueryJBuildException unknownException)
         {
@@ -418,8 +421,11 @@ public class TemplateGeneratorThread
             log.warn(ioException);
         }
 
-        UniqueLogFactory.getLog(TemplateGeneratorThread.class).debug(
-            "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished");
+        if (generated)
+        {
+            UniqueLogFactory.getLog(TemplateGeneratorThread.class).debug(
+                "Thread " + template.getTemplateContext().getTemplateName() + ":" + threadIndex + " finished");
+        }
 
         if (barrier != null)
         {

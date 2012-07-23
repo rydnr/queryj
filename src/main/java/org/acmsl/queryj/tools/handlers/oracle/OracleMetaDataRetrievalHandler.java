@@ -61,6 +61,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.sql.DatabaseMetaData;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -125,7 +126,7 @@ public class OracleMetaDataRetrievalHandler
         final boolean lazyTableExtraction,
         final boolean disableProcedureExtraction,
         final boolean lazyProcedureExtraction,
-        @NotNull final DatabaseMetaData metaData,
+        @Nullable final DatabaseMetaData metaData,
         @Nullable final String catalog,
         @Nullable final String schema,
         final boolean caseSensitive,
@@ -144,7 +145,7 @@ public class OracleMetaDataRetrievalHandler
                     new MetadataExtractionLogger(),
                     catalog,
                     schema,
-                    null, // TODO: explicit tables
+                    new ArrayList<String>(0), // TODO: explicit tables
                     tables,
                     disableTableExtraction,
                     lazyTableExtraction,

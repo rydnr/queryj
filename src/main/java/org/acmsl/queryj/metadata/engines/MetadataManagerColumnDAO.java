@@ -117,7 +117,7 @@ public class MetadataManagerColumnDAO
      * @param columnName the column name.
      * @return the {@link Attribute column}.
      */
-    @NotNull
+    @Nullable
     @Override
     public Attribute findColumn(
         @NotNull final String table,
@@ -181,7 +181,7 @@ public class MetadataManagerColumnDAO
         final int ordinalPosition,
         final int length,
         final int precision,
-        @NotNull final String value,
+        @Nullable final String value,
         @Nullable final String keyword,
         @Nullable final String retrievalQuery,
         final boolean readOnly,

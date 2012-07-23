@@ -1115,12 +1115,7 @@ custom_select_template_call(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<if(result.multiple)>
-List\<(<sql.resultClass>)\>
-<else>
-(<sql.resultClass>)
-<endif>
-     <actual_custom_select_template_call(sql=sql, result=result)>;
+(<custom_select_return(table=table, select=sql, result=result)>) <actual_custom_select_template_call(sql=sql, result=result)>;
 >>
 
 actual_custom_select_template_call(sql, result) ::= <<

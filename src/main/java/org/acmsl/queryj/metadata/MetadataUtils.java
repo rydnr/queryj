@@ -357,7 +357,6 @@ public class MetadataUtils
      * Checks whether the foreign key allows null or not.
      * @param attributes the attributes.
      * @return such information.
-     * @precondition attributes != null
      */
     @SuppressWarnings("unused")
     public boolean allowsNullAsAWhole(@Nullable final Collection<Attribute> attributes)
@@ -680,9 +679,6 @@ public class MetadataUtils
      * @param name the attribute name.
      * @param tableName the table name.
      * @return <code>true</code> in such case.
-     * @precondition attribute != null
-     * @precondition name != null
-     * @precondition tableName != null
      */
     public boolean match(
         @Nullable final Attribute attribute,
@@ -705,10 +701,9 @@ public class MetadataUtils
      * Caches the singular table name.
      * @param tableName the table name.
      * @param singularForm the singular form.
-     * @precondition tableName != null
      */
     protected void cacheSingularTableName(
-        final String tableName, final String singularForm)
+        @NotNull final String tableName, @NotNull final String singularForm)
     {
         cacheEntry(buildSingularKey(tableName), singularForm);
     }
@@ -717,10 +712,9 @@ public class MetadataUtils
      * Caches the plural table name.
      * @param tableName the table name.
      * @param pluralForm the plural form.
-     * @precondition tableName != null
      */
     protected void cachePluralTableName(
-        final String tableName, final String pluralForm)
+        @NotNull final String tableName, @NotNull final String pluralForm)
     {
         cacheEntry(buildPluralKey(tableName), pluralForm);
     }
@@ -729,10 +723,9 @@ public class MetadataUtils
      * Caches given singular or plural form of a table name.
      * @param key the key.
      * @param value the value.
-     * @precondition key != null
      */
     protected void cacheEntry(
-        final String key, @Nullable final String value)
+        @NotNull final String key, @Nullable final String value)
     {
         if  (value == null)
         {
@@ -748,10 +741,9 @@ public class MetadataUtils
      * Retrieves the cached singular form for given table.
      * @param tableName the table name.
      * @return such value.
-     * @precondition tableName != null
      */
     @Nullable
-    protected String retrieveCachedSingularTableName(final String tableName)
+    protected String retrieveCachedSingularTableName(@NotNull final String tableName)
     {
         return retrieveCachedEntry(buildSingularKey(tableName));
     }
@@ -760,10 +752,9 @@ public class MetadataUtils
      * Retrieves the cached plural form for given table.
      * @param tableName the table name.
      * @return such value.
-     * @precondition tableName != null
      */
     @Nullable
-    protected String retrieveCachedPluralTableName(final String tableName)
+    protected String retrieveCachedPluralTableName(@NotNull final String tableName)
     {
         return retrieveCachedEntry(buildPluralKey(tableName));
     }
@@ -796,7 +787,7 @@ public class MetadataUtils
      * @param key the key.
      * @return the cached entry, or <code>null</code> if it's not cached.
      */
-    @NotNull
+    @Nullable
     protected String retrieveCachedEntry(@NotNull final Map<String,String> cache, @NotNull final String key)
     {
         return cache.get(key);
