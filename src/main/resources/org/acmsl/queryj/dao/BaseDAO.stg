@@ -121,8 +121,13 @@ import <basePackageName>.<voSubpackageName>.<voName>;
 import <basePackageName>.<voSubpackageName>.<voName>Decorator;
 import <basePackageName>.<voSubpackageName>.<voName>DecoratorImpl;
 <endif>
-
 import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+
+<table.differentCustomResults:custom_select_import(result=it, table=table, package=project_package); separator="\n">
+>>
+
+custom_select_import(result, table, package) ::= <<
+<custom_select_return_import(result=result, table=table, package=package)>
 >>
 
 class(table) ::= <<
@@ -400,7 +405,7 @@ custom_select(cs, table) ::= <<
 >>
 
 custom_select_declaration(select, result) ::= <<
-<custom_select_return(table=table, select=select, result=result)> <select.nameUncapitalized>(
+<custom_select_return(table=table, result=result)> <select.nameUncapitalized>(
 <if(select.parameters)>
     <select.parameters:attribute_declaration_impl(attr=it); separator=",\n">
 <else>

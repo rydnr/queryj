@@ -41,9 +41,11 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
+import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.AbstractTable;
 import org.acmsl.queryj.metadata.vo.Attribute;
@@ -2706,4 +2708,114 @@ public abstract class AbstractTableDecorator
     {
         return new CachingAttributeDecorator(attribute, metadataManager);
     }
+
+    /**
+     * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * @return such list.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Result> getDifferentCustomResults()
+    {
+        return getDifferentCustomResults(getTable(), getCustomSqlProvider());
+    }
+
+    /**
+     * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * @return such list.
+     */
+    @NotNull
+    protected List<Result> getDifferentCustomResults(
+        @NotNull final Table table, @NotNull final CustomSqlProvider customSqlProvider)
+    {
+        return
+            getDifferentCustomResults(
+                table.getName(),
+                getVoName(),
+                customSqlProvider.getSqlDAO(),
+                customSqlProvider.getSqlResultDAO(),
+                getMetadataManager(),
+                customSqlProvider,
+                getDecoratorFactory(),
+                CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * @param table the {@link Table} instance.
+     * @param voName the ValueObject name.
+     * @param sqlDAO the {@link SqlDAO} instance.
+     * @param resultDAO the {@link SqlResultDAO} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} implementation.
+     * @param customResultUtils the {@link CustomResultUtils} instance.
+     * @return such list.
+     */
+    @NotNull
+    protected List<Result> getDifferentCustomResults(
+        @NotNull final String table,
+        @NotNull final String voName,
+        @NotNull final SqlDAO sqlDAO,
+        @NotNull final SqlResultDAO resultDAO,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+        List<Result> result = new ArrayList<Result>();
+
+        @NotNull final List<Sql> t_lSql = sqlDAO.findSelects(table);
+        t_lSql.addAll(sqlDAO.findSelectsForUpdate(table));
+
+        for (@Nullable Sql t_Sql : t_lSql)
+        {
+            if (t_Sql != null)
+            {
+                @Nullable final ResultRef t_ResultRef = t_Sql.getResultRef();
+
+                if (t_ResultRef != null)
+                {
+                    @Nullable final Result t_Result = resultDAO.findByPrimaryKey(t_ResultRef.getId());
+                    if (   (t_Result != null)
+                        && (!matches(t_Result.getClassValue(), voName))
+                        && (!result.contains(t_Result)))
+                    {
+                        result.add(
+                            customResultUtils.decorate(
+                                t_Result, metadataManager, customSqlProvider, decoratorFactory));
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Checks whether given ValueObject classes match.
+     * @param classValue the class value.
+     * @param voName the ValueObject name.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean matches(@Nullable final String classValue, @NotNull final String voName)
+    {
+        boolean result = false;
+
+        if (classValue != null)
+        {
+            String[] t_astrParts = classValue.split("\\.");
+
+            if (t_astrParts.length > 0)
+            {
+                result = voName.equals(t_astrParts[t_astrParts.length - 1]);
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Decorates given
+     */
 }

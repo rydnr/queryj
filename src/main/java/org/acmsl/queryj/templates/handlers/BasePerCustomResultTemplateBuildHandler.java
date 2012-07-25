@@ -97,7 +97,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     @ThreadSafe
     @Override
@@ -276,8 +275,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
-     * @precondition customResult != null
-     * @precondition parameters != null
      */
     @ThreadSafe
     protected String retrievePackage(
@@ -321,8 +318,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * Stores the template collection in given attribute map.
      * @param templates the templates.
      * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
      */
     protected abstract void storeTemplates(
         @NotNull final List<T> templates, @NotNull final Map parameters);
@@ -334,8 +329,6 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @return such templates.
      * @throws QueryJBuildException if the templates cannot be retrieved for any
      * reason.
-     * @precondition parameters != null
-     * @precondition customSqlProvider != null
      */
     @ThreadSafe
     @NotNull

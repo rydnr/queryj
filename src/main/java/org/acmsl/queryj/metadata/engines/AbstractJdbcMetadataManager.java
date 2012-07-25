@@ -1322,7 +1322,7 @@ public abstract class AbstractJdbcMetadataManager
     @Override
     public boolean isGenerationAllowedForTable(@NotNull final String tableName)
     {
-        if (tableName.equals("G_SHARES"))
+        if (tableName.equals("G_SHARE_BOOKINGS"))
         {
             System.out.println("debug ");
         }

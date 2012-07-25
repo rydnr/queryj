@@ -41,10 +41,15 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project classes.
  */
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -257,4 +262,11 @@ public interface TableDecorator
      */
     @NotNull
     List<Row> getStaticContent();
+
+    /**
+     * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * @return such list.
+     */
+    @NotNull
+    List<Result> getDifferentCustomResults();
 }

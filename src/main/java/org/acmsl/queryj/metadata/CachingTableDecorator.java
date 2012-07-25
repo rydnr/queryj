@@ -41,6 +41,7 @@ package org.acmsl.queryj.metadata;
  * Importing project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
@@ -304,6 +305,11 @@ public class CachingTableDecorator
      * The cached externally-managed attributes.
      */
     private List<AttributeDecorator> m__lCachedAllExternallyManagedAttributes;
+
+    /**
+     * The cached list of different results.
+     */
+    private List<Result> m__lCachedDifferentCustomResults;
 
     /**
      * Creates a <code>CachingTableDecorator</code> with the
@@ -2629,6 +2635,53 @@ public class CachingTableDecorator
         {
             result = super.getAllExternallyManagedAttributes();
             setCachedAllExternallyManagedAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies the cached different custom results.
+     * @param results such results.
+     */
+    protected final void immutableSetCachedDifferentCustomResults(@NotNull final List<Result> results)
+    {
+        this.m__lCachedDifferentCustomResults = results;
+    }
+
+    /**
+     * Specifies the cached different custom results.
+     * @param results such results.
+     */
+    protected void setCachedDifferentCustomResults(@NotNull final List<Result> results)
+    {
+        immutableSetCachedDifferentCustomResults(results);
+    }
+
+    /**
+     * Retrieves the cached different custom results.
+     * @return such results.
+     A*/
+    @Nullable
+    public List<Result> getCachedDifferentCustomResults()
+    {
+        return this.m__lCachedDifferentCustomResults;
+    }
+
+    /**
+     * Retrieves the list of different results defined for this table (using the referring custom-selects).
+     * @return such list.
+     */
+    @NotNull
+    @Override
+    public List<Result> getDifferentCustomResults()
+    {
+        List<Result> result = getCachedDifferentCustomResults();
+
+        if (result == null)
+        {
+            result = super.getDifferentCustomResults();
+            setCachedDifferentCustomResults(result);
         }
 
         return result;

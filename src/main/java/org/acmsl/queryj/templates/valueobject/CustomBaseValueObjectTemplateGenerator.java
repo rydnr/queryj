@@ -48,6 +48,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Is able to generate custom BaseValueObject templates.
@@ -75,10 +76,23 @@ public class CustomBaseValueObjectTemplateGenerator
     @Override
     public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        return
-              "Abstract"
-            + extractClassName(context.getResult().getClassValue())
-            + "ValueObject.java";
+        @NotNull String result;
+
+        @Nullable final String t_strClassValue = context.getResult().getClassValue();
+
+        if (t_strClassValue != null)
+        {
+            result =
+                  "Abstract"
+                + extractClassName(t_strClassValue)
+                + "ValueObject.java";
+        }
+        else
+        {
+            result = "Error_in_" + context.getResult().getId();
+        }
+
+        return result;
     }
 
     /**

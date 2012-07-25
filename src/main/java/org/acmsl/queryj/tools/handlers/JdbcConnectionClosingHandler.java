@@ -145,8 +145,15 @@ public class JdbcConnectionClosingHandler
                         }
                         catch (@NotNull final ExecutionException interrupted)
                         {
-                            log.info(
-                                "Could not retrieve information about the thread's template", interrupted);
+                            log.info(interrupted.getMessage());
+
+                            Throwable cause = interrupted.getCause();
+
+                            while (cause != null)
+                            {
+                                log.error(cause.getMessage(), cause);
+                                cause = cause.getCause();
+                            }
                         }
 
                         synchronized(LOCK)

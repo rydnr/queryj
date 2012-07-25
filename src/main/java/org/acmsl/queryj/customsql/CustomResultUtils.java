@@ -36,8 +36,11 @@ package org.acmsl.queryj.customsql;
  * Importing some project-specific classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.queryj.metadata.CachingResultDecorator;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
+import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.vo.Table;
@@ -109,6 +112,25 @@ public class CustomResultUtils
         @NotNull final MetadataManager metadataManager)
     {
         return retrieveTable(customResult, customSqlProvider, metadataManager) != null;
+    }
+
+    /**
+     * Decorates given custom result.
+     * @param customResult the {@link Result} instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @return the decorated result.
+     */
+    @NotNull
+    public ResultDecorator decorate(
+        @NotNull final Result customResult,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final DecoratorFactory decoratorFactory)
+    {
+        return new CachingResultDecorator(customResult, customSqlProvider, metadataManager, decoratorFactory);
+
     }
 
     /**

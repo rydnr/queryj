@@ -1353,59 +1353,96 @@ class_annotations() ::= <<
 @org.checkthread.annotations.ThreadSafe
 >>
 
-custom_select_return(table, select, result) ::= <<
+custom_select_return(table, result) ::= <<
 <if(table.voDecorated)>
-<custom_select_return_decorated(select=select, result=result)>
+<custom_select_return_decorated(result=result)>
 <else>
-<custom_select_return_nondecorated(select=select, result=result)>
+<custom_select_return_nondecorated(result=result)>
 <endif>
 >>
 
-custom_select_return_decorated(select, result) ::= <<
+custom_select_return_decorated(result) ::= <<
 <if(result.multiple)>
-<custom_select_declaration_decorated_multiple(select=select, result=result)>
+<custom_select_declaration_decorated_multiple(result=result)>
 <else>
-<custom_select_declaration_decorated_single(select=select, result=result)>
+<custom_select_declaration_decorated_single(result=result)>
 <endif>
 >>
 
-custom_select_return_decorated_multiple(select, result) ::= <<
+custom_select_return_decorated_multiple(result) ::= <<
 List\<<result.voName>Decorator\> 
 >>
 
-custom_select_return_decorated_single(select, result) ::= <<
+custom_select_return_decorated_single(result) ::= <<
 <result.voName>Decorator
 >>
 
-custom_select_return_nondecorated(select, result) ::= <<
+custom_select_return_nondecorated(result) ::= <<
 <if(result.multiple)>
-<custom_select_return_nondecorated_multiple(select=select, result=result)>
+<custom_select_return_nondecorated_multiple(result=result)>
 <else>
-<custom_select_return_nondecorated_single(select=select, result=result)>
+<custom_select_return_nondecorated_single(result=result)>
 <endif>
 >>
 
-custom_select_return_nondecorated_multiple(select, result) ::= <<
+custom_select_return_nondecorated_multiple(result) ::= <<
 <if(result.wrappingASingleProperty)>
-<custom_select_return_property_multiple(select=select, result=result)>
+<custom_select_return_property_multiple(result=result)>
 <else>
 List\<<result.voName>\>
 <endif>
 >>
 
-custom_select_return_nondecorated_single(select, result) ::= <<
+custom_select_return_nondecorated_single(result) ::= <<
 <if(result.wrappingASingleProperty)>
-<custom_select_return_property_single(select=select, result=result)>
+<custom_select_return_property_single(result=result)>
 <else>
 <result.voName>
 <endif>
 >>
 
-custom_select_return_property_multiple(select, result) ::= <<
+custom_select_return_property_multiple(result) ::= <<
 <notnull()>
 List\<<result.properties:{property|<property.objectType>}>\>
 >>
 
 custom_select_return_property_single(select, result) ::= <<
 <result.properties:{property|<if(!property.primitive)><if(property.nullable)><nullable()><else><notnull()><endif><endif><property.type>}>
+>>
+
+
+custom_select_return_import(table, result, package) ::= <<
+<if(table.voDecorated)>
+<custom_select_return_import_decorated(result=result, package=package)>
+<else>
+<custom_select_return_import_nondecorated(result=result, package=package)>
+<endif>
+>>
+
+custom_select_return_import_decorated(result, package) ::= <<
+<if(!result.multiple)>
+/* ? */<custom_select_declaration_decorated_single(result=result, package=package)>
+<endif>
+>>
+
+custom_select_return_import_nondecorated(result, package) ::= <<
+<if(result.multiple)>
+<custom_select_return_import_nondecorated_single(result=result, package=package)>
+<else>
+<if(result.voName)>
+import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
+<endif>
+<endif>
+>>
+
+custom_select_return_import_nondecorated_single(result, package) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_import_property_single(result=result, package=package)>
+<else>
+import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
+<endif>
+>>
+
+custom_select_return_import_property_single(select, result, package) ::= <<
+<result.properties:{property|<if(!property.primitive)>import <package>.<typeInitMap.voSubpackageName>.<property.type>;<endif>}>
 >>
