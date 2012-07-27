@@ -87,7 +87,7 @@ sourceImpl(table) ::= <<
   ],
   timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/DAO.stg
+// Generated using org/acmsl/queryj/dao/DAO.stg at <timestamp>
 
 <package_declaration(
   packageNames=
@@ -278,6 +278,11 @@ import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
   basePackageName=basePackageName,
   baseDAOSubpackageName=baseDAOSubpackageName,
   referredVOName=it.sourceVoName); separator="\n">
+<table.differentCustomResults:custom_select_import(result=it, table=table, package=project_package); separator="\n">
+>>
+
+custom_select_import(result, table, package) ::= <<
+<custom_select_return_import(result=result, table=table, package=package)>
 >>
 
 foreignkey_statementsetter_import(
