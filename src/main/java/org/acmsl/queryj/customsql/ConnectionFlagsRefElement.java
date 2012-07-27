@@ -73,6 +73,7 @@ public class ConnectionFlagsRefElement
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return

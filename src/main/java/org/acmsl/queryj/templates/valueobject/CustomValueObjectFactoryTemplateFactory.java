@@ -110,9 +110,12 @@ public class CustomValueObjectFactoryTemplateFactory
     {
         @Nullable CustomValueObjectFactoryTemplate result = null;
 
-        if  (!isStandard(
-                 extractClassName(customResult.getClassValue()),
-                 metadataManager))
+        @Nullable final String t_strClassValue = customResult.getClassValue();
+
+        if  (   (t_strClassValue != null)
+             && (!isStandard(
+                 extractClassName(t_strClassValue),
+                 metadataManager)))
         {
             result =
                 new CustomValueObjectFactoryTemplate(

@@ -502,8 +502,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param template the template.
      * @param input the input.
      * @return the processed text.
-     * @precondition template != null
-     * @precondition input != null
      */
     @Nullable
     protected String processInnerTemplate(

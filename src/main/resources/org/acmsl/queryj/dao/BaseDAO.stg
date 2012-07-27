@@ -80,6 +80,7 @@ source() ::= <<
 /*
  * Importing some JDK classes.
  */
+import java.util.Date;
 import java.util.List;
 <if(column_type_imports)>
 <column_type_imports:import(type=it); separator="\n">
@@ -117,12 +118,13 @@ project_imports(basePackageName, voSubpackageName, voName, table) ::= <<
  * Importing project classes.
  */
 import <basePackageName>.<voSubpackageName>.<voName>;
+<if(table.static)>
+import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
+<endif>
 <if(table.voDecorated)>
 import <basePackageName>.<voSubpackageName>.<voName>Decorator;
 import <basePackageName>.<voSubpackageName>.<voName>DecoratorImpl;
 <endif>
-import <basePackageName>.<voSubpackageName>.<voName>ValueObject;
-
 <table.differentCustomResults:custom_select_import(result=it, table=table, package=project_package); separator="\n">
 >>
 
@@ -200,7 +202,7 @@ public interface <table.voName>DAO
      * @return the \{@link <table.voName>} instance.
      */
     <nullable()>
-    <table.voName> findConstantByPk(
+    <table.voName> findConstantByPrimaryKey(
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
 <endif>

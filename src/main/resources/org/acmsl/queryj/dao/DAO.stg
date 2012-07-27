@@ -250,10 +250,7 @@ import <subpackageName>.<tableNameLowercased>.<voName>AttributesStatementSetter;
 import <subpackageName>.<tableNameLowercased>.<voName>PkStatementSetter;
 import <subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
 <customResults:resultset_extractor_import(
-  basePackageName=basePackageName,
-  baseDAOSubpackageName=baseDAOSubpackageName,
-  rdbSubpackageName=rdbSubpackageName,
-  subpackageName=subpackageName,
+  packageName=subpackageName,
   crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
 <if(parent)>
@@ -491,13 +488,15 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
      */
     public <engine_name><table.voName>DAO(
         <notnull()>final DataSource dataSource,
-        <nullable()>final <repository.capitalized>DAOListener daoListener)
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
         super(dataSource, daoListener);
     }
 
 <if(table.static)>
-    <find_constant_by(primaryKey=table.primaryKey,voName=table.voName); separator="\n\n">
+    <find_constant_by_pk(primaryKey=table.primaryKey, voName=table.voName)>
+
+    <find_constant_by(primaryKey=table.primaryKey,voName=table.voName)>
 <endif>
 
 
@@ -514,6 +513,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+    <nullable()>
 <if(table.voDecorated)>
     public <table.voName>Decorator findByPrimaryKey(
 <else>
@@ -544,6 +544,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+    <nullable()>
 <if(table.voDecorated)>
     protected <table.voName>Decorator findByPrimaryKey(
 <else>
@@ -577,6 +578,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+    <nullable()>
 <if(table.voDecorated)>
     protected <table.voName>Decorator findByPrimaryKey(
 <else>
@@ -612,6 +614,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
      * primary key.
      * @throws DataAccessException if the operation fails.
      */
+    <nullable()>
     @SuppressWarnings("unchecked")
 <if(table.voDecorated)>
     protected <table.voName>Decorator findByPrimaryKey(
@@ -1007,7 +1010,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
 
     /**
      * Extracts \<i><table.voName>\</i> value objects from result sets.
-     * @author \<a href="http://www.acm-sl.org/queryj">QueryJ\</a>
+    <class_common_javadoc(template="org/acmsl/queryj/dao/DAO.stg")>
      */
     public static class <table.voName>PkResultSetExtractor
         extends  <repository.capitalized>ResultSetExtractor
@@ -1161,8 +1164,7 @@ public <voName> findConstantBy<primaryKey:{attribute|<attribute.nameCapitalized>
     for  (<nullable()><voName> item : FIXED_CONSTANTS)
     {
         if  (   (item != null)
-             <primaryKey:{attribute|&& (item.get<attribute.nameCapitalized>().equals(
-                    <attribute.nameLowercased>))}; separator="\n">)
+             <primaryKey:find_constant_check_attribute(attribute=it); separator="\n">)
         {
             result = item;
             break;
@@ -1181,7 +1183,7 @@ find_constant_by_pk(primaryKey, voName) ::= <<
  * @return the {@link <voName>} instance.
  */
 <nullable()>
-public <voName> findConstantByPk(
+public <voName> findConstantByPrimaryKey(
   <primaryKey:attribute_declaration(attr=it); separator=",\n">)
 {
     <nullable()><voName> result = null;

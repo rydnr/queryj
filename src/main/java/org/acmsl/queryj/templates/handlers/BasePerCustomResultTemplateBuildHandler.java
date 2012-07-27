@@ -247,20 +247,27 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @return <code>true</code> in such case.
      */
     @ThreadSafe
-    @SuppressWarnings("unused")
     protected boolean isGenerationAllowedForResult(
         @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
     {
+        if (   ("com.ventura24.nlp.games.vo.GExtendedShareBooking".equals(customResult.getClassValue()))
+            || ("prize.categories.single.prize.category.result".equals(customResult.getId()))
+            || ("single.long.result".equals(customResult.getId())))
+        {
+            System.out.println("breakpoint");
+        }
+
         boolean result =
             customResultUtils.isGenerationAllowedForResult(customResult.getId());
 
         if (result)
         {
             result =
-                customResultUtils.retrieveTable(customResult, customSqlProvider, metadataManager) != null;
+                !customResultUtils.isImplicit(customResult, customSqlProvider, metadataManager);
+
         }
 
         return result;

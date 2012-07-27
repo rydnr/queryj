@@ -35,7 +35,6 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -45,11 +44,16 @@ import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.metadata.vo.Attribute;
+import org.acmsl.queryj.metadata.vo.Table;
+
+/*
+ * Importing some ACM-SL Commons classes.
+ */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
 
 /*
  * Importing Apache Commons Logging classes.
  */
-import org.acmsl.queryj.metadata.vo.Table;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -57,6 +61,11 @@ import org.apache.commons.logging.LogFactory;
  */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing some checkthread.org annotations.
+ */
+import org.checkthread.annotations.ThreadSafe;
 
 /*
  * Importing JDK classes.
@@ -69,6 +78,7 @@ import java.util.Locale;
  * Decorates &lt;result&gt; elements in <i>custom-sql</i> models.
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
+@ThreadSafe
 public abstract class AbstractResultDecorator
     extends  ResultElement
     implements  ResultDecorator
@@ -341,7 +351,6 @@ public abstract class AbstractResultDecorator
      * a set of them.
      * @param result the result element.
      * @return such information.
-     * @precondition result != null
      */
     protected boolean isMultiple(@NotNull final Result result)
     {
@@ -637,7 +646,7 @@ public abstract class AbstractResultDecorator
      * @return such value.
      */
     @SuppressWarnings("unused")
-    @NotNull
+    @Nullable
     public String getVoName()
     {
         return getVoName(getResult(), getMetadataManager(), getCustomSqlProvider(), CustomResultUtils.getInstance());
@@ -650,14 +659,14 @@ public abstract class AbstractResultDecorator
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     protected String getVoName(
         @NotNull final Result customResult,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        String result = customResult.getClassValue();
+        @Nullable String result = customResult.getClassValue();
 
         if (customResult.getPropertyRefs().size() == 0)
         {
@@ -668,7 +677,7 @@ public abstract class AbstractResultDecorator
                 result = capitalize(getSingular(t_strTable.toLowerCase(Locale.US)), DecorationUtils.getInstance());
             }
         }
-        else
+        else if (result != null)
         {
             String[] tokens = result.split("\\.");
 

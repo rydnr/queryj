@@ -35,7 +35,6 @@ package org.acmsl.queryj.templates.valueobject.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.metadata.MetadataManager;
@@ -114,24 +113,5 @@ public class CustomValueObjectImplTemplateBuildHandler
         return
             packageUtils.retrieveValueObjectPackage(
                 projectPackage);
-    }
-
-    /**
-     * Checks whether the generation is allowed for given result.
-     *
-     * @param customResult      the custom result.
-     * @param customSqlProvider the {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance.
-     * @param metadataManager   the {@link org.acmsl.queryj.metadata.MetadataManager} instance.
-     * @param customResultUtils the {@link org.acmsl.queryj.customsql.CustomResultUtils} instance.
-     * @return <code>true</code> in such case.
-     */
-    @Override
-    protected boolean isGenerationAllowedForResult(
-        @NotNull final Result customResult,
-        @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final MetadataManager metadataManager,
-        @NotNull final CustomResultUtils customResultUtils)
-    {
-        return !customResultUtils.isImplicit(customResult, customSqlProvider, metadataManager);
     }
 }

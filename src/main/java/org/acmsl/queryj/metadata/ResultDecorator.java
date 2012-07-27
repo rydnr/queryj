@@ -47,6 +47,7 @@ import org.acmsl.commons.patterns.Decorator;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -93,6 +94,13 @@ public interface ResultDecorator
      * Retrieves whether this {@link Result} is wrapping a single {@link Property}.
      * @return <code>true</code> in such case.
      */
-    @SuppressWarnings("unused")
     boolean isWrappingASingleProperty();
+
+    /**
+     * Retrieves the value-object name.
+     * @return such value.
+     */
+    @Nullable
+    String getVoName();
+
 }

@@ -552,7 +552,7 @@ preparedstatement_set(attr) ::= <<
  Generates just the call to preparedstatement.setXXX()
  @param attr the attribute.
 !>
-preparedStatement.set<attr.objectType>(<if(attr.nullable)>
+preparedStatement.set<if(attr.date)>Timestamp<else><attr.objectType><endif>(<if(attr.nullable)>
 <if(attr.boolean)>
 <if(attr.string)>index, <attr.nameLowercased>.booleanValue() ? "<attr.booleanTrue>" : "<attr.booleanFalse>");
 <else>index, <attr.nameLowercased>.booleanValue() ? <attr.booleanTrue> : <attr.booleanFalse>);
@@ -562,11 +562,14 @@ preparedStatement.set<attr.objectType>(<if(attr.nullable)>
 <else>
 <if(attr.timestamp)>index, new Timestamp(<attr.nameLowercased>.getTime()));
 <else>
+<if(attr.date)>index, new Timestamp(<attr.nameLowercased>.getTime()));
+<else>
 <if(attr.boolean)>
 <if(attr.string)>index, (<attr.nameLowercased>) ? "<attr.booleanTrue>" : "<attr.booleanFalse>");
 <else>index, (<attr.nameLowercased>) ? <attr.booleanTrue> : <attr.booleanFalse>);
 <endif>
 <else>index, <attr.nameLowercased>);
+<endif>
 <endif>
 <endif>
 <endif>

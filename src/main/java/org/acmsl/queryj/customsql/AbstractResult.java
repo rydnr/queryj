@@ -246,6 +246,7 @@ public abstract class AbstractResult
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return

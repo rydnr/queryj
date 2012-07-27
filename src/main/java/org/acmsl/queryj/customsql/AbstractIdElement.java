@@ -37,6 +37,7 @@ package org.acmsl.queryj.customsql;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Common parent to all <i>custom-sql</i> elements with <i>id</i>
@@ -54,9 +55,8 @@ public abstract class AbstractIdElement
     /**
      * Builds an AbstractIdElement with given <i>id</i>.
      * @param id the id.
-     * @precondition id != null
      */
-    protected AbstractIdElement(final String id)
+    protected AbstractIdElement(@NotNull final String id)
     {
         immutableSetId(id);
     }
@@ -65,7 +65,7 @@ public abstract class AbstractIdElement
      * Specifies the <i>id</i> value.
      * @param id the id.
      */
-    protected final void immutableSetId(final String id)
+    protected final void immutableSetId(@NotNull final String id)
     {
         m__strId = id;
     }
@@ -74,7 +74,8 @@ public abstract class AbstractIdElement
      * Specifies the <i>id</i> value.
      * @param id the id.
      */
-    protected void setId(final String id)
+    @SuppressWarnings("unused")
+    protected void setId(@NotNull final String id)
     {
         immutableSetId(id);
     }
@@ -83,6 +84,7 @@ public abstract class AbstractIdElement
      * Retrieves the <i>id</i> value.
      * @return such information.
      */
+    @NotNull
     public String getId()
     {
         return m__strId;
@@ -92,6 +94,8 @@ public abstract class AbstractIdElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
+    @Override
     public String toString()
     {
         return toString(getId());
@@ -103,7 +107,7 @@ public abstract class AbstractIdElement
      * @return such information.
      */
     @NotNull
-    protected String toString(final String id)
+    protected String toString(@NotNull final String id)
     {
         return
               getClass().getName()
@@ -114,6 +118,7 @@ public abstract class AbstractIdElement
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public int hashCode()
     {
         return
@@ -127,7 +132,8 @@ public abstract class AbstractIdElement
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    public boolean equals(final Object object)
+    @Override
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -154,7 +160,7 @@ public abstract class AbstractIdElement
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final IdentifiableElement object)
+    public int compareTo(@Nullable final IdentifiableElement object)
         throws  ClassCastException
     {
         return

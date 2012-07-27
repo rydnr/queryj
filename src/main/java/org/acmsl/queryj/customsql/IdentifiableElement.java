@@ -34,6 +34,11 @@
 package org.acmsl.queryj.customsql;
 
 /*
+ * Importing some JetBrains annotations
+ */
+import org.jetbrains.annotations.NotNull;
+
+/*
  * Importing some JDK classes.
  */
 import java.io.Serializable;
@@ -49,5 +54,6 @@ public interface IdentifiableElement
      * Retrieves the <i>id</i> value.
      * @return such information.
      */
-    public String getId();
+    @NotNull
+    String getId();
 }

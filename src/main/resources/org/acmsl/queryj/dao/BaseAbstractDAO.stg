@@ -134,10 +134,14 @@ public abstract class Abstract<table.voName>DAO
      * Builds a {@link Abstract<table.voName>DAO} instance
      * with given data source.
      * @param dataSource the required data source.
+     * @param daoListener the {@link <repository.capitalized>DAOListener}
+     * instance.
      */
-    public Abstract<table.voName>DAO(<notnull()>final DataSource dataSource)
+    public Abstract<table.voName>DAO(
+        <notnull()>final DataSource dataSource,
+        <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
-        super(dataSource);
+        super(dataSource, daoListener);
     }
 
     /**
@@ -202,8 +206,7 @@ public <voName> findConstantBy<attribute.nameCapitalized>(
     for  (<nullable()> <voName> t_CurrentItem : FIXED_CONSTANTS)
     {
         if  (   (t_CurrentItem != null)
-             && (<attribute.nameLowercased>.equals(
-                    t_CurrentItem.get<attribute.nameCapitalized>())))
+             <primaryKey:find_constant_check_attribute(attribute=it); separator="\n">)
         {
             result = t_CurrentItem;
             break;
@@ -286,26 +289,18 @@ find_constant_by_pk(voName, primaryKeyAttributes) ::= <<
  * @return the {@link <voName>} instance.
  */
 <nullable()>
-public <voName> findConstantByPk(
+public <voName> findConstantByPrimaryKey(
   <primaryKeyAttributes:attribute_declaration(attr=it); separator=",\n">)
 {
     <nullable()><voName> result = null;
 
-    boolean t_bFound = false;
-
-    for  (<nullable()> <voName> t_CurrentItem : FIXED_CONSTANTS)
+    for  (<nullable()><voName> item : FIXED_CONSTANTS)
     {
-        if  (t_CurrentItem != null)
+        if  (   (item != null)
+             <primaryKey:find_constant_check_attribute(attribute=it); separator="\n">)
         {
-            t_bFound = true;
-
-            <primaryKeyAttributes:static_attribute_check(attr=it); separator="\n">
-
-            if  (t_bFound)
-            {
-                result = t_CurrentItem;
-                break;
-            }
+            result = item;
+            break;
         }
     }
 

@@ -681,6 +681,7 @@ public class SqlElement
      * Provides a text information about this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return

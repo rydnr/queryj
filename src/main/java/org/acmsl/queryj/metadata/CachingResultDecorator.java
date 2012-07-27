@@ -36,6 +36,7 @@ package org.acmsl.queryj.metadata;
 /*
  * Importing project-specific classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.Result;
@@ -550,7 +551,15 @@ public class CachingResultDecorator
 
         if (result == null)
         {
-            result = super.getVoName();
+            try
+            {
+                result = super.getVoName();
+            }
+            catch (final Throwable throwable)
+            {
+                UniqueLogFactory.getLog(CachingResultDecorator.class).fatal(
+                    "Error in Result.getVoName()", throwable);
+            }
             setCachedVoName(result);
         }
 

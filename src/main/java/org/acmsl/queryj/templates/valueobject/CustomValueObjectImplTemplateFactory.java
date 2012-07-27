@@ -110,9 +110,12 @@ public class CustomValueObjectImplTemplateFactory
     {
         @Nullable CustomValueObjectImplTemplate result = null;
 
-        if  (!isStandard(
-                 extractClassName(customResult.getClassValue()),
-                 metadataManager))
+        @Nullable final String t_strClassName = customResult.getClassValue();
+
+        if  (   (t_strClassName != null)
+             && (!isStandard(
+                     extractClassName(t_strClassName),
+                     metadataManager)))
         {
             result =
                 new CustomValueObjectImplTemplate(

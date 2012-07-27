@@ -40,6 +40,10 @@ import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.commons.utils.StringValidator;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -157,7 +161,6 @@ public class PackageUtils
      * @param packageName the original package.
      * @param subpackage the subpackage.
      * @return the complate package information for given subpackage.
-     * @precondition packageName != null
      */
     @NotNull
     protected String retrievePackage(
@@ -176,8 +179,6 @@ public class PackageUtils
      * @param subpackage the subpackage.
      * @param stringValidator the {@link StringValidator} instance.
      * @return the complete package information for given subpackage.
-     * @precondition packageName != null
-     * @precondition stringValidator != null
      */
     @NotNull
     protected String retrievePackage(
@@ -210,8 +211,6 @@ public class PackageUtils
      * @param subpackage the subpackage.
      * @param subFolders whether to use sub folders or not.
      * @return the complete package information for given subpackage.
-     * @precondition packageName != null
-     * @precondition subpackage != null
      */
     @NotNull
     protected String retrieveTestPackage(
@@ -232,7 +231,6 @@ public class PackageUtils
      * @param packageName the original package.
      * @param subFolders whether to use sub folders or not.
      * @return the complete package information for given subpackage.
-     * @precondition packageName != null
      */
     @NotNull
     protected String retrieveTestPackage(
@@ -247,8 +245,6 @@ public class PackageUtils
      * @param packageName the original package.
      * @return the folder in which the associated class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     protected File retrieveFolder(
@@ -264,8 +260,6 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     protected File retrieveFolder(
@@ -285,8 +279,6 @@ public class PackageUtils
      * @param testPackage whether the package contains unit tests.
      * @return the folder in which the associated class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     protected File retrieveFolder(
@@ -318,11 +310,6 @@ public class PackageUtils
      * @param stringValidator the {@link StringValidator} instance.
      * @return the folder in which the associated DAO class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition subpackage != null
-     * @precondition stringUtils != null
-     * @precondition stringValidator != null
      */
     @NotNull
     protected File retrieveFolder(
@@ -362,8 +349,6 @@ public class PackageUtils
      * @param testPackage whether the package contains unit tests.
      * @return the folder in which the associated DAO class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     protected File retrieveFolder(
@@ -390,9 +375,6 @@ public class PackageUtils
      * @param stringUtils the {@link StringUtils} instance.
      * @return the folder in which the associated DAO class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition stringUtils != null
      */
     @NotNull
     protected File retrieveFolder(
@@ -430,7 +412,6 @@ public class PackageUtils
      * @param useSubFolders whether to use subfolders or not.
      * @return the folder in which the associated class should be
      * generated.
-     * @precondition parentFolder != null
      */
     @NotNull
     protected File retrieveTestFolder(
@@ -451,13 +432,11 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @return the folder in which the associated class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     protected File retrieveTestFolder(
         @NotNull final File parentFolder,
-        final String packageName,
+        @NotNull final String packageName,
         final boolean useSubFolders)
     {
         return
@@ -498,9 +477,9 @@ public class PackageUtils
      * Retrieves the package name for base DAO templates.
      * @param packageName the original package.
      * @return the package for the associated base DAO interface.
-     * @precondition packageName != null
      */
-    public String retrieveBaseDAOPackage(final String packageName)
+    @NotNull
+    public String retrieveBaseDAOPackage(@NotNull final String packageName)
     {
         return retrievePackage(packageName, BASE_DAO_SUBPACKAGE);
     }
@@ -512,8 +491,6 @@ public class PackageUtils
      * @param useSubFolders whether to use subfolders.
      * @return the folder in which the associated DAO class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     public File retrieveBaseDAOFolder(
@@ -523,18 +500,17 @@ public class PackageUtils
     {
         return
             retrieveFolder(
-                    parentFolder,
-                    packageName,
-                    BASE_DAO_SUBPACKAGE,
-                    useSubFolders,
-                    false);
+                parentFolder,
+                packageName,
+                BASE_DAO_SUBPACKAGE,
+                useSubFolders,
+                false);
     }
 
     /**
      * Retrieves the package name for base DAO factory templates.
      * @param packageName the original package.
      * @return the package for the associated base DAO factory class.
-     * @precondition packageName != null
      */
     @NotNull
     public String retrieveBaseDAOFactoryPackage(
@@ -550,8 +526,6 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @return the folder in which  the associated DAO factory should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
      */
     @NotNull
     public File retrieveBaseDAOFactoryFolder(
@@ -567,7 +541,6 @@ public class PackageUtils
      * Retrieves the package name for value object templates.
      * @param packageName the original package.
      * @return the package for the associated value object class.
-     * @precondition packageName != null
      */
     @NotNull
     public String retrieveValueObjectPackage(@NotNull final String packageName)
@@ -671,7 +644,6 @@ public class PackageUtils
      * Retrieves the package name for value object implementation templates.
      * @param packageName the original package.
      * @return the package for the associated value object class.
-     * @precondition packageName != null
      */
     @NotNull
     public String retrieveValueObjectImplPackage(
@@ -800,7 +772,6 @@ public class PackageUtils
      * Retrieves the subpackage name for DAO templates.
      * @param engineName the DAO engine.
      * @return the subpackage for the associated DAO class.
-     * @precondition engineName != null
      */
     @NotNull
     public String retrieveDAOSubpackage(@NotNull final String engineName)
@@ -813,8 +784,6 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the DAO engine.
      * @return the package for the associated DAO class.
-     * @precondition packageName != null
-     * @precondition engineName != null
      */
     @NotNull
     public String retrieveDAOPackage(
@@ -834,9 +803,6 @@ public class PackageUtils
      * @param useSubfolders whether to use subfolders.
      * @return the folder in which  the associated DAO class should be
      * generated.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
      */
     @NotNull
     public File retrieveDAOFolder(
@@ -1434,9 +1400,6 @@ public class PackageUtils
      * @param engineName the engine.
      * @param tableName the table name.
      * @return the package for the associated pointers.
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public String retrieveJdbcOperationsPackage(
@@ -1459,10 +1422,6 @@ public class PackageUtils
      * @param tableName the table name.
      * @param stringUtils the {@link StringUtils} instance.
      * @return the package for the associated pointers.
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
-     * @precondition stringUtils != null
      */
     @NotNull
     public String retrieveJdbcOperationsPackage(
@@ -1488,10 +1447,6 @@ public class PackageUtils
      * @param tableName the table name.
      * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public File retrieveJdbcOperationsFolder(
@@ -1520,11 +1475,6 @@ public class PackageUtils
      * @param useSubFolders whether to use sub folders.
      * @param stringUtils the {@link StringUtils} instance.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
-     * @precondition stringUtils != null
      */
     @NotNull
     public File retrieveJdbcOperationsFolder(
@@ -1581,9 +1531,6 @@ public class PackageUtils
      * @param engineName the engine.
      * @param tableName the table name.
      * @return the package for the associated classes.
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public String retrieveResultSetExtractorPackage(
@@ -1604,10 +1551,6 @@ public class PackageUtils
      * @param tableName the table name.
      * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public File retrieveResultSetExtractorFolder(
@@ -1631,8 +1574,6 @@ public class PackageUtils
      * @param packageName the original package.
      * @param engineName the engine.
      * @return the package for the associated classes.
-     * @precondition packageName != null
-     * @precondition engineName != null
      */
     @NotNull
     public String retrieveCustomResultSetExtractorPackage(
@@ -1649,9 +1590,6 @@ public class PackageUtils
      * @param engineName the engine.
      * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
      */
     @NotNull
     public File retrieveCustomResultSetExtractorFolder(
@@ -1671,9 +1609,6 @@ public class PackageUtils
      * @param engineName the engine.
      * @param tableName the table name.
      * @return the package for the associated classes.
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public String retrieveAttributesStatementSetterPackage(
@@ -1694,10 +1629,6 @@ public class PackageUtils
      * @param tableName the table name.
      * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public File retrieveAttributesStatementSetterFolder(
@@ -1722,9 +1653,6 @@ public class PackageUtils
      * @param engineName the engine.
      * @param tableName the table name.
      * @return the package for the associated classes.
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public String retrievePkStatementSetterPackage(
@@ -1745,10 +1673,6 @@ public class PackageUtils
      * @param tableName the table name.
      * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public File retrievePkStatementSetterFolder(
@@ -1773,9 +1697,6 @@ public class PackageUtils
      * @param engineName the engine.
      * @param tableName the table name.
      * @return the package for the associated classes.
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public String retrieveFkStatementSetterPackage(
@@ -1796,10 +1717,6 @@ public class PackageUtils
      * @param tableName the table name.
      * @param useSubFolders whether to use sub folders.
      * @return the folder for the associated pointers.
-     * @precondition parentFolder != null
-     * @precondition packageName != null
-     * @precondition engineName != null
-     * @precondition tableName != null
      */
     @NotNull
     public File retrieveFkStatementSetterFolder(
@@ -2163,7 +2080,6 @@ public class PackageUtils
      * Extracts the class name of given fully-qualified class.
      * @param fqdn such information.
      * @return the class name.
-     * @precondition fqcn != null
      */
     @NotNull
     public String extractClassName(@NotNull final String fqdn)
@@ -2192,8 +2108,6 @@ public class PackageUtils
      * @param value the value.
      * @param separator the separator.
      * @return the chunks.
-     * @precondition value != null
-     * @precondition separator != null
      */
     @NotNull
     public String[] split(
@@ -2208,9 +2122,6 @@ public class PackageUtils
      * @param separator the separator.
      * @param stringUtils the {@link StringUtils} instance.
      * @return the chunks.
-     * @precondition value != null
-     * @precondition separator != null
-     * @precondition stringUtils != null
      */
     @NotNull
     protected String[] split(

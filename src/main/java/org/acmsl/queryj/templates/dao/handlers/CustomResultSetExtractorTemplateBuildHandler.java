@@ -92,6 +92,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * {@inheritDoc}
      */
     @Override
+    @NotNull
     protected String retrievePackage(
         @NotNull final Result customResult,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -153,10 +154,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @return <code>true</code> in such case.
-     * @precondition resultElement != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
-     * @precondition customResultUtils != null
      */
     protected boolean matchesSqlFilter(
         @NotNull final Result resultElement,
@@ -181,12 +178,9 @@ public class CustomResultSetExtractorTemplateBuildHandler
      * @param engineName the engine name.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @precondition engineName != null
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     protected String retrievePackage(
-        final String projectPackage,
+        @NotNull final String projectPackage,
         @NotNull final String engineName,
         @NotNull final PackageUtils packageUtils)
     {

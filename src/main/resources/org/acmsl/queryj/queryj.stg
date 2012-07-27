@@ -183,7 +183,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
+<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException
 {
@@ -214,7 +214,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
+<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
@@ -242,7 +242,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
+<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
@@ -274,7 +274,7 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, select=cs, result=cs.result)> <cs.nameUncapitalized>(
+<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
@@ -1022,20 +1022,14 @@ protected static class SelectForUpdateTransactionCallback
 >>
 
 resultset_extractor_import(
-  basePackageName,
-  baseDAOSubpackageName,
-  rdbSubpackageName,
-  subpackageName,
+  packageName,
   crseIdCapitalized) ::= <<
 <!
   Generates the import statement of a custom resultset extractor.
-  @param basePackageName the base package.
-  @param baseDAOSubpackageName the base DAO subpackage.
-  @param rdbSubpackageName the rdb subpackage.
-  @param subpackageName the subpackage.
+  @param packageName the package.
   @param crseIdCapitalized the custom resultset extractor identifier, capitalized.
 !>
-import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<subpackageName>.<crseIdCapitalized>Extractor;
+import <packageName>.<crseIdCapitalized>Extractor;
 >>
 
 resultset_extractor_constants(
@@ -1065,7 +1059,7 @@ custom_select_result_declaration(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-<custom_select_return(table=table, select=sql, result=result)> result;
+<custom_select_return(table=table, result=result)> result;
 >>
 
 implicit_attribute_declaration(attr, result) ::= <<
@@ -1115,7 +1109,7 @@ custom_select_template_call(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-(<custom_select_return(table=table, select=sql, result=result)>) <actual_custom_select_template_call(sql=sql, result=result)>;
+(<custom_select_return(table=table, result=result)>) <actual_custom_select_template_call(sql=sql, result=result)>;
 >>
 
 actual_custom_select_template_call(sql, result) ::= <<
@@ -1286,7 +1280,7 @@ primitive_to_Timestamp_value(value) ::= <<
 
 Date_to_primitive(value) ::= <<
 <if(value.date)>
-new Date(<value.nameLowercased>.getTime())
+new Timestamp(<value.nameLowercased>.getTime())
 <else>
 <Object_to_primitive(value=value)>
 <endif>
@@ -1420,9 +1414,7 @@ custom_select_return_import(table, result, package) ::= <<
 >>
 
 custom_select_return_import_decorated(result, package) ::= <<
-<if(!result.multiple)>
-/* ? */<custom_select_declaration_decorated_single(result=result, package=package)>
-<endif>
+<if(!result.multiple)><custom_select_declaration_decorated_single(result=result, package=package)><endif>
 >>
 
 custom_select_return_import_nondecorated(result, package) ::= <<
@@ -1438,11 +1430,20 @@ import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
 custom_select_return_import_nondecorated_single(result, package) ::= <<
 <if(result.wrappingASingleProperty)>
 <custom_select_return_import_property_single(result=result, package=package)>
-<else>
+<else><if(result.voName)>
 import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
-<endif>
+<endif><endif>
 >>
 
 custom_select_return_import_property_single(select, result, package) ::= <<
 <result.properties:{property|<if(!property.primitive)>import <package>.<typeInitMap.voSubpackageName>.<property.type>;<endif>}>
+>>
+
+find_constant_check_attribute(attribute) ::= <<
+// !!
+<if(attribute.primitive)>
+&& (item.get<attribute.nameCapitalized>() == <attribute.nameLowercased>)
+<else>
+&& (item.get<attribute.nameCapitalized>().equals(<attribute.nameLowercased>))
+<endif>
 >>

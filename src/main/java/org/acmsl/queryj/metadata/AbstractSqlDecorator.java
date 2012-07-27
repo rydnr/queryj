@@ -821,7 +821,7 @@ public abstract class AbstractSqlDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@Nullable final IdentifiableElement object)
+    public int compareTo(@NotNull final IdentifiableElement object)
         throws  ClassCastException
     {
         int result;

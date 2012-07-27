@@ -369,7 +369,7 @@ public class DecorationUtils
      * @return the singular.
      */
     @NotNull
-    protected String getSingular(@NotNull final String word)
+    public  String getSingular(@NotNull final String word)
     {
         return getSingular(word, SingularPluralFormConverter.getInstance());
     }

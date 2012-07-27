@@ -157,6 +157,7 @@ public class PropertyElement
      * contained in this instance.
      * @return such information.
      */
+    @NotNull
     public String toString()
     {
         return

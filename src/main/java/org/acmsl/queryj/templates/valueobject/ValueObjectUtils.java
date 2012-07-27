@@ -102,8 +102,6 @@ public class ValueObjectUtils
      * @param className the class name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return <code>true</code> in such case.
-     * @precondition className != null
-     * @precondition metadataManager != null
      */
     public boolean isStandard(
         @NotNull final String className, @NotNull final MetadataManager metadataManager)
@@ -138,7 +136,6 @@ public class ValueObjectUtils
      * Extracts the class name of given fully-qualified class.
      * @param fqcn such information.
      * @return the class name.
-     * @precondition fqcn != null
      */
     @NotNull
     public String extractClassName(@NotNull final String fqcn)
@@ -151,8 +148,6 @@ public class ValueObjectUtils
      * @param fqcn such information.
      * @param packageUtils the {@link PackageUtils} instance.
      * @return the class name.
-     * @precondition fqcn != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected String extractClassName(
@@ -184,8 +179,6 @@ public class ValueObjectUtils
      * instance.
      * @param stringUtils the {@link StringUtils} instance.
      * @return the class name.
-     * @precondition englishGrammarUtils != null
-     * @precondition stringUtils != null
      */
     protected String getVoClassName(
         @NotNull final String tableName,

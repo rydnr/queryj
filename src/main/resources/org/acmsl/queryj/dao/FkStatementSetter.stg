@@ -197,7 +197,7 @@ public class <foreignKey.source.voName>By<foreignKey.target.voName>StatementSett
      * @param preparedStatement the prepared statement.
      * @throws SQLException intercepted by \<i>Spring\</i>.
      */
-    public void setValues(@NonNull final PreparedStatement preparedStatement)
+    public void setValues(<notnull()>final PreparedStatement preparedStatement)
         throws  SQLException
     {
         setValues(
@@ -281,7 +281,7 @@ attribute_query_specification(attr) ::= <<
 <if(attr.nullable)>
 if  (<attr.nameLowercased> == null)
 {
-    preparedStatement.setNull(<attr.ordinalPosition>, <attr.type>);
+    preparedStatement.setNull(<attr.ordinalPosition>, <attr.javaSqlType>/*<attr.type>*/);
 }
 else
 {

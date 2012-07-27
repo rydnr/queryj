@@ -35,8 +35,9 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
+import com.google.inject.Provides;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
+import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.MetadataUtils;
@@ -50,11 +51,6 @@ import org.acmsl.queryj.metadata.vo.Table;
  */
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
-
-/*
- * Importing some Apache Commons-Logging classes.
- */
-import org.apache.commons.logging.Log;
 
 /*
  * Importing some JetBrains classes.
@@ -111,7 +107,17 @@ public class CustomResultUtils
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        return retrieveTable(customResult, customSqlProvider, metadataManager) != null;
+        boolean result = false;
+
+        @Nullable final String t_strTable = retrieveTable(customResult, customSqlProvider, metadataManager);
+
+        if (t_strTable != null)
+        {
+            result =
+                matches(customResult, t_strTable, customSqlProvider, MetadataUtils.getInstance());
+        }
+
+        return result;
     }
 
     /**
@@ -287,23 +293,9 @@ public class CustomResultUtils
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final MetadataManager metadataManager)
     {
-        String result = null;
+        String result;
 
-        String id = resultElement.getId();
-
-        if (id != null)
-        {
-            result = retrieveTable(id, customSqlProvider, metadataManager);
-        }
-        else
-        {
-            Log t_Log = UniqueLogFactory.getLog(CustomResultUtils.class);
-
-            if (t_Log != null)
-            {
-                t_Log.warn("Result with no id: " + resultElement);
-            }
-        }
+        result = retrieveTable(resultElement.getId(), customSqlProvider, metadataManager);
 
         return result;
     }
@@ -372,9 +364,9 @@ public class CustomResultUtils
      * @return <code>true</code> if it should be included.
      */
     public boolean matches(
-            @NotNull final Result resultElement,
-            @NotNull final String tableName,
-            @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final Result resultElement,
+        @NotNull final String tableName,
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         return matches(resultElement, tableName, customSqlProvider, MetadataUtils.getInstance());
     }
@@ -396,10 +388,10 @@ public class CustomResultUtils
     {
         boolean result = false;
 
+        String t_strDao = null;
+
         for (@Nullable Sql t_Sql : findSqlElementsByResultId(resultElement.getId(), customSqlProvider))
         {
-            String t_strDao = null;
-
             if (t_Sql != null)
             {
                 t_strDao = t_Sql.getDao();
@@ -410,6 +402,19 @@ public class CustomResultUtils
             {
                 result = true;
                 break;
+            }
+        }
+
+        if (result)
+        {
+            result = false;
+
+            @Nullable final String t_strResultVoClass = extractVoName(resultElement);
+            @Nullable final String t_strDaoVoClass = extractVoName(t_strDao);
+
+            if (t_strResultVoClass != null)
+            {
+                result = t_strResultVoClass.equalsIgnoreCase(t_strDaoVoClass);
             }
         }
 
@@ -536,7 +541,6 @@ public class CustomResultUtils
      * Caches given singular or plural form of a table name.
      * @param key the key.
      * @param value the value.
-     * @precondition key != null
      */
     protected void cacheEntry(
         final String key, @Nullable final String value)
@@ -596,10 +600,58 @@ public class CustomResultUtils
     }
 
     /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     * @return such information.
+     * Extracts the ValueObject name of given result.
+     * @param customResult the {@link Result} instance.
+     * @return such class name, or <code>null</code> if it has no declared value.
      */
+    @Nullable
+    protected String extractVoName(@NotNull final Result customResult)
+    {
+        String result = customResult.getClassValue();
+
+        if (result != null)
+        {
+            String[] t_astrParts = result.split("\\.");
+
+            if (t_astrParts.length > 0)
+            {
+                result = t_astrParts[t_astrParts.length - 1];
+            }
+
+            result = extractVoName(result);
+        }
+
+        return result;
+    }
+
+    /**
+     * Extracts the ValueObject name of given name.
+     * @param name the name.
+     * @return such class name, or <code>null</code> if it has no declared value.
+     */
+    @Nullable
+    protected String extractVoName(@NotNull final String name)
+    {
+        return extractVoName(name, DecorationUtils.getInstance());
+    }
+
+    /**
+     * Extracts the ValueObject name of given result class.
+     * @param name the class name.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such class name, or <code>null</code> if it has no declared value.
+     */
+    @Nullable
+    protected String extractVoName(@NotNull final String name, @NotNull final DecorationUtils decorationUtils)
+    {
+        return decorationUtils.capitalize(decorationUtils.getSingular(name));
+    }
+
+   /**
+    * Provides a text representation of the information
+    * contained in this instance.
+    * @return such information.
+    */
     @Override
     @NotNull
     public String toString()
@@ -640,10 +692,10 @@ public class CustomResultUtils
             result =
                 new org.apache.commons.lang.builder.EqualsBuilder()
                     .appendSuper(super.equals(t_OtherInstance))
-                .isEquals();
+                    .isEquals();
         }
 
         return result;
     }
-
 }
+
