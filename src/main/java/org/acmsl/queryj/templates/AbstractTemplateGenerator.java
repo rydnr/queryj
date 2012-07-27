@@ -95,7 +95,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param caching whether to support caching or not.
      * @param threadCount the number of threads to use.
      */
-    @ThreadSafe
     protected AbstractTemplateGenerator(final boolean caching, final int threadCount)
     {
         immutableSetCaching(caching);
@@ -106,7 +105,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Specifies whether to cache templates or not.
      * @param flag such setting.
      */
-    @ThreadSafe
     protected final void immutableSetCaching(final boolean flag)
     {
         m__bCaching = flag;
@@ -116,7 +114,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Specifies whether to cache templates or not.
      * @param flag such setting.
      */
-    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setCaching(final boolean flag)
     {
@@ -127,7 +124,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Retrieves whether to cache templates or not.
      * @return such setting.
      */
-    @ThreadSafe
     public boolean isCaching()
     {
         return m__bCaching;
@@ -137,7 +133,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Specifies the thread count.
      * @param count such value.
      */
-    @ThreadSafe
     protected final void immutableSetThreadCount(final int count)
     {
         m__iThreadCount = count;
@@ -147,7 +142,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Specifies the thread count.
      * @param count such value.
      */
-    @ThreadSafe
     @SuppressWarnings("unused")
     protected void setThreadCount(final int count)
     {
@@ -158,7 +152,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Retrieves the thread count.
      * @return such value.
      */
-    @ThreadSafe
     @SuppressWarnings("unused")
     public int getThreadCount()
     {
@@ -169,7 +162,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * Retrieves the decorator factory.
      * @return such instance.
      */
-    @ThreadSafe
     @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
@@ -185,7 +177,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @throws IOException if the file cannot be created.
      * @throws QueryJBuildException if the generation process fails.
      */
-    @ThreadSafe
     @Override
     public boolean write(
         @NotNull final N template,
@@ -218,7 +209,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @throws IOException if the file cannot be created.
      * @throws QueryJBuildException if the generation process fails.
      */
-    @ThreadSafe
     protected boolean write(
         final boolean caching,
         @NotNull final N template,
@@ -253,7 +243,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param log the {@link Log} instance.
      * @throws IOException if the output dir cannot be created.
      */
-    @ThreadSafe
     protected boolean generate(
         @NotNull final N template,
         final boolean caching,
@@ -337,7 +326,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param fileUtils the {@link FileUtils} instance.
      * @return the hash, if found.
      */
-    @ThreadSafe
     @Nullable
     protected String retrieveHash(
         @NotNull final String fileName,
@@ -364,7 +352,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param rootFolder the root folder.
      * @return the hash file.
      */
-    @ThreadSafe
     @NotNull
     protected File buildHashFile(
         @NotNull final String fileName,
@@ -381,7 +368,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param template the template.
      * @param outputFilePath the output file path.
      */
-    @ThreadSafe
     protected void serializeTemplate(@NotNull final N template, @NotNull final String outputFilePath)
     {
         try
@@ -425,7 +411,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param rootFolder the root folder.
      * @return the actual folder.
      */
-    @ThreadSafe
     @NotNull
     protected File getOutputDir(@NotNull final File outputDir, @NotNull final File rootFolder)
     {
@@ -458,7 +443,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param charset the charset.
      * @param fileUtils the {@link FileUtils} instance.
      */
-    @ThreadSafe
     protected void writeHash(
         @NotNull final String hashValue,
         @NotNull final String fileName,
@@ -476,7 +460,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param relevantContent the content.
      * @return the hash.
      */
-    @ThreadSafe
     protected String computeHash(
         @NotNull final String relevantContent, @NotNull final Charset charset)
         throws QueryJBuildException
@@ -506,7 +489,6 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      * @param buffer the buffer to convert.
      * @return the hexadecimal representation.
      */
-    @ThreadSafe
     @NotNull
     protected String toHex(@NotNull final byte[] buffer)
     {

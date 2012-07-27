@@ -153,7 +153,25 @@ public class BasePerCustomResultTemplateContext
     @Override
     public String getTemplateName()
     {
-        return getResult().getClassValue();
+        return getTemplateName(getResult());
+    }
+
+    /**
+     * Retrieves the template name.
+     * @param customResult the {@link Result} instance.
+     * @return the template name.
+     */
+    @NotNull
+    public String getTemplateName(@NotNull final Result customResult)
+    {
+        String result = customResult.getClassValue();
+
+        if (result == null)
+        {
+            result = customResult.getId();
+        }
+
+        return result;
     }
 
     @Override

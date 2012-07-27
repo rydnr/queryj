@@ -48,10 +48,14 @@ import org.acmsl.commons.utils.ConversionUtils;
  * Importing some additional classes.
  */
 import org.apache.commons.digester.Digester;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
+
+/*
+ * Importing some JetBrains annotations.
+ */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -70,7 +74,7 @@ public class ResultElementFactory
     /**
      * Creates a ResultElementFactory instance.
      */
-    public ResultElementFactory() {};
+    public ResultElementFactory() {}
 
     /**
      * Creates a ResultElement instance from given SAX attributes.
@@ -79,9 +83,6 @@ public class ResultElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;result&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
     @Nullable
     public Object createObject(
@@ -90,7 +91,7 @@ public class ResultElementFactory
         final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ResultElement result = null;
+        @Nullable ResultElement result;
 
         String t_strId = attributes.getValue("id");
 

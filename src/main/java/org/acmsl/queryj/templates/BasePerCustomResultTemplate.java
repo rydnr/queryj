@@ -34,20 +34,12 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some project-specific classes.
  */
-
-/*
- * Importing some ACM-SL classes.
- */
+import org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain;
 
 /*
  * Importing StringTemplate classes.
  */
-import org.acmsl.queryj.templates.handlers.fillhandlers.BasePerCustomResultFillTemplateChain;
 import org.antlr.stringtemplate.StringTemplate;
-
-/*
- * Importing some JDK classes.
- */
 
 /*
  * Importing some JetBrains annotations.
@@ -102,7 +94,7 @@ public abstract class BasePerCustomResultTemplate<C extends BasePerCustomResultT
     {
         return
             new InvalidTemplateException(
-                "invalid.per.custom.result.template",
+                "invalid.per.custom-result.template",
                 new Object[]
                 {
                     template.getName(),

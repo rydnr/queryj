@@ -115,13 +115,6 @@ sourceImpl(table) ::= <<
   table=table,
   parent=table.parentTable)>
 
-/*
- * Importing some ACM-SL classes.
- */
-import org.acmsl.queryj.DeleteQuery;
-import org.acmsl.queryj.Query;
-import org.acmsl.queryj.QueryFactory;
-
 <checkers_import()>
 /*
  * Importing Spring classes.

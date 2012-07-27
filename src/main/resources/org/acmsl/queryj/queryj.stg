@@ -1418,25 +1418,21 @@ custom_select_return_import_decorated(result, package) ::= <<
 >>
 
 custom_select_return_import_nondecorated(result, package) ::= <<
-<if(result.multiple)>
+<if(!result.multiple)>
 <custom_select_return_import_nondecorated_single(result=result, package=package)>
-<else>
-<if(result.voName)>
-import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
-<endif>
 <endif>
 >>
 
 custom_select_return_import_nondecorated_single(result, package) ::= <<
 <if(result.wrappingASingleProperty)>
 <custom_select_return_import_property_single(result=result, package=package)>
-<else><if(result.voName)>
-import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
-<endif><endif>
+<else><if(!result.implicit)><if(result.voName)>
+/* my case */import <package>.<typeInitMap.voSubpackageName>.<result.voName>;
+<endif><endif><endif>
 >>
 
 custom_select_return_import_property_single(select, result, package) ::= <<
-<result.properties:{property|<if(!property.primitive)>import <package>.<typeInitMap.voSubpackageName>.<property.type>;<endif>}>
+<!<result.properties:{property|<if(!property.primitive)>import <property.type>;<endif>}>!>
 >>
 
 find_constant_check_attribute(attribute) ::= <<

@@ -60,14 +60,11 @@ source() ::= <<
   ],
   timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/CustomResultSetExtractor.stg
+// Generated using org/acmsl/queryj/dao/CustomResultSetExtractor.stg at <timestamp>
 
 <package_declaration(
   packageNames=
   [
-    project_package,
-    typeInitMap.baseDAOSubpackageName,
-    typeInitMap.rdbSubpackageName,
     sub_package_name
   ])>
 
@@ -250,8 +247,8 @@ public class <result.idCapitalized>Extractor
 
             daoListener.resultSetMovedForward(sql, t_iRowCount);
 
-            <result.properties:nullable_attribute_extraction(attr=it)>
-            <result.lobProperties:special_attribute_extraction(attr=it)>
+            <result.properties:nullable_attribute_extraction(value=it)>
+            <result.lobProperties:special_attribute_extraction(result=result, value=it)>
 
 <if(result.multiple)>
             result.add(
@@ -261,7 +258,7 @@ public class <result.idCapitalized>Extractor
 
                 factory.createValueObject(
 <if(result.implicit)>
-                    <result.implicitProperties:implicit_nullable_attribute_extraction(result=result, attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
+                    <result.implicitProperties:implicit_nullable_attribute_extraction(value=it); separator=",\n">)<if(result.multiple)>)<endif>;
 <else>
                     <result.properties:attribute_extraction(attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
 <endif>
@@ -276,12 +273,12 @@ public class <result.idCapitalized>Extractor
 >>
 
 
-implicit_attribute_result(value) ::= <<
+implicit_attrte_result(value) ::= <<
 <!
  Prints the correct return clause for the implicit attribute.
- @param attr the implicit attribute.
+ @param value the implicit attribute.
  !>
-<if(attr.nullable)>
+<if(value.nullable)>
 return result;
 <else>
 return new <value.objectType>(result);
@@ -289,11 +286,11 @@ return new <value.objectType>(result);
 
 >>
 
-implicit_nullable_attribute_extraction(result, value) ::= <<
+implicit_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract implicit nullable attributes.
  @param result the sql result.
- @param attr the implicit attribute.
+ @param value the implicit attribute.
  !>
 resultSet.get<value.objectType>(<value.index>)
 >>
@@ -301,13 +298,13 @@ resultSet.get<value.objectType>(<value.index>)
 nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes.
- @param attr the attribute.
+ @param value the attribute.
 !>
 <if(lob_handling_required)>
 <indirect_template(
   name=lob_handling_flavor+"_nullable_attribute_extraction", extra1=value)>
 <else>
-<default_nullable_attribute_extraction(attr=value )>
+<default_nullable_attribute_extraction(value=value )>
 <endif>
 
 >>
@@ -315,23 +312,23 @@ nullable_attribute_extraction(value) ::= <<
 default_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes.
- @param attr the attribute.
+ @param value the attribute.
 !>
-<if(attr.boolean)>
-<Boolean_nullable_attribute_extraction(attr=value)>
+<if(value.boolean)>
+<Boolean_nullable_attribute_extraction(value=value)>
 <else>
-<if(attr.allowsNull)>
-<if(attr.timestamp)>
+<if(value.allowsNull)>
+<if(value.timestamp)>
 Timestamp t_<value.columnNameNormalizedCapitalized>AsTimestamp =
 <else>
 <value.objectType> t_<value.columnNameNormalizedCapitalized>As<value.objectType> =
 <endif>
 
-<if(attr.primitive)>
+<if(value.primitive)>
 <if(lob_handling_required)>
-    <object_nullable_clobhandling_attribute_extractor(attr=value)>
+    <object_nullable_clobhandling_attribute_extractor(value=value)>
 <else>
-    <primitive_nullable_attribute_extractor(attr=value)>
+    <primitive_nullable_attribute_extractor(value=value)>
 <endif>
 <else>
 <if(lob_handling_required)>
@@ -343,7 +340,7 @@ Timestamp t_<value.columnNameNormalizedCapitalized>AsTimestamp =
 
 if  (resultSet.wasNull())
 {
-<if(attr.timestamp)>
+<if(value.timestamp)>
     t_<value.columnNameNormalizedCapitalized>AsTimestamp = null;
 <else>
     t_<value.columnNameNormalizedCapitalized>As<value.objectType> = null;
@@ -360,13 +357,13 @@ Boolean_nullable_attribute_extraction(value) ::= <<
 <!
   Generates the code to extract a primitive nullable attribute.
 !>
-<if(attr.allowsNull)>
+<if(value.allowsNull)>
 Boolean t_<value.columnNameNormalizedCapitalized>AsBoolean = null;
 <else>
 boolean t_<value.columnNameNormalizedCapitalized>AsBoolean = false;
 <endif>
 
-<if(attr.allowsNull)>
+<if(value.allowsNull)>
 <value.objectType> t_<value.nameLowercased> =
     new <value.objectType>(
         resultSet.get<value.objectType>(
@@ -383,7 +380,7 @@ if  (resultSet.wasNull())
 <endif>
 
 
-<if(attr.primitive)>
+<if(value.primitive)>
 if  (t_<value.nameLowercased> == <value.booleanTrue>)
 <else>
 if  (("" + t_<value.nameLowercased>).equals("" + <value.booleanTrue>))
@@ -391,7 +388,7 @@ if  (("" + t_<value.nameLowercased>).equals("" + <value.booleanTrue>))
 
 
 {
-<if(attr.allowsNull)>
+<if(value.allowsNull)>
     t_<value.columnNameNormalizedCapitalized>AsBoolean = Boolean.TRUE;
 
 }
@@ -468,7 +465,7 @@ primitive_nullable_attribute_extractor(value) ::= <<
   Generates the code to extract a primitive nullable attribute.
 !>
 new <value.objectType>(
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
     resultSet.getInt(
 <else>
     resultSet.get<value.objectType>(
@@ -482,7 +479,7 @@ primitive_nullable_clobhandling_attribute_extractor(value) ::= <<
   Generates the code to extract a primitive nullable attribute.
 !>
 new <value.objectType>(
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
     resultSet.getInt("<value.columnName>"));
 <else>
     resultSet.get<value.objectType>("<value.columnName>"));
@@ -494,10 +491,10 @@ object_nullable_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-<if(attr.timestamp)>
+<if(value.timestamp)>
 resultSet.getTimestamp("<value.nameUppercased>");
 <else>
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
 resultSet.getInt(
 <else>
 resultSet.get<value.objectType>(
@@ -511,10 +508,10 @@ object_nullable_clobhandling_attribute_extractor(value) ::= <<
 <!
   Generates the code to extract a non-primitive nullable attribute.
 !>
-<if(attr.timestamp)>
+<if(value.timestamp)>
 resultSet.getTimestamp("<value.columnName>");
 <else>
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
 resultSet.getInt("<value.columnName>");
 <else>
 // <attr> : object_nullable_clobhandling_attribute_extractor
@@ -528,11 +525,11 @@ resultSet.get<value.objectType>("<value.columnName>");
 attribute_extraction(value) ::= <<
 <!
  Generates the code to extract attributes.
- @param attr the attribute.
+ @param value the attribute.
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=lob_handling_flavor+"_attribute_extraction", attr=value)>
+  name=lob_handling_flavor+"_attribute_extraction", value=value)>
 <else>
 <default_attribute_extraction(value)>
 <endif>
@@ -542,27 +539,27 @@ attribute_extraction(value) ::= <<
 default_attribute_extraction(value) ::= <<
 <!
  Generates the member declaration for a concrete attribute.
- @param attr the attribute.
+ @param value the attribute.
 !>
 //<value.columnName>
-<if(attr.allowsNull)>
-<if(attr.timestamp)>
+<if(value.allowsNull)>
+<if(value.timestamp)>
 t_<value.columnNameNormalizedCapitalized>AsTimestamp
 <else>
 t_<value.columnNameNormalizedCapitalized>As<value.objectType>
 <endif>
 <else>
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
 resultSet.getInt("<value.columnName>")
 <else>
-<if(attr.timestamp)>
+<if(value.timestamp)>
 resultSet.getTimestamp("<value.columnName>")
 <else>
-<if(attr.boolean)>
+<if(value.boolean)>
 t_<value.columnNameNormalizedCapitalized>AsBoolean
 <else>
 // <attr> : default_attribute_extraction
-<if(attr.blob)>
+<if(value.blob)>
 // TODO
 null
 <else>
@@ -578,15 +575,15 @@ resultSet.get<value.objectType>("<value.columnName>")
 default_clobhandling_attribute_extraction(value) ::= <<
 <!
  Generates the member declaration for a concrete attribute.
- @param attr the attribute.
+ @param value the attribute.
 !>
-<if(attr.timestamp)>
+<if(value.timestamp)>
 resultSet.getTimestamp("<value.nameUppercased>")
 <else>
-<if(attr.allowsNull)>
+<if(value.allowsNull)>
 t_<value.nameCapitalized>As<value.objectType>
 <else>
-<if(attr.numberSmallerThanInt)>
+<if(value.numberSmallerThanInt)>
 resultSet.getInt("<value.nameUppercased>")
 <else>
 // <attr> : default_clobhandling_attribute_extraction
@@ -602,18 +599,18 @@ resultSet.get<value.objectType>("<value.nameUppercased>")
 special_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract special attributes.
- @param attr the attribute.
+ @param value the attribute.
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=lob_handling_flavor+"_special_attribute_extraction", attr=value)>
+  name=lob_handling_flavor+"_special_attribute_extraction", value=value)>
 <endif>
 >>
 
-oracle_nullable_attribute_extraction(value) ::= <<
+Oracle_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle.
- @param attr the attribute.
+ @param value the attribute.
 !>
 <oracle8_nullable_attribute_extraction(value=value)>
 >>
@@ -621,9 +618,9 @@ oracle_nullable_attribute_extraction(value) ::= <<
 oracle8_nullable_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract nullable attributes for Oracle8.
- @param attr the attribute.
+ @param value the attribute.
 !>
-<if(!attr.clob)>
+<if(!value.clob)>
 <default_nullable_attribute_extraction(value=value)>
 <endif>
 >>
@@ -631,7 +628,7 @@ oracle8_nullable_attribute_extraction(value) ::= <<
 oracle_special_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract special attributes for Oracle.
- @param attr the attribute.
+ @param value the attribute.
 !>
 <oracle8_special_attribute_extraction(value=value)>
 >>
@@ -639,9 +636,9 @@ oracle_special_attribute_extraction(value) ::= <<
 oracle8_special_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract special attributes for Oracle8.
- @param attr the attribute.
+ @param value the attribute.
 !>
-<if(attr.clob)>
+<if(value.clob)>
 oracle.sql.CLOB t_<value.columnNameNormalizedCapitalized> =
     (oracle.sql.CLOB) resultSet.getClob("<value.columnName>");
 
@@ -660,7 +657,7 @@ if  (resultSet.wasNull())
 oracle_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract the attributes for Oracle.
- @param attr the attribute.
+ @param value the attribute.
 !>
 <oracle8_attribute_extraction(value=value)>
 >>
@@ -668,9 +665,9 @@ oracle_attribute_extraction(value) ::= <<
 oracle8_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract the attributes for Oracle8.
- @param attr the attribute.
+ @param value the attribute.
 !>
-<if(attr.clob)>
+<if(value.clob)>
 (selectForUpdateMode)
 ?  <value.nameLowercased>
 :  t_<value.columnNameNormalizedCapitalized>.getSubString(1, (int) t_<value.columnNameNormalizedCapitalized>.length())

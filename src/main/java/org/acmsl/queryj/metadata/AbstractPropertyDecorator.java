@@ -71,8 +71,6 @@ public abstract class AbstractPropertyDecorator
     /**
      * Creates an <code>AbstractPropertyDecorator</code> to decorate given property.
      * @param property the property to decorate.
-     * @precondition property != null
-     * @precondition metadataManager != null
      */
     public AbstractPropertyDecorator(
         @NotNull final Property property, @NotNull final MetadataManager metadataManager)
@@ -578,6 +576,28 @@ public abstract class AbstractPropertyDecorator
      * @return such information.
      */
     @SuppressWarnings("unused")
+    public boolean isClob()
+    {
+        return isClob(getType(), getMetadataTypeManager());
+    }
+
+    /**
+     * Retrieves whether the property is a binary LOB or not.
+     * @param type the attribute type.
+     * @param metadataTypeManager the {@link MetadataTypeManager} instance.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected boolean isClob(@NotNull final String type, @NotNull final MetadataTypeManager metadataTypeManager)
+    {
+        return metadataTypeManager.isClob(type);
+    }
+
+    /**
+     * Retrieves whether the property is a binary LOB or not.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
     public boolean isNumeric()
     {
         return isNumeric(getType(), getMetadataTypeManager());
@@ -609,6 +629,7 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the hash code associated to this instance.
      * @return such information.
      */
+    @Override
     public final int hashCode()
     {
         return hashCode(getProperty());
@@ -618,7 +639,6 @@ public abstract class AbstractPropertyDecorator
      * Retrieves the hash code associated to given property.
      * @param property the property.
      * @return such information.
-     * @precondition property != null
      */
     protected final int hashCode(@NotNull final Property property)
     {
@@ -630,13 +650,14 @@ public abstract class AbstractPropertyDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(final Object object)
     {
         boolean result = false;
 
-        if (object instanceof AbstractPropertyDecorator)
+        if (object instanceof Property)
         {
-            result = equals(getProperty(), object);
+            result = equals(getProperty(), (Property) object);
         }
 
         return result;
@@ -648,7 +669,7 @@ public abstract class AbstractPropertyDecorator
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
-    protected boolean equals(@NotNull final Property property, final Object object)
+    protected boolean equals(@NotNull final Property property, @NotNull final Property object)
     {
         return property.equals(object);
     }
@@ -660,6 +681,7 @@ public abstract class AbstractPropertyDecorator
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
+    @Override
     public int compareTo(final Property object)
         throws  ClassCastException
     {

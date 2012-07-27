@@ -65,7 +65,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -220,7 +220,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                             jndiLocation,
                             t_ResultElement);
 
-                    if  (t_Template != null)
+                    if  (   (t_Template != null)
+                         && (!t_lTemplates.contains(t_Template)))
                     {
                         t_lTemplates.add(t_Template);
                     }
@@ -254,8 +255,8 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final CustomResultUtils customResultUtils)
     {
         if (   ("com.ventura24.nlp.games.vo.GExtendedShareBooking".equals(customResult.getClassValue()))
-            || ("prize.categories.single.prize.category.result".equals(customResult.getId()))
-            || ("single.long.result".equals(customResult.getId())))
+            || ("multiple.season.result".equals(customResult.getId()))
+            || ("single.season.result".equals(customResult.getId())))
         {
             System.out.println("breakpoint");
         }
@@ -368,17 +369,11 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     {
         @NotNull final List<Result> result = new ArrayList<Result>(results.size());
 
-        @NotNull final Map<String,Result> t_mAux = new HashMap<String,Result>();
+        @NotNull HashSet<Result> t_Aux = new HashSet<Result>(results.size());
 
-        for (@Nullable Result t_Result : results)
-        {
-            if (t_Result != null)
-            {
-                t_mAux.put(t_Result.getClassValue(), t_Result);
-            }
-        }
+        t_Aux.addAll(results);
 
-        result.addAll(t_mAux.values());
+        result.addAll(t_Aux);
 
         return result;
     }

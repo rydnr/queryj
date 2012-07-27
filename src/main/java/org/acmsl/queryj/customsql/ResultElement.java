@@ -179,19 +179,15 @@ public class ResultElement
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return <code>true</code> in such case.
      */
-    public boolean equals(
+    @SuppressWarnings("unused")
+    protected boolean equals(
         @NotNull final Result candidate,
         @NotNull final String id,
         @Nullable final String classValue,
         @NotNull final String matches,
         final Collection<PropertyRef> propertyRefs)
     {
-        return
-            (   (id.equalsIgnoreCase(candidate.getId())
-             && (   ("" + classValue).equals(candidate.getClassValue()))
-             && (matches.equalsIgnoreCase(candidate.getMatches()))
-             && ("" + propertyRefs).equals(
-                     "" + candidate.getPropertyRefs())));
+        return id.equalsIgnoreCase(candidate.getId());
     }
 
     /**

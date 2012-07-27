@@ -52,6 +52,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  */
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /*
@@ -341,6 +342,24 @@ public class SqlXmlParserImpl
     }
 
     /**
+     * Specifies the queries.
+     * @param queries such information.
+     */
+    protected final void immutableSetQueries(@NotNull final List<Sql> queries)
+    {
+        m__lQueries = queries;
+    }
+
+    /**
+     * Specifies the queries.
+     * @param queries such information.
+     */
+    protected void setQueries(@NotNull final List<Sql> queries)
+    {
+        immutableSetQueries(queries);
+    }
+
+    /**
      * Retrieves the sql.xml {@link org.acmsl.queryj.metadata.vo.Table} collection.
      * return such collection.
      */
@@ -352,6 +371,24 @@ public class SqlXmlParserImpl
     }
 
     /**
+     * Specifies the {@link Result}s.
+     * @param results the results.
+     */
+    protected final void immutableSetResults(@NotNull final List<Result> results)
+    {
+        this.m__lResults = results;
+    }
+
+    /**
+     * Specifies the {@link Result}s.
+     * @param results the results.
+     */
+    protected void setResults(@NotNull final List<Result> results)
+    {
+        immutableSetResults(results);
+    }
+
+    /**
      * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Result} collection.
      * return such collection.
      */
@@ -360,6 +397,24 @@ public class SqlXmlParserImpl
     public List<Result> getResults()
     {
         return m__lResults;
+    }
+
+    /**
+     * Specifies the {@link Parameter}s.
+     * @param parameters such information.
+     */
+    protected final void immutableSetParameters(@NotNull final List<Parameter> parameters)
+    {
+        this.m__lParameters = parameters;
+    }
+
+    /**
+     * Specifies the {@link Parameter}s.
+     * @param parameters such information.
+     */
+    protected void setParameters(@NotNull final List<Parameter> parameters)
+    {
+        immutableSetParameters(parameters);
     }
 
     /**
@@ -385,6 +440,24 @@ public class SqlXmlParserImpl
     }
 
     /**
+     * Specifies the {@link Property properties}.
+     * @param properties the properties.
+     */
+    protected final void immutableSetProperties(@NotNull final List<Property> properties)
+    {
+        this.m__lProperties = properties;
+    }
+
+    /**
+     * Specifies the {@link Property properties}.
+     * @param properties the properties.
+     */
+    protected void setProperties(@NotNull final List<Property> properties)
+    {
+        immutableSetProperties(properties);
+    }
+
+    /**
      * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.Property} collection.
      * return such collection.
      */
@@ -407,6 +480,24 @@ public class SqlXmlParserImpl
     }
 
     /**
+     * Specifies the list of {@link ConnectionFlags}.
+     * @param list such list.
+     */
+    protected final void immutableSetConnectionFlagList(@NotNull final List<ConnectionFlags> list)
+    {
+        this.m__lConnectionFlags = list;
+    }
+
+    /**
+     * Specifies the list of {@link ConnectionFlags}.
+     * @param list such list.
+     */
+    protected void setConnectionFlagList(@NotNull final List<ConnectionFlags> list)
+    {
+        immutableSetConnectionFlagList(list);
+    }
+
+    /**
      * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.ConnectionFlags} collection.
      * return such collection.
      */
@@ -418,6 +509,24 @@ public class SqlXmlParserImpl
     }
 
     /**
+     * Specifies the list of {@link StatementFlags}.
+     * @param list such list.
+     */
+    protected final void immutableSetStatementFlagList(@NotNull final List<StatementFlags> list)
+    {
+        this.m__lStatementFlags = list;
+    }
+
+    /**
+     * Specifies the list of {@link StatementFlags}.
+     * @param list such list.
+     */
+    protected void setStatementFlagList(@NotNull final List<StatementFlags> list)
+    {
+        immutableSetStatementFlagList(list);
+    }
+
+    /**
      * Retrieves the sql.xml {@link org.acmsl.queryj.customsql.StatementFlags} collection.
      * return such collection.
      */
@@ -426,6 +535,24 @@ public class SqlXmlParserImpl
     public List<StatementFlags> getStatementFlagList()
     {
         return m__lStatementFlags;
+    }
+
+    /**
+     * Specifies the list of {@link ResultSetFlags}.
+     * @param list such list.
+     */
+    protected final void immutableSetResultSetFlagList(@NotNull final List<ResultSetFlags> list)
+    {
+        this.m__lResultSetFlags = list;
+    }
+
+    /**
+     * Specifies the list of {@link ResultSetFlags}.
+     * @param list such list.
+     */
+    protected void setResultSetFlagList(@NotNull final List<ResultSetFlags> list)
+    {
+        immutableSetResultSetFlagList(list);
     }
 
     /**
@@ -724,7 +851,42 @@ public class SqlXmlParserImpl
         if  (queries.size() == 0)
         {
             load();
+
+            postProcess();
         }
+    }
+
+    /**
+     * Post processes the parsed contents.
+     */
+    protected void postProcess()
+    {
+        setQueries(postProcess(getQueries()));
+        setResults(postProcess(getResults()));
+        setParameters(postProcess(getParameters()));
+        setProperties(postProcess(getProperties()));
+        setConnectionFlagList(postProcess(getConnectionFlagList()));
+        setStatementFlagList(postProcess(getStatementFlagList()));
+        setResultSetFlagList(postProcess(getResultSetFlagList()));
+    }
+
+    /**
+     * Post-processes given items.
+     * @param items the items.
+     * @return the processed items.
+     */
+    @NotNull
+    protected <T extends IdentifiableElement> List<T> postProcess(@NotNull final List<T> items)
+    {
+        List<T> result;
+
+        HashSet<T> aux = new HashSet<T>(items.size());
+        aux.addAll(items);
+
+        result = new ArrayList<T>(aux.size());
+        result.addAll(aux);
+
+        return result;
     }
 
     /**
@@ -735,7 +897,26 @@ public class SqlXmlParserImpl
     @Override
     public void addResult(@NotNull final String id, @NotNull final Result result)
     {
-        getResults().add(result);
+        addResult(id, result, getResults());
+    }
+
+    /**
+     * Adds a new result.
+     * @param id the result id.
+     * @param result the <code>Result</code> instance.
+     */
+    protected void addResult(
+        @NotNull final String id, @NotNull final Result result, @NotNull final List<Result> results)
+    {
+        if (results.contains(result))
+        {
+            results.add(result);
+        }
+        else
+        {
+            UniqueLogFactory.getLog(SqlXmlParserImpl.class).warn(
+                id + " is defined more than once");
+        }
     }
 
     /**

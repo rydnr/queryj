@@ -35,24 +35,20 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.Result;
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
+import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 
 /*
  * Importing some ACM-SL classes.
  */
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing some JetBrains annotations.
  */
-import org.acmsl.queryj.templates.BasePerCustomResultTemplateGenerator;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -110,7 +106,7 @@ public class CustomResultSetExtractorTemplateGenerator
         @NotNull final BasePerCustomResultTemplateContext context,
         @NotNull final StringUtils stringUtils)
     {
-        return
+        String result =
             stringUtils.capitalize(
                 stringUtils.capitalize(
                     stringUtils.capitalize(
@@ -119,5 +115,10 @@ public class CustomResultSetExtractorTemplateGenerator
                     '_'),
                 '-')
             + "Extractor.java";
+
+        UniqueLogFactory.getLog(CustomResultSetExtractorTemplateGenerator.class).info(
+            "About to write " + result);
+
+        return result;
     }
 }
