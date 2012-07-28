@@ -369,8 +369,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param path the ST path.
      * @param theme the ST theme.
      * @return such key.
-     * @precondition path != null
-     * @precondition theme != null
      */
     @NotNull
     protected final Object buildSTGroupKey(
@@ -387,9 +385,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * instance.
      * @param stUtils the {@link STUtils} instance.
      * @return such instance.
-     * @precondition path != null
-     * @precondition theme != null
-     * @precondition stUtils != null
      */
     @Nullable
     protected StringTemplateGroup retrieveGroup(
@@ -404,7 +399,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Configures given {@link StringTemplate} instance.
      * @param stringTemplate such template.
-     * @precondition stringTemplate != null
      */
     @SuppressWarnings("unused")
     protected void configure(@NotNull final StringTemplate stringTemplate)
@@ -418,7 +412,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Retrieves the template in given group.
      * @param group the StringTemplate group.
      * @return the template.
-     * @precondition group != null
      */
     @Nullable
     protected StringTemplate retrieveTemplate(@Nullable final StringTemplateGroup group)
@@ -527,6 +520,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Prints a log message displaying ClassLoader issues related
      * to ANTLR.jar and StringTemplate.jar.
      */
+    @SuppressWarnings("unused")
     protected synchronized void traceClassLoaders()
     {
         @NotNull FinalizingThread t_FinalizingThread =
@@ -547,6 +541,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     /**
      * Cleans up the thread to trace class loaders on shutdown.
      */
+    @SuppressWarnings("unused")
     protected void cleanUpClassLoaderTracing()
     {
         @NotNull FinalizingThread t_FinalizingThread =
@@ -696,7 +691,6 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param value the value.
      * @param decorationUtils the {@link DecorationUtils} instance.
      * @return such output.
-     * @precondition value != null
      */
     @NotNull
     protected String normalize(

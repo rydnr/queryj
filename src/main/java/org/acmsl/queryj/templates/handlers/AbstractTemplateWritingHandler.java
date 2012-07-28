@@ -109,7 +109,6 @@ public abstract class AbstractTemplateWritingHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws org.acmsl.queryj.tools.QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     @ThreadSafe
     @Override

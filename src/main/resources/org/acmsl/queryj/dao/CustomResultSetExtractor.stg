@@ -92,6 +92,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 /*
  * Importing Jakarta Commons Logging classes
@@ -292,7 +293,7 @@ implicit_nullable_attribute_extraction(value) ::= <<
  @param result the sql result.
  @param value the implicit attribute.
  !>
-resultSet.get<value.objectType>(<value.index>)
+resultSet.get<value.objectType>("<value.columnName>")
 >>
 
 nullable_attribute_extraction(value) ::= <<

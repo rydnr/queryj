@@ -471,17 +471,20 @@ public abstract class AbstractResultDecorator
                 {
                     for (@Nullable Attribute t_Attribute : metadataManager.getColumnDAO().findAllColumns(t_strTable))
                     {
-                        result.add(
-                            decoratorFactory.createDecorator(
-                                new PropertyElement(
-                                    t_strTable + "." + t_Attribute.getName(),
-                                    t_Attribute.getName(),
-                                    t_Attribute.getOrdinalPosition(),
-                                    t_Attribute.getType(),
-                                    t_Attribute.isNullable()),
-                                resultElement,
-                                customSqlProvider,
-                                metadataManager));
+                        if (t_Attribute != null)
+                        {
+                            result.add(
+                                decoratorFactory.createDecorator(
+                                    new PropertyElement(
+                                        t_strTable + "." + t_Attribute.getName(),
+                                        t_Attribute.getName(),
+                                        t_Attribute.getOrdinalPosition(),
+                                        t_Attribute.getType(),
+                                        t_Attribute.isNullable()),
+                                    resultElement,
+                                    customSqlProvider,
+                                    metadataManager));
+                        }
                     }
                 }
             }
@@ -816,7 +819,7 @@ public abstract class AbstractResultDecorator
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final Object object)
+    public int compareTo(@Nullable final Result object)
         throws  ClassCastException
     {
         return compareTo(getResult(), object);
@@ -831,7 +834,7 @@ public abstract class AbstractResultDecorator
      * object prevents it from being compared to this Object.
      */
     @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Result result, final Object object)
+    protected int compareTo(@NotNull final Result result, @Nullable final Result object)
         throws  ClassCastException
     {
         return result.compareTo(object);

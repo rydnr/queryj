@@ -79,6 +79,36 @@ public class CustomResultSetExtractorTemplateBuildHandler
     public CustomResultSetExtractorTemplateBuildHandler() {}
 
     /**
+     * Checks whether the generation is allowed for given result.
+     *
+     * @param customResult      the custom result.
+     * @param customSqlProvider the {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance.
+     * @param metadataManager   the {@link org.acmsl.queryj.metadata.MetadataManager} instance.
+     * @param customResultUtils the {@link org.acmsl.queryj.customsql.CustomResultUtils} instance.
+     * @return <code>true</code> in such case.
+     */
+    @Override
+    protected boolean isGenerationAllowedForResult(
+        @NotNull final Result customResult,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final CustomResultUtils customResultUtils)
+    {
+        return true;
+    }
+
+    /**
+     * Retrieves whether for this template type in particular, duplicated results
+     * are allowed or not (i.e., results differing only in the multiplicity factor).
+     * @return <code>true</code> in such case.
+     */
+    @Override
+    protected boolean isDuplicatedResultsAllowed()
+    {
+        return true;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @NotNull
@@ -189,6 +219,7 @@ public class CustomResultSetExtractorTemplateBuildHandler
                 projectPackage, engineName);
     }
 
+
     /**
      * Displays useful information about this handler.
      * @return such information.
@@ -199,4 +230,6 @@ public class CustomResultSetExtractorTemplateBuildHandler
     {
         return "Builder:" + getClass().getName();
     }
+
+
 }

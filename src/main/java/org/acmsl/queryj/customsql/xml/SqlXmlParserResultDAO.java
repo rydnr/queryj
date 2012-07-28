@@ -38,7 +38,6 @@ package org.acmsl.queryj.customsql.xml;
 /*
  * Importing project classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultRef;
 import org.acmsl.queryj.customsql.Sql;
@@ -187,7 +186,8 @@ public class SqlXmlParserResultDAO
 
                             if ("g_cycle_metadata".equals(t_strDAO))
                             {
-                                UniqueLogFactory.getLog(SqlXmlParserResultDAO.class).debug("caught");
+                                @SuppressWarnings("unused")
+                                int a = 1;
                             }
                             if (   (t_strDAO != null)
                                 && (matches(table, t_strDAO, englishGrammarUtils)))

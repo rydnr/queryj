@@ -35,7 +35,6 @@ package org.acmsl.queryj.customsql;
 /*
  * Importing some project-specific classes.
  */
-import com.google.inject.Provides;
 import org.acmsl.queryj.metadata.CachingResultDecorator;
 import org.acmsl.queryj.metadata.DecorationUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -317,10 +316,10 @@ public class CustomResultUtils
 
         if (result == null)
         {
-            if (   (resultId.equals("draws.multiple.draw.result"))
-                || (resultId.equals("active_lottery_numbers.multiple.total_avaibles.result")))
+            if (resultId.equalsIgnoreCase(System.getProperty("queryj.customresult.debug")))
             {
-                System.out.println("caught");
+                @SuppressWarnings("unused")
+                int a = 1;
             }
 
             String t_strDao;

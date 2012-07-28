@@ -283,40 +283,19 @@ public abstract class AbstractResult
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(@Nullable final Object object)
+    public int compareTo(@Nullable final Result object)
         throws  ClassCastException
     {
-        int result = 1;
+        int result = -1;
 
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof Result)
+        if (object != null)
         {
-                @NotNull final Result t_OtherInstance = (Result) object;
-
-                result =
-                    new org.apache.commons.lang.builder.CompareToBuilder()
-                        .append(
-                            getMatches(),
-                            t_OtherInstance.getMatches())
-                        .append(
-                            getPropertyRefs(),
-                            t_OtherInstance.getPropertyRefs())
-                        .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                    .append(
+                        getId(),
+                        object.getId())
+                    .toComparison();
         }
 
         return result;

@@ -49,7 +49,7 @@ import java.util.List;
  */
 public interface Result
     extends  IdentifiableElement,
-             java.lang.Comparable
+             java.lang.Comparable<Result>
 {
     /**
      * The <b>none</b> value for <i>matches</i> attribute.

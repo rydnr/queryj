@@ -35,7 +35,6 @@ package org.acmsl.queryj.templates.dao;
 /*
  * Importing some project-specific classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateContext;
 import org.acmsl.queryj.templates.AbstractTemplateGenerator;
@@ -106,7 +105,7 @@ public class CustomResultSetExtractorTemplateGenerator
         @NotNull final BasePerCustomResultTemplateContext context,
         @NotNull final StringUtils stringUtils)
     {
-        String result =
+        return
             stringUtils.capitalize(
                 stringUtils.capitalize(
                     stringUtils.capitalize(
@@ -115,10 +114,5 @@ public class CustomResultSetExtractorTemplateGenerator
                     '_'),
                 '-')
             + "Extractor.java";
-
-        UniqueLogFactory.getLog(CustomResultSetExtractorTemplateGenerator.class).info(
-            "About to write " + result);
-
-        return result;
     }
 }

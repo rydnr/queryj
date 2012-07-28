@@ -1322,9 +1322,10 @@ public abstract class AbstractJdbcMetadataManager
     @Override
     public boolean isGenerationAllowedForTable(@NotNull final String tableName)
     {
-        if (tableName.equals("G_SHARES"))
+        if (tableName.equalsIgnoreCase(System.getProperty("queryj.table.debug")))
         {
-            System.out.println("debug ");
+            @SuppressWarnings("unused")
+            int a = 1;
         }
 
         return

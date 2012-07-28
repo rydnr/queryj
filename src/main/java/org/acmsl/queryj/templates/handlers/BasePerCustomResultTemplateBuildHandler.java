@@ -86,14 +86,17 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     public static final String CUSTOM_RESULTS = "..CustOMresultS:::";
 
     /**
+     * The key for storing the custom RESULTS (no duplicated entries) in the parameter map.
+     */
+    public static final String CUSTOM_RESULTS_NO_DUPLICATES = CUSTOM_RESULTS + "..NoDuplic4tes;";
+
+    /**
      * Creates a <code>BasePerCustomResultTemplateBuildHandler</code> instance.
      */
     public BasePerCustomResultTemplateBuildHandler() {}
 
     /**
      * Handles given information.
-     *
-     *
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -145,8 +148,18 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
-            retrieveCustomResults(parameters, customSqlProvider),
+            retrieveCustomResults(parameters, customSqlProvider, isDuplicatedResultsAllowed()),
             CustomResultUtils.getInstance());
+    }
+
+    /**
+     * Retrieves whether for this template type in particular, duplicated results
+     * are allowed or not (i.e., results differing only in the multiplicity factor).
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isDuplicatedResultsAllowed()
+    {
+        return false;
     }
 
     /**
@@ -254,11 +267,10 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        if (   ("com.ventura24.nlp.games.vo.GExtendedShareBooking".equals(customResult.getClassValue()))
-            || ("multiple.season.result".equals(customResult.getId()))
-            || ("single.season.result".equals(customResult.getId())))
+        if ("multiple.bettor.result".equals(customResult.getId()))
         {
-            System.out.println("breakpoint");
+            @SuppressWarnings("unused")
+            int a = 1;
         }
 
         boolean result =
@@ -334,25 +346,35 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * Retrieves the foreign keys.
      * @param parameters the parameter map.
      * @param customSqlProvider the custom RESULT provider.
+     * @param allowDuplicates whether to remove duplicates.
      * @return such templates.
      * @throws QueryJBuildException if the templates cannot be retrieved for any
      * reason.
      */
-    @ThreadSafe
     @NotNull
     @SuppressWarnings("unchecked")
     protected List<Result> retrieveCustomResults(
         @NotNull final Map parameters,
-        @NotNull final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        final boolean allowDuplicates)
       throws  QueryJBuildException
     {
-        @Nullable List<Result> result = (List<Result>) parameters.get(CUSTOM_RESULTS);
+        String t_strKey = CUSTOM_RESULTS;
+
+        if (!allowDuplicates)
+        {
+            t_strKey = CUSTOM_RESULTS_NO_DUPLICATES;
+        }
+        @Nullable List<Result> result = (List<Result>) parameters.get(t_strKey);
 
         if  (result == null)
         {
             result = retrieveCustomResultElements(customSqlProvider);
-            result = fixDuplicated(result);
-            parameters.put(CUSTOM_RESULTS, result);
+            if (!allowDuplicates)
+            {
+                result = fixDuplicated(result);
+            }
+            parameters.put(t_strKey, result);
         }
 
         return result;

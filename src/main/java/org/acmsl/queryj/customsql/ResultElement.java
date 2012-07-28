@@ -41,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing JDK classes.
  */
 import java.util.Collection;
+import java.util.Locale;
 
 /*
  * Importing checkthread.org annotations.
@@ -137,15 +138,14 @@ public class ResultElement
      * @param propertyRefs the <i>property-ref</i> elements.
      * @return such value.
      */
+    @SuppressWarnings("unused")
     protected int hashCode(
         final String id,
         final String classValue,
         final String matches,
         final Collection propertyRefs)
     {
-        return
-            (id + "@#" + classValue + "#@" + matches + "@#" + propertyRefs)
-            .toLowerCase().hashCode();
+        return id.toLowerCase(Locale.US).hashCode() + Result.class.hashCode();
     }
 
     /**

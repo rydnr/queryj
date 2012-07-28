@@ -78,6 +78,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -2787,6 +2788,16 @@ public abstract class AbstractTableDecorator
                     }
                 }
             }
+        }
+
+        try
+        {
+            Collections.sort(result);
+        }
+        catch (@NotNull final Throwable throwable)
+        {
+            UniqueLogFactory.getLog(AbstractTableDecorator.class).fatal(
+                throwable.getMessage(), throwable);
         }
 
         return result;
