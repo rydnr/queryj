@@ -71,6 +71,7 @@ import org.checkthread.annotations.ThreadSafe;
  * Importing JDK classes.
  */
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -600,6 +601,10 @@ public abstract class AbstractResultDecorator
         {
             result = new ArrayList<Property>(0);
         }
+        else
+        {
+            Collections.sort(result);
+        }
 
         return result;
     }
@@ -640,6 +645,8 @@ public abstract class AbstractResultDecorator
                         metadataManager));
             }
         }
+
+        Collections.sort(result);
 
         return result;
     }

@@ -2224,6 +2224,17 @@ public abstract class AbstractTableDecorator
         {
             result = new ArrayList<Row>(0);
         }
+        else
+        {
+            try
+            {
+                Collections.sort(result);
+            }
+            catch (@NotNull final Throwable throwable)
+            {
+                UniqueLogFactory.getLog(AbstractTableDecorator.class).error(throwable);
+            }
+        }
 
         return result;
     }
@@ -2334,6 +2345,8 @@ public abstract class AbstractTableDecorator
                 result.add(t_Attribute);
             }
         }
+
+        Collections.sort(result);
 
         return result;
     }

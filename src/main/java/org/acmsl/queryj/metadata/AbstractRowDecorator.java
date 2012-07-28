@@ -49,6 +49,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing JDK classes.
  */
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -148,7 +149,8 @@ public abstract class AbstractRowDecorator
      * Retrieves the decorated row.
      * @return such row.
      */
-    @NotNull
+    @SuppressWarnings("unused")
+    @Nullable
     public Row getRow()
     {
         return m__Row;
@@ -239,6 +241,7 @@ public abstract class AbstractRowDecorator
      * Retrieves the decorator factory to use.
      * @return the {@link DecoratorFactory} instance.
      */
+    @NotNull
     public DecoratorFactory getDecoratorFactory()
     {
         return m__DecoratorFactory;
@@ -265,7 +268,12 @@ public abstract class AbstractRowDecorator
     protected List<Attribute> getAttributes(
         @NotNull final MetadataManager metadataManager, @NotNull final DecoratorFactory decoratorFactory)
     {
-        return decoratorFactory.decorateAttributes(super.getAttributes(), metadataManager);
+        List<Attribute> result =
+            decoratorFactory.decorateAttributes(super.getAttributes(), metadataManager);
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -332,108 +340,5 @@ public abstract class AbstractRowDecorator
     protected String capitalize(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.capitalize(value);
-    }
-
-    /**
-     * Provides a text representation of the information
-     * contained in this instance.
-     * @return such information.
-     */
-    @Override
-    @NotNull
-    public String toString()
-    {
-        return toString(getRow());
-    }
-
-    /**
-     * Provides a text representation of the information
-     * contained in given instance.
-     * @param row the decorated row.
-     * @return such information.
-     */
-    @NotNull
-    protected String toString(@NotNull final Row row)
-    {
-        return "" + row;
-    }
-
-    /**
-     * Retrieves the hash code associated to this instance.
-     * @return such information.
-     */
-    @Override
-    public int hashCode()
-    {
-        return hashCode(getRow());
-    }
-
-    /**
-     * Retrieves the hash code associated to given row.
-     * @param row the row.
-     * @return such information.
-     */
-    protected int hashCode(@NotNull final Row row)
-    {
-        return row.hashCode();
-    }
-
-    /**
-     * Checks whether given object is semantically equal to this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     */
-    @Override
-    public boolean equals(@Nullable final Object object)
-    {
-        boolean result = false;
-
-        if (object instanceof Row)
-        {
-            result = equals(getRow(), object);
-        }
-
-        return result;
-    }
-
-    /**
-     * Checks whether given object is semantically equal to given instance.
-     * @param row the row.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @precondition row != null
-     */
-    protected boolean equals(@NotNull final Row row, @NotNull final Object object)
-    {
-        return row.equals(object);
-    }
-
-    /**
-     * Compares given object with this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
-     */
-    @Override
-    public int compareTo(final Object object)
-        throws  ClassCastException
-    {
-        return compareTo(getRow(), object);
-    }
-
-    /**
-     * Compares given object with given instance.
-     * @param row the decorated row.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
-     */
-    @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Row row, final Object object)
-        throws  ClassCastException
-    {
-        return row.compareTo(object);
     }
 }

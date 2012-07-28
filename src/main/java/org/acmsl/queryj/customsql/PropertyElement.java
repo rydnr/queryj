@@ -41,6 +41,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Models &lt;property&gt; elements in <i>custom-sql</i> models, which
@@ -152,6 +153,16 @@ public class PropertyElement
     }
 
     /**
+     * Retrieves the validation value.
+     *
+     * @return such value.
+     */
+    public String getValidationValue()
+    {
+        return null;
+    }
+
+    /**
      * Provides a text representation of the information
      * contained in this instance.
      * @return such information.
@@ -220,31 +231,29 @@ public class PropertyElement
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Property object)
+    @Override
+    public int compareTo(@Nullable final Property object)
         throws  ClassCastException
     {
         int result = 1;
 
         if  (object != null)
         {
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    isNullable(),
-                    object.isNullable())
-                .toComparison();
+            result = compareThem(this, object);
         }
 
         return result;
     }
 
     /**
-     * Retrieves the validation value.
-     *
-     * @return such value.
+     * Compares given {@link Property properties}.
+     * @param first the first.
+     * @param second the second.
+     * @return the outcome of comparing <code>first.getIndex()</code> vs
+     * <code>second.getIndex()</code>
      */
-    public String getValidationValue()
+    protected int compareThem(@NotNull final Property first, @NotNull final Property second)
     {
-        return null;
+        return first.getIndex() - second.getIndex();
     }
 }

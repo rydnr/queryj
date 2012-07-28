@@ -40,11 +40,13 @@ package org.acmsl.queryj.metadata.engines;
  */
 import org.acmsl.queryj.metadata.ColumnDAO;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.TableDAO;
 import org.acmsl.queryj.metadata.vo.Attribute;
 
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.vo.Table;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -123,8 +125,56 @@ public class MetadataManagerColumnDAO
         @NotNull final String table,
         @NotNull final String columnName)
     {
-        // TODO
-        return null;
+        return findColumn(table, columnName, getMetadataManager());
+    }
+
+    /**
+     * Retrieves a concrete column in a given table.
+     * @param table the table name.
+     * @param columnName the column name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the {@link Attribute column}.
+     */
+    @Nullable
+    protected Attribute findColumn(
+        @NotNull final String table,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
+    {
+        return findColumn(table, columnName, metadataManager.getTableDAO());
+    }
+
+    /**
+     * Retrieves a concrete column in a given table.
+     * @param table the table name.
+     * @param columnName the column name.
+     * @param tableDAO the {@link TableDAO} instance.
+     * @return the {@link Attribute column}.
+     */
+    @Nullable
+    protected Attribute findColumn(
+        @NotNull final String table,
+        @NotNull final String columnName,
+        @NotNull final TableDAO tableDAO)
+    {
+        Attribute result = null;
+
+        @Nullable final Table t_Table = tableDAO.findByName(table);
+
+        if (t_Table != null)
+        {
+            for (@Nullable Attribute t_Attribute : t_Table.getAttributes())
+            {
+                if (   (t_Attribute != null)
+                    && (columnName.equalsIgnoreCase(t_Attribute.getName())))
+                {
+                    result = t_Attribute;
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -136,8 +186,44 @@ public class MetadataManagerColumnDAO
     @Override
     public List<Attribute> findColumns(@NotNull final String table)
     {
-        // TODO
-        return new ArrayList<Attribute>(0);
+        return findColumns(table, getMetadataManager());
+    }
+
+    /**
+     * Retrieves the columns for given table.
+     * @param table the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the list of {@link Attribute columns}.
+     */
+    @NotNull
+    protected List<Attribute> findColumns(@NotNull final String table, @NotNull final MetadataManager metadataManager)
+    {
+        return findColumns(table, metadataManager.getTableDAO());
+    }
+
+    /**
+     * Retrieves the columns for given table.
+     * @param table the table name.
+     * @param tableDAO the {@link TableDAO} instance.
+     * @return the list of {@link Attribute columns}.
+     */
+    @NotNull
+    protected List<Attribute> findColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
+    {
+        List<Attribute> result;
+
+        @Nullable final Table t_Table = tableDAO.findByName(table);
+
+        if (t_Table != null)
+        {
+            result = t_Table.getAttributes();
+        }
+        else
+        {
+            result = new ArrayList<Attribute>(0);
+        }
+
+        return result;
     }
 
     /**
@@ -149,8 +235,50 @@ public class MetadataManagerColumnDAO
     @Override
     public List<Attribute> findAllColumns(@NotNull final String table)
     {
-        // TODO
-        return new ArrayList<Attribute>(0);
+        return findAllColumns(table, getMetadataManager());
+    }
+
+    /**
+     * Retrieves the columns for given table, including parent's, if any.
+     * @param table the table name.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @return the list of {@link Attribute columns}.
+     */
+    @NotNull
+    protected List<Attribute> findAllColumns(
+        @NotNull final String table, @NotNull final MetadataManager metadataManager)
+    {
+        return findAllColumns(table, metadataManager.getTableDAO());
+    }
+
+    /**
+     * Retrieves the columns for given table, including parent's, if any.
+     * @param table the table name.
+     * @param tableDAO the {@link TableDAO} instance.
+     * @return the list of {@link Attribute columns}.
+     */
+    @NotNull
+    protected List<Attribute> findAllColumns(@NotNull final String table, @NotNull final TableDAO tableDAO)
+    {
+        List<Attribute> result = new ArrayList<Attribute>(0);
+
+        Table t_Table = tableDAO.findByName(table);
+
+        if (t_Table != null)
+        {
+            @Nullable Table t_Parent = t_Table.getParentTable();
+
+            while (t_Parent != null)
+            {
+                result.addAll(t_Parent.getAttributes());
+
+                t_Parent = t_Parent.getParentTable();
+            }
+
+            result.addAll(t_Table.getAttributes());
+        }
+
+        return result;
     }
 
     /**

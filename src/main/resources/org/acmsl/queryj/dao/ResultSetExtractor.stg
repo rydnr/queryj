@@ -314,16 +314,18 @@ private boolean m__bSelectForUpdateMode;
 /**
  * Creates a Oracle-based {@link ResultSetExtractor}
  * to extract <table.voName> information, managing LOB stuff.
+ * @param sql the sql.
  * @param selectForUpdateMode whether the result set is the result of
  * the \<i>select for update} (required to perform some operations
  * such as \<b>insert\</b>s), or not.
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  */
 public <table.voName>ResultSetExtractor(
+    <notnull()>final String sql,
     final boolean selectForUpdateMode,
-    final <repository.capitalized>DAOListener daoListener)
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
 {
-    super(daoListener);
+    super(sql, daoListener);
     immutableSetSelectForUpdateMode(selectForUpdateMode);
 }
 
@@ -341,21 +343,23 @@ public <table.voName>ResultSetExtractor(
     <lob_attributes:attribute_method_declaration(value=it);
       separator=",\n">,
     final boolean selectForUpdateMode,
-    final <repository.capitalized>DAOListener daoListener)
+    <notnull()>final <repository.capitalized>DAOListener daoListener)
 {
-    this(selectForUpdateMode, daoListener);
+    this(sql, selectForUpdateMode, daoListener);
     <table.lobAttributes:attribute_setter_call(value=it); separator="\n">
 }
 
 /**
  * Creates a Oracle-based {@link ResultSetExtractor}
  * to extract <table.voName> information, managing LOB stuff.
+ * @param sql the sql.
  * @param daoListener the {@link <repository.capitalized>DAOListener} instance.
  */
 public <table.voName>ResultSetExtractor(
-    final <repository.capitalized>DAOListener daoListener)
+    <notnull>final String sql,
+    <notnull>final <repository.capitalized>DAOListener daoListener)
 {
-    this(false, daoListener);
+    this(sql, false, daoListener);
 }
 
 <lob_attributes:attribute_accessors(value=it); separator="\n\n">

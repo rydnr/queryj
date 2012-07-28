@@ -42,7 +42,8 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Property
-    extends  IdentifiableElement
+    extends  IdentifiableElement,
+             Comparable<Property>
 {
     /**
      * Retrieves the <i>column_name</i> attribute.

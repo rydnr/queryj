@@ -260,6 +260,8 @@ public interface <table.voName>DAO
      */
     int update(
         <table.nonReadOnlyAttributes:attribute_declaration_impl(attr=it); separator=",\n">);
+        /*<table.nonReadOnlyAttributes:{it|<it.name> -> <it.ordinalPosition>}; separator=",\n">);*/
+
 
     /**
      * Deletes {@link <table.voName>} information.
@@ -365,7 +367,7 @@ find_constant_methods(attribute, table) ::= <<
  */
 <nullable()>
 <table.voName> findConstantBy<attribute.nameCapitalized>(
-    <type_checker(attr=attribute)>final <attribute.javaType> <attribute.nameLowercased>);
+    <type_checker(attribute=attribute)>final <attribute.javaType> <attribute.nameLowercased>);
 
 >>
 

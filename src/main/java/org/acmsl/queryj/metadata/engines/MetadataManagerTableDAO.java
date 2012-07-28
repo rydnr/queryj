@@ -115,7 +115,7 @@ public abstract class MetadataManagerTableDAO<M extends MetadataManager>
      * @return such {@link MetadataManager instance}.
      */
     @NotNull
-    protected M getMetadataManager()
+    protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
     }

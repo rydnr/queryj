@@ -183,15 +183,17 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+public <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_declaration(attr=it); separator=",\n">)
   throws DataAccessException
 {
+    <notnull()>final String t_strSql = auditSql(<cs.idAsConstant>_SQL);
+
     return
         <cs.nameUncapitalized>(
             <cs.parameters:{<it.nameLowercased>,}; separator="\n">
-            new PreparedStatementCreatorFactory(
-                auditSql(<cs.idAsConstant>_SQL)),
+            t_strSql,
+            new PreparedStatementCreatorFactory(t_strSql),
             new Object[]
             {
                 <cs.parameters:custom_select_parameter_value(
@@ -206,6 +208,7 @@ custom_select(cs, table) ::= <<
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
@@ -214,8 +217,9 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    <notnull()>final String sql,
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
     <notnull()>final DataSource dataSource)
@@ -224,6 +228,7 @@ custom_select(cs, table) ::= <<
     return
         <cs.nameUncapitalized>(
             <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            sql,
             preparedStatementCreatorFactory,
             params,
             new DataSourceTransactionManager(dataSource));
@@ -233,6 +238,7 @@ custom_select(cs, table) ::= <<
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
@@ -242,8 +248,9 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    <notnull()>final String sql,
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
     <notnull()>final PlatformTransactionManager transactionManager)
@@ -254,6 +261,7 @@ custom_select(cs, table) ::= <<
     result =
         <cs.nameUncapitalized>(
             <cs.parameters:{<it.nameLowercased>,}; separator="\n">
+            sql,
             preparedStatementCreatorFactory,
             params,
             new TransactionTemplate(transactionManager));
@@ -265,6 +273,7 @@ custom_select(cs, table) ::= <<
  * Custom select \<i><cs.id>\</i>:\<br/>
  * \<b><cs.description>\</b>.
  <cs.parameters:attribute_javadoc(name=it.nameLowercased); separator="\n">
+ * @param sql the SQL.
  * @param preparedStatementCreatorFactory the
  * {@link PreparedStatementCreatorFactory} instance
  * specific for this operation.
@@ -274,8 +283,9 @@ custom_select(cs, table) ::= <<
  * @return the \<i><cs.resultClass>\</i> information retrieved.
  * @throws DataAccessException if the operation fails.
  */
-<custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
+protected <custom_select_return(table=table, result=cs.result)> <cs.nameUncapitalized>(
     <cs.parameters:attribute_isolated_declaration(attr=it); separator="\n">
+    <notnull()>final String sql,
     <notnull()>final PreparedStatementCreatorFactory preparedStatementCreatorFactory,
     <nullable()>final Object[] params,
     <notnull()>final TransactionTemplate transactionTemplate)
@@ -1109,7 +1119,7 @@ custom_select_template_call(sql, result, table) ::= <<
  @param result the sql result.
  @param table the table.
  !>
-(<custom_select_return(table=table, result=result)>) <actual_custom_select_template_call(sql=sql, result=result)>;
+(<custom_select_return_cast(table=table, result=result)>) <actual_custom_select_template_call(sql=sql, result=result)>;
 >>
 
 actual_custom_select_template_call(sql, result) ::= <<
@@ -1126,7 +1136,7 @@ transactionTemplate.execute(
         // calls setXXX twice
         // preparedStatementCreatorFactory
         //     .newPreparedStatementSetter(t_aParams),
-        new <sql.resultIdCapitalized>Extractor(getDAOListener()),
+        new <sql.resultIdCapitalized>Extractor(sql, getDAOListener()),
         this))
 >>
 
@@ -1425,3 +1435,32 @@ find_constant_check_attribute(attribute) ::= <<
 && (item.get<attribute.nameCapitalized>().equals(<attribute.nameLowercased>))
 <endif>
 >>
+
+custom_select_return_cast(table, result) ::= <<
+<if(table.voDecorated)>
+<custom_select_return_decorated(result=result)>
+<else>
+<custom_select_return_cast_nondecorated(result=result)>
+<endif>
+>>
+
+custom_select_return_cast_nondecorated(result) ::= <<
+<if(result.multiple)>
+<custom_select_return_nondecorated_multiple(result=result)>
+<else>
+<custom_select_return_cast_nondecorated_single(result=result)>
+<endif>
+>>
+
+custom_select_return_cast_nondecorated_single(result) ::= <<
+<if(result.wrappingASingleProperty)>
+<custom_select_return_cast_property_single(result=result)>
+<else>
+<result.voName>
+<endif>
+>>
+
+custom_select_return_cast_property_single(select, result) ::= <<
+<result.properties:{property|<property.objectType>}>
+>>
+

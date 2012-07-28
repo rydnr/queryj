@@ -43,7 +43,7 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Row
-    extends  java.lang.Comparable,
+    extends  Comparable<Row>,
              Serializable
 {
     /**

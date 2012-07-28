@@ -184,7 +184,7 @@ public class <table.voName>ValueObjectFactory
 <if(parent)>
                 <table.allParentAndNonParentAttributes:{<it.nameUncapitalized>}; separator=",\n">);
 <else>
-                <table.attributes:{<it.nameUncapitalized>}; separator=",\n">);
+                <table.attributes:{/*<it.ordinalPosition>*/<it.nameUncapitalized>}; separator=",\n">);
 <endif>
 <endif>
 

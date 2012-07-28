@@ -163,7 +163,7 @@ public class <result.idCapitalized>Extractor
         <notnull()>final String sql,
         <notnull()>final <repository.capitalized>DAOListener daoListener)
     {
-        super(daoListener);
+        super(sql, daoListener);
     }
 
     // \<extract data\>
@@ -257,9 +257,11 @@ public class <result.idCapitalized>Extractor
             result =
 <endif>
 
-                factory.createValueObject(
+                factory.create(
 <if(result.implicit)>
+// implicit 
                     <result.implicitProperties:implicit_nullable_attribute_extraction(value=it); separator=",\n">)<if(result.multiple)>)<endif>;
+                    <result.implicitProperties:{prop|/*<prop.columnName>-><prop.index>*/}; separator="\n">
 <else>
                     <result.properties:attribute_extraction(attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
 <endif>
@@ -274,7 +276,7 @@ public class <result.idCapitalized>Extractor
 >>
 
 
-implicit_attrte_result(value) ::= <<
+implicit_attribute_result(value) ::= <<
 <!
  Prints the correct return clause for the implicit attribute.
  @param value the implicit attribute.

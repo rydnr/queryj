@@ -42,6 +42,7 @@ import org.acmsl.queryj.customsql.PropertyElement;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -651,7 +652,7 @@ public abstract class AbstractPropertyDecorator
      * @return the result of such comparison.
      */
     @Override
-    public boolean equals(final Object object)
+    public boolean equals(@Nullable final Object object)
     {
         boolean result = false;
 
@@ -672,41 +673,5 @@ public abstract class AbstractPropertyDecorator
     protected boolean equals(@NotNull final Property property, @NotNull final Property object)
     {
         return property.equals(object);
-    }
-
-    /**
-     * Compares given object with this instance.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
-     */
-    @Override
-    public int compareTo(final Property object)
-        throws  ClassCastException
-    {
-        return compareTo(getProperty(), object);
-    }
-
-    /**
-     * Compares given object with given instance.
-     * @param property the decorated property.
-     * @param object the object to compare to.
-     * @return the result of such comparison.
-     * @throws ClassCastException if the type of the specified
-     * object prevents it from being compared to this Object.
-     */
-    @SuppressWarnings("unchecked")
-    protected int compareTo(@NotNull final Property property, final Property object)
-        throws  ClassCastException
-    {
-        int result = 1;
-
-        if (property instanceof Comparable)
-        {
-            result = ((Comparable<Property>) property).compareTo(object);
-        }
-
-        return result;
     }
 }

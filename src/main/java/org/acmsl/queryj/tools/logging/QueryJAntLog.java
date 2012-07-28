@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -51,12 +50,17 @@ import org.acmsl.commons.logging.UniqueLogFactory;
  * Importing some Ant classes.
  */
 import org.apache.tools.ant.Project;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
 
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Minimal logging helper to avoid using Ant-specific
@@ -79,9 +83,8 @@ public class QueryJAntLog
      * Creates a <code>QueryJAntLog</code> instance
      * from given <code>Project</code>.
      * @param project the Ant project.
-     * @precondition project != null
      */
-    public QueryJAntLog(final Project project)
+    public QueryJAntLog(@NotNull final Project project)
     {
         immutableSetProject(project);
         immutableInitialize();
@@ -91,8 +94,7 @@ public class QueryJAntLog
      * Specifies the <code>Project</code> instance.
      * @param project the Ant project.
      */
-    protected final void immutableSetProject(
-        final Project project)
+    protected final void immutableSetProject(@NotNull final Project project)
     {
         m__Project = project;
     }
@@ -101,6 +103,7 @@ public class QueryJAntLog
      * Specifies the <code>Project</code> instance.
      * @param project the Ant project.
      */
+    @SuppressWarnings("unused")
     protected void setProject(final Project project)
     {
         immutableSetProject(project);
@@ -200,7 +203,7 @@ public class QueryJAntLog
      * <p>Logs a message with trace log level.</p>
      * @param message the message.
      */
-    public void trace(final Object message)
+    public void trace(@Nullable final Object message)
     {
         trace(message, getProject());
     }
@@ -209,9 +212,8 @@ public class QueryJAntLog
      * <p>Logs a message with trace log level.</p>
      * @param message the message.
      * @param project the <code>Project</code> instance.
-     * @precondition project != null
      */
-    protected void trace(final Object message, @NotNull final Project project)
+    protected void trace(@Nullable final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_VERBOSE);
     }
@@ -221,7 +223,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void trace(final Object message, @NotNull final Throwable throwable)
+    public void trace(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         trace(message, throwable, getProject());
     }
@@ -232,7 +234,7 @@ public class QueryJAntLog
      * @param throwable the cause.
      */
     protected void trace(
-        final Object message,
+        @Nullable final Object message,
         @NotNull final Throwable throwable,
         @NotNull final Project project)
     {
@@ -245,7 +247,7 @@ public class QueryJAntLog
      * <p>Logs a message with debug log level.</p>
      * @param message the message.
      */
-    public void debug(final Object message)
+    public void debug(@Nullable final Object message)
     {
         debug(message, getProject());
     }
@@ -254,9 +256,8 @@ public class QueryJAntLog
      * <p>Logs a message with debug log level.</p>
      * @param message the message.
      * @param project the <code>Project</code> instance.
-     * @precondition project != null
      */
-    protected void debug(final Object message, @NotNull final Project project)
+    protected void debug(@Nullable final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_DEBUG);
     }
@@ -266,7 +267,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void debug(final Object message, @NotNull final Throwable throwable)
+    public void debug(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         debug(message, throwable, getProject());
     }
@@ -277,7 +278,7 @@ public class QueryJAntLog
      * @param throwable the cause.
      */
     protected void debug(
-        final Object message,
+        @Nullable final Object message,
         @NotNull final Throwable throwable,
         @NotNull final Project project)
     {
@@ -290,7 +291,7 @@ public class QueryJAntLog
      * <p>Logs a message with info log level.</p>
      * @param message the message.
      */
-    public void info(final Object message)
+    public void info(@Nullable final Object message)
     {
         info(message, getProject());
     }
@@ -299,9 +300,8 @@ public class QueryJAntLog
      * <p>Logs a message with info log level.</p>
      * @param message the message.
      * @param project the <code>Project</code> instance.
-     * @precondition project != null
      */
-    protected void info(final Object message, @NotNull final Project project)
+    protected void info(@Nullable final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_INFO);
     }
@@ -311,7 +311,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void info(final Object message, @NotNull final Throwable throwable)
+    public void info(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         info(message, throwable, getProject());
     }
@@ -322,7 +322,7 @@ public class QueryJAntLog
      * @param throwable the cause.
      */
     protected void info(
-        final Object message,
+        @Nullable final Object message,
         @NotNull final Throwable throwable,
         @NotNull final Project project)
     {
@@ -335,7 +335,7 @@ public class QueryJAntLog
      * <p>Logs a message with warn log level.</p>
      * @param message the message.
      */
-    public void warn(final Object message)
+    public void warn(@Nullable final Object message)
     {
         warn(message, getProject());
     }
@@ -344,9 +344,8 @@ public class QueryJAntLog
      * <p>Logs a message with warn log level.</p>
      * @param message the message.
      * @param project the <code>Project</code> instance.
-     * @precondition project != null
      */
-    protected void warn(final Object message, @NotNull final Project project)
+    protected void warn(@Nullable final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_WARN);
     }
@@ -356,7 +355,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void warn(final Object message, @NotNull final Throwable throwable)
+    public void warn(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         warn(message, throwable, getProject());
     }
@@ -367,7 +366,7 @@ public class QueryJAntLog
      * @param throwable the cause.
      */
     protected void warn(
-        final Object message,
+        @Nullable final Object message,
         @NotNull final Throwable throwable,
         @NotNull final Project project)
     {
@@ -380,7 +379,7 @@ public class QueryJAntLog
      * <p>Logs a message with error log level.</p>
      * @param message the message.
      */
-    public void error(final Object message)
+    public void error(@Nullable final Object message)
     {
         error(message, getProject());
     }
@@ -389,9 +388,8 @@ public class QueryJAntLog
      * <p>Logs a message with error log level.</p>
      * @param message the message.
      * @param project the <code>Project</code> instance.
-     * @precondition project != null
      */
-    protected void error(final Object message, @NotNull final Project project)
+    protected void error(@Nullable final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_ERR);
     }
@@ -401,7 +399,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void error(final Object message, @NotNull final Throwable throwable)
+    public void error(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         error(message, throwable, getProject());
     }
@@ -412,7 +410,7 @@ public class QueryJAntLog
      * @param throwable the cause.
      */
     protected void error(
-        final Object message,
+        @Nullable final Object message,
         @NotNull final Throwable throwable,
         @NotNull final Project project)
     {
@@ -425,7 +423,7 @@ public class QueryJAntLog
      * <p>Logs a message with fatal log level.</p>
      * @param message the message.
      */
-    public void fatal(final Object message)
+    public void fatal(@Nullable final Object message)
     {
         fatal(message, getProject());
     }
@@ -434,9 +432,8 @@ public class QueryJAntLog
      * <p>Logs a message with fatal log level.</p>
      * @param message the message.
      * @param project the <code>Project</code> instance.
-     * @precondition project != null
      */
-    protected void fatal(final Object message, @NotNull final Project project)
+    protected void fatal(@Nullable final Object message, @NotNull final Project project)
     {
         project.log("" + message, Project.MSG_ERR);
     }
@@ -446,7 +443,7 @@ public class QueryJAntLog
      * @param message the message.
      * @param throwable the cause.
      */
-    public void fatal(final Object message, @NotNull final Throwable throwable)
+    public void fatal(@Nullable final Object message, @NotNull final Throwable throwable)
     {
         fatal(message, throwable, getProject());
     }
@@ -457,7 +454,7 @@ public class QueryJAntLog
      * @param throwable the cause.
      */
     protected void fatal(
-        final Object message,
+        @Nullable final Object message,
         @NotNull final Throwable throwable,
         @NotNull final Project project)
     {

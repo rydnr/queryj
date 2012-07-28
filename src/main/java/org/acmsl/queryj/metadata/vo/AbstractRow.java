@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -239,46 +238,37 @@ public abstract class AbstractRow
      * object prevents it from being compared to this Object.
      */
     @Override
-    public int compareTo(@Nullable final Object object)
+    public int compareTo(@Nullable final Row object)
         throws  ClassCastException
     {
         int result = 1;
 
-        @Nullable ClassCastException exceptionToThrow = null;
-
-        if  (object instanceof Row)
+        if  (object != null)
         {
-            @NotNull final Row t_OtherInstance = (Row) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getName(),
-                    t_OtherInstance.getName())
-                .append(
-                    getTableName(),
-                    t_OtherInstance.getTableName())
-                .append(
-                    getAttributes(),
-                    t_OtherInstance.getAttributes())
-                .toComparison();
-        }
-        else
-        {
-            exceptionToThrow =
-                new ClassCastException(
-                      "Cannot compare "
-                    + object
-                    + " with "
-                    + toString());
-        }
-
-        if  (exceptionToThrow != null)
-        {
-            throw  exceptionToThrow;
+            result = compareThem(this, object);
         }
 
         return result;
+    }
+
+    /**
+     * Compares both {@link Row rows}.
+     * @param first the first.
+     * @param second the second.
+     * @return a positive number of the first is considered 'greater'
+     * than the second; 0 if they're equal; a negative number otherwise.
+     */
+    protected int compareThem(@NotNull final Row first, @NotNull final Row second)
+    {
+        return
+            new org.apache.commons.lang.builder.CompareToBuilder()
+                .append(
+                    first.getName(),
+                    second.getName())
+                .append(
+                    first.getTableName(),
+                    second.getTableName())
+                .toComparison();
     }
 }
 
