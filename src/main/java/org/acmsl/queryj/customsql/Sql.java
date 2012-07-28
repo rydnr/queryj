@@ -55,7 +55,8 @@ import java.util.List;
  * @author <a href="mailto:chous@acm-sl.org">Jose San Leandro Armendariz</a>
  */
 public interface Sql
-    extends  IdentifiableElement
+    extends  IdentifiableElement,
+             Comparable<Sql>
 {
     /**
      * The <b>select</b> value for <i>type</i> attribute.

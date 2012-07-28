@@ -814,29 +814,32 @@ public abstract class AbstractAttribute
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
-        if (obj == null)
+        boolean result = false;
+
+        if (obj instanceof Attribute)
         {
-            return false;
+            result = areEqual(this, (Attribute) obj);
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final AbstractAttribute other = (AbstractAttribute) obj;
-        return new EqualsBuilder().append(this.m__strName, other.m__strName).append(this.m__iTypeId, other.m__iTypeId)
-            .append(this.m__strType, other.m__strType).append(this.m__strTableName, other.m__strTableName)
-            .append(this.m__strComment, other.m__strComment).append(this.m__strKeyword, other.m__strKeyword)
-            .append(this.m__strRetrievalQuery, other.m__strRetrievalQuery).append(this.m__bNullable, other.m__bNullable)
-            .append(this.m__strValue, other.m__strValue).append(this.m__bReadOnly, other.m__bReadOnly)
-            .append(this.m__bBoolean, other.m__bBoolean).append(this.m__strBooleanTrue, other.m__strBooleanTrue)
-            .append(this.m__strBooleanFalse, other.m__strBooleanFalse)
-            .append(this.m__strBooleanNull, other.m__strBooleanNull)
-            .append(this.m__iOrdinalPosition, other.m__iOrdinalPosition)
-            .append(this.m__iColumnLength, other.m__iColumnLength)
-            .append(this.m__iColumnPrecision, other.m__iColumnPrecision)
-            .append(this.m__aStackTrace, other.m__aStackTrace).isEquals();
+
+        return result;
+    }
+
+    /**
+     * Checks whether given {@link Attribute attributes} are equal.
+     * @param first the first attribute.
+     * @param second the second attribute.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean areEqual(@NotNull final Attribute first, @NotNull final Attribute second)
+    {
+        return
+            new EqualsBuilder()
+                .append(first.getName(), second.getName())
+                .append(first.getTypeId(), second.getTypeId())
+                .append(first.getTableName(), second.getTableName())
+                .isEquals();
     }
 
     /**
@@ -846,68 +849,29 @@ public abstract class AbstractAttribute
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    @Override
+    public int compareTo(@Nullable final Attribute object)
         throws  ClassCastException
     {
         int result = 1;
 
-        if (   (this == object)
-            || (this.equals(object)))
+        if (object != null)
         {
-            result = 0;
-        }
-        else if  (object instanceof Attribute)
-        {
-            @NotNull final Attribute t_OtherInstance = (Attribute) object;
-
-            result =
-                new org.apache.commons.lang.builder.CompareToBuilder()
-                    .append(
-                        getName(),
-                        t_OtherInstance.getName())
-                    .append(
-                        getTypeId(),
-                        t_OtherInstance.getTypeId())
-                    .append(
-                        getType(),
-                        t_OtherInstance.getType())
-                     .append(
-                         getTableName(),
-                         t_OtherInstance.getTableName())
-                     .append(
-                         getComment(),
-                         t_OtherInstance.getComment())
-                     .append(
-                         getKeyword(),
-                         t_OtherInstance.getKeyword())
-                    .append(
-                        getRetrievalQuery(),
-                        t_OtherInstance.getRetrievalQuery())
-                    .append(
-                         isNullable(),
-                         t_OtherInstance.isNullable())
-                     .append(
-                         getValue(),
-                         t_OtherInstance.getValue())
-                     .append(
-                         isReadOnly(),
-                         t_OtherInstance.isReadOnly())
-                     .append(
-                         isBoolean(),
-                         t_OtherInstance.isBoolean())
-                     .append(
-                         getBooleanTrue(),
-                         t_OtherInstance.getBooleanTrue())
-                     .append(
-                         getBooleanFalse(),
-                         t_OtherInstance.getBooleanFalse())
-                     .append(
-                         getBooleanNull(),
-                         t_OtherInstance.getBooleanNull())
-                    .toComparison();
+            result = compareThem(this, object);
         }
 
         return result;
     }
 
+    /**
+     * Compares both {@link Attribute} instances.
+     * @param first the first.
+     * @param second the second.
+     * @return the outcome of comparing <code>first.getOrdinalPosition()</code> vs
+     * <code>second.getOrdinalPosition()</code>
+     */
+    protected int compareThem(@NotNull final Attribute first, @NotNull final Attribute second)
+    {
+        return first.getOrdinalPosition() - second.getOrdinalPosition();
+    }
 }

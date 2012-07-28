@@ -594,7 +594,21 @@ public abstract class AbstractForeignKeyDecorator
 
         if (result == null)
         {
-            result = getSourceVoName() + "_" + getTargetVoName() + foreignKey.hashCode();
+            StringBuilder t_sbAux = new StringBuilder(getSourceVoName());
+
+            t_sbAux.append("_");
+            t_sbAux.append(getTargetVoName());
+
+            for (@Nullable Attribute t_Attribute : getAttributes())
+            {
+                if (t_Attribute != null)
+                {
+                    t_sbAux.append("_");
+                    t_sbAux.append(t_Attribute.getName());
+                }
+            }
+
+            result = t_sbAux.toString();
         }
 
         return result;
@@ -617,7 +631,6 @@ public abstract class AbstractForeignKeyDecorator
      * contained in given instance.
      * @param foreignKey the decorated foreign key.
      * @return such information.
-     * @precondition foreignKey != null
      */
     @NotNull
     protected String toString(@NotNull final ForeignKey foreignKey)
@@ -692,7 +705,6 @@ public abstract class AbstractForeignKeyDecorator
      * @return the result of such comparison.
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
-     * @precondition foreignKey != null
      */
     protected int compareTo(@NotNull final ForeignKey foreignKey, @Nullable final ForeignKey object)
         throws  ClassCastException

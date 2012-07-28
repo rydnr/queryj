@@ -48,7 +48,7 @@ import java.io.Serializable;
  *         >Jose San Leandro</a>
  */
 public interface Attribute
-    extends Comparable,
+    extends Comparable<Attribute>,
             Serializable
 {
     /**

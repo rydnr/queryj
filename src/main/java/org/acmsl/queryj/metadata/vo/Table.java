@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -56,7 +55,8 @@ import java.util.List;
  *         >Jose San Leandro</a>
  */
 public interface Table
-    extends Serializable
+    extends Serializable,
+            Comparable<Table>
 {
     /**
      * Retrieves the table name.

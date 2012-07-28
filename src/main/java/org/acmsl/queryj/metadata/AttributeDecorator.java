@@ -48,8 +48,7 @@ import org.acmsl.commons.patterns.Decorator;
  */
 public interface AttributeDecorator
     extends  Attribute,
-             Decorator,
-             java.lang.Comparable
+             Decorator
 {
     /**
      * Retrieves the decorated <code>Attribute</code>.
@@ -86,5 +85,6 @@ public interface AttributeDecorator
      * Retrieves the attribute type, as a {@link java.sql.Types}'s constant.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     int getJavaSqlType();
 }

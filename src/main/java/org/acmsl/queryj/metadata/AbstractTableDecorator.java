@@ -445,6 +445,16 @@ public abstract class AbstractTableDecorator
             setForeignKeys(result);
         }
 
+        try
+        {
+            Collections.sort(result);
+        }
+        catch (@NotNull final Throwable error)
+        {
+            UniqueLogFactory.getLog(AbstractTableDecorator.class).error(
+                error);
+        }
+
         return result;
     }
 
@@ -1044,6 +1054,8 @@ public abstract class AbstractTableDecorator
                     decorateAttributes());
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1099,6 +1111,8 @@ public abstract class AbstractTableDecorator
                         decoratorFactory));
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1145,6 +1159,8 @@ public abstract class AbstractTableDecorator
                 name, attributes, parentTable, metadataManager, decoratorFactory, tableDecoratorHelper);
 
         result = tableDecoratorHelper.removeExternallyManaged(result);
+
+        Collections.sort(result);
 
         return result;
     }
@@ -1201,6 +1217,8 @@ public abstract class AbstractTableDecorator
                     metadataManager);
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1256,6 +1274,8 @@ public abstract class AbstractTableDecorator
                     name,
                     metadataManager);
         }
+
+        Collections.sort(result);
 
         return result;
     }
@@ -1362,6 +1382,8 @@ public abstract class AbstractTableDecorator
                 metadataManager,
                 decoratorFactory));
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1438,6 +1460,8 @@ public abstract class AbstractTableDecorator
             }
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1513,12 +1537,16 @@ public abstract class AbstractTableDecorator
         @NotNull final MetadataManager metadataManager,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        return
+        List<Attribute> result =
             tableDecoratorHelper.removeOverridden(
                 firstAttributes,
                 secondAttributes,
                 parentTableName,
                 metadataManager);
+
+        Collections.sort(result);
+
+        return result;
     }
         
     /**
@@ -1653,6 +1681,8 @@ public abstract class AbstractTableDecorator
             }
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1693,6 +1723,8 @@ public abstract class AbstractTableDecorator
                 result.add(t_Attribute);
             }
         }
+
+        Collections.sort(result);
 
         return result;
     }
@@ -1754,6 +1786,8 @@ public abstract class AbstractTableDecorator
         }
 
         result.addAll(nonParentAttributes);
+
+        Collections.sort(result);
 
         return result;
     }
@@ -1819,6 +1853,8 @@ public abstract class AbstractTableDecorator
 
         result.addAll(nonParentNonExternallyManagedAttributes);
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1850,6 +1886,8 @@ public abstract class AbstractTableDecorator
                 result.add(t_Attribute);
             }
         }
+
+        Collections.sort(result);
 
         return result;
     }
@@ -1887,6 +1925,8 @@ public abstract class AbstractTableDecorator
                 result.add(t_Attribute);
             }
         }
+
+        Collections.sort(result);
 
         return result;
     }
@@ -1926,6 +1966,8 @@ public abstract class AbstractTableDecorator
             }
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -1962,7 +2004,11 @@ public abstract class AbstractTableDecorator
         @NotNull List<Attribute> result =
             getAllParentAndNonParentNonExternallyManagedAttributes();
 
-        return removeReadOnly(result, TableDecoratorHelper.getInstance());
+        result = removeReadOnly(result, TableDecoratorHelper.getInstance());
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -1987,9 +2033,13 @@ public abstract class AbstractTableDecorator
     @NotNull
     public List<Attribute> getAllParentAndNonParentNonReadOnlyAttributes()
     {
-        @NotNull final List<Attribute> result = getAllParentAndNonParentAttributes();
+        @NotNull List<Attribute> result = getAllParentAndNonParentAttributes();
 
-        return removeReadOnly(result, TableDecoratorHelper.getInstance());
+        result = removeReadOnly(result, TableDecoratorHelper.getInstance());
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -2013,9 +2063,13 @@ public abstract class AbstractTableDecorator
     protected List<Attribute> getAllParentAndNonParentReadOnlyAttributes(
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        return
+        List<Attribute> result =
             tableDecoratorHelper.removeNonReadOnlyAttributes(
                 getAllParentAndNonParentAttributes());
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -2084,6 +2138,8 @@ public abstract class AbstractTableDecorator
         result.addAll(
             tableDecoratorHelper.removeReadOnly(
                 nonParentNonExternallyManagedPlusPkAttributes));
+
+        Collections.sort(result);
 
         return result;
     }
@@ -2233,7 +2289,11 @@ public abstract class AbstractTableDecorator
     protected List<Sql> getDynamicQueries(
         @NotNull final String tableName, @NotNull final SqlDAO sqlDAO)
     {
-        return sqlDAO.findDynamic(tableName);
+        List<Sql> result = sqlDAO.findDynamic(tableName);
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -2303,6 +2363,8 @@ public abstract class AbstractTableDecorator
 
         result.removeAll(toExclude);
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -2338,7 +2400,11 @@ public abstract class AbstractTableDecorator
     @NotNull
     protected List<Sql> getCustomSelects(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
     {
-        return sqlDAO.findSelects(table.getName());
+        List<Sql> result = sqlDAO.findSelects(table.getName());
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -2374,7 +2440,11 @@ public abstract class AbstractTableDecorator
     @NotNull
     protected List<Sql> getCustomSelectsForUpdate(@NotNull final Table table, @NotNull final SqlDAO sqlDAO)
     {
-        return sqlDAO.findSelectsForUpdate(table.getName());
+        List<Sql> result = sqlDAO.findSelectsForUpdate(table.getName());
+
+        Collections.sort(result);
+
+        return result;
     }
 
     /**
@@ -2464,6 +2534,8 @@ public abstract class AbstractTableDecorator
         @NotNull final List<Sql> result = new ArrayList<Sql>(sqlDAO.findInserts(tableName));
 
         result.addAll(sqlDAO.findUpdates(tableName));
+
+        Collections.sort(result);
 
         return result;
     }
@@ -2595,6 +2667,8 @@ public abstract class AbstractTableDecorator
             result.add(decorate(t_Result, customSqlProvider, metadataManager, decoratorFactory));
         }
 
+        Collections.sort(result);
+
         return result;
     }
 
@@ -2694,6 +2768,9 @@ public abstract class AbstractTableDecorator
                 result.add(decorate(t_Attribute, metadataManager));
             }
         }
+
+        Collections.sort(result);
+
         return result;
     }
 
@@ -2790,15 +2867,7 @@ public abstract class AbstractTableDecorator
             }
         }
 
-        try
-        {
-            Collections.sort(result);
-        }
-        catch (@NotNull final Throwable throwable)
-        {
-            UniqueLogFactory.getLog(AbstractTableDecorator.class).fatal(
-                throwable.getMessage(), throwable);
-        }
+        Collections.sort(result);
 
         return result;
     }
@@ -2825,8 +2894,4 @@ public abstract class AbstractTableDecorator
 
         return result;
     }
-
-    /**
-     * Decorates given
-     */
 }

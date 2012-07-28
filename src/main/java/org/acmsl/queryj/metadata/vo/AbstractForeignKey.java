@@ -38,6 +38,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /*
+ * Importing some Apache Commons-Lang classes.
+ */
+import org.apache.commons.lang.builder.CompareToBuilder;
+
+/*
  * Importing JDK classes.
  */
 import java.util.List;
@@ -291,6 +296,7 @@ public abstract class AbstractForeignKey
      * @param object the object to compare to.
      * @return the result of such comparison.
      */
+    @Override
     public boolean equals(final Object object)
     {
         boolean result = false;
@@ -326,22 +332,58 @@ public abstract class AbstractForeignKey
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final ForeignKey object)
+    public int compareTo(@Nullable final ForeignKey object)
     {
-        return
-            new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(
-                    getSourceTableName(),
-                    object.getSourceTableName())
-                .append(
-                    getAttributes(),
-                    object.getAttributes())
-                .append(
-                    getTargetTableName(),
-                    object.getTargetTableName())
-                .append(
-                    isNullable(),
-                    object.isNullable())
-                .toComparison();
+        int result = 1;
+
+        if (object != null)
+        {
+            result = compareThem(this, object);
+        }
+
+        return result;
+    }
+
+    /**
+     * Compares given {@link ForeignKey foreign keys}.
+     * @param first the first.
+     * @param second the second.
+     * @return a positive number if the first is considered 'greater' than the second;
+     * 0 if they are equal; a negative number otherwise.
+     */
+    protected int compareThem(@NotNull final ForeignKey first, @NotNull final ForeignKey second)
+    {
+        int result;
+
+        CompareToBuilder comparator = new CompareToBuilder();
+
+        comparator.append(
+            first.getSourceTableName(),
+            second.getSourceTableName());
+
+        comparator.append(
+            first.getTargetTableName(),
+            second.getTargetTableName());
+
+        comparator.append(
+            first.isNullable(),
+            second.isNullable());
+
+        List<Attribute> t_lFirstAttributes = first.getAttributes();
+        List<Attribute> t_lSecondAttributes = second.getAttributes();
+
+        Attribute[] t_aFirstAttributes = new Attribute[t_lFirstAttributes.size()];
+        t_lFirstAttributes.toArray(t_aFirstAttributes);
+        Attribute[] t_aSecondAttributes = new Attribute[t_lSecondAttributes.size()];
+        t_lSecondAttributes.toArray(t_aSecondAttributes);
+
+        for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)
+        {
+            comparator.append(t_aFirstAttributes[t_iIndex], t_aSecondAttributes[t_iIndex]);
+        }
+
+        result = comparator.toComparison();
+
+        return result;
     }
 }

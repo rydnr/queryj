@@ -93,8 +93,6 @@ public abstract class AbstractAttributeDecorator
      * <code>Attribute</code> to decorate.
      * @param attribute the attribute.
      * @param metadataManager the metadata manager.
-     * @precondition attribute != null
-     * @precondition metadataManager != null
      */
     public AbstractAttributeDecorator(
         @NotNull final Attribute attribute, @NotNull final MetadataManager metadataManager)

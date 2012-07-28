@@ -242,9 +242,6 @@ project_imports(
 import <subpackageName>.<tableNameLowercased>.<voName>AttributesStatementSetter;
 import <subpackageName>.<tableNameLowercased>.<voName>PkStatementSetter;
 import <subpackageName>.<tableNameLowercased>.<voName>ResultSetExtractor;
-<customResults:resultset_extractor_import(
-  packageName=subpackageName,
-  crseIdCapitalized=it.idCapitalized); separator="\n">
 import <basePackageName>.<voSubpackageName>.<voName>;
 <if(parent)>
 import <basePackageName>.<baseDAOSubpackageName>.<parent.voName>DAO;
@@ -261,7 +258,6 @@ import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAO
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>JdbcTemplate;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>PreparedStatementCreator;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
-<!//import <basePackageName>.<trSubpackageName>.<trName>TableRepository;!>
 import <basePackageName>.<damSubpackageName>.<trName>DataAccessManager;
 <fkAttributes:foreignkey_statementsetter_import(
   basePackageName=basePackageName,
@@ -356,7 +352,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
           "SELECT "
 <if(parent)>
 <table.allParentAndNonParentAttributes:{ attr |
-        +   "<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
+        +   /*<attr.ordinalPosition>*/"<attr.tableNameUppercased>.<attr.nameUppercased>}; separator=", \"\n"> "
         + "FROM <table.nameUppercased>, <table.allParentTables:{ table | <table.nameUppercased>}; separator=", "> "
         + "WHERE "
 <table.primaryKey:{pk |
@@ -365,7 +361,7 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
         <table.allParentTables:{ table | <if(table.parentTable)><find_by_pk_sql_join(table=table, parent=table.parentTable)><endif>}>;
 <else>
 <table.attributes:{attr |
-        +   "<attr.nameUppercased>}; separator=", \"\n"> "
+        +  /*<attr.ordinalPosition>*/ "<attr.nameUppercased>}; separator=", \"\n"> "
         + "FROM <table.nameUppercased> "
         + "WHERE "
 <table.primaryKey:{attr |
