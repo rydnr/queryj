@@ -85,7 +85,7 @@ first_line_description(result) ::= <<
   Generates the first line of the generated file description.
   @param result the custom result.
 !>
-Value object factory for custom result \<i\><result.id>\</i\>.
+Value object factory for custom result \<i\><result_id>\</i\>.
 >>
 
 class(result) ::= <<

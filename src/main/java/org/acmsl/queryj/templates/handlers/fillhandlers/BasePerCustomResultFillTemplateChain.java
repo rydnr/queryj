@@ -54,12 +54,15 @@ import org.acmsl.commons.patterns.Chain;
  */
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
 /*
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
+/*
+ * Importing JDK classes.
+ */
+import java.util.List;
 
 /**
  * Sets up the chain required to provide placeholder replacements for
@@ -104,6 +107,12 @@ public class BasePerCustomResultFillTemplateChain
             chain,
             new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,CustomResultTypeImportsHandler,List<String>>(
                 new CustomResultTypeImportsHandler(context)),
+            relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler<BasePerCustomResultTemplateContext,ResultIdHandler,DecoratedString>(
+                new ResultIdHandler(context)),
             relevantOnly);
     }
 }

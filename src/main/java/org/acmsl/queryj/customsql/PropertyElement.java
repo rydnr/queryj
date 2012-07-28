@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -160,11 +159,20 @@ public class PropertyElement
     @NotNull
     public String toString()
     {
-        return
-            new org.apache.commons.lang.builder.ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("nullable", isNullable())
-                .toString();
+        StringBuilder result = new StringBuilder(getClass().getName());
+        result.append("{id:\"");
+        result.append(getId());
+        result.append("\"; columnName:\"");
+        result.append(getColumnName());
+        result.append("\"; type:\"");
+        result.append(getType());
+        result.append("\"; index:");
+        result.append(getIndex());
+        result.append("; validationValue:\"");
+        result.append(getValidationValue());
+        result.append("}");
+
+        return result.toString();
     }
 
     /**

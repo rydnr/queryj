@@ -379,7 +379,10 @@ public abstract class AbstractForeignKey
 
         for (int t_iIndex = 0; t_iIndex < t_aFirstAttributes.length; t_iIndex++)
         {
-            comparator.append(t_aFirstAttributes[t_iIndex], t_aSecondAttributes[t_iIndex]);
+            if (t_iIndex < t_aSecondAttributes.length)
+            {
+                comparator.append(t_aFirstAttributes[t_iIndex], t_aSecondAttributes[t_iIndex]);
+            }
         }
 
         result = comparator.toComparison();
