@@ -131,9 +131,7 @@ project_imports(result, basePackageName, baseDAOSubpackageName, rdbSubpackageNam
  * Importing project classes.
  */
 <if(!result.implicit)>
-<if(result.wrappingASingleProperty)>
-<result.properties:{property|<if(!property.primitive)>import <property.type><endif>}>
-<else>
+<if(!result.wrappingASingleProperty)>
 import <result.classValue>;
 import <result.classValue>ValueObjectFactory;
 <endif>
@@ -199,7 +197,7 @@ public class <result.idCapitalized>Extractor
     {
 <if(result.wrappingASingleProperty)>
 <if(result.multiple)>
-        List\<single_property_wrapper_return(result=result)>\> result = new ArrayList\<<single_property_wrapper_return(result=result)>\>();
+        List\<<single_property_wrapper_return(result=result)>\> result = new ArrayList\<<single_property_wrapper_return(result=result)>\>();
 <else>
         <single_property_wrapper_return(result=result)> result = null;
 <endif>
@@ -278,7 +276,7 @@ public class <result.idCapitalized>Extractor
                     <result.implicitProperties:implicit_nullable_attribute_extraction(value=it); separator=",\n">)<if(result.multiple)>)<endif>;
                     <result.implicitProperties:{prop|/*<prop.columnName>-><prop.index>*/}; separator="\n">
 <else>
-                    <result.properties:attribute_extraction(attr=it); separator=",\n"><if(!result.wrappingASingleProperty)>)<endif><if(result.multiple)>)<endif>;
+                    <result.properties:attribute_extraction(value=it); separator=",\n"><if(!result.wrappingASingleProperty)>)<endif><if(result.multiple)>)<endif>;
 <endif>
 
         }
@@ -547,7 +545,7 @@ attribute_extraction(value) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=lob_handling_flavor+"_attribute_extraction", value=value)>
+  name=lob_handling_flavor+"_attribute_extraction", extra1=value)>
 <else>
 <default_attribute_extraction(value)>
 <endif>
@@ -621,7 +619,7 @@ special_attribute_extraction(value) ::= <<
 !>
 <if(lob_handling_required)>
 <indirect_template(
-  name=lob_handling_flavor+"_special_attribute_extraction", value=value)>
+  name=lob_handling_flavor+"_special_attribute_extraction", extra1=value)>
 <endif>
 >>
 
@@ -672,7 +670,7 @@ if  (resultSet.wasNull())
 <endif>
 >>
 
-oracle_attribute_extraction(value) ::= <<
+Oracle_attribute_extraction(value) ::= <<
 <!
  Generates the code to extract the attributes for Oracle.
  @param value the attribute.
@@ -695,5 +693,5 @@ oracle8_attribute_extraction(value) ::= <<
 >>
 
 single_property_wrapper_return(result) ::= <<
-<result.properties:{property|<property.type>}>
+<result.properties:{property|<property.objectType>}>
 >>

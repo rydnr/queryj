@@ -40,6 +40,7 @@ import org.acmsl.queryj.QueryJException;
 import org.acmsl.queryj.metadata.CachingDecoratorFactory;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.SqlResultDAO;
+import org.acmsl.queryj.tools.DebugUtils;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomResultUtils;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
@@ -267,7 +268,7 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomResultUtils customResultUtils)
     {
-        if ("multiple.bettor.result".equals(customResult.getId()))
+        if (DebugUtils.getInstance().debugEnabledForResultId(customResult.getId()))
         {
             @SuppressWarnings("unused")
             int a = 1;

@@ -48,6 +48,7 @@ import org.acmsl.commons.utils.ClassLoaderUtils;
 /*
  * Importing Commons-Logging classes.
  */
+import org.antlr.stringtemplate.misc.StringTemplateTreeView;
 import org.apache.commons.logging.Log;
 
 /*
@@ -99,7 +100,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                  * Receives a warning message.
                  * @param message the warning message.
                  */
-                public void warning(final String message)
+                public void warning(@Nullable final String message)
                 {
                     Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplate.class);
@@ -115,7 +116,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                  * @param message the error message.
                  * @param cause the cause.
                  */
-                public void error(final String message, final Throwable cause)
+                public void error(@Nullable final String message, @NotNull final Throwable cause)
                 {
                     Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplate.class);
@@ -178,8 +179,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the {@link TemplateContext}.
      * @param context the context.
      */
-    private void immutableSetTemplateContext(
-        final C context)
+    private void immutableSetTemplateContext(@NotNull final C context)
     {
         m__TemplateContext = context;
     }
@@ -189,8 +189,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the context.
      */
     @SuppressWarnings("unused")
-    protected void setTemplateContext(
-        @NotNull final C context)
+    protected void setTemplateContext(@NotNull final C context)
     {
         immutableSetTemplateContext(context);
     }
@@ -209,7 +208,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the cached processed header.
      * @param header such value.
      */
-    protected final void immutableSetCachedProcessedHeader(final String header)
+    protected final void immutableSetCachedProcessedHeader(@NotNull final String header)
     {
         m__strCachedProcessedHeader = header;
     }
@@ -218,7 +217,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the cached processed header.
      * @param header such value.
      */
-    protected void setCachedProcessedHeader(final String header)
+    protected void setCachedProcessedHeader(@NotNull final String header)
     {
         immutableSetCachedProcessedHeader(header);
     }
@@ -238,6 +237,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param context the template context.
      * @return such information.
      */
+    @Nullable
     protected String getHeader(@NotNull final TemplateContext context)
     {
         return context.getHeader();
@@ -267,11 +267,14 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such information.
      */
     @Nullable
-    public String processHeader(final Map input, final String header)
+    public String processHeader(@NotNull final Map input, @Nullable final String header)
     {
         @Nullable String result = processInnerTemplate(header, input);
 
-        setCachedProcessedHeader(result);
+        if (result != null)
+        {
+            setCachedProcessedHeader(result);
+        }
         
         return result;
     }
@@ -308,7 +311,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such instance.
      */
     @Nullable
-    protected StringTemplateGroup retrieveGroup(final String path)
+    protected StringTemplateGroup retrieveGroup(@NotNull final String path)
     {
         return
             retrieveGroup(
@@ -327,7 +330,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @SuppressWarnings("unchecked")
     @Nullable
     protected StringTemplateGroup retrieveGroup(
-        final String path, final String theme, @NotNull final Map cache)
+        @NotNull final String path, @NotNull final String theme, @NotNull final Map cache)
     {
         @Nullable StringTemplateGroup result;
         
@@ -372,7 +375,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     @NotNull
     protected final Object buildSTGroupKey(
-        final String path, final String theme)
+        @NotNull final String path, @NotNull final String theme)
     {
         return ".:\\AbstractTemplate//STCACHE//" + path + "//" + theme;
     }
@@ -432,7 +435,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @throws InvalidTemplateException if the template cannot be generated.
      */
     @Override
-    @NotNull
+    @Nullable
     public String generate(final boolean relevantOnly)
       throws  InvalidTemplateException
     {
@@ -446,7 +449,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
-    @NotNull
+    @Nullable
     protected String generate(@NotNull final C context, final boolean relevantOnly)
         throws  InvalidTemplateException
     {
@@ -757,9 +760,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such code.
      * @throws InvalidTemplateException if the template cannot be processed.
      */
-    @NotNull
+    @Nullable
     protected String generateOutput(
-        @NotNull final String header, @NotNull final C context, final boolean relevantOnly)
+        @Nullable final String header, @NotNull final C context, final boolean relevantOnly)
         throws InvalidTemplateException
     {
         return
@@ -779,10 +782,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @return such code.
      * @throws InvalidTemplateException if the generation process fails.
      */
-    @NotNull
+    @Nullable
     @SuppressWarnings("unchecked,unused")
     protected String generateOutput(
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final C context,
         final boolean relevantOnly,
         @NotNull final MetadataManager metadataManager)
@@ -796,26 +799,41 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
 
-        try
-        {
-            Map placeHolders = buildFillTemplateChain(context, relevantOnly).providePlaceholders();
-            t_Template.setAttributes(placeHolders);
-        }
-        catch (@NotNull final QueryJBuildException invalidTemplate)
-        {
-            t_ExceptionToWrap = invalidTemplate;
-        }
-
-        if (   (t_Template != null)
-            && (t_ExceptionToWrap == null))
+        if (t_Template != null)
         {
             try
             {
-                result = t_Template.toString();
+                Map placeHolders = buildFillTemplateChain(context, relevantOnly).providePlaceholders();
+                t_Template.setAttributes(placeHolders);
             }
-            catch (@NotNull final IllegalArgumentException invalidTemplate)
+            catch (@NotNull final QueryJBuildException invalidTemplate)
             {
                 t_ExceptionToWrap = invalidTemplate;
+            }
+
+            if (t_ExceptionToWrap == null)
+            {
+                try
+                {
+                    result = t_Template.toString();
+                }
+                catch (@NotNull final Throwable throwable)
+                {
+                    t_ExceptionToWrap = throwable;
+
+                    UniqueLogFactory.getLog(AbstractTemplate.class).error(
+                        "Error in template " + getTemplateName(), throwable);
+
+                    StringTemplateTreeView debugTool =
+                        new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
+
+                    debugTool.setVisible(true);
+
+                    while (debugTool.isShowing())
+                    {
+                        int a = 1;
+                    }
+                }
             }
         }
 

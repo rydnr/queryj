@@ -54,6 +54,7 @@ import org.acmsl.commons.utils.EnglishGrammarUtils;
 /*
  * Importing Apache Commons Logging classes.
  */
+import org.acmsl.queryj.tools.DebugUtils;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -533,14 +534,20 @@ public abstract class AbstractResultDecorator
     @SuppressWarnings("unused")
     public boolean isImplicit()
     {
-        boolean result = false;
+        boolean result = true;
 
-        @NotNull final List<Property> t_lImplicitProperties =
-            getImplicitProperties();
-
-        if (t_lImplicitProperties.size() > 0)
+        if (DebugUtils.getInstance().debugEnabledForResultId(getId()))
         {
-            result = true;
+            @SuppressWarnings("unused")
+            int a = 1;
+        }
+
+        @NotNull final List<PropertyRef> t_lExplicitProperties =
+            getPropertyRefs();
+
+        if (t_lExplicitProperties.size() > 0)
+        {
+            result = false;
         }
 
         return result;

@@ -64,6 +64,7 @@ import org.acmsl.commons.logging.UniqueLogFactory;
 /*
  * Importing some Apache Commons-Logging classes.
  */
+import org.acmsl.queryj.tools.DebugUtils;
 import org.apache.commons.logging.Log;
 
 /*
@@ -1322,7 +1323,7 @@ public abstract class AbstractJdbcMetadataManager
     @Override
     public boolean isGenerationAllowedForTable(@NotNull final String tableName)
     {
-        if (tableName.equalsIgnoreCase(System.getProperty("queryj.table.debug")))
+        if (DebugUtils.getInstance().debugEnabledForTable(tableName))
         {
             @SuppressWarnings("unused")
             int a = 1;

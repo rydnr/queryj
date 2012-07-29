@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents any kind of templates.
@@ -56,7 +57,7 @@ public interface Template<T extends TemplateContext>
      * @return such output.
      * @throws InvalidTemplateException if the template cannot be generated.
      */
-    @NotNull
+    @Nullable
     String generate(final boolean relevantOnly)
       throws  InvalidTemplateException;
 }

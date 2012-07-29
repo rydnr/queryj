@@ -44,6 +44,7 @@ import org.acmsl.queryj.metadata.ResultDecorator;
 import org.acmsl.queryj.metadata.SqlDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.tools.DebugUtils;
 
 /*
  * Importing ACM-SL Commons classes.
@@ -316,7 +317,7 @@ public class CustomResultUtils
 
         if (result == null)
         {
-            if (resultId.equalsIgnoreCase(System.getProperty("queryj.customresult.debug")))
+            if (DebugUtils.getInstance().debugEnabledForResultId(resultId))
             {
                 @SuppressWarnings("unused")
                 int a = 1;
