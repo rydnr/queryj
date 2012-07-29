@@ -1343,7 +1343,7 @@ fk_delete_method(foreignKey) ::= <<
  * \<br/>\<b>This method is not implemented yet\</b>.
  <foreignKey:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
-public void deleteBy<foreignKey.attributes:{attr |<attr.nameCapitalized>}>(
+public void deleteBy<foreignKey:{fk |<fk.nameCapitalized>}>(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">)
 {
     // TODO: not refactored yet. Removed till then.

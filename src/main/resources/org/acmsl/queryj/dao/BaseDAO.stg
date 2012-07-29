@@ -381,7 +381,7 @@ fk_delete_method(foreignKey, table) ::= <<
  * by given foreign keys.
  <foreignKey.attributes:attribute_javadoc(name=it.nameLowercased); separator="\n">
  */
-void deleteBy<foreignKey:{attr |<attr.nameCapitalized>}>(
+void deleteBy<foreignKey:{fk |<fk.nameCapitalized>}>(
     <foreignKey.attributes:attribute_declaration(attr=it); separator=",\n">);
 >>
 
