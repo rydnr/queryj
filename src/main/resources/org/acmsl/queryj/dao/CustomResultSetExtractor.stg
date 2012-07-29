@@ -597,7 +597,7 @@ default_clobhandling_attribute_extraction(value) ::= <<
 resultSet.getTimestamp("<value.nameUppercased>")
 <else>
 <if(value.allowsNull)>
-t_<value.nameCapitalized>As<value.objectType>
+t_<value.columnNameNormalizedCapitalized>As<value.objectType>
 <else>
 <if(value.numberSmallerThanInt)>
 resultSet.getInt("<value.nameUppercased>")
