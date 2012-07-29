@@ -172,43 +172,38 @@ public abstract class Abstract<table.voName>DAO
 
   <if(table.static)>
 // <table.primaryKey>
-    <table.attributes:static_table(
-      attribute=it,
-      primaryKeyAttributes=table.primaryKey,
-      voName=table.voName)>
+    <table.attributes:static_table(attribute=it, table=table)>
 
   <endif>
 
 }
 >>
 
-static_table(
-  attribute, primaryKeyAttributes, voName) ::= <<
+static_table(attribute, table) ::= <<
 <!
   Generates the method to operate directly on defined constants.
   @param attribute the attribute.
-  @param primaryKeyAttributes the primary key.
-  @param voName the value object name.
+  @param table the table.
 !>
 /**
- * Loads \<i><voName>\</i> information from the constant pool,
+ * Loads \<i><table.voName>\</i> information from the constant pool,
  * filtering by <attribute.name>.
  * @param <attribute.nameLowercased> the <attribute.name>
  * to filter.
- * @return the {@link <voName>} instance.
+ * @return the {@link <table.voName>} instance.
  */
 <nullable()>
-public <voName> findConstantBy<attribute.nameCapitalized>(
+public <table.voName> findConstantBy<attribute.nameCapitalized>(
     <type_checker(attribute=attribute)>final <attribute.javaType> <attribute.nameLowercased>)
 {
-    <nullable()><voName> result = null;
+    <nullable()><table.voName> result = null;
 
-    for  (<nullable()> <voName> t_CurrentItem : FIXED_CONSTANTS)
+    for  (<nullable()> <table.voName> item : FIXED_CONSTANTS)
     {
-        if  (   (t_CurrentItem != null)
-             <primaryKey:find_constant_check_attribute(attribute=it); separator="\n">)
+        if  (   (item != null)
+             <find_constant_check_attribute(attribute=attribute)>)
         {
-            result = t_CurrentItem;
+            result = item;
             break;
         }
     }

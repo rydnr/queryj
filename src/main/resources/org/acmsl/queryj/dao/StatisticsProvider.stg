@@ -111,7 +111,7 @@ public class <repository.capitalized>StatisticsProvider
     /**
      * The default map size.
      */
-    protected final int DEFAULT_MAP_SIZE = 20;
+    protected static final int DEFAULT_MAP_SIZE = 20;
 
     /**
      * The map storing per-{@link java.sql.Connection} statistics.
@@ -165,7 +165,7 @@ public class <repository.capitalized>StatisticsProvider
     private static int resultSetsAlive = 0;
 
     /**
-     * Singleton implemented to avoid double-check locking.
+     * Singleton implemented to avoid double-locking check.
      */
     protected static final class <repository.capitalized>StatisticsProviderSingletonContainer
     {
@@ -200,7 +200,7 @@ public class <repository.capitalized>StatisticsProvider
          * Retrieves the duration.
          * @return such information.
          */
-        public int getDuration()
+        public long getDuration()
         {
             Date endTime = this.end;
 
@@ -214,9 +214,12 @@ public class <repository.capitalized>StatisticsProvider
 
         /**
          * Retrieves the duration.
+         * @param start the starting point.
+         * @param end the ending point.
          * @return such information.
          */
-        protected int getDuration(<notnull()>final Date start, <notnull()>final Date end)
+        protected long getDuration(
+            <notnull()>final Date start, <notnull()>final Date end)
         {
             return end.getTime() - start.getTime();
         }
@@ -244,11 +247,11 @@ public class <repository.capitalized>StatisticsProvider
 
         connectionsAlive++;
 
-        List\<String, Sample\> timestamps = TRANSACTION_DURATION.get(sql);
+        List\<Sample\> timestamps = TRANSACTION_DURATION.get(sql);
 
         if (timestamps == null)
         {
-            List\<Sample\> timestamps = new ArrayList\<Sample\>();
+            timestamps = new ArrayList\<Sample\>(1);
             timestamps.add(new Sample());
             TRANSACTION_DURATION.put(sql, timestamps);
         }
@@ -267,7 +270,7 @@ public class <repository.capitalized>StatisticsProvider
 
         connectionsAlive--;
 
-        List\<String, Sample\> timestamps = TRANSACTION_DURATION.get(sql);
+        List\<Sample\> timestamps = TRANSACTION_DURATION.get(sql);
 
         if (   (timestamps != null)
             && (timestamps.size() > 0))
@@ -292,11 +295,11 @@ public class <repository.capitalized>StatisticsProvider
 
         statementsAlive++;
 
-        List\<String, Sample\> timestamps = SQL_DURATION.get(sql);
+        List\<Sample\> timestamps = SQL_DURATION.get(sql);
 
         if (timestamps == null)
         {
-            List\<Sample\> timestamps = new ArrayList\<Sample\>();
+            timestamps = new ArrayList\<Sample\>();
             timestamps.add(new Sample());
             SQL_DURATION.put(sql, timestamps);
         }
@@ -341,13 +344,13 @@ public class <repository.capitalized>StatisticsProvider
         {
             resultSetsAlive++;
 
-            List\<String, Sample\> timestamps = ROW_RETRIEVAL_DURATION.get(sql);
+            List\<Sample\> timestamps = ROW_RETRIEVAL_DURATION.get(sql);
 
             if (timestamps == null)
             {
                 timestamps = new ArrayList\<Sample\>();
                 timestamps.add(new Sample());
-                ROW_RETRIEVAL_DURATION.put(timestamps);
+                ROW_RETRIEVAL_DURATION.put(sql, timestamps);
             }
         }
     }
@@ -362,7 +365,7 @@ public class <repository.capitalized>StatisticsProvider
     {
         resultSetsAlive--;
 
-        List\<String, Sample\> timestamps = ROW_RETRIEVAL_DURATION.get(sql);
+        List\<Sample\> timestamps = ROW_RETRIEVAL_DURATION.get(sql);
 
         if (   (timestamps != null)
             && (timestamps.size() > 0))
@@ -413,9 +416,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the average transaction time.
      */
-    public int getAverageTransactionTime(<notnull()> final String sql)
+    public long getAverageTransactionTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = TRANSACTION_DURATION.get(sql);
 
@@ -432,9 +435,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the maximum transaction time.
      */
-    public int getMaxTransactionTime(<notnull()> final String sql)
+    public long getMaxTransactionTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = TRANSACTION_DURATION.get(sql);
 
@@ -451,9 +454,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the minimum transaction time.
      */
-    public int getMinTransactionTime(<notnull()> final String sql)
+    public long getMinTransactionTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = TRANSACTION_DURATION.get(sql);
 
@@ -470,9 +473,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the average statement time.
      */
-    public int getAverageStatementTime(<notnull()> final String sql)
+    public long getAverageStatementTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = SQL_DURATION.get(sql);
 
@@ -489,9 +492,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the maximum statement time.
      */
-    public int getMaxStatementTime(<notnull()> final String sql)
+    public long getMaxStatementTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = SQL_DURATION.get(sql);
 
@@ -508,9 +511,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the minimum statement time.
      */
-    public int getMinStatementTime(<notnull()> final String sql)
+    public long getMinStatementTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = SQL_DURATION.get(sql);
 
@@ -527,9 +530,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the average result-set time.
      */
-    public int getAverageResultSetTime(<notnull()> final String sql)
+    public long getAverageResultSetTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = ROW_RETRIEVAL_DURATION.get(sql);
 
@@ -546,9 +549,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the maximum result-set time.
      */
-    public int getMaxResultSetTime(<notnull()> final String sql)
+    public long getMaxResultSetTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = ROW_RETRIEVAL_DURATION.get(sql);
 
@@ -565,9 +568,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param sql the SQL.
      * @return the minimum result-set time.
      */
-    public int getMinResultSetTime(<notnull()> final String sql)
+    public long getMinResultSetTime(<notnull()> final String sql)
     {
-        int result = 0;
+        long result = 0;
 
         List\<Sample\> transactionSamples = ROW_RETRIEVAL_DURATION.get(sql);
 
@@ -584,9 +587,9 @@ public class <repository.capitalized>StatisticsProvider
      * @param samples the samples.
      * @return the average.
      */
-    protected int computeAverage(<notnull()>final List\<Sample\> samples)
+    protected long computeAverage(<notnull()>final List\<Sample\> samples)
     {
-        int result = 0;
+        long result = 0;
 
         int count = samples.size();
 
@@ -613,15 +616,15 @@ public class <repository.capitalized>StatisticsProvider
      * @param samples the samples.
      * @return the average.
      */
-    protected int computeMax(<notnull()>final List\<Sample\> samples)
+    protected long computeMax(<notnull()>final List\<Sample\> samples)
     {
-        int result = 0;
+        long result = 0;
 
         int count = samples.size();
 
         if (count > 0)
         {
-            int duration = 0;
+            long duration = 0;
 
             for (<nullable()>Sample sample : samples)
             {
@@ -645,15 +648,15 @@ public class <repository.capitalized>StatisticsProvider
      * @param samples the samples.
      * @return the average.
      */
-    protected int computeMin(<notnull()>final List\<Sample\> samples)
+    protected long computeMin(<notnull()>final List\<Sample\> samples)
     {
-        int result = 0;
+        long result = 0;
 
         int count = samples.size();
 
         if (count > 0)
         {
-            int duration = 0;
+            long duration = 0;
 
             for (<nullable()>Sample sample : samples)
             {
