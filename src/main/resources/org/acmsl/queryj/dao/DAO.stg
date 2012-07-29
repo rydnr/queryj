@@ -488,9 +488,10 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
     }
 
 <if(table.static)>
-    <find_constant_by_pk(primaryKey=table.primaryKey, voName=table.voName)>
+    <table.nonPrimaryKeyAttributes:find_constant_methods(
+      attribute=it, table=table); separator="\n\n">
 
-    <find_constant_by(primaryKey=table.primaryKey,voName=table.voName)>
+    <find_constant_by_pk(primaryKey=table.primaryKey, voName=table.voName)>
 <endif>
 
 
@@ -1142,33 +1143,6 @@ result.put(
 <endif>
 >>
 
-find_constant_by(primaryKey, voName) ::= <<
-/**
- * Loads \<i\><voName>\</i\> information from the constant pool,
- * filtering by <primaryKey:{attribute|<attribute.nameLowercased>}; separaror=", ">.
- <primaryKey:{attribute|<attribute_javadoc(name=attribute.nameLowercased)>}; separator="\n">
- * @return the {@link <voName>} instance.
- */
-<nullable()>
-public <voName> findConstantBy<primaryKey:{attribute|<attribute.nameCapitalized>}>(
-    <primaryKey:{attribute|final <attribute.javaType> <attribute.nameLowercased>}; separator=",\n">)
-{
-    <nullable()><voName> result = null;
-
-    for  (<nullable()><voName> item : FIXED_CONSTANTS)
-    {
-        if  (   (item != null)
-             <primaryKey:find_constant_check_attribute(attribute=it); separator="\n">)
-        {
-            result = item;
-            break;
-        }
-    }
-
-    return result;
-}
->>
-
 find_constant_by_pk(primaryKey, voName) ::= <<
 /**
  * Loads \<i><voName>\</i> information from the constant pool,
@@ -1198,6 +1172,40 @@ public <voName> findConstantByPrimaryKey(
                 result = item;
                 break;
             }
+        }
+    }
+
+    return result;
+}
+
+>>
+
+find_constant_methods(attribute, table) ::= <<
+<!
+  Declares the methods to operate directly on defined constants.
+  @param attribute the attribute.
+  @param table the table.
+!>
+/**
+ * Loads \<i><table.name>\</i> information from the constant pool,
+ * filtering by <attribute.name>.
+ * @param <attribute.nameLowercased> the <attribute.name>
+ * to filter.
+ * @return the {@link <table.voName>} instance.
+ */
+<nullable()>
+public <table.voName> findConstantBy<attribute.nameCapitalized>(
+    <type_checker(attribute=attribute)>final <attribute.javaType> <attribute.nameLowercased>)
+{
+    <nullable()><table.voName> result = null;
+
+    for  (<nullable()><table.voName> item : FIXED_CONSTANTS)
+    {
+        if  (   (item != null)
+             <find_constant_check_attribute(attribute=attribute); separator="\n">)
+        {
+            result = item;
+            break;
         }
     }
 

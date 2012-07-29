@@ -192,8 +192,7 @@ public interface <table.voName>DAO
         FIXED_CONSTANTS;
 
     <table.nonPrimaryKeyAttributes:find_constant_methods(
-      attribute=it,
-      table=table)>
+      attribute=it, table=table); separator="\n\n">
 
     /**
      * Loads \<i><table.name>\</i> information from the constant pool,
