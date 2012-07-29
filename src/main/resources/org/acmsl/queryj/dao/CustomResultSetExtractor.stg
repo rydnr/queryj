@@ -131,8 +131,12 @@ project_imports(result, basePackageName, baseDAOSubpackageName, rdbSubpackageNam
  * Importing project classes.
  */
 <if(!result.implicit)>
+<if(result.wrappingASingleProperty)>
+<result.properties:{property|<if(!property.primitive)>import <property.type><endif>}>
+<else>
 import <result.classValue>;
 import <result.classValue>ValueObjectFactory;
+<endif>
 <endif>
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>DAOListener;
 import <basePackageName>.<baseDAOSubpackageName>.<rdbSubpackageName>.<trName>ResultSetExtractor;
@@ -193,6 +197,13 @@ public class <result.idCapitalized>Extractor
       throws  SQLException,
               DataAccessException
     {
+<if(result.wrappingASingleProperty)>
+<if(result.multiple)>
+        List\<single_property_wrapper_return(result=result)>\> result = new ArrayList\<<single_property_wrapper_return(result=result)>\>();
+<else>
+        <single_property_wrapper_return(result=result)> result = null;
+<endif>
+<else>
         return
             extractData(
                 resultSet,
@@ -233,6 +244,7 @@ public class <result.idCapitalized>Extractor
 <else>
         <result.classValue> result = null;
 <endif>
+<endif>
 
 
         int t_iRowCount = 0;
@@ -257,13 +269,16 @@ public class <result.idCapitalized>Extractor
             result =
 <endif>
 
+<if(!result.wrappingASingleProperty)>
                 factory.create(
+<endif>
+
 <if(result.implicit)>
 // implicit 
                     <result.implicitProperties:implicit_nullable_attribute_extraction(value=it); separator=",\n">)<if(result.multiple)>)<endif>;
                     <result.implicitProperties:{prop|/*<prop.columnName>-><prop.index>*/}; separator="\n">
 <else>
-                    <result.properties:attribute_extraction(attr=it); separator=",\n">)<if(result.multiple)>)<endif>;
+                    <result.properties:attribute_extraction(attr=it); separator=",\n"><if(!result.wrappingASingleProperty)>)<endif><if(result.multiple)>)<endif>;
 <endif>
 
         }
@@ -677,4 +692,8 @@ oracle8_attribute_extraction(value) ::= <<
 <else>
 <default_clobhandling_attribute_extraction(value=value)>
 <endif>
+>>
+
+single_property_wrapper_return(result) ::= <<
+<result.properties:{property|<property.type>}>
 >>
