@@ -261,7 +261,7 @@ public abstract class AbstractField
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final Attribute object)
         throws  ClassCastException
     {
         final int result;

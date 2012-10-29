@@ -18,7 +18,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.checkthread:checkthread-annotations:1.0.9" level="project" />
     <orderEntry type="library" name="Maven: org.acmsl:queryj-sql:2.1-SNAPSHOT" level="project" />
-    <orderEntry type="library" name="Maven: org.acmsl:acmsl-commons:0.7.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="acmsl-commons" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.apache.commons:commons-logging:1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache:oro:2.0.8" level="project" />
     <orderEntry type="library" name="Maven: com.jetbrains:annotations:11.1.1" level="project" />
