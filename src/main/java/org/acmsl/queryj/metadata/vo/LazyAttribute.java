@@ -1027,7 +1027,7 @@ public class LazyAttribute
      * @throws ClassCastException if the specified object's type prevents it
      *                            from being compared to this object.
      */
-    public int compareTo(final Object o)
+    public int compareTo(final Attribute o)
     {
         int result = 1;
 

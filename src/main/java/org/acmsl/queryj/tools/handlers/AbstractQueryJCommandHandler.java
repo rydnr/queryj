@@ -353,7 +353,7 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the header.
      */
-    @NotNull
+    @Nullable
     protected String retrieveHeader(@NotNull final Map parameters)
     {
         return (String) parameters.get(ParameterValidationHandler.HEADER);

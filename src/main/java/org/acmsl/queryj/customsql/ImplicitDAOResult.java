@@ -241,7 +241,7 @@ public class ImplicitDAOResult
      * @throws ClassCastException if the type of the specified
      * object prevents it from being compared to this Object.
      */
-    public int compareTo(final Object object)
+    public int compareTo(final Result object)
         throws  ClassCastException
     {
         int result = 1;
