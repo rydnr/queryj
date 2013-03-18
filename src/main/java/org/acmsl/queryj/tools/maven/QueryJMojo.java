@@ -1530,7 +1530,6 @@ public class QueryJMojo
      * Executes QueryJ via Maven2.
      * @param log the Maven log.
      * @throws MojoExecutionException if something goes wrong.
-     * @precondition log != null
      */
     protected void execute(@NotNull final Log log)
         throws MojoExecutionException
@@ -1561,7 +1560,6 @@ public class QueryJMojo
      * @param log the Maven log.
      * @param version the QueryJ version.
      * @throws MojoExecutionException if something goes wrong.
-     * @precondition log != null
      */
     protected void execute(@NotNull final Log log, final String version)
         throws MojoExecutionException
@@ -1608,7 +1606,6 @@ public class QueryJMojo
      * Retrieves the pom.properties bundled within the QueryJ jar.
      * @param log the Maven log.
      * @return such information.
-     * @precondition log != null
      */
     @Nullable
     protected Properties retrievePomProperties(@NotNull final Log log)
