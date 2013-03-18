@@ -72,6 +72,9 @@ public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTem
      * @param jmx whether to enable JMX.
      * @param tableNames the list of table names.
      * @param jndiLocation the JNDI location of the data source.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @return the new template.
      */
     @Nullable
@@ -82,9 +85,12 @@ public interface BasePerRepositoryTemplateFactory<T extends BasePerRepositoryTem
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation);
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations);
 }

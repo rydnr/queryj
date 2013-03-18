@@ -60,6 +60,7 @@ import java.util.Map;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Builds a table template using database metadata.
@@ -96,10 +97,13 @@ public class TableTemplateBuildHandler
         @NotNull final TableTemplateFactory templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final List<Table> tables,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
@@ -125,6 +129,9 @@ public class TableTemplateBuildHandler
             implementMarkerInterfaces,
             jmx,
             jndiLocation,
+            disableGenerationTimestamps,
+            disableNotNullAnnotations,
+            disableCheckthreadAnnotations,
             t_lTables,
             decoratorFactory,
             daoTemplateUtils);

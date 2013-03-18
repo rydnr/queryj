@@ -102,10 +102,13 @@ public class CustomValueObjectImplTemplateFactory
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectImplTemplate result = null;
@@ -130,6 +133,9 @@ public class CustomValueObjectImplTemplateFactory
                         implementMarkerInterfaces,
                         jmx,
                         jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations,
                         customResult));
         }
 

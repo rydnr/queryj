@@ -105,15 +105,18 @@ public class KeywordRepositoryTemplateBuildHandler
         @NotNull final String projectPackage,
         @NotNull final String packageName,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
-        @Nullable KeywordRepositoryTemplate result =
+        @Nullable final KeywordRepositoryTemplate result =
             templateFactory.createTemplate(
                 metadataManager,
                 customSqlProvider,
@@ -125,7 +128,10 @@ public class KeywordRepositoryTemplateBuildHandler
                 implementMarkerInterfaces,
                 jmx,
                 tableNames,
-                jndiLocation);
+                jndiLocation,
+                disableGenerationTimestamps,
+                disableNotNullAnnotations,
+                disableCheckthreadAnnotations);
 
         if (result != null)
         {
@@ -148,8 +154,7 @@ public class KeywordRepositoryTemplateBuildHandler
                     Iterator t_itFieldIterator =
                         t_cFieldElements.iterator();
 
-                    while  (   (t_itFieldIterator != null)
-                            && (t_itFieldIterator.hasNext()))
+                    while  (t_itFieldIterator.hasNext())
                     {
                         @Nullable AntFieldElement t_Field =
                             (AntFieldElement) t_itFieldIterator.next();
@@ -181,7 +186,6 @@ public class KeywordRepositoryTemplateBuildHandler
      * attribute map.
      * @param parameters the parameter map.
      * @return the externally-managed-fields information.
-     * @precondition parameters != null
      */
     @Nullable
     @SuppressWarnings("unchecked")

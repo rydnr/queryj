@@ -50,6 +50,7 @@ import org.acmsl.commons.patterns.Factory;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents entities able to create per-<i>foreign key</i> templates.
@@ -70,6 +71,9 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param foreignKey the foreign key.
      */
     @NotNull
@@ -80,9 +84,12 @@ public interface BasePerForeignKeyTemplateFactory<T extends BasePerForeignKeyTem
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final ForeignKey foreignKey);
 }

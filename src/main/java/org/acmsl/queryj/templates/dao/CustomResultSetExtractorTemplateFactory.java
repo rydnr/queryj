@@ -51,6 +51,7 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -102,10 +103,13 @@ public class CustomResultSetExtractorTemplateFactory
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Result customResult)
     {
         return
@@ -121,6 +125,9 @@ public class CustomResultSetExtractorTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
                     customResult));
     }
 }

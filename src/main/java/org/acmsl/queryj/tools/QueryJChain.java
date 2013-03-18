@@ -312,6 +312,24 @@ public class QueryJChain
     private int m__iThreadCount;
 
     /**
+     * Whether to generate file timestamps.
+     */
+    private String m__strDisableGenerationTimestamps;
+    private boolean m__bDisableGenerationTimestampsFlag;
+
+    /**
+     * Whether to disable NotNull annotations.
+     */
+    private String m__strDisableNotNullAnnotations;
+    private Boolean m__bDisableNotNullAnnotationsFlag;
+
+    /**
+     * Whether to disable checkthread.org annotations.
+     */
+    private String m__strDisableCheckthreadAnnotations;
+    private Boolean m__bDisableCheckthreadAnnotationsFlag;
+
+    /**
      * Creates a {@link QueryJChain} instance.
      */
     public QueryJChain() {}
@@ -2114,8 +2132,7 @@ public class QueryJChain
      * Specifies whether to disable caching.
      * @param allow such setting.
      */
-    protected final void immutableSetDisableCaching(
-        final String allow)
+    protected final void immutableSetDisableCaching(final String allow)
     {
         m__strDisableCaching = allow;
     }
@@ -2124,7 +2141,6 @@ public class QueryJChain
      * Specifies whether to disable caching.
      * @param disable such setting.
      */
-    @SuppressWarnings("unused")
     public void setDisableCaching(final String disable)
     {
         immutableSetDisableCaching(disable);
@@ -2157,8 +2173,7 @@ public class QueryJChain
      * Specifies the "disable-caching" flag.
      * @param flag such flag.
      */
-    protected final void immutableSetDisableCachingFlag(
-        final boolean flag)
+    protected final void immutableSetDisableCachingFlag(final boolean flag)
     {
         m__bDisableCachingFlag = flag;
     }
@@ -2177,7 +2192,7 @@ public class QueryJChain
      * @return such flag.
      */
     @SuppressWarnings("unused")
-    protected boolean getDisableCachingFlag()
+    public boolean getDisableCachingFlag()
     {
         return m__bDisableCachingFlag;
     }
@@ -2188,22 +2203,20 @@ public class QueryJChain
      * @param properties the properties.
      * @return such flag.
      */
-    protected boolean getDisableCachingFlag(
-        @Nullable final Properties properties)
+    protected boolean getDisableCachingFlag(@Nullable final Properties properties)
     {
-        String t_strResult = getDisableCaching();
+        @Nullable String t_strResult = getDisableCaching();
 
         if  (   (t_strResult == null)
-                && (properties != null))
+             && (properties != null))
         {
-            t_strResult =
-                properties.getProperty(DISABLE_CACHING);
-            setDisableCustomSqlValidation(t_strResult);
+            t_strResult = properties.getProperty(DISABLE_CACHING);
+
+            setDisableCaching(t_strResult);
         }
 
         return toBoolean(t_strResult);
     }
-
 
     /**
      * Specifies the thread count.
@@ -2246,7 +2259,8 @@ public class QueryJChain
         if  (   (result == 0)
              && (properties != null))
         {
-            String t_strValue = properties.getProperty(THREAD_COUNT);
+            @Nullable String t_strValue = properties.getProperty(THREAD_COUNT);
+
             if (t_strValue != null)
             {
                 try
@@ -2255,7 +2269,7 @@ public class QueryJChain
                 }
                 catch (@NotNull final NumberFormatException invalidValue)
                 {
-                    Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+                    @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
                     if (t_Log != null)
                     {
@@ -2323,6 +2337,238 @@ public class QueryJChain
         }
 
         return result;
+    }
+
+    /**
+     * Specifies whether to use generation timestamps.
+     * @param disable the choice.
+     */
+    protected final void immutableSetDisableGenerationTimestamps(@NotNull final String disable)
+    {
+        m__strDisableGenerationTimestamps = disable;
+    }
+
+    /**
+     * Specifies whether to use generation timestamps.
+     * @param disable the choice.
+     */
+    protected void setDisableGenerationTimestamps(@NotNull final String disable)
+    {
+        immutableSetDisableGenerationTimestamps(disable);
+    }
+
+    /**
+     * Retrieves whether to use generation timestamps.
+     * @return such setting.
+     */
+    protected final String getDisableGenerationTimestamps()
+    {
+        return m__strDisableGenerationTimestamps;
+    }
+
+    /**
+     * Specifies whether to use generation timestamps.
+     * @param flag the choice.
+     */
+    protected final void immutableSetDisableGenerationTimestampsFlag(final boolean flag)
+    {
+        m__bDisableGenerationTimestampsFlag = flag;
+    }
+
+    /**
+     * Specifies whether to use generation timestamps.
+     * @param flag the choice.
+     */
+    @SuppressWarnings("unused")
+    public void setDisableGenerationTimestampsFlag(final boolean flag)
+    {
+        immutableSetDisableGenerationTimestamps(Boolean.valueOf(flag).toString());
+
+        immutableSetDisableGenerationTimestampsFlag(flag);
+    }
+
+    /**
+     * Retrieves whether to use generation timestamps.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableGenerationTimestampsFlag()
+    {
+        return m__bDisableGenerationTimestampsFlag;
+    }
+
+    /**
+     * Retrieves whether to use notnull annotations.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableGenerationTimestamps(@Nullable final Properties properties)
+    {
+        @Nullable String t_strResult = getDisableGenerationTimestamps();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(DISABLE_TIMESTAMPS);
+
+            setDisableGenerationTimestamps(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
+     * Specifies whether to use notnull annotations.
+     * @param disable the choice.
+     */
+    protected final void immutableSetDisableNotNullAnnotations(@NotNull final String disable)
+    {
+        m__strDisableNotNullAnnotations = disable;
+    }
+
+    /**
+     * Specifies whether to use notnull annotations.
+     * @param disable the choice.
+     */
+    protected void setDisableNotNullAnnotations(@NotNull final String disable)
+    {
+        immutableSetDisableNotNullAnnotations(disable);
+    }
+
+    /**
+     * Retrieves whether to use notnull annotations.
+     * @return such setting.
+     */
+    protected final String getDisableNotNullAnnotations()
+    {
+        return m__strDisableNotNullAnnotations;
+    }
+
+    /**
+     * Specifies whether to use notnull annotations.
+     * @param flag the choice.
+     */
+    protected final void immutableSetDisableNotNullAnnotationsFlag(final boolean flag)
+    {
+        m__bDisableNotNullAnnotationsFlag = flag;
+    }
+
+    /**
+     * Specifies whether to use notnull annotations.
+     * @param flag the choice.
+     */
+    public void setDisableNotNullAnnotationsFlag(final boolean flag)
+    {
+        immutableSetDisableNotNullAnnotations(Boolean.valueOf(flag).toString());
+
+        immutableSetDisableNotNullAnnotationsFlag(flag);
+    }
+
+    /**
+     * Retrieves whether to use notnull annotations.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableNotNullAnnotationsFlag()
+    {
+        return m__bDisableNotNullAnnotationsFlag;
+    }
+
+    /**
+     * Retrieves whether to use notnull annotations.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableNotNullAnnotations(@Nullable final Properties properties)
+    {
+        @Nullable String t_strResult = getDisableNotNullAnnotations();
+
+        if  (   (t_strResult == null)
+                && (properties != null))
+        {
+            t_strResult = properties.getProperty(DISABLE_NOTNULL_ANNOTATIONS);
+
+            setDisableNotNullAnnotations(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
+    }
+
+    /**
+     * Specifies whether to use checkthread.org annotations.
+     * @param disable the choice.
+     */
+    protected final void immutableSetDisableCheckthreadAnnotations(@NotNull final String disable)
+    {
+        m__strDisableCheckthreadAnnotations = disable;
+    }
+
+    /**
+     * Specifies whether to use checkthread.org annotations.
+     * @param disable the choice.
+     */
+    protected void setDisableCheckthreadAnnotations(@NotNull final String disable)
+    {
+        immutableSetDisableCheckthreadAnnotations(disable);
+    }
+
+    /**
+     * Retrieves whether to use checkthread.org annotations.
+     * @return such setting.
+     */
+    protected final String getDisableCheckthreadAnnotations()
+    {
+        return m__strDisableCheckthreadAnnotations;
+    }
+
+    /**
+     * Specifies whether to use checkthread.org annotations.
+     * @param flag the choice.
+     */
+    protected final void immutableSetDisableCheckthreadAnnotationsFlag(final boolean flag)
+    {
+        m__bDisableCheckthreadAnnotationsFlag = flag;
+    }
+
+    /**
+     * Specifies whether to use checkthread.org annotations.
+     * @param flag the choice.
+     */
+    public void setDisableCheckthreadAnnotationsFlag(final boolean flag)
+    {
+        immutableSetDisableCheckthreadAnnotations(Boolean.valueOf(flag).toString());
+
+        immutableSetDisableCheckthreadAnnotationsFlag(flag);
+    }
+
+    /**
+     * Retrieves whether to use checkthread.org annotations.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableCheckthreadAnnotationsFlag()
+    {
+        return m__bDisableCheckthreadAnnotationsFlag;
+    }
+
+    /**
+     * Retrieves whether to use checkthread.org annotations.
+     * @return such setting.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableCheckthreadAnnotations(@Nullable final Properties properties)
+    {
+        @Nullable String t_strResult = getDisableCheckthreadAnnotations();
+
+        if  (   (t_strResult == null)
+             && (properties != null))
+        {
+            t_strResult = properties.getProperty(DISABLE_CHECKTHREAD_ANNOTATIONS);
+
+            setDisableCheckthreadAnnotations(t_strResult);
+        }
+
+        return toBoolean(t_strResult);
     }
 
     /**
@@ -2402,7 +2648,7 @@ public class QueryJChain
     protected void cleanUpOnError(
         @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
-        Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+        @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
         if  (t_Log != null)
         {
@@ -2493,7 +2739,10 @@ public class QueryJChain
             getGrammarSuffix(settings),
             getEncoding(settings),
             !getDisableCachingFlag(settings),
-            getThreadCount(settings));
+            getThreadCount(settings),
+            getDisableGenerationTimestamps(settings),
+            getDisableNotNullAnnotations(settings),
+            getDisableCheckthreadAnnotations(settings));
 
         return command;
     }
@@ -2537,6 +2786,9 @@ public class QueryJChain
      * @param encoding the encoding.
      * @param caching whether to enable template caching.
      * @param threadCount the thread count.
+     * @param disableGenerationTimestamps whether to disable timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable Checkthread.org annotations.
      */
     @SuppressWarnings("unchecked")
     protected void mapAttributes(
@@ -2569,7 +2821,10 @@ public class QueryJChain
         @Nullable final String grammarSuffix,
         @Nullable final String encoding,
         final boolean caching,
-        final int threadCount)
+        final int threadCount,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations)
     {
         if  (attributes != null)
         {
@@ -2749,7 +3004,7 @@ public class QueryJChain
                 && (grammarName != null)
                 && (grammarSuffix != null))
             {
-                File t_GrammarFile =
+                @NotNull File t_GrammarFile =
                     new File(
                           grammarFolder + File.separator + grammarName
                         + "_" + Locale.US.getLanguage().toLowerCase(Locale.US)
@@ -2772,6 +3027,18 @@ public class QueryJChain
             attributes.put(
                 ParameterValidationHandler.THREAD_COUNT,
                 threadCount);
+
+            attributes.put(
+                ParameterValidationHandler.DISABLE_TIMESTAMPS,
+                disableGenerationTimestamps);
+
+            attributes.put(
+                ParameterValidationHandler.DISABLE_NOTNULL_ANNOTATIONS,
+                disableNotNullAnnotations);
+
+            attributes.put(
+                ParameterValidationHandler.DISABLE_CHECKTHREAD_ANNOTATIONS,
+                disableCheckthreadAnnotations);
         }
     }
 
@@ -2798,7 +3065,7 @@ public class QueryJChain
 
         if  (value != null)
         {
-            String t_strTrimmedValue = value.trim().toLowerCase();
+            @NotNull String t_strTrimmedValue = value.trim().toLowerCase();
 
             result =
                 (   (t_strTrimmedValue.equals("yes"))
@@ -2833,7 +3100,7 @@ public class QueryJChain
             {
                 result = null;
 
-                Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+                @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
                 if  (t_Log != null)
                 {
@@ -2853,7 +3120,7 @@ public class QueryJChain
                     }
                     catch  (@NotNull final IOException ioException)
                     {
-                        Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
+                        @Nullable Log t_Log = UniqueLogFactory.getLog(QueryJChain.class);
 
                         if  (t_Log != null)
                         {

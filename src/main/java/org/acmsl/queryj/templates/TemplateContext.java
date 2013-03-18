@@ -35,18 +35,18 @@
  */
 package org.acmsl.queryj.templates;
 
-import org.acmsl.queryj.metadata.MetadataManager;
-
 /*
  * Importing project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
+import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Context information required in Template generation.
@@ -79,7 +79,7 @@ public interface TemplateContext
      * Retrieves the header.
      * @return such information.
      */
-    @NotNull
+    @Nullable
     String getHeader();
 
     /**
@@ -130,4 +130,24 @@ public interface TemplateContext
      */
     @NotNull
     String getJndiLocation();
+
+    /**
+     * Retrieves whether to use generation timestamps or not.
+     * @return such setting.
+     */
+    boolean getDisableGenerationTimestamps();
+
+    /**
+     * Retrieves whether to use NotNull annotations or not.
+     * @return such setting.
+     */
+    boolean getDisableNotNullAnnotations();
+
+    /**
+     * Retrieves whether to use checkthread.org annotations or not.
+     * @return such setting.
+     */
+    boolean getDisableCheckthreadAnnotations();
+
+
 }

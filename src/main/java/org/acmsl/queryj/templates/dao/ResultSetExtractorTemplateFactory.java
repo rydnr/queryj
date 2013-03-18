@@ -107,10 +107,13 @@ public class ResultSetExtractorTemplateFactory
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -127,6 +130,9 @@ public class ResultSetExtractorTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
                     tableName,
                     staticContents));
     }

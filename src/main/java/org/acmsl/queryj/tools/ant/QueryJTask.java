@@ -1596,7 +1596,6 @@ public class QueryJTask
      * Specifies whether to disable custom sql validation.
      * @param disable such setting.
      */
-    @SuppressWarnings("unused")
     public void setDisableCaching(@Nullable final String disable, @NotNull final QueryJChain delegee)
     {
         if (disable != null)
@@ -1643,6 +1642,122 @@ public class QueryJTask
     }
 
     /**
+     * Specifies whether to include timestamps in the generated code.
+     * @param disableGenerateTimestamps such choice.
+     */
+    public void setDisableGenerationTimestamps(final boolean disableGenerateTimestamps)
+    {
+        setDisableGenerationTimestamps(disableGenerateTimestamps, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to include timestamps in the generated code.
+     * @param disableGenerateTimestamps such choice.
+     */
+    protected void setDisableGenerationTimestamps(
+        final boolean disableGenerateTimestamps, @NotNull final QueryJChain delegee)
+    {
+        delegee.setDisableGenerationTimestampsFlag(disableGenerateTimestamps);
+    }
+
+    /**
+     * Retrieves whether to include timestamps in the generated code.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableGenerationTimestamps()
+    {
+        return getDisableGenerationTimestamps(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to include timestamps in the generated code.
+     * @return such information.
+     */
+    protected final boolean getDisableGenerationTimestamps(@NotNull final QueryJChain delegee)
+    {
+        return delegee.getDisableGenerationTimestampsFlag();
+    }
+
+    /**
+     * Specifies whether to include NotNull annotations in the generated code.
+     * @param disableNotNullAnnotations such choice.
+     */
+    public void setDisableNotNullAnnotations(final boolean disableNotNullAnnotations)
+    {
+        setDisableNotNullAnnotations(disableNotNullAnnotations, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to include NotNull annotations in the generated code.
+     * @param disableNotNullAnnotations such choice.
+     */
+    protected void setDisableNotNullAnnotations(
+        final boolean disableNotNullAnnotations, @NotNull final QueryJChain delegee)
+    {
+        delegee.setDisableNotNullAnnotationsFlag(disableNotNullAnnotations);
+    }
+
+    /**
+     * Retrieves whether to include NotNull annotations in the generated code.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableNotNullAnnotations()
+    {
+        return getDisableNotNullAnnotations(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to include NotNull annotations in the generated code.
+     * @return such information.
+     */
+    protected final boolean getDisableNotNullAnnotations(@NotNull final QueryJChain delegee)
+    {
+        return delegee.getDisableNotNullAnnotationsFlag();
+    }
+
+    /**
+     * Specifies whether to include Checkthread.org annotations in the generated code.
+     * @param disableCheckthreadAnnotations such choice.
+     */
+    public void setDisableCheckthreadAnnotations(final boolean disableCheckthreadAnnotations)
+    {
+        setDisableNotNullAnnotations(disableCheckthreadAnnotations, getQueryJChain());
+    }
+
+    /**
+     * Specifies whether to include Checkthread.org annotations in the generated code.
+     * @param disableCheckthreadAnnotations such choice.
+     */
+    @SuppressWarnings("unused")
+    protected void setDisableCheckthreadAnnotations(
+        final boolean disableCheckthreadAnnotations, @NotNull final QueryJChain delegee)
+    {
+        delegee.setDisableCheckthreadAnnotationsFlag(disableCheckthreadAnnotations);
+    }
+
+    /**
+     * Retrieves whether to include Checkthread.org annotations in the generated code.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    public boolean getDisableCheckthreadAnnotations()
+    {
+        return getDisableNotNullAnnotations(getQueryJChain());
+    }
+
+    /**
+     * Retrieves whether to include Checkthread.org annotations in the generated code.
+     * @return such information.
+     */
+    @SuppressWarnings("unused")
+    protected final boolean getDisableCheckthreadAnnotations(@NotNull final QueryJChain delegee)
+    {
+        return delegee.getDisableCheckthreadAnnotationsFlag();
+    }
+
+    /**
      * Customizes <code>QueryJChain</code> to get parameters from Ant.
      * @author <a href="mailto:chous@acm-sl.org"
                >Jose San Leandro</a>
@@ -1668,41 +1783,7 @@ public class QueryJTask
         }
 
         /**
-         * Maps the attributes in the command map.
-         * @param attributes the command attributes.
-         * @param driver the JDBC driver.
-         * @param url the JDBC url.
-         * @param username the JDBC username.
-         * @param password the JDBC password.
-         * @param catalog the JDBC catalog.
-         * @param schema the JDBC schema.
-         * @param repository the repository.
-         * @param packageName the base package of the generated sources.
-         * @param header the copyright header.
-         * @param extractTables whether to extract tables or not.
-         * @param extractProcedures whether to extract the procedures or not.
-         * @param extractFunctions whether to extract the functions or not.
-         * @param jndiDataSource the location in JNDI of the
-         * <code>DataSource</code>.
-         * @param generateMockDAOImplementation whether to generate Mock DAOs.
-         * @param generateXmlDAOImplementation whether to generate XML DAOs.
-         * @param generateTests whether to generate tests.
-         * @param allowEmptyRepositoryDAO whether to generate a repository
-         * DAO even tough it'll contain no custom queries..
-         * @param implementMarkerInterfaces whether to make some generated 
-         * sources implement <code>org.acmsl.commons.patterns</code>
-         * <i>Marker</i> interfaces.
-         * @param customSqlModel the format of the custom SQL file.
-         * @param disableCustomSqlValidation whether to disable custom sql
-         * validation.
-         * @param sqlXmlFile the file containing the custom SQL.
-         * @param grammarFolder the grammar folder.
-         * @param grammarName the grammar with irregular singular and plural
-         * forms of the table names.
-         * @param grammarSuffix the grammar suffix.
-         * @param encoding the file encoding.
-         * @param caching whether template caching is enabled or not.
-         * @param threadCount the thread count.
+         * {@inheritDoc}
          */
         @Override
         protected void mapAttributes(
@@ -1735,7 +1816,10 @@ public class QueryJTask
             @Nullable final String grammarSuffix,
             @Nullable final String encoding,
             final boolean caching,
-            final int threadCount)
+            final int threadCount,
+            final boolean disableTimestamps,
+            final boolean disableNotNullAnnotations,
+            final boolean disableCheckthreadAnnotations)
         {
             super.mapAttributes(
                 attributes,
@@ -1767,7 +1851,10 @@ public class QueryJTask
                 grammarSuffix,
                 encoding,
                 caching,
-                threadCount);
+                threadCount,
+                disableTimestamps,
+                disableNotNullAnnotations,
+                disableCheckthreadAnnotations);
 
             mapAttributes(
                 attributes,

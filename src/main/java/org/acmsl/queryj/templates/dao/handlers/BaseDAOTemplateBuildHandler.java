@@ -128,10 +128,13 @@ public class BaseDAOTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable List<Row> staticContents,
         @NotNull final Map parameters)
@@ -168,6 +171,9 @@ public class BaseDAOTemplateBuildHandler
                 implementMarkerInterfaces,
                 jmx,
                 jndiLocation,
+                disableGenerationTimestamps,
+                disableNotNullAnnotations,
+                disableCheckthreadAnnotations,
                 tableName,
                 t_cStaticValues);
 

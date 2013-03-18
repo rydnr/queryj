@@ -251,6 +251,24 @@ public class QueryJMojo
     private String m__strEncoding;
 
     /**
+     * Whether to generate file timestamps.
+     * @parameter property="disableTimestamps"
+     */
+    private Boolean m__bDisableGenerationTimestamps;
+
+    /**
+     * Whether to disable NotNull annotations.
+     * @parameter property="disableNotNullAnnotations"
+     */
+    private Boolean m__bDisableNotNullAnnotations = false;
+
+    /**
+     * Whether to disable checkthread.org annotations.
+     * @parameter property="disableCheckthreadAnnotations"
+     */
+    private Boolean m__bDisableCheckthreadAnnotations = false;
+
+    /**
  	* The current build session instance. This is used for toolchain manager API calls.
  	*
  	* @parameter default-value="${session}"
@@ -1517,6 +1535,162 @@ public class QueryJMojo
     }
 
     /**
+     * Specifies whether to use generation timestamps.
+     * @param flag the choice.
+     */
+    protected final void immutableSetDisableGenerationTimestamps(@NotNull final Boolean flag)
+    {
+        m__bDisableGenerationTimestamps = flag;
+    }
+
+    /**
+     * Specifies whether to use generation timestamps.
+     * @param flag the choice.
+     */
+    protected void setDisableGenerationTimestamps(@NotNull final Boolean flag)
+    {
+        immutableSetDisableGenerationTimestamps(flag);
+    }
+
+    /**
+     * Retrieves whether to use generation timestamps.
+     * @return such setting.
+     */
+    @Nullable
+    protected final Boolean immutableGetDisableGenerationTimestamps()
+    {
+        return m__bDisableGenerationTimestamps;
+    }
+
+    /**
+     * Retrieves whether to use generation timestamps.
+     * @return such setting.
+     */
+    @NotNull
+    public Boolean getDisableGenerationTimestamps()
+    {
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.disableTimestamps");
+
+        if (aux == null)
+        {
+            result = immutableGetDisableGenerationTimestamps();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies whether to use NotNull annotations in the generated code.
+     * @param flag such choice.
+     */
+    protected final void immutableSetDisableNotNullAnnotations(@NotNull final Boolean flag)
+    {
+        m__bDisableNotNullAnnotations = flag;
+    }
+
+    /**
+     * Specifies whether to use NotNull annotations in the generated code.
+     * @param flag such choice.
+     */
+    protected void setDisableNotNullAnnotations(@NotNull final Boolean flag)
+    {
+        immutableSetDisableNotNullAnnotations(flag);
+    }
+
+    /**
+     * Retrieves whether to use NotNull annotations in the generated code.
+     * @return the current setting.
+     */
+    @Nullable
+    protected final Boolean immutableGetDisableNotNullAnnotations()
+    {
+        return m__bDisableNotNullAnnotations;
+    }
+
+    /**
+     * Retrieves whether to use NotNull annotations in the generated code.
+     * @return the current setting.
+     */
+    @NotNull
+    public Boolean getDisableNotNullAnnotations()
+    {
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.disableNotNullAnnotations");
+
+        if (aux == null)
+        {
+            result = immutableGetDisableNotNullAnnotations();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
+    }
+
+    /**
+     * Specifies whether to use Checkthread.org annotations in the generated code.
+     * @param flag such choice.
+     */
+    protected final void immutableSetDisableCheckthreadAnnotations(@NotNull final Boolean flag)
+    {
+        m__bDisableCheckthreadAnnotations = flag;
+    }
+
+    /**
+     * Specifies whether to use Checkthread.org annotations in the generated code.
+     * @param flag such choice.
+     */
+    protected void setDisableCheckthreadAnnotations(@NotNull final Boolean flag)
+    {
+        immutableSetDisableCheckthreadAnnotations(flag);
+    }
+
+    /**
+     * Retrieves whether to use Checkthread annotations in the generated code.
+     * @return the current setting.
+     */
+    @Nullable
+    protected final Boolean immutableGetDisableCheckthreadAnnotations()
+    {
+        return m__bDisableCheckthreadAnnotations;
+    }
+
+    /**
+     * Retrieves whether to use Checkthread annotations in the generated code.
+     * @return the current setting.
+     */
+    @NotNull
+    public Boolean getDisableCheckthreadAnnotations()
+    {
+        Boolean result = null;
+
+        String aux = System.getProperty("queryj.disableCheckthreadAnnotations");
+
+        if (aux == null)
+        {
+            result = immutableGetDisableCheckthreadAnnotations();
+        }
+
+        if (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
+    }
+
+    /**
      * Executes QueryJ via Maven2.
      * @throws MojoExecutionException if something goes wrong.
      */
@@ -1708,7 +1882,7 @@ public class QueryJMojo
             "" + getExtractProcedures());
 
         log.debug(
-            "Grammar bundle: " + getGrammarFolder() + File.separator
+              "Grammar bundle: " + getGrammarFolder() + File.separator
             + getGrammarName() + "(_" + Locale.US.getLanguage().toLowerCase(Locale.US)
             + ")" + getGrammarSuffix());
 
@@ -1722,7 +1896,7 @@ public class QueryJMojo
         buildExternallyManagedFields(result);
         buildTables(result);
 
-        String encoding = getEncoding();
+        @Nullable String encoding = getEncoding();
 
         if (encoding == null)
         {
@@ -1736,7 +1910,7 @@ public class QueryJMojo
 
         boolean caching = true;
 
-        Boolean auxCaching = isCaching();
+        @Nullable Boolean auxCaching = isCaching();
         if (auxCaching != null)
         {
             caching = auxCaching;
@@ -1749,6 +1923,20 @@ public class QueryJMojo
 
         log.info("Using " + threadCount + " threads");
         result.setThreadCount(threadCount);
+
+        boolean disableGenerationTimestamps = getDisableGenerationTimestamps();
+
+        result.setDisableGenerationTimestamps(disableGenerationTimestamps);
+
+        boolean disableNotNullAnnotations = getDisableNotNullAnnotations();
+
+        result.setDisableNotNullAnnotations(disableNotNullAnnotations);
+
+        boolean disableCheckthreadAnnotations = getDisableCheckthreadAnnotations();
+
+        result.setDisableCheckthreadAnnotations(disableCheckthreadAnnotations);
+
+
 
         return result;
     }

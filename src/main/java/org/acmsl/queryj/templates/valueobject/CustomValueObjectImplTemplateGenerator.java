@@ -82,17 +82,21 @@ public class CustomValueObjectImplTemplateGenerator
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Result customResult)
     {
         @Nullable CustomValueObjectImplTemplate result = null;
 
-        if  (!isStandard(
-                 extractClassName(customResult.getClassValue()),
-                 metadataManager))
+        @Nullable final String classValue = customResult.getClassValue();
+
+        if  (  (classValue != null)
+            && (!isStandard(extractClassName(classValue), metadataManager)))
         {
             result =
                 new CustomValueObjectImplTemplate(
@@ -107,6 +111,9 @@ public class CustomValueObjectImplTemplateGenerator
                         implementMarkerInterfaces,
                         jmx,
                         jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations,
                         customResult));
         }
 
@@ -120,9 +127,16 @@ public class CustomValueObjectImplTemplateGenerator
     @Override
     public String retrieveTemplateFileName(@NotNull final BasePerCustomResultTemplateContext context)
     {
-        return
-            extractClassName(context.getResult().getClassValue())
-            + "ValueObject.java";
+        String result = "";
+
+        @Nullable final String classValue = context.getResult().getClassValue();
+
+        if (classValue != null)
+        {
+            result = extractClassName(classValue) + "ValueObject.java";
+        }
+
+        return result;
     }
 
 

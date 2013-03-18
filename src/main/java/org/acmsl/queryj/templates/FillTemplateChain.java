@@ -40,10 +40,13 @@ package org.acmsl.queryj.templates;
  */
 import org.acmsl.queryj.AbstractQueryJChain;
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.templates.handlers.fillhandlers.AreTimestampsAllowedHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.DAOChooserPropertiesFileNameHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.JndiLocationFillHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.LobHandlingFlavorHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.LobHandlingRepositoryCheckHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.UseCheckthreadAnnotationsHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.UseNotNullAnnotationsHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.templates.handlers.FillAdapterHandler;
 import org.acmsl.queryj.templates.handlers.TemplateContextFillAdapterHandler;
@@ -180,7 +183,7 @@ public abstract class FillTemplateChain<C extends TemplateContext>
      */
     @NotNull
     @Override
-    protected QueryJCommand buildCommand(final QueryJCommand command)
+    protected QueryJCommand buildCommand(@NotNull final QueryJCommand command)
     {
         return command;
     }
@@ -191,7 +194,8 @@ public abstract class FillTemplateChain<C extends TemplateContext>
      * @param command the command.
      */
     @Override
-    protected void cleanUpOnError(final QueryJBuildException buildException, final QueryJCommand command)
+    protected void cleanUpOnError(
+        @NotNull final QueryJBuildException buildException, @NotNull final QueryJCommand command)
     {
         // nothing required.
     }
@@ -355,6 +359,27 @@ public abstract class FillTemplateChain<C extends TemplateContext>
             new TemplateContextFillAdapterHandler
                 <TemplateContext,LobHandlingFlavorHandler,DecoratedString>(
                 new LobHandlingFlavorHandler(context)),
+            relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler
+                <TemplateContext,AreTimestampsAllowedHandler,Boolean>(
+                new AreTimestampsAllowedHandler(context)),
+            relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler
+                <TemplateContext,UseNotNullAnnotationsHandler,Boolean>(
+                new UseNotNullAnnotationsHandler(context)),
+            relevantOnly);
+
+        add(
+            chain,
+            new TemplateContextFillAdapterHandler
+                <TemplateContext,UseCheckthreadAnnotationsHandler,Boolean>(
+                new UseCheckthreadAnnotationsHandler(context)),
             relevantOnly);
 
         addHandlers(chain, context, relevantOnly);

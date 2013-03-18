@@ -93,13 +93,16 @@ public class BasePerTableTemplateContext
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tableName the table name.
      * @param staticValues the static rows, if the table is marked as <code>@static</code>.
      */
     public BasePerTableTemplateContext(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
@@ -107,6 +110,9 @@ public class BasePerTableTemplateContext
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable final List<Row> staticValues)
     {
@@ -120,7 +126,10 @@ public class BasePerTableTemplateContext
             repositoryName,
             implementMarkerInterfaces,
             jmx,
-            jndiLocation);
+            jndiLocation,
+            disableGenerationTimestamps,
+            disableNotNullAnnotations,
+            disableCheckthreadAnnotations);
 
         immutableSetTableName(tableName);
         immutableSetStaticValues(staticValues);

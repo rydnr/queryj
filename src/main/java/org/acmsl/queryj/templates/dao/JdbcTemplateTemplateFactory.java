@@ -55,6 +55,7 @@ import org.acmsl.commons.patterns.Singleton;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -109,11 +110,14 @@ public class JdbcTemplateTemplateFactory
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations)
     {
         return
             new JdbcTemplateTemplate(
@@ -128,6 +132,9 @@ public class JdbcTemplateTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     tableNames,
-                    jndiLocation));
+                    jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations));
     }
 }

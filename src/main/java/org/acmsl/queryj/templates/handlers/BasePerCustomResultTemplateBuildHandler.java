@@ -107,20 +107,14 @@ public abstract class BasePerCustomResultTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        boolean result = true;
+        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
 
-        @Nullable final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+        buildTemplates(
+            parameters,
+            t_MetadataManager,
+            retrieveCustomSqlProvider(parameters));
 
-        if (t_MetadataManager != null)
-        {
-            buildTemplates(
-                parameters,
-                t_MetadataManager,
-                retrieveCustomSqlProvider(parameters));
-            result = false;
-        }
-
-        return result;
+        return false;
     }
 
     /**
@@ -149,6 +143,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
+            retrieveDisableGenerationTimestamps(parameters),
+            retrieveDisableNotNullAnnotations(parameters),
+            retrieveDisableCheckthreadAnnotations(parameters),
             retrieveCustomResults(parameters, customSqlProvider, isDuplicatedResultsAllowed()),
             CustomResultUtils.getInstance());
     }
@@ -182,6 +179,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to enable JMX support.
      * @param jndiLocation the JNDI location.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param resultElements the {@link Result} list.
      * @param customResultUtils the {@link CustomResultUtils} instance.
      * @throws QueryJBuildException if the templates cannot be built.
@@ -195,10 +195,13 @@ public abstract class BasePerCustomResultTemplateBuildHandler
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final List<Result> resultElements,
         @NotNull final CustomResultUtils customResultUtils)
       throws  QueryJBuildException
@@ -232,6 +235,9 @@ public abstract class BasePerCustomResultTemplateBuildHandler
                             implementMarkerInterfaces,
                             jmx,
                             jndiLocation,
+                            disableGenerationTimestamps,
+                            disableNotNullAnnotations,
+                            disableCheckthreadAnnotations,
                             t_ResultElement);
 
                     if  (   (t_Template != null)

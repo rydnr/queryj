@@ -27,7 +27,7 @@
  *
  * Author: Jose San Leandro Armendariz
  *
- * Description: Is able to craete AttributesStatementSetterTemplate instances.
+ * Description: Is able to create AttributesStatementSetterTemplate instances.
  *
  */
 package org.acmsl.queryj.templates.dao;
@@ -105,10 +105,13 @@ public class AttributesStatementSetterTemplateFactory
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -125,6 +128,9 @@ public class AttributesStatementSetterTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
                     tableName,
                     staticContents));
     }

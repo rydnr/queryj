@@ -105,10 +105,13 @@ public class DAOFactoryTemplateFactory
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiDataSource,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -125,6 +128,9 @@ public class DAOFactoryTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     jndiDataSource,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
                     tableName,
                     staticContents));
     }

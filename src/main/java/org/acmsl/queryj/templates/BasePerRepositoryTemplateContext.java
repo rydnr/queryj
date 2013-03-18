@@ -43,11 +43,16 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing some Apache Commons-Lang classes.
  */
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -90,11 +95,14 @@ public class BasePerRepositoryTemplateContext
      * @param jmx whether to include JMX support.
      * @param tableNames the table names.
      * @param jndiLocation the JNDI location of the data source.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      */
     public BasePerRepositoryTemplateContext(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
@@ -102,7 +110,10 @@ public class BasePerRepositoryTemplateContext
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull List<String> tableNames,
-        @NotNull final String jndiLocation)
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations)
     {
         super(
             metadataManager,
@@ -114,7 +125,10 @@ public class BasePerRepositoryTemplateContext
             repositoryName,
             implementMarkerInterfaces,
             jmx,
-            jndiLocation);
+            jndiLocation,
+            disableGenerationTimestamps,
+            disableNotNullAnnotations,
+            disableCheckthreadAnnotations);
 
         immutableSetTableNames(tableNames);
     }

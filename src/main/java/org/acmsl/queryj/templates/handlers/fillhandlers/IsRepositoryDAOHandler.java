@@ -89,6 +89,7 @@ public class IsRepositoryDAOHandler
     /**
      * Retrieves whether the {@link TemplateContext context} is associated to a
      * repository-wide DAO.
+     * @param context the {@link TemplateContext}.
      * @return such value.
      */
     @NotNull
@@ -101,7 +102,7 @@ public class IsRepositoryDAOHandler
     /**
      * Checks whether given custom SQL provider defines any repository-scope
      * SQL or not.
-     * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
+     * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return <code>true</code> in such case.
      */
     protected boolean definesRepositoryScopedSql(

@@ -71,6 +71,9 @@ public interface BasePerCustomResultTemplateFactory<T extends BasePerCustomResul
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path for the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param customResult the custom result.
      * @return the template.
      */
@@ -82,9 +85,12 @@ public interface BasePerCustomResultTemplateFactory<T extends BasePerCustomResul
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Result customResult);
 }

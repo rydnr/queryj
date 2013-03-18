@@ -99,17 +99,11 @@ public abstract class BasePerTableTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        boolean result = true;
+        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
 
-        MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
+        buildTemplate(parameters, t_MetadataManager, t_MetadataManager.getTableDAO());
 
-        if (t_MetadataManager != null)
-        {
-            buildTemplate(parameters, t_MetadataManager, t_MetadataManager.getTableDAO());
-            result = false;
-        }
-
-        return result;
+        return false;
     }
 
     /**
@@ -136,6 +130,9 @@ public abstract class BasePerTableTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
+            retrieveDisableGenerationTimestamps(parameters),
+            retrieveDisableNotNullAnnotations(parameters),
+            retrieveDisableCheckthreadAnnotations(parameters),
             tableDAO.findAllTables(),
             CachingDecoratorFactory.getInstance(),
             DAOTemplateUtils.getInstance());
@@ -161,6 +158,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * interfaces.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tables the tables.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @param daoTemplateUtils the {@link DAOTemplateUtils} instance.
@@ -173,16 +173,19 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final TF templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final List<Table> tables,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final DAOTemplateUtils daoTemplateUtils)
       throws  QueryJBuildException
     {
-        List<T> t_lTemplates = new ArrayList<T>();
+        @NotNull final List<T> t_lTemplates = new ArrayList<T>();
 
         @Nullable T t_Template;
 
@@ -208,7 +211,7 @@ public abstract class BasePerTableTemplateBuildHandler
                         catch (@Nullable final SQLException cannotRetrieveTableContents)
                         {
                             @Nullable
-                            Log t_Log = UniqueLogFactory.getLog(BasePerTableTemplateBuildHandler.class);
+                            final Log t_Log = UniqueLogFactory.getLog(BasePerTableTemplateBuildHandler.class);
 
                             if (t_Log != null)
                             {
@@ -238,6 +241,9 @@ public abstract class BasePerTableTemplateBuildHandler
                             implementMarkerInterfaces,
                             jmx,
                             jndiLocation,
+                            disableGenerationTimestamps,
+                            disableNotNullAnnotations,
+                            disableCheckthreadAnnotations,
                             t_Table.getName(),
                             t_lStaticContent,
                             parameters);
@@ -260,7 +266,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param parameters the parameter map.
      * @return the package name.
      * @throws QueryJBuildException if the package retrieval process if faulty.
-     * @precondition parameters != null
      */
     protected String retrievePackage(
         @NotNull final String tableName, @NotNull final String engineName, @NotNull final Map parameters)
@@ -276,9 +281,6 @@ public abstract class BasePerTableTemplateBuildHandler
 
     /**
      * Retrieves the package name.
-     *
-     *
-     *
      * @param tableName the table name.
      * @param engineName the engine name.
      * @param projectPackage the project package.
@@ -295,8 +297,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * Stores the template collection in given attribute map.
      * @param templates the templates.
      * @param parameters the parameter map.
-     * @precondition templates != null
-     * @precondition parameters != null
      */
     protected abstract void storeTemplates(
         @NotNull final List<T> templates, @NotNull final Map parameters);
@@ -313,6 +313,9 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param implementMarkerInterfaces whether to use marker interface or not.
      * @param jmx whether to include JMX support or not.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @param parameters the parameter map.
@@ -327,10 +330,13 @@ public abstract class BasePerTableTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable List<Row> staticContents,
         @NotNull final Map parameters)
@@ -348,6 +354,9 @@ public abstract class BasePerTableTemplateBuildHandler
                 implementMarkerInterfaces,
                 jmx,
                 jndiLocation,
+                disableGenerationTimestamps,
+                disableNotNullAnnotations,
+                disableCheckthreadAnnotations,
                 tableName,
                 staticContents);
     }
@@ -357,8 +366,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * @param tableName the table name.
      * @param metadataManager the {@link MetadataManager} instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
      */
     protected boolean isStaticTable(
         @NotNull final String tableName, @NotNull final MetadataManager metadataManager)
@@ -493,7 +500,6 @@ public abstract class BasePerTableTemplateBuildHandler
      * Builds a key for storing the static content for given table.
      * @param tableName the table name.
      * @return such key.
-     * @precondition tableName != null
      */
     @NotNull
     protected Object buildStaticContentKey(@NotNull final String tableName)

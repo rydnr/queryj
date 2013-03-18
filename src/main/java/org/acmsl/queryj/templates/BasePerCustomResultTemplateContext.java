@@ -59,6 +59,7 @@ import org.jetbrains.annotations.NotNull;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Context information required by templates customized for each {@link Result}
@@ -87,12 +88,16 @@ public class BasePerCustomResultTemplateContext
      * @param repositoryName the repository name.
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include JMX support.
+     * @param jndiLocation the JNDI location.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param result the {@link Result} instance.
      */
     public BasePerCustomResultTemplateContext(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
@@ -100,6 +105,9 @@ public class BasePerCustomResultTemplateContext
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Result result)
     {
         super(
@@ -112,7 +120,10 @@ public class BasePerCustomResultTemplateContext
             repositoryName,
             implementMarkerInterfaces,
             jmx,
-            jndiLocation);
+            jndiLocation,
+            disableGenerationTimestamps,
+            disableNotNullAnnotations,
+            disableCheckthreadAnnotations);
 
         immutableSetResult(result);
     }

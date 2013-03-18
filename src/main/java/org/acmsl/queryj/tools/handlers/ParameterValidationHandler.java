@@ -429,7 +429,7 @@ public class ParameterValidationHandler
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
      */
-    protected boolean handle(@NotNull final Map parameters, final QueryJLog log)
+    protected boolean handle(@NotNull final Map parameters, @Nullable final QueryJLog log)
         throws  QueryJBuildException
     {
         validateParameters(parameters, (log instanceof QueryJAntLog));
@@ -439,8 +439,6 @@ public class ParameterValidationHandler
 
     /**
      * Handles given parameters.
-     *
-     *
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -487,6 +485,9 @@ public class ParameterValidationHandler
             (String) parameters.get(ENCODING),
             (Boolean) parameters.get(CACHING),
             (Integer) parameters.get(THREAD_COUNT),
+            (Boolean) parameters.get(DISABLE_TIMESTAMPS),
+            (Boolean) parameters.get(DISABLE_NOTNULL_ANNOTATIONS),
+            (Boolean) parameters.get(DISABLE_CHECKTHREAD_ANNOTATIONS),
             parameters,
             usingAnt);
 
@@ -524,6 +525,11 @@ public class ParameterValidationHandler
      * @param grammarBundleName the grammar bundle name.
      * @param grammarSuffix the grammar suffix.
      * @param encoding the file encoding.
+     * @param caching whether to use template caching or not.
+     * @param threadCount the number of threads.
+     * @param disableGenerationTimestamps whether to disable timestamps in generated files.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable Checkthread.org annotations.
      * @param parameters the parameter map, to store processed information
      * such as the header contents.
      * @param usingAnt whether QueryJ is executed within Ant.
@@ -542,12 +548,12 @@ public class ParameterValidationHandler
         @Nullable final String packageName,
         @Nullable final File outputDir,
         @Nullable final File header,
-        final Boolean outputDirSubFolders,
-        final Boolean extractProcedures,
-        final Boolean extractFunctions,
+        @NotNull final Boolean outputDirSubFolders,
+        @NotNull final Boolean extractProcedures,
+        @NotNull final Boolean extractFunctions,
         @Nullable final String jndiDataSources,
-        final Boolean generateMockDAO,
-        final String customSqlModel,
+        @NotNull final Boolean generateMockDAO,
+        @NotNull final String customSqlModel,
         @Nullable final File sqlXmlFile,
         @Nullable final File grammarFolder,
         @Nullable final String grammarBundleName,
@@ -555,6 +561,9 @@ public class ParameterValidationHandler
         @Nullable final String encoding,
         final boolean caching,
         final int threadCount,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Map parameters,
         final boolean usingAnt)
       throws  QueryJBuildException

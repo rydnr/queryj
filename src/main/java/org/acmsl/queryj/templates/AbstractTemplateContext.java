@@ -117,6 +117,21 @@ public abstract class AbstractTemplateContext
     private String m__strJndiLocation;
 
     /**
+     * Whether to disable generation timestamps.
+     */
+    private boolean m__bDisableGenerationTimestamps;
+
+    /**
+     * Whether to disable NotNull annotations.
+     */
+    private boolean m__bDisableNotNullAnnotations;
+
+    /**
+     * Whether to disable checkthread.org annotations.
+     */
+    private boolean m__bDisableCheckthreadAnnotations;
+
+    /**
      * Creates an {@link AbstractTemplateContext} with given information.
      * @param metadataManager the {@link MetadataManager} instance.
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
@@ -128,18 +143,24 @@ public abstract class AbstractTemplateContext
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations.
      */
     protected AbstractTemplateContext(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
-        @NotNull final String jndiLocation)
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations)
     {
         immutableSetMetadataManager(metadataManager);
         immutableSetCustomSqlProvider(customSqlProvider);
@@ -151,6 +172,9 @@ public abstract class AbstractTemplateContext
         immutableSetImplementMarkerInterfaces(implementMarkerInterfaces);
         immutableSetJmxSupportEnabled(jmx);
         immutableSetJndiLocation(jndiLocation);
+        immutableSetDisableGenerationTimestamps(disableGenerationTimestamps);
+        immutableSetDisableNotNullAnnotations(disableNotNullAnnotations);
+        immutableSetDisableCheckthreadAnnotations(disableCheckthreadAnnotations);
     }
 
     /**
@@ -458,6 +482,96 @@ public abstract class AbstractTemplateContext
     }
 
     /**
+     * Specifies whether to disable generation timestamps or not.
+     * @param flag such setting.
+     */
+    protected final void immutableSetDisableGenerationTimestamps(final boolean flag)
+    {
+        m__bDisableGenerationTimestamps = flag;
+    }
+
+    /**
+     * Specifies whether to disable generation timestamps or not.
+     * @param flag such setting.
+     */
+    @SuppressWarnings("unused")
+    protected void setDisableGenerationTimestamps(final boolean flag)
+    {
+        immutableSetDisableGenerationTimestamps(flag);
+    }
+
+    /**
+     * Retrieves whether to use generation timestamps or not.
+     *
+     * @return such setting.
+     */
+    @Override
+    public boolean getDisableGenerationTimestamps()
+    {
+        return m__bDisableGenerationTimestamps;
+    }
+
+    /**
+     * Specifies whether to disable NotNull annotations or not.
+     * @param flag such setting.
+     */
+    protected final void immutableSetDisableNotNullAnnotations(final boolean flag)
+    {
+        m__bDisableNotNullAnnotations = flag;
+    }
+
+    /**
+     * Specifies whether to disable NotNull annotations or not.
+     * @param flag such setting.
+     */
+    @SuppressWarnings("unused")
+    protected void setDisableNotNullAnnotations(final boolean flag)
+    {
+        immutableSetDisableNotNullAnnotations(flag);
+    }
+
+    /**
+     * Retrieves whether to use NotNull annotations or not.
+     *
+     * @return such setting.
+     */
+    @Override
+    public boolean getDisableNotNullAnnotations()
+    {
+        return m__bDisableNotNullAnnotations;
+    }
+
+    /**
+     * Specifies whether to disable checkthread.org annotations or not.
+     * @param flag such setting.
+     */
+    protected final void immutableSetDisableCheckthreadAnnotations(final boolean flag)
+    {
+        m__bDisableCheckthreadAnnotations = flag;
+    }
+
+    /**
+     * Specifies whether to disable checkthread.org annotations or not.
+     * @param flag such setting.
+     */
+    @SuppressWarnings("unused")
+    protected void setDisableCheckthreadAnnotations(final boolean flag)
+    {
+        immutableSetDisableCheckthreadAnnotations(flag);
+    }
+
+    /**
+     * Retrieves whether to use checkthread.org annotations or not.
+     *
+     * @return such setting.
+     */
+    @Override
+    public boolean getDisableCheckthreadAnnotations()
+    {
+        return m__bDisableCheckthreadAnnotations;
+    }
+
+    /**
      * Concatenates given attributes.
      * @param attributes the attributes.
      * @return the CSV version of given list.
@@ -489,6 +603,8 @@ public abstract class AbstractTemplateContext
             .append(this.m__MetadataManager).append(this.m__CustomSqlProvider).append(this.m__strPackageName)
             .append(this.m__strBasePackageName).append(this.m__strRepositoryName)
             .append(this.m__bImplementMarkerInterfaces).append(this.m__bJmx).append(this.m__strJndiLocation)
+            .append(this.m__bDisableGenerationTimestamps).append(this.m__bDisableNotNullAnnotations)
+            .append(this.m__bDisableCheckthreadAnnotations)
             .toHashCode();
     }
 
@@ -504,7 +620,9 @@ public abstract class AbstractTemplateContext
             return false;
         }
         final AbstractTemplateContext other = (AbstractTemplateContext) obj;
-        return new EqualsBuilder().append(this.m__strHeader, other.m__strHeader)
+
+        return
+            new EqualsBuilder().append(this.m__strHeader, other.m__strHeader)
             .append(this.m__DecoratorFactory, other.m__DecoratorFactory)
             .append(this.m__MetadataManager, other.m__MetadataManager)
             .append(this.m__CustomSqlProvider, other.m__CustomSqlProvider)
@@ -512,6 +630,10 @@ public abstract class AbstractTemplateContext
             .append(this.m__strBasePackageName, other.m__strBasePackageName)
             .append(this.m__strRepositoryName, other.m__strRepositoryName)
             .append(this.m__bImplementMarkerInterfaces, other.m__bImplementMarkerInterfaces)
-            .append(this.m__bJmx, other.m__bJmx).append(this.m__strJndiLocation, other.m__strJndiLocation).isEquals();
+            .append(this.m__bJmx, other.m__bJmx).append(this.m__strJndiLocation, other.m__strJndiLocation)
+            .append(this.m__bDisableGenerationTimestamps, other.m__bDisableGenerationTimestamps)
+            .append(this.m__bDisableNotNullAnnotations, other.m__bDisableNotNullAnnotations)
+            .append(this.m__bDisableCheckthreadAnnotations, other.m__bDisableCheckthreadAnnotations)
+            .isEquals();
     }
 }

@@ -107,8 +107,11 @@ public class ValueObjectFactoryTemplateFactory
      * @param header the header.
      * @param implementMarkerInterfaces whether to implement marker
      * interfaces.
-     * @param jmx whether to includu JMX support.
+     * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param tableName the table name.
      * @param staticContents the table's static contents (optional).
      * @return the fresh new template.
@@ -121,10 +124,13 @@ public class ValueObjectFactoryTemplateFactory
         @NotNull final String packageName,
         @NotNull final String basePackageName,
         @NotNull final String repositoryName,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final String tableName,
         @Nullable final List<Row> staticContents)
     {
@@ -141,6 +147,9 @@ public class ValueObjectFactoryTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations,
                     tableName,
                     staticContents));
     }

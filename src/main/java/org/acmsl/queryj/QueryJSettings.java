@@ -191,4 +191,19 @@ public interface QueryJSettings
      * The thread count.
      */
     public static final String THREAD_COUNT = PREFIX + "threadCount";
+
+    /**
+     * Whether to use timestamps to indicate when the file was generated.
+     */
+    public static final String DISABLE_TIMESTAMPS = PREFIX + "timestamps";
+
+    /**
+     * Whether to use notnull annotations.
+     */
+    public static final String DISABLE_NOTNULL_ANNOTATIONS = PREFIX + "disableNotNullAnnotations";
+
+    /**
+     * Whether to use checkthread.org annotations.
+     */
+    public static final String DISABLE_CHECKTHREAD_ANNOTATIONS = PREFIX + "disableCheckthreadAnnotations";
 }

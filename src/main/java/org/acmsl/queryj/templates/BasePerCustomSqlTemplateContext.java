@@ -45,11 +45,16 @@ import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing some Apache Commons-Lang classes.
  */
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -83,12 +88,16 @@ public class BasePerCustomSqlTemplateContext
      * @param repositoryName the repository name.
      * @param implementMarkerInterfaces whether to implement marker interfaces or not.
      * @param jmx whether to include support for JMX or not.
+     * @param jndiLocation the JNDI location.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param sql the {@link Sql} instance.
      */
     public BasePerCustomSqlTemplateContext(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final String packageName,
         @NotNull final String basePackageName,
@@ -96,6 +105,9 @@ public class BasePerCustomSqlTemplateContext
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Sql sql)
     {
         super(
@@ -108,7 +120,10 @@ public class BasePerCustomSqlTemplateContext
             repositoryName,
             implementMarkerInterfaces,
             jmx,
-            jndiLocation);
+            jndiLocation,
+            disableGenerationTimestamps,
+            disableNotNullAnnotations,
+            disableCheckthreadAnnotations);
 
         immutableSetSql(sql);
     }

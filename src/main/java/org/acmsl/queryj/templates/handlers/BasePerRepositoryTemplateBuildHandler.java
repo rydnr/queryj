@@ -128,12 +128,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters, @NotNull final String projectPackage)
         throws  QueryJBuildException
     {
-        @Nullable MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
-
-        if (t_MetadataManager == null)
-        {
-            throw new QueryJBuildException("Cannot access database metadata");
-        }
+        @NotNull final MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
 
         buildTemplate(
             parameters,
@@ -179,7 +174,7 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
@@ -205,6 +200,9 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                     jmx,
                     t_lTableNames,
                     retrieveJNDILocation(parameters),
+                    retrieveDisableGenerationTimestamps(parameters),
+                    retrieveDisableNotNullAnnotations(parameters),
+                    retrieveDisableCheckthreadAnnotations(parameters),
                     parameters);
 
             if (t_Template != null)
@@ -236,6 +234,10 @@ public abstract class BasePerRepositoryTemplateBuildHandler
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to support JMX or not.
      * @param tableNames the table names.
+     * @param jndiLocation the JNDI path of the {@link javax.sql.DataSource}.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @return the template.
      * @throws QueryJBuildException on invalid input.
      */
@@ -249,11 +251,14 @@ public abstract class BasePerRepositoryTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
         @NotNull String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final Map parameters)
       throws  QueryJBuildException
     {
@@ -269,7 +274,10 @@ public abstract class BasePerRepositoryTemplateBuildHandler
                 implementMarkerInterfaces,
                 jmx,
                 tableNames,
-                jndiLocation);
+                jndiLocation,
+                disableGenerationTimestamps,
+                disableNotNullAnnotations,
+                disableCheckthreadAnnotations);
     }
 
     /**

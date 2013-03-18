@@ -94,12 +94,7 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        @Nullable MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
-
-        if (t_MetadataManager == null)
-        {
-            throw new QueryJBuildException("Error accessing database metadata");
-        }
+        @NotNull MetadataManager t_MetadataManager = retrieveMetadataManager(parameters);
 
         buildTemplates(
             parameters,
@@ -136,6 +131,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
             retrieveImplementMarkerInterfaces(parameters),
             retrieveJmx(parameters),
             retrieveJNDILocation(parameters),
+            retrieveDisableGenerationTimestamps(parameters),
+            retrieveDisableNotNullAnnotations(parameters),
+            retrieveDisableCheckthreadAnnotations(parameters),
             retrieveForeignKeys(
                 parameters, metadataManager),
             CachingDecoratorFactory.getInstance());
@@ -160,6 +158,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
      * @param implementMarkerInterfaces whether to implement marker interfaces.
      * @param jmx whether to include JMX support.
      * @param jndiLocation the JNDI location.
+     * @param disableGenerationTimestamps whether to disable generation timestamps.
+     * @param disableNotNullAnnotations whether to disable NotNull annotations.
+     * @param disableCheckthreadAnnotations whether to disable checkthread.org annotations or not.
      * @param foreignKeys the foreign keys.
      * @param decoratorFactory the {@link DecoratorFactory} instance.
      * @throws QueryJBuildException if the build process cannot be performed.
@@ -171,10 +172,13 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
         @NotNull final TF templateFactory,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations,
         @NotNull final List<ForeignKey> foreignKeys,
         @NotNull final DecoratorFactory decoratorFactory)
       throws  QueryJBuildException
@@ -201,6 +205,9 @@ public abstract class BasePerForeignKeyTemplateBuildHandler
                         implementMarkerInterfaces,
                         jmx,
                         jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations,
                         t_ForeignKey));
             }
         }
