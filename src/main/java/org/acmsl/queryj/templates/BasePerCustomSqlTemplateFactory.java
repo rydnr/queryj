@@ -37,14 +37,19 @@ package org.acmsl.queryj.templates;
  * Importing some project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.SqlElement;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.MetadataManager;
 
 /*
  * Importing some ACM-SL Commons classes.
  */
 import org.acmsl.commons.patterns.Factory;
+
+/*
+ * Importing some JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents entities able to create per-<i>custom sql</i> templates.
@@ -67,13 +72,13 @@ public interface BasePerCustomSqlTemplateFactory<T extends BasePerCustomSqlTempl
      */
     @NotNull
     public T createTemplate(
-        final SqlElement sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager,
-        final String packageName,
-        final String engineName,
-        final String engineVersion,
-        final String basePackageName,
-        final String repositoryName,
-        final String header);
+        @NotNull final Sql sql,
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final String packageName,
+        @NotNull final String engineName,
+        @Nullable final String engineVersion,
+        @NotNull final String basePackageName,
+        @NotNull final String repositoryName,
+        @Nullable final String header);
 }

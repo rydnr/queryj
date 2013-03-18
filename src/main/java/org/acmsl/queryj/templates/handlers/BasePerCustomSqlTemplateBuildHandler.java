@@ -88,7 +88,6 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
@@ -142,15 +141,12 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param engineVersion the engine version.
      * @param quote the quote character.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition quote != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote)
+        @NotNull final String engineName,
+        @Nullable final String engineVersion,
+        @NotNull final String quote)
       throws  QueryJBuildException
     {
         buildTemplates(
@@ -171,16 +167,13 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @param customSqlProvider the custom SQL provider.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
      */
     protected void buildTemplates(
         @NotNull final Map parameters,
-        final String engineName,
-        final String engineVersion,
-        final String quote,
-        final MetadataManager metadataManager,
+        @NotNull final String engineName,
+        @Nullable final String engineVersion,
+        @NotNull final String quote,
+        @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider)
       throws  QueryJBuildException
     {
@@ -220,19 +213,12 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param sqlElements the custom SQL elements.
      * @param header the header.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
-     * @precondition engineName != null
-     * @precondition metadataManager != null
-     * @precondition customSqlProvider != null
-     * @precondition templateFactory != null
-     * @precondition projectPackage != null
-     * @precondition repository != null
-     * @precondition sqlElements != null
      */
+    @SuppressWarnings("unused")
     protected void buildTemplates(
         @NotNull final Map parameters,
         @NotNull final String engineName,
-        @NotNull final String engineVersion,
+        @Nullable final String engineVersion,
         @NotNull final String quote,
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
@@ -240,7 +226,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
         @NotNull final String projectPackage,
         @NotNull final String repository,
         @NotNull final List<Sql> sqlElements,
-        @NotNull final String header)
+        @Nullable final String header)
       throws  QueryJBuildException
     {
         @NotNull List<BasePerCustomSqlTemplate> t_lTemplates =
@@ -250,17 +236,20 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
 
         for (@Nullable Sql t_Sql : sqlElements)
         {
-            t_lTemplates.add(
-                templateFactory.createTemplate(
-                    t_SqlElement,
-                    customSqlProvider,
-                    metadataManager,
-                    retrievePackage(t_SqlElement, engineName, parameters),
-                    engineName,
-                    engineVersion,
-                    projectPackage,
-                    repository,
-                    header));
+            if (t_Sql != null)
+            {
+                t_lTemplates.add(
+                    templateFactory.createTemplate(
+                        t_Sql,
+                        customSqlProvider,
+                        metadataManager,
+                        retrievePackage(t_Sql, engineName, parameters),
+                        engineName,
+                        engineVersion,
+                        projectPackage,
+                        repository,
+                        header));
+            }
         }
 
         storeTemplates(t_lTemplates, parameters);
@@ -272,13 +261,11 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param engineName the engine name.
      * @param parameters the parameter map.
      * @return the package name.
-     * @precondition customSql != null
-     * @precondition parameters != null
      */
     @NotNull
     protected String retrievePackage(
-        final SqlElement customSql,
-        final String engineName,
+        @NotNull final Sql customSql,
+        @NotNull final String engineName,
         @NotNull final Map parameters)
     {
         return
@@ -299,7 +286,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      */
     @NotNull
     protected abstract String retrievePackage(
-        @NotNull final SqlElement customSql,
+        @NotNull final Sql customSql,
         @NotNull final String engineName,
         @NotNull final String projectPackage,
         @NotNull final PackageUtils packageUtils);
@@ -343,6 +330,7 @@ public abstract class BasePerCustomSqlTemplateBuildHandler
      * @param metadataManager the database metadata manager.
      * @return such foreign keys.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected List<Sql> retrieveCustomSqlElements(
         @NotNull final SqlDAO sqlDAO,

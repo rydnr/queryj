@@ -391,6 +391,21 @@ public class ParameterValidationHandler
     public static final String ILLEGAL_THREAD_COUNT = "Invalid thread count";
 
     /**
+     * Whether to disable generation timestamps or not.
+     */
+    public static final String DISABLE_TIMESTAMPS = "timestamps";
+
+    /**
+     * Whether to disable NotNull annotations or not.
+     */
+    public static final String DISABLE_NOTNULL_ANNOTATIONS = "notNullAnnotations";
+
+    /**
+     * Whether to disable checkthread.org annotations or not.
+     */
+    public static final String DISABLE_CHECKTHREAD_ANNOTATIONS = "checkthreadAnnotations";
+
+    /**
      * Creates a {@link ParameterValidationHandler} instance.
      */
     public ParameterValidationHandler() {}
@@ -400,7 +415,6 @@ public class ParameterValidationHandler
      * @param command the command to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition command != null
      */
     public boolean handle(@NotNull final QueryJCommand command)
         throws  QueryJBuildException
@@ -414,7 +428,6 @@ public class ParameterValidationHandler
      * @param log the log.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters, final QueryJLog log)
         throws  QueryJBuildException
@@ -431,7 +444,6 @@ public class ParameterValidationHandler
      * @param parameters the parameters to handle.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
@@ -446,7 +458,6 @@ public class ParameterValidationHandler
      * @param parameters the parameter map.
      * @param usingAnt whether QueryJ is executed within Ant.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     public void validateParameters(
         @NotNull final Map parameters, final boolean usingAnt)

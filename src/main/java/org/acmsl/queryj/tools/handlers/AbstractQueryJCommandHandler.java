@@ -215,7 +215,7 @@ public abstract class AbstractQueryJCommandHandler
      * @param parameters the parameter map.
      * @return the manager.
      */
-    @Nullable
+    @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final Map parameters)
     {
         return
@@ -465,7 +465,7 @@ public abstract class AbstractQueryJCommandHandler
 
         if (result == null)
         {
-            @NotNull String encoding =
+            @Nullable String encoding =
                 (String) parameters.get(ParameterValidationHandler.ENCODING);
 
             if (encoding == null)
@@ -563,6 +563,66 @@ public abstract class AbstractQueryJCommandHandler
     protected int retrieveThreadCount(@NotNull final Map parameters)
     {
         return (Integer) parameters.get(ParameterValidationHandler.THREAD_COUNT);
+    }
+
+    /**
+     * Retrieves whether to disable generation timestamps or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     */
+    protected boolean retrieveDisableGenerationTimestamps(@NotNull final Map parameters)
+    {
+        Boolean result =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.DISABLE_TIMESTAMPS);
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether to disable NotNull annotations or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     */
+    protected boolean retrieveDisableNotNullAnnotations(@NotNull final Map parameters)
+    {
+        Boolean result =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.DISABLE_NOTNULL_ANNOTATIONS);
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
+    }
+
+    /**
+     * Retrieves whether to disable checkthread.org annotations or not.
+     * @param parameters the parameter map.
+     * @return such condition.
+     */
+    protected boolean retrieveDisableCheckthreadAnnotations(@NotNull final Map parameters)
+    {
+        Boolean result =
+            (Boolean)
+                parameters.get(
+                    ParameterValidationHandler.DISABLE_CHECKTHREAD_ANNOTATIONS);
+
+        if  (result == null)
+        {
+            result = Boolean.FALSE;
+        }
+
+        return result;
     }
 
     /**
