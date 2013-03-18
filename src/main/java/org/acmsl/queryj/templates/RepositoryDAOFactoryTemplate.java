@@ -117,7 +117,7 @@ public class RepositoryDAOFactoryTemplate
     protected void fillParameters(
         @NotNull final Map input,
         @NotNull final StringTemplate template,
-        @NotNull final String header,
+        @Nullable final String header,
         @NotNull final MetadataManager metadataManager,
         @NotNull final MetadataTypeManager metadataTypeManager,
         @NotNull final CustomSqlProvider customSqlProvider,

@@ -37,23 +37,25 @@ package org.acmsl.queryj.templates;
  * Importing some project-specific classes.
  */
 
-import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 /*
  * Importing some ACM-SL classes.
  */
+import org.acmsl.commons.patterns.Singleton;
+
 /*
  * Importing some JetBrains annotations.
  */
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /*
  * Importing some JDK classes.
  */
+import java.util.List;
 
 /*
  * Importing checkthread.org annotations.
@@ -79,6 +81,7 @@ public class TableRepositoryTemplateFactory
          */
         public static final TableRepositoryTemplateFactory SINGLETON = new TableRepositoryTemplateFactory();
     }
+
     /**
      * Retrieves the singleton instance.
      * @return such instance.
@@ -100,11 +103,14 @@ public class TableRepositoryTemplateFactory
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final List<String> tableNames,
-        @NotNull final String jndiLocation)
+        @NotNull final String jndiLocation,
+        final boolean disableGenerationTimestamps,
+        final boolean disableNotNullAnnotations,
+        final boolean disableCheckthreadAnnotations)
     {
         return
             new TableRepositoryTemplate(
@@ -119,6 +125,9 @@ public class TableRepositoryTemplateFactory
                     implementMarkerInterfaces,
                     jmx,
                     tableNames,
-                    jndiLocation));
+                    jndiLocation,
+                    disableGenerationTimestamps,
+                    disableNotNullAnnotations,
+                    disableCheckthreadAnnotations));
     }
 }

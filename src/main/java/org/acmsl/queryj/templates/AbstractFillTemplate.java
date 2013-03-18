@@ -46,6 +46,7 @@ import org.acmsl.queryj.QueryJCommand;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Tunes the template generation process to use a chain-of-responsibility approach.
@@ -77,7 +78,7 @@ public abstract class AbstractFillTemplate<C extends TemplateContext>
     @NotNull
     @Override
     protected String generateOutput(
-        @NotNull final String header, @NotNull final C context, final boolean relevantOnly)
+        @Nullable final String header, @NotNull final C context, final boolean relevantOnly)
         throws InvalidTemplateException
     {
         String result = "";

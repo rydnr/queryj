@@ -58,6 +58,7 @@ import java.util.Map;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing checkthread.org annotations.
@@ -102,8 +103,6 @@ public class RepositoryDAOFactoryTemplateBuildHandler
      * Stores the template in given attribute map.
      * @param template the template.
      * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
      */
     @Override
     @SuppressWarnings("unchecked")
@@ -130,7 +129,7 @@ public class RepositoryDAOFactoryTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,

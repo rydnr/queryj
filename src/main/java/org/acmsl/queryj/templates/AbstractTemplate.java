@@ -102,7 +102,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                  */
                 public void warning(@Nullable final String message)
                 {
-                    Log t_Log =
+                    @Nullable Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplate.class);
 
                     if  (t_Log != null)
@@ -118,7 +118,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                  */
                 public void error(@Nullable final String message, @NotNull final Throwable cause)
                 {
-                    Log t_Log =
+                    @Nullable Log t_Log =
                         UniqueLogFactory.getLog(AbstractTemplate.class);
 
                     if  (t_Log != null)
@@ -208,7 +208,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the cached processed header.
      * @param header such value.
      */
-    protected final void immutableSetCachedProcessedHeader(@NotNull final String header)
+    protected final void immutableSetCachedProcessedHeader(@Nullable final String header)
     {
         m__strCachedProcessedHeader = header;
     }
@@ -217,7 +217,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Specifies the cached processed header.
      * @param header such value.
      */
-    protected void setCachedProcessedHeader(@NotNull final String header)
+    protected void setCachedProcessedHeader(@Nullable final String header)
     {
         immutableSetCachedProcessedHeader(header);
     }
@@ -473,9 +473,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Logs a custom header.
      * @param header the header.
      */
-    protected void logHeader(@NotNull final String header)
+    protected void logHeader(@Nullable final String header)
     {
-        Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+        @Nullable Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
         
         if  (t_Log != null)
         {
@@ -531,7 +531,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         if (t_FinalizingThread.isNew())
         {
-            Runtime t_Runtime = Runtime.getRuntime();
+            @Nullable Runtime t_Runtime = Runtime.getRuntime();
 
             if  (t_Runtime != null)
             {
@@ -550,7 +550,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
-        Runtime t_Runtime = Runtime.getRuntime();
+        @Nullable Runtime t_Runtime = Runtime.getRuntime();
 
         if  (t_Runtime != null)
         {
@@ -606,22 +606,21 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         // org.antlr.stringtemplate.language.ChunkToken
         // can happen if ANTLR gets loaded by a ClassLoader
         // with no reference to StringTemplate classes.
-        Log t_Log =
+        @Nullable Log t_Log =
             UniqueLogFactory.getLog(AbstractTemplate.class);
 
-        ClassLoaderUtils t_ClassLoaderUtils =
+        @NotNull ClassLoaderUtils t_ClassLoaderUtils =
             ClassLoaderUtils.getInstance();
 
-        if  (   (t_Log != null)
-             && (t_ClassLoaderUtils != null))
+        if  (t_Log != null)
         {
             @NotNull StringBuilder t_sbMessage = new StringBuilder();
 
-            String t_strAntlrLocation =
+            @Nullable String t_strAntlrLocation =
                 t_ClassLoaderUtils.findLocation(
                     ANTLRParser.class);
 
-            String t_strStringTemplateLocation =
+            @Nullable String t_strStringTemplateLocation =
                 t_ClassLoaderUtils.findLocation(
                     StringTemplate.class);
 
@@ -803,7 +802,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         {
             try
             {
-                Map placeHolders = buildFillTemplateChain(context, relevantOnly).providePlaceholders();
+                @NotNull Map placeHolders = buildFillTemplateChain(context, relevantOnly).providePlaceholders();
                 t_Template.setAttributes(placeHolders);
             }
             catch (@NotNull final QueryJBuildException invalidTemplate)

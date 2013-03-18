@@ -92,6 +92,13 @@ public class HeaderHandler
     @NotNull
     protected DecoratedString getValue(@NotNull final TemplateContext context)
     {
-        return new DecoratedString(context.getHeader());
+        String header = context.getHeader();
+
+        if (header == null)
+        {
+            header = "";
+        }
+
+        return new DecoratedString(header);
     }
 }

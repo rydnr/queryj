@@ -51,6 +51,7 @@ import org.acmsl.queryj.tools.PackageUtils;
  * Importing some JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing some JDK classes.
@@ -63,6 +64,7 @@ import java.util.Map;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+
 
 /**
  * Builds a repository DAO if requested.
@@ -95,7 +97,7 @@ public class RepositoryDAOTemplateBuildHandler
         @NotNull final String packageName,
         @NotNull final String projectPackage,
         @NotNull final String repository,
-        @NotNull final String header,
+        @Nullable final String header,
         final boolean implementMarkerInterfaces,
         final boolean jmx,
         @NotNull final String jndiLocation,
@@ -130,8 +132,6 @@ public class RepositoryDAOTemplateBuildHandler
      * @param projectPackage the project package.
      * @param packageUtils the <code>PackageUtils</code> instance.
      * @return the package name.
-     * @precondition projectPackage != null
-     * @precondition packageUtils != null
      */
     @NotNull
     protected String retrievePackage(
@@ -148,8 +148,6 @@ public class RepositoryDAOTemplateBuildHandler
      * Stores the template in given attribute map.
      * @param template the template.
      * @param parameters the parameter map.
-     * @precondition template != null
-     * @precondition parameters != null
      */
     @SuppressWarnings("unchecked")
     protected void storeTemplate(
