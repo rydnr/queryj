@@ -53,6 +53,7 @@ import org.jetbrains.annotations.NotNull;
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
  * @since 2012/06/03
  */
+@SuppressWarnings("unused")
 public abstract class TemplateFillChain<C extends TemplateContext>
     extends AbstractQueryJChain
 {
@@ -65,6 +66,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
      * Creates a {@link TemplateFillChain} with given context.
      * @param context the {@link TemplateContext context}.
      */
+    @SuppressWarnings("unused")
     public TemplateFillChain(@NotNull final C context)
     {
         immutableSetTemplateContext(context);
@@ -107,7 +109,7 @@ public abstract class TemplateFillChain<C extends TemplateContext>
      */
     @Override
     @NotNull
-    protected Chain buildChain(final Chain chain)
+    protected Chain buildChain(@NotNull final Chain chain)
     {
         @NotNull final Chain result = chain;
 

@@ -103,7 +103,7 @@ public abstract class AbstractQueryJChain
 
     /**
      * Requests the chained logic to be performed.
-     * @throws org.acmsl.queryj.tools.QueryJBuildException whenever the required
+     * @throws QueryJBuildException whenever the required
      * parameters are not present or valid.
      */
     public void process()
@@ -135,15 +135,14 @@ public abstract class AbstractQueryJChain
      * @return the initialized command.
      */
     @NotNull
-    protected abstract QueryJCommand buildCommand(final QueryJCommand command);
+    protected abstract QueryJCommand buildCommand(@NotNull final QueryJCommand command);
 
     /**
      * Retrieves the link of the chain just after the one given command
-     * handlar takes.
+     * handler takes.
      * @param chain the concrete chain.
      * @param commandHandler the handler just before the desired link.
-     * @return the next hanlder in the chain.
-     * @precondition chain != null
+     * @return the next handler in the chain.
      */
     @Nullable
     public QueryJCommandHandler getNextChainLink(
@@ -188,7 +187,7 @@ public abstract class AbstractQueryJChain
     {
         boolean result = false;
 
-        final QueryJLog t_Log = command.getLog();
+        @Nullable final QueryJLog t_Log = command.getLog();
 
         boolean t_bLoggingEnabled = (t_Log != null);
 
@@ -225,12 +224,12 @@ public abstract class AbstractQueryJChain
         {
             cleanUpOnError(buildException, command);
 
-	    if (t_bLoggingEnabled)
-	    {
-		t_Log.error(
-		    "QueryJ could not generate sources correctly.",
-		    buildException);
-	    }
+            if (t_bLoggingEnabled)
+            {
+                t_Log.error(
+                    "QueryJ could not generate sources correctly.",
+                    buildException);
+	        }
 
             throw buildException;
         }
@@ -244,6 +243,6 @@ public abstract class AbstractQueryJChain
      * @param command the command.
      */
     protected abstract void cleanUpOnError(
-        final QueryJBuildException buildException,
-        final QueryJCommand command);
+        @NotNull final QueryJBuildException buildException,
+        @NotNull final QueryJCommand command);
 }

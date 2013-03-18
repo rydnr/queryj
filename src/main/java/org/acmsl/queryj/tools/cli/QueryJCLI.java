@@ -51,6 +51,10 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+
+/*
+ * Importing JetBrains annotations,
+ */
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -71,7 +75,7 @@ public final class QueryJCLI
      * Executes <b>QueryJ</b> from the command line.
      * @param args the command-line arguments.
      */
-    public static void main(final String[] args)
+    public static void main(@NotNull final String[] args)
     {
         executeQueryJ(args, QueryJCLIHelper.getInstance());
     }
@@ -80,7 +84,6 @@ public final class QueryJCLI
      * Executes <b>QueryJ</b> from the command line.
      * @param args the command-line arguments.
      * @param helper the <code>QueryJCLIHelper</code> instance.
-     * @precondition helper != null
      */
     protected static void executeQueryJ(
         final String[] args, @NotNull final QueryJCLIHelper helper)
@@ -111,27 +114,19 @@ public final class QueryJCLI
      * @param helpOption the option specifying the help.
      * @param helpLongOption the long option specifying the help.
      * @param helper the <code>QueryJCLIHelper</code> instance.
-     * @precondition configurationOption != null
-     * @precondition configurationLongOption != null
-     * @precondition customSqlOption != null
-     * @precondition customSqlLongOption != null
-     * @precondition verbosityOptions != null
-     * @precondition helpOption != null
-     * @precondition helpLongOption != null
-     * @precondition helper != null
      */
     protected static void executeQueryJ(
-        final String[] args,
-        final Option configurationOption,
-        final Option configurationLongOption,
-        final Option customSqlOption,
-        final Option customSqlLongOption,
-        final Option[] verbosityOptions,
-        final Option helpOption,
-        final Option helpLongOption,
+        @NotNull final String[] args,
+        @NotNull final Option configurationOption,
+        @NotNull final Option configurationLongOption,
+        @NotNull final Option customSqlOption,
+        @NotNull final Option customSqlLongOption,
+        @NotNull final Option[] verbosityOptions,
+        @NotNull final Option helpOption,
+        @NotNull final Option helpLongOption,
         @NotNull final QueryJCLIHelper helper)
     {
-        @Nullable Options t_Options = null;
+        @Nullable Options t_Options;
 
         @Nullable CommandLine t_CommandLine = null;
 
@@ -249,15 +244,13 @@ public final class QueryJCLI
      * Executes QueryJ using given options.
      * @param configurationSettings the configuration settings.
      * @param logThreshold the log threshold.
-     * @param customSqlFileName the name of the custom SQL file.
      * @throws QueryJBuildException if QueryJ fails.
-     * @precondition configurationFileName != null
-     * @precondition customSqlFileName != null
      */
+    @SuppressWarnings("unused")
     protected static void executeQueryJ(
         final Properties configurationSettings,
         final int logThreshold,
-        final String customSqlFileName)
+        @NotNull final String customSqlFule)
       throws  QueryJBuildException
     {
         new CLIQueryJChain(configurationSettings, logThreshold).process();
@@ -301,6 +294,7 @@ public final class QueryJCLI
          * Specifies the log threshold.
          * @param threshold such threshold.
          */
+        @SuppressWarnings("unused")
         protected void setLogThreshold(final int threshold)
         {
             immutableSetLogThreshold(threshold);
@@ -333,8 +327,7 @@ public final class QueryJCLI
     /**
      * Retrieves the log threshold.
      * @param commandLine the command line.
-     * @returh such threshold.
-     * @precondition commandLine != null
+     * @return such threshold.
      */
     protected static int retrieveLogThreshold(@NotNull final CommandLine commandLine)
     {
@@ -375,7 +368,6 @@ public final class QueryJCLI
      * Checks whether the user has requested the help message.
      * @param commandLine the command line.
      * @return <code>true</code> in such case.
-     * @precondition commandLine != null
      */
     protected static boolean requestsHelp(@NotNull final CommandLine commandLine)
     {

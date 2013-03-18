@@ -49,7 +49,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 /*
- * Importing some JDK clases.
+ * Importing some JDK classes.
  */
 import java.util.Locale;
 
@@ -78,7 +78,7 @@ public class DecoratedString
      * @param value the value.
      */
     @SuppressWarnings("unused")
-    public DecoratedString(@NotNull final String value)
+    public DecoratedString(final String value)
     {
         immutableSetValue(value);
     }

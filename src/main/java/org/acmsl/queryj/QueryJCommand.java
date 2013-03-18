@@ -186,7 +186,6 @@ public class QueryJCommand
      * Retrieves if a concrete attribute exists.
      * @param name the attribute name.
      * @return <code>true</code> if the attribute is already defined.
-     * @precondition name != null
      */
     public boolean contains(@NotNull final String name)
     {

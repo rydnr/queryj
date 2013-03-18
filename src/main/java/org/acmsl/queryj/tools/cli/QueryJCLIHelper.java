@@ -255,17 +255,13 @@ public class QueryJCLIHelper
      * @param verbosityOptions the options specifying the verbosity.
      * @param helpOption the option specifying the help.
      * @return the <code>Options</code> instance.
-     * @precondition configurationOption != null
-     * @precondition customSqlOption != null
-     * @precondition verbosityOptions != null
-     * @precondition helpOption != null
      */
     @NotNull
     public Options createOptions(
-        final Option configurationOption,
-        final Option customSqlOption,
-        final Option[] verbosityOptions,
-        final Option helpOption)
+        @NotNull final Option configurationOption,
+        @NotNull final Option customSqlOption,
+        @NotNull final Option[] verbosityOptions,
+        @NotNull final Option helpOption)
     {
         @NotNull Options result = new Options();
 
@@ -288,18 +284,13 @@ public class QueryJCLIHelper
      * @param customSqlOption the option specifying the custom SQL file.
      * @param verbosityOptions the options specifying the verbosity.
      * @param helpOption the option specifying the help.
-     * @precondition options != null
-     * @precondition configurationOption != null
-     * @precondition customSqlOption != null
-     * @precondition verbosityOptions != null
-     * @precondition helpOption != null
      */
     protected void addOptions(
         @NotNull final Options options,
-        final Option configurationOption,
-        final Option customSqlOption,
+        @NotNull final Option configurationOption,
+        @NotNull final Option customSqlOption,
         @Nullable final Option[] verbosityOptions,
-        final Option helpOption)
+        @NotNull final Option helpOption)
     {
         options.addOption(configurationOption);
         options.addOption(customSqlOption);
@@ -319,8 +310,6 @@ public class QueryJCLIHelper
      * Prints an error message.
      * @param message the message.
      * @param printStream where to print the message to.
-     * @precondition message != null
-     * @precondition printStream != null
      */
     public void printError(final String message, @NotNull final PrintStream printStream)
     {
@@ -331,9 +320,8 @@ public class QueryJCLIHelper
      * Prints the <i>Usage</i> message.
      * @param options the command-line options.
      * @param printStream where to print the message to.
-     * @precondition options != null
-     * @precondition printStream != null
      */
+    @SuppressWarnings("unused")
     public void printUsage(
         final Options options, final PrintStream printStream)
     {
@@ -353,15 +341,8 @@ public class QueryJCLIHelper
      * @param helpOption the option specifying the help.
      * @param helpLongOption the long option specifying the help.
      * @param printStream where to print the message to.
-     * @precondition configurationOption != null
-     * @precondition configurationLongOption != null
-     * @precondition customSqlOption != null
-     * @precondition customSqlLongOption != null
-     * @precondition verbosityOptions != null
-     * @precondition helpOption != null
-     * @precondition helpLongOption != null
-     * @precondition printStream != null
      */
+    @SuppressWarnings("unused")
     public void printUsage(
         final Option configurationOption,
         final Option configurationLongOption,
@@ -485,11 +466,10 @@ public class QueryJCLIHelper
      * @param log whether to log errors or not.
      * @return the <code>Properties</code> instance with the configuration
      * settings.
-     * @precondition stream != null
      */
     @Nullable
     public Properties readConfigurationSettings(
-        final InputStream stream, final boolean log)
+        @NotNull final InputStream stream, final boolean log)
     {
         @Nullable Properties result = new Properties();
 
