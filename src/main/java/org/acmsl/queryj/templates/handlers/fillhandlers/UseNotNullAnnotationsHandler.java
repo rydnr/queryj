@@ -70,14 +70,14 @@ public class UseNotNullAnnotationsHandler
     }
 
     /**
-     * Returns "notnull?".
+     * Returns "notnull_annotations_enabled".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "notnull?";
+        return "notnull_annotations_enabled";
     }
 
     /**
