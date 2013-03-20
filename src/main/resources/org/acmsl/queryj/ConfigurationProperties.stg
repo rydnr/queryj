@@ -134,7 +134,9 @@ header(years,description,timestamp) ::= <<
 #
 #  <"$">Id: $
 #
+<if(generation_timestamps_enabled)>
 #  Generation timestamp: <timestamp>
+<endif>
 #
 >>
 

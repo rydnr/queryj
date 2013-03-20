@@ -63,7 +63,9 @@ source() ::= <<
   ],
   timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/DAOFactory.stg
+<if(generation_timestamps_enabled)>
+// Generated using org/acmsl/queryj/dao/DAOFactory.stg at <timestamp>
+<endif>
 
 <package_declaration(
   packageNames=
@@ -164,7 +166,7 @@ class(table) ::= <<
         className=dao_implementation_class_name,
         engineName=engine_name)
     ]:{ line |<line>}; separator="\n * ">
-<class_common_javadoc()>
+<class_common_javadoc(template="org/acmsl/queryj/dao/DAOFactory.stg")>
  */
 <class_annotations()>
 public class <engine_name><table.voName>DAOFactory

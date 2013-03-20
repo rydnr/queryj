@@ -61,7 +61,9 @@ source() ::= <<
   ],
   timestamp=timestamp)>
 <endif>
+<if(generation_timestamps_enabled)>
 // Generated using org/acmsl/queryj/dao/FkStatementSetter.stg at <timestamp>
+<endif>
 
 <package_declaration(
   packageNames=

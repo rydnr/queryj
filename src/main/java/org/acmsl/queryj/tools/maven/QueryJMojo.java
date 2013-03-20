@@ -252,7 +252,7 @@ public class QueryJMojo
 
     /**
      * Whether to generate file timestamps.
-     * @parameter property="disableTimestamps"
+     * @parameter property="disableGenerationTimestamps"
      */
     private Boolean m__bDisableGenerationTimestamps;
 
@@ -1547,7 +1547,7 @@ public class QueryJMojo
      * Specifies whether to use generation timestamps.
      * @param flag the choice.
      */
-    protected void setDisableGenerationTimestamps(@NotNull final Boolean flag)
+    public void setDisableGenerationTimestamps(@NotNull final Boolean flag)
     {
         immutableSetDisableGenerationTimestamps(flag);
     }
@@ -1599,7 +1599,7 @@ public class QueryJMojo
      * Specifies whether to use NotNull annotations in the generated code.
      * @param flag such choice.
      */
-    protected void setDisableNotNullAnnotations(@NotNull final Boolean flag)
+    public void setDisableNotNullAnnotations(@NotNull final Boolean flag)
     {
         immutableSetDisableNotNullAnnotations(flag);
     }
@@ -1651,7 +1651,7 @@ public class QueryJMojo
      * Specifies whether to use Checkthread.org annotations in the generated code.
      * @param flag such choice.
      */
-    protected void setDisableCheckthreadAnnotations(@NotNull final Boolean flag)
+    public void setDisableCheckthreadAnnotations(@NotNull final Boolean flag)
     {
         immutableSetDisableCheckthreadAnnotations(flag);
     }

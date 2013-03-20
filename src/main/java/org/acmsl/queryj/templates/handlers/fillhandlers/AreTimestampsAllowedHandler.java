@@ -70,14 +70,14 @@ public class AreTimestampsAllowedHandler
     }
 
     /**
-     * Returns "timestamps?".
+     * Returns "generation_timestamps_enabled".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "timestamps?";
+        return "generation_timestamps_enabled";
     }
 
     /**
@@ -89,6 +89,8 @@ public class AreTimestampsAllowedHandler
     @Override
     protected Boolean getValue(@NotNull final TemplateContext context)
     {
-        return !context.getDisableGenerationTimestamps();
+        Boolean result = !context.getDisableGenerationTimestamps();
+
+        return result;
     }
 }

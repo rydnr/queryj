@@ -56,7 +56,9 @@ source() ::= <<
     ],
     timestamp=timestamp)>
 <endif>
+<if(generation_timestamps_enabled)>
 // Generated using org/acmsl/queryj/DataAccessManager.stg at <timestamp>
+<endif>
 
 <package_declaration(
   packageNames=
