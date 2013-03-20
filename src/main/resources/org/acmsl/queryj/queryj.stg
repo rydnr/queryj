@@ -93,7 +93,7 @@ java_header(years,description,timestamp) ::= <<
  *
  * Last modified by: (Your name)
  *
-<if(timestamps?)>
+<if(generation_timestamps_enabled)>
  * Generation timestamp: <timestamp>
 <endif>
  */
@@ -118,7 +118,7 @@ import checkers.nullness.quals.Nullable;
 
 class_common_javadoc(template) ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\> <if(template)>(<template>)<endif>
-<if(timestamps?)>
+<if(generation_timestamps_enabled)>
  * @since <timestamp>
 <endif>
 >>
@@ -1334,11 +1334,11 @@ primitive_to_Object_value(value) ::= <<
 >>
 
 notnull() ::= <<
-<if(notnull?)>@NotNull<endif>
+<if(notnull_annotations_enabled)>@NotNull<endif>
 >>
 
 nullable() ::= <<
-<if(notnull?)>@Nullable<endif>
+<if(notnull_annotations_enabled)>@Nullable<endif>
 >>
 
 type_checker(attribute) ::= <<
@@ -1356,7 +1356,7 @@ import <type>;
 >>
 
 class_annotations() ::= <<
-<if(checkthread?)>@org.checkthread.annotations.ThreadSafe<endif>
+<if(checkthread_annotations_enabled)>@org.checkthread.annotations.ThreadSafe<endif>
 >>
 
 custom_select_return(table, result) ::= <<
