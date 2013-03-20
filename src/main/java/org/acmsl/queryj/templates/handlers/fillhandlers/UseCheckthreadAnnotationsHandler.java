@@ -70,14 +70,14 @@ public class UseCheckthreadAnnotationsHandler
     }
 
     /**
-     * Returns "checkthread?".
+     * Returns "checkthread_annotations_enabled".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "checkthread?";
+        return "checkthread_annotations_enabled";
     }
 
     /**
