@@ -94,7 +94,7 @@ public abstract class AbstractQueryJCommandHandler
         {
             @NotNull QueryJCommand t_Command = (QueryJCommand) command;
             
-            Log t_OtherLog =
+            @Nullable final Log t_OtherLog =
                 UniqueLogFactory.getLog(
                     AbstractQueryJCommandHandler.class);
 
@@ -109,7 +109,7 @@ public abstract class AbstractQueryJCommandHandler
             }
             catch  (@NotNull final QueryJBuildException buildException)
             {
-                Log t_Log =
+                @Nullable final Log t_Log =
                     UniqueLogFactory.getLog(
                         AbstractQueryJCommandHandler.class);
 

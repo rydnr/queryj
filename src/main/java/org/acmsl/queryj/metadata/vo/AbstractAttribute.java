@@ -223,11 +223,11 @@ public abstract class AbstractAttribute
      * @param booleanNull the symbol for <code>null</code> values in boolean attributes.
      */
     protected AbstractAttribute(
-        @Nullable final String name,
+        @NotNull final String name,
         final int typeId,
-        @Nullable final String type,
-        @Nullable final String tableName,
-        @Nullable final String comment,
+        @NotNull final String type,
+        @NotNull final String tableName,
+        @NotNull final String comment,
         final int ordinalPosition,
         final int length,
         final int precision,

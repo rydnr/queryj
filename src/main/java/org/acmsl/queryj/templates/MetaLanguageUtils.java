@@ -140,13 +140,12 @@ public class MetaLanguageUtils
     }
 
     /**
-    * Retrieves the attribute used to identify table content's
-    * staticly.
+    * Retrieves the attribute used to identify table content.
     * @param tableComment the table's comment.
     * @return such attribute.
     */
     @Nullable
-    public String retrieveStaticAttribute(@NotNull final String tableComment)
+    public String retrieveStaticAttribute(@Nullable final String tableComment)
     {
         @Nullable String result = null;
 
@@ -154,15 +153,16 @@ public class MetaLanguageUtils
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(tableComment);
+                assert tableComment != null;
+                @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
                 t_Parser.tableComment();
 
                 result = t_Parser.getTableStatic();
             }
-            catch  (final RecognitionException recognitionException)
+            catch  (@NotNull final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -185,21 +185,21 @@ public class MetaLanguageUtils
     @Nullable
     public String retrieveDeclaredParent(@NotNull final String tableComment)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (!isEmpty(tableComment))
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(tableComment);
+                @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
                 t_Parser.tableComment();
 
                 result = t_Parser.getTableIsa();
             }
-            catch  (final RecognitionException recognitionException)
+            catch  (@NotNull final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -223,21 +223,21 @@ public class MetaLanguageUtils
     @Nullable
     public String retrieveDiscriminatingParent(@NotNull final String tableComment)
     {
-        String result = null;
+        @Nullable String result = null;
 
         if  (!isEmpty(tableComment))
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(tableComment);
+                @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
                 t_Parser.tableComment();
 
                 result = t_Parser.getTableIsaType();
             }
-            catch  (final RecognitionException recognitionException)
+            catch  (@NotNull final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -262,17 +262,17 @@ public class MetaLanguageUtils
     @NotNull
     public String[] retrieveColumnBool(@NotNull final String columnComment)
     {
-        String[] result = null;
+        @Nullable String[] result = null;
 
         if  (!isEmpty(columnComment))
         {
              try
              {
-                 PerCommentParser t_Parser = setUpParser(columnComment);
+                 @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
 
                  t_Parser.columnComment();
 
-                 String t_strTrue = t_Parser.getColumnBoolTrue();
+                 @Nullable final String t_strTrue = t_Parser.getColumnBoolTrue();
 
                  if  (t_strTrue != null)
                  {
@@ -282,9 +282,9 @@ public class MetaLanguageUtils
                      result[2] = t_Parser.getColumnBoolNull();
                  }
              }
-             catch  (final RecognitionException recognitionException)
+             catch  (@NotNull final RecognitionException recognitionException)
              {
-                 Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                 @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                  if  (t_Log != null)
                  {
@@ -317,15 +317,15 @@ public class MetaLanguageUtils
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(columnComment);
+                @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
 
                 t_Parser.columnComment();
 
                 result = t_Parser.getColumnReadOnly();
             }
-            catch  (final RecognitionException recognitionException)
+            catch  (@NotNull final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -350,20 +350,21 @@ public class MetaLanguageUtils
     public String[][] retrieveColumnDiscriminatedTables(
         @NotNull final String columnComment)
     {
-        String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
+        @Nullable String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
 
         if  (!isEmpty(columnComment))
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(columnComment);
+                @NotNull final PerCommentParser t_Parser = setUpParser(columnComment);
 
                 t_Parser.columnComment();
+
                 result = t_Parser.getColumnIsaRefs();
             }
-            catch  (final RecognitionException recognitionException)
+            catch  (@NotNull final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -390,15 +391,15 @@ public class MetaLanguageUtils
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(tableComment);
+                @NotNull final  PerCommentParser t_Parser = setUpParser(tableComment);
 
                 t_Parser.tableComment();
 
                 result = t_Parser.getTableDecorator();
             }
-            catch  (final RecognitionException recognitionException)
+            catch  (@NotNull final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -421,13 +422,13 @@ public class MetaLanguageUtils
     @NotNull
     public String[][] retrieveTableRelationship(@NotNull final String tableComment)
     {
-        String[][] result = EMPTY_STRING_ARRAY_ARRAY;
+        @Nullable String[][] result = EMPTY_STRING_ARRAY_ARRAY;
 
         if  (!isEmpty(tableComment))
         {
             try
             {
-                PerCommentParser t_Parser = setUpParser(tableComment);
+                @NotNull final PerCommentParser t_Parser = setUpParser(tableComment);
 
                 t_Parser.tableComment();
 
@@ -435,7 +436,7 @@ public class MetaLanguageUtils
             }
             catch  (final RecognitionException recognitionException)
             {
-                Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+                @Nullable final  Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
                 if  (t_Log != null)
                 {
@@ -459,13 +460,11 @@ public class MetaLanguageUtils
     protected PerCommentParser setUpParser(@NotNull final String comment)
         throws  RecognitionException
     {
-        PerCommentParser result;
-
-        result = (PerCommentParser) PARSER_CACHE.get(comment);
+        @Nullable PerCommentParser result = (PerCommentParser) PARSER_CACHE.get(comment);
 
         if  (result == null)
         {
-            Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
+            @Nullable final Log t_Log = UniqueLogFactory.getLog(MetaLanguageUtils.class);
 
             if  (   (t_Log != null)
                  && (t_Log.isDebugEnabled()))
@@ -473,11 +472,11 @@ public class MetaLanguageUtils
                 t_Log.debug("Parsing '" + comment + "'");
             }
 
-            PerCommentLexer t_Lexer =
+            @NotNull final  PerCommentLexer t_Lexer =
                 new PerCommentLexer(
                     new ANTLRStringStream(comment));
             
-            CommonTokenStream t_Tokens =
+            @NotNull final CommonTokenStream t_Tokens =
                 new CommonTokenStream(t_Lexer);
 
             result = new PerCommentParser(t_Tokens);
@@ -493,7 +492,7 @@ public class MetaLanguageUtils
      * @param text the text.
      * @return <code>true</code> in such case.
      */
-    protected boolean isEmpty(@NotNull final String text)
+    protected boolean isEmpty(@Nullable final String text)
     {
         return isEmpty(text, StringValidator.getInstance());
     }
@@ -501,11 +500,11 @@ public class MetaLanguageUtils
     /**
      * Checks whether given input is empty or not.
      * @param text the text.
-     * @param stringValidator the <code>StringValidator</code> instance.
+     * @param stringValidator the {@link StringValidator} instance.
      * @return <code>true</code> in such case.
      */
     protected boolean isEmpty(
-        @NotNull final String text, @NotNull final StringValidator stringValidator)
+        @Nullable final String text, @NotNull final StringValidator stringValidator)
     {
         return stringValidator.isEmpty(text);
     }
@@ -521,7 +520,7 @@ public class MetaLanguageUtils
     {
         boolean result = false;
 
-        Table t_Table = metadataManager.getTableDAO().findByName(tableName);
+        @Nullable final Table t_Table = metadataManager.getTableDAO().findByName(tableName);
 
         if (t_Table != null)
         {

@@ -78,7 +78,7 @@ public class AntFieldElement
      */
     public AntFieldElement()
     {
-        super(null, -1, null, null, null, 1, -1, -1, null, null, false, null, false, false, null, null, null, false);
+        super("", -1, "", "", "", 1, -1, -1, "", "", false, "", false, false, "", "", "", false);
     }
 
     /**
@@ -159,11 +159,11 @@ public class AntFieldElement
         {
             result = new AntFieldFkElement();
 
-            Collection t_cFieldFks = getFieldFks();
+            Collection<AntFieldFkElement> t_cFieldFks = getFieldFks();
 
             if  (t_cFieldFks == null)
             {
-                t_cFieldFks = new ArrayList();
+                t_cFieldFks = new ArrayList<AntFieldFkElement>();
                 setFieldFks(t_cFieldFks);
             }
 

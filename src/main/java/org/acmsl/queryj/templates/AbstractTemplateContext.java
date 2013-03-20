@@ -182,7 +182,7 @@ public abstract class AbstractTemplateContext
      * @param metadataManager the metadata manager.
      */
     private void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         m__MetadataManager = metadataManager;
     }
@@ -193,7 +193,7 @@ public abstract class AbstractTemplateContext
      */
     @SuppressWarnings("unused")
     protected void setMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         immutableSetMetadataManager(metadataManager);
     }
@@ -214,7 +214,7 @@ public abstract class AbstractTemplateContext
      * @param customSqlProvider the customsql provider.
      */
     private void immutableSetCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         m__CustomSqlProvider = customSqlProvider;
     }
@@ -225,7 +225,7 @@ public abstract class AbstractTemplateContext
      */
     @SuppressWarnings("unused")
     protected void setCustomSqlProvider(
-        final CustomSqlProvider customSqlProvider)
+        @NotNull final CustomSqlProvider customSqlProvider)
     {
         immutableSetCustomSqlProvider(customSqlProvider);
     }
@@ -245,7 +245,7 @@ public abstract class AbstractTemplateContext
      * Specifies the header.
      * @param header the header.
      */
-    protected final void immutableSetHeader(final String header)
+    protected final void immutableSetHeader(@Nullable final String header)
     {
         m__strHeader = header;
     }
@@ -255,7 +255,7 @@ public abstract class AbstractTemplateContext
      * @param header the header.
      */
     @SuppressWarnings("unused")
-    protected void setHeader(final String header)
+    protected void setHeader(@Nullable final String header)
     {
         immutableSetHeader(header);
     }
@@ -264,7 +264,7 @@ public abstract class AbstractTemplateContext
      * Retrieves the header.
      * @return the header.
      */
-    @NotNull
+    @Nullable
     @Override
     public String getHeader()
     {
@@ -307,7 +307,7 @@ public abstract class AbstractTemplateContext
      * Specifies the package name.
      * @param packageName the new package name.
      */
-    private void immutableSetPackageName(final String packageName)
+    private void immutableSetPackageName(@NotNull final String packageName)
     {
         m__strPackageName = packageName;
     }
@@ -317,7 +317,7 @@ public abstract class AbstractTemplateContext
      * @param packageName the new package name.
      */
     @SuppressWarnings("unused")
-    protected void setPackageName(final String packageName)
+    protected void setPackageName(@NotNull final String packageName)
     {
         immutableSetPackageName(packageName);
     }
@@ -337,7 +337,7 @@ public abstract class AbstractTemplateContext
      * Specifies the base package name.
      * @param basePackageName the new base package name.
      */
-    private void immutableSetBasePackageName(final String basePackageName)
+    private void immutableSetBasePackageName(@NotNull final String basePackageName)
     {
         m__strBasePackageName = basePackageName;
     }
@@ -347,7 +347,7 @@ public abstract class AbstractTemplateContext
      * @param basePackageName the new base package name.
      */
     @SuppressWarnings("unused")
-    protected void setBasePackageName(final String basePackageName)
+    protected void setBasePackageName(@NotNull final String basePackageName)
     {
         immutableSetBasePackageName(basePackageName);
     }
@@ -367,7 +367,7 @@ public abstract class AbstractTemplateContext
      * Specifies the repository name.
      * @param repositoryName the new repository name.
      */
-    private void immutableSetRepositoryName(final String repositoryName)
+    private void immutableSetRepositoryName(@NotNull final String repositoryName)
     {
         m__strRepositoryName = repositoryName;
     }
@@ -377,7 +377,7 @@ public abstract class AbstractTemplateContext
      * @param repositoryName the new repository name.
      */
     @SuppressWarnings("unused")
-    protected void setRepositoryName(final String repositoryName)
+    protected void setRepositoryName(@NotNull final String repositoryName)
     {
         immutableSetRepositoryName(repositoryName);
     }
@@ -475,6 +475,7 @@ public abstract class AbstractTemplateContext
      * Retrieves the JNDI location for the {@link javax.sql.DataSource}.
      * @return such location.
      */
+    @Override
     @NotNull
     public String getJndiLocation()
     {
@@ -583,12 +584,12 @@ public abstract class AbstractTemplateContext
 
         for (@Nullable Attribute t_Attribute : attributes)
         {
-            if (result.length() > 0)
-            {
-                result.append(",");
-            }
             if (t_Attribute != null)
             {
+                if (result.length() > 0)
+                {
+                    result.append(",");
+                }
                 result.append(t_Attribute.getName());
             }
         }
@@ -599,7 +600,8 @@ public abstract class AbstractTemplateContext
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.m__strHeader).append(this.m__DecoratorFactory)
+        return
+            new HashCodeBuilder().append(this.m__strHeader).append(this.m__DecoratorFactory)
             .append(this.m__MetadataManager).append(this.m__CustomSqlProvider).append(this.m__strPackageName)
             .append(this.m__strBasePackageName).append(this.m__strRepositoryName)
             .append(this.m__bImplementMarkerInterfaces).append(this.m__bJmx).append(this.m__strJndiLocation)
@@ -609,7 +611,7 @@ public abstract class AbstractTemplateContext
     }
 
     @Override
-    public boolean equals(final Object obj)
+    public boolean equals(@Nullable final Object obj)
     {
         if (obj == null)
         {
