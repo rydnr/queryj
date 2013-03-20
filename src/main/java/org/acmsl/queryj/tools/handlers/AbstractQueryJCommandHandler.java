@@ -176,7 +176,7 @@ public abstract class AbstractQueryJCommandHandler
      * @return the metadata.
      * @throws QueryJBuildException if the database metadata is not accessible.
      */
-    @Nullable
+    @NotNull
     protected DatabaseMetaData retrieveDatabaseMetaData(@NotNull final Map parameters)
       throws QueryJBuildException
     {
