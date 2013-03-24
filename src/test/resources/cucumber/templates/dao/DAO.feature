@@ -1,10 +1,24 @@
 Feature: DAO template
 
   Scenario: DAO template compiles
-  Given the following tables:
-    | repository | table | column1 | column1_type | column1_comment               | column2 | column2_type | column3     | column3_type |
-    | nlp-webapp | user  | user_id | number       | The id of the user @oraseq s1 | name    | varchar      | age         | number       |
-    | test       | car   | car_id  | number       | The id of the car  @oraseq s2 | name    | varchar      | launch_date | timestamp    | 
-    | tool       | tool  | tool_id | number       | The id of the tool @oraseq s3 | path    | varchar      | version     | varchar      |
-  When I generate with DAO.stg
-  Then the generated file compiles correctly
+
+    Given the following tables:
+    | repository | table     | parent table | decorated | relationship | static |
+    | users      | user      |              |           |              |        |
+
+    And the following columns:
+    | table | column        | type      | pk    | allows null | readonly | sequence  | foreing key | keyword | boolean | length | precision |
+    | user  | user_id       | number    | true  | false       | false    | seq_users |             |         |         |     10 |         0 |
+    | user  | company_id    | number    | false | true        | false    |           | fk1         |         |         |     10 |         0 |
+    | user  | name          | varchar   | false | false       | false    |           |             |         |         |     30 |           |
+    | user  | email         | varchar   | false | false       | false    |           |             |         |         |     30 |         0 |
+    | user  | registered    | number    | false | false       | false    |           |             |         | 0,1     |      1 |         1 |
+    | user  | creation_date | timestamp | false | false       | true     |           |             | sysdate |         |        |           |
+
+    And the following foreign keys:
+    | id  | source table | source columns | target table | target columns |
+    | fk1 | user         | company_id     | companies    | company_id     |
+
+    When I generate with DAO.stg
+
+    Then the generated UserDAO.java compiles successfully
