@@ -91,6 +91,8 @@ public class JdbcMetadataManager
         super(name);
     }
 
+
+
     /**
      * Creates a {@link AbstractJdbcMetadataManager} with given information.
      * @param name the manager name.
@@ -109,7 +111,7 @@ public class JdbcMetadataManager
      */
     public JdbcMetadataManager(
         @NotNull final String name,
-        @NotNull final DatabaseMetaData metadata,
+        @Nullable final DatabaseMetaData metadata,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @Nullable final String catalog,
         @Nullable final String schema,

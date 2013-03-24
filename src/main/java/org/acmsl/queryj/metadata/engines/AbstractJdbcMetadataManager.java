@@ -197,7 +197,7 @@ public abstract class AbstractJdbcMetadataManager
      */
     protected AbstractJdbcMetadataManager(
         @NotNull final String name,
-        @NotNull final DatabaseMetaData metadata,
+        @Nullable final DatabaseMetaData metadata,
         @NotNull final MetadataExtractionListener metadataExtractionListener,
         @Nullable final String catalog,
         @Nullable final String schema,
@@ -400,7 +400,7 @@ public abstract class AbstractJdbcMetadataManager
      * Specifies the meta data.
      * @param metaData the database meta data.
      */
-    protected final void immutableSetMetaData(@NotNull final DatabaseMetaData metaData)
+    protected final void immutableSetMetaData(@Nullable final DatabaseMetaData metaData)
     {
         m__MetaData = metaData;
     }
@@ -423,7 +423,14 @@ public abstract class AbstractJdbcMetadataManager
     @Override
     public DatabaseMetaData getMetaData()
     {
-        return m__MetaData;
+        DatabaseMetaData result = m__MetaData;
+
+        if (result == null)
+        {
+            throw new RuntimeException("missing required DatabaseMetaData information");
+        }
+
+        return result;
     }
 
     /**
