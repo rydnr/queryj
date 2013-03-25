@@ -36,7 +36,7 @@
 // Description: Defines the rules to generate value object
 //              implementations.
 //
-group CustomValueObject;
+group ValueObject;
 
 source() ::= <<
 <!

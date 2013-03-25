@@ -35,7 +35,7 @@
 //
 // Description: Generates JndiUtils sources.
 //
-group JdbcTemplate;
+group JndiUtils;
 
 source() ::= <<
 <!

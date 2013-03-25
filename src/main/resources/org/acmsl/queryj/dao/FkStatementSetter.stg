@@ -37,7 +37,7 @@
 //              a foreign key.
 //
 //
-group ForeignKeyStatementSetter;
+group FkStatementSetter;
 
 source() ::= <<
 <!

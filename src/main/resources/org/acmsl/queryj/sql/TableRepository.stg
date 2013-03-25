@@ -39,7 +39,7 @@
 //
 // $Id: TableRepository.stg 1905 2007-08-02 09:20:27Z chous $
 //
-group Table;
+group TableRepository;
 
 source(input) ::= <<
 <!

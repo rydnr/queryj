@@ -40,7 +40,7 @@
 //
 // $Id: DataAccessContextLocal.stg 1905 2007-08-02 09:20:27Z chous $
 //
-group ConfigurationProperties;
+group DataAccessContextLocal;
 
 source(input) ::= <<
 <!
