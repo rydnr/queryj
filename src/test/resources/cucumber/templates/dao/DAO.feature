@@ -19,6 +19,6 @@ Feature: DAO template
     | source table | source columns | target table | allows null |
     | user         | company_id     | companies    | true        |
 
-    When I generate with DAO.stg
+    When I generate with DAO.stg for Oracle
 
-    Then the generated UserDAO.java compiles successfully
+    Then the generated OracleUserDAO.java compiles successfully

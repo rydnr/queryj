@@ -121,7 +121,7 @@ public class DAOTemplateGenerator
         @NotNull final EnglishGrammarUtils englishGrammarUtils)
     {
         return
-              metadataManager.getEngineName()
+              stringUtils.capitalize(metadataManager.getEngineName())
             + stringUtils.capitalize(
                   englishGrammarUtils.getSingular(
                       context.getTableName().toLowerCase(Locale.US)),

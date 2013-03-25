@@ -264,6 +264,14 @@
                   <arg value="${project.build.directory}/generated-sources/antlr/org/acmsl/queryj/tools/antlr"/>
                   <arg value="PerComment.g"/>
                 </java>
+                <java classname="org.antlr.Tool"
+                      classpathref="maven.plugin.classpath"
+                      fork="true"
+                      dir="src/main/antlr">
+                  <arg value="-o"/>
+                  <arg value="${project.build.directory}/generated-sources/antlr/org/acmsl/queryj/tools/antlr"/>
+                  <arg value="Java.g"/>
+                </java>
               </tasks>
               <sourceRoot>${project.build.directory}/generated-sources/antlr</sourceRoot>
             </configuration>

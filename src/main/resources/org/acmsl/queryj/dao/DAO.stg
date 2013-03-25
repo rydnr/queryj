@@ -2225,11 +2225,13 @@ attribute_resultset_extractor_class(
 /**
  * <[
       first_line_description(
-        className=dao_implementation_class_name,
-        engineName=engine_name),
+        tableName=table_name,
+        engineName=engine_name,
+        engineVersion=engine_version),
       second_line_description(
-        className=dao_implementation_class_name,
-        engineName=engine_name)
+        tableName=table_name,
+        engineName=engine_name,
+        engineVersion=engine_version),
     ]:{ line |<line>}; separator="\n * ">
 <class_common_javadoc()>
  * Extracts \<i><table.voName>\</i> value objects from result sets.

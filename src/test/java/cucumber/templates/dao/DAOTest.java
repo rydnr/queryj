@@ -64,6 +64,8 @@ import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
 import org.jetbrains.annotations.NotNull;
+import org.junit.Rule;
+import org.junit.rules.TemporaryFolder;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -80,6 +82,9 @@ import java.util.Map;
  */
 public class DAOTest
 {
+    @Rule
+    public TemporaryFolder rootFolder = new TemporaryFolder();
+
     /**
      * The table.
      */
@@ -308,14 +313,14 @@ public class DAOTest
      * @param templateName the template.
      */
     @SuppressWarnings("unused")
-    @When("I generate with (.*)\\.stg")
-    public void generateFile(@NotNull final String templateName)
+    @When("I generate with (.*)\\.stg for (.*)")
+    public void generateFile(@NotNull final String templateName, @NotNull final String engine)
     {
         DAOTemplateGenerator generator = new DAOTemplateGenerator(false, 1);
 
         BasePerTableTemplateContext context =
             new BasePerTableTemplateContext(
-                retrieveMetadataManager(),
+                retrieveMetadataManager(engine),
                 retrieveCustomSqlProvider(),
                 "", // header
                 generator.getDecoratorFactory(),
@@ -333,20 +338,18 @@ public class DAOTest
 
         DAOTemplate template = new DAOTemplate(context);
 
-        File rootFolder = null;
+        File outputDir = null;
         try
         {
-            rootFolder = File.createTempFile("cucumber", getClass().getName());
-            rootFolder.mkdirs();
+            rootFolder.create();
+            outputDir = rootFolder.newFolder("dao");
         }
-        catch (@NotNull final IOException cannotCreateTempFolder)
+        catch (@NotNull final IOException ioException)
         {
-            Assert.fail(cannotCreateTempFolder.getMessage());
+            Assert.fail(ioException.getMessage());
         }
 
-        File outputDir = new File(rootFolder, "dao");
-
-        outputDir.mkdirs();
+//        Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
 
         UniqueLogFactory.initializeInstance(LogFactory.getLog(DAOTest.class));
 
@@ -355,7 +358,7 @@ public class DAOTest
             generator.write(
                 template,
                 outputDir,
-                rootFolder,
+                rootFolder.getRoot(),
                 Charset.defaultCharset());
         }
         catch (@NotNull final IOException ioException)
@@ -381,10 +384,11 @@ public class DAOTest
 
     /**
      * Retrieves a {@link MetadataManager} instance.
+     * @param engineName the name of the engine.
      * @return such instance.
      */
     @NotNull
-    protected MetadataManager retrieveMetadataManager()
+    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
     {
         @NotNull final Table table = getTable();
         @NotNull final List<String> tableNames = new ArrayList<String>(1);
@@ -404,24 +408,16 @@ public class DAOTest
                 true, // disable table extraction
                 true, // lazy table extraction
                 false, // case sensitive
-                "oracle", // engine
+                engineName, // engine
                 "11", // engine version
                 "'"); // quote
 
     }
-/*
-      @NotNull final MetadataExtractionListener metadataExtractionListener,
-        @Nullable final String catalog,
-        @Nullable final String schema,
-        @NotNull final List<String> tableNames,
-        @NotNull final List<Table> tables,
-        final boolean disableTableExtraction,
-        final boolean lazyTableExtraction,
-        final boolean caseSensitive,
-        @NotNull final String engineName,
-        @NotNull final String engineVersion,
-        @NotNull final String quote)
- */
+
+    /**
+     * Retrieves an empty {@link CustomSqlProvider} instance.
+     * @return such instance.
+     */
     @NotNull
     protected CustomSqlProvider retrieveCustomSqlProvider()
     {
@@ -564,5 +560,53 @@ public class DAOTest
         return result;
     }
 
+    /**
+     * Creates a temporary directory.
+     * @param prefix the prefix to use (optional).
+     * @return the temporary folder.
+     * @throws IOException if the folder cannot be created.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    protected File createTempFolder(@Nullable final String prefix)
+        throws IOException
+    {
+        @Nullable File result = null;
 
+        @NotNull final String folderPrefix = (prefix != null) ? prefix : "cucumber";
+
+        @Nullable IOException exceptionToThrow = null;
+
+        try
+        {
+            result = File.createTempFile(folderPrefix, Long.toString(System.nanoTime()));
+        }
+        catch (@NotNull final IOException ioException)
+        {
+            exceptionToThrow = ioException;
+        }
+
+        if (   (exceptionToThrow == null)
+            && (result != null)
+            && (!result.delete()))
+        {
+            exceptionToThrow =
+                new IOException("Could not delete temporary file: " + result.getAbsolutePath());
+        }
+
+        if (   (exceptionToThrow == null)
+            && (result != null)
+            && (!result.mkdirs()))
+        {
+            exceptionToThrow =
+                new IOException("Could not create temporary file: " + result.getAbsolutePath());
+        }
+
+        if (exceptionToThrow != null)
+        {
+            throw exceptionToThrow;
+        }
+
+        return result;
+    }
 }
