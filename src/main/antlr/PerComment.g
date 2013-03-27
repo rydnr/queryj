@@ -2,7 +2,7 @@
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -77,7 +77,7 @@ grammar PerComment;
  * Description: ANTLR parser for PerComment.g
  *
  */
-package org.acmsl.queryj.antlr;
+package org.acmsl.queryj.tools.antlr;
 
 /* 
  * Importing some JetBrains annotations.
@@ -96,7 +96,7 @@ import java.util.List;
 /*
                         QueryJ
 
-    Copyright (C) 2002-2007  Jose San Leandro Armendariz
+    Copyright (C) 2002-today  Jose San Leandro Armendariz
                         chous@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -130,7 +130,7 @@ import java.util.List;
  * Description: ANTLR lexer for PerComment.g
  *
  */
-package org.acmsl.queryj.antlr;
+package org.acmsl.queryj.tools.antlr;
 }
 
 @parser::members
@@ -220,7 +220,7 @@ public String getTableComment()
 }
 
 /**
- * Specifies the column name used to distinguish the 
+ * Specifies the column name used to distinguish the
  * static content.
  * @param name such name.
  */
@@ -230,7 +230,7 @@ protected void setTableStatic(@NotNull final String name)
 }
 
 /**
- * Retrieves the column name used to distinguish the 
+ * Retrieves the column name used to distinguish the
  * static content.
  * @return such column name.
  */

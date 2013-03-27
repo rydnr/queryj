@@ -41,6 +41,7 @@ import cucumber.api.DataTable;
 
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+
 import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
@@ -53,6 +54,10 @@ import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.dao.DAOTemplate;
 import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
+import org.acmsl.queryj.tools.antlr.JavaParser;
+import org.acmsl.queryj.tools.antlr.JavaLexer;
+import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.CommonTokenStream;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
@@ -380,6 +385,26 @@ public class DAOTest
         File outputFile = getOutputFile();
 
         Assert.assertEquals("Wrong name of the generated file", file, outputFile.getName());
+
+        @Nullable JavaLexer t_Lexer = null;
+
+        try
+        {
+            t_Lexer =
+                new JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
+        }
+        catch (final IOException missingFile)
+        {
+            Assert.fail(missingFile.getMessage());
+
+        }
+
+        @NotNull final CommonTokenStream t_Tokens =
+            new CommonTokenStream(t_Lexer);
+
+        @NotNull final JavaParser t_Parser = new JavaParser(t_Tokens);
+
+        Assert.assertNotNull("Missing package", t_Parser.getPackageName());
     }
 
     /**

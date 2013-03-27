@@ -367,20 +367,17 @@ public class MetadataUtils
         {
             Iterator<Attribute> t_itAttributes = attributes.iterator();
 
-            if  (t_itAttributes != null)
+            @Nullable Attribute t_CurrentAttribute;
+
+            while  (t_itAttributes.hasNext())
             {
-                @Nullable Attribute t_CurrentAttribute;
+                t_CurrentAttribute = t_itAttributes.next();
 
-                while  (t_itAttributes.hasNext())
+                if  (   (t_CurrentAttribute != null)
+                     && (t_CurrentAttribute.isNullable()))
                 {
-                    t_CurrentAttribute = t_itAttributes.next();
-
-                    if  (   (t_CurrentAttribute != null)
-                         && (t_CurrentAttribute.isNullable()))
-                    {
-                        result = true;
-                        break;
-                    }
+                    result = true;
+                    break;
                 }
             }
         }
