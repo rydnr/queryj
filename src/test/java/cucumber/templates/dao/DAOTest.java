@@ -58,6 +58,7 @@ import org.acmsl.queryj.tools.antlr.JavaParser;
 import org.acmsl.queryj.tools.antlr.JavaLexer;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
 import org.apache.commons.logging.LogFactory;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
@@ -396,13 +397,21 @@ public class DAOTest
         catch (final IOException missingFile)
         {
             Assert.fail(missingFile.getMessage());
-
         }
 
         @NotNull final CommonTokenStream t_Tokens =
             new CommonTokenStream(t_Lexer);
 
         @NotNull final JavaParser t_Parser = new JavaParser(t_Tokens);
+
+        try
+        {
+            t_Parser.compilationUnit();
+        }
+        catch (@NotNull final RecognitionException invalidClass)
+        {
+            Assert.fail(invalidClass.getMessage());
+        }
 
         Assert.assertNotNull("Missing package", t_Parser.getPackageName());
     }

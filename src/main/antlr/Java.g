@@ -991,8 +991,7 @@ explicitConstructorInvocation
 qualifiedName returns [String result]
 @init { result = null; StringBuilder aux = new StringBuilder(); }
     :   i=IDENTIFIER { aux.append($i.text); }
-        ('.' t=IDENTIFIER { aux.append("."); aux.append($t.text); }
-        )*
+        ('.' t=IDENTIFIER { aux.append("."); aux.append($t.text); } )*
       { result = aux.toString(); }
     ;
 
