@@ -35,14 +35,24 @@
  */
 package cucumber.templates.dao;
 
+/*
+ * Importing Cucumber classes.
+ */
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.DataTable;
-
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+/*
+ * Importing ACM-SL Commons classes.
+ */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.io.FileUtils;
+
+/*
+ * Importing QueryJ classes.
+ */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
@@ -56,23 +66,40 @@ import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.antlr.JavaParser;
 import org.acmsl.queryj.tools.antlr.JavaLexer;
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.CommonTokenStream;
-import org.antlr.runtime.RecognitionException;
-import org.apache.commons.logging.LogFactory;
-import org.jetbrains.annotations.Nullable;
-import org.junit.Assert;
-
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
+
+/*
+ * Importing ANTLR classes.
+ */
+import org.antlr.runtime.ANTLRFileStream;
+import org.antlr.runtime.CommonTokenStream;
+
+/*
+ * Importing Apache Commons-Logging classes.
+ */
+import org.apache.commons.logging.LogFactory;
+
+/*
+ * Importing JetBrains annotations.
+ */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/*
+ * Importing JUnit classes.
+ */
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
+/*
+ * Importing JDK classes.
+ */
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -83,7 +110,7 @@ import java.util.Map;
 
 /**
  * Cucumber test for DAO.feature.
- * @author <a href="chous@acm-sl.org">Jose San Leandro</a>
+ * @author <a href="queryj@acm-sl.org">Jose San Leandro</a>
  * @since 03/2013
  */
 public class DAOTest
@@ -385,6 +412,8 @@ public class DAOTest
     {
         File outputFile = getOutputFile();
 
+        FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
+
         Assert.assertEquals("Wrong name of the generated file", file, outputFile.getName());
 
         @Nullable JavaLexer t_Lexer = null;
@@ -408,13 +437,16 @@ public class DAOTest
         {
             t_Parser.compilationUnit();
         }
-        catch (@NotNull final RecognitionException invalidClass)
+        catch (@NotNull final Throwable invalidClass)
         {
             Assert.fail(invalidClass.getMessage());
         }
 
         Assert.assertNotNull("Missing package", t_Parser.getPackageName());
         Assert.assertEquals("Invalid package", "com.foo.bar.dao", t_Parser.getPackageName());
+
+        Assert.assertNotNull("Missing class", t_Parser.getRootClass());
+
     }
 
     /**

@@ -403,6 +403,7 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.List;
 }
 
@@ -481,7 +482,7 @@ package org.acmsl.queryj.tools.antlr;
 /**
  * The class/interface.
  */
-private Class rootClass;
+private JavaSource rootClass;
 
 /**
  * The package name.
@@ -497,7 +498,7 @@ private List<String> imports = new ArrayList<String>();
  * Specifies the root class.
  * @param the root class.
  */
-protected final void immutableSetRootClass(@NotNull final Class rootClass)
+protected final void immutableSetRootClass(@NotNull final JavaSource rootClass)
 {
     this.rootClass = rootClass;
 }
@@ -506,7 +507,7 @@ protected final void immutableSetRootClass(@NotNull final Class rootClass)
  * Specifies the root class.
  * @param the root class.
  */
-protected void setRootClass(@NotNull final Class rootClass)
+protected void setRootClass(@NotNull final JavaSource rootClass)
 {
     immutableSetRootClass(rootClass);
 }
@@ -516,7 +517,7 @@ protected void setRootClass(@NotNull final Class rootClass)
  * @return such class.
  */
 @Nullable
-public Class getRootClass()
+public JavaSource getRootClass()
 {
     return this.rootClass;
 }
@@ -575,6 +576,15 @@ public List<String> getImports()
 public void addImport(@NotNull final String newImport)
 {
     immutableGetImports().add(newImport);
+}
+
+@Override
+public void displayRecognitionError(
+    final String[] tokenNames, final RecognitionException e)
+{
+    String hdr = getErrorHeader(e);
+    String msg = getErrorMessage(e, tokenNames);
+    throw new RuntimeException("[" + hdr + "] " + msg, e);
 }
 }
 
@@ -661,15 +671,17 @@ classDeclaration
     |   enumDeclaration
     ;
 
-normalClassDeclaration 
-    :   modifiers  'class' IDENTIFIER
+normalClassDeclaration
+@init{ JavaClassSource source = null; }
+    :   modifiers  'class' c=IDENTIFIER { source = new JavaClassSource($c.text); }
         (typeParameters
         )?
-        ('extends' type
+        ('extends' t=type { source.setSuperClass($t.text); }
         )?
-        ('implements' typeList
+        ('implements' tl=typeList { source.setInterfaces(tl); }
         )?            
         classBody
+        { setRootClass(source); }
     ;
 
 
@@ -758,9 +770,10 @@ normalInterfaceDeclaration
         interfaceBody
     ;
 
-typeList 
-    :   type
-        (',' type
+typeList returns [ List<String> result ]
+@init { result = new ArrayList<String>(); }
+    :   t1=type { result.add($t1.text); }
+        (',' t=type { result.add($t.text); }
         )*
     ;
 
@@ -886,35 +899,39 @@ interfaceFieldDeclaration
     ;
 
 
-type 
-    :   classOrInterfaceType
-        ('[' ']'
+type returns [ String result ]
+@init { String result = ""; }
+    :   c=classOrInterfaceType { result = $c.text; }
+        ('[' ']' { result += "[]"; }
         )*
-    |   primitiveType
-        ('[' ']'
+    |   p=primitiveType { result = $p.text; }
+        ('[' ']' { result += "[]"; }
         )*
     ;
 
 
-classOrInterfaceType 
-    :   IDENTIFIER
+classOrInterfaceType returns [ String result ]
+@init { String result; StringBuilder aux = new StringBuilder(); }
+    :   i=IDENTIFIER { aux.append($i.text); }
         (typeArguments
         )?
-        ('.' IDENTIFIER
+        ('.' id=IDENTIFIER { aux.append($id.text); }
             (typeArguments
             )?
         )*
+        { result = aux.toString(); }
     ;
 
-primitiveType  
-    :   'boolean'
-    |   'char'
-    |   'byte'
-    |   'short'
-    |   'int'
-    |   'long'
-    |   'float'
-    |   'double'
+primitiveType returns [ String result ]
+@init { String result; }
+    :   b='boolean' { result = $b.text; }
+    |   c='char' { result = $c.text; }
+    |   bt='byte' { result = $bt.text; }
+    |   s='short' { result = $s.text; }
+    |   i='int' { result = $i.text; }
+    |   l='long' { result = $l.text; }
+    |   f='float' { result = $f.text; }
+    |   d='double' { result = $d.text; }
     ;
 
 typeArguments 

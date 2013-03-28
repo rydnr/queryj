@@ -74,7 +74,9 @@ import org.jetbrains.annotations.Nullable;
 /*
  * Importing some JDK classes.
  */
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /*
@@ -96,12 +98,6 @@ public class MetaLanguageUtils
      * The cache of parsers.
      */
     private final Map PARSER_CACHE = new HashMap();
-
-    /**
-     * An empty String array array.
-     */
-    static final String[][] EMPTY_STRING_ARRAY_ARRAY =
-        new String[0][0];
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -347,10 +343,10 @@ public class MetaLanguageUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public String[][] retrieveColumnDiscriminatedTables(
+    public List<List<String>> retrieveColumnDiscriminatedTables(
         @NotNull final String columnComment)
     {
-        @Nullable String[][] result = PerCommentParser.EMPTY_STRING_STRING_ARRAY;
+        @Nullable List<List<String>> result = new ArrayList<List<String>>();
 
         if  (!isEmpty(columnComment))
         {
@@ -420,9 +416,9 @@ public class MetaLanguageUtils
      */
     @SuppressWarnings("unused")
     @NotNull
-    public String[][] retrieveTableRelationship(@NotNull final String tableComment)
+    public List<List<String>> retrieveTableRelationship(@NotNull final String tableComment)
     {
-        @Nullable String[][] result = EMPTY_STRING_ARRAY_ARRAY;
+        @NotNull List<List<String>> result = new ArrayList<List<String>>();
 
         if  (!isEmpty(tableComment))
         {
