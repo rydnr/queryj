@@ -330,7 +330,7 @@ public class DAOTest
                 retrieveCustomSqlProvider(),
                 "", // header
                 generator.getDecoratorFactory(),
-                "dao",
+                "com.foo.bar.dao",
                 "com.foo.bar",
                 "acme", // repository
                 false, // marker
@@ -414,6 +414,7 @@ public class DAOTest
         }
 
         Assert.assertNotNull("Missing package", t_Parser.getPackageName());
+        Assert.assertEquals("Invalid package", "com.foo.bar.dao", t_Parser.getPackageName());
     }
 
     /**
