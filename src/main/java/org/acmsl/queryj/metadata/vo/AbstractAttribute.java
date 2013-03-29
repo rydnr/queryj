@@ -474,9 +474,20 @@ public abstract class AbstractAttribute
      */
     public boolean isExternallyManaged()
     {
-        return
-            (    (getKeyword() != null)
-              || (getRetrievalQuery() != null));
+        boolean result = false;
+
+        @Nullable final String keyword = getKeyword();
+        @Nullable final String retrievalQuery = getRetrievalQuery();
+
+        if (   (keyword != null)
+            && (!keyword.trim().equals(""))
+            && (retrievalQuery != null)
+            && (!retrievalQuery.trim().equals("")))
+        {
+            result = true;
+        }
+
+        return result;
     }
 
     /**

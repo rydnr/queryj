@@ -258,6 +258,8 @@ public class DAOTest
 
         List<Attribute> attributes = table.getAttributes();
 
+        List<Attribute> primaryKey = table.getPrimaryKey();
+
         Attribute attribute;
 
         int index = 1;
@@ -289,6 +291,11 @@ public class DAOTest
                     booleanInfo[0],
                     booleanInfo[1],
                     booleanInfo[2]);
+
+            if (Boolean.valueOf(columnEntry.get("pk")))
+            {
+                primaryKey.add(attribute);
+            }
 
             attributes.add(attribute);
         }
@@ -351,9 +358,11 @@ public class DAOTest
     {
         DAOTemplateGenerator generator = new DAOTemplateGenerator(false, 1);
 
+        @NotNull final Table table = getTable();
+
         BasePerTableTemplateContext context =
             new BasePerTableTemplateContext(
-                retrieveMetadataManager(engine),
+                retrieveMetadataManager(engine, table),
                 retrieveCustomSqlProvider(),
                 "", // header
                 generator.getDecoratorFactory(),
@@ -366,7 +375,7 @@ public class DAOTest
                 true, // disable generation timestamps
                 true, // disable NotNull annotations
                 true, // disable checkThread.org annotations
-                getTable().getName(),
+                table.getName(),
                 new ArrayList<Row>(0));
 
         DAOTemplate template = new DAOTemplate(context);
@@ -452,12 +461,12 @@ public class DAOTest
     /**
      * Retrieves a {@link MetadataManager} instance.
      * @param engineName the name of the engine.
+     * @param table the {@link Table}.
      * @return such instance.
      */
     @NotNull
-    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
+    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final Table table)
     {
-        @NotNull final Table table = getTable();
         @NotNull final List<String> tableNames = new ArrayList<String>(1);
         tableNames.add(table.getName());
         @NotNull final List<Table> tables = new ArrayList<Table>(1);
