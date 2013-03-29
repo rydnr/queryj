@@ -61,7 +61,7 @@ java_header(years,description,timestamp) ::= <<
                         QueryJ
 
     Copyright (C) <years; separator="-">-today Jose San Leandro Armendariz
-                              chous@acm-sl.org
+                              queryj@acm-sl.org
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public
@@ -92,10 +92,8 @@ java_header(years,description,timestamp) ::= <<
  * Description: <description:{line | <line>}; separator="\n *              ">
  *
  * Last modified by: (Your name)
- *
-<if(generation_timestamps_enabled)>
- * Generation timestamp: <timestamp>
-<endif>
+ *<if(generation_timestamps_enabled)>
+ * Generation timestamp: <timestamp><endif>
  */
 >>
 
@@ -117,10 +115,8 @@ import checkers.nullness.quals.Nullable;
 >>
 
 class_common_javadoc(template) ::= <<
- * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\> <if(template)>(<template>)<endif>
-<if(generation_timestamps_enabled)>
- * @since <timestamp>
-<endif>
+ * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\> <if(template)>(<template>)<endif><if(generation_timestamps_enabled)>
+ * @since <timestamp><endif>
 >>
 
 attribute_javadoc(name) ::= <<
