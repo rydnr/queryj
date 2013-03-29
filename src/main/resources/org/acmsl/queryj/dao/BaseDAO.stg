@@ -197,6 +197,7 @@ public interface <table.voName>DAO
     <table.nonPrimaryKeyAttributes:find_constant_methods(
       attribute=it, table=table); separator="\n\n">
 
+<if(table.primaryKey)>
     /**
      * Loads \<i><table.name>\</i> information from the constant pool,
      * filtering by the primary key.
@@ -208,7 +209,9 @@ public interface <table.voName>DAO
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
 
 <endif>
+<endif>
 
+<if(table.primaryKey)>
     /**
      * Retrieves {@link <table.voName>} information
      * filtering by its primary key.
@@ -224,6 +227,8 @@ public interface <table.voName>DAO
 <endif>
 
         <table.primaryKey:attribute_declaration(attr=it); separator=",\n">);
+<endif>
+
 
     /**
      * Persists {@link <table.voName>} information.
