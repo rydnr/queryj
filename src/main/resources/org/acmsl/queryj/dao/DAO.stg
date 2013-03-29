@@ -501,7 +501,9 @@ public <if(table.dynamicQueries)>abstract <endif>class <engine_name><table.voNam
     <table.nonPrimaryKeyAttributes:find_constant_methods(
       attribute=it, table=table); separator="\n\n">
 
+<if(table.primaryKey)>
     <find_constant_by_pk(primaryKey=table.primaryKey, voName=table.voName)>
+<endif>
 <endif>
 
 <if(table.primaryKey)>
