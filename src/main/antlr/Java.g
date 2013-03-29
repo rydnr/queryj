@@ -578,10 +578,11 @@ public void addImport(@NotNull final String newImport)
     immutableGetImports().add(newImport);
 }
 
-@Override
-public void displayRecognitionError(
+//@Override
+public void _displayRecognitionError(
     final String[] tokenNames, final RecognitionException e)
 {
+    super.displayRecognitionError(tokenNames, e);
     String hdr = getErrorHeader(e);
     String msg = getErrorMessage(e, tokenNames);
     throw new RuntimeException("[" + hdr + "] " + msg, e);
@@ -672,7 +673,7 @@ classDeclaration
     ;
 
 normalClassDeclaration
-@init{ JavaClassSource source = null; }
+@init{ JavaClassSource source = null; System.out.println("In normalClassDeclaration");}
     :   modifiers  'class' c=IDENTIFIER { source = new JavaClassSource($c.text); }
         (typeParameters
         )?
@@ -1547,7 +1548,7 @@ literal
     ;
 
 /**
- * These are headers help to make syntatical predicates, not necessary but helps to make grammar faster.
+ * These are headers help to make syntactical predicates, not necessary but helps to make grammar faster.
  */
  
 classHeader 
