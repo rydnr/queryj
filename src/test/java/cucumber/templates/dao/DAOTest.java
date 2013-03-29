@@ -372,8 +372,8 @@ public class DAOTest
                 false, // marker
                 false, // jmx
                 "java:comp/env/db",
-                true, // disable generation timestamps
-                true, // disable NotNull annotations
+                false, // disable generation timestamps
+                false, // disable NotNull annotations
                 true, // disable checkThread.org annotations
                 table.getName(),
                 new ArrayList<Row>(0));

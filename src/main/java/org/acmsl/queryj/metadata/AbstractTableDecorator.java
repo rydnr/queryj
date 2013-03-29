@@ -1016,9 +1016,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getNonReadOnlyAttributes(
-                getName(),
                 getAttributes(),
-                getParentTable(),
                 getMetadataManager(),
                 getDecoratorFactory(),
                 TableDecoratorHelper.getInstance());
@@ -1026,33 +1024,24 @@ public abstract class AbstractTableDecorator
 
     /**
      * Retrieves the non-read-only attributes.
-     * @param name the table name.
      * @param attributes the attributes.
-     * @param parentTable the parent table (or <code>null</code> otherwise).
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code>
-     * instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such attributes.
      */
-    @SuppressWarnings("unused")
     @NotNull
     protected List<Attribute> getNonReadOnlyAttributes(
-        @NotNull final String name,
         @NotNull final List<Attribute> attributes,
-        @Nullable final Table parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
-        @NotNull List<Attribute> result = attributes;
-
-        if  (parentTable != null)
-        {
-            result =
-                tableDecoratorHelper.removeReadOnly(
-                    decorateAttributes());
-        }
+        @NotNull List<Attribute> result =
+            decorateAttributes(
+                tableDecoratorHelper.removeReadOnly(attributes),
+                metadataManager,
+                decoratorFactory);
 
         Collections.sort(result);
 
@@ -1117,6 +1106,46 @@ public abstract class AbstractTableDecorator
     }
 
     /**
+     * Retrieves the non-read-only attributes, including parent's.
+     * @return such attributes.
+     */
+    @SuppressWarnings("unused")
+    @NotNull
+    public List<Attribute> getNonPrimaryKeyReadOnlyAttributes()
+    {
+        return
+            getNonPrimaryKeyReadOnlyAttributes(
+                getNonPrimaryKeyAttributes(),
+                getMetadataManager(),
+                getDecoratorFactory(),
+                TableDecoratorHelper.getInstance());
+    }
+
+    /**
+     * Retrieves the non-read-only attributes.
+     * @param nonPrimaryKeyAttributes the non-primary key attributes.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
+     * @return such attributes.
+     */
+    @NotNull
+    protected List<Attribute> getNonPrimaryKeyReadOnlyAttributes(
+        @NotNull final List<Attribute> nonPrimaryKeyAttributes,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final DecoratorFactory decoratorFactory,
+        @NotNull final TableDecoratorHelper tableDecoratorHelper)
+    {
+        @NotNull List<Attribute> result =
+                tableDecoratorHelper.removeReadOnly(
+                    decorateAttributes(nonPrimaryKeyAttributes, metadataManager, decoratorFactory));
+
+        Collections.sort(result);
+
+        return result;
+    }
+
+    /**
      * Retrieves the non-read-only attributes.
      * @return such attributes.
      */
@@ -1125,9 +1154,7 @@ public abstract class AbstractTableDecorator
     {
         return
             getAllNonReadOnlyButExternallyManagedAttributes(
-                getName(),
                 getAttributes(),
-                getParentTable(),
                 getMetadataManager(),
                 getDecoratorFactory(),
                 TableDecoratorHelper.getInstance());
@@ -1135,28 +1162,22 @@ public abstract class AbstractTableDecorator
 
     /**
      * Retrieves the non-read-only attributes.
-     * @param name the table name.
      * @param attributes the attributes.
-     * @param parentTable the parent table (or <code>null</code> otherwise).
-     * @param metadataManager the <code>MetadataManager</code> instance.
-     * @param decoratorFactory the <code>DecoratorFactory</code> instance.
-     * @param tableDecoratorHelper the <code>TableDecoratorHelper</code>
-     * instance.
+     * @param metadataManager the {@link MetadataManager} instance.
+     * @param decoratorFactory the {@link DecoratorFactory} instance.
+     * @param tableDecoratorHelper the {@link TableDecoratorHelper} instance.
      * @return such attributes.
      */
-    @SuppressWarnings("unused")
     @NotNull
     protected List<Attribute> getAllNonReadOnlyButExternallyManagedAttributes(
-        @NotNull final String name,
         @NotNull final List<Attribute> attributes,
-        @Nullable final Table parentTable,
         @NotNull final MetadataManager metadataManager,
         @NotNull final DecoratorFactory decoratorFactory,
         @NotNull final TableDecoratorHelper tableDecoratorHelper)
     {
         List<Attribute> result =
             getNonReadOnlyAttributes(
-                name, attributes, parentTable, metadataManager, decoratorFactory, tableDecoratorHelper);
+                attributes, metadataManager, decoratorFactory, tableDecoratorHelper);
 
         result = tableDecoratorHelper.removeExternallyManaged(result);
 

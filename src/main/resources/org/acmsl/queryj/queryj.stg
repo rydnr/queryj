@@ -1330,18 +1330,21 @@ primitive_to_Object_value(value) ::= <<
 >>
 
 notnull() ::= <<
-<if(notnull_annotations_enabled)>@NotNull<endif>
+<! Conditionally add @NotNull annotations. !>
+<if(notnull_annotations_enabled)>@NotNull <else>
+<endif>
 >>
 
 nullable() ::= <<
-<if(notnull_annotations_enabled)>@Nullable<endif>
+<if(notnull_annotations_enabled)>@Nullable <else>
+<endif>
 >>
 
 type_checker(attribute) ::= <<
 <!
  Type checker for given attribute
  @param attribute the attribute.
-!><if(attribute.nullable)><nullable()> <else><if(!attribute.primitive)><notnull()> <endif><endif>
+!><if(attribute.nullable)><nullable()><else><if(!attribute.primitive)><notnull()><endif><endif>
 >>
 
 import(type) ::= <<

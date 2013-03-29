@@ -302,6 +302,11 @@ public class CachingTableDecorator
     private List<Attribute> m__lCachedReadOnlyAttributes;
 
     /**
+     * The cached non-read only, non-primary key attributes.
+     */
+    private List<Attribute> m__lCachedNonPrimaryKeyReadOnlyAttributes;
+
+    /**
      * The cached externally-managed attributes.
      */
     private List<AttributeDecorator> m__lCachedAllExternallyManagedAttributes;
@@ -487,7 +492,6 @@ public class CachingTableDecorator
      * Specifies the cached parent table.
      * @param parent such table.
      */
-    @SuppressWarnings("unused")
     protected void setCachedParentTable(@NotNull final Table parent)
     {
         immutableSetCachedParentTable(parent);
@@ -916,7 +920,6 @@ public class CachingTableDecorator
      * Caches the value-object name, uncapitalized.
      * @param value the value to cache.
      */
-    @SuppressWarnings("unused")
     protected void setCachedVoNameUncapitalized(@NotNull final String value)
     {
         immutableSetCachedVoNameUncapitalized(value);
@@ -926,7 +929,6 @@ public class CachingTableDecorator
      * Retrieves the cached value-object name, uncapitalized.
      * @return the cached value.
      */
-    @SuppressWarnings("unused")
     @Nullable
     protected String getCachedVoNameUncapitalized()
     {
@@ -1152,7 +1154,6 @@ public class CachingTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such decorator.
      */
-    @SuppressWarnings("unused")
     @Nullable
     protected TableDecorator createTableDecorator(
         @Nullable final String parentTable,
@@ -1194,7 +1195,6 @@ public class CachingTableDecorator
      * @param customSqlProvider the {@link CustomSqlProvider} instance.
      * @return such decorator.
      */
-    @SuppressWarnings("unused")
     protected TableDecorator createTableDecorator(
         @NotNull final Table parentTable,
         @NotNull final MetadataManager metadataManager,
@@ -1974,7 +1974,6 @@ public class CachingTableDecorator
      * Specifies the cached static contents.
      * @param rows the rows.
      */
-    @SuppressWarnings("unused")
     protected void setCachedStaticContent(@NotNull final List<Row> rows)
     {
         immutableSetCachedStaticContent(rows);
@@ -1984,7 +1983,6 @@ public class CachingTableDecorator
      * Retrieves the cached static contents.
      * @return such rows.
      */
-    @SuppressWarnings("unused")
     @Nullable
     public List<Row> getCachedStaticContent()
     {
@@ -2022,7 +2020,6 @@ public class CachingTableDecorator
      * Specifies the cached dynamic queries.
      * @param list such list.
      */
-    @SuppressWarnings("unused")
     protected void setCachedDynamicQueries(@NotNull final List<Sql> list)
     {
         immutableSetCachedDynamicQueries(list);
@@ -2116,7 +2113,6 @@ public class CachingTableDecorator
      * Specifies the cached custom selects.
      * @param selects such information.
      */
-    @SuppressWarnings("unused")
     protected void setCachedCustomSelects(@NotNull final List<Sql> selects)
     {
         immutableSetCachedCustomSelects(selects);
@@ -2165,7 +2161,6 @@ public class CachingTableDecorator
      * Specifies the cached custom updates or inserts.
      * @param queries such information.
      */
-    @SuppressWarnings("unused")
     protected void setCachedCustomUpdatesOrInserts(@NotNull final List<Sql> queries)
     {
         immutableSetCachedCustomUpdatesOrInserts(queries);
@@ -2213,7 +2208,6 @@ public class CachingTableDecorator
      * Specifies the cached custom results.
      * @param results the results to cache.
      */
-    @SuppressWarnings("unused")
     protected void setCachedCustomResults(@NotNull final List<ResultDecorator> results)
     {
         immutableSetCachedCustomResults(results);
@@ -2261,7 +2255,6 @@ public class CachingTableDecorator
      * Specifies the cached child attributes.
      * @param attributes such {@link Attribute attributes}.
      */
-    @SuppressWarnings("unused")
     protected void setCachedChildAttributes(@NotNull final List<Attribute> attributes)
     {
         immutableSetCachedChildAttributes(attributes);
@@ -2443,7 +2436,6 @@ public class CachingTableDecorator
      * Specifies the cached singular name, in upper case.
      * @param value such value.
      */
-    @SuppressWarnings("unused")
     protected void setCachedSingularNameUppercased(@NotNull final String value)
     {
         immutableSetCachedSingularNameUppercased(value);
@@ -2493,7 +2485,6 @@ public class CachingTableDecorator
      * Specifies the cached singular name, in lower case.
      * @param value such value.
      */
-    @SuppressWarnings("unused")
     protected void setCachedSingularNameLowercased(@NotNull final String value)
     {
         immutableSetCachedSingularNameLowercased(value);
@@ -2542,7 +2533,6 @@ public class CachingTableDecorator
      * Specifies the cached read-only attributes.
      * @param list such {@link Attribute} list.
      */
-    @SuppressWarnings("unused")
     protected void setCachedReadOnlyAttributes(@NotNull final List<Attribute> list)
     {
         immutableSetCachedReadOnlyAttributes(list);
@@ -2579,6 +2569,53 @@ public class CachingTableDecorator
     }
 
     /**
+     * Specifies the cached non-read-only, non-primary-key attributes.
+     * @param list such {@link Attribute} list.
+     */
+    protected final void immutableSetCachedNonPrimaryKeyReadOnlyAttributes(@NotNull final List<Attribute> list)
+    {
+        this.m__lCachedNonPrimaryKeyReadOnlyAttributes = list;
+    }
+
+    /**
+     * Specifies the cached non-read-only, non-primary-key attributes.
+     * @param list such {@link Attribute} list.
+     */
+    protected void setCachedNonPrimaryKeyReadOnlyAttributes(@NotNull final List<Attribute> list)
+    {
+        immutableSetCachedNonPrimaryKeyReadOnlyAttributes(list);
+    }
+
+    /**
+     * Retrieves the cached non-read-only, non-primary-key attributes.
+     * @return such list.
+     */
+    @Nullable
+    public List<Attribute> getCachedNonPrimaryKeyReadOnlyAttributes()
+    {
+        return m__lCachedNonPrimaryKeyReadOnlyAttributes;
+    }
+
+    /**
+     * Retrieves the non-read-only, non-primary-key attributes.
+     * @return such list.
+     */
+    @Override
+    @NotNull
+    public List<Attribute> getNonPrimaryKeyReadOnlyAttributes()
+    {
+        List<Attribute> result = getCachedNonPrimaryKeyReadOnlyAttributes();
+
+        if (result == null)
+        {
+            result = super.getNonPrimaryKeyReadOnlyAttributes();
+            setCachedNonPrimaryKeyReadOnlyAttributes(result);
+        }
+
+        return result;
+    }
+
+    /**
      * Retrieves the custom select-for-update queries.
      *
      * @return such list of {@link org.acmsl.queryj.customsql.Sql} elements.
@@ -2605,7 +2642,6 @@ public class CachingTableDecorator
      * Specifies the cached, externally-managed attributes.
      * @param list such {@link AttributeDecorator attributes}.
      */
-    @SuppressWarnings("unused")
     protected void setCachedAllExternallyManagedAttributes(@NotNull final List<AttributeDecorator> list)
     {
         immutableSetCachedAllExternallyManagedAttributes(list);
