@@ -105,6 +105,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -121,7 +122,7 @@ public class DAOTest
     /**
      * The table.
      */
-    private Table m__Table;
+    private Map<String, Table> m__mTables;
 
     /**
      * The foreign keys.
@@ -131,43 +132,45 @@ public class DAOTest
     /**
      * The output file.
      */
-    private File m__OutputFile;
+    private Map<String, File> m__mOutputFiles;
 
     /**
      * Creates a new test instance.
      */
     public DAOTest()
     {
+        immutableSetTables(new HashMap<String, Table>());
         immutableSetForeignKeys(new ArrayList<ForeignKey>());
+        immutableSetOutputFiles(new HashMap<String, File>());
     }
 
     /**
-     * Specifies the table.
-     * @param table the table.
+     * Specifies the tables.
+     * @param tables the tables.
      */
-    protected final void immutableSetTable(@NotNull final Table table)
+    protected final void immutableSetTables(@NotNull final Map<String, Table> tables)
     {
-        m__Table = table;
+        m__mTables = tables;
     }
 
     /**
-     * Specifies the table.
-     * @param table the table.
+     * Specifies the tables.
+     * @param tables the tables.
      */
     @SuppressWarnings("unused")
-    protected void setTable(@NotNull final Table table)
+    protected void setTables(@NotNull final Map<String, Table> tables)
     {
-        immutableSetTable(table);
+        immutableSetTables(tables);
     }
 
     /**
-     * Retrieves the table.
+     * Retrieves the tables.
      * @return such information.
      */
     @NotNull
-    protected Table getTable()
+    protected Map<String, Table> getTables()
     {
-        return m__Table;
+        return m__mTables;
     }
 
     /**
@@ -197,53 +200,66 @@ public class DAOTest
 
     /**
      * Specifies the output file.
-     * @param file such file.
+     * @param files such files.
      */
     @SuppressWarnings("unused")
-    protected void immutableSetOutputFile(@NotNull final File file)
+    protected void immutableSetOutputFiles(@NotNull final Map<String, File> files)
     {
-        m__OutputFile = file;
+        m__mOutputFiles = files;
     }
 
     /**
-     * Specifies the output file.
-     * @param file such file.
+     * Specifies the output files.
+     * @param files such files.
      */
-    protected void setOutputFile(@NotNull final File file)
+    @SuppressWarnings("unused")
+    protected void setOutputFiles(@NotNull final Map<String, File> files)
     {
-        immutableSetOutputFile(file);
+        immutableSetOutputFiles(files);
     }
 
     /**
      * Retrieves the output file.
      * @return such file.
      */
-    public File getOutputFile()
+    public Map<String, File> getOutputFiles()
     {
-        return m__OutputFile;
+        return m__mOutputFiles;
     }
 
     /**
-     * Defines the input table based on the information provided by the
+     * Defines the input tables based on the information provided by the
      * feature.
-     * @param tableInfo the information about the table.
+     * @param tableInfo the information about the tables.
      */
-    @Given("the following table:")
-    public void defineInputTable(@NotNull final DataTable tableInfo)
+    @SuppressWarnings("unused")
+    @Given("the following tables:")
+    public void defineInputTables(@NotNull final DataTable tableInfo)
+    {
+        defineInputTables(tableInfo, getTables());
+    }
+
+    /**
+     * Defines the input tables based on the information provided by the
+     * feature.
+     * @param tableInfo the information about the tables.
+     * @param tables the table collection.
+     */
+    protected void defineInputTables(
+        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table> tables)
     {
         @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
 
-        Table table = null;
+        Table table;
 
         for (@NotNull final Map<String, String> tableEntry: tableEntries)
         {
             table = convertToTable(tableEntry);
-            break;
-        }
 
-        if (table != null)
-        {
-            setTable(table);
+            if (table != null)
+            {
+                tables.put(table.getName(), table);
+            }
         }
     }
 
@@ -251,53 +267,69 @@ public class DAOTest
      * Defines the columns from the feature.
      * @param columnInfo the column information.
      */
+    @SuppressWarnings("unused")
     @And("the following columns:")
     public void defineInputColumns(@NotNull final DataTable columnInfo)
     {
-        @NotNull final Table table = getTable();
+        defineInputColumns(columnInfo, getTables());
+    }
 
-        List<Attribute> attributes = table.getAttributes();
-
-        List<Attribute> primaryKey = table.getPrimaryKey();
-
-        Attribute attribute;
-
-        int index = 1;
-
-        int precision;
-        String[] booleanInfo;
-
-        for (@NotNull final Map<String, String> columnEntry: columnInfo.asMaps())
+    /**
+     * Defines the columns from the feature.
+     * @param columnInfo the column information.
+     * @param tables the tables.
+     */
+    protected void defineInputColumns(
+        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table> tables)
+    {
+        for (@NotNull final Table table : tables.values())
         {
-            precision = retrievePrecision(columnEntry);
-            booleanInfo = retrieveBooleanInfo(columnEntry);
+            @NotNull final List<Attribute> attributes = table.getAttributes();
 
-            attribute =
-                new AttributeValueObject(
-                    columnEntry.get("column"),
-                    retrieveAttributeTypeId(columnEntry.get("type"), precision),
-                    columnEntry.get("type"),
-                    columnEntry.get("table"),
-                    "test comment",
-                    index++,
-                    retrieveLength(columnEntry),
-                    precision,
-                    columnEntry.get("keyword"),
-                    columnEntry.get("query"),
-                    Boolean.valueOf(columnEntry.get("allows null")),
-                    columnEntry.get("value"),
-                    Boolean.valueOf(columnEntry.get("readonly")),
-                    booleanInfo[0] != null,
-                    booleanInfo[0],
-                    booleanInfo[1],
-                    booleanInfo[2]);
+            @NotNull final List<Attribute> primaryKey = table.getPrimaryKey();
 
-            if (Boolean.valueOf(columnEntry.get("pk")))
+            Attribute attribute;
+
+            int index = 1;
+
+            int precision;
+            String[] booleanInfo;
+
+            for (@NotNull final Map<String, String> columnEntry: columnInfo.asMaps())
             {
-                primaryKey.add(attribute);
-            }
+                if (table.getName().equals(columnEntry.get("table")))
+                {
+                    precision = retrievePrecision(columnEntry);
+                    booleanInfo = retrieveBooleanInfo(columnEntry);
 
-            attributes.add(attribute);
+                    attribute =
+                        new AttributeValueObject(
+                            columnEntry.get("column"),
+                            retrieveAttributeTypeId(columnEntry.get("type"), precision),
+                            columnEntry.get("type"),
+                            table.getName(),
+                            "test comment",
+                            index++,
+                            retrieveLength(columnEntry),
+                            precision,
+                            columnEntry.get("keyword"),
+                            columnEntry.get("query"),
+                            Boolean.valueOf(columnEntry.get("allows null")),
+                            columnEntry.get("value"),
+                            Boolean.valueOf(columnEntry.get("readonly")),
+                            booleanInfo[0] != null,
+                            booleanInfo[0],
+                            booleanInfo[1],
+                            booleanInfo[2]);
+
+                    if (Boolean.valueOf(columnEntry.get("pk")))
+                    {
+                        primaryKey.add(attribute);
+                    }
+
+                    attributes.add(attribute);
+                }
+            }
         }
     }
 
@@ -309,7 +341,16 @@ public class DAOTest
     @And("the following foreign keys:")
     public void defineForeignKeys(@NotNull final DataTable fkInfo)
     {
-        String id;
+        defineForeignKeys(fkInfo, getTables());
+    }
+
+    /**
+     * Defines the foreign keys via cucumber features.
+     * @param fkInfo such information.
+     * @param tables the tables.
+     */
+    protected void defineForeignKeys(@NotNull final DataTable fkInfo, @NotNull final Map<String, Table> tables)
+    {
         String sourceTable;
         String sourceColumnsField;
         String[] sourceColumns;
@@ -385,106 +426,134 @@ public class DAOTest
     @When("I generate with (.*)\\.stg for (.*)")
     public void generateFile(@NotNull final String templateName, @NotNull final String engine)
     {
-        DAOTemplateGenerator generator = new DAOTemplateGenerator(false, 1);
-
-        @NotNull final Table table = getTable();
-
-        BasePerTableTemplateContext context =
-            new BasePerTableTemplateContext(
-                retrieveMetadataManager(engine, table),
-                retrieveCustomSqlProvider(),
-                "", // header
-                generator.getDecoratorFactory(),
-                "com.foo.bar.dao",
-                "com.foo.bar",
-                "acme", // repository
-                false, // marker
-                false, // jmx
-                "java:comp/env/db",
-                false, // disable generation timestamps
-                false, // disable NotNull annotations
-                true, // disable checkThread.org annotations
-                table.getName(),
-                new ArrayList<Row>(0));
-
-        DAOTemplate template = new DAOTemplate(context);
-
-        File outputDir = null;
-        try
-        {
-            rootFolder.create();
-            outputDir = rootFolder.newFolder("dao");
-        }
-        catch (@NotNull final IOException ioException)
-        {
-            Assert.fail(ioException.getMessage());
-        }
-
-//        Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
-
-        UniqueLogFactory.initializeInstance(LogFactory.getLog(DAOTest.class));
-
-        try
-        {
-            generator.write(
-                template,
-                outputDir,
-                rootFolder.getRoot(),
-                Charset.defaultCharset());
-        }
-        catch (@NotNull final IOException ioException)
-        {
-            Assert.fail(ioException.getMessage());
-        }
-        catch (@NotNull final QueryJBuildException queryjBuildException)
-        {
-            Assert.fail(queryjBuildException.getMessage());
-        }
-
-        setOutputFile(new File(outputDir, generator.retrieveTemplateFileName(context)));
+        generateFile(templateName, engine, getTables(), getOutputFiles());
     }
 
-    @SuppressWarnings("unused")
-    @Then("the generated (.*) compiles successfully")
-    public void checkGeneratedFileCompiles(@NotNull final String file)
+    /**
+     * Generates a file with the information from the feature.
+     * @param templateName the template.
+     * @param tables the tables.
+     * @param outputFiles the output files.
+     */
+    protected void generateFile(
+        @NotNull final String templateName,
+        @NotNull final String engine,
+        @NotNull final Map<String, Table> tables,
+        @NotNull final Map<String, File> outputFiles)
     {
-        File outputFile = getOutputFile();
+        // TODO: find out DAOTemplate and DAOTemplateGenerator using templateName
+        DAOTemplateGenerator generator = new DAOTemplateGenerator(false, 1);
 
-        FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
-
-        Assert.assertEquals("Wrong name of the generated file", file, outputFile.getName());
-
-        @Nullable JavaLexer t_Lexer = null;
-
-        try
+        for (@NotNull final Table table : tables.values())
         {
-            t_Lexer =
-                new JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
+            BasePerTableTemplateContext context =
+                new BasePerTableTemplateContext(
+                    retrieveMetadataManager(engine, table),
+                    retrieveCustomSqlProvider(),
+                    "", // header
+                    generator.getDecoratorFactory(),
+                    "com.foo.bar.dao",
+                    "com.foo.bar",
+                    "acme", // repository
+                    false, // marker
+                    false, // jmx
+                    "java:comp/env/db",
+                    false, // disable generation timestamps
+                    false, // disable NotNull annotations
+                    true, // disable checkThread.org annotations
+                    table.getName(),
+                    new ArrayList<Row>(0));
+
+            DAOTemplate template = new DAOTemplate(context);
+
+            File outputDir = null;
+
+            try
+            {
+                rootFolder.create();
+                outputDir = rootFolder.newFolder("dao");
+            }
+            catch (@NotNull final IOException ioException)
+            {
+                Assert.fail(ioException.getMessage());
+            }
+
+//            Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
+
+            UniqueLogFactory.initializeInstance(LogFactory.getLog(DAOTest.class));
+
+            try
+            {
+                generator.write(
+                    template,
+                    outputDir,
+                    rootFolder.getRoot(),
+                    Charset.defaultCharset());
+            }
+            catch (@NotNull final IOException ioException)
+            {
+                Assert.fail(ioException.getMessage());
+            }
+            catch (@NotNull final QueryJBuildException queryjBuildException)
+            {
+                Assert.fail(queryjBuildException.getMessage());
+            }
+
+            outputFiles.put(table.getName(), new File(outputDir, generator.retrieveTemplateFileName(context)));
         }
-        catch (final IOException missingFile)
+    }
+
+    /**
+     * Checks the generated files compile.
+     */
+    @SuppressWarnings("unused")
+    @Then("the generated files compile successfully")
+    public void checkGeneratedFilesCompile()
+    {
+        checkGeneratedFilesCompile(getOutputFiles());
+    }
+
+    /**
+     * Checks the generated files compile.
+     * @param outputFiles the output files.
+     */
+    protected void checkGeneratedFilesCompile(@NotNull final Map<String, File> outputFiles)
+    {
+        for (@NotNull File outputFile : outputFiles.values())
         {
-            Assert.fail(missingFile.getMessage());
+            FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
+
+            @Nullable JavaLexer t_Lexer = null;
+
+            try
+            {
+                t_Lexer =
+                    new JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
+            }
+            catch (final IOException missingFile)
+            {
+                Assert.fail(missingFile.getMessage());
+            }
+
+            @NotNull final CommonTokenStream t_Tokens =
+                new CommonTokenStream(t_Lexer);
+
+            @NotNull final JavaParser t_Parser = new JavaParser(t_Tokens);
+
+            try
+            {
+                t_Parser.compilationUnit();
+            }
+            catch (@NotNull final Throwable invalidClass)
+            {
+                Assert.fail(invalidClass.getMessage());
+            }
+
+            Assert.assertNotNull("Missing package", t_Parser.getPackageName());
+            Assert.assertEquals("Invalid package", "com.foo.bar.dao", t_Parser.getPackageName());
+
+            Assert.assertNotNull("Missing class", t_Parser.getRootClass());
         }
-
-        @NotNull final CommonTokenStream t_Tokens =
-            new CommonTokenStream(t_Lexer);
-
-        @NotNull final JavaParser t_Parser = new JavaParser(t_Tokens);
-
-        try
-        {
-            t_Parser.compilationUnit();
-        }
-        catch (@NotNull final Throwable invalidClass)
-        {
-            Assert.fail(invalidClass.getMessage());
-        }
-
-        Assert.assertNotNull("Missing package", t_Parser.getPackageName());
-        Assert.assertEquals("Invalid package", "com.foo.bar.dao", t_Parser.getPackageName());
-
-        Assert.assertNotNull("Missing class", t_Parser.getRootClass());
-
     }
 
     /**
@@ -545,21 +614,28 @@ public class DAOTest
      * @param tableEntry the table information.
      * @return the {@link Table} instance.
      */
-    @NotNull
+    @Nullable
     protected Table convertToTable(@NotNull final Map<String, String> tableEntry)
     {
-        Table result;
+        Table result = null;
 
-        result =
-            new TableValueObject(
-                tableEntry.get("table"),
-                tableEntry.get("comment"),
-                new ArrayList<Attribute>(),
-                new ArrayList<Attribute>(),
-                new ArrayList<ForeignKey>(),
-                null, //tableEntry.get("parent table"),
-                tableEntry.get("static") != null,
-                tableEntry.get("decorated") != null);
+        String table =  tableEntry.get("table");
+
+        if (table != null)
+        {
+            result =
+                new TableValueObject(
+                    table,
+                    tableEntry.get("comment"),
+                    new ArrayList<Attribute>(),
+                    new ArrayList<Attribute>(),
+                    new ArrayList<ForeignKey>(),
+                    // TODO: Decorate TableValueObject to retrieve the parent table via its name
+                    // and the table collection.
+                    null, //tableEntry.get("parent table"),
+                    tableEntry.get("static") != null,
+                    tableEntry.get("decorated") != null);
+        }
 
         return result;
     }
