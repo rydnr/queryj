@@ -317,34 +317,63 @@ public class DAOTest
 
         ForeignKey foreignKey;
 
-        @NotNull final Table table = getTable();
-
-        @NotNull final List<ForeignKey> foreignKeys = getForeignKeys();
-
-        for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
+        for (@NotNull final Table table : tables.values())
         {
-            sourceTable = fkEntry.get("source table");
+            @NotNull final List<ForeignKey> foreignKeys = getForeignKeys();
 
-            if (table.getName().equalsIgnoreCase(sourceTable.trim()))
+            for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
             {
-                sourceColumnsField = fkEntry.get("source columns");
-                sourceColumns = null;
-                if (sourceColumnsField != null)
+                sourceTable = fkEntry.get("source table");
+
+                if (table.getName().equalsIgnoreCase(sourceTable.trim()))
                 {
-                    sourceColumns = sourceColumnsField.split(",");
+                    sourceColumnsField = fkEntry.get("source columns");
+                    sourceColumns = null;
+                    if (sourceColumnsField != null)
+                    {
+                        sourceColumns = sourceColumnsField.split(",");
+                    }
+
+                    targetTable = fkEntry.get("target table");
+
+                    foreignKey =
+                        new ForeignKeyValueObject(
+                            sourceTable,
+                            filterAttributes(table, sourceColumns),
+                            targetTable,
+                            Boolean.valueOf(fkEntry.get("allows null")));
+
+                    foreignKeys.add(foreignKey);
                 }
-
-                targetTable = fkEntry.get("target table");
-
-                foreignKey =
-                    new ForeignKeyValueObject(
-                        sourceTable,
-                        filterAttributes(table, sourceColumns),
-                        targetTable,
-                        Boolean.valueOf(fkEntry.get("allows null")));
-
-                foreignKeys.add(foreignKey);
             }
+        }
+    }
+
+    /**
+     * Defines table values via cucumber features.
+     * @param values such information.
+     */
+    @SuppressWarnings("unused")
+    @And("the following values:")
+    public void defineValues(@NotNull final DataTable values)
+    {
+        defineValues(values, getTables());
+    }
+
+    /**
+     * Defines table values via cucumber features.
+     * @param values such information.
+     * @param tables the tables.
+     */
+    protected void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table> tables)
+    {
+        for (@NotNull final Table table : tables.values())
+        {
+            @NotNull final List<Attribute> attributes = table.getAttributes();
+
+            @NotNull final List<Attribute> primaryKey = table.getPrimaryKey();
+
+            // TODO override MetadataManager#TableDAO#findAll with the contents of "values"
         }
     }
 
