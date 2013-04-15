@@ -116,6 +116,7 @@ import checkers.nullness.quals.Nullable;
 
 class_common_javadoc(template) ::= <<
  * @author \<a href="http://www.acm-sl.org/projects/queryj"\>QueryJ\</a\> <if(template)>(<template>)<endif><if(generation_timestamps_enabled)>
+
  * @since <timestamp><endif>
 >>
 
@@ -679,6 +680,7 @@ protected static class UpdateTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
+    @Override
     <nullable()>
     protected Object doInTransaction(
         <notnull()>final TransactionStatus status,
@@ -686,7 +688,7 @@ protected static class UpdateTransactionCallback
         <notnull()>final PreparedStatementSetter setter,
         <notnull()>final <daoName>DAO dao)
     {
-        return new Integer(dao.update(creator, setter));
+        return Integer.valueOf(dao.update(creator, setter));
     }
 }
 
@@ -810,6 +812,7 @@ protected static class QueryTransactionCallback
      * @param dao the {@link <daoName>DAO} instance.
      * @return the transaction result.
      */
+    @Override
     <nullable()>
     protected Object doInTransaction(
         <notnull()>final TransactionStatus status,
@@ -930,6 +933,7 @@ protected static class SelectForUpdateTransactionCallback
      * @param status the transaction status.
      * @return the transaction result.
      */
+    @Override
     <nullable()>
     public Object doInTransaction(<notnull()>final TransactionStatus status)
     {

@@ -568,6 +568,7 @@ public class DAOTemplateUtils
         @NotNull final Connection connection)
       throws  SQLException
     {
+        // TODO: Move this to TableDAO
         @NotNull List<Row> result = new ArrayList<Row>();
 
         Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);

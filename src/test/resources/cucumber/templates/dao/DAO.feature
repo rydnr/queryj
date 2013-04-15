@@ -1,8 +1,8 @@
 Feature: DAO template
 
-  Scenario: DAO template compiles
+  Scenario: DAO template compiles for a type 1 table
 
-    Given the following table:
+    Given the following tables:
     | table | parent table | decorated | relationship | static |
     | user  |              |           |              |        |
 
@@ -22,3 +22,25 @@ Feature: DAO template
     When I generate with DAO.stg for Oracle
 
     Then the generated OracleUserDAO.java compiles successfully
+
+  Scenario: DAO template compiles for a type 2 table
+
+    Given the following tables:
+      | table       | parent table | decorated | relationship | static |
+      | car_brands  |              |           |              | name   |
+
+    And the following columns:
+      | table      | column    | type      | pk    | allows null | readonly | sequence  | keyword | boolean | length | precision |
+      | car_brands | brand_id  | number    | true  | false       | false    |           |         |         |     10 |         0 |
+      | car_brands | name      | varchar   | false | false       | false    |           |         |         |     30 |           |
+
+    And the following values:
+      | car_brands | brand_id |       name |
+      | car_brands |        1 |       SEAT |
+      | car_brands |        2 |    CITROEN |
+      | car_brands |        3 | VOLKSWAGEN |
+      | car_brands |        4 |       AUDI |
+
+    When I generate with DAO.stg for Oracle
+
+    Then the generated files compile successfully
