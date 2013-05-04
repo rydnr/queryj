@@ -99,25 +99,4 @@ public interface JavaSource
      */
     @SuppressWarnings("unused")
     public Method[] getMethods();
-
-    /**
-     * Retrieves the constructors.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    public Constructor<?>[] getConstructors();
-
-    /**
-     * Retrieves the superclass, if any.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    public String getSuperClass();
-
-    /**
-     * Retrieves the interfaces, if any.
-     * @return such information.
-     */
-    @SuppressWarnings("unused")
-    public List<String> getInterfaces();
 }

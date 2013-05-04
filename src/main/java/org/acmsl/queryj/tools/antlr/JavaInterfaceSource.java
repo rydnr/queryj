@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: JavaClassSource.java
+ * Filename: JavaInterfaceSource.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Represents normal Java classes.
+ * Description: Represents normal Java interfaces.
  *
- * Date: 3/28/13
- * Time: 1:46 PM
+ * Date: 2013/05/04
+ * Time: 19:41
  *
  */
 package org.acmsl.queryj.tools.antlr;
@@ -43,18 +43,18 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing JDK classes.
  */
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents normal Java classes.
+ * Represents normal Java interfaces.
  * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @since 2013/05/04
  */
 @SuppressWarnings("unused")
-public class JavaClassSource
+public class JavaInterfaceSource
     implements JavaSource
 {
     /**
@@ -63,23 +63,18 @@ public class JavaClassSource
     private String m__strName;
 
     /**
-     * The superclass.
+     * The super interface.
      */
-    private String m__strSuperClass;
-
-    /**
-     * The interfaces.
-     */
-    private List<String> m__lInterfaces;
+    private List<String> m__lSuperInterfaces;
 
     /**
      * Creates a class with given name.
      * @param name the name.
      */
-    public JavaClassSource(@NotNull final String name)
+    public JavaInterfaceSource(@NotNull final String name)
     {
         immutableSetName(name);
-        immutableSetInterfaces(new ArrayList<String>());
+        immutableSetSuperInterfaces(new ArrayList<String>(0));
     }
 
     /**
@@ -113,41 +108,12 @@ public class JavaClassSource
     }
 
     /**
-     * Specifies the superclass.
-     * @param superclass the superclass.
-     */
-    protected final void immutableSetSuperClass(@NotNull final String superclass)
-    {
-        m__strSuperClass = superclass;
-    }
-
-    /**
-     * Specifies the superclass.
-     * @param superclass the superclass.
-     */
-    @SuppressWarnings("unused")
-    public void setSuperClass(@NotNull final String superclass)
-    {
-        immutableSetSuperClass(superclass);
-    }
-
-    /**
-     * Retrieves the superclass, if any.
-     *
-     * @return such information.
-     */
-    public String getSuperClass()
-    {
-        return m__strSuperClass;
-    }
-
-    /**
      * Specifies the interfaces.
      * @param interfaces such information.
      */
-    protected final void immutableSetInterfaces(@NotNull final List<String> interfaces)
+    protected final void immutableSetSuperInterfaces(@NotNull final List<String> interfaces)
     {
-        m__lInterfaces = interfaces;
+        m__lSuperInterfaces = interfaces;
     }
 
     /**
@@ -155,29 +121,19 @@ public class JavaClassSource
      * @param interfaces such information.
      */
     @SuppressWarnings("unused")
-    public void setInterfaces(@NotNull final List<String> interfaces)
+    public void setSuperInterfaces(@NotNull final List<String> interfaces)
     {
-        immutableSetInterfaces(interfaces);
+        immutableSetSuperInterfaces(interfaces);
     }
 
     /**
-     * Retrieves the interfaces, if any.
+     * Retrieves the super interfaces, if any.
      *
      * @return such information.
      */
-    public List<String> getInterfaces()
+    public List<String> getSuperInterfaces()
     {
-        return m__lInterfaces;
-    }
-
-    /**
-     * Retrieves the constructors.
-     *
-     * @return such information.
-     */
-    public Constructor<?>[] getConstructors()
-    {
-        return new Constructor<?>[0];  //To change body of implemented methods use File | Settings | File Templates.
+        return m__lSuperInterfaces;
     }
 
     /**
@@ -188,7 +144,7 @@ public class JavaClassSource
     @Override
     public boolean isInterface()
     {
-        return false;
+        return true;
     }
 
     /**

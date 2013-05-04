@@ -29,7 +29,7 @@
 
  ******************************************************************************
  *
- * (From http://svn.acm-sl.org/queryj/branches/br-0_6--ventura24-2_0-0/src/main/antlr/PerComment.g)
+ * Filename: Java.g
  *
  * Author: Adapted for QueryJ by Jose San Leandro. Original license and copyright: see below.
  *
@@ -579,7 +579,7 @@ public void addImport(@NotNull final String newImport)
 }
 
 //@Override
-public void _displayRecognitionError(
+public void displayRecognitionError(
     final String[] tokenNames, final RecognitionException e)
 {
     super.displayRecognitionError(tokenNames, e);
@@ -637,7 +637,7 @@ typeDeclaration
     ;
 
 classOrInterfaceDeclaration 
-    :    classDeclaration
+    :   classDeclaration
     |   interfaceDeclaration
     ;
     
@@ -673,7 +673,7 @@ classDeclaration
     ;
 
 normalClassDeclaration
-@init{ JavaClassSource source = null; System.out.println("In normalClassDeclaration");}
+@init{ JavaClassSource source = null; }
     :   modifiers  'class' c=IDENTIFIER { source = new JavaClassSource($c.text); }
         (typeParameters
         )?
@@ -763,12 +763,14 @@ interfaceDeclaration
     ;
     
 normalInterfaceDeclaration 
-    :   modifiers 'interface' IDENTIFIER
+@init{ JavaInterfaceSource source = null; System.out.println("It's an interface");}
+    :   modifiers 'interface' c=IDENTIFIER { source = new JavaInterfaceSource($c.text); }
         (typeParameters
         )?
-        ('extends' typeList
+        ('extends' tl=typeList { source.setSuperInterfaces(tl); }
         )?
         interfaceBody
+        { setRootClass(source); }
     ;
 
 typeList returns [ List<String> result ]
