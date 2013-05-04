@@ -23,11 +23,11 @@
 
  ******************************************************************************
  *
- * Filename: AbstractDAOTest.java
+ * Filename: PerTableTemplatesTest.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: Abstract class with common methods for Cucumber tests for DAO templates.
+ * Description: Cucumber tests for per-table templates.
  *
  * Date: 2013/05/04
  * Time: 9:33 AM
@@ -38,9 +38,6 @@ package cucumber.templates.dao;
 /*
  * Importing project classes.
  */
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
@@ -58,6 +55,10 @@ import org.acmsl.queryj.metadata.vo.TableValueObject;
 import org.acmsl.queryj.templates.BasePerTableTemplate;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplate;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOTemplate;
+import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.antlr.JavaLexer;
 import org.acmsl.queryj.tools.antlr.JavaParser;
@@ -72,6 +73,10 @@ import org.acmsl.commons.utils.io.FileUtils;
  * Importing Cucumber classes.
  */
 import cucumber.api.DataTable;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
 /*
  * Importing ANTLR classes.
@@ -110,11 +115,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Abstract class with common methods for Cucumber tests for DAO templates.
+ * Cucumber tests for per-table templates.
  * @author <a href="chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/05/04
  */
-public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTableTemplateContext>>
+public class PerTableTemplatesTest
 {
     @Rule
     public TemporaryFolder rootFolder = new TemporaryFolder();
@@ -134,7 +139,7 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
     /**
      * Creates an instance.
      */
-    protected AbstractDAOTest()
+    public PerTableTemplatesTest()
     {
         immutableSetTables(new HashMap<String, Table>());
         immutableSetForeignKeys(new ArrayList<ForeignKey>());
@@ -230,7 +235,7 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
      * @param tableInfo the information about the tables.
      */
     @SuppressWarnings("unused")
-    @Given("the following tables:")
+    @Given("^the following tables:$")
     public void defineInputTables(@NotNull final DataTable tableInfo)
     {
         defineInputTables(tableInfo, getTables());
@@ -265,7 +270,7 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
      * @param columnInfo the column information.
      */
     @SuppressWarnings("unused")
-    @And("the following columns:")
+    @Given("^the following columns:$")
     public void defineInputColumns(@NotNull final DataTable columnInfo)
     {
         defineInputColumns(columnInfo, getTables());
@@ -335,7 +340,7 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
      * @param fkInfo such information.
      */
     @SuppressWarnings("unused")
-    @And("the following foreign keys:")
+    @Given("^the following foreign keys:$")
     public void defineForeignKeys(@NotNull final DataTable fkInfo)
     {
         defineForeignKeys(fkInfo, getTables());
@@ -392,7 +397,7 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
      * @param values such information.
      */
     @SuppressWarnings("unused")
-    @And("the following values:")
+    @And("^the following values:$")
     public void defineValues(@NotNull final DataTable values)
     {
         defineValues(values, getTables());
@@ -417,44 +422,90 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
     }
 
     /**
-     * Generates a file with the information from the feature.
-     */
-    @SuppressWarnings("unused")
-    public abstract void generateFile(@NotNull final String engine);
-
-    /**
      * Retrieves the template generator from given template name.
+     * @param template the template.
      * @return such generator.
      */
-    protected abstract BasePerTableTemplateGenerator<N, BasePerTableTemplateContext> retrieveTemplateGenerator();
+    @Nullable
+    protected BasePerTableTemplateGenerator retrieveTemplateGenerator(
+        @NotNull final String template)
+    {
+        BasePerTableTemplateGenerator result = null;
+
+        if ("DAO".equals(template))
+        {
+            result = new DAOTemplateGenerator(false, 1);
+        }
+        else if ("BaseDAO".equals(template))
+        {
+            result = new BaseDAOTemplateGenerator(false, 1);
+        }
+
+        return result;
+    }
 
     /**
      * Retrieves the template from given template name.
+     * @param template the template.
      * @param context the {@link BasePerTableTemplateContext} instance.
      * @return such template.
      */
-    protected abstract N retrieveTemplate(@NotNull final BasePerTableTemplateContext context);
+    @Nullable
+    protected BasePerTableTemplate retrieveTemplate(
+        @NotNull final String template, @NotNull final BasePerTableTemplateContext context)
+    {
+        BasePerTableTemplate result = null;
+
+        if ("DAO".equals(template))
+        {
+            result = new DAOTemplate(context);
+        }
+        else if ("BaseDAO".equals(template))
+        {
+            result = new BaseDAOTemplate(context);
+        }
+
+        return result;
+    }
 
     /**
-     * Retrieves the {@link DecoratorFactory} instance using given generator.
+     * Retrieves the {@link org.acmsl.queryj.metadata.DecoratorFactory} instance using given generator.
      * @param generator the generator to use.
      * @return the decorator factory.
      */
-    protected abstract DecoratorFactory retrieveDecoratorFactory(
-        BasePerTableTemplateGenerator<N, BasePerTableTemplateContext> generator);
+    @NotNull
+    protected DecoratorFactory retrieveDecoratorFactory(BasePerTableTemplateGenerator generator)
+    {
+        return generator.getDecoratorFactory();
+    }
 
     /**
      * Generates a file with the information from the feature.
+     * @param template the template.
+     * @param engine the engine.
+     */
+    @SuppressWarnings("unused")
+    @When("^I generate with (.*)\\.stg for (.*)$")
+    public void generateFile(@NotNull final String template, @NotNull final String engine)
+    {
+        generateFile(template, engine, getTables(), getOutputFiles());
+    }
+    /**
+     * Generates a file with the information from the feature.
+     * @param templateName the template.
      * @param tables the tables.
      * @param outputFiles the output files.
      */
     protected void generateFile(
+        @NotNull final String templateName,
         @NotNull final String engine,
         @NotNull final Map<String, Table> tables,
         @NotNull final Map<String, File> outputFiles)
     {
-        BasePerTableTemplateGenerator<N, BasePerTableTemplateContext> generator =
-            retrieveTemplateGenerator();
+        BasePerTableTemplateGenerator generator =
+            retrieveTemplateGenerator(templateName);
+
+        Assert.assertNotNull("No template generator found for " + templateName, generator);
 
         for (@NotNull final Table table : tables.values())
         {
@@ -476,7 +527,9 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
                     table.getName(),
                     new ArrayList<Row>(0));
 
-            N template = retrieveTemplate(context);
+            BasePerTableTemplate template = retrieveTemplate(templateName, context);
+
+            Assert.assertNotNull("No template found for " + templateName, template);
 
             File outputDir = null;
 
@@ -492,7 +545,7 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
 
 //            Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
 
-            UniqueLogFactory.initializeInstance(LogFactory.getLog(DAOTest.class));
+            UniqueLogFactory.initializeInstance(LogFactory.getLog(PerTableTemplatesTest.class));
 
             try
             {
@@ -516,20 +569,23 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
     }
 
     /**
-     * Checks the generated files compile.
+     * Checks the generated file compiles.
+     * @param outputName the name of the output file.
      */
     @SuppressWarnings("unused")
-    @Then("the generated files compile successfully")
-    public void checkGeneratedFilesCompile()
+    @Then("^the generated (.*) compiles successfully")
+    public void checkGeneratedFileCompiles(@NotNull final String outputName)
     {
-        checkGeneratedFilesCompile(getOutputFiles());
+        checkGeneratedFilesCompile(outputName, getOutputFiles());
     }
 
     /**
      * Checks the generated files compile.
+     * @param outputName the name of the output file.
      * @param outputFiles the output files.
      */
-    protected void checkGeneratedFilesCompile(@NotNull final Map<String, File> outputFiles)
+    protected void checkGeneratedFilesCompile(
+        @NotNull final String outputName, @NotNull final Map<String, File> outputFiles)
     {
         for (@NotNull File outputFile : outputFiles.values())
         {
@@ -561,10 +617,14 @@ public abstract class AbstractDAOTest<N extends BasePerTableTemplate<BasePerTabl
                 Assert.fail(invalidClass.getMessage());
             }
 
-            Assert.assertNotNull("Missing package", t_Parser.getPackageName());
-            Assert.assertEquals("Invalid package", "com.foo.bar.dao", t_Parser.getPackageName());
+            Assert.assertNotNull(
+                "Missing package in file " + outputFile.getAbsolutePath(), t_Parser.getPackageName());
+            Assert.assertEquals(
+                "Invalid package in file " + outputFile.getAbsolutePath(),
+                "com.foo.bar.dao",
+                t_Parser.getPackageName());
 
-            Assert.assertNotNull("Missing class", t_Parser.getRootClass());
+            Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), t_Parser.getRootClass());
         }
     }
 

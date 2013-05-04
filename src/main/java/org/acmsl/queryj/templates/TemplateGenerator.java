@@ -35,6 +35,7 @@ package org.acmsl.queryj.templates;
 /*
  * Importing some JetBrains annotations.
  */
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,4 +77,11 @@ public interface TemplateGenerator<T extends Template<C>, C extends TemplateCont
         @NotNull final Charset charset)
         throws  IOException,
                 QueryJBuildException;
+
+    /**
+     * Retrieves the {@link DecoratorFactory} instance.
+     * @return such instance.
+     */
+    @NotNull
+    DecoratorFactory getDecoratorFactory();
 }
