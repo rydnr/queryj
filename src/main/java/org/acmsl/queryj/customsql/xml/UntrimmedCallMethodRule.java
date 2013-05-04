@@ -43,6 +43,7 @@ import org.apache.commons.digester.CallMethodRule;
  * Importing checkthread.org annotations.
  */
 import org.checkthread.annotations.ThreadSafe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Custom implementation of Digester's CallMethodRule, so that
@@ -56,14 +57,11 @@ public class UntrimmedCallMethodRule
     /**
      * Constructs a <i>call method</i> rule with the specified method name.
      * The parameter types (if any) default to java.lang.String.
-     * @param digester the associated Digester instance.
      * @param methodName method name of the parent method to call.
      * @param paramCount the number of parameters to collect, or
      * zero for a single argument from the body of this element.
-     * @precondition methodName != null
-     * @precondition paramCount >= 0
      */
-    public UntrimmedCallMethodRule(final String methodName, final int paramCount)
+    public UntrimmedCallMethodRule(@NotNull final String methodName, final int paramCount)
     {
         super(methodName, paramCount);
     }
@@ -72,9 +70,8 @@ public class UntrimmedCallMethodRule
      * Constructs a <i>call method</i> rule with the specified method name.  
      * The method must accept no parameters.
      * @param methodName method name of the parent method to call.
-     * @precondition methodName != null
      */
-    public UntrimmedCallMethodRule(final String methodName)
+    public UntrimmedCallMethodRule(@NotNull final String methodName)
     {
         super(methodName);
     }
@@ -89,16 +86,15 @@ public class UntrimmedCallMethodRule
      * @param paramCount the number of parameters to collect, or
      * zero for a single argument from the body of ths element
      * @param paramTypes the Java class names of the arguments
-     * (if you wish to use a primitive type, specify the corresonding
+     * (if you wish to use a primitive type, specify the corresponding
      * Java wrapper class instead, such as <code>java.lang.Boolean</code>
      * for a <code>boolean</code> parameter)
-     * @precondition methodName != null
-     * @precondition paramCount >= 0
      */
+    @SuppressWarnings("unused")
     public UntrimmedCallMethodRule(
-        final String methodName,
+        @NotNull final String methodName,
         final int paramCount, 
-        final String paramTypes[])
+        @NotNull final String paramTypes[])
     {
         super(methodName, paramCount, paramTypes);
     }
@@ -114,16 +110,15 @@ public class UntrimmedCallMethodRule
      * zero for a single argument from the body of ths element
      * @param paramTypes the Java classes that represent the
      * parameter types of the method arguments
-     * (if you wish to use a primitive type, specify the corresonding
+     * (if you wish to use a primitive type, specify the corresponding
      * Java wrapper class instead, such as <code>java.lang.Boolean.TYPE</code>
      * for a <code>boolean</code> parameter)
-     * @precondition methodName != null
-     * @precondition paramCount >= 0
      */
+    @SuppressWarnings("unused")
     public UntrimmedCallMethodRule(
-        final String methodName,
+        @NotNull final String methodName,
         final int paramCount, 
-        final Class paramTypes[])
+        @NotNull final Class paramTypes[])
     {
         super(methodName, paramCount, paramTypes);
     }
@@ -132,6 +127,7 @@ public class UntrimmedCallMethodRule
      * Specifies the parameter count.
      * @param count such count.
      */
+    @SuppressWarnings("unused")
     protected void setParamCount(final int count)
     {
         super.paramCount = count;
@@ -150,6 +146,7 @@ public class UntrimmedCallMethodRule
      * Specifies the body text.
      * @param text the text.
      */
+    @SuppressWarnings("unused")
     protected void setBodyText(final String text)
     {
         super.bodyText = text;
@@ -168,7 +165,8 @@ public class UntrimmedCallMethodRule
      * Processes the body text of this element.
      * @param body the body text of this element
      */
-    public void body(final String body)
+    @SuppressWarnings("unused")
+    public void body(@NotNull final String body)
     {
         body(body, getParamCount());
     }
@@ -177,9 +175,9 @@ public class UntrimmedCallMethodRule
      * Processes the body text of this element.
      * @param body the body text of this element
      * @param paramCount the parameter count.
-     * @precondition paramCount >= 0
      */
-    protected void body(final String body, final int paramCount)
+    @SuppressWarnings("unused")
+    protected void body(@NotNull final String body, final int paramCount)
     {
         if (paramCount == 0)
         {

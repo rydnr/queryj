@@ -23,14 +23,14 @@
 
  ******************************************************************************
  *
- * Filename: DAOTest.java
+ * Filename: BaseDAOTest.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
  * Description: Cucumber test for DAO.feature
  *
- * Date: 3/23/13
- * Time: 10:20 AM
+ * Date: 2013/05/04
+ * Time: 10:06 AM
  *
  */
 package cucumber.templates.dao;
@@ -38,6 +38,10 @@ package cucumber.templates.dao;
 /*
  * Importing Cucumber classes.
  */
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.DataTable;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 /*
@@ -46,8 +50,8 @@ import cucumber.api.java.en.When;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateContext;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
-import org.acmsl.queryj.templates.dao.DAOTemplate;
-import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplate;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
 
 /*
  * Importing JetBrains annotations.
@@ -60,17 +64,17 @@ import org.jetbrains.annotations.NotNull;
 //import org.junit.Assert;
 
 /**
- * Cucumber test for DAO.feature.
+ * Cucumber test for BaseDAO.feature.
  * @author <a href="queryj@acm-sl.org">Jose San Leandro</a>
  * @since 03/2013
  */
-public class DAOTest
-    extends AbstractDAOTest<DAOTemplate>
+public class BaseDAOTest
+    extends AbstractDAOTest<BaseDAOTemplate>
 {
     /**
      * Creates a new test instance.
      */
-    public DAOTest()
+    public BaseDAOTest()
     {
     }
 
@@ -79,9 +83,9 @@ public class DAOTest
      * @return such generator.
      */
     @Override
-    protected BasePerTableTemplateGenerator<DAOTemplate, BasePerTableTemplateContext> retrieveTemplateGenerator()
+    protected BasePerTableTemplateGenerator<BaseDAOTemplate, BasePerTableTemplateContext> retrieveTemplateGenerator()
     {
-        return new DAOTemplateGenerator(false, 1);
+        return new BaseDAOTemplateGenerator(false, 1);
     }
 
     /**
@@ -90,9 +94,9 @@ public class DAOTest
      * @return such template.
      */
     @Override
-    protected DAOTemplate retrieveTemplate(@NotNull final BasePerTableTemplateContext context)
+    protected BaseDAOTemplate retrieveTemplate(@NotNull final BasePerTableTemplateContext context)
     {
-        return new DAOTemplate(context);
+        return new BaseDAOTemplate(context);
     }
 
     /**
@@ -100,11 +104,12 @@ public class DAOTest
      * @param generator the generator to use.
      * @return the decorator factory.
      */
+    @Override
     protected DecoratorFactory retrieveDecoratorFactory(
-        BasePerTableTemplateGenerator<DAOTemplate, BasePerTableTemplateContext> generator)
+        BasePerTableTemplateGenerator<BaseDAOTemplate, BasePerTableTemplateContext> generator)
     {
         // TODO: Fix this.
-        return ((DAOTemplateGenerator) generator).getDecoratorFactory();
+        return ((BaseDAOTemplateGenerator) generator).getDecoratorFactory();
     }
 
     /**
@@ -113,7 +118,7 @@ public class DAOTest
      */
     @SuppressWarnings("unused")
     @Override
-    @When("I generate with DAO\\.stg for (.*)")
+    @When("I generate with BaseDAO.stg for (.*)")
     public void generateFile(@NotNull final String engine)
     {
         generateFile(engine, getTables(), getOutputFiles());

@@ -113,30 +113,27 @@ public class CachingSqlDecorator
      * @param customSqlProvider the <code>CustomSqlProvider</code>, required
      * to decorate referred parameters.
      * @param metadataManager the metadata manager.
-     * @precondition sql != null
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
     public CachingSqlDecorator(
         @NotNull final Sql sql,
-        final CustomSqlProvider customSqlProvider,
-        final MetadataManager metadataManager)
+        @NotNull final CustomSqlProvider customSqlProvider,
+        @NotNull final MetadataManager metadataManager)
     {
         super(sql, customSqlProvider, metadataManager);
     }
 
     /**
-     * Specifies the cached splitted quoted value.
+     * Specifies the cached split quoted value.
      * @param value the value to cache.
      */
     protected final void immutableSetCachedSplittedQuotedValue(
-        final String[] value)
+        @NotNull final String[] value)
     {
         m__astrCachedSplittedQuotedValue = value;
     }
 
     /**
-     * Specifies the cached splitted quoted value.
+     * Specifies the cached split quoted value.
      * @param value the value to cache.
      */
     protected void setCachedSplittedQuotedValue(final String[] value)
@@ -145,7 +142,7 @@ public class CachingSqlDecorator
     }
 
     /**
-     * Retrieves the cached splitted quoted value.
+     * Retrieves the cached split quoted value.
      * @return such value.
      */
     @Nullable
@@ -462,7 +459,6 @@ public class CachingSqlDecorator
      * Clones given String array.
      * @param array the array to clone.
      * @return the cloned array.
-     * @precondition array != null
      */
     @NotNull
     protected String[] clone(@Nullable final String[] array)

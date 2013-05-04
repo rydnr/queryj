@@ -85,25 +85,14 @@ public class CustomSqlProvisioningHandler
      * @param parameters the parameters.
      * @return <code>true</code> if the chain should be stopped.
      * @throws QueryJBuildException if the build process cannot be performed.
-     * @precondition parameters != null
      */
     protected boolean handle(@NotNull final Map parameters)
         throws  QueryJBuildException
     {
-        boolean result = true;
-
-        MetadataManager t_MetadataManager =
-            retrieveMetadataManager(parameters);
-
-        if (t_MetadataManager != null)
-        {
-            result =
-                handle(
-                    retrieveCustomSqlProvider(parameters),
-                    t_MetadataManager);
-        }
-
-        return result;
+        return
+            handle(
+                retrieveCustomSqlProvider(parameters),
+                retrieveMetadataManager(parameters));
     }
 
     /**
@@ -111,8 +100,6 @@ public class CustomSqlProvisioningHandler
      * @param customSqlProvider the <code>CustomSqlProvider</code> instance.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return <code>true</code> if the chain should be stopped.
-     * @precondition customSqlProvider != null
-     * @precondition metadataManager != null
      */
     protected boolean handle(
         @NotNull final CustomSqlProvider customSqlProvider,
