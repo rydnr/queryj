@@ -1349,8 +1349,11 @@ public class JdbcMetadataTypeManager
         boolean result = false;
 
         if  (   ("int".equals(dataType))
-             || ("Integer".equalsIgnoreCase(dataType))
              || ("long".equalsIgnoreCase(dataType))
+             || ("boolean".equalsIgnoreCase(dataType))
+             || ("float".equalsIgnoreCase(dataType))
+             || ("char".equalsIgnoreCase(dataType))
+             || ("byte".equalsIgnoreCase(dataType))
              || ("double".equalsIgnoreCase(dataType)))
         {
             result = true;

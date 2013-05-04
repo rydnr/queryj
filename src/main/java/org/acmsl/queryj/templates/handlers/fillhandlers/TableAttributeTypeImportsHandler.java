@@ -172,6 +172,7 @@ public class TableAttributeTypeImportsHandler
                         t_Attribute.getTypeId(), t_Attribute.isBoolean());
 
                 if (   (!metadataTypeManager.inJavaLang(t_strImport))
+                    && (!metadataTypeManager.isPrimitive(t_strImport))
                     && (!result.contains(t_strImport)))
                 {
                     result.add(t_strImport);

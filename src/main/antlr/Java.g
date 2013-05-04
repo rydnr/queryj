@@ -763,7 +763,7 @@ interfaceDeclaration
     ;
     
 normalInterfaceDeclaration 
-@init{ JavaInterfaceSource source = null; System.out.println("It's an interface");}
+@init{ JavaInterfaceSource source = null; }
     :   modifiers 'interface' c=IDENTIFIER { source = new JavaInterfaceSource($c.text); }
         (typeParameters
         )?
