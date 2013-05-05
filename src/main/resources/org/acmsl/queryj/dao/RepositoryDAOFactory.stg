@@ -63,15 +63,7 @@ source() ::= <<
 // Generated using org/acmsl/queryj/dao/RepositoryDAOFactory.stg at <timestamp>
 <endif>
 
-<package_declaration(
-  packageNames=
-  [
-    base_package_name,
-    typeInitMap.baseDAOSubpackageName,
-    typeInitMap.rdbSubpackageName,
-    engine_name_lowercased,
-    subpackage_name
-  ])>
+<package_declaration(package=package)>
 
 <project_imports(
   basePackageName=base_package_name,

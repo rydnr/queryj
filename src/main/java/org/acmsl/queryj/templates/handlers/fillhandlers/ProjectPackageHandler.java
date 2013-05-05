@@ -29,8 +29,8 @@
  *
  * Description: Is able to resolve "project_package" placeholders.
  *
- * Date: 5/23/12
- * Time: 8:23 PM
+ * Date: 2012/05/23
+ * Time: 20:23
  *
  */
 package org.acmsl.queryj.templates.handlers.fillhandlers;

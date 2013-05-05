@@ -67,17 +67,13 @@ source() ::= <<
 // Generated using org/acmsl/queryj/dao/DAOFactory.stg at <timestamp>
 <endif>
 
-<package_declaration(
-  packageNames=
-  [
-    sub_package_name
-  ])>
+<package_declaration(package=package)>
 
 <project_imports(
   basePackageName=project_package,
   baseDAOSubpackageName=typeInitMap.baseDAOSubpackageName,
   rdbSubpackageName=typeInitMap.rdbSubpackageName,
-  subpackageName=sub_package_name,
+  package=package,
   engineName=engine_name,
   voName=table.voName,
   trName=repository.capitalized)>
@@ -124,7 +120,7 @@ project_imports(
   basePackageName,
   baseDAOSubpackageName,
   rdbSubpackageName,
-  subpackageName,
+  package,
   engineName,
   voName,
   trName) ::= <<
@@ -133,7 +129,7 @@ project_imports(
   @param basePackageName the base package name.
   @param baseDAOSubpackageName the subpackage name.
   @param rdbSubpackageName the subpackage for the relational-specific DAO stuff.
-  @param subpackageName the subpackage name.
+  @param package the package.
   @param engineName the engine name.
   @param voName the class name of the value-object.
   @param trName the name of the table repository.

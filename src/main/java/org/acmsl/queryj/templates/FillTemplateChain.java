@@ -45,6 +45,7 @@ import org.acmsl.queryj.templates.handlers.fillhandlers.DAOChooserPropertiesFile
 import org.acmsl.queryj.templates.handlers.fillhandlers.JndiLocationFillHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.LobHandlingFlavorHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.LobHandlingRepositoryCheckHandler;
+import org.acmsl.queryj.templates.handlers.fillhandlers.PackageNameHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.UseCheckthreadAnnotationsHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.UseNotNullAnnotationsHandler;
 import org.acmsl.queryj.tools.QueryJBuildException;
@@ -61,7 +62,6 @@ import org.acmsl.queryj.templates.handlers.fillhandlers.IsRepositoryDAOHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.ProjectPackageHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.RepositoryNameHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.SerialVersionUIDHandler;
-import org.acmsl.queryj.templates.handlers.fillhandlers.SubPackageNameHandler;
 import org.acmsl.queryj.templates.handlers.fillhandlers.TimestampHandler;
 
 /*
@@ -319,14 +319,14 @@ public abstract class FillTemplateChain<C extends TemplateContext>
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<TemplateContext,RepositoryNameHandler,DecoratedString>(
-                new RepositoryNameHandler(context)),
+            new TemplateContextFillAdapterHandler<TemplateContext,PackageNameHandler,DecoratedString>(
+                new PackageNameHandler(context)),
             relevantOnly);
 
         add(
             chain,
-            new TemplateContextFillAdapterHandler<TemplateContext,SubPackageNameHandler,DecoratedString>(
-                new SubPackageNameHandler(context)),
+            new TemplateContextFillAdapterHandler<TemplateContext,RepositoryNameHandler,DecoratedString>(
+                new RepositoryNameHandler(context)),
             relevantOnly);
 
         add(

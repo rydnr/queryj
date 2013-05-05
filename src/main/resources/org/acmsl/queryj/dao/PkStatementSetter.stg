@@ -61,11 +61,7 @@ source() ::= <<
 // Generated using org/acmsl/queryj/dao/PkStatementSetter.stg at <timestamp>
 <endif>
 
-<package_declaration(
-  packageNames=
-  [
-    sub_package_name
-  ])>
+<package_declaration(package=package)>
 
 <checkers_import()>
 /*

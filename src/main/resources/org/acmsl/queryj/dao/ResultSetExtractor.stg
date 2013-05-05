@@ -62,11 +62,7 @@ source() ::= <<
 // Generated using org/acmsl/queryj/dao/ResultSetExtractor.stg at <timestamp>
 <endif>
 
-<package_declaration(
-  packageNames=
-  [
-    sub_package_name
-  ])>
+<package_declaration(package=package)>
 
 <project_imports(
   basePackageName=project_package,

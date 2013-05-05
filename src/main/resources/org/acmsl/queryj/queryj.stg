@@ -97,10 +97,10 @@ java_header(years,description,timestamp) ::= <<
  */
 >>
 
-package_declaration(packageNames) ::= <<
+package_declaration(package) ::= <<
 <! Generates the package declaration !>
-<! @param packageNames the package names !>
-package <packageNames; separator=".">;
+<! @param package the package name !>
+package <package>;
 >>
 
 checkers_import() ::= <<

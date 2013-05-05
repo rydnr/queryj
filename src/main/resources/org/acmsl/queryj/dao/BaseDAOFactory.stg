@@ -57,14 +57,11 @@ source() ::= <<
   ],
   timestamp=timestamp)>
 <endif>
-// Generated using org/acmsl/queryj/dao/BaseDAOFactory.stg
+<if(generation_timestamps_enabled)>
+// Generated using org/acmsl/queryj/dao/BaseDAOFactory.stg at <timestamp>
+<endif>
 
-<package_declaration(
-  packageNames=
-  [
-    project_package,
-    typeInitMap.baseDAOSubpackageName
-  ])>
+<package_declaration(package=package)>
 
 <project_imports(
   daoPackage=

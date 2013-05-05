@@ -23,25 +23,25 @@
 
  ******************************************************************************
  *
- * Filename: SubPackageNameHandler.java
+ * Filename: PackageNameHandler.java
  *
  * Author: Jose San Leandro Armendariz (chous)
  *
- * Description: 
+ * Description: Is able to resolve "package" placeholders.
  *
- * Date: 5/23/12
- * Time: 8:29 PM
+ * Date: 2013/05/05
+ * Time: 16:57
  *
  */
 package org.acmsl.queryj.templates.handlers.fillhandlers;
 
 /*
- * Importing some project classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.templates.TemplateContext;
 
 /*
- * Importing some JetBrains annotations.
+ * Importing JetBrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
 
@@ -51,34 +51,34 @@ import org.jetbrains.annotations.NotNull;
 import org.checkthread.annotations.ThreadSafe;
 
 /**
-* Is able to resolve "sub_package_name" placeholders
-* @author <a href="mailto:chous@acm-sl.org">chous</a>
-* @since 2012/05/23
-*/
+ * Is able to resolve "package" placeholders.
+ * @author <a href="mailto:chous@acm-sl.org">chous</a>
+ * @since 2013/05/05
+ */
 @SuppressWarnings("unused")
 @ThreadSafe
-public class SubPackageNameHandler
-    extends AbstractTemplateContextFillHandler<TemplateContext,DecoratedString>
+public class PackageNameHandler
+    extends AbstractTemplateContextFillHandler<TemplateContext, DecoratedString>
 {
     /**
-     * Creates a handler able to resolve "sub_package_name" using given {@link TemplateContext}.
+     * Creates a handler to resolve "project_package" placeholders.
      * @param context the {@link TemplateContext context}.
      */
     @SuppressWarnings("unused")
-    public SubPackageNameHandler(@NotNull final TemplateContext context)
+    public PackageNameHandler(@NotNull final TemplateContext context)
     {
         super(context);
     }
 
     /**
-     * Returns "sub_package_name".
+     * Returns "project_package".
      * @return such placeholder.
      */
     @NotNull
     @Override
     public String getPlaceHolder()
     {
-        return "sub_package_name";
+        return "package";
     }
 
     /**
