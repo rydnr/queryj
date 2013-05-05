@@ -19,9 +19,9 @@ Feature: Per-table templates
     | source table | source columns | target table | allows null |
     | user         | company_id     | companies    | true        |
 
-    When I generate with <template>.stg for Oracle
+    When I generate with per-table <template>.stg for Oracle
 
-    Then the generated <output> compiles successfully
+    Then the generated per-table <output> file compiles successfully
 
     Examples:
       | template           | output                            |
@@ -53,9 +53,9 @@ Feature: Per-table templates
       | car_brands |        3 | VOLKSWAGEN |
       | car_brands |        4 |       AUDI |
 
-    When I generate with <template>.stg for Oracle
+    When I generate with per-table <template>.stg for Oracle
 
-    Then the generated <output> compiles successfully
+    Then the generated per-table <output> file compiles successfully
 
     Examples:
       | template           | output                            |

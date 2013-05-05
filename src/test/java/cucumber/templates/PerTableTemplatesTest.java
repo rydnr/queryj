@@ -33,17 +33,12 @@
  * Time: 9:33 AM
  *
  */
-package cucumber.templates.dao;
+package cucumber.templates;
 
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.customsql.CustomSqlProvider;
-import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.MetadataExtractionLogger;
-import org.acmsl.queryj.metadata.MetadataManager;
-import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
 import org.acmsl.queryj.metadata.vo.Attribute;
 import org.acmsl.queryj.metadata.vo.AttributeValueObject;
@@ -57,9 +52,6 @@ import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateFactory;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
-import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator;
-import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateGenerator;
-import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
 import org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory;
 import org.acmsl.queryj.templates.dao.DAOFactoryTemplateGenerator;
 import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
@@ -76,14 +68,11 @@ import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateFactory;
 import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateGenerator;
 import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
-import org.acmsl.queryj.tools.antlr.JavaLexer;
-import org.acmsl.queryj.tools.antlr.JavaParser;
 
 /*
  * Importing ACM-SL Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
-import org.acmsl.commons.utils.io.FileUtils;
 
 /*
  * Importing Cucumber classes.
@@ -93,12 +82,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-
-/*
- * Importing ANTLR classes.
- */
-import org.antlr.runtime.ANTLRFileStream;
-import org.antlr.runtime.CommonTokenStream;
 
 /*
  * Importing Apache Commons Logging classes.
@@ -115,13 +98,10 @@ import org.jetbrains.annotations.Nullable;
  * Importing JUnit classes.
  */
 import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.rules.TemporaryFolder;
 
 /*
  * Importing JDK classes.
  */
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -136,21 +116,17 @@ import java.util.Map;
  * @since 2013/05/04
  */
 public class PerTableTemplatesTest
+    extends AbstractTemplatesTest<BasePerTableTemplateGenerator, BasePerTableTemplateFactory>
 {
-    @Rule
-    public TemporaryFolder rootFolder = new TemporaryFolder();
     /**
-     * The table.
+     * The tables.
      */
     private Map<String, Table> m__mTables;
+
     /**
      * The foreign keys.
      */
     private List<ForeignKey> m__lForeignKeys;
-    /**
-     * The output file.
-     */
-    private Map<String, File> m__mOutputFiles;
 
     /**
      * Creates an instance.
@@ -159,23 +135,7 @@ public class PerTableTemplatesTest
     {
         immutableSetTables(new HashMap<String, Table>());
         immutableSetForeignKeys(new ArrayList<ForeignKey>());
-        immutableSetOutputFiles(new HashMap<String, File>());
-    }
 
-    /**
-     * A simple mapping between template names and generators.
-     */
-    private static final Map<String, BasePerTableTemplateGenerator> GENERATOR_MAPPINGS =
-        new HashMap<String, BasePerTableTemplateGenerator>();
-
-    /**
-     * A simple mapping between template names and factories.
-     */
-    private static final Map<String, BasePerTableTemplateFactory> FACTORY_MAPPINGS =
-        new HashMap<String, BasePerTableTemplateFactory>();
-
-    static
-    {
         // dao
         GENERATOR_MAPPINGS.put("DAO", new DAOTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DAO", DAOTemplateFactory.getInstance());
@@ -196,7 +156,6 @@ public class PerTableTemplatesTest
         FACTORY_MAPPINGS.put("ValueObjectFactory", ValueObjectFactoryTemplateFactory.getInstance());
         GENERATOR_MAPPINGS.put("ValueObjectImpl", new ValueObjectImplTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("ValueObjectImpl", ValueObjectImplTemplateFactory.getInstance());
-
     }
 
     /**
@@ -242,7 +201,7 @@ public class PerTableTemplatesTest
      * @param foreignKeys the foreign keys.
      */
     @SuppressWarnings("unused")
-    protected void setSetForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    protected void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
     {
         immutableSetForeignKeys(foreignKeys);
     }
@@ -251,35 +210,6 @@ public class PerTableTemplatesTest
     protected List<ForeignKey> getForeignKeys()
     {
         return m__lForeignKeys;
-    }
-
-    /**
-     * Specifies the output file.
-     * @param files such files.
-     */
-    @SuppressWarnings("unused")
-    protected void immutableSetOutputFiles(@NotNull final Map<String, File> files)
-    {
-        m__mOutputFiles = files;
-    }
-
-    /**
-     * Specifies the output files.
-     * @param files such files.
-     */
-    @SuppressWarnings("unused")
-    protected void setOutputFiles(@NotNull final Map<String, File> files)
-    {
-        immutableSetOutputFiles(files);
-    }
-
-    /**
-     * Retrieves the output file.
-     * @return such file.
-     */
-    public Map<String, File> getOutputFiles()
-    {
-        return m__mOutputFiles;
     }
 
     /**
@@ -475,35 +405,24 @@ public class PerTableTemplatesTest
     }
 
     /**
-     * Retrieves the template generator from given template name.
-     * @param template the template.
-     * @return such generator.
+     * Checks the generated file compiles.
+     * @param outputName the name of the output file.
      */
-    @Nullable
-    protected BasePerTableTemplateGenerator retrieveTemplateGenerator(
-        @NotNull final String template)
+    @SuppressWarnings("unused")
+    @Then("^the generated per-table (.*) file compiles successfully")
+    public void checkGeneratedFileCompiles(@NotNull final String outputName)
     {
-        return GENERATOR_MAPPINGS.get(template);
+        checkGeneratedFilesCompile(outputName, getOutputFiles());
     }
 
     /**
-     * Retrieves the template from given template name.
-     * @param template the template.
-     * @return such template.
-     */
-    @Nullable
-    protected BasePerTableTemplateFactory retrieveTemplateFactory(@NotNull final String template)
-    {
-        return FACTORY_MAPPINGS.get(template);
-    }
-
-    /**
-     * Retrieves the {@link org.acmsl.queryj.metadata.DecoratorFactory} instance using given generator.
+     * Retrieves the {@link DecoratorFactory} instance using given generator.
      * @param generator the generator to use.
      * @return the decorator factory.
      */
     @NotNull
-    protected DecoratorFactory retrieveDecoratorFactory(BasePerTableTemplateGenerator generator)
+    @Override
+    protected DecoratorFactory retrieveDecoratorFactory(@NotNull final BasePerTableTemplateGenerator generator)
     {
         return generator.getDecoratorFactory();
     }
@@ -514,17 +433,19 @@ public class PerTableTemplatesTest
      * @param engine the engine.
      */
     @SuppressWarnings("unused")
-    @When("^I generate with (.*)\\.stg for (.*)$")
+    @When("^I generate with per-table (.*)\\.stg for (.*)$")
     public void generateFile(@NotNull final String template, @NotNull final String engine)
     {
         generateFile(template, engine, getTables(), getOutputFiles());
     }
+
     /**
      * Generates a file with the information from the feature.
      * @param templateName the template.
      * @param tables the tables.
      * @param outputFiles the output files.
      */
+    @SuppressWarnings("unchecked")
     protected void generateFile(
         @NotNull final String templateName,
         @NotNull final String engine,
@@ -540,7 +461,7 @@ public class PerTableTemplatesTest
         {
             BasePerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 
-            Assert.assertNotNull("No template factory found for " + templateName, generator);
+            Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
             BasePerTableTemplate template =
                 templateFactory.createTemplate(
@@ -602,108 +523,6 @@ public class PerTableTemplatesTest
     }
 
     /**
-     * Checks the generated file compiles.
-     * @param outputName the name of the output file.
-     */
-    @SuppressWarnings("unused")
-    @Then("^the generated (.*) compiles successfully")
-    public void checkGeneratedFileCompiles(@NotNull final String outputName)
-    {
-        checkGeneratedFilesCompile(outputName, getOutputFiles());
-    }
-
-    /**
-     * Checks the generated files compile.
-     * @param outputName the name of the output file.
-     * @param outputFiles the output files.
-     */
-    protected void checkGeneratedFilesCompile(
-        @NotNull final String outputName, @NotNull final Map<String, File> outputFiles)
-    {
-        for (@NotNull File outputFile : outputFiles.values())
-        {
-            FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
-
-            @Nullable JavaLexer t_Lexer = null;
-
-            try
-            {
-                t_Lexer =
-                    new JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
-            }
-            catch (final IOException missingFile)
-            {
-                Assert.fail(missingFile.getMessage());
-            }
-
-            @NotNull final CommonTokenStream t_Tokens =
-                new CommonTokenStream(t_Lexer);
-
-            @NotNull final JavaParser t_Parser = new JavaParser(t_Tokens);
-
-            try
-            {
-                t_Parser.compilationUnit();
-            }
-            catch (@NotNull final Throwable invalidClass)
-            {
-                Assert.fail(invalidClass.getMessage());
-            }
-
-            Assert.assertNotNull(
-                "Missing package in file " + outputFile.getAbsolutePath(), t_Parser.getPackageName());
-            Assert.assertEquals(
-                "Invalid package in file " + outputFile.getAbsolutePath(),
-                "com.foo.bar.dao",
-                t_Parser.getPackageName());
-
-            Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), t_Parser.getRootClass());
-        }
-    }
-
-    /**
-     * Retrieves a {@link org.acmsl.queryj.metadata.MetadataManager} instance.
-     * @param engineName the name of the engine.
-     * @param table the {@link org.acmsl.queryj.metadata.vo.Table}.
-     * @return such instance.
-     */
-    @NotNull
-    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final Table table)
-    {
-        @NotNull final List<String> tableNames = new ArrayList<String>(1);
-        tableNames.add(table.getName());
-        @NotNull final List<Table> tables = new ArrayList<Table>(1);
-        tables.add(table);
-
-        return
-            new JdbcMetadataManager(
-                "fake manager",
-                null, // database metadata
-                new MetadataExtractionLogger(), // extraction listener
-                "catalog",
-                "schema",
-                tableNames,
-                tables,
-                true, // disable table extraction
-                true, // lazy table extraction
-                false, // case sensitive
-                engineName, // engine
-                "11", // engine version
-                "'"); // quote
-
-    }
-
-    /**
-     * Retrieves an empty {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance.
-     * @return such instance.
-     */
-    @NotNull
-    protected CustomSqlProvider retrieveCustomSqlProvider()
-    {
-        return new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()));
-    }
-
-    /**
      * Retrieves the id of the attribute type.
      * @param type the type.
      * @param precision the precision.
@@ -715,9 +534,9 @@ public class PerTableTemplatesTest
     }
 
     /**
-     * Converts given table information to a {@link org.acmsl.queryj.metadata.vo.Table}.
+     * Converts given table information to a {@link Table}.
      * @param tableEntry the table information.
-     * @return the {@link org.acmsl.queryj.metadata.vo.Table} instance.
+     * @return the {@link Table} instance.
      */
     @Nullable
     protected Table convertToTable(@NotNull final Map<String, String> tableEntry)
@@ -846,53 +665,4 @@ public class PerTableTemplatesTest
         return result;
     }
 
-    /**
-     * Creates a temporary directory.
-     * @param prefix the prefix to use (optional).
-     * @return the temporary folder.
-     * @throws java.io.IOException if the folder cannot be created.
-     */
-    @SuppressWarnings("unused")
-    @NotNull
-    protected File createTempFolder(@Nullable final String prefix)
-        throws IOException
-    {
-        @Nullable File result = null;
-
-        @NotNull final String folderPrefix = (prefix != null) ? prefix : "cucumber";
-
-        @Nullable IOException exceptionToThrow = null;
-
-        try
-        {
-            result = File.createTempFile(folderPrefix, Long.toString(System.nanoTime()));
-        }
-        catch (@NotNull final IOException ioException)
-        {
-            exceptionToThrow = ioException;
-        }
-
-        if (   (exceptionToThrow == null)
-            && (result != null)
-            && (!result.delete()))
-        {
-            exceptionToThrow =
-                new IOException("Could not delete temporary file: " + result.getAbsolutePath());
-        }
-
-        if (   (exceptionToThrow == null)
-            && (result != null)
-            && (!result.mkdirs()))
-        {
-            exceptionToThrow =
-                new IOException("Could not create temporary file: " + result.getAbsolutePath());
-        }
-
-        if (exceptionToThrow != null)
-        {
-            throw exceptionToThrow;
-        }
-
-        return result;
-    }
 }
