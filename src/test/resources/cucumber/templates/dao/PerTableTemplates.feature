@@ -24,9 +24,16 @@ Feature: Per-table templates
     Then the generated <output> compiles successfully
 
     Examples:
-      | template  | output             |
-      | DAO       | OracleUserDAO.java |
-      | BaseDAO   | UserDAO.java       |
+      | template           | output                            |
+      | DAO                | OracleUserDAO.java                |
+      | BaseDAO            | UserDAO.java                      |
+      | DAOFactory         | UserDAOFactory.java               |
+      | PkStatementSetter  | OracleUserPkStatementSetter.java  |
+      | ResultSetExtractor | OracleUserResultSetExtractor.java |
+      | BaseValueObject    | AbstractUserValueObject.java      |
+      | ValueObject        | UserValueObject.java              |
+      | ValueObjectFactory | UserValueObjectFactory.java       |
+      | ValueObjectImpl    | UserValueObjectImpl.java          |
 
   Scenario Outline: Per-table templates compiles for a type 2 table
 
@@ -51,6 +58,13 @@ Feature: Per-table templates
     Then the generated <output> compiles successfully
 
     Examples:
-      | template  | output             |
-      | DAO       | OracleUserDAO.java |
-      | BaseDAO   | UserDAO.java       |
+      | template           | output                            |
+      | DAO                | OracleUserDAO.java                |
+      | BaseDAO            | UserDAO.java                      |
+      | DAOFactory         | UserDAOFactory.java               |
+      | PkStatementSetter  | OracleUserPkStatementSetter.java  |
+      | ResultSetExtractor | OracleUserResultSetExtractor.java |
+      | BaseValueObject    | AbstractUserValueObject.java      |
+      | ValueObject        | UserValueObject.java              |
+      | ValueObjectFactory | UserValueObjectFactory.java       |
+      | ValueObjectImpl    | UserValueObjectImpl.java          |

@@ -53,12 +53,28 @@ import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableValueObject;
 import org.acmsl.queryj.templates.BasePerTableTemplate;
-import org.acmsl.queryj.templates.BasePerTableTemplateContext;
+import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
-import org.acmsl.queryj.templates.dao.BaseDAOTemplate;
+import org.acmsl.queryj.templates.dao.BaseDAOTemplateFactory;
 import org.acmsl.queryj.templates.dao.BaseDAOTemplateGenerator;
-import org.acmsl.queryj.templates.dao.DAOTemplate;
+import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.CustomResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOFactoryTemplateFactory;
+import org.acmsl.queryj.templates.dao.DAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOTemplateFactory;
 import org.acmsl.queryj.templates.dao.DAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.PkStatementSetterTemplateFactory;
+import org.acmsl.queryj.templates.dao.PkStatementSetterTemplateGenerator;
+import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.templates.dao.ResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.BaseValueObjectTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.ValueObjectFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateFactory;
+import org.acmsl.queryj.templates.valueobject.ValueObjectImplTemplateGenerator;
+import org.acmsl.queryj.templates.valueobject.ValueObjectTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.tools.antlr.JavaLexer;
 import org.acmsl.queryj.tools.antlr.JavaParser;
@@ -144,6 +160,43 @@ public class PerTableTemplatesTest
         immutableSetTables(new HashMap<String, Table>());
         immutableSetForeignKeys(new ArrayList<ForeignKey>());
         immutableSetOutputFiles(new HashMap<String, File>());
+    }
+
+    /**
+     * A simple mapping between template names and generators.
+     */
+    private static final Map<String, BasePerTableTemplateGenerator> GENERATOR_MAPPINGS =
+        new HashMap<String, BasePerTableTemplateGenerator>();
+
+    /**
+     * A simple mapping between template names and factories.
+     */
+    private static final Map<String, BasePerTableTemplateFactory> FACTORY_MAPPINGS =
+        new HashMap<String, BasePerTableTemplateFactory>();
+
+    static
+    {
+        // dao
+        GENERATOR_MAPPINGS.put("DAO", new DAOTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAO", DAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BaseDAO", new BaseDAOTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseDAO", BaseDAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DAOFactory", new DAOFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAOFactory", DAOFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("PkStatementSetter", new PkStatementSetterTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("PkStatementSetter", PkStatementSetterTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ResultSetExtractor", new ResultSetExtractorTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ResultSetExtractor", ResultSetExtractorTemplateFactory.getInstance());
+        // vo
+        GENERATOR_MAPPINGS.put("BaseValueObject", new BaseValueObjectTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseValueObject", BaseValueObjectTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ValueObject", new ValueObjectTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ValueObject", BaseValueObjectTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ValueObjectFactory", new ValueObjectFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ValueObjectFactory", ValueObjectFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ValueObjectImpl", new ValueObjectImplTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ValueObjectImpl", ValueObjectImplTemplateFactory.getInstance());
+
     }
 
     /**
@@ -430,42 +483,18 @@ public class PerTableTemplatesTest
     protected BasePerTableTemplateGenerator retrieveTemplateGenerator(
         @NotNull final String template)
     {
-        BasePerTableTemplateGenerator result = null;
-
-        if ("DAO".equals(template))
-        {
-            result = new DAOTemplateGenerator(false, 1);
-        }
-        else if ("BaseDAO".equals(template))
-        {
-            result = new BaseDAOTemplateGenerator(false, 1);
-        }
-
-        return result;
+        return GENERATOR_MAPPINGS.get(template);
     }
 
     /**
      * Retrieves the template from given template name.
      * @param template the template.
-     * @param context the {@link BasePerTableTemplateContext} instance.
      * @return such template.
      */
     @Nullable
-    protected BasePerTableTemplate retrieveTemplate(
-        @NotNull final String template, @NotNull final BasePerTableTemplateContext context)
+    protected BasePerTableTemplateFactory retrieveTemplateFactory(@NotNull final String template)
     {
-        BasePerTableTemplate result = null;
-
-        if ("DAO".equals(template))
-        {
-            result = new DAOTemplate(context);
-        }
-        else if ("BaseDAO".equals(template))
-        {
-            result = new BaseDAOTemplate(context);
-        }
-
-        return result;
+        return FACTORY_MAPPINGS.get(template);
     }
 
     /**
@@ -509,15 +538,19 @@ public class PerTableTemplatesTest
 
         for (@NotNull final Table table : tables.values())
         {
-            BasePerTableTemplateContext context =
-                new BasePerTableTemplateContext(
+            BasePerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
+
+            Assert.assertNotNull("No template factory found for " + templateName, generator);
+
+            BasePerTableTemplate template =
+                templateFactory.createTemplate(
                     retrieveMetadataManager(engine, table),
                     retrieveCustomSqlProvider(),
-                    "", // header
                     retrieveDecoratorFactory(generator),
                     "com.foo.bar.dao",
                     "com.foo.bar",
                     "acme", // repository
+                    "", // header
                     false, // marker
                     false, // jmx
                     "java:comp/env/db",
@@ -526,8 +559,6 @@ public class PerTableTemplatesTest
                     true, // disable checkThread.org annotations
                     table.getName(),
                     new ArrayList<Row>(0));
-
-            BasePerTableTemplate template = retrieveTemplate(templateName, context);
 
             Assert.assertNotNull("No template found for " + templateName, template);
 
@@ -564,7 +595,9 @@ public class PerTableTemplatesTest
                 Assert.fail(queryjBuildException.getMessage());
             }
 
-            outputFiles.put(table.getName(), new File(outputDir, generator.retrieveTemplateFileName(context)));
+            outputFiles.put(
+                table.getName(),
+                new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
         }
     }
 
