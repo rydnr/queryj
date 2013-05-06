@@ -3308,25 +3308,13 @@ public abstract class AbstractJdbcMetadataManagerOld
     /**
      * Parses given environment property to find out whether some tables are
      * explicitly specified.
-     * @param environmentProperty the environment propery.
-     * @return the tables especified in given environment property.
+     * @param environmentProperty the environment property.
+     * @return the tables specified in given environment property.
      */
     @NotNull
     protected String[] parseExplicitTables(@NotNull final String environmentProperty)
     {
-        @NotNull String[] result = null;
-
-        if (environmentProperty != null)
-        {
-            result = environmentProperty.split(",");
-        }
-
-        if (result == null)
-        {
-            result = EMPTY_STRING_ARRAY;
-        }
-
-        return result;
+        return environmentProperty.split(",");
     }
 
     /**
@@ -3363,7 +3351,7 @@ public abstract class AbstractJdbcMetadataManagerOld
             {
                 result = false;
             }
-            else if (tablesDisabled != null)
+            else
             {
                 result = !Arrays.asList(tablesDisabled).contains(tableName);
             }
@@ -5572,11 +5560,6 @@ public abstract class AbstractJdbcMetadataManagerOld
                 result =
                     metaLanguageUtils.retrieveColumnBool(
                         t_strColumnComment);
-
-                if  (result == null)
-                {
-                    result = new String[0];
-                }
 
                 columnBools.put(
                     buildColumnBoolsKey(

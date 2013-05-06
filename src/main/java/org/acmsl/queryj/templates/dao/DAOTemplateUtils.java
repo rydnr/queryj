@@ -573,7 +573,7 @@ public class DAOTemplateUtils
 
         Log t_Log = UniqueLogFactory.getLog(DAOTemplateUtils.class);
         
-        int t_iColumnCount = (attributes != null) ? attributes.size() : 0;
+        int t_iColumnCount = attributes.size();
 
         @Nullable ResultSet t_rsResults = null;
 
@@ -705,11 +705,6 @@ public class DAOTemplateUtils
                         sqlException);
                 }
             }
-        }
-
-        if (result == null)
-        {
-            result = new ArrayList<Row>(0);
         }
 
         return result;

@@ -381,7 +381,7 @@ public class OracleMetadataManagerOld
 
         Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
 
-        int t_iLength = (tableNames != null) ? tableNames.length : 0;
+        int t_iLength = tableNames.length;
 
         ResultSet t_Results = null;
 
@@ -548,7 +548,7 @@ public class OracleMetadataManagerOld
 
             try
             {
-                if  (t_PreparedStatement != null)
+                if (t_PreparedStatement != null)
                 {
                     t_PreparedStatement.close();
                 }
@@ -577,7 +577,7 @@ public class OracleMetadataManagerOld
     @SuppressWarnings("unused")
     protected void newExtractForeignKeys(
         @NotNull final Connection connection,
-        @Nullable final String[] tableNames,
+        @NotNull final String[] tableNames,
         @NotNull final QueryFactory queryFactory,
         @NotNull final OracleTextFunctions textFunctions)
       throws  SQLException,
@@ -587,9 +587,9 @@ public class OracleMetadataManagerOld
 
         @Nullable PreparedStatement t_PreparedStatement = null;
 
-        Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(OracleMetadataManagerOld.class);
         
-        int t_iLength = (tableNames != null) ? tableNames.length : 0;
+        final int t_iLength = tableNames.length;
         
         try
         {
@@ -613,15 +613,15 @@ public class OracleMetadataManagerOld
                 //   and rcol.position = col.position
                 //   and upper(col.table_name) = ?
 
-                @NotNull SelectQuery t_Query = queryFactory.createSelectQuery();
+                @NotNull final SelectQuery t_Query = queryFactory.createSelectQuery();
 
-                @Nullable OracleUserConstraintsTable CON =
+                @NotNull final OracleUserConstraintsTable CON =
                     OracleUserConstraintsTable.getInstance("con");
-                @Nullable OracleUserConsColumnsTable COL =
+                @NotNull final OracleUserConsColumnsTable COL =
                     OracleUserConsColumnsTable.getInstance("col");
-                @Nullable OracleUserConstraintsTable RCON =
+                @NotNull final OracleUserConstraintsTable RCON =
                     OracleUserConstraintsTable.getInstance("rcon");
-                @Nullable OracleUserConsColumnsTable RCOL =
+                @NotNull final OracleUserConsColumnsTable RCOL =
                     OracleUserConsColumnsTable.getInstance("rcol");
 
                 t_Query.select(CON.CONSTRAINT_NAME);
@@ -1226,11 +1226,6 @@ public class OracleMetadataManagerOld
                         sqlException);
                 }
             }
-        }
-
-        if  (result == null)
-        {
-            result = EMPTY_INT_ARRAY;
         }
 
         return result;

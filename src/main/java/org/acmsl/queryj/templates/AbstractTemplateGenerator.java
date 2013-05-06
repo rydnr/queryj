@@ -257,62 +257,65 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
     {
         boolean result = false;
 
-        @NotNull final String relevantContent = template.generate(true);
+        @Nullable final String relevantContent = template.generate(true);
 
-        @NotNull final String newHash = computeHash(relevantContent, charset);
-
-        @Nullable final String oldHash = retrieveHash(fileName, outputDir, rootFolder, fileUtils);
-
-        if (   (oldHash == null)
-            || (!newHash.equals(oldHash)))
+        if (relevantContent != null)
         {
-            result = true;
-        }
+            @NotNull final String newHash = computeHash(relevantContent, charset);
 
-        if (result)
-        {
-            String t_strOutputFile =
-                outputDir.getAbsolutePath()
-                + File.separator
-                + fileName;
+            @Nullable final String oldHash = retrieveHash(fileName, outputDir, rootFolder, fileUtils);
 
-            if (caching)
+            if (   (oldHash == null)
+                || (!newHash.equals(oldHash)))
             {
-                serializeTemplate(
-                    template,
-                    getOutputDir(outputDir, rootFolder).getAbsolutePath() + File.separator + "." + fileName + ".ser");
+                result = true;
             }
 
-            String t_strFileContents = template.generate(false);
-
-            if  (!"".equals(t_strFileContents))
+            if (result)
             {
-                boolean folderCreated = outputDir.mkdirs();
+                String t_strOutputFile =
+                      outputDir.getAbsolutePath()
+                    + File.separator
+                    + fileName;
 
-                if (   (!folderCreated)
-                    && (!outputDir.exists()))
+                if (caching)
                 {
-                    throw
-                        new IOException("Cannot create output dir: " + outputDir);
+                    serializeTemplate(
+                        template,
+                        getOutputDir(outputDir, rootFolder).getAbsolutePath() + File.separator + "." + fileName + ".ser");
+                }
+
+                String t_strFileContents = template.generate(false);
+
+                if  (!"".equals(t_strFileContents))
+                {
+                    boolean folderCreated = outputDir.mkdirs();
+
+                    if (   (!folderCreated)
+                        && (!outputDir.exists()))
+                    {
+                        throw
+                            new IOException("Cannot create output dir: " + outputDir);
+                    }
+                    else if (t_strFileContents != null)
+                    {
+                        log.debug(
+                              "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
+                            + t_strOutputFile);
+                    }
+
+                    fileUtils.writeFile(
+                        t_strOutputFile,
+                        t_strFileContents,
+                        charset);
+
+                    writeHash(newHash, fileName, outputDir, rootFolder, charset, fileUtils);
                 }
                 else
                 {
                     log.debug(
-                        "Writing " + (t_strFileContents.length() * 2) + " bytes (" + charset + "): "
-                        + t_strOutputFile);
+                        "Not writing " + t_strOutputFile + " since the generated content is empty");
                 }
-
-                fileUtils.writeFile(
-                    t_strOutputFile,
-                    t_strFileContents,
-                    charset);
-
-                writeHash(newHash, fileName, outputDir, rootFolder, charset, fileUtils);
-            }
-            else
-            {
-                log.debug(
-                    "Not writing " + t_strOutputFile + " since the generated content is empty");
             }
         }
 
@@ -370,6 +373,8 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
      */
     protected void serializeTemplate(@NotNull final N template, @NotNull final String outputFilePath)
     {
+        ObjectOutputStream t_osCache = null;
+
         try
         {
             @NotNull final File outputFile = new File(outputFilePath);
@@ -388,20 +393,37 @@ public abstract class AbstractTemplateGenerator<N extends Template<C>, C extends
                 throw new IOException(baseFolder + " is not writable");
             }
 
-            ObjectOutputStream t_osCache =
-                new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
+            t_osCache = new ObjectOutputStream(new FileOutputStream(new File(outputFilePath)));
 
             t_osCache.writeObject(template);
         }
         catch (@NotNull IOException cannotSerialize)
         {
             @NotNull final Log t_Log =
-                UniqueLogFactory.getLog(
-                    AbstractTemplateGenerator.class);
+                UniqueLogFactory.getLog(AbstractTemplateGenerator.class);
 
             t_Log.warn(
                 "Cannot serialize template " + outputFilePath + " (" + cannotSerialize + ")",
                 cannotSerialize);
+        }
+        finally
+        {
+            if (t_osCache != null)
+            {
+                try
+                {
+                    t_osCache.close();
+                }
+                catch (@NotNull final IOException cannotCloseCacheFile)
+                {
+                    @NotNull final Log t_Log =
+                        UniqueLogFactory.getLog(AbstractTemplateGenerator.class);
+
+                    t_Log.warn(
+                        "Cannot serialize template " + outputFilePath + " (" + cannotCloseCacheFile + ")",
+                        cannotCloseCacheFile);
+                }
+            }
         }
     }
 

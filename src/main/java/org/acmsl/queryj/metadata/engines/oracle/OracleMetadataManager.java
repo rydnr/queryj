@@ -514,13 +514,13 @@ public class OracleMetadataManager
         String t_strType = resultSet.getString("DATA_TYPE");
         int t_iLength = resultSet.getInt("DATA_LENGTH");
         Integer t_iPrecision = resultSet.getInt("DATA_PRECISION");
-        Integer t_iScale = resultSet.getInt("DATA_SCALE");
+        //Integer t_iScale = resultSet.getInt("DATA_SCALE");
         boolean t_bNullable = "Y".equalsIgnoreCase(resultSet.getString("NULLABLE"));
         int t_iOrdinalPosition = resultSet.getInt("COLUMN_ID");
         Integer t_iPkPosition = resultSet.getInt("PK_POSITION");
         String t_strFkName = resultSet.getString("FK_NAME");
         String t_strTargetTable = resultSet.getString("TARGET_TABLE");
-        Integer t_iFkPosition = resultSet.getInt("FK_POSITION");
+        //Integer t_iFkPosition = resultSet.getInt("FK_POSITION");
 
         @Nullable TableIncompleteValueObject t_Table = tableMap.get(t_strTableName);
 

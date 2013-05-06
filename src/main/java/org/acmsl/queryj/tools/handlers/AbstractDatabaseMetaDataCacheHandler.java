@@ -99,16 +99,30 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
     {
         @NotNull File t_CacheFile = retrieveCacheFile(outputDir);
 
+        @Nullable ObjectOutputStream t_osCache = null;
         try
         {
-            ObjectOutputStream t_osCache =
-                new ObjectOutputStream(new FileOutputStream(t_CacheFile));
+            t_osCache = new ObjectOutputStream(new FileOutputStream(t_CacheFile));
 
             t_osCache.writeObject(manager);
         }
-        catch (@NotNull FileNotFoundException fileNotFound)
+        catch (@NotNull final FileNotFoundException fileNotFound)
         {
             // we don't care much.
+        }
+        finally
+        {
+            if (t_osCache != null)
+            {
+                try
+                {
+                    t_osCache.close();
+                }
+                catch (@NotNull final IOException cannotClose)
+                {
+                    // we don't care much.
+                }
+            }
         }
     }
 
@@ -144,10 +158,32 @@ public abstract class AbstractDatabaseMetaDataCacheHandler
     {
         @Nullable MetadataManager result;
 
-        ObjectInputStream t_isCache =
-            new ObjectInputStream(new FileInputStream(retrieveCacheFile(outputDir)));
+        @Nullable ObjectInputStream t_isCache = null;
 
-        result = (MetadataManager) t_isCache.readObject();
+        try
+        {
+            t_isCache = new ObjectInputStream(new FileInputStream(retrieveCacheFile(outputDir)));
+
+            result = (MetadataManager) t_isCache.readObject();
+        }
+        catch (@NotNull final IOException cannotFindCacheFile)
+        {
+            throw cannotFindCacheFile;
+        }
+        finally
+        {
+            if (t_isCache != null)
+            {
+                try
+                {
+                    t_isCache.close();
+                }
+                catch (@NotNull final IOException cannotClose)
+                {
+                    // Not important.
+                }
+            }
+        }
 
         return result;
     }

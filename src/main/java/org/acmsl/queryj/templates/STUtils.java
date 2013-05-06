@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
  */
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.WeakHashMap;
 import java.util.Map;
 
@@ -73,7 +74,7 @@ public class STUtils
     /**
      * The cached template groups.
      */
-    private static final Map ST_GROUPS = new WeakHashMap();
+    private static final Map<String, StringTemplateGroup> ST_GROUPS = new WeakHashMap<String, StringTemplateGroup>();
 
     /**
      * Singleton implemented to avoid the double-checked locking.
@@ -107,22 +108,22 @@ public class STUtils
      * @param theme the theme.
      * @param errorListener the {@link StringTemplateErrorListener}
      * instance.
+     * @param charset the charset.
      * @return such instance.
-     * @precondition path != null
-     * @precondition theme != null
      */
     @Nullable
     public StringTemplateGroup retrieveGroup(
-        final String path,
-        final String theme,
-        final StringTemplateErrorListener errorListener)
+        @NotNull final String path,
+        @NotNull final String theme,
+        @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final Charset charset)
     {
-        @Nullable StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
+        @Nullable StringTemplateGroup result = ST_GROUPS.get(path);
         
         if  (result == null)
         {
-            @Nullable StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener);
-            result = retrieveUncachedGroup(path, errorListener);
+            @Nullable StringTemplateGroup t_Theme = retrieveGroup(theme, errorListener, charset);
+            result = retrieveUncachedGroup(path, errorListener, charset);
 
             if  (result != null)
             {
@@ -138,17 +139,20 @@ public class STUtils
      * Retrieves the string template group.
      * @param path the path.
      * @param errorListener the {@link StringTemplateErrorListener} instance.
+     * @param charset the charset.
      * @return such instance.
      */
     @Nullable
     protected StringTemplateGroup retrieveGroup(
-        @NotNull final String path, @NotNull final StringTemplateErrorListener errorListener)
+        @NotNull final String path,
+        @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final Charset charset)
     {
-        @Nullable StringTemplateGroup result = (StringTemplateGroup) ST_GROUPS.get(path);
+        @Nullable StringTemplateGroup result = ST_GROUPS.get(path);
         
         if  (result == null)
         {
-            result = retrieveUncachedGroup(path, errorListener);
+            result = retrieveUncachedGroup(path, errorListener, charset);
             ST_GROUPS.put(path, result);
         }
         
@@ -160,19 +164,22 @@ public class STUtils
      * @param path the path.
      * @param errorListener the {@link StringTemplateErrorListener}
      * instance.
+     * @param charset the charset.
      * @return such instance.
      */
     @Nullable
     protected StringTemplateGroup retrieveUncachedGroup(
-        @NotNull final String path, @NotNull final StringTemplateErrorListener errorListener)
+        @NotNull final String path,
+        @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final Charset charset)
     {
-        @Nullable StringTemplateGroup result = null;
+        @Nullable StringTemplateGroup result;
 
         @NotNull InputStream t_Input = STUtils.class.getResourceAsStream(path);
 
         result =
             new StringTemplateGroup(
-                new InputStreamReader(t_Input),
+                new InputStreamReader(t_Input, charset),
                 AngleBracketTemplateLexer.class,
                 errorListener);
 

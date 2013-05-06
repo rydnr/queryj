@@ -133,15 +133,12 @@ public class LazyAttribute
      * @param name the attribute name.
      * @param metadataManager the metadata manager.
      * @param metadataTypeManager the metadata type manager.
-     * @precondition tableName != null
-     * @precondition metadataManager != null
-     * @precondition metadataTypeManager != null
      */
     public LazyAttribute(
-        final String tableName,
-        final String name,
-        final MetadataManager metadataManager,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final String tableName,
+        @NotNull final String name,
+        @NotNull final MetadataManager metadataManager,
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         super(tableName, name);
         immutableSetMetadataManager(metadataManager);
@@ -153,7 +150,7 @@ public class LazyAttribute
      * @param metadataManager such instance.
      */
     protected final void immutableSetMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         m__MetadataManager = metadataManager;
     }
@@ -163,7 +160,7 @@ public class LazyAttribute
      * @param metadataManager such instance.
      */
     protected void setMetadataManager(
-        final MetadataManager metadataManager)
+        @NotNull final MetadataManager metadataManager)
     {
         immutableSetMetadataManager(metadataManager);
     }
@@ -172,6 +169,7 @@ public class LazyAttribute
      * Retrieves the metadata manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataManager getMetadataManager()
     {
         return m__MetadataManager;
@@ -182,7 +180,7 @@ public class LazyAttribute
      * @param metadataTypeManager such instance.
      */
     protected final void immutableSetMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         m__MetadataTypeManager = metadataTypeManager;
     }
@@ -193,7 +191,7 @@ public class LazyAttribute
      */
     @SuppressWarnings("unused")
     protected void setMetadataTypeManager(
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         immutableSetMetadataTypeManager(metadataTypeManager);
     }
@@ -202,6 +200,7 @@ public class LazyAttribute
      * Retrieves the metadata type manager.
      * @return such instance.
      */
+    @NotNull
     protected MetadataTypeManager getMetadataTypeManager()
     {
         return m__MetadataTypeManager;
@@ -211,7 +210,7 @@ public class LazyAttribute
      * Specifies the cached type.
      * @param type the type.
      */
-    protected final void immutableSetCachedTypeId(final Integer type)
+    protected final void immutableSetCachedTypeId(@NotNull final Integer type)
     {
         m__CachedTypeId = type;
     }
@@ -221,7 +220,7 @@ public class LazyAttribute
      * @param type the type.
      */
     @SuppressWarnings("unused")
-    protected void setCachedTypeId(final Integer type)
+    protected void setCachedTypeId(@NotNull final Integer type)
     {
         immutableSetCachedTypeId(type);
     }
@@ -230,6 +229,7 @@ public class LazyAttribute
      * Retrieves the cached type.
      * @return such information.
      */
+    @Nullable
     protected Integer getCachedTypeId()
     {
         return m__CachedTypeId;
@@ -241,7 +241,7 @@ public class LazyAttribute
      */
     public int getTypeId()
     {
-        Integer result = getCachedTypeId();
+        @Nullable Integer result = getCachedTypeId();
 
         if  (result == null)
         {
@@ -263,14 +263,11 @@ public class LazyAttribute
      * @param name the name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition name != null
-     * @precondition metadataManager != null
      */
     protected int retrieveTypeId(
-        final String tableName,
-        final String name,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String name,
+        @NotNull final MetadataManager metadataManager)
     {
         int result = -1;
 
@@ -338,11 +335,10 @@ public class LazyAttribute
      * @param type the column type.
      * @param metadataTypeManager the <code>MetadataTypeManager</code> instance.
      * @return such information.
-     * @precondition metadataTypeManager != null
      */
     protected String retrieveNativeType(
         final int type,
-        final MetadataTypeManager metadataTypeManager)
+        @NotNull final MetadataTypeManager metadataTypeManager)
     {
         return metadataTypeManager.getNativeType(type);
     }
@@ -351,7 +347,7 @@ public class LazyAttribute
      * Specifies the cached comment.
      * @param comment such comment.
      */
-    protected final void immutableSetCachedComment(final String comment)
+    protected final void immutableSetCachedComment(@NotNull final String comment)
     {
         m__strCachedComment = comment;
     }
@@ -360,7 +356,7 @@ public class LazyAttribute
      * Specifies the cached comment.
      * @param comment such comment.
      */
-    protected void setCachedComment(final String comment)
+    protected void setCachedComment(@NotNull final String comment)
     {
         immutableSetCachedComment(comment);
     }
@@ -369,6 +365,7 @@ public class LazyAttribute
      * Retrieves the cached comment.
      * @return such information.
      */
+    @Nullable
     protected String getCachedComment()
     {
         return m__strCachedComment;
@@ -378,9 +375,10 @@ public class LazyAttribute
      * Retrieves the comment.
      * @return such information.
      */
+    @Nullable
     public String getComment()
     {
-        String result = getCachedComment();
+        @Nullable String result = getCachedComment();
 
         if  (result == null)
         {
@@ -388,7 +386,10 @@ public class LazyAttribute
                 retrieveComment(
                     getTableName(), getName(), getMetadataManager());
 
-            setCachedComment(result);
+            if (result != null)
+            {
+                setCachedComment(result);
+            }
         }
 
         return result;
@@ -450,6 +451,7 @@ public class LazyAttribute
      * Retrieves whether the attribute is managed externally or not.
      * @return such information.
      */
+    @SuppressWarnings("unused")
     public boolean getManagedExternally()
     {
         Boolean result = getCachedManagedExternally();
@@ -727,7 +729,7 @@ public class LazyAttribute
      * Specifies the cached true symbol for boolean values.
      * @param symbol such symbol.
      */
-    protected final void immutableSetCachedBooleanTrue(final String symbol)
+    protected final void immutableSetCachedBooleanTrue(@NotNull final String symbol)
     {
         m__strCachedBooleanTrue = symbol;
     }
@@ -736,7 +738,7 @@ public class LazyAttribute
      * Specifies the cached true symbol for boolean values.
      * @param symbol such flag.
      */
-    protected void setCachedBooleanTrue(final String symbol)
+    protected void setCachedBooleanTrue(@NotNull final String symbol)
     {
         immutableSetCachedBooleanTrue(symbol);
     }
@@ -754,9 +756,10 @@ public class LazyAttribute
      * Retrieves the true symbol for boolean values.
      * @return such information.
      */
+    @Nullable
     public String getBooleanTrue()
     {
-        String result = getCachedBooleanTrue();
+        @Nullable String result = getCachedBooleanTrue();
 
         if  (result == null)
         {
@@ -766,7 +769,10 @@ public class LazyAttribute
                     getName(),
                     getMetadataManager());
 
-            setCachedBooleanTrue(result);
+            if (result != null)
+            {
+                setCachedBooleanTrue(result);
+            }
         }
 
         return result;
@@ -778,14 +784,12 @@ public class LazyAttribute
      * @param columnName the column name.
      * @param metadataManager the <code>MetadataManager</code> instance.
      * @return such information.
-     * @precondition tableName != null
-     * @precondition columnName != null
-     * @precondition metadataManager != null
      */
+    @Nullable
     protected String retrieveBooleanTrue(
-        final String tableName,
-        final String columnName,
-        final MetadataManager metadataManager)
+        @NotNull final String tableName,
+        @NotNull final String columnName,
+        @NotNull final MetadataManager metadataManager)
     {
         @Nullable String result = null;
 
@@ -834,7 +838,7 @@ public class LazyAttribute
      * Specifies the cached false symbol for boolean values.
      * @param symbol such symbol.
      */
-    protected final void immutableSetCachedBooleanFalse(final String symbol)
+    protected final void immutableSetCachedBooleanFalse(@NotNull final String symbol)
     {
         m__strCachedBooleanFalse = symbol;
     }
@@ -843,7 +847,7 @@ public class LazyAttribute
      * Specifies the cached false symbol for boolean values.
      * @param symbol such flag.
      */
-    protected void setCachedBooleanFalse(final String symbol)
+    protected void setCachedBooleanFalse(@NotNull final String symbol)
     {
         immutableSetCachedBooleanFalse(symbol);
     }
@@ -852,6 +856,7 @@ public class LazyAttribute
      * Retrieves the cached false symbol for boolean values.
      * @return such false.
      */
+    @Nullable
     protected String getCachedBooleanFalse()
     {
         return m__strCachedBooleanFalse;
@@ -861,9 +866,10 @@ public class LazyAttribute
      * Retrieves the false symbol for boolean values.
      * @return such information.
      */
+    @Nullable
     public String getBooleanFalse()
     {
-        String result = getCachedBooleanFalse();
+        @Nullable String result = getCachedBooleanFalse();
 
         if  (result == null)
         {
@@ -873,7 +879,10 @@ public class LazyAttribute
                     getName(),
                     getMetadataManager());
 
-            setCachedBooleanFalse(result);
+            if (result != null)
+            {
+                setCachedBooleanFalse(result);
+            }
         }
 
         return result;
@@ -908,7 +917,7 @@ public class LazyAttribute
      * Specifies the cached null symbol for boolean values.
      * @param symbol such symbol.
      */
-    protected final void immutableSetCachedBooleanNull(final String symbol)
+    protected final void immutableSetCachedBooleanNull(@NotNull final String symbol)
     {
         m__strCachedBooleanNull = symbol;
     }
@@ -917,7 +926,7 @@ public class LazyAttribute
      * Specifies the cached null symbol for boolean values.
      * @param symbol such flag.
      */
-    protected void setCachedBooleanNull(final String symbol)
+    protected void setCachedBooleanNull(@NotNull final String symbol)
     {
         immutableSetCachedBooleanNull(symbol);
     }
@@ -926,6 +935,7 @@ public class LazyAttribute
      * Retrieves the cached null symbol for boolean values.
      * @return such null.
      */
+    @Nullable
     protected String getCachedBooleanNull()
     {
         return m__strCachedBooleanNull;
@@ -935,9 +945,10 @@ public class LazyAttribute
      * Retrieves the null symbol for boolean values.
      * @return such information.
      */
+    @Nullable
     public String getBooleanNull()
     {
-        String result = getCachedBooleanNull();
+        @Nullable String result = getCachedBooleanNull();
 
         if  (result == null)
         {
@@ -947,7 +958,10 @@ public class LazyAttribute
                     getName(),
                     getMetadataManager());
 
-            setCachedBooleanNull(result);
+            if (result != null)
+            {
+                setCachedBooleanNull(result);
+            }
         }
 
         return result;
@@ -979,7 +993,7 @@ public class LazyAttribute
     }
 
     /**
-     * Retrieves whether the attribute's value is null
+     * Retrieves whether the attribute value is null
      * or not.
      *
      * @return <code>true</code> if the value is null.
@@ -1027,7 +1041,8 @@ public class LazyAttribute
      * @throws ClassCastException if the specified object's type prevents it
      *                            from being compared to this object.
      */
-    public int compareTo(final Attribute o)
+    @Override
+    public int compareTo(@Nullable final Attribute o)
     {
         int result = 1;
 
@@ -1036,15 +1051,15 @@ public class LazyAttribute
         {
             result = 0;
         }
-        else if (o instanceof Attribute)
+        else if (o != null)
         {
             @NotNull final String t_strMyTable = getTableName();
-            @NotNull final String t_strHisTable = ((Attribute) o).getTableName();
+            @NotNull final String t_strHisTable = o.getTableName();
 
             if (t_strMyTable.equals(t_strHisTable))
             {
                 final @NotNull String t_strMyName = getName();
-                final String t_strHisValue = ((Attribute) o).getValue();
+                final String t_strHisValue = o.getValue();
 
                 result = 1;
 
@@ -1059,7 +1074,7 @@ public class LazyAttribute
     }
 
     @Override
-    public boolean equals(final Object o)
+    public boolean equals(@Nullable final Object o)
     {
         if (this == o)
         {

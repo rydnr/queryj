@@ -189,7 +189,7 @@ public class CachingRowDecorator
      * Retrieves the cached lowercased version of the name.
      * @return such value.
      */
-    @NotNull
+    @Nullable
     public String getCachedNameLowercased()
     {
         return m__strCachedNameLowercased;
@@ -236,7 +236,7 @@ public class CachingRowDecorator
      * Retrieves the cached capitalized version of the name.
      * @return the value.
      */
-    @NotNull
+    @Nullable
     protected String getCachedNameCapitalized()
     {
         return m__strCachedNameCapitalized;

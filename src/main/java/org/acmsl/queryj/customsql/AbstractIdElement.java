@@ -163,9 +163,16 @@ public abstract class AbstractIdElement
     public int compareTo(@Nullable final IdentifiableElement object)
         throws  ClassCastException
     {
-        return
-            new org.apache.commons.lang.builder.CompareToBuilder()
-                .append(getId(), object.getId())
-                .toComparison();
+        int result = -1;
+
+        if (object != null)
+        {
+            result =
+                new org.apache.commons.lang.builder.CompareToBuilder()
+                    .append(getId(), object.getId())
+                    .toComparison();
+        }
+
+        return result;
     }
 }

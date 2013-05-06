@@ -728,12 +728,7 @@ public class DatabaseMetaDataLoggingHandler
         }
         catch  (@NotNull final SQLException sqlException)
         {
-            if  (t_Log != null)
-            {
-                t_Log.error(
-                    "Database metadata request failed.",
-                    sqlException);
-            }
+            t_Log.error("Database metadata request failed.", sqlException);
         }
 
         return result;

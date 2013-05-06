@@ -74,6 +74,7 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -317,6 +318,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
             retrieveGroup(
                 path,
                 "/org/acmsl/queryj/queryj.stg",
+                Charset.defaultCharset(),
                 getSTCache());
     }
     
@@ -324,13 +326,17 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * Retrieves the string template group.
      * @param path the path.
      * @param theme the theme.
+     * @param charset the charset.
      * @param cache the ST cache.
      * @return such instance.
      */
     @SuppressWarnings("unchecked")
     @Nullable
     protected StringTemplateGroup retrieveGroup(
-        @NotNull final String path, @NotNull final String theme, @NotNull final Map cache)
+        @NotNull final String path,
+        @NotNull final String theme,
+        @NotNull final Charset charset,
+        @NotNull final Map cache)
     {
         @Nullable StringTemplateGroup result;
         
@@ -345,6 +351,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     path,
                     theme,
                     retrieveStErrorListener(),
+                    charset,
                     STUtils.getInstance());
 
             if  (result != null)
@@ -386,6 +393,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      * @param theme the theme.
      * @param errorListener the {@link StringTemplateErrorListener}
      * instance.
+     * @param charset the charset.
      * @param stUtils the {@link STUtils} instance.
      * @return such instance.
      */
@@ -394,9 +402,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @NotNull final String path,
         @NotNull final String theme,
         @NotNull final StringTemplateErrorListener errorListener,
+        @NotNull final Charset charset,
         @NotNull final STUtils stUtils)
     {
-        return stUtils.retrieveGroup(path, theme, errorListener);
+        return stUtils.retrieveGroup(path, theme, errorListener, charset);
     }
 
     /**
