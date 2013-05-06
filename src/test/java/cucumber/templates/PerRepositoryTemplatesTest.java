@@ -44,8 +44,8 @@ import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
-import org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplateGenerator;
 import org.acmsl.queryj.templates.dao.DataAccessManagerTemplateFactory;
+import org.acmsl.queryj.templates.dao.DataAccessManagerTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -112,7 +112,7 @@ public class PerRepositoryTemplatesTest
     {
         immutableSetTableNames(new ArrayList<String>());
 
-        GENERATOR_MAPPINGS.put("DataAccessManager", new DataAccessContextLocalTemplateGenerator(false, 1));
+        GENERATOR_MAPPINGS.put("DataAccessManager", new DataAccessManagerTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DataAccessManager", DataAccessManagerTemplateFactory.getInstance());
     }
 
@@ -289,7 +289,7 @@ public class PerRepositoryTemplatesTest
                 retrieveDecoratorFactory(generator),
                 "com.foo.bar.dao",
                 "com.foo.bar",
-                "acme", // repository
+                repository,
                 "", // header
                 false, // marker
                 false, // jmx
