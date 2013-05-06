@@ -58,7 +58,6 @@ import org.jetbrains.annotations.Nullable;
  * Importing some JDK classes.
  */
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /*
@@ -169,13 +168,7 @@ public class BasePerRepositoryTemplateContext
     @NotNull
     public List<String> getTableNames()
     {
-        @NotNull List<String> t_lOriginal = immutableGetTableNames();
-
-        List<String> result = new ArrayList<String>(t_lOriginal);
-
-        Collections.copy(result, t_lOriginal);
-
-        return result;
+        return new ArrayList<String>(immutableGetTableNames());
     }
 
     /**

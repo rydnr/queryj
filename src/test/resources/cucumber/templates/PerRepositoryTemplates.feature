@@ -13,7 +13,7 @@ Feature: Per-repository templates
       | companies  |
       | partners   |
 
-    When I generate with per-repository <template>.stg for Oracle
+    When I generate with per-repository <template>.stg
 
     Then the generated per-repository <output> file compiles successfully
 

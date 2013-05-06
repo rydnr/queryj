@@ -102,10 +102,10 @@ public class TableListHandler
     {
         return
             decorateTables(
-                    context.getTableNames(),
-                    context.getMetadataManager(),
-                    context.getDecoratorFactory(),
-                    context.getCustomSqlProvider());
+                context.getTableNames(),
+                context.getMetadataManager(),
+                context.getDecoratorFactory(),
+                context.getCustomSqlProvider());
     }
 
     /**

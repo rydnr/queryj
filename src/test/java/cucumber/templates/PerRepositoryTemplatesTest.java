@@ -41,6 +41,7 @@ package cucumber.templates;
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.Table;
+import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
@@ -101,6 +102,16 @@ public class PerRepositoryTemplatesTest
     private String m__strRepository;
 
     /**
+     * The db user.
+     */
+    private String m__strDbUser;
+
+    /**
+     * The vendor.
+     */
+    private String m__strVendor;
+
+    /**
      * The table names.
      */
     private List<String> m__lTableNames;
@@ -142,6 +153,60 @@ public class PerRepositoryTemplatesTest
     public String getRepositoryName()
     {
         return m__strRepository;
+    }
+
+    /**
+     * Specifies the db user.
+     * @param user the database username.
+     */
+    protected final void immutableSetDbUser(@NotNull final String user)
+    {
+        this.m__strDbUser = user;
+    }
+
+    /**
+     * Specifies the db user.
+     * @param user the database username.
+     */
+    protected void setDbUser(@NotNull final String user)
+    {
+        immutableSetDbUser(user);
+    }
+
+    /**
+     * Retrieves the db user.
+     * @return the database username.
+     */
+    public String getDbUser()
+    {
+        return this.m__strDbUser;
+    }
+
+    /**
+     * Specifies the vendor.
+     * @param vendor the database vendor.
+     */
+    protected final void immutableSetVendor(@NotNull final String vendor)
+    {
+        this.m__strVendor = vendor;
+    }
+
+    /**
+     * Specifies the vendor.
+     * @param vendor the database vendor.
+     */
+    protected void setVendor(@NotNull final String vendor)
+    {
+        immutableSetVendor(vendor);
+    }
+
+    /**
+     * Specifies the vendor.
+     * @return the database vendor.
+     */
+    public String getVendor()
+    {
+        return this.m__strVendor;
     }
 
     /**
@@ -214,9 +279,11 @@ public class PerRepositoryTemplatesTest
 
         String user = repositoryInfo.get("user");
         Assert.assertNotNull("Missing repository user", user);
+        setDbUser(user);
 
         String vendor = repositoryInfo.get("vendor");
         Assert.assertNotNull("Missing repository vendor", vendor);
+        setVendor(vendor);
     }
 
     /**
@@ -226,7 +293,7 @@ public class PerRepositoryTemplatesTest
     @Given("^a repository with the following tables:$")
     public void defineTables(@NotNull final DataTable dataTable)
     {
-        defineTables(dataTable.asMaps(), getTableNames());
+        defineTables(dataTable.asMaps(), immutableGetTableNames());
     }
 
     /**
@@ -249,13 +316,12 @@ public class PerRepositoryTemplatesTest
     /**
      * Generates a file with the information from the feature.
      * @param template the template.
-     * @param engine the engine.
      */
     @SuppressWarnings("unused")
-    @When("^I generate with per-repository (.*)\\.stg for (.*)$")
-    public void generateFile(@NotNull final String template, @NotNull final String engine)
+    @When("^I generate with per-repository (.*)\\.stg$")
+    public void generateFile(@NotNull final String template)
     {
-        generateFile(template, engine, getRepositoryName(), getTableNames(), getOutputFiles());
+        generateFile(template, getRepositoryName(), getVendor(), getTableNames(), getOutputFiles());
     }
 
     /**
@@ -284,7 +350,7 @@ public class PerRepositoryTemplatesTest
 
         BasePerRepositoryTemplate template =
             templateFactory.createTemplate(
-                retrieveMetadataManager(engine, tables, new ArrayList<Table>(0)),
+                retrieveMetadataManager(engine, tables, wrapTables(tables)),
                 retrieveCustomSqlProvider(),
                 retrieveDecoratorFactory(generator),
                 "com.foo.bar.dao",
@@ -337,6 +403,24 @@ public class PerRepositoryTemplatesTest
         outputFiles.put(
             repository,
             new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
+    }
+
+    /**
+     * Wraps a list of {@link Table}s using given names.
+     * @param tableNames the table names.
+     * @return the table list.
+     */
+    protected List<Table> wrapTables(final List<String> tableNames)
+    {
+        @NotNull final List<Table> result = new ArrayList<Table>(tableNames.size());
+
+        for (String tableName : tableNames)
+        {
+            result.add(
+                new TableIncompleteValueObject(tableName, null));
+        }
+
+        return result;
     }
 
     /**

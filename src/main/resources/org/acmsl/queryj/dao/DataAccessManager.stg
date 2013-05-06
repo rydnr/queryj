@@ -124,6 +124,9 @@ public class <repository.capitalized>DataAccessManager
      */
     private static final class <repository.capitalized>DataAccessManagerSingletonContainer
     {
+        /**
+         * The singleton instance.
+         */
         private static final <repository.capitalized>DataAccessManager SINGLETON =
             new <repository.capitalized>DataAccessManager();
     }
