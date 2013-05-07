@@ -18,5 +18,20 @@ Feature: Per-repository templates
     Then the generated per-repository <output> file compiles successfully
 
   Examples:
-    | template          | output                            |
-    | DataAccessManager | ECommerceDataAccessManager.java  |
+    | template                     | output                                 |
+    | DataAccessManager            | ECommerceDataAccessManager.java        |
+    | BasePreparedStatementCreator | ECommercePreparedStatementCreator.java |
+    | BaseRepositoryDAO            | ECommerceDAO.java                      |
+    | BaseRepositoryDAOFactory     | ECommerceDAOFactory.java               |
+    | BaseResultSetExtractor       | ECommerceResultSetExtractor.java       |
+    | DAOChooser                   | ECommerceDAOChooser.java               |
+    | DAOListener                  | ECommerceDAOListener.java              |
+    | DAOListenerImpl              | ECommerceDAOListenerImpl.java          |
+    | JdbcTemplate                 | ECommerceJdbcTemplate.java             |
+    | JndiUtils                    | ECommerceJndiUtils.java                |
+    | RepositoryDAO                | ECommerceRepositoryDAO.java            |
+    | RepositoryDAOFactory         | ECommerceRepositoryDAOFactory.java     |
+    | StatisticsProvider           | ECommerceStatisticsProvider.java       |
+    | ThreadLocalBag               | ECommerceThreadLocalBag.java           |
+    | ConfigurationProperties      | e-commerce-queryj.properties           |
+    | DataAccessContextLocal       | e-commerce-dataAccessLocal.xml.sample  |

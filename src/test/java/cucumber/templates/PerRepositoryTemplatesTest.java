@@ -45,8 +45,38 @@ import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
+import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplateFactory;
+import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.RepositoryDAOTemplateFactory;
+import org.acmsl.queryj.templates.RepositoryDAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateFactory;
+import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateFactory;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOFactoryTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateFactory;
+import org.acmsl.queryj.templates.dao.BaseRepositoryDAOTemplateGenerator;
+import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateFactory;
+import org.acmsl.queryj.templates.dao.BaseResultSetExtractorTemplateGenerator;
+import org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateFactory;
+import org.acmsl.queryj.templates.dao.ConfigurationPropertiesTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOChooserTemplateFactory;
+import org.acmsl.queryj.templates.dao.DAOChooserTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOListenerImplTemplateFactory;
+import org.acmsl.queryj.templates.dao.DAOListenerImplTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DAOListenerTemplateFactory;
+import org.acmsl.queryj.templates.dao.DAOListenerTemplateGenerator;
+import org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplateFactory;
+import org.acmsl.queryj.templates.dao.DataAccessContextLocalTemplateGenerator;
 import org.acmsl.queryj.templates.dao.DataAccessManagerTemplateFactory;
 import org.acmsl.queryj.templates.dao.DataAccessManagerTemplateGenerator;
+import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateFactory;
+import org.acmsl.queryj.templates.dao.JdbcTemplateTemplateGenerator;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplateFactory;
+import org.acmsl.queryj.templates.dao.JndiUtilsTemplateGenerator;
+import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateFactory;
+import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateGenerator;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory;
+import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -125,6 +155,36 @@ public class PerRepositoryTemplatesTest
 
         GENERATOR_MAPPINGS.put("DataAccessManager", new DataAccessManagerTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DataAccessManager", DataAccessManagerTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BasePreparedStatementCreator", new BasePreparedStatementCreatorTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BasePreparedStatementCreator", BasePreparedStatementCreatorTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BaseRepositoryDAO", new BaseRepositoryDAOTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseRepositoryDAO", BaseRepositoryDAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BaseRepositoryDAOFactory", new BaseRepositoryDAOFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseRepositoryDAOFactory", BaseRepositoryDAOFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("BaseResultSetExtractor", new BaseResultSetExtractorTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("BaseResultSetExtractor", BaseResultSetExtractorTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DAOChooser", new DAOChooserTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAOChooser", DAOChooserTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DAOListener", new DAOListenerTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAOListener", DAOListenerTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DAOListenerImpl", new DAOListenerImplTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DAOListenerImpl", DAOListenerImplTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("JdbcTemplate", new JdbcTemplateTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("JdbcTemplate", JdbcTemplateTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("JndiUtils", new JndiUtilsTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("JndiUtils", JndiUtilsTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("RepositoryDAO", new RepositoryDAOTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("RepositoryDAO", RepositoryDAOTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("RepositoryDAOFactory", new RepositoryDAOFactoryTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("RepositoryDAOFactory", RepositoryDAOFactoryTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("StatisticsProvider", new StatisticsProviderTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("StatisticsProvider", StatisticsProviderTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ThreadLocalBag", new ThreadLocalBagTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ThreadLocalBag", ThreadLocalBagTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("ConfigurationProperties", new ConfigurationPropertiesTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("ConfigurationProperties", ConfigurationPropertiesTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("DataAccessContextLocal", new DataAccessContextLocalTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("DataAccessContextLocal", DataAccessContextLocalTemplateFactory.getInstance());
     }
 
     /**
