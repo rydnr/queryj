@@ -19,18 +19,18 @@ Feature: Per-repository templates
 
   Examples:
     | template                     | output                                 |
-    | DataAccessManager            | ECommerceDataAccessManager.java        |
-    | BasePreparedStatementCreator | ECommercePreparedStatementCreator.java |
-    | BaseRepositoryDAO            | ECommerceDAO.java                      |
-    | BaseRepositoryDAOFactory     | ECommerceDAOFactory.java               |
-    | BaseResultSetExtractor       | ECommerceResultSetExtractor.java       |
+#    | DataAccessManager            | ECommerceDataAccessManager.java        |
+#    | BasePreparedStatementCreator | ECommercePreparedStatementCreator.java |
+#    | BaseRepositoryDAO            | ECommerceDAO.java                      |
+#    | BaseRepositoryDAOFactory     | ECommerceDAOFactory.java               |
+#    | BaseResultSetExtractor       | ECommerceResultSetExtractor.java       |
     | DAOChooser                   | ECommerceDAOChooser.java               |
     | DAOListener                  | ECommerceDAOListener.java              |
     | DAOListenerImpl              | ECommerceDAOListenerImpl.java          |
     | JdbcTemplate                 | ECommerceJdbcTemplate.java             |
-    | JndiUtils                    | ECommerceJndiUtils.java                |
-    | RepositoryDAO                | ECommerceRepositoryDAO.java            |
-    | RepositoryDAOFactory         | ECommerceRepositoryDAOFactory.java     |
+#    | JndiUtils                    | ECommerceJndiUtils.java                |
+#    | RepositoryDAO                | ECommerceRepositoryDAO.java            |
+#    | RepositoryDAOFactory         | ECommerceRepositoryDAOFactory.java     |
     | StatisticsProvider           | ECommerceStatisticsProvider.java       |
     | ThreadLocalBag               | ECommerceThreadLocalBag.java           |
     | ConfigurationProperties      | e-commerce-queryj.properties           |

@@ -174,7 +174,7 @@ public abstract class AbstractTemplatesTest<G, F>
             }
             catch (final IOException missingFile)
             {
-                Assert.fail(missingFile.getMessage());
+                Assert.fail("Lexer error: " + missingFile.getMessage());
             }
 
             @NotNull final CommonTokenStream t_Tokens =
@@ -189,7 +189,7 @@ public abstract class AbstractTemplatesTest<G, F>
             }
             catch (@NotNull final Throwable invalidClass)
             {
-                Assert.fail(invalidClass.getMessage());
+                Assert.fail("Parser error: " + invalidClass.getMessage());
             }
 
             Assert.assertNotNull(

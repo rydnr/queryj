@@ -183,6 +183,16 @@ public class DecoratedString
     }
 
     /**
+     * Retrieves the "uppercased" and "normalized" version.
+     * @return the value associated to "[placeholder].normalizedUppercased".
+     */
+    @NotNull
+    public String getNormalizedUppercased()
+    {
+        return uppercase(getNormalized());
+    }
+
+    /**
      * Retrieves the "uppercased" version.
      * @return the value associated to "[placeholder].uppercased".
      */

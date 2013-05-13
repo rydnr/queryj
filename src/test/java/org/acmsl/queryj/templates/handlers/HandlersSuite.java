@@ -1,7 +1,7 @@
 /*
                       Project tests
 
-Copyright (C) 2003  Jose San Leandro Armend?riz
+Copyright (C) 2003-today  Jose San Leandro Armendariz
 chous@acm-sl.org
 
 This library is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ Spain
 
 ******************************************************************************
 *
-* Filename: $RCSfile$
+* Filename: HandlerSuite.java
 *
 * Author: Jose San Leandro Armend?riz
 *
@@ -37,12 +37,6 @@ Spain
 *
 */
 package org.acmsl.queryj.templates.handlers;
-
-
-/*
-* Importing project classes.
-*/
-
 
 
 /*
@@ -79,47 +73,48 @@ Boston, MA  02111-1307  USA
 
 
 /**
-* Executes all tests defined for package
-* org.acmsl.queryj.templates.handlers
-* @see org.acmsl.queryj.templates.handlers
-*/
+ * Executes all tests defined for package
+ * org.acmsl.queryj.templates.handlers
+ * @see org.acmsl.queryj.templates.handlers
+ */
 public class HandlersSuite
 // JUnitDoclet begin extends_implements
 // JUnitDoclet end extends_implements
 {
-  // JUnitDoclet begin class
-  // JUnitDoclet end class
-  
-  public static TestSuite suite()
-  {
-    TestSuite suite;
-    
-    suite =
-    new TestSuite("org.acmsl.queryj.templates.handlers");
-    
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableTemplateHandlerBundleTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableTemplateBuildHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.KeywordRepositoryTemplateHandlerBundleTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.KeywordRepositoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableRepositoryTemplateBuildHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.KeywordRepositoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableRepositoryTemplateWritingHandlerTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableTemplateWritingHandlerTest.class);
-    //suite.addTestSuite(org.acmsl.queryj.templates.handlers.TemplateHandlerBundleTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableRepositoryTemplateHandlerBundleTest.class);
-    
-    
-    
-    // JUnitDoclet begin method suite
-    // JUnitDoclet end method suite
-    
-    return suite;
-  }
-  
-  public static void main(String[] args)
-  {
-    // JUnitDoclet begin method testsuite.main
-    junit.textui.TestRunner.run(suite());
-    // JUnitDoclet end method testsuite.main
-  }
+    // JUnitDoclet begin class
+    // JUnitDoclet end class
+
+    public static TestSuite suite()
+    {
+        TestSuite suite;
+
+        suite =
+            new TestSuite("org.acmsl.queryj.templates.handlers");
+
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableTemplateHandlerBundleTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableTemplateBuildHandlerTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.KeywordRepositoryTemplateHandlerBundleTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.KeywordRepositoryTemplateBuildHandlerTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableRepositoryTemplateBuildHandlerTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.KeywordRepositoryTemplateWritingHandlerTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableRepositoryTemplateWritingHandlerTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableTemplateWritingHandlerTest.class);
+        //suite.addTestSuite(org.acmsl.queryj.templates.handlers.TemplateHandlerBundleTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.handlers.TableRepositoryTemplateHandlerBundleTest.class);
+
+        suite.addTest(org.acmsl.queryj.templates.handlers.fillhandlers.FillhandlerSuite.suite());
+
+
+        // JUnitDoclet begin method suite
+        // JUnitDoclet end method suite
+
+        return suite;
+    }
+
+    public static void main(String[] args)
+    {
+        // JUnitDoclet begin method testsuite.main
+        junit.textui.TestRunner.run(suite());
+        // JUnitDoclet end method testsuite.main
+    }
 }
