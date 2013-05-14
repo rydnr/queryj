@@ -493,4 +493,11 @@ public class PerRepositoryTemplatesTest
     {
         checkGeneratedFilesCompile(outputName, getOutputFiles());
     }
+
+    @Then("^the generated properties (.*) is valid$")
+    public void checkPropertiesIsValid(@NotNull final String outputName)
+    {
+        checkPropertiesFiles(outputName, getOutputFiles());
+    }
+
 }

@@ -75,11 +75,13 @@ import org.junit.rules.TemporaryFolder;
  */
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Generic stuff for template tests.
@@ -165,42 +167,66 @@ public abstract class AbstractTemplatesTest<G, F>
         {
             FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
 
-            @Nullable org.acmsl.queryj.tools.antlr.JavaLexer t_Lexer = null;
-
-            try
+            if (   (outputFile.getAbsolutePath().endsWith(outputName))
+                && (isJava(outputFile)))
             {
-                t_Lexer =
-                    new org.acmsl.queryj.tools.antlr.JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
+                @Nullable org.acmsl.queryj.tools.antlr.JavaLexer t_Lexer = null;
+
+                try
+                {
+                    t_Lexer =
+                        new org.acmsl.queryj.tools.antlr.JavaLexer(new ANTLRFileStream(outputFile.getAbsolutePath()));
+                }
+                catch (final IOException missingFile)
+                {
+                    Assert.fail("Lexer error: " + missingFile.getMessage());
+                }
+
+                @NotNull final CommonTokenStream t_Tokens =
+                    new CommonTokenStream(t_Lexer);
+
+                @NotNull final org.acmsl.queryj.tools.antlr.JavaParser
+                    t_Parser = new org.acmsl.queryj.tools.antlr.JavaParser(t_Tokens);
+
+                try
+                {
+                    t_Parser.compilationUnit();
+                }
+                catch (@NotNull final Throwable invalidClass)
+                {
+                    Assert.fail("Parser error: " + invalidClass.getMessage());
+                }
+
+                Assert.assertNotNull(
+                    "Missing package in file " + outputFile.getAbsolutePath(), t_Parser.getPackageName());
+                Assert.assertEquals(
+                    "Invalid package in file " + outputFile.getAbsolutePath(),
+                    "com.foo.bar.dao",
+                    t_Parser.getPackageName());
+
+                Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), t_Parser.getRootClass());
             }
-            catch (final IOException missingFile)
-            {
-                Assert.fail("Lexer error: " + missingFile.getMessage());
-            }
-
-            @NotNull final CommonTokenStream t_Tokens =
-                new CommonTokenStream(t_Lexer);
-
-            @NotNull final org.acmsl.queryj.tools.antlr.JavaParser
-                t_Parser = new org.acmsl.queryj.tools.antlr.JavaParser(t_Tokens);
-
-            try
-            {
-                t_Parser.compilationUnit();
-            }
-            catch (@NotNull final Throwable invalidClass)
-            {
-                Assert.fail("Parser error: " + invalidClass.getMessage());
-            }
-
-            Assert.assertNotNull(
-                "Missing package in file " + outputFile.getAbsolutePath(), t_Parser.getPackageName());
-            Assert.assertEquals(
-                "Invalid package in file " + outputFile.getAbsolutePath(),
-                "com.foo.bar.dao",
-                t_Parser.getPackageName());
-
-            Assert.assertNotNull("Missing class in file " + outputFile.getAbsolutePath(), t_Parser.getRootClass());
         }
+    }
+
+    /**
+     * Checks if the output file is Java or not.
+     * @param outputFile the output file.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isJava(@NotNull final File outputFile)
+    {
+        return outputFile.getAbsolutePath().endsWith(".java");
+    }
+
+    /**
+     * Checks if the output file is a properties or not.
+     * @param outputFile the output file.
+     * @return <code>true</code> in such case.
+     */
+    protected boolean isProperties(@NotNull final File outputFile)
+    {
+        return outputFile.getAbsolutePath().endsWith(".properties");
     }
 
     /**
@@ -346,4 +372,54 @@ public abstract class AbstractTemplatesTest<G, F>
                 "'"); // quote
     }
 
+    /**
+     * Checks the generated properties files are valid.
+     * @param outputName the name of the output file.
+     * @param outputFiles the output files.
+     */
+    protected void checkPropertiesFiles(
+        @NotNull final String outputName, @NotNull final Map<String, File> outputFiles)
+    {
+        for (@NotNull File outputFile : outputFiles.values())
+        {
+            FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
+
+            if (   (outputFile.getAbsolutePath().endsWith(outputName))
+                && (isProperties(outputFile)))
+            {
+                Properties properties = new Properties();
+
+                FileInputStream stream = null;
+                try
+                {
+                    stream = new FileInputStream(outputFile);
+                    properties.load(stream);
+                }
+                catch (final IOException e)
+                {
+                    Assert.fail("Cannot read file: " + e.getMessage());
+                }
+                finally
+                {
+                    if (stream != null)
+                    {
+                        try
+                        {
+                            stream.close();
+                        }
+                        catch (IOException e)
+                        {
+                            Assert.fail("Cannot read file: " +  e.getMessage());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        return "AbstractTemplatesTest{}";
+    }
 }

@@ -38,19 +38,9 @@ Spain
 */
 package org.acmsl.queryj.templates;
 
-
 /*
-* Importing project classes.
-*/
-
-import org.acmsl.queryj.templates.dao.DaoSuite;
-import org.acmsl.queryj.templates.handlers.HandlersSuite;
-import org.acmsl.queryj.templates.valueobject.ValueobjectSuite;
-
-
-/*
-/* Importing JUnit classes.
-*/
+ * Importing JUnit classes.
+ */
 import junit.framework.TestSuite;
 
 // JUnitDoclet begin import
@@ -93,33 +83,32 @@ public class TemplatesSuite
   // JUnitDoclet begin class
   // JUnitDoclet end class
   
-  public static TestSuite suite()
-  {
-    TestSuite suite;
-    
-    suite =
-    new TestSuite("org.acmsl.queryj.tools.templates");
-    
-    //suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateUtilsTest.class);
-    suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateUtilsTest.class);
-    //suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateTest.class);
-    
-    suite.addTest(org.acmsl.queryj.templates.dao.DaoSuite.suite());
-    suite.addTest(org.acmsl.queryj.templates.handlers.HandlersSuite.suite());
-    suite.addTest(org.acmsl.queryj.templates.valueobject.ValueobjectSuite.suite());
-    
-    
-    // JUnitDoclet begin method suite
-    // JUnitDoclet end method suite
-    
-    return suite;
-  }
+    public static TestSuite suite()
+    {
+        TestSuite suite;
+
+        suite = new TestSuite("org.acmsl.queryj.tools.templates");
+
+        //suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.TableRepositoryTemplateUtilsTest.class);
+        suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateUtilsTest.class);
+        //suite.addTestSuite(org.acmsl.queryj.templates.TableTemplateTest.class);
+
+        suite.addTest(org.acmsl.queryj.templates.dao.DaoSuite.suite());
+        suite.addTest(org.acmsl.queryj.templates.handlers.HandlersSuite.suite());
+        suite.addTest(org.acmsl.queryj.templates.valueobject.ValueobjectSuite.suite());
+
+
+        // JUnitDoclet begin method suite
+        // JUnitDoclet end method suite
+
+        return suite;
+    }
   
-  public static void main(String[] args)
-  {
-    // JUnitDoclet begin method testsuite.main
-    junit.textui.TestRunner.run(suite());
-    // JUnitDoclet end method testsuite.main
-  }
+    public static void main(final String[] args)
+    {
+        // JUnitDoclet begin method testsuite.main
+        junit.textui.TestRunner.run(suite());
+        // JUnitDoclet end method testsuite.main
+    }
 }

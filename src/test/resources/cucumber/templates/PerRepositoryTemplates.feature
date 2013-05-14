@@ -35,3 +35,21 @@ Feature: Per-repository templates
     | ThreadLocalBag               | ECommerceThreadLocalBag.java           |
     | ConfigurationProperties      | e-commerce-queryj.properties           |
     | DataAccessContextLocal       | e-commerce-dataAccessLocal.xml.sample  |
+
+  Scenario: queryj.properties is generated correctly for a repository
+
+    Given a repository with the following information:
+      | name       | user   | vendor |
+      | e-commerce | dbuser | Oracle |
+
+    Given a repository with the following tables:
+      | table      |
+      | users      |
+      | addresses  |
+      | companies  |
+      | partners   |
+
+    When I generate with per-repository ConfigurationProperties.stg
+
+    Then the generated properties e-commerce-queryj.properties is valid
+
