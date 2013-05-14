@@ -144,13 +144,13 @@ public class <repository.capitalized>DAOChooser
     <tables:dao_constant(
       table=it,
       repositoryLowercased=repository.lowercased,
-      repositoryUppercased=repository.uppercased);
+      repositoryUppercased=repository.normalizedUppercased);
       separator="\n\n">
 
 <if(is_repository_dao)>
     <repository_dao_constant(
       repositoryLowercased=repository.lowercased,
-      repositoryUppercased=repository.uppercased);
+      repositoryUppercased=repository.normalizedUppercased);
       separator="\n\n">
 <endif>
 
