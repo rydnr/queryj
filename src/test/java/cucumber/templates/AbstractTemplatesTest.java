@@ -417,6 +417,68 @@ public abstract class AbstractTemplatesTest<G, F>
         }
     }
 
+    /**
+     * Retrieves the output file matching the name given.
+     * @param fileName the file name.
+     * @return the output file.
+     */
+    @Nullable
+    protected File retrieveOutputFile(@NotNull final String fileName)
+    {
+        @Nullable File result = null;
+
+        for (File file : getOutputFiles().values())
+        {
+            if (file.getAbsolutePath().endsWith(fileName))
+            {
+                result = file;
+                break;
+            }
+        }
+
+        return result;
+    }
+
+    /**
+     * Reads a properties file.
+     * @param file the name of the properties file.
+     * @return the properties.
+     */
+    @Nullable
+    protected Properties readPropertiesFile(@NotNull final File file)
+    {
+        Properties result = null;
+
+        FileInputStream stream = null;
+        try
+        {
+            stream = new FileInputStream(file);
+            result = new Properties();
+            result.load(stream);
+        }
+        catch (final IOException e)
+        {
+            Assert.fail("Cannot read file: " + e.getMessage());
+        }
+        finally
+        {
+            if (stream != null)
+            {
+                try
+                {
+                    stream.close();
+                }
+                catch (IOException e)
+                {
+                    Assert.fail("Cannot read file: " +  e.getMessage());
+                }
+            }
+        }
+
+        return result;
+    }
+
+    @NotNull
     @Override
     public String toString()
     {

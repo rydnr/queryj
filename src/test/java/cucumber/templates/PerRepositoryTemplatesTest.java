@@ -39,6 +39,8 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
@@ -115,7 +117,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Maps steps in Cucumber scenarios for testing per-repository templates.
@@ -126,6 +130,16 @@ import java.util.Map;
 public class PerRepositoryTemplatesTest
     extends AbstractTemplatesTest<BasePerRepositoryTemplateGenerator, BasePerRepositoryTemplateFactory>
 {
+    /**
+     * The package name.
+     */
+    public static final String PACKAGE_NAME = "com.foo.bar";
+
+    /**
+     * The DAO package name.
+     */
+    public static final String DAO_PACKAGE_NAME = "com.foo.bar.dao";
+
     /**
      * The repository.
      */
@@ -413,8 +427,8 @@ public class PerRepositoryTemplatesTest
                 retrieveMetadataManager(engine, tables, wrapTables(tables)),
                 retrieveCustomSqlProvider(),
                 retrieveDecoratorFactory(generator),
-                "com.foo.bar.dao",
-                "com.foo.bar",
+                DAO_PACKAGE_NAME,
+                PACKAGE_NAME,
                 repository,
                 "", // header
                 false, // marker
@@ -494,10 +508,95 @@ public class PerRepositoryTemplatesTest
         checkGeneratedFilesCompile(outputName, getOutputFiles());
     }
 
-    @Then("^the generated properties (.*) is valid$")
+    /**
+     * Checks whether the generated properties file is valid.
+     * @param outputName the output name.
+     */
+    @Then("^the generated properties (.*)-queryj.properties is valid$")
     public void checkPropertiesIsValid(@NotNull final String outputName)
     {
-        checkPropertiesFiles(outputName, getOutputFiles());
+        checkPropertiesIsValid(
+            outputName,
+            getOutputFiles(),
+            getTableNames(),
+            getVendor(),
+            EnglishGrammarUtils.getInstance(),
+            StringUtils.getInstance());
     }
 
+    /**
+     * Checks whether the generated properties file is valid.
+     * @param outputName the output name.
+     * @param outputFiles the output files.
+     * @param tableNames the table names.
+     * @param vendor the vendor.
+     * @param grammarUtils the {@link EnglishGrammarUtils} instance.
+     */
+    protected void checkPropertiesIsValid(
+        @NotNull final String outputName,
+        @NotNull final Map<String,File> outputFiles,
+        @NotNull final List<String> tableNames,
+        @NotNull final String vendor,
+        @NotNull final EnglishGrammarUtils grammarUtils,
+        @NotNull final StringUtils stringUtils)
+    {
+        checkPropertiesFiles(outputName, outputFiles);
+        File file = retrieveOutputFile(outputName.concat("-queryj.properties"));
+
+        if (file != null)
+        {
+            Properties properties = readPropertiesFile(file);
+
+            Assert.assertEquals(
+                "Invalid number of entries in " + file.getAbsolutePath(),
+                tableNames.size(),
+                properties.size());
+
+            for (String tableName : tableNames)
+            {
+                String singularTableName = toSingular(tableName, grammarUtils);
+
+                String key =
+                    getRepositoryName() + "." + singularTableName + ".dao";
+
+                Assert.assertTrue(
+                    "Missing entry in " + file.getAbsolutePath(),
+                    properties.containsKey(key));
+
+                Assert.assertEquals(
+                    "Invalid entry " + key + " in " + file.getAbsolutePath(),
+                    DAO_PACKAGE_NAME
+                    + ".rdb."
+                    + vendor.toLowerCase(Locale.getDefault())
+                    + "." + vendor
+                    + capitalize(singularTableName, stringUtils)
+                    + "DAOFactory",
+                    properties.getProperty(key));
+            }
+        }
+    }
+
+    /**
+     * Converts given word to singular.
+     * @param value the word.
+     * @param grammarUtils the {@link EnglishGrammarUtils} instance.
+     * @return the singular word.
+     */
+    protected String toSingular(
+        @NotNull final String value, @NotNull final EnglishGrammarUtils grammarUtils)
+    {
+        return grammarUtils.getSingular(value);
+    }
+
+    /**
+     * Capitalizes given value.
+     * @param value the value.
+     * @param stringUtils the {@link StringUtils} instance.
+     * @return the capitalized value.
+     */
+    protected String capitalize(
+        @NotNull final String value, @NotNull final StringUtils stringUtils)
+    {
+        return stringUtils.capitalize(value);
+    }
 }
