@@ -811,8 +811,25 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         {
             try
             {
-                @NotNull Map placeHolders = buildFillTemplateChain(context, relevantOnly).providePlaceholders();
+                @NotNull final Map<String, ?> placeHolders =
+                    buildFillTemplateChain(context, relevantOnly).providePlaceholders();
                 t_Template.setAttributes(placeHolders);
+                t_Template.setErrorListener(
+                    new StringTemplateErrorListener()
+                    {
+                        @Override
+                        public void error(final String s, final Throwable throwable)
+                        {
+                            UniqueLogFactory.getLog(AbstractTemplate.class).error(s, throwable);
+                        }
+
+                        @Override
+                        public void warning(final String s)
+                        {
+                            UniqueLogFactory.getLog(AbstractTemplate.class).warn(s);
+                        }
+                    }
+                );
             }
             catch (@NotNull final QueryJBuildException invalidTemplate)
             {
@@ -837,9 +854,16 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
                     debugTool.setVisible(true);
 
-                    while (debugTool.isShowing())
+                    while (debugTool.isVisible())
                     {
-                        int a = 1;
+                        try
+                        {
+                            wait(1000);
+                        }
+                        catch (InterruptedException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }

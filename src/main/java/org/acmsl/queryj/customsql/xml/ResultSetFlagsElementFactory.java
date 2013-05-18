@@ -1,4 +1,3 @@
-//;-*- mode: java -*-
 /*
                         QueryJ
 
@@ -70,7 +69,7 @@ public class ResultSetFlagsElementFactory
     /**
      * Creates a ResultSetFlagsElementFactory instance.
      */
-    public ResultSetFlagsElementFactory() {};
+    public ResultSetFlagsElementFactory() {}
 
     /**
      * Creates a ResultSetFlagsElement instance from given SAX
@@ -80,25 +79,22 @@ public class ResultSetFlagsElementFactory
      * @param conversionUtils the ConversionUtils instance.
      * @return the &lt;sql&gt; information.
      * @throws SAXException if the attributes are not valid.
-     * @precondition attributes != null
-     * @precondition digester != null
-     * @precondition conversionUtils != null
      */
     @Nullable
     public Object createObject(
         @NotNull final Attributes attributes,
-        final Digester digester,
-        final ConversionUtils conversionUtils)
+        @NotNull final Digester digester,
+        @NotNull final ConversionUtils conversionUtils)
       throws SAXException
     {
-        @Nullable ResultSetFlagsElement result = null;
+        @Nullable ResultSetFlagsElement result;
 
-        String t_strId = attributes.getValue("id");
+        @Nullable final String t_strId = attributes.getValue("id");
 
-        String t_strType = attributes.getValue("type");
+        @Nullable final String t_strType = attributes.getValue("type");
 
-        String t_strConcurrency = attributes.getValue("concurrency");
-        String t_strHoldability = attributes.getValue("holdability");
+        @Nullable final String t_strConcurrency = attributes.getValue("concurrency");
+        @Nullable final String t_strHoldability = attributes.getValue("holdability");
 
         result =
             new ResultSetFlagsElement(

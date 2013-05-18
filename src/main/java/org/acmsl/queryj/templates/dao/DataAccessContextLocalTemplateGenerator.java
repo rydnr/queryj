@@ -70,13 +70,14 @@ public class DataAccessContextLocalTemplateGenerator
     }
 
     /**
-     * Returns "dataAccessContext-local.xml.sample".
+     * Returns "[repository]-dataAccessContext-local.xml.sample".
+     * @param context the {@link BasePerRepositoryTemplateContext} instance.
      * @return such file name.
      */
     @SuppressWarnings("unused")
     @NotNull
     public String retrieveTemplateFileName(@NotNull final BasePerRepositoryTemplateContext context)
     {
-        return "dataAccessContext-local.xml.sample";
+        return context.getRepositoryName().concat("-dataAccessContext-local.xml.sample");
     }
 }

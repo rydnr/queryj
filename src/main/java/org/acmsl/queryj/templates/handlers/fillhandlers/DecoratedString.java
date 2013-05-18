@@ -51,6 +51,8 @@ import org.jetbrains.annotations.NotNull;
 /*
  * Importing some JDK classes.
  */
+import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 
 /*
@@ -71,14 +73,14 @@ public class DecoratedString
      * The actual value.
      */
     @NotNull
-    private String value;
+    private String m__strValue;
 
     /**
      * Creates a {@link DecoratedString} with given value.
      * @param value the value.
      */
     @SuppressWarnings("unused")
-    public DecoratedString(final String value)
+    public DecoratedString(@NotNull final String value)
     {
         immutableSetValue(value);
     }
@@ -89,7 +91,7 @@ public class DecoratedString
      */
     protected final void immutableSetValue(@NotNull final String value)
     {
-        this.value = value;
+        this.m__strValue = value;
     }
 
     /**
@@ -99,7 +101,7 @@ public class DecoratedString
     @SuppressWarnings("unused")
     protected void setValue(@NotNull final String value)
     {
-        this.value = value;
+        immutableSetValue(value);
     }
 
     /**
@@ -109,34 +111,28 @@ public class DecoratedString
     @NotNull
     public String getValue()
     {
-        return this.value;
-    }
-
-    @Override
-    public String toString()
-    {
-        return getValue();
+        return this.m__strValue;
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder().append(this.value).toHashCode();
+        return new HashCodeBuilder().append(getValue()).toHashCode();
     }
 
     @Override
     public boolean equals(final Object obj)
     {
-        if (obj == null)
+        boolean result = false;
+
+        if (   (obj != null)
+            && (getClass() == obj.getClass()))
         {
-            return false;
+            @NotNull final DecoratedString other = (DecoratedString) obj;
+            result = new EqualsBuilder().append(this.getValue(), other.getValue()).isEquals();
         }
-        if (getClass() != obj.getClass())
-        {
-            return false;
-        }
-        final DecoratedString other = (DecoratedString) obj;
-        return new EqualsBuilder().append(this.value, other.value).isEquals();
+
+        return result;
     }
 
     /**
@@ -255,5 +251,33 @@ public class DecoratedString
     protected String uncapitalize(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
     {
         return decorationUtils.uncapitalize(value);
+    }
+
+    /**
+     * Retrieves the lines of the string.
+     * @return such lines.
+     */
+    @NotNull
+    public List<String> getLines()
+    {
+        return getLines(getValue(), DecorationUtils.getInstance());
+    }
+
+    /**
+     * Retrieves the lines of the string.
+     * @param value the value.
+     * @param decorationUtils the {@link DecorationUtils} instance.
+     * @return such lines.
+     */
+    @NotNull
+    protected List<String> getLines(@NotNull final String value, @NotNull final DecorationUtils decorationUtils)
+    {
+        return Arrays.asList(decorationUtils.split(value));
+    }
+
+    @Override
+    public String toString()
+    {
+        return getValue();
     }
 }

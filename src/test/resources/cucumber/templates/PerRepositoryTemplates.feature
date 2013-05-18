@@ -53,3 +53,20 @@ Feature: Per-repository templates
 
     Then the generated properties e-commerce-queryj.properties is valid
 
+  Scenario: dataAccessContext-local.xml is generated correctly for a repository
+
+    Given a repository with the following information:
+      | name       | user   | vendor |
+      | e-commerce | dbuser | Oracle |
+
+    Given a repository with the following tables:
+      | table      |
+      | users      |
+      | addresses  |
+      | companies  |
+      | partners   |
+
+    When I generate with per-repository DataAccessContextLocal.stg
+
+    Then the generated Spring file e-commerce-dataAccessContext-local.xml.sample is valid
+
