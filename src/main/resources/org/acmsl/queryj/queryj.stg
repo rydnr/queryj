@@ -52,15 +52,15 @@ typeInitMap ::= [
   "mockSubpackageName":"mock"
 ]
 
-java_header(years,description,timestamp) ::= <<
-<! Generates the copyright header !>
-<! @param years the copyright years. !>
+java_header(year, description, timestamp) ::= <<
+<! Generates the copyright header. !>
+<! @param year the current year. !>
 <! @param description the description. !>
 <! @param timestamp the timestamp. !>
 /*
                         QueryJ
 
-    Copyright (C) <years; separator="-">-today Jose San Leandro Armendariz
+    Copyright (C) <year>-today Jose San Leandro Armendariz
                               queryj@acm-sl.org
 
     This library is free software; you can redistribute it and/or
@@ -92,7 +92,8 @@ java_header(years,description,timestamp) ::= <<
  * Description: <description:{line | <line>}; separator="\n *              ">
  *
  * Last modified by: (Your name)
- *<if(generation_timestamps_enabled)>
+ *
+<if(generation_timestamps_enabled)>
  * Generation timestamp: <timestamp><endif>
  */
 >>

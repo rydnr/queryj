@@ -41,9 +41,6 @@ group DataAccessContextLocal;
 source() ::= <<
 <!
  Generates configuration properties.
- @param current_year the current year.
- @param tables the tables.
- @param repository the repository.
 !>
 \<?xml version="1.0" encoding="UTF-8"?\>
 \<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"\>
@@ -52,7 +49,7 @@ source() ::= <<
 <header.split:{<it>}; separator="\n">
 <else>
 <java_header(
-  years=[current_year],
+  year=current_year,
   description=
   [
     "Specifies the transactional behavior of the DAO layer."

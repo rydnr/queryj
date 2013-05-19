@@ -42,19 +42,12 @@ group BasePreparedStatementCreator;
 source() ::= <<
 <!
   Generates a DAO database implementation source file.
-  @param copyright_years the copyright's years.
-  @param package the package.
-  @param dao_class_name the DAO class name.
-  @param dao_factory_class_name the DAO factory class name.
-  @param dao_implementation_class_name the DAO implementation class name.
-  @params project_imports
-  @params class
 !>
 <if(header)>
 <header>
 <else>
 <java_header(
-  years=copyright_years,
+  year=current_year,
   description=
   [
     first_line_description(

@@ -41,9 +41,6 @@ group ConfigurationProperties;
 source() ::= <<
 <!
  Generates configuration properties.
- @param current_year the current year.
- @param tables the tables.
- @param repository the repository.
 !>
 #//;-*- mode: java-conf-*-
 <if(header)>

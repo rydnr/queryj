@@ -40,15 +40,12 @@ group DataAccessManager;
 source() ::= <<
 <!
  Generates the DataAccessManager.
- @param copyright_years the copyright's years.
- @param tables the tables.
- @param repository the repository name.
 !>
 <if(header)>
 <header>
 <else>
 <java_header(
-  years=copyright_years,
+  year=current_year,
   description=
     [
       first_line_description(model=repository),

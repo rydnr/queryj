@@ -42,17 +42,12 @@ group ValueObjectImpl;
 source() ::= <<
 <!
   Generates a value object.
-  @param copyright_years the copyright's years.
-  @param table.name the table name.
-  @param project_package the package.
-  @params project_imports
-  @params class
 !>
 <if(header)>
 <header>
 <else>
 <java_header(
-  years=copyright_years,
+  year=current_year,
   description=
   [
     first_line_description(tableName=table.name)

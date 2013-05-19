@@ -41,14 +41,12 @@ group CustomValueObjectImpl;
 source() ::= <<
 <!
   Generates a custom value object implementation.
-  @param copyright_years the copyright's years.
-  @param package the package.
 !>
 <if(header)>
 <header>
 <else>
 <java_header(
-  years=copyright_years,
+  year=current_year,
   description=
   [
     first_line_description(result=result)

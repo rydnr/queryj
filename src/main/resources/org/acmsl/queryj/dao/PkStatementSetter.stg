@@ -40,15 +40,12 @@ group PkStatementSetter;
 source() ::= <<
 <!
   Generates a PkStatementSetter source file.
-  @param copyright_years the copyright's years.
-  @param table the table.
-  @params class
 !>
 <if(header)>
 <header>
 <else>
 <java_header(
-  years=copyright_years,
+  year=current_year,
   description=
   [
       first_line_description(tableName=table.name),

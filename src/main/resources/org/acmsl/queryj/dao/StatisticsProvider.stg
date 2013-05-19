@@ -40,15 +40,12 @@ group StatisticsProvider;
 source(input) ::= <<
 <!
   Generates a StatisticsProvider source.
-  @param copyright_years the copyright's years.
-  @param package the package.
-  @params class
 !>
 <if(header)>
 <header>
 <else>
 <java_header(
-  years=copyright_years,
+  year=current_year,
   description=
   [
     first_line_description()
