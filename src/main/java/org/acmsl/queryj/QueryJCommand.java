@@ -101,7 +101,7 @@ public class QueryJCommand
      * Specifies the attribute map.
      * @param map such map.
      */
-    protected final void immutableSetAttributeMap(final Map<String,?> map)
+    protected final void immutableSetAttributeMap(@NotNull final Map<String,?> map)
     {
         m__mAttributes = map;
     }
@@ -111,7 +111,7 @@ public class QueryJCommand
      * @param map such map.
      */
     @SuppressWarnings("unused")
-    public void setAttributeMap(final Map<String,?> map)
+    public void setAttributeMap(@NotNull final Map<String,?> map)
     {
         immutableSetAttributeMap(map);
     }
@@ -120,9 +120,21 @@ public class QueryJCommand
      * Retrieves the attribute map.
      * @return the map.
      */
-    public Map<String,?> getAttributeMap()
+    @NotNull
+    protected final Map<String,?> immutableGetAttributeMap()
     {
         return m__mAttributes;
+    }
+
+    /**
+     * Retrieves the attribute map.
+     * @return the map.
+     */
+    @NotNull
+    @SuppressWarnings("unchecked")
+    public Map<String,?> getAttributeMap()
+    {
+        return new HashMap(m__mAttributes);
     }
 
     /**

@@ -38,7 +38,6 @@ package org.acmsl.queryj.templates.dao;
  * Importing some StringTemplate classes.
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.RepositoryDAOTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*
@@ -61,7 +60,7 @@ import org.checkthread.annotations.ThreadSafe;
 public class BaseRepositoryDAOFactoryTemplate
     extends RepositoryDAOTemplate<BasePerRepositoryTemplateContext>
 {
-    private static final long serialVersionUID = -607618292235033006L;
+    private static final long serialVersionUID = 2360680927937751431L;
 
     /**
      * Builds a <code>BaseRepositoryDAOFactoryTemplate</code> using given

@@ -35,17 +35,17 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplateFactory;
-import org.acmsl.queryj.tools.QueryJBuildException;
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.TableTemplate;
+import org.acmsl.queryj.templates.dao.RepositoryDAOFactoryTemplate;
+import org.acmsl.queryj.templates.dao.RepositoryDAOFactoryTemplateFactory;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateBuildHandler;
-import org.acmsl.queryj.templates.RepositoryDAOFactoryTemplate;
+import org.acmsl.queryj.templates.TableTemplate;
 import org.acmsl.queryj.templates.TemplateMappingManager;
 import org.acmsl.queryj.tools.PackageUtils;
+import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing some JDK classes.

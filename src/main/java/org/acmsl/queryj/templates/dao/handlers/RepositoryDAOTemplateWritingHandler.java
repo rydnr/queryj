@@ -36,12 +36,12 @@ package org.acmsl.queryj.templates.dao.handlers;
 /*
  * Importing some project classes.
  */
-import org.acmsl.queryj.tools.PackageUtils;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
+import org.acmsl.queryj.templates.dao.RepositoryDAOTemplate;
+import org.acmsl.queryj.templates.dao.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.handlers.BasePerRepositoryTemplateWritingHandler;
-import org.acmsl.queryj.templates.RepositoryDAOTemplate;
-import org.acmsl.queryj.templates.RepositoryDAOTemplateGenerator;
 import org.acmsl.queryj.templates.TemplateMappingManager;
+import org.acmsl.queryj.tools.PackageUtils;
 
 /*
  * Importing some JetBrains annotations.

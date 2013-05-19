@@ -858,7 +858,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     {
                         try
                         {
-                            wait(1000);
+                            Thread.currentThread().sleep(1000);
                         }
                         catch (InterruptedException e)
                         {

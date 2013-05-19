@@ -35,10 +35,13 @@
 package org.acmsl.queryj.templates.dao;
 
 /*
- * Importing some StringTemplate classes.
+ * Importing project classes.
  */
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
-import org.acmsl.queryj.templates.RepositoryDAOTemplate;
+
+/*
+ * Importing some StringTemplate classes.
+ */
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 /*

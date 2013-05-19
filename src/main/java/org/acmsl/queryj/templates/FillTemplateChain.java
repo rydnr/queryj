@@ -205,10 +205,10 @@ public abstract class FillTemplateChain<C extends TemplateContext>
      * @throws QueryJBuildException if the process fails.
      */
     @SuppressWarnings("unchecked")
-    public Map providePlaceholders()
+    public Map<String, ?> providePlaceholders()
         throws QueryJBuildException
     {
-        Map result;
+        Map<String, ?> result;
 
         @NotNull QueryJCommand t_Command = buildCommand();
 
