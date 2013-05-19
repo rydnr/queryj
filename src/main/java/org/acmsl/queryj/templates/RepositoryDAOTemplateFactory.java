@@ -95,8 +95,8 @@ public class RepositoryDAOTemplateFactory
      * {@inheritDoc}
      */
     @Override
-    @NotNull
-    public RepositoryDAOTemplate<BasePerRepositoryTemplateContext> createTemplate(
+    @Nullable
+    public RepositoryDAOTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
         @NotNull final CustomSqlProvider customSqlProvider,
         @NotNull final DecoratorFactory decoratorFactory,
@@ -112,22 +112,29 @@ public class RepositoryDAOTemplateFactory
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations)
     {
-        return
-            new RepositoryDAOTemplate<BasePerRepositoryTemplateContext>(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    decoratorFactory,
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation,
-                    disableGenerationTimestamps,
-                    disableNotNullAnnotations,
-                    disableCheckthreadAnnotations));
+        @Nullable RepositoryDAOTemplate result = null;
+
+        if (customSqlProvider.getSqlDAO().containsRepositoryScopedSql())
+        {
+            result =
+                new RepositoryDAOTemplate<BasePerRepositoryTemplateContext>(
+                    new BasePerRepositoryTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        decoratorFactory,
+                        packageName,
+                        projectPackage,
+                        repository,
+                        implementMarkerInterfaces,
+                        jmx,
+                        tableNames,
+                        jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations));
+        }
+
+        return result;
     }
 }

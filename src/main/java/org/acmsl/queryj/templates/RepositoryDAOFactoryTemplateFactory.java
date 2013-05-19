@@ -112,22 +112,29 @@ public class RepositoryDAOFactoryTemplateFactory
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations)
     {
-        return
-            new RepositoryDAOFactoryTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    decoratorFactory,
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation,
-                    disableGenerationTimestamps,
-                    disableNotNullAnnotations,
-                    disableCheckthreadAnnotations));
+        @Nullable RepositoryDAOFactoryTemplate result = null;
+
+        if (customSqlProvider.getSqlDAO().containsRepositoryScopedSql())
+        {
+            result =
+                new RepositoryDAOFactoryTemplate(
+                    new BasePerRepositoryTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        decoratorFactory,
+                        packageName,
+                        projectPackage,
+                        repository,
+                        implementMarkerInterfaces,
+                        jmx,
+                        tableNames,
+                        jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations));
+        }
+
+        return result;
     }
 }

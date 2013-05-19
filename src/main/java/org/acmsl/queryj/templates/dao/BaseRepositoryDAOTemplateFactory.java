@@ -36,8 +36,11 @@ package org.acmsl.queryj.templates.dao;
  * Importing some project-specific classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Sql;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlDAO;
+import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateContext;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 
@@ -114,22 +117,29 @@ public class BaseRepositoryDAOTemplateFactory
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations)
     {
-        return
-            new BaseRepositoryDAOTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    decoratorFactory,
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation,
-                    disableGenerationTimestamps,
-                    disableNotNullAnnotations,
-                    disableCheckthreadAnnotations));
+        @Nullable BaseRepositoryDAOTemplate result = null;
+
+        if (customSqlProvider.getSqlDAO().containsRepositoryScopedSql())
+        {
+            result =
+                new BaseRepositoryDAOTemplate(
+                    new BasePerRepositoryTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        decoratorFactory,
+                        packageName,
+                        projectPackage,
+                        repository,
+                        implementMarkerInterfaces,
+                        jmx,
+                        tableNames,
+                        jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations));
+        }
+
+        return result;
     }
 }

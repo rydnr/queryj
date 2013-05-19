@@ -96,7 +96,7 @@ public class BaseRepositoryDAOFactoryTemplateFactory
     /**
      * {@inheritDoc}
      */
-    @NotNull
+    @Nullable
     @Override
     public BaseRepositoryDAOFactoryTemplate createTemplate(
         @NotNull final MetadataManager metadataManager,
@@ -114,22 +114,30 @@ public class BaseRepositoryDAOFactoryTemplateFactory
         final boolean disableNotNullAnnotations,
         final boolean disableCheckthreadAnnotations)
     {
-        return
-            new BaseRepositoryDAOFactoryTemplate(
-                new BasePerRepositoryTemplateContext(
-                    metadataManager,
-                    customSqlProvider,
-                    header,
-                    decoratorFactory,
-                    packageName,
-                    projectPackage,
-                    repository,
-                    implementMarkerInterfaces,
-                    jmx,
-                    tableNames,
-                    jndiLocation,
-                    disableGenerationTimestamps,
-                    disableNotNullAnnotations,
-                    disableCheckthreadAnnotations));
+        @Nullable
+        BaseRepositoryDAOFactoryTemplate result = null;
+
+        if (customSqlProvider.getSqlDAO().containsRepositoryScopedSql())
+        {
+            result =
+                new BaseRepositoryDAOFactoryTemplate(
+                    new BasePerRepositoryTemplateContext(
+                        metadataManager,
+                        customSqlProvider,
+                        header,
+                        decoratorFactory,
+                        packageName,
+                        projectPackage,
+                        repository,
+                        implementMarkerInterfaces,
+                        jmx,
+                        tableNames,
+                        jndiLocation,
+                        disableGenerationTimestamps,
+                        disableNotNullAnnotations,
+                        disableCheckthreadAnnotations));
+        }
+
+        return result;
     }
 }
