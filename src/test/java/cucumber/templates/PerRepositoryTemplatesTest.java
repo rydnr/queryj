@@ -113,11 +113,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
 import org.xml.sax.Attributes;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /*
  * Importing JDK classes.
  */
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -681,6 +684,18 @@ public class PerRepositoryTemplatesTest
     {
         @NotNull final Digester result = new Digester();
 
+        // To avoid fetching external DTDs
+        result.setEntityResolver(
+            new EntityResolver()
+            {
+                @Override
+                public InputSource resolveEntity(final String publicId, final String systemId)
+                    throws SAXException, IOException
+                {
+                    return new InputSource(new ByteArrayInputStream("".getBytes()));
+                }
+            }
+        );
         // <beans>
 
         //   <bean>

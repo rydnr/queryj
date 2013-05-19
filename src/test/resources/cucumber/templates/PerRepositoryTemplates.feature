@@ -19,7 +19,7 @@ Feature: Per-repository templates
 
   Examples:
     | template                     | output                                 |
-#    | DataAccessManager            | ECommerceDataAccessManager.java        |
+    | DataAccessManager            | ECommerceDataAccessManager.java        |
 #    | BasePreparedStatementCreator | ECommercePreparedStatementCreator.java |
 #    | BaseRepositoryDAO            | ECommerceDAO.java                      |
 #    | BaseRepositoryDAOFactory     | ECommerceDAOFactory.java               |
