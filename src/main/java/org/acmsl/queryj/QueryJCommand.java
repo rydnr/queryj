@@ -134,7 +134,7 @@ public class QueryJCommand
     @SuppressWarnings("unchecked")
     public Map<String,?> getAttributeMap()
     {
-        return new HashMap(m__mAttributes);
+        return m__mAttributes;
     }
 
     /**

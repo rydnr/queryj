@@ -243,15 +243,15 @@ public abstract class FillTemplateChain<C extends TemplateContext>
         @NotNull final FillAdapterHandler handler,
         final boolean relevantOnly)
     {
-        FillAdapterHandler actualHander = handler;
+        FillAdapterHandler actualHandler = handler;
 
         if (   (relevantOnly)
             && (handler.getFillHandler() instanceof NonRelevantFillHandler))
         {
-            actualHander = new EmptyFillAdapterHandler(handler.getFillHandler());
+            actualHandler = new EmptyFillAdapterHandler(handler.getFillHandler());
         }
 
-        chain.add(actualHander);
+        chain.add(actualHandler);
     }
 
     /**

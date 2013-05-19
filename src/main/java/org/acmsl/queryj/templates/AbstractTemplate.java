@@ -270,7 +270,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @Nullable
     public String processHeader(@NotNull final Map input, @Nullable final String header)
     {
-        @Nullable String result = processInnerTemplate(header, input);
+        @Nullable final String result = processInnerTemplate(header, input);
 
         if (result != null)
         {
@@ -340,7 +340,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     {
         @Nullable StringTemplateGroup result;
         
-        @NotNull Object t_Key = buildSTGroupKey(path, theme);
+        @NotNull final Object t_Key = buildSTGroupKey(path, theme);
 
         result = (StringTemplateGroup) cache.get(t_Key);
 
@@ -462,7 +462,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     protected String generate(@NotNull final C context, final boolean relevantOnly)
         throws  InvalidTemplateException
     {
-        String result;
+        final String result;
 
         if (!relevantOnly)
         {
@@ -484,7 +484,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
      */
     protected void logHeader(@Nullable final String header)
     {
-        @Nullable Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
+        @Nullable final Log t_Log = UniqueLogFactory.getLog(AbstractTemplate.class);
         
         if  (t_Log != null)
         {
@@ -516,7 +516,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         
         if  (template != null)
         {
-            @NotNull StringTemplate t_strInnerTemplate =
+            @NotNull final StringTemplate t_strInnerTemplate =
                 new StringTemplate(
                     template, AngleBracketTemplateLexer.class);
 
@@ -535,12 +535,12 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @SuppressWarnings("unused")
     protected synchronized void traceClassLoaders()
     {
-        @NotNull FinalizingThread t_FinalizingThread =
+        @NotNull final FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
         if (t_FinalizingThread.isNew())
         {
-            @Nullable Runtime t_Runtime = Runtime.getRuntime();
+            @Nullable final Runtime t_Runtime = Runtime.getRuntime();
 
             if  (t_Runtime != null)
             {
@@ -556,10 +556,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
     @SuppressWarnings("unused")
     protected void cleanUpClassLoaderTracing()
     {
-        @NotNull FinalizingThread t_FinalizingThread =
+        @NotNull final FinalizingThread t_FinalizingThread =
             FinalizingThreadSingletonContainer.getInstance();
 
-        @Nullable Runtime t_Runtime = Runtime.getRuntime();
+        @Nullable final Runtime t_Runtime = Runtime.getRuntime();
 
         if  (t_Runtime != null)
         {
@@ -589,7 +589,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         @SuppressWarnings("unused")
         public boolean isNew()
         {
-            boolean result = m__bNew;
+            final boolean result = m__bNew;
 
             m__bNew = false;
 
@@ -615,21 +615,21 @@ public abstract class AbstractTemplate<C extends TemplateContext>
         // org.antlr.stringtemplate.language.ChunkToken
         // can happen if ANTLR gets loaded by a ClassLoader
         // with no reference to StringTemplate classes.
-        @Nullable Log t_Log =
+        @Nullable final Log t_Log =
             UniqueLogFactory.getLog(AbstractTemplate.class);
 
-        @NotNull ClassLoaderUtils t_ClassLoaderUtils =
+        @NotNull final ClassLoaderUtils t_ClassLoaderUtils =
             ClassLoaderUtils.getInstance();
 
         if  (t_Log != null)
         {
-            @NotNull StringBuilder t_sbMessage = new StringBuilder();
+            @NotNull final StringBuilder t_sbMessage = new StringBuilder();
 
-            @Nullable String t_strAntlrLocation =
+            @Nullable final String t_strAntlrLocation =
                 t_ClassLoaderUtils.findLocation(
                     ANTLRParser.class);
 
-            @Nullable String t_strStringTemplateLocation =
+            @Nullable final String t_strStringTemplateLocation =
                 t_ClassLoaderUtils.findLocation(
                     StringTemplate.class);
 
@@ -647,10 +647,10 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                 + "instantiation fails. Check your classpath or the way "
                 + "it's defined by Ant or any other tool you might be "
                 + "using. ");
-            boolean t_bAntlrLocationFound =
+            final boolean t_bAntlrLocationFound =
                 (   (t_strAntlrLocation != null)
                  && (t_strAntlrLocation.trim().length() > 0));
-            boolean t_bStringTemplateLocationFound =
+            final boolean t_bStringTemplateLocationFound =
                 (   (t_strStringTemplateLocation != null)
                  && (t_strStringTemplateLocation.trim().length() > 0));
 
@@ -803,9 +803,9 @@ public abstract class AbstractTemplate<C extends TemplateContext>
 
         @Nullable Throwable t_ExceptionToWrap = null;
 
-        @Nullable StringTemplateGroup t_Group = retrieveGroup();
+        @Nullable final StringTemplateGroup t_Group = retrieveGroup();
 
-        @Nullable StringTemplate t_Template = retrieveTemplate(t_Group);
+        @Nullable final StringTemplate t_Template = retrieveTemplate(t_Group);
 
         if (t_Template != null)
         {
@@ -849,7 +849,7 @@ public abstract class AbstractTemplate<C extends TemplateContext>
                     UniqueLogFactory.getLog(AbstractTemplate.class).error(
                         "Error in template " + getTemplateName(), throwable);
 
-                    StringTemplateTreeView debugTool =
+                    @Nullable final StringTemplateTreeView debugTool =
                         new StringTemplateTreeView("Debugging " + getTemplateName(), t_Template);
 
                     debugTool.setVisible(true);
