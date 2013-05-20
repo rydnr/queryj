@@ -91,7 +91,7 @@ first_line_description() ::= <<
 Accesses JNDI-published {@link DataSource} instances.
 >>
 
-class(input) ::= <<
+class() ::= <<
 <!
  Generates the class body.
  @param timestamp the timestamp.
@@ -101,7 +101,7 @@ class(input) ::= <<
  * <[
       first_line_description()
     ]:{line |<line>}; separator="\n * ">
-<class_common_javadoc(template="org/acmsl/queryj/dao/JndiUtils.stg)>
+<class_common_javadoc(template="org/acmsl/queryj/dao/JndiUtils.stg")>
  */
 <class_annotations()>
 public class <repository.capitalized>JndiUtils
@@ -149,7 +149,7 @@ public class <repository.capitalized>JndiUtils
 
         <nullable()>CannotGetJdbcConnectionException exceptionToThrow = null;
 
-        <nullable()>Context jndiContext;
+        <nullable()>final Context jndiContext;
         <nullable()>Object dataSource = null;
 
         try
@@ -160,7 +160,7 @@ public class <repository.capitalized>JndiUtils
         }
         catch (<notnull()>final NamingException noDataSourceFound) 
         {
-            LogFactory.getLog(<repository.capitalized>JndiUtils.class).warn(
+            LogFactory.getLog(<repository.capitalized>JndiUtils.class).error(
                 "No DataSource found at JNDI location: " + location,
                 noDataSourceFound);
 
@@ -178,7 +178,7 @@ public class <repository.capitalized>JndiUtils
         }
         else
         {
-            LogFactory.getLog(<repository.capitalized>JndiUtils.class).warn(
+            LogFactory.getLog(<repository.capitalized>JndiUtils.class).error(
                   "Expecting a DataSource at JNDI location: " + location
                 + " but " + dataSource + " was found instead");
 

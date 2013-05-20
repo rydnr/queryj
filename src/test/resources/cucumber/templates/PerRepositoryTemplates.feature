@@ -21,12 +21,12 @@ Feature: Per-repository templates
     | template                     | output                                 |
     | DataAccessManager            | ECommerceDataAccessManager.java        |
     | BasePreparedStatementCreator | ECommercePreparedStatementCreator.java |
-#    | BaseResultSetExtractor       | ECommerceResultSetExtractor.java       |
+    | BaseResultSetExtractor       | ECommerceResultSetExtractor.java       |
     | DAOChooser                   | ECommerceDAOChooser.java               |
     | DAOListener                  | ECommerceDAOListener.java              |
     | DAOListenerImpl              | ECommerceDAOListenerImpl.java          |
     | JdbcTemplate                 | ECommerceJdbcTemplate.java             |
-#    | JndiUtils                    | ECommerceJndiUtils.java                |
+    | JndiUtils                    | ECommerceJndiUtils.java                |
     | StatisticsProvider           | ECommerceStatisticsProvider.java       |
     | ThreadLocalBag               | ECommerceThreadLocalBag.java           |
     | ConfigurationProperties      | e-commerce-queryj.properties           |
