@@ -38,8 +38,11 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
-import org.acmsl.queryj.customsql.PropertyRef;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
+import org.acmsl.queryj.customsql.ResultElement;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplate;
 import org.acmsl.queryj.templates.BasePerCustomResultTemplateFactory;
@@ -96,7 +99,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Cucumber tests for per-table templates.
+ * Cucumber tests for per-custom-results templates.
  * @author <a href="chous@acm-sl.org">Jose San Leandro</a>
  * @since 2013/05/04
  */
@@ -104,9 +107,14 @@ public class PerCustomResultTemplatesTest
     extends AbstractTemplatesTest<BasePerCustomResultTemplateGenerator, BasePerCustomResultTemplateFactory>
 {
     /**
-     * The tables.
+     * The results.
      */
     private Map<String, Result> m__mResults;
+
+    /**
+     * The properties.
+     */
+    private Map<String, Property> m__mProperties;
 
     /**
      * Creates an instance.
@@ -114,6 +122,7 @@ public class PerCustomResultTemplatesTest
     public PerCustomResultTemplatesTest()
     {
         immutableSetResults(new HashMap<String, Result>());
+        immutableSetProperties(new HashMap<String, Property>());
 
         GENERATOR_MAPPINGS.put("CustomResultSetExtractor", new CustomResultSetExtractorTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("CustomResultSetExtractor", CustomResultSetExtractorTemplateFactory.getInstance());
@@ -158,6 +167,35 @@ public class PerCustomResultTemplatesTest
     }
 
     /**
+     * Specifies the properties.
+     * @param properties the properties.
+     */
+    protected final void immutableSetProperties(@NotNull final Map<String, Property> properties)
+    {
+        m__mProperties = properties;
+    }
+
+    /**
+     * Specifies the properties.
+     * @param properties the properties.
+     */
+    @SuppressWarnings("unused")
+    protected void setProperties(@NotNull final Map<String, Property> properties)
+    {
+        immutableSetProperties(properties);
+    }
+
+    /**
+     * Retrieves the properties.
+     * @return such information.
+     */
+    @NotNull
+    protected Map<String, Property> getProperties()
+    {
+        return m__mProperties;
+    }
+
+    /**
      * Defines the input custom results based on the information provided by the
      * feature.
      * @param resultInfo the information about the results.
@@ -178,18 +216,15 @@ public class PerCustomResultTemplatesTest
     protected void defineInputCustomResults(
         @NotNull final DataTable resultInfo, @NotNull final Map<String, Result> results)
     {
-        @NotNull final List<Map<String, String>> tableEntries = resultInfo.asMaps();
+        @NotNull final List<Map<String, String>> resultEntries = resultInfo.asMaps();
 
-        Result currentResult;
+        @NotNull Result currentResult;
 
-        for (@NotNull final Map<String, String> tableEntry: tableEntries)
+        for (@NotNull final Map<String, String> resultEntry: resultEntries)
         {
-            currentResult = convertToResult(tableEntry);
+            currentResult = convertToResult(resultEntry);
 
-            if (currentResult != null)
-            {
-                results.put(currentResult.getId(), currentResult);
-            }
+            results.put(currentResult.getId(), currentResult);
         }
     }
 
@@ -201,21 +236,34 @@ public class PerCustomResultTemplatesTest
     @Given("^the following properties:$")
     public void defineInputProperties(@NotNull final DataTable propertyInfo)
     {
-        defineInputProperties(propertyInfo, getResults());
+        defineInputProperties(propertyInfo, getProperties(), getResults());
     }
 
     /**
      * Defines the properties from the feature.
      * @param propertyInfo the property information.
+     * @param properties the properties.
      * @param results the results.
      */
     protected void defineInputProperties(
-        @NotNull final DataTable propertyInfo, @NotNull final Map<String, Result> results)
+        @NotNull final DataTable propertyInfo,
+        @NotNull final Map<String, Property> properties,
+        @NotNull final Map<String, Result> results)
     {
-        for (@NotNull final Result currentResult : results.values())
+        @NotNull final List<Map<String, String>> propertyEntries = propertyInfo.asMaps();
+
+        @NotNull Property property;
+        @Nullable Result result;
+
+        for (@NotNull final Map<String, String> propertyEntry: propertyEntries)
         {
-            @NotNull final List<PropertyRef> propertyRefs = currentResult.getPropertyRefs();
-            // TODO
+            property = convertToProperty(propertyEntry);
+
+            properties.put(property.getId(), property);
+            result = results.get(propertyEntry.get("custom-result-id"));
+
+            Assert.assertNotNull("Invalid custom result for property : " + property, result);
+            result.add(new PropertyRefElement(property.getId()));
         }
     }
 
@@ -267,23 +315,21 @@ public class PerCustomResultTemplatesTest
         @NotNull final Map<String, Result> results,
         @NotNull final Map<String, File> outputFiles)
     {
-        BasePerCustomResultTemplateGenerator generator =
+        @Nullable final BasePerCustomResultTemplateGenerator generator =
             retrieveTemplateGenerator(templateName);
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
         for (@NotNull final Result currentResult : results.values())
         {
-            BasePerCustomResultTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
+            @Nullable final BasePerCustomResultTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-            BasePerCustomResultTemplate template = null;
-            // TODO
-            /*
+            @Nullable final BasePerCustomResultTemplate template =
                 templateFactory.createTemplate(
-                    null, // metadata maretrieveMetadataManager(engine, currentResult),
                     retrieveCustomSqlProvider(),
+                    retrieveMetadataManager(engine),
                     retrieveDecoratorFactory(generator),
                     "com.foo.bar.dao",
                     "com.foo.bar",
@@ -295,12 +341,11 @@ public class PerCustomResultTemplatesTest
                     false, // disable generation timestamps
                     false, // disable NotNull annotations
                     true, // disable checkThread.org annotations
-                    currentResult.getId(),
-                    new ArrayList<Row>(0));
-*/
+                    currentResult);
+
             Assert.assertNotNull("No template found for " + templateName, template);
 
-            File outputDir = null;
+            @Nullable File outputDir = null;
 
             try
             {
@@ -344,12 +389,27 @@ public class PerCustomResultTemplatesTest
      * @param resultEntry the result information.
      * @return the {@link Result} instance.
      */
-    @Nullable
+    @NotNull
     protected Result convertToResult(@NotNull final Map<String, String> resultEntry)
     {
-        Result result = null;
+        return new ResultElement(resultEntry.get("id"), resultEntry.get("class"), resultEntry.get("matches"));
+    }
 
-        // TODO
-        return result;
+
+    /**
+     * Converts given custom result information to a {@link Property}.
+     * @param propertyEntry the property information.
+     * @return the {@link Property} instance.
+     */
+    @NotNull
+    protected Property convertToProperty(@NotNull final Map<String, String> propertyEntry)
+    {
+        return
+            new PropertyElement(
+                propertyEntry.get("id"),
+                propertyEntry.get("column-name"),
+                Integer.valueOf(propertyEntry.get("index")),
+                propertyEntry.get("type"),
+                Boolean.valueOf(propertyEntry.get("nullable")));
     }
 }

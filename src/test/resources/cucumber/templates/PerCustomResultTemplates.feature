@@ -7,9 +7,9 @@ Feature: Per-custom-results templates
     | user.multiple_user_report | com.foo.bar.vo.UserReport | multiple |
 
     And the following properties:
-    | id                | custom-result-id          | column_name  | type       |
-    | user.user_id      | user.multiple_user_report | user_id      | long       |
-    | user.total_amount | user.multiple_user_report | total_amount | BigDecimal |
+    | id                | custom-result-id          | column_name  | index | type       | nullable |
+    | user.user_id      | user.multiple_user_report | user_id      |     1 | long       |    false |
+    | user.total_amount | user.multiple_user_report | total_amount |     2 | BigDecimal |    false |
 
     When I generate with per-custom-result <template>.stg for Oracle
 

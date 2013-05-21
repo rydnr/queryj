@@ -331,14 +331,29 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * Retrieves a {@link org.acmsl.queryj.metadata.MetadataManager} instance.
      * @param engineName the name of the engine.
-     * @param table the {@link org.acmsl.queryj.metadata.vo.Table}.
+     * @param table the {@link Table}.
      * @return such instance.
      */
+    @SuppressWarnings("unused")
     @NotNull
     protected MetadataManager retrieveMetadataManager(@NotNull final String engineName, @NotNull final String table)
     {
         @NotNull final List<String> tableNames = new ArrayList<String>(1);
         tableNames.add(table);
+        @NotNull final List<Table> tables = new ArrayList<Table>(0);
+
+        return retrieveMetadataManager(engineName, tableNames, tables);
+    }
+
+    /**
+     * Retrieves a {@link org.acmsl.queryj.metadata.MetadataManager} instance.
+     * @param engineName the name of the engine.
+     * @return such instance.
+     */
+    @NotNull
+    protected MetadataManager retrieveMetadataManager(@NotNull final String engineName)
+    {
+        @NotNull final List<String> tableNames = new ArrayList<String>(0);
         @NotNull final List<Table> tables = new ArrayList<Table>(0);
 
         return retrieveMetadataManager(engineName, tableNames, tables);
