@@ -40,6 +40,7 @@ package cucumber.templates;
  */
 import org.acmsl.queryj.customsql.Property;
 import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.PropertyRef;
 import org.acmsl.queryj.customsql.PropertyRefElement;
 import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.ResultElement;
@@ -94,6 +95,7 @@ import org.junit.Assert;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -299,13 +301,15 @@ public class PerCustomResultTemplatesTest
     @When("^I generate with per-custom-result (.*)\\.stg for (.*)$")
     public void generateFile(@NotNull final String template, @NotNull final String engine)
     {
-        generateFile(template, engine, getResults(), getOutputFiles());
+        generateFile(template, engine, getResults(), getProperties(), getOutputFiles());
     }
 
     /**
      * Generates a file with the information from the feature.
      * @param templateName the template.
+     * @param engine the engine.
      * @param results the results.
+     * @param properties the properties.
      * @param outputFiles the output files.
      */
     @SuppressWarnings("unchecked")
@@ -313,6 +317,7 @@ public class PerCustomResultTemplatesTest
         @NotNull final String templateName,
         @NotNull final String engine,
         @NotNull final Map<String, Result> results,
+        @NotNull final Map<String, Property> properties,
         @NotNull final Map<String, File> outputFiles)
     {
         @Nullable final BasePerCustomResultTemplateGenerator generator =
@@ -328,7 +333,7 @@ public class PerCustomResultTemplatesTest
 
             @Nullable final BasePerCustomResultTemplate template =
                 templateFactory.createTemplate(
-                    retrieveCustomSqlProvider(),
+                    retrieveCustomSqlProvider(currentResult, retrieveProperties(currentResult, properties)),
                     retrieveMetadataManager(engine),
                     retrieveDecoratorFactory(generator),
                     "com.foo.bar.dao",
@@ -382,6 +387,32 @@ public class PerCustomResultTemplatesTest
                 currentResult.getId(),
                 new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
         }
+    }
+
+    /**
+     * Retrieves the properties for given result.
+     * @param currentResult the result.
+     * @param properties the properties.
+     * @return the list of properties of given result.
+     */
+    protected List<Property> retrieveProperties(
+        @NotNull final Result currentResult, @NotNull final Map<String, Property> properties)
+    {
+        @NotNull final List<Property> result = new ArrayList<Property>();
+
+        @Nullable Property currentProperty;
+
+        for (@NotNull final PropertyRef propertyRef : currentResult.getPropertyRefs())
+        {
+            currentProperty = properties.get(propertyRef.getId());
+
+            if (currentProperty != null)
+            {
+                result.add(currentProperty);
+            }
+        }
+
+        return result;
     }
 
     /**

@@ -39,6 +39,9 @@ package cucumber.templates;
  * Importing project classes.
  */
 import org.acmsl.queryj.customsql.CustomSqlProvider;
+import org.acmsl.queryj.customsql.Property;
+import org.acmsl.queryj.customsql.PropertyElement;
+import org.acmsl.queryj.customsql.Result;
 import org.acmsl.queryj.customsql.xml.SqlXmlParserImpl;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 
@@ -52,6 +55,8 @@ import org.acmsl.commons.utils.io.FileUtils;
  */
 import org.acmsl.queryj.metadata.MetadataExtractionLogger;
 import org.acmsl.queryj.metadata.MetadataManager;
+import org.acmsl.queryj.metadata.SqlPropertyDAO;
+import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.antlr.runtime.ANTLRFileStream;
@@ -146,13 +151,166 @@ public abstract class AbstractTemplatesTest<G, F>
     }
 
     /**
-     * Retrieves an empty {@link org.acmsl.queryj.customsql.CustomSqlProvider} instance.
+     * Retrieves an empty {@link CustomSqlProvider} instance.
      * @return such instance.
      */
     @NotNull
     protected CustomSqlProvider retrieveCustomSqlProvider()
     {
         return new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()));
+    }
+
+    /**
+     * Retrieves a {@link CustomSqlProvider} instance adapted for given result.
+     * @param customResult the {@link Result}.
+     * @param properties the {@link Property properties}.
+     * @return such instance.
+     */
+    @NotNull
+    protected CustomSqlProvider retrieveCustomSqlProvider(
+        @NotNull final Result customResult, @NotNull final List<Property> properties)
+    {
+        return
+            new SqlXmlParserImpl(new ByteArrayInputStream("".getBytes()))
+            {
+                @Override
+                @NotNull
+                public SqlResultDAO getSqlResultDAO()
+                {
+                    return
+                        new SqlResultDAO()
+                        {
+                            @Nullable
+                            @Override
+                            public Result findByPrimaryKey(@NotNull final String id)
+                            {
+                                @Nullable Result result = null;
+
+                                if (id.equals(customResult.getId()))
+                                {
+                                    result = customResult;
+                                }
+
+                                return result;
+                            }
+
+                            @Nullable
+                            @Override
+                            public Result findSingleMatch(@NotNull final String table)
+                            {
+                                return null;
+                            }
+
+                            @Nullable
+                            @Override
+                            public Result findMultipleMatch(@NotNull final String table)
+                            {
+                                return null;
+                            }
+
+                            @Nullable
+                            @Override
+                            public Result findBySqlId(@NotNull final String sqlId)
+                            {
+                                return null;
+                            }
+
+                            @NotNull
+                            @Override
+                            public List<Result> findByType(@NotNull final String type)
+                            {
+                                @NotNull final List<Result> result = new ArrayList<Result>(1);
+
+                                if (type.equals(customResult.getClassValue()))
+                                {
+                                    result.add(customResult);
+                                }
+
+                                return result;
+                            }
+
+                            @NotNull
+                            @Override
+                            public List<Result> findAll()
+                            {
+                                @NotNull final List<Result> result = new ArrayList<Result>(1);
+
+                                result.add(customResult);
+
+                                return result;
+                            }
+                        };
+                }
+
+                @Override
+                @NotNull
+                public SqlPropertyDAO getSqlPropertyDAO()
+                {
+                    return
+                        new SqlPropertyDAO()
+                        {
+                            /**
+                             * Retrieves the {@link org.acmsl.queryj.customsql.Property} associated to given id.
+                             *
+                             * @param id the parameter id.
+                             * @return the {@link org.acmsl.queryj.customsql.Property}, or <code>null</code> if
+                             * not found.
+                             */
+                            @Nullable
+                            @Override
+                            public Property findByPrimaryKey(@NotNull final String id)
+                            {
+                                @Nullable Property result = null;
+
+                                for (@NotNull final Property property : properties)
+                                {
+                                    if (id.equals(property.getId()))
+                                    {
+                                        result = property;
+                                        break;
+                                    }
+                                }
+
+                                return result;
+                            }
+
+                            /**
+                             * Retrieves all {@link org.acmsl.queryj.customsql.Parameter parameters} used in given
+                             * {@link org.acmsl.queryj.customsql.Result}.
+                             *
+                             * @param resultId the {@link org.acmsl.queryj.customsql.Result} identifier.
+                             * @return the list of properties associated to given {@link org.acmsl.queryj.customsql.Result}.
+                             */
+                            @NotNull
+                            @Override
+                            public List<Property> findByResult(@NotNull final String resultId)
+                            {
+                                @NotNull List<Property> result = properties;
+
+                                if (!resultId.equals(customResult.getId()))
+                                {
+                                    result = new ArrayList<Property>(0);
+                                }
+
+                                return result;
+                            }
+
+                            /**
+                             * Inserts a new property.
+                             * @param id         the property id.
+                             * @param columnName the column name.
+                             * @param index      the property index.
+                             * @param type       the type.
+                             * @param nullable   whether it allows null or not.
+                             */
+                            @Override
+                            public void insert(@NotNull final String id, @NotNull final String columnName, final int index, @NotNull final String type, final boolean nullable)
+                            {
+                                properties.add(new PropertyElement(id, columnName, index, type, nullable));
+                            }
+                        };
+                }
+            };
     }
 
     /**
@@ -163,7 +321,7 @@ public abstract class AbstractTemplatesTest<G, F>
     protected void checkGeneratedFilesCompile(
         @NotNull final String outputName, @NotNull final Map<String, File> outputFiles)
     {
-        for (@NotNull File outputFile : outputFiles.values())
+        for (@NotNull final File outputFile : outputFiles.values())
         {
             FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
 
@@ -395,16 +553,17 @@ public abstract class AbstractTemplatesTest<G, F>
     protected void checkPropertiesFiles(
         @NotNull final String outputName, @NotNull final Map<String, File> outputFiles)
     {
-        for (@NotNull File outputFile : outputFiles.values())
+        for (@NotNull final File outputFile : outputFiles.values())
         {
             FileUtils.getInstance().copyIfPossible(outputFile, new File(outputFile.getName()));
 
             if (   (outputFile.getAbsolutePath().endsWith(outputName))
                 && (isProperties(outputFile)))
             {
-                Properties properties = new Properties();
+                final Properties properties = new Properties();
 
                 FileInputStream stream = null;
+
                 try
                 {
                     stream = new FileInputStream(outputFile);
@@ -442,7 +601,7 @@ public abstract class AbstractTemplatesTest<G, F>
     {
         @Nullable File result = null;
 
-        for (File file : getOutputFiles().values())
+        for (@NotNull final File file : getOutputFiles().values())
         {
             if (file.getAbsolutePath().endsWith(fileName))
             {
