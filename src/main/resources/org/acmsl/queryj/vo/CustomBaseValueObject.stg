@@ -59,13 +59,6 @@ source() ::= <<
 
 <package_declaration(package=package)>
 
-<package_declaration(
-  packageNames=
-  [
-    project_package,
-    typeInitMap.voSubpackageName
-  ])>
-
 /*
  * Importing some JDK classes.
  */
