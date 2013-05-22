@@ -438,7 +438,7 @@ public class PerCustomResultTemplatesTest
         return
             new PropertyElement(
                 propertyEntry.get("id"),
-                propertyEntry.get("column-name"),
+                propertyEntry.get("column_name"),
                 Integer.valueOf(propertyEntry.get("index")),
                 propertyEntry.get("type"),
                 Boolean.valueOf(propertyEntry.get("nullable")));
