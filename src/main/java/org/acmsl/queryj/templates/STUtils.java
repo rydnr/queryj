@@ -36,6 +36,7 @@ package org.acmsl.queryj.templates;
 /*
  * Importing ACM-SL Commons classes.
  */
+import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.patterns.Singleton;
 import org.acmsl.commons.patterns.Utils;
 
@@ -173,15 +174,22 @@ public class STUtils
         @NotNull final StringTemplateErrorListener errorListener,
         @NotNull final Charset charset)
     {
-        @Nullable StringTemplateGroup result;
+        @Nullable StringTemplateGroup result = null;
 
-        @NotNull InputStream t_Input = STUtils.class.getResourceAsStream(path);
+        @Nullable final InputStream t_Input = STUtils.class.getResourceAsStream(path);
 
-        result =
-            new StringTemplateGroup(
-                new InputStreamReader(t_Input, charset),
-                AngleBracketTemplateLexer.class,
-                errorListener);
+        if (t_Input != null)
+        {
+            result =
+                new StringTemplateGroup(
+                    new InputStreamReader(t_Input, charset),
+                    AngleBracketTemplateLexer.class,
+                    errorListener);
+        }
+        else
+        {
+            UniqueLogFactory.getLog(STUtils.class).error("Missing " + path);
+        }
 
         return result;
     }

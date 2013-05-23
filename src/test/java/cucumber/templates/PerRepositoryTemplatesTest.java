@@ -80,6 +80,8 @@ import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateFactory;
 import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateGenerator;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
+import org.acmsl.queryj.templates.other.CucumberFeatureTemplateFactory;
+import org.acmsl.queryj.templates.other.CucumberFeatureTemplateGenerator;
 import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
@@ -208,6 +210,8 @@ public class PerRepositoryTemplatesTest
         FACTORY_MAPPINGS.put("ConfigurationProperties", ConfigurationPropertiesTemplateFactory.getInstance());
         GENERATOR_MAPPINGS.put("DataAccessContextLocal", new DataAccessContextLocalTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DataAccessContextLocal", DataAccessContextLocalTemplateFactory.getInstance());
+        GENERATOR_MAPPINGS.put("CucumberFeature", new CucumberFeatureTemplateGenerator(false, 1));
+        FACTORY_MAPPINGS.put("CucumberFeature", CucumberFeatureTemplateFactory.getInstance());
     }
 
     /**

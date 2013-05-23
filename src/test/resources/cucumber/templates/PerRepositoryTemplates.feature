@@ -31,6 +31,7 @@ Feature: Per-repository templates
     | ThreadLocalBag               | ECommerceThreadLocalBag.java           |
     | ConfigurationProperties      | e-commerce-queryj.properties           |
     | DataAccessContextLocal       | e-commerce-dataAccessLocal.xml.sample  |
+    | CucumberFeature              | ECommerce-tables.feature              |
 
   Scenario: queryj.properties is generated correctly for a repository
 

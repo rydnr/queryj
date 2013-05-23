@@ -36,6 +36,7 @@ package org.acmsl.queryj.tools;
  * Importing some project classes.
  */
 import org.acmsl.queryj.QueryJCommand;
+import org.acmsl.queryj.QueryJSettings;
 import org.acmsl.queryj.SingularPluralFormConverter;
 import org.acmsl.queryj.customsql.handlers.CustomSqlProviderRetrievalHandler;
 import org.acmsl.queryj.customsql.handlers.CustomSqlValidationHandler;
@@ -43,6 +44,7 @@ import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOFactoryTemplateH
 import org.acmsl.queryj.templates.dao.handlers.BaseRepositoryDAOTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.RepositoryDAOFactoryTemplateHandlerBundle;
 import org.acmsl.queryj.templates.dao.handlers.RepositoryDAOTemplateHandlerBundle;
+import org.acmsl.queryj.templates.other.OtherBundle;
 import org.acmsl.queryj.tools.handlers.Log4JInitializerHandler;
 import org.acmsl.queryj.tools.handlers.ParameterValidationHandler;
 import org.acmsl.queryj.tools.handlers.DatabaseMetaDataCacheWritingHandler;
@@ -97,7 +99,7 @@ import org.checkthread.annotations.ThreadSafe;
 @ThreadSafe
 public class QueryJChain
     extends org.acmsl.queryj.AbstractQueryJChain
-    implements org.acmsl.queryj.QueryJSettings
+    implements QueryJSettings
 {
     /**
      * The settings.
@@ -2618,6 +2620,8 @@ public class QueryJChain
         chain.add(new DatabaseMetaDataLoggingHandler());
 
         chain.add(new ExternallyManagedFieldsRetrievalHandler());
+
+        chain.add(new OtherBundle());
 
         chain.add(new TableTemplateHandlerBundle());
 
