@@ -39,9 +39,8 @@ package cucumber.templates;
 /*
  * Importing project classes.
  */
-import org.acmsl.commons.utils.EnglishGrammarUtils;
-import org.acmsl.commons.utils.StringUtils;
-import org.acmsl.queryj.customsql.xml.UntrimmedCallMethodRule;
+import cucumber.templates.xml.BeanElement;
+import cucumber.templates.xml.DataAccessContextLocalTestHelper;
 import org.acmsl.queryj.metadata.DecoratorFactory;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
@@ -88,12 +87,13 @@ import org.acmsl.queryj.tools.QueryJBuildException;
  * Importing ACM S.L. Commons classes.
  */
 import org.acmsl.commons.logging.UniqueLogFactory;
+import org.acmsl.commons.utils.EnglishGrammarUtils;
+import org.acmsl.commons.utils.StringUtils;
 
 /*
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.digester.Digester;
-import org.apache.commons.digester.ObjectCreationFactory;
 import org.apache.commons.logging.LogFactory;
 
 /*
@@ -108,21 +108,21 @@ import cucumber.api.java.en.When;
  * Importing Jetbrains annotations.
  */
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /*
  * Importing JUnit classes.
  */
-import org.jetbrains.annotations.Nullable;
 import org.junit.Assert;
-import org.xml.sax.Attributes;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
+
+/*
+ * Importing SAX classes.
+ */
 import org.xml.sax.SAXException;
 
 /*
  * Importing JDK classes.
  */
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -636,7 +636,22 @@ public class PerRepositoryTemplatesTest
 
         @NotNull final List<BeanElement> beans = parseFile(file);
 
+        Assert.assertEquals(
+            "Wrong number of <bean> elements",
+            1 /* jndi */ + 1 /* transaction manager */ + 2*(getTableNames().size()),
+            beans.size());
+    }
 
+    /**
+     * Checks whether the generated Cucumber file is valid.
+     * @param outputName the output name.
+     */
+    @Then("^the generated Cucumber file (.*) is valid$")
+    public void checkCucumberFeature(@NotNull final String outputName)
+    {
+        @Nullable final File file = retrieveOutputFile(outputName);
+
+        Assert.assertNotNull("Invalid file : " + outputName, file);
     }
 
     /**
@@ -659,7 +674,9 @@ public class PerRepositoryTemplatesTest
     @NotNull
     protected List<BeanElement> parseFile(@NotNull final File file, @NotNull final Digester digester)
     {
-        @NotNull final List<BeanElement> result = new ArrayList<BeanElement>();
+        @NotNull final List<BeanElement> result =
+            new ArrayList<BeanElement>(
+                1 /* jndi */ + 1 /* transaction manager */ + 2*(getTableNames().size()));
 
         digester.push(result);
 
@@ -667,11 +684,11 @@ public class PerRepositoryTemplatesTest
         {
             digester.parse(file);
         }
-        catch (IOException e)
+        catch (@NotNull final IOException e)
         {
             Assert.fail(e.getMessage());
         }
-        catch (SAXException e)
+        catch (@NotNull final SAXException e)
         {
             Assert.fail(e.getMessage());
         }
@@ -686,578 +703,29 @@ public class PerRepositoryTemplatesTest
     @NotNull
     protected Digester buildDataAccessContextLocalDigester()
     {
-        @NotNull final Digester result = new Digester();
-
-        // To avoid fetching external DTDs
-        result.setEntityResolver(
-            new EntityResolver()
-            {
-                @Override
-                public InputSource resolveEntity(final String publicId, final String systemId)
-                    throws SAXException, IOException
-                {
-                    return new InputSource(new ByteArrayInputStream("".getBytes()));
-                }
-            }
-        );
-        // <beans>
-
-        //   <bean>
-        result.addFactoryCreate(
-            "beans/bean",
-            new BeanElementFactory());
-
-        //     <property>
-        result.addFactoryCreate(
-            "beans/bean/property",
-            new PropertyElementFactory());
-
-        //     <value>
-        result.addRule(
-            "beans/bean/property/value",
-            new UntrimmedCallMethodRule("setValue", 0));
-        //     </value>
-
-        //     <ref>
-        result.addFactoryCreate(
-            "beans/bean/property/ref",
-            new RefElementFactory());
-        //     </ref>
-
-        result.addSetNext("beans/bean/property", "add");
-
-        //   </property>
-
-        // <sql-list>
-
-        return result;
+        return buildDataAccessContextLocalDigester(DataAccessContextLocalTestHelper.getInstance());
     }
 
     /**
-     * Represents &lt;bean&gt; information in XML files.
+     * Creates and configures a new Digester instance.
+     * @param helper the {@link DataAccessContextLocalTestHelper} instance.
+     * @return such instance.
      */
-    protected static class BeanElement
+    @NotNull
+    protected Digester buildDataAccessContextLocalDigester(@NotNull final DataAccessContextLocalTestHelper helper)
     {
-        /**
-         * The id.
-         */
-        private String m__strId;
-
-        /**
-         * The Class.
-         */
-        private String m__strClass;
-
-        /**
-         * The properties.
-         */
-        private List<PropertyElement> m__lProperties;
-
-        /**
-         * Creates a new BeanElement.
-         * @param id the id.
-         * @param clazz the class value.
-         */
-        public BeanElement(@NotNull final String id, @NotNull final String clazz)
-        {
-            immutableSetId(id);
-            immutableSetClassValue(clazz);
-            immutableSetProperties(new ArrayList<PropertyElement>(1));
-        }
-
-        /**
-         * Specifies the id.
-         * @param value the id value.
-         */
-        protected final void immutableSetId(@NotNull final String value)
-        {
-            this.m__strId = value;
-        }
-
-        /**
-         * Specifies the id.
-         * @param value the id value.
-         */
-        @SuppressWarnings("unused")
-        protected void setId(@NotNull final String value)
-        {
-            immutableSetId(value);
-        }
-
-        /**
-         * Retrieves the id.
-         * @return such value.
-         */
-        @NotNull
-        public String getId()
-        {
-            return this.m__strId;
-        }
-
-        /**
-         * Specifies the Class.
-         * @param value the Class value.
-         */
-        protected final void immutableSetClassValue(@NotNull final String value)
-        {
-            this.m__strClass = value;
-        }
-
-        /**
-         * Specifies the Class.
-         * @param value the Class value.
-         */
-        @SuppressWarnings("unused")
-        protected void setClassValue(@NotNull final String value)
-        {
-            immutableSetClassValue(value);
-        }
-
-        /**
-         * Retrieves the Class.
-         * @return such value.
-         */
-        @NotNull
-        public String getClassValue()
-        {
-            return this.m__strClass;
-        }
-
-        /**
-         * Specifies the properties.
-         * @param properties the properties.
-         */
-        protected final void immutableSetProperties(@NotNull final List<PropertyElement> properties)
-        {
-            this.m__lProperties = properties;
-        }
-
-        /**
-         * Specifies the properties.
-         * @param properties the properties.
-         */
-        @SuppressWarnings("unused")
-        protected void setProperties(@NotNull final List<PropertyElement> properties)
-        {
-            immutableSetProperties(properties);
-        }
-
-        /**
-         * Retrieves the properties.
-         * @return such information.
-         */
-        @NotNull
-        protected final List<PropertyElement> immutableGetProperties()
-        {
-            return this.m__lProperties;
-        }
-
-        /**
-         * Retrieves the properties.
-         * @return such information.
-         */
-        @NotNull
-        public List<PropertyElement> getProperties()
-        {
-            return new ArrayList<PropertyElement>(immutableGetProperties());
-        }
-
-        /**
-         * Adds a new property.
-         * @param property the property.
-         */
-        public void add(@NotNull final PropertyElement property)
-        {
-            immutableGetProperties().add(property);
-        }
-
-        @Override
-        public boolean equals(final Object o)
-        {
-            boolean result = false;
-
-            if (this == o)
-            {
-                result = true;
-            }
-            else if (o instanceof BeanElement)
-            {
-                @NotNull final BeanElement that = (BeanElement) o;
-
-                if (   (immutableGetProperties().equals(that.immutableGetProperties()))
-                    && (getClassValue().equals(that.getClassValue()))
-                    && (getId().equals(that.getId())))
-                {
-                    result = true;
-                }
-            }
-
-            return result;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int result = m__strId.hashCode();
-            result = 31 * result + m__strClass.hashCode();
-            result = 31 * result + m__lProperties.hashCode();
-            return result;
-        }
-
-        @Override
-        public String toString()
-        {
-            return
-                  "BeanElement{"
-                + " id='" + getId()
-                + "', class='" + getClassValue() + "'"
-                + "', properties=" + immutableGetProperties()
-                + "'}";
-        }
+        return helper.buildDataAccessContextLocalDigester();
     }
 
-    /**
-     * Creates BeanElements.
-     */
-    protected static class BeanElementFactory
-        implements ObjectCreationFactory
+    @NotNull
+    @Override
+    public String toString()
     {
-        /**
-         * The digester instance.
-         */
-        private Digester m__Digester;
-
-        /**
-         * <p>Factory method called by {@link org.apache.commons.digester.FactoryCreateRule} to supply an
-         * object based on the element's attributes.
-         *
-         * @param attributes the element's attributes
-         * @throws Exception any exception thrown will be propagated upwards
-         */
-        @NotNull
-        @Override
-        public Object createObject(@NotNull final Attributes attributes)
-            throws Exception
-        {
-            final @Nullable String t_strId = attributes.getValue("id");
-            final @Nullable String t_strClass = attributes.getValue("class");
-
-            return new BeanElement(t_strId, t_strClass);
-        }
-
-        /**
-         * <p>Returns the {@link org.apache.commons.digester.Digester} that was set by the
-         * {@link org.apache.commons.digester.FactoryCreateRule} upon initialization.
-         */
-        @Override
-        @Nullable
-        public Digester getDigester()
-        {
-            return m__Digester;
-        }
-
-        /**
-         * <p>Set the {@link org.apache.commons.digester.Digester} to allow the implementation to do logging,
-         * classloading based on the digester's classloader, etc.
-         *
-         * @param digester parent Digester object.
-         */
-        @Override
-        public void setDigester(@NotNull final Digester digester)
-        {
-            this.m__Digester = digester;
-        }
-    }
-
-    /**
-     * Represents &lt;property&gt; information in XML files.
-     */
-    protected static class PropertyElement
-    {
-        /**
-         * The name.
-         */
-        private String m__strName;
-
-        /**
-         * The value.
-         */
-        private String m__strValue;
-
-        /**
-         * Creates a PropertyElement with the following name.
-         * @param name the name.
-         */
-        public PropertyElement(@NotNull final String name)
-        {
-            immutableSetName(name);
-        }
-
-        /**
-         * Specifies the name.
-         * @param name the name.
-         */
-        protected final void immutableSetName(@NotNull final String name)
-        {
-            this.m__strName = name;
-        }
-
-        /**
-         * Specifies the name.
-         * @param name the name.
-         */
-        @SuppressWarnings("unused")
-        protected void setName(@NotNull final String name)
-        {
-            immutableSetName(name);
-        }
-
-        /**
-         * Retrieves the name.
-         * @return the name.
-         */
-        @NotNull
-        public String getName()
-        {
-            return this.m__strName;
-        }
-
-        /**
-         * Specifies the value.
-         * @param value the value.
-         */
-        protected final void immutableSetValue(@NotNull final String value)
-        {
-            this.m__strValue = value;
-        }
-
-        /**
-         * Specifies the value.
-         * @param value the value.
-         */
-        @SuppressWarnings("unused")
-        public void setValue(@NotNull final String value)
-        {
-            immutableSetValue(value);
-        }
-
-        /**
-         * Retrieves the value.
-         * @return the value.
-         */
-        @NotNull
-        public String getValue()
-        {
-            return this.m__strValue;
-        }
-
-        @Override
-        public boolean equals(final Object o)
-        {
-            boolean result = false;
-
-            if (this == o)
-            {
-                result = true;
-            }
-            else if (o instanceof PropertyElement)
-            {
-                PropertyElement that = (PropertyElement) o;
-
-                if (   (getName().equals(that.getName()))
-                    && (getName().equals(that.getValue())))
-                {
-                    result = true;
-                }
-            }
-
-            return result;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int result = getName().hashCode();
-            String t_strValue = getValue();
-            if (t_strValue != null)
-            {
-                result = 31 * result + t_strValue.hashCode();
-            }
-
-            return result;
-        }
-
-        @Override
-        public String toString()
-        {
-            StringBuilder result = new StringBuilder("PropertyElement{name='");
-            result.append(getName());
-            String t_strValue = getValue();
-            if (t_strValue != null)
-            {
-                result.append(", value='");
-                result.append(t_strValue);
-                result.append("'");
-            }
-            result.append("'}");
-
-            return result.toString();
-        }
-    }
-
-    /**
-     * Creates PropertyElements.
-     */
-    protected static class PropertyElementFactory
-        implements ObjectCreationFactory
-    {
-        /**
-         * The digester instance.
-         */
-        private Digester m__Digester;
-
-        /**
-         * <p>Factory method called by {@link org.apache.commons.digester.FactoryCreateRule} to supply an
-         * object based on the element's attributes.
-         *
-         * @param attributes the element's attributes
-         * @throws Exception any exception thrown will be propagated upwards
-         */
-        @Override
-        public Object createObject(@NotNull final Attributes attributes)
-            throws Exception
-        {
-            final @Nullable String t_strName = attributes.getValue("name");
-
-            return new PropertyElement(t_strName);
-        }
-
-        /**
-         * <p>Returns the {@link org.apache.commons.digester.Digester} that was set by the
-         * {@link org.apache.commons.digester.FactoryCreateRule} upon initialization.
-         */
-        @Override
-        public Digester getDigester()
-        {
-            return m__Digester;
-        }
-
-        /**
-         * <p>Set the {@link org.apache.commons.digester.Digester} to allow the implementation to do logging,
-         * classloading based on the digester's classloader, etc.
-         *
-         * @param digester parent Digester object.
-         */
-        @Override
-        public void setDigester(@NotNull final Digester digester)
-        {
-            this.m__Digester = digester;
-        }
-    }
-
-
-    /**
-     * Represents &lt;ref&gt; information in XML files.
-     */
-    protected static class RefElement
-    {
-        /**
-         * The local information.
-         */
-        private String m__strLocal;
-
-        /**
-         * Creates a RefElement with the following local reference name.
-         * @param local the reference name.
-         */
-        public RefElement(@NotNull final String local)
-        {
-            immutableSetLocal(local);
-        }
-
-        /**
-         * Specifies the local reference name.
-         * @param local the reference name.
-         */
-        protected final void immutableSetLocal(@NotNull final String local)
-        {
-            this.m__strLocal = local;
-        }
-
-        /**
-         * Specifies the local reference name.
-         * @param local the reference name.
-         */
-        @SuppressWarnings("unused")
-        protected void setLocal(@NotNull final String local)
-        {
-            immutableSetLocal(local);
-        }
-
-        /**
-         * Retrieves the local reference name.
-         * @return the reference name.
-         */
-        @NotNull
-        public String getLocal()
-        {
-            return this.m__strLocal;
-        }
-
-        @Override
-        public String toString()
-        {
-            return "RefElement{local='" + getLocal() + "'}";
-        }
-    }
-
-    /**
-     * Creates RefElements.
-     */
-    protected static class RefElementFactory
-        implements ObjectCreationFactory
-    {
-        /**
-         * The digester instance.
-         */
-        private Digester m__Digester;
-
-        /**
-         * <p>Factory method called by {@link org.apache.commons.digester.FactoryCreateRule} to supply an
-         * object based on the element's attributes.
-         *
-         * @param attributes the element's attributes
-         * @throws Exception any exception thrown will be propagated upwards
-         */
-        @Override
-        public Object createObject(@NotNull final Attributes attributes)
-            throws Exception
-        {
-            final @Nullable String t_strLocal = attributes.getValue("local");
-
-            return new RefElement(t_strLocal);
-        }
-
-        /**
-         * <p>Returns the {@link org.apache.commons.digester.Digester} that was set by the
-         * {@link org.apache.commons.digester.FactoryCreateRule} upon initialization.
-         */
-        @Override
-        public Digester getDigester()
-        {
-            return m__Digester;
-        }
-
-        /**
-         * <p>Set the {@link org.apache.commons.digester.Digester} to allow the implementation to do logging,
-         * classloading based on the digester's classloader, etc.
-         *
-         * @param digester parent Digester object
-         */
-        @Override
-        public void setDigester(final Digester digester)
-        {
-            this.m__Digester = digester;
-        }
+        return "PerRepositoryTemplatesTest{" +
+               "m__lTableNames=" + m__lTableNames +
+               ", m__strRepository='" + m__strRepository + '\'' +
+               ", m__strDbUser='" + m__strDbUser + '\'' +
+               ", m__strVendor='" + m__strVendor + '\'' +
+               '}';
     }
 }

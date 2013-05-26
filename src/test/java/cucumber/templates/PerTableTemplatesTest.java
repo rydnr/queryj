@@ -119,16 +119,6 @@ public class PerTableTemplatesTest
     extends AbstractTemplatesTest<BasePerTableTemplateGenerator, BasePerTableTemplateFactory>
 {
     /**
-     * The tables.
-     */
-    private Map<String, Table> m__mTables;
-
-    /**
-     * The foreign keys.
-     */
-    private List<ForeignKey> m__lForeignKeys;
-
-    /**
      * Creates an instance.
      */
     public PerTableTemplatesTest()
@@ -156,60 +146,6 @@ public class PerTableTemplatesTest
         FACTORY_MAPPINGS.put("ValueObjectFactory", ValueObjectFactoryTemplateFactory.getInstance());
         GENERATOR_MAPPINGS.put("ValueObjectImpl", new ValueObjectImplTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("ValueObjectImpl", ValueObjectImplTemplateFactory.getInstance());
-    }
-
-    /**
-     * Specifies the tables.
-     * @param tables the tables.
-     */
-    protected final void immutableSetTables(@NotNull final Map<String, Table> tables)
-    {
-        m__mTables = tables;
-    }
-
-    /**
-     * Specifies the tables.
-     * @param tables the tables.
-     */
-    @SuppressWarnings("unused")
-    protected void setTables(@NotNull final Map<String, Table> tables)
-    {
-        immutableSetTables(tables);
-    }
-
-    /**
-     * Retrieves the tables.
-     * @return such information.
-     */
-    @NotNull
-    protected Map<String, Table> getTables()
-    {
-        return m__mTables;
-    }
-
-    /**
-     * Specifies the foreign keys.
-     * @param foreignKeys the foreign keys.
-     */
-    protected final void immutableSetForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
-    {
-        m__lForeignKeys = foreignKeys;
-    }
-
-    /**
-     * Specifies the foreign keys.
-     * @param foreignKeys the foreign keys.
-     */
-    @SuppressWarnings("unused")
-    protected void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
-    {
-        immutableSetForeignKeys(foreignKeys);
-    }
-
-    @NotNull
-    protected List<ForeignKey> getForeignKeys()
-    {
-        return m__lForeignKeys;
     }
 
     /**

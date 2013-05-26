@@ -73,9 +73,9 @@ Feature: <repository> table templates
 
     And the following foreign keys:
     | source table | source columns | target table | allows null |
-    <tables:foreign_keys(table=table); separator="\n">
+    <tables:foreign_keys(table=it); separator="\n">
 
-    When I generate with per-table <template>.stg for <vendor> <vendor_version>
+    When I generate with per-table <template>.stg for <engine_name> <engine_version>
 
     Then the generated per-table \<output\> file compiles successfully
 
@@ -93,7 +93,7 @@ Feature: <repository> table templates
 >>
 
 table_def(table) ::= <<
-| <table> | <table.parent> | <table.decorated> | <table.relationship> | <table.static> |
+| <table.name> | <table.parent> | <table.decorated> | <table.relationship> | <table.static> |
 >>
 
 columns(table) ::= <<
@@ -107,7 +107,7 @@ column_def(table, attr) ::= <<
 >>
 
 foreign_keys(table) ::= <<
-<table.foreingKeys:foreing_key_def(table=table, foreign_key=it); separator="\n">
+<table.foreingKeys:foreign_key_def(table=table, foreign_key=it); separator="\n">
 >>
 
 foreign_key_def(table, foreignKey) ::= <<

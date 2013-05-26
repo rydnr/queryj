@@ -58,6 +58,7 @@ import org.acmsl.queryj.metadata.MetadataManager;
 import org.acmsl.queryj.metadata.SqlPropertyDAO;
 import org.acmsl.queryj.metadata.SqlResultDAO;
 import org.acmsl.queryj.metadata.engines.JdbcMetadataManager;
+import org.acmsl.queryj.metadata.vo.ForeignKey;
 import org.acmsl.queryj.metadata.vo.Table;
 import org.antlr.runtime.ANTLRFileStream;
 import org.antlr.runtime.CommonTokenStream;
@@ -98,12 +99,12 @@ public abstract class AbstractTemplatesTest<G, F>
     /**
      * A simple mapping between template names and generators.
      */
-    protected final Map<String, G> GENERATOR_MAPPINGS = new HashMap<String, G>();
+    @NotNull protected final Map<String, G> GENERATOR_MAPPINGS = new HashMap<String, G>();
 
     /**
      * A simple mapping between template names and factories.
      */
-    protected final Map<String, F> FACTORY_MAPPINGS = new HashMap<String, F>();
+    @NotNull protected final Map<String, F> FACTORY_MAPPINGS = new HashMap<String, F>();
 
     @Rule
     public TemporaryFolder rootFolder = new TemporaryFolder();
@@ -114,11 +115,23 @@ public abstract class AbstractTemplatesTest<G, F>
     private Map<String, File> m__mOutputFiles;
 
     /**
+     * The tables.
+     */
+    private Map<String, Table> m__mTables;
+
+    /**
+     * The foreign keys.
+     */
+    private List<ForeignKey> m__lForeignKeys;
+
+    /**
      * Creates an empty instance.
      */
     protected AbstractTemplatesTest()
     {
         immutableSetOutputFiles(new HashMap<String, File>());
+        immutableSetTables(new HashMap<String, Table>());
+        immutableSetForeignKeys(new ArrayList<ForeignKey>());
     }
 
     /**
@@ -148,6 +161,60 @@ public abstract class AbstractTemplatesTest<G, F>
     public Map<String, File> getOutputFiles()
     {
         return m__mOutputFiles;
+    }
+
+    /**
+     * Specifies the tables.
+     * @param tables the tables.
+     */
+    protected final void immutableSetTables(@NotNull final Map<String, Table> tables)
+    {
+        m__mTables = tables;
+    }
+
+    /**
+     * Specifies the tables.
+     * @param tables the tables.
+     */
+    @SuppressWarnings("unused")
+    protected void setTables(@NotNull final Map<String, Table> tables)
+    {
+        immutableSetTables(tables);
+    }
+
+    /**
+     * Retrieves the tables.
+     * @return such information.
+     */
+    @NotNull
+    protected Map<String, Table> getTables()
+    {
+        return m__mTables;
+    }
+
+    /**
+     * Specifies the foreign keys.
+     * @param foreignKeys the foreign keys.
+     */
+    protected final void immutableSetForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    {
+        m__lForeignKeys = foreignKeys;
+    }
+
+    /**
+     * Specifies the foreign keys.
+     * @param foreignKeys the foreign keys.
+     */
+    @SuppressWarnings("unused")
+    protected void setForeignKeys(@NotNull final List<ForeignKey> foreignKeys)
+    {
+        immutableSetForeignKeys(foreignKeys);
+    }
+
+    @NotNull
+    protected List<ForeignKey> getForeignKeys()
+    {
+        return m__lForeignKeys;
     }
 
     /**
@@ -429,7 +496,8 @@ public abstract class AbstractTemplatesTest<G, F>
                 new IOException("Could not create temporary file: " + result.getAbsolutePath());
         }
 
-        if (exceptionToThrow != null)
+        if (   (exceptionToThrow != null)
+            || (result == null))
         {
             throw exceptionToThrow;
         }
