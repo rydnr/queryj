@@ -42,9 +42,6 @@ package cucumber.templates;
 import cucumber.templates.xml.BeanElement;
 import cucumber.templates.xml.DataAccessContextLocalTestHelper;
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.metadata.vo.TableIncompleteValueObject;
-import org.acmsl.queryj.templates.BasePerRepositoryTemplate;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateFactory;
 import org.acmsl.queryj.templates.BasePerRepositoryTemplateGenerator;
 import org.acmsl.queryj.templates.dao.BasePreparedStatementCreatorTemplateFactory;
@@ -79,14 +76,10 @@ import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateFactory;
 import org.acmsl.queryj.templates.dao.StatisticsProviderTemplateGenerator;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateFactory;
 import org.acmsl.queryj.templates.dao.ThreadLocalBagTemplateGenerator;
-import org.acmsl.queryj.templates.other.CucumberFeatureTemplateFactory;
-import org.acmsl.queryj.templates.other.CucumberFeatureTemplateGenerator;
-import org.acmsl.queryj.tools.QueryJBuildException;
 
 /*
  * Importing ACM S.L. Commons classes.
  */
-import org.acmsl.commons.logging.UniqueLogFactory;
 import org.acmsl.commons.utils.EnglishGrammarUtils;
 import org.acmsl.commons.utils.StringUtils;
 
@@ -94,7 +87,6 @@ import org.acmsl.commons.utils.StringUtils;
  * Importing Apache Commons Logging classes.
  */
 import org.apache.commons.digester.Digester;
-import org.apache.commons.logging.LogFactory;
 
 /*
  * Importing Cucumber classes.
@@ -125,7 +117,6 @@ import org.xml.sax.SAXException;
  */
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -139,45 +130,13 @@ import java.util.Properties;
  */
 @SuppressWarnings("unused")
 public class PerRepositoryTemplatesTest
-    extends AbstractTemplatesTest<BasePerRepositoryTemplateGenerator, BasePerRepositoryTemplateFactory>
+    extends AbstractPerRepositoryTemplatesTest<BasePerRepositoryTemplateGenerator, BasePerRepositoryTemplateFactory>
 {
-    /**
-     * The package name.
-     */
-    public static final String PACKAGE_NAME = "com.foo.bar";
-
-    /**
-     * The DAO package name.
-     */
-    public static final String DAO_PACKAGE_NAME = "com.foo.bar.dao";
-
-    /**
-     * The repository.
-     */
-    private String m__strRepository;
-
-    /**
-     * The db user.
-     */
-    private String m__strDbUser;
-
-    /**
-     * The vendor.
-     */
-    private String m__strVendor;
-
-    /**
-     * The table names.
-     */
-    private List<String> m__lTableNames;
-
     /**
      * Creates an instance.
      */
     public PerRepositoryTemplatesTest()
     {
-        immutableSetTableNames(new ArrayList<String>());
-
         GENERATOR_MAPPINGS.put("DataAccessManager", new DataAccessManagerTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DataAccessManager", DataAccessManagerTemplateFactory.getInstance());
         GENERATOR_MAPPINGS.put("BasePreparedStatementCreator", new BasePreparedStatementCreatorTemplateGenerator(false, 1));
@@ -210,126 +169,6 @@ public class PerRepositoryTemplatesTest
         FACTORY_MAPPINGS.put("ConfigurationProperties", ConfigurationPropertiesTemplateFactory.getInstance());
         GENERATOR_MAPPINGS.put("DataAccessContextLocal", new DataAccessContextLocalTemplateGenerator(false, 1));
         FACTORY_MAPPINGS.put("DataAccessContextLocal", DataAccessContextLocalTemplateFactory.getInstance());
-        GENERATOR_MAPPINGS.put("CucumberFeature", new CucumberFeatureTemplateGenerator(false, 1));
-        FACTORY_MAPPINGS.put("CucumberFeature", CucumberFeatureTemplateFactory.getInstance());
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param name such name.
-     */
-    protected final void immutableSetRepositoryName(@NotNull final String name)
-    {
-        this.m__strRepository = name;
-    }
-
-    /**
-     * Specifies the repository name.
-     * @param name such name.
-     */
-    protected void setRepositoryName(@NotNull final String name)
-    {
-        immutableSetRepositoryName(name);
-    }
-
-    /**
-     * Retrieves the repository name.
-     * @return such name.
-     */
-    @NotNull
-    public String getRepositoryName()
-    {
-        return m__strRepository;
-    }
-
-    /**
-     * Specifies the db user.
-     * @param user the database username.
-     */
-    protected final void immutableSetDbUser(@NotNull final String user)
-    {
-        this.m__strDbUser = user;
-    }
-
-    /**
-     * Specifies the db user.
-     * @param user the database username.
-     */
-    protected void setDbUser(@NotNull final String user)
-    {
-        immutableSetDbUser(user);
-    }
-
-    /**
-     * Retrieves the db user.
-     * @return the database username.
-     */
-    public String getDbUser()
-    {
-        return this.m__strDbUser;
-    }
-
-    /**
-     * Specifies the vendor.
-     * @param vendor the database vendor.
-     */
-    protected final void immutableSetVendor(@NotNull final String vendor)
-    {
-        this.m__strVendor = vendor;
-    }
-
-    /**
-     * Specifies the vendor.
-     * @param vendor the database vendor.
-     */
-    protected void setVendor(@NotNull final String vendor)
-    {
-        immutableSetVendor(vendor);
-    }
-
-    /**
-     * Specifies the vendor.
-     * @return the database vendor.
-     */
-    public String getVendor()
-    {
-        return this.m__strVendor;
-    }
-
-    /**
-     * Specifies the table names.
-     * @param tableNames such names.
-     */
-    protected final void immutableSetTableNames(@NotNull final List<String> tableNames)
-    {
-        m__lTableNames = tableNames;
-    }
-
-    /**
-     * Specifies the table names.
-     * @param tableNames such names.
-     */
-    protected void setTableNames(@NotNull final List<String> tableNames)
-    {
-        immutableSetTableNames(tableNames);
-    }
-
-    /**
-     * Retrieves the table names.
-     * @return such names.
-     */
-    protected final List<String> immutableGetTableNames()
-    {
-        return m__lTableNames;
-    }
-
-    /**
-     * Retrieves the table names.
-     * @return such names.
-     */
-    public List<String> getTableNames()
-    {
-        return new ArrayList<String>(immutableGetTableNames());
     }
 
     /**
@@ -351,26 +190,7 @@ public class PerRepositoryTemplatesTest
     @Given("^a repository with the following information:$")
     public void defineRepository(@NotNull final DataTable repositoryTable)
     {
-        @NotNull final List<Map<String,String>> entries = repositoryTable.asMaps();
-
-        Assert.assertTrue("Missing repository information", entries.size() > 0);
-        Assert.assertTrue("Too many repositories defined", entries.size() == 1);
-
-        @Nullable final Map<String, String> repositoryInfo = entries.get(0);
-
-        Assert.assertNotNull(repositoryInfo);
-
-        @Nullable final String name = repositoryInfo.get("name");
-        Assert.assertNotNull("Missing repository name", name);
-        setRepositoryName(name);
-
-        @Nullable final String user = repositoryInfo.get("user");
-        Assert.assertNotNull("Missing repository user", user);
-        setDbUser(user);
-
-        @Nullable final String vendor = repositoryInfo.get("vendor");
-        Assert.assertNotNull("Missing repository vendor", vendor);
-        setVendor(vendor);
+        defineRepository(repositoryTable.asMaps());
     }
 
     /**
@@ -410,108 +230,6 @@ public class PerRepositoryTemplatesTest
     public void generateFile(@NotNull final String template)
     {
         generateFile(template, getRepositoryName(), getVendor(), getTableNames(), getOutputFiles());
-    }
-
-    /**
-     * Generates a file with the information from the feature.
-     * @param templateName the template.
-     * @param repository the repository.
-     * @param tables the tables.
-     * @param outputFiles the output files.
-     */
-    @SuppressWarnings("unchecked")
-    protected void generateFile(
-        @NotNull final String templateName,
-        @NotNull final String repository,
-        @NotNull final String engine,
-        @NotNull final List<String> tables,
-        @NotNull final Map<String, File> outputFiles)
-    {
-        final BasePerRepositoryTemplateGenerator generator =
-            retrieveTemplateGenerator(templateName);
-
-        Assert.assertNotNull("No template generator found for " + templateName, generator);
-
-        final BasePerRepositoryTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
-
-        Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
-
-        final BasePerRepositoryTemplate template =
-            templateFactory.createTemplate(
-                retrieveMetadataManager(engine, tables, wrapTables(tables)),
-                retrieveCustomSqlProvider(),
-                retrieveDecoratorFactory(generator),
-                DAO_PACKAGE_NAME,
-                PACKAGE_NAME,
-                repository,
-                "", // header
-                false, // marker
-                false, // jmx
-                tables,
-                "java:comp/env/db",
-                false, // disable generation timestamps
-                false, // disable NotNull annotations
-                true); // disable checkThread.org annotations
-
-        Assert.assertNotNull("No template found for " + templateName, template);
-
-        File outputDir = null;
-
-        try
-        {
-            rootFolder.create();
-            outputDir = rootFolder.newFolder("dao");
-        }
-        catch (@NotNull final IOException ioException)
-        {
-            Assert.fail(ioException.getMessage());
-        }
-
-//            Assert.assertTrue("Cannot create folder: " + outputDir.getAbsolutePath(), outputDir.mkdirs());
-
-        UniqueLogFactory.initializeInstance(LogFactory.getLog(PerTableTemplatesTest.class));
-
-        try
-        {
-            generator.write(
-                template,
-                outputDir,
-                rootFolder.getRoot(),
-                Charset.defaultCharset());
-        }
-        catch (@NotNull final IOException ioException)
-        {
-            Assert.fail(ioException.getMessage());
-        }
-        catch (@NotNull final QueryJBuildException queryjBuildException)
-        {
-            Assert.fail(queryjBuildException.getMessage());
-        }
-
-        outputFiles.put(
-            repository,
-            new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
-    }
-
-    /**
-     * Wraps a list of {@link Table}s using given names.
-     * @param tableNames the table names.
-     * @return the table list.
-     */
-    protected List<Table> wrapTables(final List<String> tableNames)
-    {
-        @NotNull final List<Table> result = new ArrayList<Table>(tableNames.size());
-
-        for (@Nullable final String tableName : tableNames)
-        {
-            if (tableName != null)
-            {
-                result.add(
-                    new TableIncompleteValueObject(tableName, null));
-            }
-        }
-
-        return result;
     }
 
     /**
@@ -643,18 +361,6 @@ public class PerRepositoryTemplatesTest
     }
 
     /**
-     * Checks whether the generated Cucumber file is valid.
-     * @param outputName the output name.
-     */
-    @Then("^the generated Cucumber file (.*) is valid$")
-    public void checkCucumberFeature(@NotNull final String outputName)
-    {
-        @Nullable final File file = retrieveOutputFile(outputName);
-
-        Assert.assertNotNull("Invalid file : " + outputName, file);
-    }
-
-    /**
      * Parses given file.
      * @param file the file to parse.
      * @return the list of {@link BeanElement}s in the file.
@@ -721,11 +427,18 @@ public class PerRepositoryTemplatesTest
     @Override
     public String toString()
     {
-        return "PerRepositoryTemplatesTest{" +
-               "m__lTableNames=" + m__lTableNames +
-               ", m__strRepository='" + m__strRepository + '\'' +
-               ", m__strDbUser='" + m__strDbUser + '\'' +
-               ", m__strVendor='" + m__strVendor + '\'' +
-               '}';
+        @NotNull final StringBuilder result = new StringBuilder("PerRepositoryTemplatesTest{");
+
+        result.append("tableNames=");
+        result.append(immutableGetTableNames());
+        result.append(", repository='");
+        result.append(getRepositoryName());
+        result.append("', dbUser='");
+        result.append(getDbUser());
+        result.append("', vendor='");
+        result.append(getVendor());
+        result.append("' }");
+
+        return result.toString();
     }
 }

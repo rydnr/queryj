@@ -39,14 +39,9 @@ package cucumber.templates;
  * Importing project classes.
  */
 import org.acmsl.queryj.metadata.DecoratorFactory;
-import org.acmsl.queryj.metadata.engines.JdbcMetadataTypeManager;
-import org.acmsl.queryj.metadata.vo.Attribute;
-import org.acmsl.queryj.metadata.vo.AttributeValueObject;
 import org.acmsl.queryj.metadata.vo.ForeignKey;
-import org.acmsl.queryj.metadata.vo.ForeignKeyValueObject;
 import org.acmsl.queryj.metadata.vo.Row;
 import org.acmsl.queryj.metadata.vo.Table;
-import org.acmsl.queryj.metadata.vo.TableValueObject;
 import org.acmsl.queryj.templates.BasePerTableTemplate;
 import org.acmsl.queryj.templates.BasePerTableTemplateFactory;
 import org.acmsl.queryj.templates.BasePerTableTemplateGenerator;
@@ -157,31 +152,20 @@ public class PerTableTemplatesTest
     @Given("^the following tables:$")
     public void defineInputTables(@NotNull final DataTable tableInfo)
     {
-        defineInputTables(tableInfo, getTables());
+        defineInputTables(tableInfo, getTables(), TableTestHelper.getInstance());
     }
 
     /**
      * Defines the input tables based on the information provided by the
      * feature.
      * @param tableInfo the information about the tables.
-     * @param tables the table collection.
      */
     protected void defineInputTables(
-        @NotNull final DataTable tableInfo, @NotNull final Map<String, Table> tables)
+        @NotNull final DataTable tableInfo,
+        @NotNull final Map<String, Table> tables,
+        @NotNull final TableTestHelper helper)
     {
-        @NotNull final List<Map<String, String>> tableEntries = tableInfo.asMaps();
-
-        Table table;
-
-        for (@NotNull final Map<String, String> tableEntry: tableEntries)
-        {
-            table = convertToTable(tableEntry);
-
-            if (table != null)
-            {
-                tables.put(table.getName(), table);
-            }
-        }
+        helper.defineInputTables(tableInfo, tables);
     }
 
     /**
@@ -192,7 +176,7 @@ public class PerTableTemplatesTest
     @Given("^the following columns:$")
     public void defineInputColumns(@NotNull final DataTable columnInfo)
     {
-        defineInputColumns(columnInfo, getTables());
+        defineInputColumns(columnInfo, getTables(), TableTestHelper.getInstance());
     }
 
     /**
@@ -200,58 +184,12 @@ public class PerTableTemplatesTest
      * @param columnInfo the column information.
      * @param tables the tables.
      */
-    protected void defineInputColumns(
-        @NotNull final DataTable columnInfo, @NotNull final Map<String, Table> tables)
+    protected List<Table> defineInputColumns(
+        @NotNull final DataTable columnInfo,
+        @NotNull final Map<String, Table> tables,
+        @NotNull final TableTestHelper helper)
     {
-        for (@NotNull final Table table : tables.values())
-        {
-            @NotNull final List<Attribute> attributes = table.getAttributes();
-
-            @NotNull final List<Attribute> primaryKey = table.getPrimaryKey();
-
-            Attribute attribute;
-
-            int index = 1;
-
-            int precision;
-            String[] booleanInfo;
-
-            for (@NotNull final Map<String, String> columnEntry: columnInfo.asMaps())
-            {
-                if (table.getName().equals(columnEntry.get("table")))
-                {
-                    precision = retrievePrecision(columnEntry);
-                    booleanInfo = retrieveBooleanInfo(columnEntry);
-
-                    attribute =
-                        new AttributeValueObject(
-                            columnEntry.get("column"),
-                            retrieveAttributeTypeId(columnEntry.get("type"), precision),
-                            columnEntry.get("type"),
-                            table.getName(),
-                            "test comment",
-                            index++,
-                            retrieveLength(columnEntry),
-                            precision,
-                            columnEntry.get("keyword"),
-                            columnEntry.get("query"),
-                            Boolean.valueOf(columnEntry.get("allows null")),
-                            columnEntry.get("value"),
-                            Boolean.valueOf(columnEntry.get("readonly")),
-                            booleanInfo[0] != null,
-                            booleanInfo[0],
-                            booleanInfo[1],
-                            booleanInfo[2]);
-
-                    if (Boolean.valueOf(columnEntry.get("pk")))
-                    {
-                        primaryKey.add(attribute);
-                    }
-
-                    attributes.add(attribute);
-                }
-            }
-        }
+        return helper.defineInputColumns(columnInfo, tables);
     }
 
     /**
@@ -262,53 +200,23 @@ public class PerTableTemplatesTest
     @Given("^the following foreign keys:$")
     public void defineForeignKeys(@NotNull final DataTable fkInfo)
     {
-        defineForeignKeys(fkInfo, getTables());
+        defineForeignKeys(fkInfo, getTables(), getForeignKeys(), TableTestHelper.getInstance());
     }
 
     /**
      * Defines the foreign keys via cucumber features.
      * @param fkInfo such information.
-     * @param tables the tables.
+     * @param tables the table map.
+     * @param foreignKeys the foreignKeys,
+     * @param helper the {@link TableTestHelper} instance.
      */
-    protected void defineForeignKeys(@NotNull final DataTable fkInfo, @NotNull final Map<String, Table> tables)
+    protected void defineForeignKeys(
+        @NotNull final DataTable fkInfo,
+        @NotNull final Map<String, Table> tables,
+        @NotNull final List<ForeignKey> foreignKeys,
+        @NotNull final TableTestHelper helper)
     {
-        String sourceTable;
-        String sourceColumnsField;
-        String[] sourceColumns;
-        String targetTable;
-
-        ForeignKey foreignKey;
-
-        for (@NotNull final Table table : tables.values())
-        {
-            @NotNull final List<ForeignKey> foreignKeys = getForeignKeys();
-
-            for (@NotNull final Map<String, String> fkEntry: fkInfo.asMaps())
-            {
-                sourceTable = fkEntry.get("source table");
-
-                if (table.getName().equalsIgnoreCase(sourceTable.trim()))
-                {
-                    sourceColumnsField = fkEntry.get("source columns");
-                    sourceColumns = null;
-                    if (sourceColumnsField != null)
-                    {
-                        sourceColumns = sourceColumnsField.split(",");
-                    }
-
-                    targetTable = fkEntry.get("target table");
-
-                    foreignKey =
-                        new ForeignKeyValueObject(
-                            sourceTable,
-                            filterAttributes(table, sourceColumns),
-                            targetTable,
-                            Boolean.valueOf(fkEntry.get("allows null")));
-
-                    foreignKeys.add(foreignKey);
-                }
-            }
-        }
+        helper.defineForeignKeys(fkInfo, tables, foreignKeys);
     }
 
     /**
@@ -319,25 +227,21 @@ public class PerTableTemplatesTest
     @And("^the following values:$")
     public void defineValues(@NotNull final DataTable values)
     {
-        defineValues(values, getTables());
+        defineValues(values, getTables(), TableTestHelper.getInstance());
     }
 
     /**
      * Defines table values via cucumber features.
      * @param values such information.
      * @param tables the tables.
+     * @param helper the {@link TableTestHelper} instance.
      */
-    @SuppressWarnings("unused")
-    protected void defineValues(@NotNull final DataTable values, @NotNull final Map<String, Table> tables)
+    protected void defineValues(
+        @NotNull final DataTable values,
+        @NotNull final Map<String, Table> tables,
+        @NotNull final TableTestHelper helper)
     {
-        for (@NotNull final Table table : tables.values())
-        {
-            @NotNull final List<Attribute> attributes = table.getAttributes();
-
-            @NotNull final List<Attribute> primaryKey = table.getPrimaryKey();
-
-            // TODO override MetadataManager#TableDAO#findAll with the contents of "values"
-        }
+        helper.defineValues(values, tables);
     }
 
     /**
@@ -388,18 +292,18 @@ public class PerTableTemplatesTest
         @NotNull final Map<String, Table> tables,
         @NotNull final Map<String, File> outputFiles)
     {
-        BasePerTableTemplateGenerator generator =
+        @Nullable final BasePerTableTemplateGenerator generator =
             retrieveTemplateGenerator(templateName);
 
         Assert.assertNotNull("No template generator found for " + templateName, generator);
 
         for (@NotNull final Table table : tables.values())
         {
-            BasePerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
+            @Nullable final BasePerTableTemplateFactory templateFactory = retrieveTemplateFactory(templateName);
 
             Assert.assertNotNull("No template factory found for " + templateName, templateFactory);
 
-            BasePerTableTemplate template =
+            @Nullable final BasePerTableTemplate template =
                 templateFactory.createTemplate(
                     retrieveMetadataManager(engine, table),
                     retrieveCustomSqlProvider(),
@@ -457,148 +361,4 @@ public class PerTableTemplatesTest
                 new File(outputDir, generator.retrieveTemplateFileName(template.getTemplateContext())));
         }
     }
-
-    /**
-     * Retrieves the id of the attribute type.
-     * @param type the type.
-     * @param precision the precision.
-     * @return the concrete type in {@link java.sql.Types}.
-     */
-    protected int retrieveAttributeTypeId(@NotNull final String type, final int precision)
-    {
-        return new JdbcMetadataTypeManager().getJavaType(type, precision);
-    }
-
-    /**
-     * Converts given table information to a {@link Table}.
-     * @param tableEntry the table information.
-     * @return the {@link Table} instance.
-     */
-    @Nullable
-    protected Table convertToTable(@NotNull final Map<String, String> tableEntry)
-    {
-        Table result = null;
-
-        String table =  tableEntry.get("table");
-
-        if (table != null)
-        {
-            result =
-                new TableValueObject(
-                    table,
-                    tableEntry.get("comment"),
-                    new ArrayList<Attribute>(),
-                    new ArrayList<Attribute>(),
-                    new ArrayList<ForeignKey>(),
-                    // TODO: Decorate TableValueObject to retrieve the parent table via its name
-                    // and the table collection.
-                    null, //tableEntry.get("parent table"),
-                    tableEntry.get("static") != null,
-                    tableEntry.get("decorated") != null);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves an int value from given row.
-     * @param row the row.
-     * @param columnName the column name.
-     * @return the value.
-     */
-    protected int retrieveInt(@NotNull final Map<String, String> row, @NotNull final String columnName)
-    {
-        int result = 0;
-        String value = row.get(columnName);
-
-        if (   (value != null)
-            && (!"".equals(value.trim())))
-        {
-            result = Integer.parseInt(value);
-        }
-
-        return result;
-    }
-
-    /**
-     * Retrieves the length information from given row.
-     * @param row the row.
-     * @return the length.
-     */
-    protected int retrieveLength(@NotNull final Map<String, String> row)
-    {
-        return retrieveInt(row, "length");
-    }
-
-    /**
-     * Retrieves the precision information from given row.
-     * @param row the row.
-     * @return the length.
-     */
-    protected int retrievePrecision(@NotNull final Map<String, String> row)
-    {
-        return retrieveInt(row, "precision");
-    }
-
-    /**
-     * Retrieves the boolean declaration of given row.
-     * @param row the row.
-     * @return an 3-element array in which the first element is the
-     * value for <code>true</code> entries; the second element is
-     * the value representing <code>false</code>, and
-     * the last element is the value to be translated as <code>null</code>.
-     */
-    @NotNull
-    protected String[] retrieveBooleanInfo(@NotNull final Map<String, String> row)
-    {
-        String[] result = new String[3];
-
-        String booleanInfo = row.get("boolean");
-
-        if (   (booleanInfo != null)
-            && (!"".equals(booleanInfo.trim())))
-        {
-            String[] fields = booleanInfo.split(",");
-            result[0] = fields[0];
-
-            if (fields.length > 1)
-            {
-                result[1] = fields[1];
-            }
-
-            if (fields.length > 2)
-            {
-                result[2] = fields[2];
-            }
-        }
-
-        return result;
-    }
-
-    /**
-     * Filters the attributes based on given column names.
-     * @param table the table name.
-     * @param columns the columns.
-     * @return the list of attributes matching given column names.
-     */
-    @NotNull
-    protected List<Attribute> filterAttributes(final Table table, final String[] columns)
-    {
-        @NotNull final List<Attribute> result = new ArrayList<Attribute>();
-
-        for (@NotNull final Attribute attribute : table.getAttributes())
-        {
-            for (@Nullable final String column : columns)
-            {
-                if (attribute.getName().equalsIgnoreCase(column))
-                {
-                    result.add(attribute);
-                    break;
-                }
-            }
-        }
-
-        return result;
-    }
-
 }

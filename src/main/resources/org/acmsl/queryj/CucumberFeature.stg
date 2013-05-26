@@ -75,7 +75,7 @@ Feature: <repository> table templates
     | source table | source columns | target table | allows null |
     <tables:foreign_keys(table=it); separator="\n">
 
-    When I generate with per-table <template>.stg for <engine_name> <engine_version>
+    When I generate with per-table \<template\>.stg for <engine_name> <engine_version>
 
     Then the generated per-table \<output\> file compiles successfully
 
@@ -102,8 +102,7 @@ columns(table) ::= <<
 >>
 
 column_def(table, attr) ::= <<
-    | table | column | type | pk | allows null | readonly | sequence  | keyword | boolean | length | precision |
-| <table> | <attr.name> | <attr.type> | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.typeLength> | <attr.typePrecision> |
+| <table.name> | <attr.name> | <attr.type> | <attr.nullable> | <attr.readOnly> | <attr.sequence> | <attr.keyword> | <attr.boolean> | <attr.typeLength> | <attr.typePrecision> |
 >>
 
 foreign_keys(table) ::= <<

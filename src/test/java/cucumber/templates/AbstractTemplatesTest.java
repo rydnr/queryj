@@ -106,6 +106,19 @@ public abstract class AbstractTemplatesTest<G, F>
      */
     @NotNull protected final Map<String, F> FACTORY_MAPPINGS = new HashMap<String, F>();
 
+    /**
+     * The package name.
+     */
+    public static final String PACKAGE_NAME = "com.foo.bar";
+
+    /**
+     * The DAO package name.
+     */
+    public static final String DAO_PACKAGE_NAME = "com.foo.bar.dao";
+
+    /**
+     * A temporary folder for generated files.
+     */
     @Rule
     public TemporaryFolder rootFolder = new TemporaryFolder();
 
@@ -720,10 +733,25 @@ public abstract class AbstractTemplatesTest<G, F>
         return result;
     }
 
-    @NotNull
     @Override
     public String toString()
     {
-        return "AbstractTemplatesTest{}";
+        @NotNull final StringBuilder result =
+            new StringBuilder("AbstractTemplatesTest{ FACTORY_MAPPINGS=");
+
+        result.append(FACTORY_MAPPINGS);
+        result.append(", GENERATOR_MAPPINGS=");
+        result.append(GENERATOR_MAPPINGS);
+        result.append(", rootFolder=");
+        result.append(rootFolder);
+        result.append(", m__mOutputFiles=");
+        result.append(m__mOutputFiles);
+        result.append(", m__mTables=");
+        result.append(m__mTables);
+        result.append(", m__lForeignKeys=");
+        result.append(m__lForeignKeys);
+        result.append("}");
+
+        return result.toString();
     }
 }
