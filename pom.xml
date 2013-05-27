@@ -30,6 +30,7 @@
   <modules>
     <module>queryj-core</module>
     <module>queryj-templates</module>
+    <module>queryj-maven</module>
   </modules>
 
   <repositories>
